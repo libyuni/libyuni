@@ -1,0 +1,25 @@
+# hidden / vim files
+.*
+
+# CMake stuff
+CMakeFiles
+Makefile
+CMakeCache.txt
+src/ProfileBuild.cmake
+src/build/
+src/cmake_install.cmake
+
+# Yuni generated files
+src/compiler-flags-debug-cc
+src/compiler-flags-debug-cxx
+src/compiler-flags-release-cc
+src/compiler-flags-release-cxx
+src/tools/cmake_install.cmake
+src/tools/yuni-config/cmake_install.cmake
+src/yuni/cmake_install.cmake
+src/yuni/config.h
+src/yuni/platform.h
+src/yuni/yuni.config.gcc
+src/yuni/yuni.config.gcc.target
+src/yuni/yuni.version
+
