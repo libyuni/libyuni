@@ -1,4 +1,4 @@
-#include "every.h"
+#include "core.h"
 #include "../datetime/timestamp.h"
 #ifdef YUNI_HAS_CPP_MOVE
 # include <utility>
@@ -39,20 +39,17 @@ namespace Yuni
 
 
 
-	Thread::Timer::Ptr  Every(uint ms, const Bind<bool ()>& callback, bool autostart)
+	Thread::Timer::Ptr  every(uint ms, const Bind<bool ()>& callback, bool autostart)
 	{
-		Thread::Timer* timer;
 		# ifdef YUNI_HAS_CPP_MOVE
-		timer = new EveryTimer(ms, std::move(callback));
+		Thread::Timer* timer = new EveryTimer(ms, std::move(callback));
 		# else
-		timer = new EveryTimer(ms, callback);
+		Thread::Timer* timer = new EveryTimer(ms, callback);
 		# endif
 		if (autostart)
 			timer->start();
 		return timer;
 	}
-
-
 
 
 
@@ -111,7 +108,7 @@ namespace Yuni
 
 
 
-	Thread::Timer::Ptr  Every(uint ms, bool precise, const Bind<bool (uint64)>& callback, bool autostart)
+	Thread::Timer::Ptr  every(uint ms, bool precise, const Bind<bool (uint64)>& callback, bool autostart)
 	{
 		Thread::Timer* timer;
 
@@ -141,5 +138,4 @@ namespace Yuni
 
 
 } // namespace Yuni
-
 

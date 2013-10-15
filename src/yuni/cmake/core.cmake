@@ -613,13 +613,15 @@ set(SRC_THREADS
 		thread/signal.cpp
 		thread/timer.h
 		thread/timer.hxx
-		thread/every.h
-		thread/every.cpp
 		thread/async.h
 		thread/async.cpp
 		thread/timer.cpp
 		thread/array.h
-		thread/array.hxx)
+		thread/array.hxx
+
+		thread/core.h
+		thread/spawn.cpp
+		thread/every.cpp)
 source_group(threads FILES ${SRC_THREADS})
 
 # Jobs

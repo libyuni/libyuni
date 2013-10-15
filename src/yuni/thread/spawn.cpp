@@ -1,4 +1,5 @@
-#include "async.h"
+
+#include "core.h"
 #ifdef YUNI_HAS_CPP_MOVE
 # include <utility>
 #endif
@@ -39,7 +40,7 @@ namespace Yuni
 
 
 
-	Thread::IThread::Ptr  Async(const Bind<void ()>& callback, bool autostart)
+	Thread::IThread::Ptr  spawn(const Bind<void ()>& callback, bool autostart)
 	{
 		# ifdef YUNI_HAS_CPP_MOVE
 		Thread::IThread* thread = new AsyncThread(std::move(callback));
@@ -56,5 +57,4 @@ namespace Yuni
 
 
 } // namespace Yuni
-
 
