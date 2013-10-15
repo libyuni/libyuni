@@ -7,52 +7,52 @@
 namespace Yuni
 {
 
-	template<class ChildT, template<class> class TP>
-	inline IIntrusiveSmartPtr<ChildT,TP>::IIntrusiveSmartPtr() :
-		pRefCount(0)
+	template<class ChildT, bool VirtualT, template<class> class TP>
+	inline IIntrusiveSmartPtr<ChildT,VirtualT,TP>::IIntrusiveSmartPtr() :
+		pRefCount()
 	{
 	}
 
 
-	template<class ChildT, template<class> class TP>
-	inline IIntrusiveSmartPtr<ChildT,TP>::~IIntrusiveSmartPtr()
+	template<class ChildT, bool VirtualT, template<class> class TP>
+	inline IIntrusiveSmartPtr<ChildT,VirtualT,TP>::~IIntrusiveSmartPtr()
 	{
 		assert(pRefCount == 0 and "Destroying smart ptr object with a non-zero reference count");
 	}
 
 
-	template<class ChildT, template<class> class TP>
-	inline IIntrusiveSmartPtr<ChildT,TP>::IIntrusiveSmartPtr(const IIntrusiveSmartPtr<ChildT,TP>& rhs) :
-		pRefCount(0)
+	template<class ChildT, bool VirtualT, template<class> class TP>
+	inline IIntrusiveSmartPtr<ChildT,VirtualT,TP>::IIntrusiveSmartPtr(const IIntrusiveSmartPtr<ChildT,VirtualT,TP>&) :
+		pRefCount()
 	{
 	}
 
 
-	template<class ChildT, template<class> class TP>
-	inline IIntrusiveSmartPtr<ChildT,TP> &
-	IIntrusiveSmartPtr<ChildT,TP>::operator = (const IIntrusiveSmartPtr& rhs) const
+	template<class ChildT, bool VirtualT, template<class> class TP>
+	inline IIntrusiveSmartPtr<ChildT,VirtualT,TP> &
+	IIntrusiveSmartPtr<ChildT,VirtualT,TP>::operator = (const IIntrusiveSmartPtr&) const
 	{
 		// Does nothing
 		return *this;
 	}
 
 
-	template<class ChildT, template<class> class TP>
-	inline bool IIntrusiveSmartPtr<ChildT,TP>::unique() const
+	template<class ChildT, bool VirtualT, template<class> class TP>
+	inline bool IIntrusiveSmartPtr<ChildT,VirtualT,TP>::unique() const
 	{
 		return (pRefCount == 1);
 	}
 
 
-	template<class ChildT, template<class> class TP>
-	inline void	IIntrusiveSmartPtr<ChildT,TP>::addRef() const
+	template<class ChildT, bool VirtualT, template<class> class TP>
+	inline void	IIntrusiveSmartPtr<ChildT,VirtualT,TP>::addRef() const
 	{
 		++pRefCount;
 	}
 
 
-	template<class ChildT, template<class> class TP>
-	bool IIntrusiveSmartPtr<ChildT,TP>::release() const
+	template<class ChildT, bool VirtualT, template<class> class TP>
+	bool IIntrusiveSmartPtr<ChildT,VirtualT,TP>::release() const
 	{
 		assert(pRefCount > 0 and "IIntrusiveSmartPtr: Invalid call to the method release");
 		if (--pRefCount > 0)
@@ -67,6 +67,79 @@ namespace Yuni
 
 		// we will be released soon
 		onRelease();
+		return true;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	template<class ChildT, template<class> class TP>
+	inline IIntrusiveSmartPtr<ChildT,false,TP>::IIntrusiveSmartPtr() :
+		pRefCount()
+	{
+	}
+
+
+	template<class ChildT, template<class> class TP>
+	inline IIntrusiveSmartPtr<ChildT,false,TP>::~IIntrusiveSmartPtr()
+	{
+		assert(pRefCount == 0 and "Destroying smart ptr object with a non-zero reference count");
+	}
+
+
+	template<class ChildT, template<class> class TP>
+	inline IIntrusiveSmartPtr<ChildT,false,TP>::IIntrusiveSmartPtr(const IIntrusiveSmartPtr<ChildT,false,TP>&) :
+		pRefCount()
+	{
+	}
+
+
+	template<class ChildT, template<class> class TP>
+	inline IIntrusiveSmartPtr<ChildT,false,TP> &
+	IIntrusiveSmartPtr<ChildT,false,TP>::operator = (const IIntrusiveSmartPtr&) const
+	{
+		// Does nothing
+		return *this;
+	}
+
+
+	template<class ChildT, template<class> class TP>
+	inline bool IIntrusiveSmartPtr<ChildT,false,TP>::unique() const
+	{
+		return (pRefCount == 1);
+	}
+
+
+	template<class ChildT, template<class> class TP>
+	inline void	IIntrusiveSmartPtr<ChildT,false,TP>::addRef() const
+	{
+		++pRefCount;
+	}
+
+
+	template<class ChildT, template<class> class TP>
+	bool IIntrusiveSmartPtr<ChildT,false,TP>::release() const
+	{
+		assert(pRefCount > 0 and "IIntrusiveSmartPtr: Invalid call to the method release");
+		if (--pRefCount > 0)
+			return false;
+		// double check to avoid race conditions
+		// TODO check if there is not another way
+		{
+			typename ThreadingPolicy::MutexLocker locker(*this);
+			if (pRefCount > 0)
+				return false;
+		}
 		return true;
 	}
 
