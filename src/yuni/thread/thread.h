@@ -305,5 +305,6 @@ namespace Thread
 } // namespace Yuni
 
 # include "thread.hxx"
+# include "core.h" // for yuni standard helpers
 
 #endif // __YUNI_THREAD_THREAD_H__

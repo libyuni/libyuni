@@ -6,6 +6,7 @@
 # include "../thread/thread.h"
 # include "../core/string.h"
 # include "../core/atomic/bool.h"
+# include "../core/smartptr/intrusive.h"
 
 
 
@@ -57,13 +58,15 @@ namespace Job
 	** \see QueueService
 	** \ingroup Jobs
 	*/
-	class YUNI_DECL IJob : public Policy::ObjectLevelLockable<IJob>
+	class YUNI_DECL IJob : public IIntrusiveSmartPtr<IJob, false>
 	{
 	public:
+		//! Ancestor
+		typedef IIntrusiveSmartPtr<IJob, false>  Ancestor;
 		//! The most suitable smart pointer for the class
-		typedef SmartPtr<IJob> Ptr;
+		typedef typename Ancestor::SmartPtrType<IJob>::PtrThreadSafe Ptr;
 		//! The threading policy
-		typedef Policy::ObjectLevelLockable<IJob> ThreadingPolicy;
+		typedef typename Ancestor::ThreadingPolicy ThreadingPolicy;
 		//! List of jobs
 		typedef std::list<Ptr> List;
 

@@ -159,7 +159,11 @@ namespace Thread
 			thread.pSignalStartup.notify();
 		}
 
+		// Notify the thread that it has really stopped
 		thread.pSignalHaveStopped.notify();
+
+		// The original thread might be destroyed here, at the end of the scope
+		// when destroying the smartptr acquired at the begining of this function.
 		return 0;
 	}
 

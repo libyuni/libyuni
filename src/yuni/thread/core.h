@@ -12,33 +12,36 @@ namespace Yuni
 	/*!
 	** \brief Convenient wrapper for executing some code into another thread
 	**
-	** The code will be executed into another thread.
+	** The callback will be executed into another thread.
+	**
 	** From sample:
 	** \code
 	** #include <yuni/yuni.h>
-	** #include <yuni/thread/every.h>
+	** #include <yuni/thread/thread.h>
 	** #include <yuni/core/system/suspend.h>
 	** #include <iostream>
 	** using namespace Yuni;
 	**
 	** int main()
 	** {
-	**	auto thread1 = spawn([&] () {
+	**	spawn([&] () {
 	**		std::cout << "thread1: some complex computations here..." << std::endl;
 	**		// suspend the execution of the thread for 3 seconds for the demo
 	**		thread1->suspend(3000);
 	**		std::cout << "thread1: done here !" << std::endl;
 	**	});
 	**
-	**	auto thread2 = spawn([&] () {
+	**	spawn([&] () {
 	**		std::cout << "thread2: some complex computations here..." << std::endl;
 	**		// suspend the execution of the thread for 3 seconds for the demo
 	**		thread2->suspend(2000);
 	**		std::cout << "thread2: done here !" << std::endl;
 	**	});
 	**
-	**	thread1->wait(); // wait for the end of the first thread
-	**	thread2->wait(); // wait for the end of the second thread
+	**	// Suspend the execution of the main thread until all threads are terminated
+	**	// Another way is to retrieve the variable returned by spawn (IThread) and to use
+	**	// the method wait() on it.
+	**	Thread::WaitForAllThreads();
 	**	return 0;
 	** }
 	** \endcode
@@ -55,7 +58,7 @@ namespace Yuni
 	** From sample:
 	** \code
 	** #include <yuni/yuni.h>
-	** #include <yuni/thread/every.h>
+	** #include <yuni/thread/thread.h>
 	** #include <yuni/core/system/suspend.h>
 	** #include <iostream>
 	** using namespace Yuni;
@@ -72,6 +75,7 @@ namespace Yuni
 	**	return 0;
 	** }
 	** \endcode
+	**
 	** \param ms An amount of time, in milliseconds
 	** \param callback The callback to execute
 	** \param autostart True to automatically start the timer
@@ -86,7 +90,7 @@ namespace Yuni
 	** The code will be executed into another thread.
 	** \code
 	** #include <yuni/yuni.h>
-	** #include <yuni/thread/every.h>
+	** #include <yuni/thread/thread.h>
 	** #include <yuni/core/system/suspend.h>
 	** #include <iostream>
 	** using namespace Yuni;
@@ -102,6 +106,7 @@ namespace Yuni
 	**	return 0;
 	** }
 	** \endcode
+	**
 	** \param ms An amount of time, in milliseconds
 	** \param precise True to not take into consideration the time spent in the callback (with performance penalty)
 	** \param callback The callback to execute
