@@ -66,13 +66,6 @@ namespace Job
 	}
 
 
-	void IJob::name(const AnyString& newname)
-	{
-		ThreadingPolicy::MutexLocker locker(*this);
-		pName = newname;
-	}
-
-
 
 
 

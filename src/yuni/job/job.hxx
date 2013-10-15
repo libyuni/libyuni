@@ -43,13 +43,6 @@ namespace Job
 	}
 
 
-	inline String IJob::name() const
-	{
-		ThreadingPolicy::MutexLocker locker(*this);
-		return pName;
-	}
-
-
 	inline void IJob::progression(const int p)
 	{
 		pProgression = ((p < 0) ? 0 : (p > 100 ? 100 : p));
@@ -79,16 +72,15 @@ namespace Job
 		info.canceling = pCanceling;
 
 		info.progression = pProgression;
-
-		ThreadingPolicy::MutexLocker locker(*this);
-		info.name = pName;
+		info.name = caption();
 	}
 
 
-	inline void IJob::nameWL(const AnyString& newName)
+	inline String IJob::caption() const
 	{
-		pName = newName;
+		return nullptr;
 	}
+
 
 
 

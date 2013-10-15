@@ -613,8 +613,6 @@ set(SRC_THREADS
 		thread/signal.cpp
 		thread/timer.h
 		thread/timer.hxx
-		thread/async.h
-		thread/async.cpp
 		thread/timer.cpp
 		thread/array.h
 		thread/array.hxx

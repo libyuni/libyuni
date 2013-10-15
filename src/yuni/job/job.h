@@ -26,7 +26,7 @@ namespace Job
 	** This class is designed to implement a single task executed by
 	** Job::QueueService.
 	**
-	** You can, for example, use this class to wrap a downloader, an image
+	** This clas can be used for wrapping a downloader, an image
 	** processing algorithm, a movie encoder, etc.
 	**
 	** Indeed, doing time-consuming operations like downloads and database
@@ -35,6 +35,8 @@ namespace Job
 	** problem, you want to execute your long-running task in an asynchonous
 	** manner (a background task).
 	**
+	** See async() for a more convenient way for simple tasks
+	**
 	** \code
 	**
 	** class MyJob : public Job::IJob
@@ -42,7 +44,7 @@ namespace Job
 	** public:
 	**   virtual ~MyJob() { }
 	** private:
-	**   virtual void onExecute()
+	**   virtual void onExecute() override
 	**   {
 	**		[... time consuming job ...]
 	**   }
@@ -76,16 +78,8 @@ namespace Job
 		virtual ~IJob();
 		//@}
 
-		//! \name ID Card
-		//@{
-		//! Get the full human-readable name of this job
-		String name() const;
-		//! Set the name of the job
-		void name(const AnyString& newname);
-		//@}
 
-
-		//! \name Progression
+		//! \name Informations about the job itself
 		//@{
 		/*!
 		** \brief Get the progression in percent (value between 0 and 100)
@@ -101,6 +95,9 @@ namespace Job
 		** \endcode
 		*/
 		bool finished() const;
+
+		//! Get the caption of the job
+		virtual String caption() const;
 		//@}
 
 
@@ -179,12 +176,6 @@ namespace Job
 		*/
 		bool shouldAbort() const;
 
-		/*!
-		** \brief Set the name of the job without locking
-		** \warning This method should only be used from the constructor
-		*/
-		void nameWL(const AnyString& newName);
-
 
 	private:
 		//! State of the job
@@ -195,8 +186,6 @@ namespace Job
 		Atomic::Bool pCanceling;
 		//! The attached thread to this job, if any
 		ThreadingPolicy::Volatile<Thread::IThread*>::Type pThread;
-		//! Name of the job
-		String pName;
 
 		// our friends !
 		template<class JobT> friend class Yuni::Private::QueueService::JobAccessor;
