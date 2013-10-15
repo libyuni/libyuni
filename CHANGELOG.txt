@@ -1,0 +1,6 @@
+release 0.2
+-----------
+
+* Multi-thread/multi-core improvements
+  The pthread-win32 library has been replaced by native Windows threads
+
