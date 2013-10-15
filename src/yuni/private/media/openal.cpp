@@ -11,12 +11,14 @@ namespace Media
 
 	bool OpenAL::Init()
 	{
-		ALCdevice* device = ::alcOpenDevice(NULL);
+		ALCdevice* device = ::alcOpenDevice(nullptr);
 		if (!device)
 			return false;
-		ALCcontext* context = ::alcCreateContext(device, NULL);
+
+		ALCcontext* context = ::alcCreateContext(device, nullptr);
 		if (!context)
 			return false;
+
 		::alcMakeContextCurrent(context);
 
 		// Set the listener at (0,0,0)
@@ -32,82 +34,96 @@ namespace Media
 		return true;
 	}
 
+
 	bool OpenAL::Close()
 	{
 		ALCcontext* context = ::alcGetCurrentContext();
-		ALCdevice* device = ::alcGetContextsDevice(context);
-		::alcMakeContextCurrent(NULL);
+		ALCdevice* device   = ::alcGetContextsDevice(context);
+
+		::alcMakeContextCurrent(nullptr);
 		::alcDestroyContext(context);
 		::alcCloseDevice(device);
+		#ifndef NDEBUG
+		std::cout << "Finished closing OpenAL." << std::endl;
+		#endif
 		return true;
 	}
+
 
 	ALenum OpenAL::GetFormat(uint bits, uint channels)
 	{
 		switch (bits)
 		{
-		case 8:
-			if (channels == 1)
-				return AL_FORMAT_MONO8;
-			if (channels == 2)
-				return AL_FORMAT_STEREO8;
-			if (::alIsExtensionPresent("AL_EXT_MCFORMATS"))
+			case 16:
 			{
-				if (channels == 4)
-					return alGetEnumValue("AL_FORMAT_QUAD8");
-				if (channels == 6)
-					return alGetEnumValue("AL_FORMAT_51CHN8");
+				if (channels == 1)
+					return AL_FORMAT_MONO16;
+				if (channels == 2)
+					return AL_FORMAT_STEREO16;
+
+				if (::alIsExtensionPresent("AL_EXT_MCFORMATS"))
+				{
+					if (channels == 4)
+						return alGetEnumValue("AL_FORMAT_QUAD16");
+					if (channels == 6)
+						return alGetEnumValue("AL_FORMAT_51CHN16");
+				}
+				break;
 			}
-			break;
-		case 16:
-			if (channels == 1)
-				return AL_FORMAT_MONO16;
-			if (channels == 2)
-				return AL_FORMAT_STEREO16;
-			if (::alIsExtensionPresent("AL_EXT_MCFORMATS"))
+			case 8:
 			{
-				if (channels == 4)
-					return alGetEnumValue("AL_FORMAT_QUAD16");
-				if (channels == 6)
-					return alGetEnumValue("AL_FORMAT_51CHN16");
+				if (channels == 1)
+					return AL_FORMAT_MONO8;
+				if (channels == 2)
+					return AL_FORMAT_STEREO8;
+
+				if (::alIsExtensionPresent("AL_EXT_MCFORMATS"))
+				{
+					if (channels == 4)
+						return alGetEnumValue("AL_FORMAT_QUAD8");
+					if (channels == 6)
+						return alGetEnumValue("AL_FORMAT_51CHN8");
+				}
+				break;
 			}
-			break;
 		}
 		return 0;
 	}
+
 
 	void OpenAL::SetDistanceModel(DistanceModel model)
 	{
 		ALenum modelName;
 		switch (model)
 		{
-		case None:
-			modelName = AL_NONE;
-			break;
-		case InverseDistance:
-			modelName = AL_INVERSE_DISTANCE;
-			break;
-		case InverseDistanceClamped:
-			modelName = AL_INVERSE_DISTANCE_CLAMPED;
-			break;
-		case LinearDistance:
-			modelName = AL_LINEAR_DISTANCE;
-			break;
-		case LinearDistanceClamped:
-			modelName = AL_LINEAR_DISTANCE_CLAMPED;
-			break;
-		case ExponentDistance:
-			modelName = AL_EXPONENT_DISTANCE;
-			break;
-		case ExponentDistanceClamped:
-			modelName = AL_EXPONENT_DISTANCE_CLAMPED;
-			break;
-		default:
-			modelName = AL_INVERSE_DISTANCE_CLAMPED;
-			break;
+			case None:
+				modelName = AL_NONE;
+				break;
+			case InverseDistance:
+				modelName = AL_INVERSE_DISTANCE;
+				break;
+			case InverseDistanceClamped:
+				modelName = AL_INVERSE_DISTANCE_CLAMPED;
+				break;
+			case LinearDistance:
+				modelName = AL_LINEAR_DISTANCE;
+				break;
+			case LinearDistanceClamped:
+				modelName = AL_LINEAR_DISTANCE_CLAMPED;
+				break;
+			case ExponentDistance:
+				modelName = AL_EXPONENT_DISTANCE;
+				break;
+			case ExponentDistanceClamped:
+				modelName = AL_EXPONENT_DISTANCE_CLAMPED;
+				break;
+			default:
+				modelName = AL_INVERSE_DISTANCE_CLAMPED;
 		}
+
 		::alDistanceModel(modelName);
 	}
+
 
 	bool OpenAL::CreateBuffers(int nbBuffers, uint* buffers)
 	{
@@ -116,10 +132,12 @@ namespace Media
 		return alGetError() == AL_NO_ERROR;
 	}
 
+
 	void OpenAL::DestroyBuffers(int nbBuffers, uint* buffers)
 	{
 		alDeleteBuffers(nbBuffers, buffers);
 	}
+
 
 	void OpenAL::SetListener(float position[3], float velocity[3], float orientation[6])
 	{
@@ -127,6 +145,7 @@ namespace Media
 		alListenerfv(AL_VELOCITY, velocity);
 		alListenerfv(AL_ORIENTATION, orientation);
 	}
+
 
 	uint OpenAL::CreateSource(Point3D<> position, Vector3D<> velocity,
 		Vector3D<> direction, float pitch, float gain, bool attenuate, bool loop)
@@ -143,23 +162,22 @@ namespace Media
 		::alSourcef(source, AL_MAX_GAIN, 1.5f); // Max amplification
 		::alSourcef(source, AL_MAX_DISTANCE, 10000.0f);
 
-		if (!MoveSource(source, position, velocity, direction))
+		if (not MoveSource(source, position, velocity, direction)
+			and not ModifySource(source, pitch, gain, attenuate, loop))
 		{
 			DestroySource(source);
 			return 0;
 		}
-		if (!ModifySource(source, pitch, gain, attenuate, loop))
-		{
-			DestroySource(source);
-			return 0;
-		}
+
 		return source;
 	}
+
 
 	void OpenAL::DestroySource(uint source)
 	{
 		::alDeleteSources(1, &source);
 	}
+
 
 	bool OpenAL::PlaySource(ALuint source)
 	{
@@ -168,12 +186,14 @@ namespace Media
 		return AL_NO_ERROR == alGetError();
 	}
 
+
 	bool OpenAL::PauseSource(ALuint source)
 	{
 		::alGetError();
 		::alSourcePause(source);
 		return AL_NO_ERROR == ::alGetError();
 	}
+
 
 	bool OpenAL::StopSource(uint source)
 	{
@@ -182,20 +202,23 @@ namespace Media
 		return AL_NO_ERROR == ::alGetError();
 	}
 
+
 	bool OpenAL::IsSourcePlaying(uint source)
 	{
 		::alGetError();
 		ALint state;
 		::alGetSourcei(source, AL_SOURCE_STATE, &state);
-		return AL_NO_ERROR == alGetError() && AL_PLAYING == state;
+		return AL_NO_ERROR == alGetError() and AL_PLAYING == state;
 	}
+
 
 	bool OpenAL::IsSourcePaused(uint source)
 	{
 		ALint state;
 		::alGetSourcei(source, AL_SOURCE_STATE, &state);
-		return AL_NO_ERROR == alGetError() && AL_PAUSED == state;
+		return AL_NO_ERROR == alGetError() and AL_PAUSED == state;
 	}
+
 
 	bool OpenAL::ModifySource(uint source, float pitch, float gain,
 		bool attenuate, bool loop)
@@ -208,6 +231,7 @@ namespace Media
 		return ::alGetError() == AL_NO_ERROR;
 	}
 
+
 	bool OpenAL::MoveSource(uint source, const Point3D<>& position,
 		const Vector3D<>& velocity, const Vector3D<>& direction)
 	{
@@ -218,12 +242,14 @@ namespace Media
 		float pos[3] = { position.x, position.y, position.z};
 		float vel[3] = { velocity.x, velocity.y, velocity.z};
 		float dir[3] = { direction.x, direction.y, direction.z};
+
 		::alGetError();
 		::alSourcefv(source, AL_POSITION, pos);
 		::alSourcefv(source, AL_VELOCITY, vel);
 		::alSourcefv(source, AL_DIRECTION, dir);
 		return ::alGetError() == AL_NO_ERROR;
 	}
+
 
 	bool OpenAL::BindBufferToSource(uint buffer, uint source)
 	{
@@ -232,10 +258,12 @@ namespace Media
 		return ::alGetError() == AL_NO_ERROR;
 	}
 
+
 	void OpenAL::UnbindBufferFromSource(uint source)
 	{
 		::alSourcei(source, AL_BUFFER, 0);
 	}
+
 
 	bool OpenAL::QueueBufferToSource(uint buffer, uint source)
 	{
@@ -244,6 +272,7 @@ namespace Media
 		return ::alGetError() == AL_NO_ERROR;
 	}
 
+
 	uint OpenAL::UnqueueBufferFromSource(uint source)
 	{
 		uint buf;
@@ -251,13 +280,17 @@ namespace Media
 		return buf;
 	}
 
+
 	float OpenAL::SourcePlaybackPosition(uint source)
 	{
 		float pos = 0;
 		::alGetSourcef(source, AL_SEC_OFFSET, &pos);
+		# ifndef NDEBUG
 		std::cout << "Getting position at " << pos << std::endl;
+		# endif
 		return pos / 60.0f; // Normalize the time
 	}
+
 
 	void OpenAL::SetSourcePlaybackPosition(uint source, float position)
 	{

@@ -5,8 +5,10 @@
 namespace Yuni
 {
 
-	inline RWMutex::RWMutex(uint maxReaders) :
-		pSemaphore(maxReaders)
+	inline RWMutex::RWMutex(uint maxReaders)
+		# ifndef YUNI_NO_THREAD_SAFE
+		: pSemaphore(maxReaders), pMutex()
+		# endif
 	{
 	}
 
@@ -16,15 +18,17 @@ namespace Yuni
 	}
 
 
-	inline RWMutex::RWMutex(const RWMutex& copy) :
-		pSemaphore(copy.pSemaphore)
+	inline RWMutex::RWMutex(const RWMutex& copy)
+		# ifndef YUNI_NO_THREAD_SAFE
+		: pSemaphore(copy.pSemaphore), pMutex()
+		# endif
 	{
 	}
 
 
 	inline RWMutex& RWMutex::operator = (const RWMutex&)
 	{
-		// Do nothing on purpose
+		// Does nothing on purpose
 		return *this;
 	}
 

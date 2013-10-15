@@ -161,6 +161,18 @@ namespace Media
 	}
 
 
+	bool Source::rewindDispatched(uint source)
+	{
+		for (uint i = 0; i < pBufferCount; ++i)
+			Private::Media::OpenAL::UnqueueBufferFromSource(source);
+		if (pAStream)
+			pAStream->rewind();
+		if (pVStream)
+			pVStream->rewind();
+		return prepareDispatched(source);
+	}
+
+
 	bool Source::destroyDispatched(Thread::Signal* signal)
 	{
 		if (!pAStream and !pVStream)

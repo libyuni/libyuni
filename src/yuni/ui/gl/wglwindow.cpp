@@ -425,6 +425,18 @@ namespace UI
 	}
 
 
+
+
+	WGLWindow::~WGLWindow()
+	{
+		// Unregister Window Class only when on the last window
+		if (WindowCount() == 1 and not UnregisterClass(L"OpenGL", pHInstance))
+		{
+			std::cerr << "Window closing error : Could not unregister Window Class !" << std::endl;
+		}
+	}
+
+
 	bool WGLWindow::initialize()
 	{
 		// Grab an instance for our window
@@ -460,7 +472,7 @@ namespace UI
 			return false;
 		}
 
-		return initWindow(false);
+		return initWindow();
 	}
 
 
@@ -587,7 +599,7 @@ namespace UI
 	}
 
 
-	bool WGLWindow::initWindow(bool keepContext)
+	bool WGLWindow::initWindow()
 	{
 		DWORD dwStyle = WS_OVERLAPPEDWINDOW;
 		DWORD dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
@@ -601,8 +613,8 @@ namespace UI
 		::AdjustWindowRectEx(&windowRect, dwStyle, false, dwExStyle);
 
 		// Create the window
-		if (!(pHWnd = ::CreateWindowEx(dwExStyle, L"OpenGL",
-			Private::WString<>(pTitle).c_str(),
+		if (!(pHWnd = ::CreateWindowEx(
+			dwExStyle, L"OpenGL", Private::WString<>(pTitle).c_str(),
 			dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
 			pLeft, pTop, // Position
 			windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, // Dimensions
@@ -661,12 +673,29 @@ namespace UI
 				0, 0, 0
 			};
 
-		// Dummy format to create a GL context
-		if (!initDefaultPixelFormat(pfd))
-			return false;
+		// Try MSAA init
+		if (pHasMSAASupport && pMultiSampling != MultiSampling::msNone)
+		{
+			if (!initMultisamplePixelFormat(pfd, true))
+			{
+				// If MSAA init failed, set the requested multisampling to none
+				pMultiSampling = MultiSampling::msNone;
+				initDefaultPixelFormat(pfd); // Should work, since it worked once before
+			}
+		}
+		else
+		{
+			// Dummy format to create a GL context
+			if (!initDefaultPixelFormat(pfd))
+			{
+				std::cerr << "Window init error : Can't set pixel format !" << std::endl;
+				kill();
+				return false;
+			}
+		}
 
 		// Create a Rendering Context if necessary
-		if ((!pHRC or !keepContext) and !(pHRC = ::wglCreateContext(pHDC)))
+		if (!(pHRC = ::wglCreateContext(pHDC)))
 		{
 			std::cerr << "Window init error : Can't create a GL rendering context !" << std::endl;
 			kill();
@@ -681,13 +710,28 @@ namespace UI
 			return false;
 		}
 
-		// Get the pixel format, try multisampling if asked for
-		if (!pHasFSAA or !initMultisamplePixelFormat(pfd))
+		// Initialize our newly created GL window
+		if (!GLWindow::initialize())
 		{
-			pHasFSAA = false;
-			if (!initDefaultPixelFormat(pfd))
-				return false;
+			std::cerr << "OpenGL Initialization Failed !" << std::endl;
+			kill();
+			return false;
 		}
+
+		if (!pHasMSAASupport && pMultiSampling != MultiSampling::msNone &&
+			initMultisamplePixelFormat(pfd, false))
+		{
+			pHasMSAASupport = true;
+			closeWindowForReinit();
+			::wglDeleteContext(pHRC);
+			initWindow();
+		}
+
+		// On success, enable multisampling
+		if (pHasMSAASupport && pMultiSampling != MultiSampling::msNone)
+			::glEnable(GL_MULTISAMPLE);
+		else
+			::glDisable(GL_MULTISAMPLE);
 
 		// Show the window
 		::ShowWindow(pHWnd,SW_SHOW);
@@ -698,14 +742,6 @@ namespace UI
 
 		// Set up our perspective GL screen
 		resize(pWidth, pHeight);
-
-		// Initialize our newly created GL window
-		if (!GLWindow::initialize())
-		{
-			std::cerr << "OpenGL Initialization Failed !" << std::endl;
-			kill();
-			return false;
-		}
 
 		if (pFullScreen)
 		{
@@ -739,67 +775,69 @@ namespace UI
 	}
 
 
-	bool WGLWindow::initMultisamplePixelFormat(const PIXELFORMATDESCRIPTOR& pfd)
+	bool WGLWindow::initMultisamplePixelFormat(const PIXELFORMATDESCRIPTOR& pfd, bool set)
 	{
 		// Make sure we have multisampling support
-		if (!::wglewIsSupported("WGL_ARB_multisample"))
+		if (not ::glewIsSupported("GL_ARB_multisample") or
+			not ::wglewIsSupported("WGL_ARB_multisample"))
 		{
 			std::cerr << "Window init error : Multisampling is not available, falling back to standard pixel format !" << std::endl;
 			return false;
 		}
 
 		// Get our pixel format
-		PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)::wglGetProcAddress("wglChoosePixelFormatARB");
+		// PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)::wglGetProcAddress("wglChoosePixelFormatARB");
 		if (!wglChoosePixelFormatARB)
-			return false;
+		 	return false;
 
 		int pixelFormat;
 		UINT numFormats;
-		float fAttributes[] = {0, 0};
+
+		uint msMultiplier = samplingMultiplier();
 
 		// Get the data from the pixel format descriptor
 		// except the SAMPLE_BUFFERS_ARB and SAMPLES_ARB, that manage multisampling
 		int iAttributes[] =
 			{
-				WGL_DRAW_TO_WINDOW_ARB, (int)pfd.dwFlags & PFD_DRAW_TO_WINDOW,
-				WGL_SUPPORT_OPENGL_ARB, (int)pfd.dwFlags & PFD_SUPPORT_OPENGL,
-				WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
-				WGL_COLOR_BITS_ARB, pfd.cColorBits,
-				WGL_ALPHA_BITS_ARB, pfd.cAlphaBits,
-				WGL_DEPTH_BITS_ARB, pfd.cDepthBits,
-				WGL_STENCIL_BITS_ARB, pfd.cStencilBits,
-				WGL_DOUBLE_BUFFER_ARB, (int)pfd.dwFlags & PFD_DOUBLEBUFFER,
+				WGL_DRAW_TO_WINDOW_ARB, true, // Draw to window
+				WGL_SUPPORT_OPENGL_ARB, true, // OpenGL
+				WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB, // Hardware acceleration
+				WGL_COLOR_BITS_ARB, (int)pBitDepth,
+				WGL_ALPHA_BITS_ARB, 0,
+				WGL_DEPTH_BITS_ARB, 24,
+				WGL_STENCIL_BITS_ARB, 8,
+				WGL_DOUBLE_BUFFER_ARB, true, // Double buffering
 				WGL_SAMPLE_BUFFERS_ARB, true, // Activate multisampling
-				WGL_SAMPLES_ARB, 4, // Check for 4x Multisampling
-				0, 0
+				WGL_SAMPLES_ARB, (int)msMultiplier, // Specify number of samples
+				WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
+				0
 			};
 
-		// Check if we can get a Pixel Format for 4 samples
-		bool valid = wglChoosePixelFormatARB(pHDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
-		// Check that the call succeeded and our format count is greater than 1
-		if (valid and numFormats >= 1)
+		// Check if we can get a Pixel Format for the wanted number of samples
+		bool valid = ::wglChoosePixelFormatARB(pHDC, iAttributes, nullptr, 1, &pixelFormat, &numFormats);
+		// Check that the call succeeded and our format count is greater or equal to 1
+		if (!valid or numFormats < 1)
 		{
-			# ifndef NDEBUG
-			std::cout << "4x FSAA activated !" << std::endl;
-			# endif
-			return true;
+			std::cerr << "Window init error : No pixel format found for multisampling !" << std::endl;
+			return false;
 		}
 
-		// Our pixel format with 4 samples failed, test for 2 samples
-		iAttributes[19] = 2;
-		valid = wglChoosePixelFormatARB(pHDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
-		// Check that the call succeeded and our format count is greater than 1
-		if (valid and numFormats >= 1)
+		if (set)
 		{
-			std::cerr << "Window init : Failed to set up 4-sample multisampling, falling back to 2-sample." << std::endl;
+			// Are we able to set the pixel format?
+			if (!::SetPixelFormat(pHDC, pixelFormat, &pfd))
+			{
+				std::cerr << "Window init error : Failed to set the Pixel Format !" << std::endl;
+				kill();
+				return false;
+			}
+
 			# ifndef NDEBUG
-			std::cout << "2x FSAA activated !" << std::endl;
+			std::cout << msMultiplier << "x MSAA activated !" << std::endl;
 			# endif
-			return true;
 		}
 
-		std::cerr << "Window init error : Failed to set up multisampling !" << std::endl;
-		return false;
+		return true;
 	}
 
 
@@ -834,34 +872,29 @@ namespace UI
 	}
 
 
-	bool WGLWindow::antiAliasing() const
-	{
-		return pHasFSAA;
-	}
-
-
-	void WGLWindow::antiAliasing(bool enable)
+	void WGLWindow::multiSampling(MultiSampling::Type samplingType)
 	{
 		// No change
-		if (enable == pHasFSAA)
+		if (samplingType == pMultiSampling)
 			return;
 
 		// Not supported (also means it could not have been activated before)
-		if (!::wglewIsSupported("WGL_ARB_multisample"))
+		if (not ::glewIsSupported("GL_ARB_multisample") or
+			not ::wglewIsSupported("WGL_ARB_multisample"))
 			return;
 
 		// Store the old vsync because we will lose it otherwise
 		bool hasVsync = vsync();
 		// Try to change the FSAA by klling the window and creating it again with the new values
 		closeWindowForReinit();
-		pHasFSAA = enable;
-		if (!initWindow(true))
+		pMultiSampling = samplingType;
+		if (!initWindow())
 			// Init window will generate errors by itself if it fails
 			// It will automatically go back to a default non-fsaa state on error
 			return;
 		// Reapply vsync
 		vsync(hasVsync);
-		if (pHasFSAA)
+		if (MultiSampling::msNone != pMultiSampling)
 			::glEnable(GL_MULTISAMPLE);
 		else
 			::glDisable(GL_MULTISAMPLE);
@@ -893,6 +926,9 @@ namespace UI
 
 	bool WGLWindow::loop()
 	{
+		if (!pHWnd || !pHRC)
+			return false;
+
 		MSG msg;
 		if (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
@@ -925,8 +961,8 @@ namespace UI
 		if (pHDC and !ReleaseDC(pHWnd, pHDC))
 		{
 			std::cerr << "Window closing error : Device Context release failed." << std::endl;
-			pHDC = nullptr;
 		}
+		pHDC = nullptr;
 
 		// Remove reference to the window at the last possible moment
 		UnregisterWindow(pHWnd);
@@ -935,8 +971,8 @@ namespace UI
 		if (pHWnd and !DestroyWindow(pHWnd))
 		{
 			std::cerr << "Window closing error : Could not destroy window !" << std::endl;
-			pHWnd = nullptr;
 		}
+		pHWnd = nullptr;
 	}
 
 
@@ -950,18 +986,8 @@ namespace UI
 		if (pHRC and !::wglDeleteContext(pHRC))
 		{
 			std::cerr << "Window closing error : Rendering Context release failed !" << std::endl;
-			pHRC = nullptr;
 		}
-
-		// Unregister Window Class only when on the last window
-		if (WindowCount() == 1 and not UnregisterClass(L"OpenGL", pHInstance))
-		{
-			std::cerr << "Window closing error : Could not unregister Window Class !" << std::endl;
-			pHInstance = nullptr;
-		}
-
-		// Send A Quit Message
-		::PostQuitMessage(0);
+		pHRC = nullptr;
 	}
 
 

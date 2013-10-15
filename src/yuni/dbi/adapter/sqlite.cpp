@@ -35,7 +35,8 @@ namespace Adapter
 			statement(statement),
 			rowIndex(0),
 			refcount(1), // already acquired
-			columns(nullptr)
+			columns(nullptr),
+			columnCount()
 		{
 			assert(statement != NULL);
 		}

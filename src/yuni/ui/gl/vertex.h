@@ -50,6 +50,13 @@ namespace Gfx3D
 		typedef TexP<VertexType>  TexCoordPolicy;
 		//! User data policy
 		typedef UserP  UserDataPolicy;
+		//! Padding type
+		typedef VertexPadding<
+			sizeof(Yuni::Point3D<float>) +
+			NorP<Vertex<NorP, ColP, TexP, UserP> >::Size +
+			ColP<Vertex<NorP, ColP, TexP, UserP> >::Size +
+			TexP<Vertex<NorP, ColP, TexP, UserP> >::Size +
+			UserP::Size>  PaddingT;
 		//! Smart pointer
 		typedef SmartPtr<VertexType>  Ptr;
 

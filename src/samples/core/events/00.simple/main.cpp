@@ -61,8 +61,18 @@ int main(void)
 {
 	// A subscriber, able to receive some events
 	Subscriber sc;
+
+	# ifdef YUNI_HAS_CPP_MOVE
+	emailHasBeenReceived.connect([] (const String& subject, const String& from) {
+		std::cout << "another notification from a lambda (c++11 minimum):" << std::endl
+			<< "\tFrom    : " << from << std::endl
+			<< "\tSubject : " << subject << std::endl;
+	});
+	# endif
+
 	// A new event
 	emailHasBeenReceived("My great subject !", "paul@utopia.org");
+
 
 	return 0;
 }

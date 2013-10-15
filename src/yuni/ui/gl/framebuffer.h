@@ -1,9 +1,10 @@
 #ifndef __YUNI_GFX3D_FRAMEBUFFER_H__
 # define __YUNI_GFX3D_FRAMEBUFFER_H__
 
-# include <yuni/yuni.h>
-# include <yuni/core/smartptr.h>
-# include <yuni/core/point2D.h>
+# include "../../yuni.h"
+# include "../../core/smartptr.h"
+# include "../../core/point2D.h"
+# include "../multisampling.h"
 # include "texture.h"
 
 namespace Yuni
@@ -27,6 +28,16 @@ namespace Gfx3D
 		typedef int  ID;
 
 	public:
+		//! Type of usage for this framebuffer
+		enum Usage
+		{
+			fbDraw,
+			fbPingPong,
+			fbRead,
+			fbReadDraw
+		};
+
+	public:
 		/*!
 		** \brief Constructor
 		*/
@@ -45,7 +56,7 @@ namespace Gfx3D
 		/*!
 		** \brief Initialize the frame buffer
 		*/
-		bool initialize();
+		bool initialize(Usage usage, UI::MultiSampling::Type msType = UI::MultiSampling::msNone, Texture::DataType type = Texture::UInt8);
 
 		//! Activate the framebuffer
 		void activate() const;
@@ -93,6 +104,9 @@ namespace Gfx3D
 
 		//! Buffer size
 		Point2D<uint> pSize;
+
+		//! Usage of the framebuffer
+		Usage pUsage;
 
 	}; // class FrameBuffer
 

@@ -8,6 +8,7 @@ generator = Generator.new()
 <%=generator.thisHeaderHasBeenGenerated("traits.h.generator.hpp")%>
 
 # include "../slist/slist.h"
+# include "../atomic/bool.h"
 
 
 
@@ -22,7 +23,7 @@ namespace EventImpl
 
 
 	template<typename T>
-	class EmptyPredicate
+	class EmptyPredicate final
 	{
 	public:
 		typedef void ResultType;
@@ -33,7 +34,7 @@ namespace EventImpl
 
 
 	template<class BindT>
-	class PredicateRemoveObject
+	class PredicateRemoveObject final
 	{
 	public:
 		PredicateRemoveObject(const void* object) :
@@ -50,7 +51,7 @@ namespace EventImpl
 
 
 	template<class BindT>
-	class PredicateRemoveObserverBase
+	class PredicateRemoveObserverBase final
 	{
 	public:
 		PredicateRemoveObserverBase(IEvent* event, const IEventObserverBase* object) :
@@ -73,7 +74,7 @@ namespace EventImpl
 
 
 	template<class BindT>
-	class PredicateRemoveWithoutChecks
+	class PredicateRemoveWithoutChecks final
 	{
 	public:
 		PredicateRemoveWithoutChecks(const IEventObserverBase* object) :
@@ -127,7 +128,7 @@ namespace EventImpl
 		*/
 		void invoke(<%=generator.variableList(i)%>) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -140,7 +141,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(<%=generator.variableList(i)%>) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -153,7 +154,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate<%=generator.variableList(i,"A","a", ", ")%>) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -162,7 +163,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -177,7 +177,7 @@ namespace EventImpl
 		*/
 		void operator () (<%=generator.variableList(i)%>) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -187,6 +187,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -195,7 +196,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 

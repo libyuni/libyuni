@@ -111,9 +111,9 @@ namespace File
 	** \param content The new content of the file
 	** \return True if the operation succeeded, false otherwise
 	*/
-	template<class StringT, class U>
+	template<class U>
 	YUNI_DEPRECATED("use SetContent / AppendContent instead",
-	bool SaveToFile(const StringT& filename, const U& content));
+	bool SaveToFile(const AnyString& filename, const U& content));
 	//@}
 
 
@@ -178,8 +178,8 @@ namespace File
 	** \param filename A filename
 	** \param predicate A functor or a lambda function
 	*/
-	template<class StringT, class PredicateT>
-	bool ReadLineByLine(const StringT& filename, const PredicateT& predicate);
+	template<class PredicateT>
+	bool ReadLineByLine(const AnyString& filename, const PredicateT& predicate);
 
 
 

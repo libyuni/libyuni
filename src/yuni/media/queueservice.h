@@ -188,7 +188,7 @@ namespace Media
 			/*!
 			** \brief Load media file from given path
 			**
-			** \param name Path to file, used from now on as an identifier for the source
+			** \param name Identifier for the source
 			*/
 			bool unload(const AnyString& name);
 

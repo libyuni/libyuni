@@ -112,17 +112,6 @@ check_cxx_source_compiles("
 
 
 check_cxx_source_compiles("
-	class Foo
-	{
-	public:
-		Foo(Foo&& other)
-		{}
-	};
-
-	int main() {Foo foo;return 0;}" YUNI_HAS_CPP_MOVE_CONSTRUCTOR)
-
-
-check_cxx_source_compiles("
 	int main()
 	{
 		static_assert(true, \"test\");
@@ -137,6 +126,32 @@ check_cxx_source_compiles("
 		std::atomic_int_fast64_t afint64;
 		return 0;
 	}" YUNI_HAS_STD_ATOMIC)
+
+
+
+check_cxx_source_compiles("
+	#include <iostream>
+	#include <string>
+	void foo(std::string&& value)
+	{
+		std::cout << value;
+	}
+	int main()
+	{
+		foo(std::string(\"\"));
+		return 0;
+	}" YUNI_HAS_CPP_MOVE)
+
+
+check_cxx_source_compiles("
+	#include <iostream>
+	int main()
+	{
+		auto func = [] () { std::cout << \"Hello world\"; };
+		func();
+		return 0;
+	}" YUNI_HAS_CPP_LAMBDA)
+
 
 
 # constexpr

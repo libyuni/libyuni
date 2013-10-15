@@ -1,6 +1,10 @@
 #ifndef __YUNI_CORE_BIT_BIT_ARRAY_HXX__
 # define __YUNI_CORE_BIT_BIT_ARRAY_HXX__
 
+# include <string.h> // memset
+# include <cassert>
+
+
 
 namespace Yuni
 {
@@ -46,12 +50,14 @@ namespace Bit
 
 	inline void Array::set(uint i)
 	{
+		assert(i < pCount and "index out of range");
 		YUNI_BIT_SET(pBuffer.data(), i);
 	}
 
 
 	inline bool Array::get(uint i) const
 	{
+		assert(i < pCount and "index out of range");
 		// note: true/false for Visual Studio Warning
 		return (YUNI_BIT_GET(pBuffer.data(), i)) ? true : false;
 	}
@@ -59,6 +65,7 @@ namespace Bit
 
 	inline bool Array::test(uint i) const
 	{
+		assert(i < pCount and "index out of range");
 		// note: true/false for Visual Studio Warning
 		return (YUNI_BIT_GET(pBuffer.data(), i)) ? true : false;
 	}
@@ -66,6 +73,7 @@ namespace Bit
 
 	inline void Array::set(uint i, bool value)
 	{
+		assert(i < pCount and "index out of range");
 		if (value)
 			YUNI_BIT_SET(pBuffer.data(), i);
 		else
@@ -75,6 +83,7 @@ namespace Bit
 
 	inline void Array::unset(uint i)
 	{
+		assert(i < pCount and "index out of range");
 		YUNI_BIT_UNSET(pBuffer.data(), i);
 	}
 
@@ -133,42 +142,12 @@ namespace Bit
 	}
 
 
-	template<class StringT>
-	inline void Array::loadFromBuffer(const StringT& u)
+	inline void Array::loadFromBuffer(const AnyString& buffer)
 	{
-		// Assert, if a C* container can not be found at compile time
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, BitArray_InvalidTypeForBuffer);
-		// Assert, if the length of the container can not be found at compile time
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  BitArray_InvalidTypeForBufferSize);
-
-		if (Traits::Length<StringT,Size>::isFixed)
-		{
-			// We can make some optimisations when the length is known at compile compile time
-			// This part of the code should not bring better performances but it should
-			// prevent against bad uses of the API, like using a C* for looking for a single char.
-
-			// The value to find is actually empty, nothing to do
-			if (0 == Traits::Length<StringT,Size>::fixedLength)
-			{
-				pBuffer.clear();
-				pCount = 0;
-				return;
-			}
-		}
-		pCount = Traits::Length<StringT,Size>::Value(u);
-		pBuffer.assign(Traits::CString<StringT>::Perform(u), pCount);
+		pBuffer = buffer;
+		pCount  = buffer.size();
 	}
 
-
-	template<class StringT>
-	inline void Array::loadFromBuffer(const StringT& u, uint size)
-	{
-		// Assert, if a C* container can not be found at compile time
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, BitArray_InvalidTypeForBuffer);
-
-		pCount = size;
-		pBuffer.assign(Traits::CString<StringT>::Perform(u), pCount);
-	}
 
 
 	template<class AnyBufferT>
@@ -189,7 +168,7 @@ namespace Bit
 	}
 
 
-	template<class StringT> inline Array& Array::operator = (const StringT& rhs)
+	inline Array& Array::operator = (const AnyString& rhs)
 	{
 		loadFromBuffer(rhs);
 		return *this;
@@ -231,12 +210,6 @@ namespace Bit
 		return npos;
 	}
 
-
-	template<bool ValueT>
-	inline uint Array::find(uint offset) const
-	{
-		return ValueT ? findFirstSet(offset) : findFirstUnset(offset);
-	}
 
 
 

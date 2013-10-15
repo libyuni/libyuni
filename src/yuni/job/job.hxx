@@ -33,13 +33,13 @@ namespace Job
 
 	inline void IJob::cancel()
 	{
-		pCanceling = 1;
+		pCanceling = true;
 	}
 
 
 	inline bool IJob::canceling() const
 	{
-		return (0 != pCanceling);
+		return (pCanceling);
 	}
 
 

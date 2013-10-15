@@ -56,6 +56,22 @@ namespace Yuni
 		//! Copy constructor
 		template<class U>
 		Quaternion(const Quaternion<U>& other);
+
+#ifdef GLM_VERSION
+		//! From glm 3x3 matrix
+		Quaternion(const glm::mat3& matrix): Quaternion(glm::quat(matrix))
+		{}
+
+		//! From glm 4x4 matrix
+		Quaternion(const glm::mat4& matrix): Quaternion(glm::quat(matrix))
+		{}
+
+		//! From glm quaternion
+		Quaternion(const glm::quat& quat):
+			w(quat.w),
+			v(quat.x, quat.y, quat.z)
+		{}
+#endif
 		//@}
 
 		//! \name Reset the coordinates
@@ -92,6 +108,30 @@ namespace Yuni
 		//! Assignment
 		template<class U>
 		Quaternion<T>& operator = (const Quaternion<U>& other);
+
+#ifdef GLM_VERSION
+		//! Assignment from glm 3x3 matrix
+		Quaternion<T>& operator = (const glm::mat3& matrix)
+		{
+			return ((*this) = glm::quat(matrix));
+		}
+
+		//! Assignment from glm 4x4 matrix
+		Quaternion<T>& operator = (const glm::mat4& matrix)
+		{
+			return ((*this) = glm::quat(matrix));
+		}
+
+		//! Assignment rom glm quaternion
+		Quaternion<T>& operator = (const glm::quat& quat)
+		{
+			w = quat.w;
+			v.x = quat.x;
+			v.y = quat.y;
+			v.z = quat.z;
+			return *this;
+		}
+#endif
 
 		//! Addition
 		template<class U>

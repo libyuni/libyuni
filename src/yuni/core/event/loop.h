@@ -3,7 +3,7 @@
 
 # include "../../yuni.h"
 # include "event.h"
-# include "../atomic/int.h"
+# include "../atomic/bool.h"
 # include "../slist/slist.h"
 # include "flow/continuous.h"
 # include "flow/timer.h"
@@ -39,10 +39,10 @@ namespace EventLoop
 	** class MyEventLoop : public Core::EventLoop::IEventLoop<MyEventLoop>
 	** {
 	** public:
-	** 	bool onLoop()
-	** 	{
-	** 		std::cout << "loop !\n";
-	** 	}
+	**	bool onLoop()
+	**	{
+	**		std::cout << "loop !\n";
+	**	}
 	** };
 	** \endcode
 	**
@@ -65,6 +65,7 @@ namespace EventLoop
 		:public Policy::ObjectLevelLockableNotRecursive<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
 		,public FlowT<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
 		,public StatsT<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
+		,private NonCopyable<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
 	{
 	public:
 		//! Parent
@@ -101,9 +102,7 @@ namespace EventLoop
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default constructor
-		*/
+		//! Default constructor
 		IEventLoop();
 		//! Destructor
 		~IEventLoop();
@@ -135,9 +134,7 @@ namespace EventLoop
 		*/
 		void stop(uint timeout = 5000 /* 5 seconds */);
 
-		/*!
-		** \brief Is the event loop running ?
-		*/
+		//! Is the event loop running ?
 		bool running() const;
 		//@}
 
@@ -176,11 +173,6 @@ namespace EventLoop
 		void suspend(uint timeout);
 
 	private:
-		//! Copy constructor
-		IEventLoop(const IEventLoop&) {/* This class is not copyable */}
-		//! Assignment
-		IEventLoop& operator = (const IEventLoop&) {/* This class is not copyable */}
-
 		//! Empty method only used to stop the running event loop
 		bool requestStop();
 
@@ -195,7 +187,7 @@ namespace EventLoop
 
 	private:
 		//! The number of events that wait to be triggered from the inner thread
-		Atomic::Int<32> pHasRequests;
+		Atomic::Bool pHasRequests;
 		//! List of incoming request
 		RequestListType* pRequests;
 		//! True if the event loop is running

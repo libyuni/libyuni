@@ -43,6 +43,20 @@ namespace CStringImpl
 	}
 
 
+	# ifdef YUNI_HAS_CPP_MOVE
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline Data<ChunkSizeT,ExpandableT>::Data(Data&& rhs) :
+		size(rhs.size),
+		capacity(rhs.size),
+		data(rhs.data)
+	{
+		rhs.size = 0;
+		rhs.capacity = 0;
+		rhs.data = nullptr;
+	}
+	# endif
+
+
 	template<uint ChunkSizeT, bool ExpandableT>
 	inline Data<ChunkSizeT,ExpandableT>::~Data()
 	{
@@ -52,6 +66,28 @@ namespace CStringImpl
 		if (chunkSize != 0)
 			::free(const_cast<void*>(static_cast<const void*>(data)));
 	}
+
+
+	# ifdef YUNI_HAS_CPP_MOVE
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline Data<ChunkSizeT,ExpandableT>& Data<ChunkSizeT,ExpandableT>::operator = (Data&& rhs)
+	{
+		// Release the internal buffer if allocated
+		// The string is a string adapter only if the chunk size if null
+		// When the string is an adapter, the variable is const
+		if (chunkSize != 0)
+			::free(const_cast<void*>(static_cast<const void*>(data)));
+
+		size = rhs.size;
+		capacity = rhs.capacity;
+		data = rhs.data;
+
+		rhs.size = 0;
+		rhs.capacity = 0;
+		rhs.data = nullptr;
+		return *this;
+	}
+	# endif
 
 
 	template<uint ChunkSizeT, bool ExpandableT>

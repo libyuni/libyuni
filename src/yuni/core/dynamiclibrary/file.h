@@ -38,12 +38,12 @@ namespace DynamicLibrary
 	**
 	** extern "C" YUNI_LIB_EXPORT const char* myname(void)
 	** {
-	** 	return "The 'my' library";
+	**	return "The 'my' library";
 	** }
 	**
 	** extern "C" YUNI_LIB_EXPORT int mylength(const char* s)
 	** {
-	** 	return s ? strlen(s) : 0;
+	**	return s ? strlen(s) : 0;
 	** }
 	** \endcode
 	**
@@ -59,29 +59,29 @@ namespace DynamicLibrary
 	**
 	** int main(void)
 	** {
-	** 		// Our dynamic library
-	** 		// (might be `mylib.so` on Unix, `my.dynlib` on Darwin, or `my.dll` on Windows)
-	** 		// The current path (`./`) is by default in the search paths
-	** 		DynamicLibrary::File lib("my");
+	**		// Our dynamic library
+	**		// (might be `mylib.so` on Unix, `my.dynlib` on Darwin, or `my.dll` on Windows)
+	**		// The current path (`./`) is by default in the search paths
+	**		DynamicLibrary::File lib("my");
 	**
-	** 		// Binding with a C function, which has only one argument and an `int`
-	** 		// as its returned type
-	** 		// warning: This binding will be only valid for the lifetime of the
-	** 		// variable `lib`. After that, you should encounter some crash if you
-	** 		// try to use it.
-	** 		Bind<int (const char*)> f = lib["mylength"];
+	**		// Binding with a C function, which has only one argument and an `int`
+	**		// as its returned type
+	**		// warning: This binding will be only valid for the lifetime of the
+	**		// variable `lib`. After that, you should encounter some crash if you
+	**		// try to use it.
+	**		Bind<int (const char*)> f = lib["mylength"];
 	**
-	** 		// Calling the exported function
-	** 		// It is safe to directly call the function like this.
-	** 		// The default constructor of the returned type is used if the library
-	** 		// has not been successfully loaded.
-	** 		int result = f("Hello world");
+	**		// Calling the exported function
+	**		// It is safe to directly call the function like this.
+	**		// The default constructor of the returned type is used if the library
+	**		// has not been successfully loaded.
+	**		int result = f("Hello world");
 	**
-	** 		std::cout << "Library loaded : " << (lib.loaded() ? "Yes" : "No") << std::endl;
-	** 		std::cout << "Returned Value : " << result << std::endl;
+	**		std::cout << "Library loaded : " << (lib.loaded() ? "Yes" : "No") << std::endl;
+	**		std::cout << "Returned Value : " << result << std::endl;
 	**
 	**		// Extra: Displaying the name of our library
-	** 		Bind<const char* ()> libname = lib["myname"];
+	**		Bind<const char* ()> libname = lib["myname"];
 	**		const char* s = libname();
 	**		std::cout << "Library name: " << (s ? s : "(null)") << std::endl;
 	**
@@ -115,7 +115,7 @@ namespace DynamicLibrary
 			*/
 			relocationLazy,
 			/*!
-			** brief All necessary relocations shall be performed when the object
+			** \brief All necessary relocations shall be performed when the object
 			** is first loaded (see RTLD_NOW, Unix only)
 			*/
 			relocationNow,
@@ -259,21 +259,21 @@ namespace DynamicLibrary
 		** \brief Try to resolve the address of an exported symbol by the library
 		**
 		** \code
-		** Yuni::DynamicLibrary::File lib;
+		** DynamicLibrary::File lib;
 		** if (lib.load("my"))
 		** {
-		** 		// The shared library has been loaded
-		** 		// We can try to resolve a symbol
-		** 		Yuni::DynamicLibrary::Symbol s = lib.resolve("myentry");
-		** 		if (s.valid())
-		** 		{
-		** 			// The symbol has been found, let's continue
-		** 			// ...
-		** 		}
-		** 		else
-		** 		{
-		** 			// The symbol has not been found in the library
-		** 		}
+		**		// The shared library has been loaded
+		**		// We can try to resolve a symbol
+		**		DynamicLibrary::Symbol s = lib.resolve("myentry");
+		**		if (s.valid())
+		**		{
+		**			// The symbol has been found, let's continue
+		**			// ...
+		**		}
+		**		else
+		**		{
+		**			// The symbol has not been found in the library
+		**		}
 		** }
 		** \endcode
 		**

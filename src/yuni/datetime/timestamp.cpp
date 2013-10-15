@@ -2,7 +2,7 @@
 #include "timestamp.h"
 #include <time.h>
 #include <cassert>
-
+#include "../core/system/gettimeofday.h"
 
 
 namespace Yuni
@@ -18,6 +18,16 @@ namespace DateTime
 		return (sint64) ::time(nullptr);
 		# endif
 	}
+
+
+	Timestamp NowMilliSeconds()
+	{
+		timeval now;
+		YUNI_SYSTEM_GETTIMEOFDAY(&now, nullptr);
+		return now.tv_sec * 1000 + now.tv_usec / 1000;
+	}
+
+
 
 } // namespace DateTime
 } // namespace Yuni

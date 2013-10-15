@@ -24,10 +24,11 @@ namespace Gfx3D
 		if (!shaders || !shaders->valid())
 			return;
 
-		pAmbient->activate(shaders);
-		pDiffuse->activate(shaders);
-		pSpecular->activate(shaders);
-		pEmission->activate(shaders);
+		pAmbient->activate(shaders, -1);
+		pSpecular->activate(shaders, 1);
+		pEmission->activate(shaders, 2);
+		pDiffuse->activate(shaders, 0);
+		// TODO : Have a normal map also ? Is this really material-related ?
 	}
 
 

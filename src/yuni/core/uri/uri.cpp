@@ -697,6 +697,69 @@ namespace Yuni
 	}
 
 
+	void Uri::password(const AnyString& newpassword)
+	{
+		pInfos.password = newpassword;
+		pInfos.isValid = true;
+	}
+
+
+	void Uri::scheme(const Net::Protocol::Type& type)
+	{
+		pInfos.scheme = Net::Protocol::ToScheme(type);
+		pInfos.isValid = true;
+	}
+
+
+	void Uri::server(const AnyString& newserver)
+	{
+		pInfos.server = newserver;
+		pInfos.isValid = true;
+	}
+
+
+	void Uri::scheme(const AnyString& newscheme)
+	{
+		pInfos.scheme = newscheme;
+		pInfos.isValid = true;
+	}
+
+
+	void Uri::user(const AnyString& newuser)
+	{
+		pInfos.user = newuser;
+		pInfos.isValid = true;
+	}
+
+
+	void Uri::path(const AnyString& newpath)
+	{
+		pInfos.path = newpath;
+		pInfos.isValid = true;
+	}
+
+
+	void Uri::query(const AnyString& newquery)
+	{
+		pInfos.query = newquery;
+		pInfos.isValid = true;
+	}
+
+
+	void Uri::fragment(const AnyString& newfragment)
+	{
+		pInfos.fragment = newfragment;
+		pInfos.isValid = true;
+	}
+
+
+	std::ostream& Uri::print(std::ostream& out) const
+	{
+		pInfos.print(out);
+		return out;
+	}
+
+
 
 
 } // namespace Yuni

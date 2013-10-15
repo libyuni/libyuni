@@ -10,7 +10,7 @@ namespace Bit
 
 
 	template<bool ValueT>
-	static uint Find(const Bit::Array::BufferType& pBuffer, uint pCount, uint offset)
+	static inline uint Find(const Bit::Array::BufferType& pBuffer, uint pCount, uint offset)
 	{
 		// bitmask
 		static const uchar mask[] = { 128, 64, 32, 16, 8, 4, 2, 1 };
@@ -30,7 +30,7 @@ namespace Bit
 					p = (p < offset) ? offset : p;
 					return (p < pCount) ? p : npos;
 				}
-				if (!ValueT and c == 0)
+				if (not ValueT and c == 0)
 				{
 					uint p = i * 8;
 					p = (p < offset) ? offset : p;
@@ -76,21 +76,22 @@ namespace Bit
 
 
 
-
-	uint Array::findFirstSet(uint offset) const
+	template<> uint Array::find<true>(uint offset) const
 	{
 		return Find<true>(pBuffer, pCount, offset);
 	}
 
 
-	uint Array::findFirstUnset(uint offset) const
+	template<> uint Array::find<false>(uint offset) const
 	{
 		return Find<false>(pBuffer, pCount, offset);
 	}
 
 
+
 	bool Array::any() const
 	{
+		// try to find a byte not null
 		for (uint i = 0; i != pBuffer.size(); ++i)
 		{
 			if (pBuffer[i] != 0)

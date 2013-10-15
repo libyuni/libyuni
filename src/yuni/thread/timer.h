@@ -3,7 +3,7 @@
 
 # include "../yuni.h"
 # include "thread.h"
-# include "../core/atomic/int.h"
+# include "../core/atomic/bool.h"
 
 
 namespace Yuni
@@ -63,6 +63,8 @@ namespace Thread
 			//! The default time interval (in milliseconds)
 			defaultInterval = 1000,
 		};
+		//! The most suitable smart pointer for the class
+		typedef SmartPtr<Timer> Ptr;
 
 	public:
 		//! \name Constructor & Destructor
@@ -229,7 +231,7 @@ namespace Thread
 		//! The maximum number of cycles before stopping, 0 means infinite
 		uint pCycleCount;
 		//! A bool value to indicate if the settings should be reloaded
-		Atomic::Int<32> pShouldReload;
+		Atomic::Bool pShouldReload;
 		//! Mutex
 		mutable Mutex pTimerMutex;
 

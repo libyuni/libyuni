@@ -20,9 +20,14 @@ namespace DateTime
 
 
 	/*!
-	** \brief Get the current timestamp
+	** \brief Get the current timestamp (in seconds since epoch)
 	*/
 	Timestamp Now();
+
+	/*!
+	** \brief Get the current timestamp (in milliseconds since epoch)
+	*/
+	Timestamp NowMilliSeconds();
 
 
 	/*!

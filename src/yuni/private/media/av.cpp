@@ -15,6 +15,8 @@ extern "C"
 # include "libavformat/avformat.h"
 }
 
+
+
 namespace Yuni
 {
 namespace Private
@@ -25,16 +27,22 @@ namespace Media
 
 	bool AV::Init()
 	{
-		av_register_all();
+		// Initialize libavformat and register all the muxers
+		::av_register_all();
+
 		# ifdef NDEBUG
 		// Silence warning output from the lib
-		av_log_set_level(AV_LOG_ERROR);
+		::av_log_set_level(AV_LOG_ERROR);
 		# else // NDEBUG
 		// Only write output when encountering unrecoverable errors
-		av_log_set_level(AV_LOG_FATAL);
+		::av_log_set_level(AV_LOG_FATAL);
 		# endif // NDEBUG
+
 		return true;
 	}
+
+
+
 
 
 

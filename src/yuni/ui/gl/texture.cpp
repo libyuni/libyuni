@@ -1,23 +1,84 @@
 
-#include <yuni/yuni.h>
-#include <yuni/core/logs.h>
-#include <yuni/core/string.h>
-#include <yuni/core/system/windows.hdr.h>
-#include <yuni/private/graphics/opengl/glew/glew.h>
+#include "texture.h"
+#include "../../core/string.h"
+#include "../../core/system/windows.hdr.h"
+#include "../../private/graphics/opengl/glew/glew.h"
 #include <fstream>
+#include <cassert>
 #include <climits>
 
 // Lib for image loading
 #include "../stb_image.h"
 
 #include "glerror.h"
-#include "texture.h"
 
 
 namespace Yuni
 {
 namespace Gfx3D
 {
+
+
+	static GLenum DepthToGLEnum(uint depth)
+	{
+		switch (depth)
+		{
+			case 3:
+			case 6:
+				return GL_RGB;
+			case 4:
+			case 8:
+				return GL_RGBA;
+			case 1:
+				return GL_RED;
+			case 2:
+				return GL_RG;
+		}
+		return GL_RGB;
+	}
+
+
+	static GLint DepthToGLEnumInternal(uint depth)
+	{
+		switch (depth)
+		{
+			case 3:
+			case 6:
+				return GL_RGB8;
+			case 4:
+			case 8:
+				return GL_RGBA8;
+			case 1:
+				return GL_R8;
+			case 2:
+				return GL_RG8;
+		}
+		return GL_RGB8;
+	}
+
+
+	static GLenum DataTypeToGLEnum(Texture::DataType type)
+	{
+		switch (type)
+		{
+			case Texture::UInt8:
+				return GL_UNSIGNED_BYTE;
+			case Texture::Int8:
+				return GL_BYTE;
+			case Texture::UInt16:
+				return GL_UNSIGNED_SHORT;
+			case Texture::Int16:
+				return GL_SHORT;
+			case Texture::UInt32:
+				return GL_UNSIGNED_INT;
+			case Texture::Int32:
+				return GL_INT;
+			case Texture::Float:
+				return GL_FLOAT;
+		}
+		return GL_UNSIGNED_BYTE;
+	}
+
 
 
 	Texture::Ptr Texture::LoadFromFile(const AnyString& filePath)
@@ -29,7 +90,7 @@ namespace Gfx3D
 		uint8* data = ::stbi_load(filePath.c_str(), &width, &height, &depth, 0); // 0 means auto-detect
 		if (!data)
 			return nullptr;
-		Texture::Ptr texture = Texture::New(width, height, depth, data, true);
+		Texture::Ptr texture = Texture::New((uint)width, (uint)height, (uint)depth, UInt8, data, true);
 
 		// free buffer
 		::stbi_image_free(data);
@@ -50,7 +111,7 @@ namespace Gfx3D
 		if (!texData)
 			return nullptr;
 
-		Texture::Ptr texture = Texture::New((uint)width, (uint)height, (uint)depth, texData, true);
+		Texture::Ptr texture = Texture::New((uint)width, (uint)height, (uint)depth, UInt8, texData, true);
 
 		// free buffer
 		::stbi_image_free(texData);
@@ -65,8 +126,6 @@ namespace Gfx3D
 
 		if (!fd)
 			return nullptr;
-
-		Yuni::Logs::Logger<> logs;
 
 		uint texture;
 		// Allocate a texture name
@@ -104,7 +163,7 @@ namespace Gfx3D
 
 		int width;
 		int height;
-		int depth;
+		int colorDepth;
 
 		#ifdef YUNI_OS_WINDOWS
 		char textureFile[MAX_PATH + 1];
@@ -114,19 +173,21 @@ namespace Gfx3D
 		for (uint i = 0; i < 6; ++i)
 		{
 			fd >> textureFile;
-			uint8* data = ::stbi_load(textureFile, &width, &height, &depth, 0);
+			uint8* data = ::stbi_load(textureFile, &width, &height, &colorDepth, 0);
 			if (!data)
 			{
 				::glDeleteTextures(1, &texture);
 				return nullptr;
 			}
-			int format = DepthToGLEnum(depth);
-			::glTexImage2D(CubeMapEnums[i], 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			GLenum format = DepthToGLEnum(colorDepth);
+			GLint formatInt = DepthToGLEnumInternal(colorDepth);
+			GLenum type = DataTypeToGLEnum(UInt8);
+			::glTexImage2D(CubeMapEnums[i], 0, formatInt, width, height, 0, format, type, data);
 			::stbi_image_free(data);
 		}
 		::glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
-		return new Texture(texture, width, height, depth);
+		return new Texture(texture, (uint)width, (uint)height, (uint)colorDepth, UInt8);
 	}
 
 
@@ -136,63 +197,13 @@ namespace Gfx3D
 	}
 
 
-	int Texture::DepthToGLEnum(uint depth)
-	{
-		int format;
-		switch (depth)
-		{
-			case 3:
-			case 6:
-				format = GL_RGB;
-				break;
-			case 4:
-			case 8:
-				format = GL_RGBA;
-				break;
-			case 1:
-				format = GL_RED;
-				break;
-			case 2:
-				format = GL_RG;
-				break;
-			default:
-				format = GL_RGB;
-				break;
-		}
-		return format;
-	}
 
 
-	static int DepthToGLEnumInternal(uint depth)
-	{
-		int format;
-		switch (depth)
-		{
-			case 3:
-			case 6:
-				format = GL_RGB8;
-				break;
-			case 4:
-			case 8:
-				format = GL_RGBA8;
-				break;
-			case 1:
-				format = GL_R8;
-				break;
-			case 2:
-				format = GL_RG8;
-				break;
-			default:
-				format = GL_RGB8;
-				break;
-		}
-		return format;
-	}
-
-
-	Texture::Ptr Texture::New(uint width, uint height, uint colorDepth,
+	Texture::Ptr Texture::New(uint width, uint height, uint colorDepth, DataType type,
 		const uint8* data, bool mipmaps)
 	{
+		assert(width > 0 && "Creating texture with width=0 !");
+		assert(height > 0 && "Creating texture with height=0 !");
 		ID id;
 
 		// Allocate a texture name
@@ -201,13 +212,66 @@ namespace Gfx3D
 		// Select our current texture
 		::glBindTexture(GL_TEXTURE_2D, id);
 
-		// when texture area is small, bilinear filter and average with the 2 closest mipmaps
+		// When texture area is small, bilinear filter and average with the 2 closest mipmaps
 		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmaps ?
 			GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
-		// when texture area is large, bilinear filter the first mipmap
+		// When texture area is large, bilinear filter the first mipmap
 		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		// the texture ends at the edges (clamp)
+		// The texture ends at the edges (clamp)
+		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+		// Color fusion mode : only used when no shader is activated
+		::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+		// This Enable right here is necessary in cases where no shader is activated
+		// !!! However, it is freakishly buggy ! If you do it on every texture load,
+		// !!! it will break the video player (it displays levels of red...)
+		// So yeah, only do it once.
+		static bool first = true;
+		if (first)
+		{
+			::glEnable(GL_TEXTURE_2D);
+			first = false;
+		}
+
+		// Set the texture in OpenGL
+		GLenum format = DepthToGLEnum(colorDepth);
+		GLenum formatInt = DepthToGLEnumInternal(colorDepth);
+		GLenum dataType = DataTypeToGLEnum(type);
+		::glTexImage2D(GL_TEXTURE_2D, 0, formatInt, width, height, 0, format, dataType, data);
+
+		// Build our texture mipmaps
+		if (mipmaps)
+			::glGenerateMipmap(GL_TEXTURE_2D);
+
+		return new Texture(id, width, height, colorDepth, type);
+	}
+
+
+	Texture::Ptr Texture::New3D(uint width, uint height, uint depth, uint colorDepth, DataType type,
+		const uint8* data, bool mipmaps)
+	{
+		assert(width > 0 && "Creating texture with width=0 !");
+		assert(height > 0 && "Creating texture with height=0 !");
+		assert(depth > 0 && "Creating texture with depth=0 !");
+		ID id;
+
+		// Allocate a texture name
+		::glGenTextures(1, &id);
+
+		// Select our current texture
+		::glBindTexture(GL_TEXTURE_2D, id);
+
+		// When texture area is small, bilinear filter and average with the 2 closest mipmaps
+		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmaps ?
+			GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+		// When texture area is large, bilinear filter the first mipmap
+		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		// The texture ends at the edges (clamp)
 		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -228,69 +292,59 @@ namespace Gfx3D
 
 		// Set the texture in OpenGL
 		GLenum format = (GLenum)DepthToGLEnum(colorDepth);
-		::glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		GLenum formatInt = DepthToGLEnumInternal(colorDepth);
+		GLenum dataType = DataTypeToGLEnum(type);
+		::glTexImage2D(GL_TEXTURE_2D, 0, formatInt, width, height, 0, format, dataType, data);
 
 		// Build our texture mipmaps
 		if (mipmaps)
 			::glGenerateMipmap(GL_TEXTURE_2D);
 
-		return new Texture(id, width, height, colorDepth);
+		return new Texture(id, width, height, depth, colorDepth, type);
 	}
 
 
-	Texture::Ptr Texture::New3D(uint width, uint height, uint depth, uint colorDepth,
-		const uint8* data, bool mipmaps)
+	Texture::Ptr Texture::NewMS(uint width, uint height, uint colorDepth,
+		DataType type, uint samples, const uint8* data)
 	{
+		assert(width > 0 && "Creating texture with width=0 !");
+		assert(height > 0 && "Creating texture with height=0 !");
 		ID id;
 
 		// Allocate a texture name
 		::glGenTextures(1, &id);
 
 		// Select our current texture
-		::glBindTexture(GL_TEXTURE_2D, id);
+		::glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, id);
 
-		// when texture area is small, bilinear filter and average with the 2 closest mipmaps
-		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmaps ?
-			GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
-		// when texture area is large, bilinear filter the first mipmap
-		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// GLenum format = DepthToGLEnum(colorDepth);
+		GLenum formatInt = DepthToGLEnumInternal(colorDepth);
+		// GLenum dataType = DataTypeToGLEnum(type);
+		::glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, formatInt, width, height, false);
 
-		// the texture ends at the edges (clamp)
-		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-		// Color fusion mode : only used when no shader is activated
-		::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-		// This Enable right here is necessary in cases where no shader is activated
-		// !!! However, it is freakishly buggy ! If you do it on every texture load,
-		// !!! it will break the video player (it displays levels of red...)
-		// So yeah, only do it once.
-		static bool first = true;
-		if (first)
-		{
-			::glEnable(GL_TEXTURE_2D);
-			first = false;
-		}
-
-		// Set the texture in OpenGL
-		GLenum format = (GLenum)DepthToGLEnum(colorDepth);
-		::glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-
-		// Build our texture mipmaps
-		if (mipmaps)
-			::glGenerateMipmap(GL_TEXTURE_2D);
-
-		return new Texture(id, width, height, depth);
+		return new Texture(id, width, height, colorDepth, type);
 	}
 
 
-	Texture::Texture(ID id, uint width, uint height, uint depth):
+	Texture::Texture(ID id, uint width, uint height, uint colorDepth, DataType type):
 		pID(id),
 		pWidth(width),
 		pHeight(height),
-		pDepth(depth)
+		// No depth on 2D textures
+		pDepth(0u),
+		pColorDepth(colorDepth),
+		pType(type)
+	{
+	}
+
+
+	Texture::Texture(ID id, uint width, uint height, uint depth, uint colorDepth, DataType type):
+		pID(id),
+		pWidth(width),
+		pHeight(height),
+		pDepth(depth),
+		pColorDepth(colorDepth),
+		pType(type)
 	{
 	}
 
@@ -308,23 +362,37 @@ namespace Gfx3D
 		pHeight = height;
 		// Bind texture
 		::glBindTexture(GL_TEXTURE_2D, pID);
-		int format = DepthToGLEnum(pDepth);
-		int formatInt = DepthToGLEnumInternal(pDepth);
+		GLenum format = DepthToGLEnum(pDepth);
+		GLint formatInt = DepthToGLEnumInternal(pDepth);
+		GLenum type = DataTypeToGLEnum(pType);
 		// Sadly, glTexSubImage2D does not do the trick, we need glTexImage2D
-		::glTexImage2D(GL_TEXTURE_2D, 0, formatInt, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
-		GLTestError("glTexImage2D Texture resize");
+		::glTexImage2D(GL_TEXTURE_2D, 0, formatInt, width, height, 0, format, type, nullptr);
+		if (!GLTestError("glTexImage2D Texture resize"))
+			std::cerr << "On texture "<< pID << std::endl;
 	}
 
 
-	void Texture::update(uint offsetX, uint offsetY, uint width, uint height, uint depth,
+	void Texture::update(const unsigned char* data)
+	{
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		::glBindTexture(GL_TEXTURE_2D, pID);
+		GLenum format = DepthToGLEnum(pColorDepth);
+		GLenum type = DataTypeToGLEnum(pType);
+		::glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, pWidth, pHeight, format, type, data);
+		if (!GLTestError("glTexSubImage2D Texture update"))
+			std::cerr << "On texture "<< pID << std::endl;
+	}
+
+
+	void Texture::update(uint offsetX, uint offsetY, uint width, uint height, uint colorDepth,
 		const unsigned char* data)
 	{
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		assert(offsetX + width <= pWidth && "Texture update : X + width is out of bounds !");
 		assert(offsetY + height <= pHeight && "Texture update : Y + height is out of bounds !");
 		::glBindTexture(GL_TEXTURE_2D, pID);
-		int format = DepthToGLEnum(depth);
-		pDepth = depth;
+		int format = DepthToGLEnum(colorDepth);
+		pColorDepth = colorDepth;
 		::glTexSubImage2D(GL_TEXTURE_2D, 0, offsetX, offsetY, width, height, format, GL_UNSIGNED_BYTE, data);
 		if (!GLTestError("glTexSubImage2D Texture update"))
 			std::cerr << "On texture "<< pID << std::endl;
@@ -346,7 +414,7 @@ namespace Gfx3D
 
 	void Texture::clearToWhite()
 	{
-		std::vector<uint8> data(pWidth * pHeight * 4, 1);
+		std::vector<uint8> data(pWidth * pHeight * 4, 255);
 		update(0, 0, pWidth, pHeight, pDepth, &data[0]);
 	}
 
@@ -369,11 +437,23 @@ namespace Gfx3D
 	}
 
 
-	uint Texture::colorDepth() const
+	uint Texture::depth() const
 	{
+		assert(pDepth > 0 && "Null depth for texture ! Make sure this is a 3D texture.");
 		return pDepth;
 	}
 
+
+	uint Texture::colorDepth() const
+	{
+		return pColorDepth;
+	}
+
+
+	Texture::DataType Texture::type() const
+	{
+		return pType;
+	}
 
 
 } // namespace Gfx3D

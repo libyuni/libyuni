@@ -52,13 +52,18 @@ namespace Media
 	template<StreamType TypeT>
 	inline typename Stream<TypeT>::Ptr File::addStream(uint index)
 	{
+		assert(pFormat and "invalid format pointer");
+
 		typedef Stream<TypeT> MyStream;
 
 		// Loop on streams in the file
 		for (uint i = 0; i != pFormat->nb_streams; ++i)
 		{
+			assert(pFormat->streams[i] and "invalid stream pointer");
+			assert(pFormat->streams[i]->codec and "invalid stream pointer");
+
 			// Reject streams that are not the requested codec type
-			if (!IsSameType<TypeT>::Check(pFormat->streams[i]->codec->codec_type))
+			if (not IsSameType<TypeT>::Check(pFormat->streams[i]->codec->codec_type))
 				continue;
 
 			// Continue until we find the requested stream
@@ -72,7 +77,7 @@ namespace Media
 			typename MyStream::Ptr stream = new MyStream(this, pFormat, pFormat->streams[i]->codec, i);
 
 			// Check that the codec was properly loaded
-			if (!stream->valid())
+			if (not stream->valid())
 			{
 				// The new stream is destroyed here by the SmartPtr
 				continue;
@@ -82,6 +87,7 @@ namespace Media
 			getCache<TypeT>()[stream->index()] = stream;
 			return stream;
 		}
+
 		return nullptr;
 	}
 
@@ -103,6 +109,7 @@ namespace Media
 	inline AVPacket* File::getNextPacket(Stream<TypeT>* stream)
 	{
 		AVPacket* packet = new AVPacket();
+
 		// Get a packet
 		while (::av_read_frame(pFormat, packet) >= 0)
 		{
@@ -143,6 +150,7 @@ namespace Media
 			// Unmanaged packet, free it and look for another one
 			::av_free_packet(packet);
 		}
+
 		delete packet;
 		return nullptr;
 	}
@@ -168,6 +176,13 @@ namespace Media
 		assert(false and "Invalid stream type");
 		return pVStreams;
 	}
+
+
+	inline bool File::valid() const
+	{
+		return nullptr != pFormat;
+	}
+
 
 
 

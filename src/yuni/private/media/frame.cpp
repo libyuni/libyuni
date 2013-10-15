@@ -56,6 +56,7 @@ namespace Media
 
 	bool Frame::valid() const
 	{
+		assert(pImpl);
 		return pImpl->frame and pImpl->frame->linesize[0] > 0
 			and pImpl->frame->linesize[1] > 0 and pImpl->frame->linesize[2] > 0;
 	}
@@ -133,6 +134,10 @@ namespace Media
 
 	void Frame::setData(void* data)
 	{
+		// This is not the common usage, but if we end up replacing the data
+		// do not forget to release the previous
+		if (pImpl->frame)
+			::av_free(pImpl->frame);
 		pImpl->frame = reinterpret_cast< ::AVFrame*>(data);
 	}
 

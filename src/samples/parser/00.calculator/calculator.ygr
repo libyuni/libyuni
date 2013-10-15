@@ -1,0 +1,21 @@
+
+wp:
+	[ \t\n\r]*
+
+number:
+	[+-]? [0123456789]+ ('.' [0123456789]+ )? ([eE] [+-]? [0123456789]+)?
+
+expr-sum:
+	expr-product ([+-] expr-product)*
+
+expr-product:
+	expr-atom ([*/%] expr-atom)*
+
+expr-atom:
+	('(' expr ')') | (number)
+
+expr:
+	expr-sum
+
+start:
+	expr

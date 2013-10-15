@@ -34,7 +34,7 @@
 			if (pThreadHandle) \
 			{ \
 				WaitForSingleObject(pThreadHandle, INFINITE); \
-				pThreadHandle = NULL; \
+				pThreadHandle = nullptr; \
 			} \
 		} \
 		while (0)
@@ -46,7 +46,7 @@
 		{ \
 			if (pThreadIDValid) \
 			{ \
-				::pthread_join(pThreadID, NULL); \
+				::pthread_join(pThreadID, nullptr); \
 				pThreadIDValid = false; \
 			} \
 		} \
@@ -185,7 +185,7 @@ namespace Thread
 	IThread::IThread() :
 		# ifndef YUNI_NO_THREAD_SAFE
 		# ifdef YUNI_OS_WINDOWS
-		pThreadHandle(NULL),
+		pThreadHandle(nullptr),
 		# else
 		// pThreadID((pthread_t) NULL), // no portable value
 		pThreadIDValid(false),
@@ -252,8 +252,8 @@ namespace Thread
 		pSignalWakeUp.reset();
 
 		# ifdef YUNI_OS_WINDOWS
-		pThreadHandle = CreateThread(NULL, 0, Yuni::Private::Thread::threadCallbackExecute,
-			this, 0, NULL);
+		pThreadHandle = CreateThread(nullptr, 0, Yuni::Private::Thread::threadCallbackExecute,
+			this, 0, nullptr);
 		if (not pThreadHandle)
 		# else
 		// Lock the startup condition before creating the thread,
@@ -261,7 +261,7 @@ namespace Thread
 		// successfully have set isRunning _and_ called the triggers.
 		// Then we can check the isRunning status and determine if the startup
 		// was a success or not.
-		pThreadIDValid = (0 == ::pthread_create(&pThreadID, NULL, Yuni::Private::Thread::threadCallbackExecute, this));
+		pThreadIDValid = (0 == ::pthread_create(&pThreadID, nullptr, Yuni::Private::Thread::threadCallbackExecute, this));
 		if (not pThreadIDValid)
 		# endif
 		{
@@ -308,7 +308,6 @@ namespace Thread
 	Error IThread::stop(uint timeout)
 	{
 		assert(timeout < INVALID_TIMEOUT and "Invalid range for timeout, IThread::stop");
-
 		ThreadingPolicy::MutexLocker locker(*this);
 		return stopWL(timeout);
 	}
@@ -472,7 +471,6 @@ namespace Thread
 	Error IThread::restart(uint timeout)
 	{
 		assert(timeout < INVALID_TIMEOUT and "Invalid range for timeout, IThread::restart");
-
 		Error status = stop(timeout);
 		return (status != errNone) ? status : start();
 	}

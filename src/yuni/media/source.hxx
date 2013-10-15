@@ -11,9 +11,9 @@ namespace Media
 	inline Source::Source() :
 		pAStream(nullptr),
 		pVStream(nullptr),
-		pBufferCount(0),
-		pSecondsElapsed(0),
-		pSecondsCurrent(0)
+		pBufferCount(),
+		pSecondsElapsed(),
+		pSecondsCurrent()
 	{
 	}
 

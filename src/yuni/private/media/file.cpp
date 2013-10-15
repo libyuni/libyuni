@@ -21,6 +21,7 @@ namespace Media
 		if (::avformat_open_input(&pFormat, filePath.c_str(), nullptr, nullptr))
 		# endif // LIBAVFORMAT_VERSION_MAJOR < 53
 		{
+			pFormat = nullptr;
 			return;
 		}
 
@@ -48,21 +49,38 @@ namespace Media
 		pAStreams.clear();
 		pVStreams.clear();
 
-		# if LIBAVFORMAT_VERSION_MAJOR < 53
-		::av_close_input_file(pFormat);
-		# else
-		::avformat_close_input(&pFormat);
-		# endif // LIBAVFORMAT_VERSION_MAJOR < 53
+		if (pFormat)
+		{
+			# if LIBAVFORMAT_VERSION_MAJOR < 53
+			::av_close_input_file(pFormat);
+			# else
+			::avformat_close_input(&pFormat);
+			# endif // LIBAVFORMAT_VERSION_MAJOR < 53
+		}
 	}
 
 
 	uint File::duration() const
 	{
-		assert(pFormat);
-		return pFormat->duration / AV_TIME_BASE;
+		assert(pFormat and "invalid format");
+		return pFormat ? (pFormat->duration / AV_TIME_BASE) : 0;
 	}
+
+
+	void File::rewind()
+	{
+		assert(pFormat and "invalid format");
+
+		for (auto stream : pVStreams)
+			stream.second->rewind();
+		for (auto stream : pAStreams)
+			stream.second->rewind();
+	}
+
+
 
 
 } // namespace Media
 } // namespace Private
 } // namespace Yuni
+

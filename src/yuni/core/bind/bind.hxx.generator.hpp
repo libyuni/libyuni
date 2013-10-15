@@ -33,6 +33,14 @@ namespace Yuni
 		pHolder(rhs.pHolder)
 	{}
 
+	# ifdef YUNI_HAS_CPP_MOVE
+	// Move Constructor
+	template<<%=tmpl[0]%>>
+	inline Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::Bind(Bind&& rhs)
+	{
+		pHolder.swap(rhs.pHolder);
+	}
+	# endif
 
 	// Constructor
 	template<<%=tmpl[0]%>>
@@ -41,6 +49,16 @@ namespace Yuni
 		bind(symbol);
 	}
 
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Constructor from a functor
+	template<<%=tmpl[0]%>>
+	template<class C>
+	inline Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::Bind(C&& functor)
+	{
+		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (<%=generator.list(i)%>)>(std::forward<C>(functor));
+	}
+
+	# else
 
 	// Constructor: Pointer-to-function
 	template<<%=tmpl[0]%>>
@@ -48,6 +66,8 @@ namespace Yuni
 	{
 		bind(pointer);
 	}
+
+	# endif
 
 
 	// Constructor: pointer-to-member
@@ -72,6 +92,17 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (<%=generator.list(i)%>)>(pointer);
 	}
+
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<<%=tmpl[0]%>>
+	template<class C>
+	inline void Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::bind(C&& functor)
+	{
+		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (<%=generator.list(i)%>)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -316,8 +347,6 @@ namespace Yuni
 
 
 
-
-
 	template<<%=tmpl[0]%>>
 	inline R Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::invoke(<%=generator.variableList(i)%>) const
 	{
@@ -406,6 +435,27 @@ namespace Yuni
 		return *this;
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	template<<%=tmpl[0]%>>
+	template<class C>
+	inline Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>& Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::operator = (C&& functor)
+	{
+		// Inc the reference count
+		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (<%=generator.list(i)%>)>(std::forward<C>(functor));
+		return *this;
+	}
+	# endif
+
+
+	# ifdef YUNI_HAS_CPP_MOVE
+	template<<%=tmpl[0]%>>
+	inline Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>& Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::operator = (Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>&& rhs)
+	{
+		pHolder.swap(rhs.pHolder);
+		return *this;
+	}
+	# endif
 
 	template<<%=tmpl[0]%>>
 	inline bool Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::operator == (R (*pointer)(<%=generator.list(i)%>)) const

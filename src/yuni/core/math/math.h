@@ -175,13 +175,12 @@ namespace Math
 	** \endcode
 	*/
 	template <int N>
-	struct Factorial
+	struct Factorial final
 	{
 		//! The Formula for the factorial function
 		enum { value = N * Factorial<N-1>::value };
 		// Fatorial<1> is located in math.hxx
-
-	}; // class Factorial
+	};
 
 
 
@@ -208,13 +207,12 @@ namespace Math
 	** \endcode
 	*/
 	template<int X, int Y>
-	struct PowerInt
+	struct PowerInt final
 	{
 		//! The formula for the power function
 		enum { value = X * PowerInt<X, Y-1>::value };
 		// PowerInt<X,0> is located in math.hxx
-
-	}; // class Power
+	};
 
 
 
@@ -229,7 +227,7 @@ namespace Math
 	/*!
 	** \brief Get the square root value
 	**
-	** The standard dquare root function, without any check on the input
+	** The standard square root function, without any check on the input
 	*/
 	template<class U> U SquareRootNoCheck(U x);
 
@@ -246,18 +244,20 @@ namespace Math
 	** \internal Via iteration
 	*/
 	template <int N, int I = 1>
-	struct SquareRootInt
+	struct SquareRootInt final
 	{
 		//! The formula for the squere root function
 		enum { value = (I*I < N) ? SquareRootInt<N, I+1>::value : I };
 		// SquareRootInt<N,N> is located in math.hxx
-
-	}; // class SquareRoot
+	};
 
 
 	/*!
 	** \brief Get if a value is a power of 2
 	**
+	** \code
+	** std::cout << Math::PowerOfTwo(64) << std::endl; // 1
+	** \endcode
 	*/
 	bool PowerOfTwo(int x);
 
@@ -372,7 +372,7 @@ namespace Math
 	** ** \param v An integer
 	** ** \return gcd(u, v)
 	** */
-	template<class U, class V> U GCD(U u, V v);
+	template<class U, class V> U  GCD(U u, V v);
 
 
 

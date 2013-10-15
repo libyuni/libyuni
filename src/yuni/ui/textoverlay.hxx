@@ -135,14 +135,12 @@ namespace UI
 		pMaterial = new Gfx3D::MaterialSurfaceColored("TextColor", r, g, b);
 	}
 
-
 	inline void TextOverlay::color(float r, float g, float b, float a)
 	{
 		pModified = true;
 		pColor.assign(r, g, b, a);
 		pMaterial = new Gfx3D::MaterialSurfaceColored("TextColor", r, g, b, a);
 	}
-
 
 	inline void TextOverlay::color(const Color::RGB<float>& color)
 	{

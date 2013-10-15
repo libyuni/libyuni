@@ -59,8 +59,8 @@ namespace DBI
 			// the channel has been successfully opened
 
 			// retrieving all events
-			// we may have an inconsistency here in some heavily multithreaded applications
-			// but it should not matter
+			// we may have a minor inconsistency here in some heavily multithreaded
+			// applications with the value of onSQLError, but it should not matter
 			// (event is thread-safe of course)
 			data->onSQLError = onSQLError;
 
@@ -102,6 +102,7 @@ namespace DBI
 
 	bool ConnectorPool::retrieveSettings(Settings& out) const
 	{
+		// acquiring the pointer to avoid race conditions
 		Yuni::Private::DBI::ConnectorDataPtr data = pData;
 		if (!(!data))
 		{
@@ -118,7 +119,9 @@ namespace DBI
 
 	void ConnectorPool::closeIdleConnections(uint* remainingCount, uint* closedCount)
 	{
+		// acquiring the pointer to avoid race conditions
 		Yuni::Private::DBI::ConnectorDataPtr data = pData;
+
 		if (!(!data))
 		{
 			// idle time, from the settings
@@ -150,7 +153,9 @@ namespace DBI
 
 	void ConnectorPool::closeIdleConnections(uint idleTime, uint* remainingCount, uint* closedCount)
 	{
+		// acquiring the pointer to avoid race conditions
 		Yuni::Private::DBI::ConnectorDataPtr data = pData;
+
 		if (!(!data))
 		{
 			// stats

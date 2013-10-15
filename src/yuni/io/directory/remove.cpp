@@ -40,15 +40,16 @@ namespace Directory
 		static bool RmDirRecursiveInternal(const AnyString& path)
 		{
 			DIR* dp;
-			struct dirent* ep;
-			CString<2096> buffer;
-			struct stat st;
-
 			if (NULL != (dp = ::opendir(path.c_str())))
 			{
+				struct dirent* ep = nullptr;
+				Clob buffer;
+
 				while (NULL != (ep = ::readdir(dp)))
 				{
 					buffer.clear() << path << SEP << (const char*) ep->d_name;
+					struct stat st;
+
 					if (0 == ::stat(buffer.c_str(), &st))
 					{
 						if (S_ISDIR(st.st_mode))

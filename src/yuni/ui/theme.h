@@ -56,7 +56,7 @@ namespace UI
 		//! Margin for automatic placement of child controls (in pixels)
 		uint margin;
 		//! Width of control borders (in pixels)
-		uint borderWidth;
+		float borderWidth;
 		//! Height of window menus (in pixels)
 		uint menuHeight;
 		//! Checkbox size (both width and height, checkboxes are squares)

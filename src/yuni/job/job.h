@@ -5,6 +5,7 @@
 # include "forward.h"
 # include "../thread/thread.h"
 # include "../core/string.h"
+# include "../core/atomic/bool.h"
 
 
 
@@ -191,7 +192,7 @@ namespace Job
 		//! Progression
 		Atomic::Int<32> pProgression;
 		//! Flag to cancel the work
-		Atomic::Int<32> pCanceling;
+		Atomic::Bool pCanceling;
 		//! The attached thread to this job, if any
 		ThreadingPolicy::Volatile<Thread::IThread*>::Type pThread;
 		//! Name of the job

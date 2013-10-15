@@ -54,6 +54,8 @@ namespace Media
 
 		bool updateDispatched(uint source);
 
+		bool rewindDispatched(uint source);
+
 		void stream(const AStreamPtr& audioStream) { pAStream = audioStream; }
 
 		void stream(const VStreamPtr& videoStream) { pVStream = videoStream; }

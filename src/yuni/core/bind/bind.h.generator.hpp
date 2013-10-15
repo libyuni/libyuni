@@ -133,33 +133,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(<%=generator.list(i)%>));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(<%=generator.list(i)%>));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(<%=generator.list(i)%>));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -262,6 +255,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -350,10 +351,18 @@ namespace Yuni
 		R operator () (<%=generator.variableList(i)%>) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(<%=generator.list(i)%>));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(<%=generator.list(i)%>)) const;

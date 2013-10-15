@@ -74,25 +74,31 @@ namespace VersionInfo
 	void List::loadFromPath(const String& folder)
 	{
 		String path;
-		IO::Normalize(path, folder);
+		IO::Canonicalize(path, folder);
 		if (pOptDebug)
 			std::cout << "[yuni-config][debug] :: reading `" << path << "`" << std::endl;
 
 		VersionInfo::Settings info;
 		info.mapping = mappingStandard;
-		String s(path);
-		s << SEP << "yuni.version";
+
+		String s;
+		s << path << SEP << "yuni.version";
 		if (not IO::File::Exists(s))
 		{
 			s.clear() << path << SEP << "include" << SEP << "yuni" << SEP << "yuni.version";
-			if (!IO::File::Exists(s))
+			if (not IO::File::Exists(s))
 			{
 				info.mapping = mappingSVNSources;
 				s.clear() << path << SEP << "src" << SEP << "yuni" << SEP << "yuni.version";
 				if (not IO::File::Exists(s))
+                {
+					if (pOptDebug)
+						std::cout << "[yuni-config][debug] :: " << s << " not found" << std::endl;
 					return;
+                }
 			}
 		}
+
 		IO::File::Stream file;
 		if (file.open(s))
 		{
@@ -102,7 +108,7 @@ namespace VersionInfo
 			Version version;
 
 			// A buffer. The given capacity will be the maximum length for a single line
-			CString<8192> buffer;
+			Clob buffer;
 			buffer.reserve(8000);
 			while (file.readline(buffer))
 			{
@@ -138,7 +144,7 @@ namespace VersionInfo
 				}
 			}
 
-			if (not version.null() && not info.modules.empty())
+			if (not version.null() and not info.modules.empty())
 			{
 				info.path = path;
 				info.compiler = pCompiler;
@@ -149,6 +155,14 @@ namespace VersionInfo
 					std::cout << "[yuni-config][debug]  - found installation `" << path
 						<< "` (" << version << ")" << std::endl;
 				}
+			}
+			else
+			{
+				std::cerr << "error: " << s << ": invalid file";
+				if (version.null())
+					std::cerr << " (invalid version)" << std::endl;
+				else if (info.modules.empty())
+					std::cerr << " (no module)" << std::endl;
 			}
 		}
 	}

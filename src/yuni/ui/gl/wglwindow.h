@@ -25,10 +25,13 @@ namespace UI
 	public:
 		//! Constructor
 		WGLWindow(const AnyString& title, uint width, uint height, uint bitDepth, bool fullScreen):
-			GLWindow(title, width, height, bitDepth, fullScreen)
+			GLWindow(title, width, height, bitDepth, fullScreen),
+			pHasMSAASupport(false)
 		{
 			pMouse = new Input::WinMouse();
 		}
+		//! Destructor
+		~WGLWindow();
 
 		//! Initialize the window
 		virtual bool initialize() override;
@@ -62,14 +65,12 @@ namespace UI
 		//! Current status of the vertical sync (OS-specific)
 		virtual bool vsync() const override;
 
-		//! Does the window have Full Screen AntiAliasing / MultiSampling ?
-		virtual bool antiAliasing() const override;
 		/*!
 		** \brief Should Full Screen AntiAliasing / MultiSampling be enabled ?
 		**
 		** Changing this value may kill and re-create the window.
 		*/
-		virtual void antiAliasing(bool enable) override;
+		virtual void multiSampling(MultiSampling::Type samplingType) override;
 
 		//! Enable / Disable full screen
 		virtual void fullScreen(bool enable) override;
@@ -108,8 +109,8 @@ namespace UI
 		//! Disable full screen mode
 		bool disableFullScreen();
 
-		//! Window initialization, we need to be able to keep the context when reinitializing
-		bool initWindow(bool keepContext);
+		//! Window initialization
+		bool initWindow();
 
 		//! Close and release all the necessary stuff to reinitialize the window
 		void closeWindowForReinit();
@@ -117,8 +118,8 @@ namespace UI
 		//! Initialize the pixel format with default values
 		bool initDefaultPixelFormat(const PIXELFORMATDESCRIPTOR& pfd);
 
-		//! Initialize the pixel format for 4x multi-sampling (with 2x fallback)
-		bool initMultisamplePixelFormat(const PIXELFORMATDESCRIPTOR& pfd);
+		//! Initialize the pixel format for multi-sampling
+		bool initMultisamplePixelFormat(const PIXELFORMATDESCRIPTOR& pfd, bool set);
 
 	protected:
 		//! Static list of registered GDI windows
@@ -133,6 +134,9 @@ namespace UI
 		HWND pHWnd;
 		HDC pHDC;
 		HGLRC pHRC;
+
+		//! True if the window has already been created with a MultiSampling pixel format.
+		bool pHasMSAASupport;
 
 		Logs::Logger<> logs;
 

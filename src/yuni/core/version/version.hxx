@@ -6,30 +6,37 @@ namespace Yuni
 {
 
 	inline Version::Version() :
-		hi(0u), lo(0u), revision(0u)
+		hi(), lo(), revision()
 	{}
 
 
-	inline Version::Version(uint h) :
-		hi(h), lo(0u), revision(0u)
+	inline Version::Version(uint major) :
+		hi(major), lo(), revision()
 	{}
 
 
-	inline Version::Version(uint h, uint l) :
-		hi(h), lo(l), revision(0u)
+	inline Version::Version(uint major, uint minor) :
+		hi(major), lo(minor), revision()
 	{}
 
 
-	inline Version::Version(uint h, uint l, uint r) :
-		hi(h), lo(l), revision(r)
+	inline Version::Version(uint major, uint minor, uint rev) :
+		hi(major), lo(minor), revision(rev)
 	{}
 
 
-	inline void Version::assign(uint h, uint l, uint r)
+	inline Version::Version(const Version& c) :
+		hi(c.hi), lo(c.lo), revision(c.revision)
+	{}
+
+
+
+
+	inline void Version::assign(uint major, uint minor, uint rev)
 	{
-		hi = h;
-		lo = l;
-		revision = r;
+		hi = major;
+		lo = minor;
+		revision = rev;
 	}
 
 
@@ -79,6 +86,29 @@ namespace Yuni
 	{
 		return !isEqualTo(rhs);
 	}
+
+
+	inline bool Version::null() const
+	{
+		return (hi == 0 and lo == 0 and revision == 0);
+	}
+
+
+	template<class S>
+	inline void Version::print(S& out) const
+	{
+		out << hi << '.' << lo << '.' << revision;
+	}
+
+
+	inline Version& Version::operator = (const Version& rhs)
+	{
+		hi = rhs.hi;
+		lo = rhs.lo;
+		revision = rhs.revision;
+		return *this;
+	}
+
 
 
 

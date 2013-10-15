@@ -8,8 +8,7 @@ namespace Logs
 {
 
 	template<class NextHandler>
-	template<typename U>
-	bool File<NextHandler>::logfile(const U& filename)
+	bool File<NextHandler>::logfile(const AnyString& filename)
 	{
 		// Assigning the new filename
 		pOutputFilename = filename;

@@ -68,7 +68,15 @@ namespace Storage
 
 	protected:
 		//! Destroy the inner data
-		void destroy() { delete pData; }
+		void destroy()
+		{
+			// [from the standard]
+			// If the object being deleted has incomplete class type at the point of deletion
+			// and the complete class has a non-trivial destructor or a deallocation function,
+			// the behavior is undefined.
+			if (0 < sizeof (T)) // won't compile for incomplete type
+				delete pData;
+		}
 
 	private:
 		//! The data
@@ -129,7 +137,15 @@ namespace Storage
 
 	protected:
 		//! Destroy the inner data
-		void destroy() { delete[] pData; }
+		void destroy()
+		{
+			// [from the standard]
+			// If the object being deleted has incomplete class type at the point of deletion
+			// and the complete class has a non-trivial destructor or a deallocation function,
+			// the behavior is undefined.
+			if (0 < sizeof (T)) // won't compile for incomplete type
+				delete[] pData;
+		}
 
 	private:
 		//! The data

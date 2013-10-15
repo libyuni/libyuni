@@ -67,7 +67,7 @@ namespace Thread
 		{
 			if (IThread::suspend(nnTimeInterval))
 				break;
-			if (!onInterval(infinite /* no cycle */))
+			if (not onInterval(infinite /* no cycle */))
 				break;
 			if (pShouldReload)
 				return false;
@@ -98,7 +98,7 @@ namespace Thread
 
 	bool Timer::onExecute()
 	{
-		pShouldReload = 0;
+		pShouldReload = false;
 		while (true)
 		{
 			// Lock
@@ -107,7 +107,7 @@ namespace Thread
 			pTimerMutex.lock();
 
 			// No cycle to do, aborting now
-			if (!pCycleCount)
+			if (0 == pCycleCount)
 			{
 				pTimerMutex.unlock();
 				return false;
@@ -152,7 +152,7 @@ namespace Thread
 		pTimerMutex.lock();
 		pTimeInterval = milliseconds;
 		pTimerMutex.unlock();
-		pShouldReload = 1;
+		pShouldReload = true;
 	}
 
 
@@ -162,7 +162,7 @@ namespace Thread
 		pTimeInterval = milliseconds;
 		pCycleCount   = cycles;
 		pTimerMutex.unlock();
-		pShouldReload = 1;
+		pShouldReload = true;
 	}
 
 

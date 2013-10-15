@@ -23,7 +23,6 @@ namespace Algorithm
 			//
 			static const int prefetch[] = {0, 2, 4, 6, 8, 1, 3, 5, 7, 9};
 
-			int n;
 			int sum = 0;
 			bool alternate = true;
 
@@ -35,7 +34,7 @@ namespace Algorithm
 				if (!String::IsDigit(i.value()))
 					return false;
 				// The `real` digit
-				n = i.value() - '0';
+				int n = i.value() - '0';
 				// Computing the sum
 				sum += (alternate = !alternate) ? prefetch[n] : n;
 			}

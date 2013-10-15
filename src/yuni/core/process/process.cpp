@@ -36,7 +36,6 @@ namespace Process
 			int outfd[2];
 			int infd[2];
 			int errd[2];
-			int oldstdin, oldstdout, oldstderr;
 			pid_t pid;
 			# endif
 		};
@@ -46,7 +45,10 @@ namespace Process
 		SubProcess(Yuni::Process& process) :
 			pProcess(process),
 			pArguments(nullptr),
-			pRedirectToConsole(true)
+			pRedirectToConsole(true),
+			pExitStatus(-1),
+			pKilled(false),
+			pEndTime(0)
 		{
 		}
 
@@ -700,11 +702,12 @@ namespace Yuni
 		MutexLocker locker(env.mutex);
 		env.executable.clear();
 		env.arguments.clear();
-		bool foundExecutable = false;
 
 		if (not cmd.empty())
 		{
 			uint offset = 0;
+			bool foundExecutable = false;
+
 			do
 			{
 				// Looking for the next whitespace
@@ -824,7 +827,12 @@ namespace Yuni
 
 	Process::ProcessEnvironment::ProcessEnvironment() :
 		running(false),
-		timeout(0),
+		processID(-1),
+		processInput(-1),
+		startTime(),
+		duration(),
+		timeout(),
+		exitstatus(-1),
 		redirectToConsole(true)
 	{}
 

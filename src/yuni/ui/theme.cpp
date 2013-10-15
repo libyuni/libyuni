@@ -10,8 +10,8 @@ namespace UI
 	Theme::Ptr Theme::sCurrent = nullptr;
 
 	Theme::Theme():
-		font(new FTFont("data/fonts/OpenSans-Light.ttf", 16)),
-		textColor(0.6274f, 0.7882f, 0.8509f), // (160,201,217)
+		font(new FTFont("data/fonts/OpenSans-Light.ttf", 12)),
+		textColor(1.0f, 0.0f, 0.0f, 1.0f),
  		windowColor(0.2274f, 0.3804f, 0.5412f, 0.8f), // (58, 97, 138) 80% alpha
 		buttonColor(0.2863f, 0.5451f, 0.651f), // (73, 139, 166)
 		buttonColorDisabled(0.2863f, 0.5451f, 0.651f), // (103, 120, 139)
@@ -20,7 +20,7 @@ namespace UI
 		borderColor(0.1882f, 0.3490f, 0.451f), // (48, 89, 115)
 		borderColorDisabled(0.1882f, 0.3490f, 0.451f), // (102, 100, 126)
 		margin(10),
-		borderWidth(3),
+		borderWidth(2.5f),
 		menuHeight(20),
 		checkBoxSize(15)
 	{}

@@ -351,6 +351,7 @@ namespace Yuni
 				default:
 					assert(false && "Index out of bounds !");
 			}
+			return x;
 		}
 		//@} Operators
 

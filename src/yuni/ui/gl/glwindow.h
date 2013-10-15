@@ -18,8 +18,7 @@ namespace UI
 	public:
 		//! Constructor
 		GLWindow(const AnyString& title, unsigned int width, unsigned int height, unsigned int bitDepth, bool fullScreen):
-			RenderWindow(title, width, height, bitDepth, fullScreen),
-			pHasFSAA(false)
+			RenderWindow(title, width, height, bitDepth, fullScreen)
 		{}
 		//! Virtual destructor
 		virtual ~GLWindow() {}
@@ -58,10 +57,6 @@ namespace UI
 
 		//! Draw a textured quad to the whole window
 		virtual void drawFullWindowQuad(const Gfx3D::Texture::Ptr& texture) const override;
-
-	protected:
-		//! Does the window offer Full Screen Anti Aliasing / MultiSampling ? (False by default)
-		bool pHasFSAA;
 	};
 
 

@@ -49,9 +49,9 @@ namespace Display
 {
 
 
-	List::List()
+	List::List() :
+		pNullMonitor(new Monitor(YUNI_DEVICE_DISPLAY_LIST_FAIL_SAFE_NAME))
 	{
-		pNullMonitor = new Monitor(YUNI_DEVICE_DISPLAY_LIST_FAIL_SAFE_NAME);
 		// Adding the default monitor
 		pMonitors.push_back(pNullMonitor);
 		pPrimary = pNullMonitor;

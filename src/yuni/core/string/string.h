@@ -41,6 +41,10 @@
 # include "traits/vnsprintf.h"
 # include "traits/into.h"
 
+# ifdef YUNI_HAS_CPP_MOVE
+# include <utility>
+# endif
+
 
 
 namespace Yuni
@@ -266,6 +270,13 @@ namespace Yuni
 		*/
 		template<uint SizeT, bool ExpT>
 		CString(const CString<SizeT,ExpT>& string);
+
+		# ifdef YUNI_HAS_CPP_MOVE
+		/*!
+		** \brief Move constructor
+		*/
+		CString(CString&& rhs);
+		# endif
 
 		/*!
 		** \brief Constructor from a copy of a substring of 's'
@@ -1292,23 +1303,30 @@ namespace Yuni
 		** \brief Removes all items equal to one of those in 'whitespaces' from the
 		**   end of the string
 		*/
-		template<class StringT> void trim(const StringT& whitespaces);
+		void trim(const AnyString& whitespaces);
 
+		/*!
+		** \brief Removes all items equal to a space from the end of the string
+		*/
+		void trimRight();
 		/*!
 		** \brief Removes all items equal to one of those in 'u' from the end of the string
 		*/
-		template<class StringT> void trimRight(const StringT& whitespaces);
-
+		void trimRight(const AnyString& whitespaces);
 		/*!
 		** \brief Remove all items equal to 'c' from the end of the string
 		*/
 		void trimRight(char c);
 
 		/*!
+		** \brief Removes all items equal to a space from the beginning of the string
+		*/
+		void trimLeft();
+		/*!
 		** \brief Removes all items equal to one of those in 'u' from the beginning
 		**   of the string
 		*/
-		template<class StringT> void trimLeft(const StringT& whitespaces);
+		void trimLeft(const AnyString& whitespaces);
 		/*!
 		** \brief Remove all items equal to 'c' from the beginning of the string
 		*/
@@ -1354,8 +1372,7 @@ namespace Yuni
 		** \param to   The string to replace with
 		** \return The number  the number of replacements performed
 		*/
-		template<class StringT1, class StringT2>
-		uint replace(const StringT1& from, const StringT2& to);
+		uint replace(const AnyString& from, const AnyString& to);
 
 		/*!
 		** \brief Replace all occurrences of a string by another one
@@ -1365,8 +1382,7 @@ namespace Yuni
 		** \param to   The string to replace with
 		** \return The number  the number of replacements performed
 		*/
-		template<class StringT1, class StringT2>
-		uint replace(Size offset, const StringT1& from, const StringT2& to);
+		uint replace(Size offset, const AnyString& from, const AnyString& to);
 
 		/*!
 		** \brief Replace all occurrences of a given char by another one
@@ -1413,8 +1429,7 @@ namespace Yuni
 		** \param to   The string to replace with
 		** \return The number  the number of replacements performed
 		*/
-		template<class StringT1, class StringT2>
-		uint ireplace(const StringT1& from, const StringT2& to);
+		uint ireplace(const AnyString& from, const AnyString& to);
 
 		/*!
 		** \brief Replace all occurrences of a string by another one (case insensitive)
@@ -1424,8 +1439,7 @@ namespace Yuni
 		** \param to   The string to replace with
 		** \return The number  the number of replacements performed
 		*/
-		template<class StringT1, class StringT2>
-		uint ireplace(Size offset, const StringT1& from, const StringT2& to);
+		uint ireplace(Size offset, const AnyString& from, const AnyString& to);
 
 		/*!
 		** \brief Remove the 'n' first characters
@@ -1454,14 +1468,14 @@ namespace Yuni
 		**
 		** This method is equivalent to the operator '=='
 		*/
-		template<class StringT> bool equals(const StringT& rhs) const;
+		bool equals(const AnyString& rhs) const;
 
 		/*!
 		** \brief Get if the string is equals to another one (ignoring case)
 		**
 		** This method is equivalent to the operator '=='
 		*/
-		template<class StringT> bool equalsInsensitive(const StringT& rhs) const;
+		bool equalsInsensitive(const AnyString& rhs) const;
 
 		/*!
 		** \brief Compare the string with another one
@@ -1470,7 +1484,7 @@ namespace Yuni
 		** \return An integer greater than, equal to, or less than 0, according as the string is greater than,
 		**   equal to, or less than the given string
 		*/
-		template<class StringT> int compare(const StringT& rhs) const;
+		int compare(const AnyString& rhs) const;
 
 		/*!
 		** \brief Compare the string with another one (ignoring the case)
@@ -1479,7 +1493,7 @@ namespace Yuni
 		** \return An integer greater than, equal to, or less than 0, according as the string is greater than,
 		**   equal to, or less than the given string
 		*/
-		template<class StringT> int compareInsensitive(const StringT& rhs) const;
+		int compareInsensitive(const AnyString& rhs) const;
 		//@}
 
 
@@ -1527,15 +1541,15 @@ namespace Yuni
 		** std::cout << "All chars: ";
 		** do
 		** {
-		** 	if (offset)
-		** 		std::cout << ", ";
-		** 	if (UTF8::errNone != t.utf8next<false>(offset, c))
-		** 	{
-		** 		std::cout << "<EOF>\n";
-		** 		break;
-		** 	}
+		**	if (offset)
+		**		std::cout << ", ";
+		**	if (UTF8::errNone != t.utf8next<false>(offset, c))
+		**	{
+		**		std::cout << "<EOF>\n";
+		**		break;
+		**	}
 		**
-		** 	std::cout << c;
+		**	std::cout << c;
 		** }
 		** while (true);
 		** \endcode
@@ -1609,7 +1623,7 @@ namespace Yuni
 		** \param pattern The pattern to use to fill the new content
 		** \see fill()
 		*/
-		template<class StringT> void resize(Size len, const StringT& pattern);
+		void resize(Size len, const AnyString& pattern);
 
 		/*!
 		** \brief Releases any memory not required to store the character data
@@ -1769,7 +1783,7 @@ namespace Yuni
 		** \param format The format, reprensented by a zero-terminated string
 		** \return Always *this
 		*/
-		template<class StringT> CString& format(const StringT& format, ...);
+		CString& format(const AnyString& format, ...);
 
 		/*!
 		** \brief Append formatted string
@@ -1778,7 +1792,7 @@ namespace Yuni
 		** \param format The format, represented by a zero-terminated string
 		** \return Always *this
 		*/
-		template<class StringT> CString& appendFormat(const StringT& format, ...);
+		CString& appendFormat(const AnyString& format, ...);
 
 		/*!
 		** \brief Append a formatted string to the end of the current string
@@ -1838,7 +1852,7 @@ namespace Yuni
 		** String t = "a, b, c";
 		** t.words(" ,\t\r\n", [&] (const AnyString& word) -> bool
 		** {
-		**	std::cout << word << std::endl; // 3 elements
+		**	std::cout << word << std::endl; // 3 elements : 'a', 'b' and 'c'
 		**	return true; // continue to the next token
 		** });
 		** \endcode
@@ -1849,13 +1863,13 @@ namespace Yuni
 		** t.words(",", [&] (AnyString& word) -> bool
 		** {
 		**	word.trim();
-		**	std::cout << word << std::endl; // 4 elements
+		**	std::cout << word << std::endl; // 4 elements : 'a', ' b', '' and ' d' (without the trim)
 		**	return true; // continue to the next token
 		** });
 		** \endcode
 		*/
-		template<class StringT, class PredicateT>
-		bool words(const StringT& separators, const PredicateT& predicate) const;
+		template<class PredicateT>
+		bool words(const AnyString& separators, const PredicateT& predicate) const;
 
 		/*!
 		** \brief Split a string into several segments
@@ -1868,7 +1882,7 @@ namespace Yuni
 		** \endcode
 		**
 		** \warning Performance Tip: For better performances, the method \p words
-		**   will suit better
+		**   would suit better
 		**
 		** \param[out] out All segments that have been found
 		** \param sep Sequence of chars considered as a separator
@@ -1879,8 +1893,8 @@ namespace Yuni
 		** \warning This method does not take care of string representation (with `'` or `"`)
 		** \see words()
 		*/
-		template<template<class,class> class ListT, class UType, class Alloc, typename StringT>
-		void split(ListT<UType,Alloc>& out, const StringT& sep,
+		template<template<class,class> class ListT, class UType, class Alloc>
+		void split(ListT<UType,Alloc>& out, const AnyString& sep,
 			bool keepEmptyElements = false, bool trimElements = true, bool emptyBefore = true) const;
 
 		/*!
@@ -1960,6 +1974,12 @@ namespace Yuni
 		CString& operator = (const CString& rhs);
 		//! The operator `=` (assign)
 		template<class U> CString& operator = (const U& rhs);
+
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move operator
+		CString& operator = (CString&& rhs);
+		# endif
+
 
 		//! The operator `<`
 		bool operator <  (const AnyString& rhs) const;

@@ -45,6 +45,16 @@ namespace BindImpl
 	*/
 	template<class P> class BoundWithFunction;
 
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	/*!
+	** \brief Binding with a functor
+	**
+	** \tparam C The type of the functor
+	** \tparam P The prototype of the member
+	*/
+	template<class C, class P> class BoundWithFunctor;
+	# endif
+
 	/*!
 	** \brief Binding with a function
 	**
@@ -166,7 +176,7 @@ namespace BindImpl
 
 
 	template<class R, class B>
-	struct Unbind
+	struct Unbind final
 	{
 		static void Execute(B* d)
 		{
@@ -175,7 +185,7 @@ namespace BindImpl
 	};
 
 	template<class B>
-	struct Unbind<void,B>
+	struct Unbind<void,B> final
 	{
 		static void Execute(B* d)
 		{
@@ -281,9 +291,72 @@ namespace BindImpl
 		R (*pPointer)(<%=generator.list(i)%>);
 
 	}; // class BoundWithFunction<R (<%=generator.list(i)%>)>
+<% end %>
 
+
+	// class BoundWithFunctor
+
+# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+<% (0..generator.argumentCount-1).each do |i| %>
+	/*!
+	** \brief
+	*/
+	template<class C, class R<%=generator.templateParameterList(i) %>>
+	class BoundWithFunctor<C, R (<%=generator.list(i)%>)> final :
+		public IPointer<R (<%=generator.list(i)%>)>
+	{
+	public:
+		//! Destructor
+		virtual ~BoundWithFunctor() {}
+
+		BoundWithFunctor(C&& functor) :
+			pFunctor(std::forward<C>(functor))
+		{}
+
+		virtual R invoke(<%=generator.variableList(i)%>) const override
+		{
+			return pFunctor(<%=generator.list(i, 'a')%>);
+		}
+
+		virtual const void* object() const override
+		{
+			return nullptr;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return nullptr;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(<%=generator.list(i)%>)) const override
+		{
+			return ((void*)&pFunctor == (void*)pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+
+	private:
+		//! Pointer-to-function
+		C pFunctor;
+
+	}; // class BoundWithFunctor<C, R (<%=generator.list(i)%>)>
 
 <% end %>
+# endif
 
 
 
@@ -293,8 +366,8 @@ namespace BindImpl
 
 <% (1..generator.argumentCount).each do |i| %>
 	template<class U, class R<%=generator.templateParameterList(i) %>>
-	class BoundWithFunctionAndUserData<U, R(<%=generator.list(i)%>)> final
-		:public IPointer<R (<%=generator.list(i - 1)%>)>
+	class BoundWithFunctionAndUserData<U, R(<%=generator.list(i)%>)> final :
+		public IPointer<R (<%=generator.list(i - 1)%>)>
 	{
 	public:
 		BoundWithFunctionAndUserData(R(*pointer)(<%=generator.list(i)%>), U userdata) :
@@ -360,8 +433,8 @@ namespace BindImpl
 
 <% (0..generator.argumentCount-1).each do |i| %>
 	template<class C, class R<%=generator.templateParameterList(i) %>>
-	class BoundWithMember<C, R(<%=generator.list(i)%>)> final
-		:public IPointer<R(<%=generator.list(i)%>)>
+	class BoundWithMember<C, R(<%=generator.list(i)%>)> final :
+		public IPointer<R(<%=generator.list(i)%>)>
 	{
 	public:
 		//! \name Constructor
@@ -430,8 +503,8 @@ namespace BindImpl
 
 <% (1..generator.argumentCount).each do |i| %>
 	template<class U, class C, class R<%=generator.templateParameterList(i) %>>
-	class BoundWithMemberAndUserData<U, C, R(<%=generator.list(i)%>)> final
-		:public IPointer<R(<%=generator.list(i-1)%>)>
+	class BoundWithMemberAndUserData<U, C, R(<%=generator.list(i)%>)> final :
+		public IPointer<R(<%=generator.list(i-1)%>)>
 	{
 	public:
 		typedef typename Static::Remove::RefOnly<A<%=i-1%>>::Type UserDataTypeByCopy;
@@ -496,8 +569,8 @@ namespace BindImpl
 
 <% (0..generator.argumentCount-1).each do |i| %>
 	template<class PtrT, class R<%=generator.templateParameterList(i) %>>
-	class BoundWithSmartPtrMember<PtrT, R(<%=generator.list(i)%>)> final
-		:public IPointer<R(<%=generator.list(i)%>)>
+	class BoundWithSmartPtrMember<PtrT, R(<%=generator.list(i)%>)> final :
+		public IPointer<R(<%=generator.list(i)%>)>
 	{
 	public:
 		typedef typename PtrT::Type  C;

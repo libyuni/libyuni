@@ -17,7 +17,7 @@ namespace CString
 	** \brief Generic implementation
 	*/
 	template<class T>
-	class Into
+	class Into final
 	{
 	public:
 		enum { valid = 0, };
@@ -39,7 +39,7 @@ namespace CString
 	** \brief const char*
 	*/
 	template<>
-	class Into<char*>
+	class Into<char*> final
 	{
 	public:
 		enum { valid = 1 };
@@ -63,7 +63,7 @@ namespace CString
 	** \brief String, with the same POD type
 	*/
 	template<uint ChunkSizeT, bool ExpandableT>
-	class Into<Yuni::CString<ChunkSizeT, ExpandableT> >
+	class Into<Yuni::CString<ChunkSizeT, ExpandableT> > final
 	{
 	public:
 		typedef Yuni::CString<ChunkSizeT, ExpandableT> TargetType;
@@ -86,7 +86,7 @@ namespace CString
 	** \brief std::string
 	*/
 	template<class CharT, class TraitsT, class AllocT>
-	class Into<std::basic_string<CharT,TraitsT, AllocT> >
+	class Into<std::basic_string<CharT,TraitsT, AllocT> > final
 	{
 	public:
 		typedef std::basic_string<CharT,TraitsT, AllocT> TargetType;
@@ -109,7 +109,7 @@ namespace CString
 	** \brief char
 	*/
 	template<>
-	class Into<char>
+	class Into<char> final
 	{
 	public:
 		enum { valid = 1 };
@@ -131,7 +131,7 @@ namespace CString
 	** \brief unsigned char
 	*/
 	template<>
-	class Into<unsigned char>
+	class Into<unsigned char> final
 	{
 	public:
 		enum { valid = 1 };
@@ -153,7 +153,7 @@ namespace CString
 	** \brief char[]
 	*/
 	template<int N>
-	class Into<char[N]>
+	class Into<char[N]> final
 	{
 	public:
 		enum { valid = 1 };
@@ -187,7 +187,7 @@ namespace CString
 	** \brief bool
 	*/
 	template<>
-	class Into<bool>
+	class Into<bool> final
 	{
 	public:
 		enum { valid = 1 };
@@ -224,39 +224,44 @@ namespace CString
 
 
 
-	class AutoDetectBaseNumber
+	namespace // anonymous
 	{
-	public:
-		static const char* Value(const char* const s, uint length, int& base)
+
+		class AutoDetectBaseNumber final
 		{
-			switch (s[0])
+		public:
+			static inline const char* Value(const char* const s, uint length, int& base)
 			{
-				case '#' :
-					{
-						base = 16;
-						return s + 1;
-					}
-				case '0' :
-					{
-						if (length > 2 and (s[1] == 'x' or s[1] == 'X'))
+				switch (s[0])
+				{
+					case '#' :
 						{
 							base = 16;
-							return s + 2;
+							return s + 1;
 						}
-					}
+					case '0' :
+						{
+							if (length > 2 and (s[1] == 'x' or s[1] == 'X'))
+							{
+								base = 16;
+								return s + 2;
+							}
+						}
+				}
+				base = 10;
+				return s;
 			}
-			base = 10;
-			return s;
-		}
 
-	}; // class AutoDetectBaseNumber
+		}; // class AutoDetectBaseNumber
+
+	} // anonymous namespace
 
 
 
 
 # define YUNI_CORE_EXTENSION_ISTRING_TO_NUMERIC(TYPE,CONVERT)  \
 	template<> \
-	class Into<TYPE> \
+	class Into<TYPE> final \
 	{ \
 	public: \
 		typedef TYPE IntoType; \
@@ -272,9 +277,9 @@ namespace CString
 			} \
 			char* pend; \
 			int base; \
-			char buffer[bufferSize]; \
 			if (not StringT::zeroTerminated) \
 			{ \
+				char buffer[bufferSize]; \
 				if (s.size() < bufferSize) \
 				{ \
 					YUNI_MEMCPY(buffer, bufferSize, s.data(), s.size()); \
@@ -303,9 +308,9 @@ namespace CString
 				return IntoType(); \
 			char* pend; \
 			int base; \
-			char buffer[bufferSize]; \
 			if (!StringT::zeroTerminated) \
 			{ \
+				char buffer[bufferSize]; \
 				if (s.size() < bufferSize) \
 				{ \
 					YUNI_MEMCPY(buffer, bufferSize, s.data(), s.size()); \
@@ -361,7 +366,7 @@ namespace CString
 	** \brief float
 	*/
 	template<>
-	class Into<float>
+	class Into<float> final
 	{
 	public:
 		enum { valid = 1 };
@@ -443,7 +448,7 @@ namespace CString
 	** \brief double
 	*/
 	template<>
-	class Into<double>
+	class Into<double> final
 	{
 	public:
 		enum { valid = 1 };
@@ -515,7 +520,7 @@ namespace CString
 	** \brief const void*
 	*/
 	template<>
-	class Into<void*>
+	class Into<void*> final
 	{
 	public:
 		enum { valid = 1 };

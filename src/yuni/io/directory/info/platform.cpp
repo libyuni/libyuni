@@ -43,10 +43,15 @@ namespace Directory
 	{
 	public:
 		DirInfo() :
+			size(),
+			modified(),
+			isFolder(false),
 			# ifndef YUNI_OS_WINDOWS
-			pdir(NULL)
+			pdir(nullptr),
+			pent(nullptr)
 			# else
-			h(-1)
+			h(-1),
+			callNext(false)
 			# endif
 		{}
 
@@ -230,7 +235,7 @@ namespace Directory
 	private:
 		# ifndef YUNI_OS_WINDOWS
 		DIR* pdir;
-		struct dirent *pent;
+		struct dirent* pent;
 		struct stat s;
 		# else
 		struct _wfinddatai64_t data;
@@ -244,7 +249,8 @@ namespace Directory
 	class IteratorData final
 	{
 	public:
-		IteratorData()
+		IteratorData() :
+			flags()
 		{}
 
 		IteratorData(const IteratorData& rhs) :
@@ -320,7 +326,7 @@ namespace Directory
 		wchar_t wbuffer[wbufferMax];
 		# endif
 
-	};
+	}; // class IteratorData
 
 
 

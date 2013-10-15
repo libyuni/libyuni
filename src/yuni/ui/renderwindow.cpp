@@ -1,5 +1,7 @@
 
 #include "renderwindow.h"
+#include "../core/foreach.h"
+
 
 
 namespace Yuni
@@ -7,22 +9,22 @@ namespace Yuni
 namespace UI
 {
 
-
 	RenderWindow::RenderWindow(const AnyString& title, uint width, uint height, uint bitDepth, bool fullScreen):
 		pTitle(title),
-		pLeft(0),
-		pTop(0),
+		pLeft(),
+		pTop(),
 		pWidth(width),
 		pHeight(height),
 		pResWidth(width),
 		pResHeight(height),
 		pBitDepth(bitDepth),
 		pFB(width, height),
-		pPostEffects(0),
+		pPostEffects(),
 		pFullScreen(fullScreen),
-		pMultiSampling(msNone),
+		pMultiSampling(MultiSampling::msNone),
 		pState(fullScreen ? wsMaximized : wsNormal),
-		pRefreshFunc(0)
+		pRefreshFunc(),
+		pMouse(nullptr)
 	{
 		pActiveView = new View(0, 0, width, height, 127, true);
 		pViewList.push_back(pActiveView);
@@ -32,6 +34,7 @@ namespace UI
 	RenderWindow::~RenderWindow()
 	{
 		pRefreshFunc.unbind();
+		pResizeFunc.unbind();
 		delete pMouse;
 	}
 
@@ -39,6 +42,7 @@ namespace UI
 	void RenderWindow::kill()
 	{
 		pRefreshFunc.unbind();
+		pResizeFunc.unbind();
 		pActiveView = nullptr;
 		pViewList.clear();
 		pDefaultFont = nullptr;
@@ -165,7 +169,7 @@ namespace UI
 		{
 			if (id == (*it)->id())
 			{
-				(*it)->draw();
+				(*it)->draw(1);
 				break;
 			}
 		}
@@ -176,7 +180,7 @@ namespace UI
 	{
 		if (wsMinimized == pState)
 			return;
-		view->draw();
+		view->draw(1);
 	}
 
 
@@ -188,7 +192,7 @@ namespace UI
 		pFB.activate();
 		// Draw the views
 		for (const View::Ptr& view : pViewList)
-			view->draw();
+			view->draw(1);
 		static bool init = false;
 		if (!init)
 		{
@@ -240,22 +244,14 @@ namespace UI
 	}
 
 
-	void RenderWindow::multiSampling(MultiSamplingType samplingType)
+	void RenderWindow::multiSampling(MultiSampling::Type samplingType)
 	{
 		if (samplingType != pMultiSampling)
 		{
-			switch (samplingType)
-			{
-				case msNone:
-					pFB.resize(pWidth, pHeight);
-					break;
-				case ms2x:
-					pFB.resize(pWidth * 2, pHeight * 2);
-					break;
-				case ms4x:
-					pFB.resize(pWidth * 4, pHeight * 4);
-					break;
-			}
+		/*
+			uint ms = samplingMultiplier();
+			pFB.resize(pWidth * ms, pHeight * ms);
+		*/
 			pMultiSampling = samplingType;
 		}
 	}
@@ -263,8 +259,10 @@ namespace UI
 
 	void RenderWindow::doMouseMove(int x, int y)
 	{
+		assert(pMouse and "invalid mouse pointer");
+
 		EventPropagation propagate = epContinue;
-		for (const View::Ptr& view : pViewList)
+		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseMove(x, y);
 			if (epFinishView <= propagate)
@@ -273,10 +271,13 @@ namespace UI
 		pMouse->doMove(x, y);
 	}
 
+
 	void RenderWindow::doMouseDown(Input::IMouse::Button btn)
 	{
+		assert(pMouse and "invalid mouse pointer");
+
 		EventPropagation propagate = epContinue;
-		for (const View::Ptr& view : pViewList)
+		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseDown(btn, pMouse->pos().x, pMouse->pos().y);
 			if (epFinishView <= propagate)
@@ -285,10 +286,13 @@ namespace UI
 		pMouse->doDown(btn);
 	}
 
+
 	void RenderWindow::doMouseUp(Input::IMouse::Button btn)
 	{
+		assert(pMouse and "invalid mouse pointer");
+
 		EventPropagation propagate = epContinue;
-		for (const View::Ptr& view : pViewList)
+		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseUp(btn, pMouse->pos().x, pMouse->pos().y);
 			if (epFinishView <= propagate)
@@ -299,8 +303,10 @@ namespace UI
 
 	void RenderWindow::doMouseDblClick(Input::IMouse::Button btn)
 	{
+		assert(pMouse and "invalid mouse pointer");
+
 		EventPropagation propagate = epContinue;
-		for (const View::Ptr& view : pViewList)
+		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseDblClick(btn, pMouse->pos().x, pMouse->pos().y);
 			if (epFinishView <= propagate)
@@ -309,10 +315,13 @@ namespace UI
 		pMouse->doDblClick(btn);
 	}
 
+
 	void RenderWindow::doMouseScroll(float delta)
 	{
+		assert(pMouse and "invalid mouse pointer");
+
 		EventPropagation propagate = epContinue;
-		for (const View::Ptr& view : pViewList)
+		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseScroll(delta, pMouse->pos().x, pMouse->pos().y);
 			if (epFinishView <= propagate)
@@ -321,15 +330,18 @@ namespace UI
 		pMouse->doScroll(delta);
 	}
 
+
 	void RenderWindow::doMouseHover(int x, int y)
 	{
 		EventPropagation propagate = epContinue;
-		for (const View::Ptr& view : pViewList)
+		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseHover(x, y);
 			if (epFinishView <= propagate)
 				break;
 		}
+
+		assert(pMouse and "invalid mouse pointer");
 		pMouse->doHover(x, y);
 	}
 
@@ -337,7 +349,7 @@ namespace UI
 	void RenderWindow::doKeyDown(Input::Key key)
 	{
 		EventPropagation propagate = epContinue;
-		for (const View::Ptr& view : pViewList)
+		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doKeyDown(key);
 			if (epFinishView <= propagate)
@@ -350,7 +362,7 @@ namespace UI
 	void RenderWindow::doKeyUp(Input::Key key)
 	{
 		EventPropagation propagate = epContinue;
-		for (const View::Ptr& view : pViewList)
+		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doKeyUp(key);
 			if (epFinishView <= propagate)
@@ -361,7 +373,9 @@ namespace UI
 
 
 
+
+
+
 } // namespace UI
 } // namespace Yuni
-
 

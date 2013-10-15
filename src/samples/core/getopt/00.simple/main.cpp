@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 
 
 	// Ask to the parser to parse the command line
-	if (!options(argc, argv))
+	if (not options(argc, argv))
 	{
 		// The program should not continue here
 		// The user may have requested the help or an error has happened

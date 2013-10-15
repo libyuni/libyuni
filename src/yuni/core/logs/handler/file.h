@@ -35,7 +35,7 @@ namespace Logs
 		** \param filename A relative or absolute filename
 		** \return True if the operation succeeded, false otherwise
 		*/
-		template<typename U> bool logfile(const U& filename);
+		bool logfile(const AnyString& filename);
 
 		/*!
 		** \brief Get the last opened log file

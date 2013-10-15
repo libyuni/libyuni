@@ -13,15 +13,13 @@ namespace UI
 	bool GLWindow::initialize()
 	{
 		// Black background
-		::glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+		::glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		// Depth Buffer setup
 		::glClearDepth(1.0f);
 		// Enables Depth Testing
 		::glEnable(GL_DEPTH_TEST);
 		// The type of Depth Testing to do
 		::glDepthFunc(GL_LEQUAL);
-		// Really nice perspective calculations
-		::glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		// Enable back-face culling
 		::glEnable(GL_CULL_FACE);
 
@@ -71,7 +69,8 @@ namespace UI
 
 	void GLWindow::drawFullWindowQuad(const Gfx3D::Texture::Ptr& texture) const
 	{
-		::glBindTexture(GL_TEXTURE_2D, texture->id());
+		auto textureType = multiSampling() ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+		::glBindTexture(textureType, texture->id());
 
 		::glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT);
 		::glDisable(GL_DEPTH_TEST);
@@ -86,8 +85,6 @@ namespace UI
 		::glPushMatrix();
 		::glLoadIdentity();
 
-		// TexCoord calls are useless when 2D shaders are activated
-		// but they are used when no post-processing effect is present
 		::glBegin(GL_QUADS);
 		::glTexCoord2f(0.0f, 1.0f);
 		::glVertex2f(-1.0f, -1.0f);
@@ -99,6 +96,36 @@ namespace UI
 		::glVertex2f(-1.0f, 1.0f);
 		::glEnd();
 
+		/*
+		// Texture coordinates are useless when 2D shaders are activated
+		// but they are used when no post-processing effect is present
+		const float texCoord[] =
+			{
+				0.0f, 0.0f,
+				0.0f, 1.0f,
+				1.0f, 1.0f,
+				0.0f, 0.0f,
+				1.0f, 1.0f,
+				1.0f, 0.0f
+			};
+		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
+		::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
+		// Set vertex positions
+		const float vertices[] =
+			{
+				-1.0f, 1.0f,
+				-1.0f, -1.0f,
+				1.0f, -1.0f,
+				-1.0f, 1.0f,
+				1.0f, -1.0f,
+				1.0f, 1.0f
+			};
+		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
+		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
+		// Draw
+		::glDrawArrays(GL_TRIANGLES, 0, 6);
+		*/
+
 		::glMatrixMode(GL_PROJECTION);
 		::glPopMatrix();
 		::glMatrixMode(GL_MODELVIEW);
@@ -107,7 +134,7 @@ namespace UI
 		::glPopAttrib();
 		//::glCullFace(GL_BACK);
 
-		::glBindTexture(GL_TEXTURE_2D, 0);
+		::glBindTexture(textureType, 0);
 	}
 
 

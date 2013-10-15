@@ -29,7 +29,7 @@ namespace Gfx3D
 		virtual ~MaterialSurface() {}
 
 		//! Activate this surface
-		virtual void activate(const ShaderProgram::Ptr& shaders) = 0;
+		virtual void activate(const ShaderProgram::Ptr& shaders, int index) = 0;
 
 	}; // class MaterialSurface
 
@@ -49,7 +49,7 @@ namespace Gfx3D
 		virtual ~MaterialSurfaceTextured() {}
 
 		//! Activate this surface
-		virtual void activate(const ShaderProgram::Ptr& shaders) override;
+		virtual void activate(const ShaderProgram::Ptr& shaders, int index) override;
 
 		//! Texture used on this surface
 		const Texture::Ptr& texture() const { return pTexture; }
@@ -95,7 +95,7 @@ namespace Gfx3D
 		virtual ~MaterialSurfaceColored() {}
 
 		//! Activate this surface
-		virtual void activate(const ShaderProgram::Ptr& shaders) override;
+		virtual void activate(const ShaderProgram::Ptr& shaders, int index) override;
 
 		//! Surface color
 		const Color::RGBA<float>& color() const { return pColor; }

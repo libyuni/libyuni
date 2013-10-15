@@ -28,8 +28,8 @@ namespace Control
 		//! Virtual destructor
 		virtual ~Window() {}
 
-		//! Draw the button
-		//		virtual void draw(DrawingSurface::Ptr& surface, bool root);
+		//! Draw the window
+		virtual void draw(DrawingSurface::Ptr& surface, bool root);
 
 	}; // class Window
 

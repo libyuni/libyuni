@@ -59,7 +59,7 @@ namespace Ownership
 
 		//! Copy constructor
 		ReferenceCounted(const ReferenceCounted& c) :
-			pCount(c.pCount)
+			pCount(c.pCount) // copying shared pointer
 		{}
 
 		//! Copy constructor for any king of template parameter

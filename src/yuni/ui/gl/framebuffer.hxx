@@ -17,7 +17,8 @@ namespace Gfx3D
 		pID(-1),
 		pTexture(nullptr),
 		pDepth(-1),
-		pSize(1, 1)
+		pSize(1, 1),
+		pUsage(fbDraw)
 	{}
 
 
@@ -25,7 +26,8 @@ namespace Gfx3D
 		pID(-1),
 		pTexture(nullptr),
 		pDepth(-1),
-		pSize(width, height)
+		pSize(width, height),
+		pUsage(fbDraw)
 	{}
 
 
@@ -36,28 +38,13 @@ namespace Gfx3D
 	}
 
 
-	inline void FrameBuffer::activate() const
-	{
-		if (!valid())
-			return;
-		::glBindFramebuffer(GL_FRAMEBUFFER, pID);
-		GLTestError("glBindFrameBuffer() binding");
-	}
-
-
-	inline void FrameBuffer::deactivate() const
-	{
-		// Unbind
-		::glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		GLTestError("glBindFrameBuffer() unbinding");
-	}
-
-
 	inline void FrameBuffer::swap()
 	{
+		assert(pUsage == fbPingPong && "FrameBuffer::swap() has no meaning when usage is not Ping-Pong !");
+
 		// Ping-pong !
 		std::swap(pTexture, pBackTexture);
-		::glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pTexture->id(), 0);
+		::glFramebufferTexture2D(pUsage, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pTexture->id(), 0);
 	}
 
 

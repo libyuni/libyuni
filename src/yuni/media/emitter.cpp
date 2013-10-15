@@ -98,6 +98,7 @@ namespace Media
 			return false;
 
 		Private::Media::OpenAL::StopSource(pID);
+		pSource->rewindDispatched(pID);
 		return true;
 	}
 
@@ -111,7 +112,6 @@ namespace Media
 		// If not playing, nothing else to do
 		if (!pPlaying)
 			return false;
-		//std::cout << "Emitter still playing !" << std::endl;
 		if (pModified)
 		{
 			if (!Private::Media::OpenAL::MoveSource(pID, pPosition, pVelocity, pDirection))
@@ -127,7 +127,6 @@ namespace Media
 		}
 		if (pSource)
 		{
-			//std::cout << "Emitter source still ok !" << std::endl;
 			pSource->updateDispatched(pID);
 		}
 		return true;

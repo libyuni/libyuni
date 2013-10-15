@@ -48,8 +48,8 @@ namespace Media
 		{
 			IsVideo = TypeT == stVideo,
 			IsAudio = TypeT == stAudio
+		};
 
-		}; // enum anonymous
 
 	public:
 		//! Smart pointer
@@ -102,6 +102,9 @@ namespace Media
 		** \brief Get the next frame
 		*/
 		Frame::Ptr nextFrame();
+
+		//! Rewind the stream
+		void rewind();
 
 		/*!
 		** \brief Is the stream ready for decoding ?

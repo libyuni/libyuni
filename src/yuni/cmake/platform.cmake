@@ -132,8 +132,11 @@
 /* C++11 keyword final */
 #cmakedefine YUNI_HAS_CPP_KEYWORD_FINAL
 
-/* C++11 move constructor */
-#cmakedefine YUNI_HAS_CPP_MOVE_CONSTRUCTOR
+/* C++11 move operator */
+#cmakedefine YUNI_HAS_CPP_MOVE
+
+/* C++11 lambda */
+#cmakedefine YUNI_HAS_CPP_LAMBDA
 
 /* C++11 static_assert */
 #cmakedefine YUNI_HAS_CPP_STATIC_ASSERT
@@ -141,6 +144,9 @@
 /* pthread pthread_getthreadid_np */
 #cmakedefine YUNI_HAS_PTHREAD_GETTHREADID_NP
 
-
+/* lambda for Yuni::Bind / Yuni::Event */
+#if defined(YUNI_HAS_CPP_MOVE) && defined(YUNI_HAS_CPP_LAMBDA)
+# define YUNI_HAS_CPP_BIND_LAMBDA
+# endif
 
 #endif /* __YUNI_PLATFORM_CHECKS_H__ */

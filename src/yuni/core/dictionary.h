@@ -22,20 +22,20 @@ namespace Yuni
 	{
 	public:
 		# ifndef YUNI_HAS_STL_UNORDERED_MAP
-		//! Un unordered dictionary table
+		//! An unordered dictionary table
 		typedef std::map<KeyT, ValueT> Hash;
-		//! Un unordered dictionary table
+		//! An unordered dictionary table
 		typedef std::map<KeyT, ValueT> Unordered;
 		# else
-		//! Un unordered dictionary table
+		//! An unordered dictionary table
 		typedef std::unordered_map<KeyT, ValueT> Hash;
-		//! Un unordered dictionary table
+		//! An unordered dictionary table
 		typedef std::unordered_map<KeyT, ValueT> Unordered;
 		# endif
 
-		//! Un ordered dictionary table
+		//! An ordered dictionary table
 		typedef std::map<KeyT, ValueT> Map;
-		//! Un ordered dictionary table
+		//! An ordered dictionary table
 		typedef std::map<KeyT, ValueT> Ordered;
 
 	}; // struct Dictionary
@@ -47,18 +47,18 @@ namespace Yuni
 	{
 	public:
 		# ifndef YUNI_HAS_STL_UNORDERED_MAP
-		//! Un unordered set table
+		//! An unordered set table
 		typedef std::set<KeyT> Hash;
-		//! Un unordered set table
+		//! An unordered set table
 		typedef std::set<KeyT> Unordered;
 		# else
-		//! Un unordered set table
+		//! An unordered set table
 		typedef std::unordered_set<KeyT> Hash;
-		//! Un unordered set table
+		//! An unordered set table
 		typedef std::unordered_set<KeyT> Unordered;
 		# endif
 
-		//! Un ordered dictionary table
+		//! An ordered dictionary table
 		typedef std::set<KeyT> Ordered;
 
 	}; // struct Set

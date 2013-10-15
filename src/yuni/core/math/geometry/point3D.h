@@ -225,7 +225,6 @@ namespace Yuni
 		**
 		** \see move()
 		*/
-		template<typename U>
 		Point3D& operator = (const Point3D& p) { x = p.x; y = p.y; z = p.z; return (*this); }
 
 		/*!
@@ -315,6 +314,7 @@ namespace Yuni
 				default:
 					assert(false and "Index out of bounds !");
 			}
+			return x;
 		}
 
 		//} Operators

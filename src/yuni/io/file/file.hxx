@@ -55,11 +55,11 @@ namespace File
 
 
 
-	template<class StringT, class U>
-	bool SaveToFile(const StringT& filename, const U& content)
+	template<class U>
+	bool SaveToFile(const AnyString& filename, const U& content)
 	{
-		IO::File::Stream file(filename, OpenMode::write | OpenMode::truncate);
-		if (file.opened())
+		IO::File::Stream file;
+		if (file.openRW(filename))
 		{
 			file += content;
 			return true;
@@ -69,9 +69,9 @@ namespace File
 
 
 
-	template<class StringT, class PredicateT>
+	template<class PredicateT>
 	bool
-	ReadLineByLine(const StringT& filename, const PredicateT& predicate)
+	ReadLineByLine(const AnyString& filename, const PredicateT& predicate)
 	{
 		IO::File::Stream file;
 		if (file.open(filename))

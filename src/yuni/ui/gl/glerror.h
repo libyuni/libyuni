@@ -56,7 +56,7 @@ namespace Gfx3D
 				errorText = "Unknown GL error";
 		}
 
-		std::cerr << errorText << " in " << location;
+		std::cerr << errorText << " in " << location << std::endl;
 		return false;
 
 		# endif // !NDEBUG

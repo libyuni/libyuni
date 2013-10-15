@@ -102,6 +102,9 @@ namespace Messaging
 		class Transports final : private NonCopyable<Transports>
 		{
 		public:
+			//! Default constructor
+			Transports();
+
 			/*!
 			** \brief Add a new transport for a list of addresses and a specific port
 			**
@@ -128,7 +131,6 @@ namespace Messaging
 			*/
 			void clear();
 
-
 		private:
 			Service* pService;
 			friend class Service;
@@ -140,6 +142,9 @@ namespace Messaging
 		class HeavyTasks final
 		{
 		public:
+			//! Default constructor
+			HeavyTasks();
+
 			//! Get if the task manager is enabled
 			bool enabled() const;
 			//! Enable / disable the task manager (valid for the next start / reload)

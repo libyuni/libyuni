@@ -7,6 +7,16 @@ namespace Yuni
 namespace Messaging
 {
 
+	inline Service::Transports::Transports() :
+		pService()
+	{}
+
+
+	inline Service::HeavyTasks::HeavyTasks() :
+		pService()
+	{}
+
+
 	inline Net::Error Service::Transports::add(const Net::Port& port, Transport::ITransport::Ptr transport)
 	{
 		return add("*", port, transport);

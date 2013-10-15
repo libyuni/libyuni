@@ -115,7 +115,7 @@ namespace UI
 		//! Font to use
 		FTFont::Ptr pFont;
 
-		//! Color to use
+		//! Text color
 		Color::RGBA<float> pColor;
 
 		//! Material

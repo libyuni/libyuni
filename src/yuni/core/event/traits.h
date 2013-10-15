@@ -9,6 +9,7 @@
 */
 
 # include "../slist/slist.h"
+# include "../atomic/bool.h"
 
 
 
@@ -23,7 +24,7 @@ namespace EventImpl
 
 
 	template<typename T>
-	class EmptyPredicate
+	class EmptyPredicate final
 	{
 	public:
 		typedef void ResultType;
@@ -34,7 +35,7 @@ namespace EventImpl
 
 
 	template<class BindT>
-	class PredicateRemoveObject
+	class PredicateRemoveObject final
 	{
 	public:
 		PredicateRemoveObject(const void* object) :
@@ -51,7 +52,7 @@ namespace EventImpl
 
 
 	template<class BindT>
-	class PredicateRemoveObserverBase
+	class PredicateRemoveObserverBase final
 	{
 	public:
 		PredicateRemoveObserverBase(IEvent* event, const IEventObserverBase* object) :
@@ -74,7 +75,7 @@ namespace EventImpl
 
 
 	template<class BindT>
-	class PredicateRemoveWithoutChecks
+	class PredicateRemoveWithoutChecks final
 	{
 	public:
 		PredicateRemoveWithoutChecks(const IEventObserverBase* object) :
@@ -126,7 +127,7 @@ namespace EventImpl
 		*/
 		void invoke() const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -139,7 +140,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke() const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -152,7 +153,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -161,7 +162,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -176,7 +176,7 @@ namespace EventImpl
 		*/
 		void operator () () const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -186,6 +186,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -194,7 +195,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -238,7 +238,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -251,7 +251,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -264,7 +264,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -273,7 +273,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -288,7 +287,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -298,6 +297,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -306,7 +306,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -352,7 +351,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -365,7 +364,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -378,7 +377,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -387,7 +386,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -402,7 +400,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -412,6 +410,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -420,7 +419,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -468,7 +466,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -481,7 +479,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -494,7 +492,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -503,7 +501,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -518,7 +515,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -528,6 +525,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -536,7 +534,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -586,7 +583,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -599,7 +596,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -612,7 +609,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -621,7 +618,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -636,7 +632,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -646,6 +642,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -654,7 +651,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -706,7 +702,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -719,7 +715,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -732,7 +728,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -741,7 +737,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -756,7 +751,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -766,6 +761,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -774,7 +770,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -828,7 +823,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -841,7 +836,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -854,7 +849,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -863,7 +858,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -878,7 +872,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -888,6 +882,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -896,7 +891,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -952,7 +946,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -965,7 +959,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -978,7 +972,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -987,7 +981,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -1002,7 +995,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1012,6 +1005,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -1020,7 +1014,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -1078,7 +1071,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1091,7 +1084,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1104,7 +1097,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1113,7 +1106,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -1128,7 +1120,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1138,6 +1130,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -1146,7 +1139,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -1206,7 +1198,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1219,7 +1211,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1232,7 +1224,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1241,7 +1233,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -1256,7 +1247,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1266,6 +1257,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -1274,7 +1266,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -1336,7 +1327,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1349,7 +1340,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1362,7 +1353,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1371,7 +1362,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -1386,7 +1376,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1396,6 +1386,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -1404,7 +1395,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -1468,7 +1458,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1481,7 +1471,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1494,7 +1484,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1503,7 +1493,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -1518,7 +1507,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1528,6 +1517,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -1536,7 +1526,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -1602,7 +1591,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1615,7 +1604,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1628,7 +1617,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1637,7 +1626,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -1652,7 +1640,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1662,6 +1650,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -1670,7 +1659,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -1738,7 +1726,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1751,7 +1739,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1764,7 +1752,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1773,7 +1761,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -1788,7 +1775,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1798,6 +1785,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -1806,7 +1794,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -1876,7 +1863,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1889,7 +1876,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1902,7 +1889,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1911,7 +1898,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -1926,7 +1912,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -1936,6 +1922,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -1944,7 +1931,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -2016,7 +2002,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -2029,7 +2015,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -2042,7 +2028,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -2051,7 +2037,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -2066,7 +2051,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -2076,6 +2061,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -2084,7 +2070,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 
@@ -2158,7 +2143,7 @@ namespace EventImpl
 		*/
 		void invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -2171,7 +2156,7 @@ namespace EventImpl
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const
 		{
 			PredicateT<R> predicate;
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -2184,7 +2169,7 @@ namespace EventImpl
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -2193,7 +2178,6 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
-
 
 		template<class EventT> void assign(EventT& rhs)
 		{
@@ -2208,7 +2192,7 @@ namespace EventImpl
 		*/
 		void operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const
 		{
-			if (!pEmpty)
+			if (not pEmpty)
 			{
 				typename ThreadingPolicy::MutexLocker locker(*this);
 				const typename BindList::const_iterator end = pBindList.end();
@@ -2218,6 +2202,7 @@ namespace EventImpl
 		}
 		//@}
 
+
 	protected:
 		//! Binding list (type)
 		typedef LinkedList<BindType> BindList;
@@ -2226,7 +2211,6 @@ namespace EventImpl
 		volatile bool pEmpty;
 		//! Binding list
 		BindList pBindList;
-
 		// friend !
 		template<class P> friend class Event;
 

@@ -23,7 +23,7 @@ namespace Thread
 
 	inline bool Signal::operator ! () const
 	{
-		return !valid();
+		return not valid();
 	}
 
 

@@ -497,7 +497,7 @@ endif ()
 # List of all available modules
 #
 
-set(YUNI_MODULE_AVAILABLE)
+set(YUNI_MODULE_AVAILABLE "core")
 
 if (YUNI_MODULE_ALGORITHMS)
 	list(APPEND YUNI_MODULE_AVAILABLE algorithms)

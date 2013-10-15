@@ -23,7 +23,7 @@ namespace Media
 	/*!
 	** \brief OpenAL wrapper
 	*/
-	class OpenAL
+	class OpenAL final
 	{
 	public:
 		//! \name Enums

@@ -62,21 +62,20 @@ namespace UI
 	}
 
 
-	void View::draw() const
+	void View::draw(uint /*msMultiplier*/) const
 	{
 		if (!pVisible)
 			return;
 
-
 		// Clear depth buffer
 		::glClear(GL_DEPTH_BUFFER_BIT);
+
+		// Reset The Current Viewport
+		::glViewport(pX, pY, pWidth, pHeight);
 
 		/*
 		if (!(!pCamera))
 		{
-			// Reset The Current Viewport
-			::glViewport(pX, pY, pWidth, pHeight);
-
 			// Select the Projection Matrix
 			::glMatrixMode(GL_PROJECTION);
 			// Reset the Projection Matrix
@@ -155,33 +154,30 @@ namespace UI
 		for (TextOverlay::Vector::const_iterator it = pTexts.begin(); endT != it; ++it)
 			drawOverlay(**it);
 
-		// Create a drawing surface for control rendering that has the size of the root control
-		/*
+		// Render the control tree
 		if (!(!pControl) and pControl->visible())
 		{
 			if (!pUISurface)
 			{
 				pUISurface = new DrawingSurface(pControl->width(), pControl->height());
 				pUISurface->begin();
-				pControl->draw(pUISurface, true);
+				pControl->draw(pUISurface);
 				pUISurface->commit();
 			}
 			else if (pControl->modified())
 			{
+				pUISurface->resize(pControl->width(), pControl->height());
 				pUISurface->begin();
-				pControl->draw(pUISurface, true);
+				pControl->draw(pUISurface);
 				pUISurface->commit();
 			}
 
 			if (pPictureShaders and pPictureShaders->valid())
 			{
-				pPictureShaders->activate();
 				drawPicture(pUISurface->texture(), pControl->x(), pControl->y(),
-					pControl->width(), pControl->height());
-				pPictureShaders->deactivate();
+					pControl->width(), pControl->height(), true);
 			}
 		}
-		*/
 
 		// Reset matrices
 		::glMatrixMode(GL_PROJECTION);
@@ -207,30 +203,52 @@ namespace UI
 	void View::drawOverlay(const PictureOverlay& picture) const
 	{
 		picture.draw(pPictureShaders);
+		//drawPicture(picture.texture(), picture.x(), picture.y(), picture.width(), picture.height());
 	}
 
 
-	void View::drawPicture(const Gfx3D::Texture::Ptr& texture, int x, int y, unsigned int width, unsigned int height) const
+	void View::drawPicture(const Gfx3D::Texture::Ptr& texture, int x, int y, unsigned int width, unsigned int height, bool flip) const
 	{
 		if (!texture)
 			return;
 
+		pPictureShaders->activate();
+		::glActiveTexture(GL_TEXTURE0);
 		// Bind the texture
 		::glBindTexture(GL_TEXTURE_2D, texture->id());
+		pPictureShaders->bindUniform("Texture0", Yuni::Gfx3D::Vertex<>::vaTexture0);
 
 		// Set texture coordinates
-		const float texCoord[] =
-			{
-				0.0f, 1.0f,
-				0.0f, 0.0f,
-				1.0f, 0.0f,
-				0.0f, 1.0f,
-				1.0f, 0.0f,
-				1.0f, 1.0f
-			};
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
-		::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
+		if (flip)
+		{
+			const float texCoord[] =
+				{
+					0.0f, 0.0f,
+					0.0f, 1.0f,
+					1.0f, 1.0f,
+					0.0f, 0.0f,
+					1.0f, 1.0f,
+					1.0f, 0.0f
+				};
+			::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
+		}
+		else
+		{
+			const float texCoord[] =
+				{
+					0.0f, 1.0f,
+					0.0f, 0.0f,
+					1.0f, 0.0f,
+					0.0f, 1.0f,
+					1.0f, 0.0f,
+					1.0f, 1.0f
+				};
+			::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
+		}
+
 		// Set vertices
+		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 		const float vertices[] =
 			{
 				(float)x, (float)(y + height),
@@ -240,8 +258,8 @@ namespace UI
 				(float)(x + width), (float)y,
 				(float)(x + width), (float)(y + height)
 			};
-		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
+
 		// Draw
 		::glDrawArrays(GL_TRIANGLES, 0, 6);
 		// Clean up
@@ -250,6 +268,7 @@ namespace UI
 
 		// Unbind the texture
 		::glBindTexture(GL_TEXTURE_2D, 0);
+		pPictureShaders->deactivate();
 	}
 
 

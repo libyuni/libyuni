@@ -29,7 +29,7 @@ namespace Logs
 		** \warning This method is not thread-safe and should only be used after the creation
 		** of the logger
 		*/
-		template<class U> void applicationName(const U& s) {pAppName = s;}
+		void applicationName(const AnyString& s) {pAppName = s;}
 		//@}
 
 

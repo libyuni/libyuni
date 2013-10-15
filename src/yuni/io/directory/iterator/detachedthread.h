@@ -67,6 +67,16 @@ namespace Iterator
 	class Options
 	{
 	public:
+		//! Default constructor
+		Options() :
+			self(nullptr),
+			# ifdef YUNI_OS_WINDOWS
+			wbuffer(nullptr),
+			# endif
+			counter(0)
+		{}
+
+	public:
 		/*!
 		** \brief The root folder
 		** \internal The shared access to this variable is already guaranted

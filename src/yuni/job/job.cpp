@@ -10,9 +10,6 @@ namespace Job
 {
 
 	IJob::IJob() :
-		pState(stateIdle),
-		pProgression(),
-		pCanceling(),
 		pThread(nullptr)
 	{}
 
@@ -52,7 +49,7 @@ namespace Job
 		// We will keep the state in `waiting` until we have properly set
 		// all other values
 		pThread = t;
-		pCanceling = 0;
+		pCanceling = false;
 		pProgression = 0;
 
 		// Here we go !

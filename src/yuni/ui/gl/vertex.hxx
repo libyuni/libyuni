@@ -41,7 +41,8 @@ namespace Gfx3D
 		NormalPolicy(v.normal()),
 		ColorPolicy(v.color()),
 		TexCoordPolicy(v.texCoord()),
-		UserDataPolicy(v.user())
+		UserDataPolicy(v.user()),
+		PaddingT()
 	{}
 
 

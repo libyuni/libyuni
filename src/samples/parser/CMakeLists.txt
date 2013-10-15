@@ -1,3 +1,3 @@
 
-add_subdirectory(00.json-parser)
+add_subdirectory(00.calculator)
 

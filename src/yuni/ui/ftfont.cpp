@@ -276,7 +276,9 @@ namespace UI
 		}
 
 		height = highestYBearing + lowestUnderBaseline + 1;
-		// Always resize the texture
+		// Always resize the texture, fail if one dimension is zero
+		if (!width || !height)
+			return;
 		texture->resize(width, height);
 		texture->clear();
 

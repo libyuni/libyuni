@@ -105,14 +105,14 @@ namespace Geometry
 		// Project the center of the sphere on the line
 		Point3D<T> projection = PointToLineProjection(center, startPoint, lineDirection);
 		// Check point ordering along the line : projection must be between start and end
-		if (projection.x < startPoint.x and projection.x < endPoint.x or
-			projection.x > startPoint.x and projection.x > endPoint.x)
+		if ((projection.x < startPoint.x and projection.x < endPoint.x) or
+			(projection.x > startPoint.x and projection.x > endPoint.x))
 			return false;
-		if (projection.y < startPoint.y and projection.y < endPoint.y or
-			projection.y > startPoint.y and projection.y > endPoint.y)
+		if ((projection.y < startPoint.y and projection.y < endPoint.y) or
+			(projection.y > startPoint.y and projection.y > endPoint.y))
 			return false;
-		if (projection.z < startPoint.z and projection.z < endPoint.z or
-			projection.z > startPoint.z and projection.z > endPoint.z)
+		if ((projection.z < startPoint.z and projection.z < endPoint.z) or
+			(projection.z > startPoint.z and projection.z > endPoint.z))
 			return false;
 		// Now check that the projection is inside the sphere : OO' <= r
 		return Vector3D<T>(center, projection).squareMagnitude() <= radius * radius;

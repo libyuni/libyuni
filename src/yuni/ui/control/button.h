@@ -25,7 +25,7 @@ namespace Control
 			IControl(x, y, width, height)
 		{}
 
-		Button(const Point2D<>& position, const Point2D<>& size):
+		Button(const Point2D<>& position, const Point2D<uint>& size):
 			IControl(position, size)
 		{}
 
@@ -47,7 +47,7 @@ namespace Control
 		void onClick(const ClassT& object, const MethodT& method) { pOnClick.bind(object, method); }
 
 		//! Draw the button on the surface
-		//		virtual void draw(DrawingSurface::Ptr& surface, bool root);
+		virtual void draw(DrawingSurface::Ptr& surface, bool root);
 
 	private:
 		Callback pOnClick;

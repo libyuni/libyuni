@@ -29,7 +29,7 @@ namespace Logs
 		{
 			if ((uint) VerbosityType::level != (uint) Verbosity::Debug::level)
 			{
-				if (not callback.empty() && not s.empty())
+				if (not callback.empty() and not s.empty())
 				{
 					// A mutex is already locked
 					pDispatchedMessage = s;

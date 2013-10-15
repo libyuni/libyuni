@@ -38,68 +38,64 @@ namespace DynamicLibrary
 
 
 	// Implementation of the static variable
-	const File::Handle File::NullHandle = NULL;
+	const File::Handle File::NullHandle = nullptr;
 
 
 
-	namespace // Anonymous namespace
+	/*!
+	** \brief Try to find a file from a single path, a filename and a prefix
+	**
+	** \param[out] s A temporary string, where to write the absolute filename
+	** \param prefix The prefix to use for the filename
+	** \return True if the filename in `s` exists and should be loaded, False otherwise
+	**/
+	template<class StringT>
+	static inline bool FindLibraryFile(StringT& out, /*const StringT2& path,*/ const AnyString& filename, const char* prefix)
 	{
+		# define TEST_THEN_LOAD(EXT) \
+			out.clear(); \
+			/*if (!path.empty()) */ \
+				/*out << path << IO::Separator; */ \
+			out << prefix << filename << EXT; \
+			if (IO::File::Exists(out)) \
+				return true
 
-		/*!
-		** \brief Try to find a file from a single path, a filename and a prefix
-		**
-		** \param[out] s A temporary string, where to write the absolute filename
-		** \param prefix The prefix to use for the filename
-		** \return True if the filename in `s` exists and should be loaded, False otherwise
-		**/
-		template<class StringT>
-		static bool FindLibraryFile(StringT& out, /*const StringT2& path,*/ const AnyString& filename, const char* prefix)
-		{
-			# define TEST_THEN_LOAD(EXT) \
-				out.clear(); \
-				/*if (!path.empty()) */ \
-					/*out << path << IO::Separator; */ \
-				out << prefix << filename << EXT; \
-				if (IO::File::Exists(out)) \
-					return true
+		# ifdef YUNI_OS_DARWIN
+		TEST_THEN_LOAD(".dylib");
+		TEST_THEN_LOAD(".bundle");
+		# endif
 
-			# ifdef YUNI_OS_DARWIN
-			TEST_THEN_LOAD(".dylib");
-			TEST_THEN_LOAD(".bundle");
-			# endif
+		# ifdef YUNI_OS_AIX
+		TEST_THEN_LOAD(".a");
+		# endif
+		# ifdef YUNI_OS_HPUX
+		TEST_THEN_LOAD(".sl");
+		# endif
 
-			# ifdef YUNI_OS_AIX
-			TEST_THEN_LOAD(".a");
-			# endif
-			# ifdef YUNI_OS_HPUX
-			TEST_THEN_LOAD(".sl");
-			# endif
+		# ifdef YUNI_OS_WINDOWS
+		TEST_THEN_LOAD(".dll");
+		# else
+		TEST_THEN_LOAD(".so");
+		# endif
 
-			# ifdef YUNI_OS_WINDOWS
-			TEST_THEN_LOAD(".dll");
-			# else
-			TEST_THEN_LOAD(".so");
-			# endif
-
-			return false;
-			# undef TEST_THEN_LOAD
-		}
+		return false;
+		# undef TEST_THEN_LOAD
+	}
 
 
-		/*!
-		** \brief Try to find a file from a list of paths, a filename and a prefix
-		**
-		** \param[out] s A temporary string, where to write the absolute filename
-		** \param prefix The prefix to use for the filename
-		** \return True if the filename in `s` exists and should be loaded, False otherwise
-		**/
-		inline static bool FindLibrary(String& out, const AnyString& filename)
-		{
-			return (FindLibraryFile(out, filename, "lib") || FindLibraryFile(out, filename, ""));
-		}
+	/*!
+	** \brief Try to find a file from a list of paths, a filename and a prefix
+	**
+	** \param[out] s A temporary string, where to write the absolute filename
+	** \param prefix The prefix to use for the filename
+	** \return True if the filename in `s` exists and should be loaded, False otherwise
+	**/
+	static inline bool FindLibrary(String& out, const AnyString& filename)
+	{
+		return (FindLibraryFile(out, filename, "lib") or FindLibraryFile(out, filename, ""));
+	}
 
 
-	} // Anonymous namespace
 
 
 
@@ -134,7 +130,7 @@ namespace DynamicLibrary
 	bool File::loadFromFile(const AnyString& filename, File::Relocation r, File::Visibility v)
 	{
 		// No filename
-		if (!filename.empty())
+		if (not filename.empty())
 		{
 			// If the file name is absolute, there is no need for research
 			if (IO::IsAbsolute(filename))
@@ -183,7 +179,7 @@ namespace DynamicLibrary
 		// Unload the library if already loaded
 		unload();
 
-		if (!filename.empty())
+		if (not filename.empty())
 		{
 			// Loading
 			Private::WString<true> buffer(filename);
@@ -208,7 +204,7 @@ namespace DynamicLibrary
 		// Unload the library if already loaded
 		unload();
 
-		if (!filename.empty())
+		if (not filename.empty())
 		{
 			// The mode
 			int mode = ((relocationLazy == r) ? RTLD_LAZY : RTLD_NOW);
@@ -233,7 +229,7 @@ namespace DynamicLibrary
 	bool File::hasSymbol(const AnyString& name) const
 	{
 		return NullHandle != pHandle
-			&& NULL != (Symbol::Handle) (YUNI_DYNLIB_DLSYM(pHandle, name.c_str()));
+			and NULL != (Symbol::Handle) (YUNI_DYNLIB_DLSYM(pHandle, name.c_str()));
 	}
 
 

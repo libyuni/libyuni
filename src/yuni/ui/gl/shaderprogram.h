@@ -6,34 +6,37 @@
 # include "shader.h"
 # include "texture.h"
 # include "vertex.h"
+# include <map>
+
 
 namespace Yuni
 {
 namespace Gfx3D
 {
 
-
 	/*!
 	** \brief A shader program can be bound to a vertex shader, a fragment shader and a compute shader
 	*/
-	class ShaderProgram
+	class ShaderProgram final
 	{
 	public:
 		//! Smart pointer
 		typedef SmartPtr<ShaderProgram>  Ptr;
+		//! Cache for name locations in the shader program
+		typedef std::map<String, int>  LocationCache;
 
 	public:
+		//! \name Constructors & Destructor
+		//@{
 		//! Constructor
 		ShaderProgram();
-
 		//! Constructor with the shaders already compiled
 		ShaderProgram(const VertexShader::Ptr& vShader, const FragmentShader::Ptr& fShader);
-
 		//! Constructor with the paths to the shaders
 		ShaderProgram(const AnyString& vShaderPath, const AnyString& fShaderPath);
-
 		//! Destructor
 		~ShaderProgram();
+		//@}
 
 		//! Set the vertex shader
 		void vertexShader(const VertexShader::Ptr& shader);
@@ -56,8 +59,13 @@ namespace Gfx3D
 		//! Activate this program
 		void activate() const;
 
-		//! Deactivate this program
-		void deactivate() const;
+		/*!
+		** 'brief Deactivate this program
+		**
+		** \internal This method does not use any class data in the current
+		**   implementation but it may change in the future
+		*/
+		static void deactivate();
 
 		//! Is the program valid for use ?
 		bool valid() const;
@@ -101,23 +109,23 @@ namespace Gfx3D
 	private:
 		//! ID of the shader program
 		mutable uint pID;
-
 		//! Is the program already linked ?
 		mutable bool pLinked;
 
 		//! Current vertex shader
 		VertexShader::Ptr pVertexShader;
-
 		//! Current fragment shader
 		FragmentShader::Ptr pFragmentShader;
-
 		//! Current compute shader
 		ComputeShader::Ptr pComputeShader;
 
 		//! Error string storage
 		String pError;
+		//! Cache for uniform locations
+		mutable LocationCache pUniformCache;
 
 	}; // class ShaderProgram
+
 
 
 

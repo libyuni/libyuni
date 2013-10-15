@@ -307,10 +307,14 @@ namespace Core
 		//@{
 		//! Return iterator to the first child of the node
 		iterator  begin() {return iterator(pFirstChild);}
-		const iterator  begin() const {return iterator(pFirstChild);}
+		const const_iterator  begin() const {return iterator(pFirstChild);}
+		depth_prefix_iterator  depth_prefix_begin() {return depth_prefix_iterator(pFirstChild);}
+		const const_depth_prefix_iterator  depth_prefix_begin() const {return const_depth_prefix_iterator(pFirstChild);}
 		//! Return iterator to the last child of the node
 		iterator  end() {return iterator();}
-		const iterator  end() const {return iterator();}
+		const const_iterator  end() const {return iterator();}
+		depth_prefix_iterator  depth_prefix_end() {return depth_prefix_iterator();}
+		const const_depth_prefix_iterator  depth_prefix_end() const {return const_depth_prefix_iterator();}
 
 
 		/*!

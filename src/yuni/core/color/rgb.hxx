@@ -437,6 +437,7 @@ namespace Color
 			default:
 				assert(false and "Index out of bounds !");
 		}
+		return red;
 	}
 
 

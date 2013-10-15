@@ -94,10 +94,12 @@ namespace Media
 		FrameImpl* pImpl;
 
 		//! Friend declaration
-		template<StreamType TypeT>
-		friend class Stream;
+		template<StreamType TypeT> friend class Stream;
 
 	}; // class Frame
+
+
+
 
 
 

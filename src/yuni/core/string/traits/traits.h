@@ -34,13 +34,13 @@ namespace CStringImpl
 
 
 	template<bool AdapterT>
-	struct FinalZero
+	struct FinalZero final
 	{
 		static inline void Set(const char*, uint) {}
 	};
 
 	template<>
-	struct FinalZero<false>
+	struct FinalZero<false> final
 	{
 		static inline void Set(char* buffer, uint offset)
 		{
@@ -51,7 +51,7 @@ namespace CStringImpl
 
 
 	template<class StringT, bool Adapter>
-	struct AdapterAssign
+	struct AdapterAssign final
 	{
 		static inline void Perform(StringT& out, const char* const cstring, typename StringT::Size size)
 		{
@@ -60,7 +60,7 @@ namespace CStringImpl
 	};
 
 	template<class StringT>
-	struct AdapterAssign<StringT, false>
+	struct AdapterAssign<StringT, false> final
 	{
 		static inline void Perform(StringT& out, const char* const cstring, typename StringT::Size size)
 		{
@@ -71,7 +71,7 @@ namespace CStringImpl
 
 
 	template<class StringT, bool Adapter>
-	struct Consume
+	struct Consume final
 	{
 		static inline void Perform(StringT& out, typename StringT::Size count)
 		{
@@ -83,7 +83,7 @@ namespace CStringImpl
 	};
 
 	template<class StringT>
-	struct Consume<StringT, false>
+	struct Consume<StringT, false> final
 	{
 		static inline void Perform(StringT& out, typename StringT::Size count)
 		{
@@ -98,7 +98,7 @@ namespace CStringImpl
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	struct Data
+	class Data
 	{
 	public:
 		typedef char C;
@@ -114,16 +114,14 @@ namespace CStringImpl
 	public:
 		//! \name Constructors & Destructors
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Data();
-
-		/*!
-		** \brief Copy constructor
-		*/
+		//! Copy constructor
 		Data(const Data& rhs);
-
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Data(Data&& rhs);
+		# endif
 		//! Destructor
 		~Data();
 		//@}
@@ -213,6 +211,11 @@ namespace CStringImpl
 		void shrink();
 
 
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move operator
+		Data& operator = (Data&& rhs);
+		# endif
+
 	protected:
 		Size size;
 		Size capacity;
@@ -228,7 +231,7 @@ namespace CStringImpl
 
 
 	template<uint ChunkSizeT>
-	struct Data<ChunkSizeT, false>
+	class Data<ChunkSizeT, false>
 	{
 	public:
 		typedef char C;
@@ -255,6 +258,18 @@ namespace CStringImpl
 		{
 			YUNI_MEMCPY(data, (uint) capacity, rhs.data, sizeof(C) * (size + (uint) zeroTerminated));
 		}
+
+		# ifdef YUNI_HAS_CPP_MOVE
+		Data(Data&& rhs) :
+			size(rhs.size)
+		{
+			// it is impossible to perform a real move in this case
+			YUNI_MEMCPY(data, (uint) capacity, rhs.data, sizeof(C) * (size + (uint) zeroTerminated));
+			rhs.size = 0;
+			if ((uint) zeroTerminated)
+				rhs.data[0] = C();
+		}
+		# endif
 
 		void clear()
 		{
@@ -337,6 +352,21 @@ namespace CStringImpl
 		{
 			// Do nothing
 		}
+
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move operator
+		Data& operator = (Data&& rhs)
+		{
+			// it is impossible to perform a real move in this case
+			size = rhs.size;
+			YUNI_MEMCPY(data, (uint) capacity, rhs.data, sizeof(C) * (size + (uint) zeroTerminated));
+
+			rhs.size = 0;
+			if ((uint) zeroTerminated)
+				rhs.data[0] = C();
+			return *this;
+		}
+		# endif
 
 	protected:
 		Size size;

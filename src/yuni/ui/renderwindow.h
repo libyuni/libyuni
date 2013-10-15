@@ -10,6 +10,7 @@
 # include "input/keyboard.h"
 # include "input/mouse.h"
 # include "font.h"
+# include "multisampling.h"
 # include "gl/posteffect.h"
 # include "gl/framebuffer.h"
 # include "gl/view.h"
@@ -47,16 +48,6 @@ namespace UI
 
 		}; // enum WindowState
 
-		//! Type of multisampling applied
-		enum MultiSamplingType
-		{
-			msNone,
-			ms2x,
-			ms4x
-
-		}; // enum MultiSampling
-
-
 	public:
 		//! \name Constructors & Destructor
 		//@{
@@ -76,7 +67,7 @@ namespace UI
 		** This should be overridden and must be called with RenderWindow::initialize().
 		** It cannot be const because if init fails, we may have to switch to fallback values.
 		*/
-		virtual bool initialize() { return pFB.initialize(); }
+		virtual bool initialize() { return pFB.initialize(Gfx3D::FrameBuffer::fbPingPong, pMultiSampling); }
 
 		/*!
 		** \brief Kill the window, release everything
@@ -199,17 +190,12 @@ namespace UI
 		//! State of the window : normal, minimized, maximized
 		bool minimized() const { return wsMinimized == pState; }
 
+		//! Do we currently have any kind of multisampling on ?
+		bool multiSampling() const { return MultiSampling::msNone != pMultiSampling; }
 		//! Change the type of multisampling applied
-		void multiSampling(MultiSamplingType samplingType);
-
-		//! Does the window have Full Screen AntiAliasing / MultiSampling ? (OS-specific)
-		virtual bool antiAliasing() const = 0;
-		/*!
-		** \brief Should Full Screen AntiAliasing / MultiSampling be enabled ? (OS-specific)
-		**
-		** Changing this value may kill and re-create the window.
-		*/
-		virtual void antiAliasing(bool enable) = 0;
+		virtual void multiSampling(MultiSampling::Type samplingType);
+		//! Get the current multisampling multiplier, 1 if no multisampling
+		uint samplingMultiplier() const { return MultiSampling::Multiplier(pMultiSampling); }
 
 		//! Enable / Disable full screen (OS-specific)
 		virtual void fullScreen(bool enable) = 0;
@@ -312,7 +298,7 @@ namespace UI
 		bool pFullScreen;
 
 		//! Type of multisampling applied
-		MultiSamplingType pMultiSampling;
+		MultiSampling::Type pMultiSampling;
 
 		//! Is the window maximized ? Minimized ?
 		WindowState pState;

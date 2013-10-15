@@ -10,7 +10,7 @@ namespace LinkedListImpl
 {
 
 	template<int ComparePointer>
-	struct Compare
+	struct Compare final
 	{
 		template<class U, class V>
 		static bool Perform(const U& u, const V& v)
@@ -21,7 +21,7 @@ namespace LinkedListImpl
 
 
 	template<>
-	struct Compare<0>
+	struct Compare<0> final
 	{
 		template<class U, class V>
 		static bool Perform(const U& u, const V& v)
@@ -30,9 +30,11 @@ namespace LinkedListImpl
 		}
 	};
 
+
 } // namespace LinkedListImpl
 } // namespace Private
 } // namespace Yuni
+
 
 
 
@@ -42,14 +44,35 @@ namespace Yuni
 
 
 	template<class T, class Alloc>
-	inline LinkedList<T,Alloc>::LinkedList()
-		:pHead(NULL), pLast(NULL), pCount(0)
+	inline LinkedList<T,Alloc>::LinkedList() :
+		pHead(NULL), pLast(NULL), pCount(0)
 	{}
 
 
 	template<class T, class Alloc>
-	inline LinkedList<T,Alloc>::LinkedList(const LinkedList<T, Alloc>& rhs)
-		:pHead(NULL), pLast(NULL), pCount(0)
+	inline LinkedList<T,Alloc>::LinkedList(const LinkedList<T, Alloc>& rhs) :
+		pHead(NULL), pLast(NULL), pCount(0)
+	{
+		push_back(rhs);
+	}
+
+
+	# ifdef YUNI_HAS_CPP_MOVE
+	template<class T, class Alloc>
+	inline LinkedList<T,Alloc>::LinkedList(LinkedList<T, Alloc>&& rhs) :
+		pHead(rhs.pHead), pLast(rhs.pLast), pCount(rhs.pCount)
+	{
+		rhs.pHead  = nullptr;
+		rhs.pLast  = nullptr;
+		rhs.pCount = 0;
+	}
+	# endif
+
+
+	template<class T, class Alloc>
+	template<class U, class A>
+	inline LinkedList<T,Alloc>::LinkedList(const LinkedList<U,A>& rhs) :
+		pHead(NULL), pLast(NULL), pCount(0)
 	{
 		push_back(rhs);
 	}
@@ -57,8 +80,8 @@ namespace Yuni
 
 	template<class T, class Alloc>
 	template<class U, class A>
-	inline LinkedList<T,Alloc>::LinkedList(const LinkedList<U,A>& rhs)
-		:pHead(NULL), pLast(NULL), pCount(0)
+	inline LinkedList<T,Alloc>::LinkedList(const std::list<U,A>& rhs) :
+		pHead(NULL), pLast(NULL), pCount(0)
 	{
 		push_back(rhs);
 	}
@@ -66,17 +89,8 @@ namespace Yuni
 
 	template<class T, class Alloc>
 	template<class U, class A>
-	inline LinkedList<T,Alloc>::LinkedList(const std::list<U,A>& rhs)
-		:pHead(NULL), pLast(NULL), pCount(0)
-	{
-		push_back(rhs);
-	}
-
-
-	template<class T, class Alloc>
-	template<class U, class A>
-	inline LinkedList<T,Alloc>::LinkedList(const std::vector<U,A>& rhs)
-		:pHead(NULL), pLast(NULL), pCount(0)
+	inline LinkedList<T,Alloc>::LinkedList(const std::vector<U,A>& rhs) :
+		pHead(NULL), pLast(NULL), pCount(0)
 	{
 		push_back(rhs);
 	}
@@ -94,24 +108,28 @@ namespace Yuni
 	template<class T, class Alloc>
 	inline typename LinkedList<T,Alloc>::reference_type LinkedList<T,Alloc>::front()
 	{
+		assert(pHead and "the list is empty");
 		return pHead->data;
 	}
 
 	template<class T, class Alloc>
 	inline typename LinkedList<T,Alloc>::const_reference_type LinkedList<T,Alloc>::front() const
 	{
+		assert(pHead and "the list is empty");
 		return pHead->data;
 	}
 
 	template<class T, class Alloc>
 	inline typename LinkedList<T,Alloc>::reference_type LinkedList<T,Alloc>::back()
 	{
+		assert(pHead and "the list is empty");
 		return pLast->data;
 	}
 
 	template<class T, class Alloc>
 	inline typename LinkedList<T,Alloc>::const_reference_type LinkedList<T,Alloc>::back() const
 	{
+		assert(pHead and "the list is empty");
 		return pLast->data;
 	}
 
@@ -278,7 +296,7 @@ namespace Yuni
 
 	template<class T, class Alloc>
 	template<class U, class A>
-	void LinkedList<T,Alloc>::push_back(const std::list<U,A> rhs)
+	void LinkedList<T,Alloc>::push_back(const std::list<U,A>& rhs)
 	{
 		typedef std::list<U,A> L;
 		typename L::const_iterator end = rhs.end();
@@ -404,8 +422,9 @@ namespace Yuni
 	void LinkedList<T,Alloc>::erase(iterator& i)
 	{
 		// Make sure the list is not empty
-		if (!pHead)
+		if (not pHead)
 			return;
+
 		// If we are erasing the first item
 		if (pHead == i.pCurrent)
 		{
@@ -417,6 +436,7 @@ namespace Yuni
 		else
 		{
 			for (Item* it = pHead; it->next; ++it)
+			{
 				// Is it the correct item ?
 				if (it->next == i)
 				{
@@ -426,6 +446,7 @@ namespace Yuni
 					--pCount;
 					break;
 				}
+			}
 		}
 	}
 
@@ -627,7 +648,7 @@ namespace Yuni
 	template<class T, class Alloc>
 	inline bool LinkedList<T,Alloc>::empty() const
 	{
-		return (NULL == pHead);
+		return (0 == pCount);
 	}
 
 
@@ -646,6 +667,7 @@ namespace Yuni
 		return *this;
 	}
 
+
 	template<class T, class Alloc>
 	template<class U>
 	inline LinkedList<T,Alloc>& LinkedList<T,Alloc>::operator -= (const U& value)
@@ -653,6 +675,7 @@ namespace Yuni
 		(void) remove(value);
 		return *this;
 	}
+
 
 	template<class T, class Alloc>
 	template<class U>
@@ -671,10 +694,25 @@ namespace Yuni
 	}
 
 
+	# ifdef YUNI_HAS_CPP_MOVE
+	template<class T, class Alloc>
+	inline LinkedList<T,Alloc>& LinkedList<T,Alloc>::operator = (LinkedList<T,Alloc>&& rhs)
+	{
+		pHead  = rhs.pHead;
+		pLast  = rhs.pLast;
+		pCount = rhs.pCount;
+		rhs.pHead  = nullptr;
+		rhs.pLast  = nullptr;
+		rhs.pCount = 0;
+		return *this;
+	}
+	# endif
+
+
 	template<class T, class Alloc>
 	inline bool LinkedList<T,Alloc>::operator ! () const
 	{
-		return (NULL == pHead);
+		return (0 == pCount);
 	}
 
 

@@ -7,6 +7,7 @@
 # include "../core/string.h"
 # include <vector>
 # include "fwd.h"
+# include "../core/noncopyable.h"
 
 
 
@@ -57,7 +58,7 @@ namespace Thread
 	** \warning : Windows Server 2003 and Windows XP:  The target thread's initial
 	**   stack is not freed when stopping the native thread, causing a resource leak
 	*/
-	class YUNI_DECL IThread : public Policy::ObjectLevelLockable<IThread>
+	class YUNI_DECL IThread : public Policy::ObjectLevelLockable<IThread>, private NonCopyable<IThread>
 	{
 	public:
 		//! The threading policy
@@ -251,11 +252,6 @@ namespace Thread
 
 
 	private:
-		//! Private copy constructor
-		IThread(const IThread&) :ThreadingPolicy() {/* not copyable */}
-		//! Operator =
-		IThread& operator = (const IThread&) {return *this;}
-
 		# ifndef YUNI_NO_THREAD_SAFE
 		//! Stop the native thread
 		Error stopWL(uint timeout);

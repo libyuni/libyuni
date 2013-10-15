@@ -15,7 +15,7 @@ namespace Yuni
 	*/
 	template<class P = void ()>
 	class YUNI_DECL Event final :
-		public IEvent,                                  // base class IEvent
+		public IEvent, // base class IEvent
 		public Yuni::Private::EventImpl::WithNArguments<Bind<P>::argumentCount, Bind<P> >
 	{
 	public:
@@ -30,9 +30,9 @@ namespace Yuni
 		typedef typename AncestorType::ThreadingPolicy ThreadingPolicy;
 		//! The most suitable smartptr for the class
 		typedef SmartPtr<Event> Ptr;
-
 		//! Pointer-to-function
 		typedef typename BindType::FunctionType FunctionType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -48,13 +48,11 @@ namespace Yuni
 			//! Type for a const pointer-to-member
 			typedef typename BindType::template PointerToMember<C>::ConstType ConstType;
 		};
+
 		enum
 		{
 			//! The number of arguments
 			argumentCount = BindType::argumentCount,
-		};
-		enum
-		{
 			//! A non-zero value if the prototype has a return value (!= void)
 			hasReturnValue = BindType::hasReturnValue,
 		};
@@ -71,7 +69,7 @@ namespace Yuni
 		** \tparam I Index of the argument (zero-based)
 		*/
 		template<int I>
-		struct Argument
+		struct Argument final
 		{
 			//! Type of the argument at position I (zero-based)
 			typedef typename BindType::template Argument<I>::Type Type;
@@ -81,13 +79,9 @@ namespace Yuni
 	public:
 		//! name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Event();
-		/*!
-		** \brief Copy constructor
-		*/
+		//! Copy constructor
 		Event(const Event& rhs);
 		//! Destructor
 		~Event();
@@ -150,8 +144,6 @@ namespace Yuni
 		//@{
 		//! Get the number of current connections
 		uint size() const;
-		//! \see size()
-		uint count() const;
 
 		//! Get if the event does not have any single callback
 		bool empty() const;
@@ -163,14 +155,12 @@ namespace Yuni
 		// ReturnType operator () (<parameters>) const;
 		//@}
 
-
 		//! \name Operators
 		//@{
 		//! Assignment with a nullptr (equivalent to clear())
 		Event& operator = (const NullPtr&);
 		//! Copy operator
 		Event& operator = (const Event& rhs);
-
 		//! Get if the event is empty
 		bool operator ! () const;
 		//@}

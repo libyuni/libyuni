@@ -8,7 +8,7 @@
 # include "../scene/camera.h"
 # include "../control/control.h"
 # include "../eventpropagation.h"
-//# include "../scene/scene.h"
+# include "drawingsurface.h"
 # include "shaderprogram.h"
 # include "../textoverlay.h"
 # include "../pictureoverlay.h"
@@ -75,7 +75,12 @@ namespace UI
 		void moveBy(int x, int y) { pX += x; pY += y; }
 
 		//! Resize the view
-		void resize(uint width, uint height) { pWidth = width; pHeight = height > 0 ? height : 1; }
+		void resize(uint width, uint height)
+		{
+			assert(height > 0 && "Resizing view to a null or negative height !");
+			pWidth = width;
+			pHeight = height > 0 ? height : 1;
+		}
 
 		//! Get the visibility of the view : the view must have a camera to be visible !
 		bool visible() const { return pVisible && !(!pCamera); }
@@ -124,7 +129,7 @@ namespace UI
 		**
 		** \note If you see nothing in this view, make sure the camera is set and the view is visible
 		*/
-		virtual void draw() const;
+		virtual void draw(uint msMultiplier) const;
 
 	protected:
 		//! Draw a text overlay
@@ -134,7 +139,8 @@ namespace UI
 		void drawOverlay(const PictureOverlay& text) const;
 
 		//! Draw a texture at the given coordinates (in pixels)
-		void drawPicture(const Gfx3D::Texture::Ptr& texture, int x, int y, unsigned int width, unsigned int height) const;
+		void drawPicture(const Gfx3D::Texture::Ptr& texture, int x, int y, unsigned int width,
+			unsigned int height, bool flip = false) const;
 
 		//! Draw all 2D elements : overlays and UI
 		void draw2D() const;
@@ -186,7 +192,7 @@ namespace UI
 		mutable Gfx3D::ShaderProgram::Ptr pPictureShaders;
 
 		//! Drawing surface for UI controls
-		// mutable DrawingSurface::Ptr pUISurface;
+		mutable DrawingSurface::Ptr pUISurface;
 
 	}; // class View
 

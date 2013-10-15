@@ -95,14 +95,14 @@ namespace Math
 
 
 	//! Factorial(1) = 1
-	template <> struct Factorial<1> { enum { value = 1 }; };
+	template <> struct Factorial<1> final { enum { value = 1 }; };
 
 
 	//! PowerInt<X,0>
-	template <int X> struct PowerInt<X,0> { enum { value = 1 }; };
+	template <int X> struct PowerInt<X,0> final { enum { value = 1 }; };
 
 	// partial specialization to end the iteration
-	template<int N> struct SquareRootInt<N,N> { enum { value = N }; };
+	template<int N> struct SquareRootInt<N,N> final { enum { value = N }; };
 
 
 	template <class U> inline bool Equals(U a, U b)
@@ -214,10 +214,12 @@ namespace Math
 		return x != x;
 	}
 
+
 	template<class T> inline int Infinite(const volatile T& x)
 	{
 		return ((x >= DBL_MAX) ? 1 : ((x <= -DBL_MAX) ? -1 : 0));
 	}
+
 
 	template<class T> inline T Floor(T x)
 	{
@@ -240,6 +242,7 @@ namespace Math
 		return ::floorl(x);
 	}
 	# endif
+
 
 
 	template<class T> inline T Ceil(T x)
@@ -280,6 +283,7 @@ namespace Math
 	{
 		return ::pow(x, y);
 	}
+
 
 
 	template<class T> inline T Round(T x, uint)
@@ -332,7 +336,7 @@ namespace Math
 
 	template<> inline float Round<float>(float x, uint place)
 	{
-		if (place)
+		if (place != 0)
 		{
 			float temp, mult;
 			mult = Power(10.f, static_cast<float>(place));
@@ -425,7 +429,7 @@ namespace Math
 
 
 	template<class T, class R>
-	struct RoundToInt
+	struct RoundToInt final
 	{
 		typedef T Type;
 		typedef R ResultType;
@@ -437,7 +441,7 @@ namespace Math
 	};
 
 	template<class T>
-	struct RoundToInt<T,T>
+	struct RoundToInt<T,T> final
 	{
 		typedef T Type;
 		typedef T ResultType;
@@ -450,7 +454,7 @@ namespace Math
 
 
 	template<>
-	struct RoundToInt<float, double>
+	struct RoundToInt<float, double> final
 	{
 		typedef float Type;
 		typedef double ResultType;
@@ -458,7 +462,7 @@ namespace Math
 	};
 
 	template<>
-	struct RoundToInt<double, float>
+	struct RoundToInt<double, float> final
 	{
 		typedef double Type;
 		typedef float ResultType;
@@ -468,7 +472,7 @@ namespace Math
 
 
 	template<>
-	struct RoundToInt<float, long int>
+	struct RoundToInt<float, long int> final
 	{
 		typedef float Type;
 		typedef long int ResultType;
@@ -476,7 +480,7 @@ namespace Math
 	};
 
 	template<>
-	struct RoundToInt<double, long int>
+	struct RoundToInt<double, long int> final
 	{
 		typedef double Type;
 		typedef long int ResultType;
@@ -486,7 +490,7 @@ namespace Math
 
 	# ifdef YUNI_HAS_LONG_DOUBLE
 	template<>
-	struct RoundToInt<long double, long int>
+	struct RoundToInt<long double, long int> final
 	{
 		typedef long double Type;
 		typedef long int ResultType;
@@ -497,7 +501,7 @@ namespace Math
 
 
 	template<>
-	struct RoundToInt<float, long long int>
+	struct RoundToInt<float, long long int> final
 	{
 		typedef float Type;
 		typedef long long int ResultType;
@@ -505,7 +509,7 @@ namespace Math
 	};
 
 	template<>
-	struct RoundToInt<double, long long int>
+	struct RoundToInt<double, long long int> final
 	{
 		typedef double Type;
 		typedef long long int ResultType;
@@ -514,7 +518,7 @@ namespace Math
 
 	# ifdef YUNI_HAS_LONG_DOUBLE
 	template<>
-	struct RoundToInt<long double, long long int>
+	struct RoundToInt<long double, long long int> final
 	{
 		typedef long double Type;
 		typedef long long int ResultType;

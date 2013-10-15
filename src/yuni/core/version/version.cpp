@@ -1,6 +1,7 @@
 
 #include "version.h"
 
+
 namespace Yuni
 {
 
@@ -11,11 +12,6 @@ namespace Yuni
 		v.lo = YUNI_VERSION_LO;
 		v.revision = YUNI_VERSION_REV;
 	}
-
-
-	Version::Version(const Version& c)
-		:hi(c.hi), lo(c.lo), revision(c.revision)
-	{}
 
 
 	bool Version::isLessThan(const Version& rhs) const
@@ -54,26 +50,6 @@ namespace Yuni
 	}
 
 
-	void Version::print(std::ostream& out) const
-	{
-		out << hi << "." << lo << "." << revision;
-	}
-
-
-
-	Version& Version::operator = (const Version& rhs)
-	{
-		hi = rhs.hi;
-		lo = rhs.lo;
-		revision = rhs.revision;
-		return *this;
-	}
-
-
-	bool Version::null() const
-	{
-		return (hi == 0 and lo == 0 and revision == 0);
-	}
 
 
 

@@ -3,33 +3,37 @@ YMESSAGE_MODULE("Parser Generator")
 
 LIBYUNI_CONFIG_LIB("both" "parser"        "yuni-static-parser")
 
-
-
 include_directories("..")
 
 
-set (SRC_PRIVATE_PARSER
-	private/parser/info-charset.h
-	private/parser/info-charset.cpp
-)
-source_group("Parser\\Private" FILES ${SRC_PRIVATE_PARSER})
+# generate cpp file
+file(READ "private/parser/peg/__parser.include.cpp.template" cpp_contents)
+string(REPLACE "\\" "\\\\" cpp_contents "${cpp_contents}")
+string(REPLACE "\"" "\\\"" cpp_contents "${cpp_contents}")
+string(REPLACE "\n" "\\n\";\n\tout << \"" cpp_contents "${cpp_contents}")
+set(cpp_contents "\ntemplate<class StreamT>\nstatic inline void PrepareCPPInclude(StreamT& out)\n{\n\tout << \"${cpp_contents}\";\n}\n")
+string(REPLACE "<< \"\\n\";" "<< '\\n';" cpp_contents "${cpp_contents}")
+file(WRITE "private/parser/peg/__parser.include.cpp.hxx" "${cpp_contents}")
+
 
 
 set(SRC_PARSER
-	parser/charset.h
-	parser/charset.hxx
-	parser/charsets.h
-	parser/charsets.cpp
-	parser/charsets.hxx
-	parser/grammar.h
+	parser/peg/grammar.h
+	parser/peg/grammar.hxx
+	parser/peg/grammar.cpp
+	parser/peg/node.h
+	parser/peg/node.hxx
+	parser/peg/node.cpp
+	parser/peg/export-cpp.cpp
+	parser/peg/export-dot.cpp
+	private/parser/peg/__parser.include.cpp.hxx
 )
-source_group("Parser" FILES ${SRC_PARSER})
+source_group("Parser\\Generator" FILES ${SRC_PARSER})
 
 
 
 add_Library(yuni-static-parser STATIC
 	${SRC_PARSER}
-	${SRC_PRIVATE_PARSER}
 )
 
 # Setting output path

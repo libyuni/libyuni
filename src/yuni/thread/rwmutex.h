@@ -96,7 +96,7 @@ namespace Yuni
 		Mutex pMutex;
 		# endif
 
-	}; // class Mutex
+	}; // class RWMutex
 
 
 

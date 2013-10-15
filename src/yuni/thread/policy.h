@@ -25,29 +25,33 @@ namespace Policy
 	*/
 	//@{
 
-	/*!
-	** \brief Helper class for retrieving the reference to the mutex in any situations
-	*/
-	template<class T>
-	class MutexExtractor
+	namespace // anonymous
 	{
-	public:
-		static Mutex& Reference(const T& rhs)
-		{
-			return const_cast<Mutex&>(rhs.pMutex);
-		}
-	};
 
-	template<>
-	class MutexExtractor<Yuni::Mutex>
-	{
-	public:
-		static Mutex& Reference(const Mutex& rhs)
+		/*!
+		** \brief Helper class for retrieving the reference to the mutex in any situations
+		*/
+		template<class T>
+		class MutexExtractor final
 		{
-			return const_cast<Mutex&>(rhs);
-		}
-	};
+		public:
+			static Mutex& Reference(const T& rhs)
+			{
+				return const_cast<Mutex&>(rhs.pMutex);
+			}
+		};
 
+		template<>
+		class MutexExtractor<Yuni::Mutex> final
+		{
+		public:
+			static Mutex& Reference(const Mutex& rhs)
+			{
+				return const_cast<Mutex&>(rhs);
+			}
+		};
+
+	} // anonymous namespace
 
 
 
@@ -70,7 +74,7 @@ namespace Policy
 		/*!
 		** \brief Locks a mutex in the constructor and unlocks it in the destructor.
 		*/
-		class MutexLocker
+		class MutexLocker final
 		{
 		public:
 			MutexLocker() {}
@@ -119,7 +123,7 @@ namespace Policy
 		/*!
 		** \brief Locks a mutex in the constructor and unlocks it in the destructor.
 		*/
-		class MutexLocker
+		class MutexLocker final
 		{
 		public:
 			template<class C> MutexLocker(const C& h) :
@@ -180,7 +184,7 @@ namespace Policy
 		/*!
 		** \brief Locks a mutex in the constructor and unlocks it in the destructor.
 		*/
-		class MutexLocker
+		class MutexLocker final
 		{
 		public:
 			template<class C> MutexLocker(const C& h) :
@@ -210,9 +214,9 @@ namespace Policy
 		//! \name Constructor & Destructor
 		//@{
 		//! Default constructor
-		ObjectLevelLockableNotRecursive() {}
+		ObjectLevelLockableNotRecursive() : pMutex(false) {}
 		//! Copy constructor
-		ObjectLevelLockableNotRecursive(const ObjectLevelLockableNotRecursive&) {}
+		ObjectLevelLockableNotRecursive(const ObjectLevelLockableNotRecursive&) : pMutex(false) {}
 		//! Destructor
 		~ObjectLevelLockableNotRecursive() {}
 		//@}
@@ -242,7 +246,7 @@ namespace Policy
 		/*!
 		** \brief Locks a mutex in the constructor and unlocks it in the destructor.
 		*/
-		class MutexLocker
+		class MutexLocker final
 		{
 		public:
 			MutexLocker()

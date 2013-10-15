@@ -30,6 +30,7 @@ namespace Yuni
 	void UUID::writeToCString(char cstring[42]) const
 	{
 		assert(cstring and "invalid pointer");
+
 		# ifndef YUNI_OS_WINDOWS
 		uuid_unparse(pValue.cstring, cstring);
 		# else
@@ -63,6 +64,8 @@ namespace Yuni
 
 	bool UUID::initializeFromCString(const char* cstring)
 	{
+		assert(cstring != NULL);
+
 		# ifndef YUNI_OS_WINDOWS
 		// Why uuid_parse takes a char* and not a const char* ??
 		return (0 == uuid_parse(const_cast<char*>(cstring), pValue.cstring));
@@ -93,7 +96,7 @@ namespace Yuni
 
 	bool UUID::null() const
 	{
-		return (0 == pValue.n32[0]) and (0 == pValue.n32[1]) and (0 == pValue.n32[2])
+		return  (0 == pValue.n32[0]) and (0 == pValue.n32[1]) and (0 == pValue.n32[2])
 			and (0 == pValue.n32[3]);
 	}
 
@@ -186,6 +189,7 @@ namespace Yuni
 
 
 } // namespace Yuni
+
 
 
 

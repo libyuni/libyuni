@@ -153,13 +153,13 @@ namespace Yuni
 		//! Scheme (lowercase)
 		const String& scheme() const;
 		//! Set the scheme
-		template<class StringT> void scheme(const StringT& s);
+		void scheme(const AnyString& newscheme);
 		void scheme(const Net::Protocol::Type& type);
 
 		//! Server
 		const String& server() const;
 		//! Set the server
-		template<class StringT> void server(const StringT& s);
+		void server(const AnyString& newserver);
 
 		//! Port (equals to `INT_MIN` if none)
 		int port() const;
@@ -171,29 +171,29 @@ namespace Yuni
 		//! User
 		const String& user() const;
 		//! Set the user
-		template<class StringT> void user(const StringT& s);
+		void user(const AnyString& newuser);
 
 		//! Password
 		const String& password() const;
 		//! Set the password
-		template<class StringT> void password(const StringT& s);
+		void password(const AnyString& newpassword);
 
 		//! Path
 		const String& path() const;
 		//! Set the path
-		template<class StringT> void path(const StringT& s);
+		void path(const AnyString& newpath);
 		//! Set a default path (`/`) if there is no path
 		void defaultPathIfEmpty();
 
 		//! Query
 		const String& query() const;
 		//! Set the query
-		template<class StringT> void query(const StringT& s);
+		void query(const AnyString& newquery);
 
 		//! Fragment
 		const String& fragment() const;
 		//! Set the fragment
-		template<class StringT> void fragment(const StringT& s);
+		void fragment(const AnyString& newfragment);
 
 		/*!
 		** \brief Get if the URI was valid during the last extract
@@ -212,7 +212,6 @@ namespace Yuni
 		** \brief Try to find out the network protocol from the scheme
 		*/
 		Net::Protocol::Type protocol() const;
-
 
 		/*!
 		** \brief Convenient method to know if the URI is merely a file
@@ -238,13 +237,13 @@ namespace Yuni
 		/*!
 		** \brief Reconstruct the URI to a string
 		*/
-		String toString() const {return pInfos.toString();}
+		String toString() const;
 
 		/*!
 		** \brief Print this URI to a stream output
 		** \param out The stream output
 		*/
-		std::ostream& print(std::ostream& out) const {pInfos.print(out);return out;}
+		std::ostream& print(std::ostream& out) const;
 		//@}
 
 

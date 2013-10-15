@@ -38,7 +38,7 @@ namespace Bit
 	** std::cout << bits << "\n";
 	** \endcode
 	*/
-	class Array
+	class Array final
 	{
 	public:
 		//! Size
@@ -54,28 +54,17 @@ namespace Bit
 	public:
 		//! \name Constructors & Destructor
 		//@{
-		/*!
-		** \brief Default constructor
-		*/
+		//! Default constructor
 		Array();
 
-		/*!
-		** \brief Constructor, with an initial number of bits
-		*/
+		//! Constructor, with an initial number of bits
 		explicit Array(uint n);
 
-		/*!
-		** \brief Constructor, with an initial number of bits and a value for each of them
-		*/
+		//! Constructor, with an initial number of bits and a value for each of them
 		Array(uint n, bool value);
 
-		/*!
-		** \brief Copy constructor
-		*/
+		//! Copy constructor
 		Array(const Array& copy);
-
-		//! Destructor
-		~Array() {}
 		//@}
 
 
@@ -149,15 +138,7 @@ namespace Bit
 		**
 		** \param buffer Any buffer
 		*/
-		template<class StringT> void loadFromBuffer(const StringT& buffer);
-
-		/*!
-		** \brief Load an array of bit from a buffer
-		**
-		** \param buffer A raw buffer
-		** \param size Size ofthe buffer
-		*/
-		template<class StringT> void loadFromBuffer(const StringT& buffer, uint size);
+		void loadFromBuffer(const AnyString& buffer);
 
 		/*!
 		** \brief Save the array of bits into another buffer (which may use any type)
@@ -173,6 +154,11 @@ namespace Bit
 		/*!
 		** \brief Find the first bit set or unset from a given offset
 		**
+		** Find the first item which is set :
+		** \code
+		** uint firstItem = mybitArray.find<true>();
+		** \endcode
+		**
 		** \param offset The offset where to start from
 		** \return The bit index. npos if not found
 		** \tparam ValueT True to find the first bit set, false for the first unset
@@ -181,6 +167,11 @@ namespace Bit
 
 		/*!
 		** \brief Find the first N bit set or unset from a given offset
+		**
+		** Find the 3th item which is set :
+		** \code
+		** uint firstItem = mybitArray.findN<true>(3);
+		** \endcode
 		**
 		** \param count  The number of consecutive bits
 		** \param offset The offset where to start from
@@ -193,14 +184,10 @@ namespace Bit
 
 		//! \name Memory management
 		//@{
-		/*!
-		** \brief The number of bits within the buffer
-		*/
+		//! The number of bits within the buffer
 		uint size() const;
 
-		/*!
-		** \brief The number of bits within the buffer
-		*/
+		//! The number of bits within the buffer
 		uint count() const;
 
 		/*!
@@ -210,19 +197,13 @@ namespace Bit
 		*/
 		uint sizeInBytes() const;
 
-		/*!
-		** \brief Reserve an amount of bits
-		*/
+		//! Reserve an amount of bits
 		void reserve(uint n);
 
-		/*!
-		** \brief Truncate to an amount of bits
-		*/
+		//! Truncate to an amount of bits
 		void truncate(uint n);
 
-		/*!
-		** \brief Resize the internal buffer to a given amount of bit
-		*/
+		//! Resize the internal buffer to a given amount of bit
 		void resize(uint n);
 		//@}
 
@@ -240,16 +221,13 @@ namespace Bit
 		//! The operator `=`
 		Array& operator = (const Array& rhs);
 		//! The operator `=`
-		template<class StringT> Array& operator = (const StringT& rhs);
+		Array& operator = (const AnyString& rhs);
 		//@}
 
 
 	private:
-		uint findFirstSet(uint offset) const;
-		uint findFirstUnset(uint offset) const;
-
-	private:
 		//! Number of bits into the buffer, requested by the caller
+		// This value is lower or equal to the buffer size
 		uint pCount;
 		//! Internal buffer
 		BufferType pBuffer;

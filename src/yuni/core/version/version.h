@@ -37,15 +37,15 @@ namespace Yuni
 		**
 		** \param h The major version number
 		*/
-		explicit Version(uint h);
+		explicit Version(uint major);
 
 		/*!
 		** \brief Constructor with a given version
 		**
-		** \param h The major version number
-		** \param l The minor version number
+		** \param major The major version number
+		** \param minor The minor version number
 		*/
-		Version(uint h, uint l);
+		Version(uint makor, uint minor);
 
 		/*!
 		** \brief Constructor with a given version
@@ -54,7 +54,7 @@ namespace Yuni
 		** \param l The minor version number
 		** \param r The revision number
 		*/
-		Version(uint h, uint l, uint r);
+		Version(uint major, uint minor, uint rev);
 
 		//! Copy constructor
 		Version(const Version& c);
@@ -75,7 +75,7 @@ namespace Yuni
 		/*!
 		** \brief Assign a new version numner
 		*/
-		void assign(uint h, uint lo = 0, uint r = 0);
+		void assign(uint major, uint minor, uint r = 0);
 
 		/*!
 		** \brief Set the version to 0.0.0
@@ -111,7 +111,7 @@ namespace Yuni
 		/*!
 		** \brief Print the version to a ostream
 		*/
-		void print(std::ostream& out) const;
+		template<class S> void print(S& out) const;
 		//@}
 
 

@@ -7,6 +7,7 @@
 # include "../static/remove.h"
 # include "../static/types.h"
 # include "../iterator.h"
+# include "../noncopyable.h"
 
 
 namespace Yuni
@@ -16,7 +17,7 @@ namespace Yuni
 	** \brief A singly linked list
 	*/
 	template<class T, class Alloc = None>
-	class YUNI_DECL LinkedList
+	class YUNI_DECL LinkedList final
 	{
 	public:
 		//! Size type
@@ -65,27 +66,20 @@ namespace Yuni
 	public:
 		//! \name Constructors & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		LinkedList();
-		/*!
-		** \brief Copy constructor
-		*/
+		//! Copy constructor
 		LinkedList(const LinkedList& rhs);
-		/*!
-		** \brief Copy constructor from another linked list
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		LinkedList(LinkedList&& rhs);
+		# endif
+		//! Copy constructor from another linked list
 		template<class U, class A> LinkedList(const LinkedList<U,A>& rhs);
-		/*!
-		** \brief Copy constructor from a standard std::list
-		*/
+		//! Copy constructor from a standard std::list
 		template<class U, class A> explicit LinkedList(const std::list<U,A>& rhs);
-		/*!
-		** \brief Copy constructor from a standard std::vector
-		*/
+		//! Copy constructor from a standard std::vector
 		template<class U, class A> explicit LinkedList(const std::vector<U,A>& rhs);
-
 		//! Destructor
 		~LinkedList();
 		//@}
@@ -155,7 +149,7 @@ namespace Yuni
 		/*!
 		** \brief Add a list of values at the end of the list
 		*/
-		template<class U, class A> void push_back(const std::list<U,A> rhs);
+		template<class U, class A> void push_back(const std::list<U,A>& rhs);
 		/*!
 		** \brief Add a list of values at the end of the list
 		*/
@@ -286,6 +280,11 @@ namespace Yuni
 		*/
 		LinkedList& operator = (const LinkedList& value);
 
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move assignement
+		LinkedList& operator = (LinkedList&& rhs);
+		# endif
+
 		/*!
 		** \brief Append a new item at the end of the list
 		**
@@ -321,31 +320,27 @@ namespace Yuni
 
 
 	protected:
-		class Item
+		class Item final : private NonCopyable<Item>
 		{
 		public:
-			Item()
-				:next(NULL)
+			Item() :
+				next(nullptr)
 			{}
-			Item(const Item& rhs)
-				:next(rhs.next), data(rhs.data)
+			inline explicit Item(Item* n) :
+				next(n), data()
 			{}
-			inline explicit Item(Item* n)
-				:next(n), data()
+			inline explicit Item(value_type& value) :
+				next(nullptr), data(value)
 			{}
-			inline explicit Item(reference_type value)
-				:next(NULL), data(value)
+			template<class U> inline explicit Item(const U& value) :
+				next(nullptr), data(value)
 			{}
-			template<class U> inline explicit Item(const U& value)
-				:next(NULL), data(value)
+			inline Item(Item* n, reference_type value) :
+				next(n), data(value)
 			{}
-			inline Item(Item* n, reference_type value)
-				:next(n), data(value)
+			template<class U> inline Item(Item* n, const U& value) :
+				next(n), data(value)
 			{}
-			template<class U> inline Item(Item* n, const U& value)
-				:next(n), data(value)
-			{}
-
 
 		public:
 			//! The next item in the list

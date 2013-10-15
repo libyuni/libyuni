@@ -208,33 +208,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)());
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)());
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)());
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -337,6 +330,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -425,10 +426,18 @@ namespace Yuni
 		R operator () () const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)());
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)()) const;
@@ -559,33 +568,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)());
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)());
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)());
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -688,6 +690,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -776,10 +786,18 @@ namespace Yuni
 		R operator () () const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)());
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)()) const;
@@ -910,33 +928,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)());
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)());
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)());
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -1039,6 +1050,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -1127,10 +1146,18 @@ namespace Yuni
 		R operator () () const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)());
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)()) const;
@@ -1261,33 +1288,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -1390,6 +1410,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -1478,10 +1506,18 @@ namespace Yuni
 		R operator () (A0 a0) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0)) const;
@@ -1612,33 +1648,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -1741,6 +1770,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -1829,10 +1866,18 @@ namespace Yuni
 		R operator () (A0 a0) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0)) const;
@@ -1963,33 +2008,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -2092,6 +2130,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -2180,10 +2226,18 @@ namespace Yuni
 		R operator () (A0 a0) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0)) const;
@@ -2314,33 +2368,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -2443,6 +2490,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -2531,10 +2586,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1)) const;
@@ -2665,33 +2728,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -2794,6 +2850,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -2882,10 +2946,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1)) const;
@@ -3016,33 +3088,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -3145,6 +3210,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -3233,10 +3306,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1)) const;
@@ -3367,33 +3448,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -3496,6 +3570,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -3584,10 +3666,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2)) const;
@@ -3718,33 +3808,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -3847,6 +3930,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -3935,10 +4026,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2)) const;
@@ -4069,33 +4168,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -4198,6 +4290,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -4286,10 +4386,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2)) const;
@@ -4420,33 +4528,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -4549,6 +4650,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -4637,10 +4746,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3)) const;
@@ -4771,33 +4888,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -4900,6 +5010,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -4988,10 +5106,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3)) const;
@@ -5122,33 +5248,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -5251,6 +5370,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -5339,10 +5466,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3)) const;
@@ -5473,33 +5608,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -5602,6 +5730,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -5690,10 +5826,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4)) const;
@@ -5824,33 +5968,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -5953,6 +6090,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -6041,10 +6186,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4)) const;
@@ -6175,33 +6328,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -6304,6 +6450,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -6392,10 +6546,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4)) const;
@@ -6526,33 +6688,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -6655,6 +6810,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -6743,10 +6906,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5)) const;
@@ -6877,33 +7048,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -7006,6 +7170,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -7094,10 +7266,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5)) const;
@@ -7228,33 +7408,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -7357,6 +7530,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -7445,10 +7626,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5)) const;
@@ -7579,33 +7768,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -7708,6 +7890,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -7796,10 +7986,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6)) const;
@@ -7930,33 +8128,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -8059,6 +8250,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -8147,10 +8346,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6)) const;
@@ -8281,33 +8488,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -8410,6 +8610,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -8498,10 +8706,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6)) const;
@@ -8632,33 +8848,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -8761,6 +8970,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -8849,10 +9066,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7)) const;
@@ -8983,33 +9208,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -9112,6 +9330,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -9200,10 +9426,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7)) const;
@@ -9334,33 +9568,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -9463,6 +9690,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -9551,10 +9786,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7)) const;
@@ -9685,33 +9928,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -9814,6 +10050,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -9902,10 +10146,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8)) const;
@@ -10036,33 +10288,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -10165,6 +10410,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -10253,10 +10506,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8)) const;
@@ -10387,33 +10648,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -10516,6 +10770,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -10604,10 +10866,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8)) const;
@@ -10738,33 +11008,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -10867,6 +11130,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -10955,10 +11226,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) const;
@@ -11089,33 +11368,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -11218,6 +11490,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -11306,10 +11586,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) const;
@@ -11440,33 +11728,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -11569,6 +11850,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -11657,10 +11946,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) const;
@@ -11791,33 +12088,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -11920,6 +12210,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -12008,10 +12306,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) const;
@@ -12142,33 +12448,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -12271,6 +12570,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -12359,10 +12666,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) const;
@@ -12493,33 +12808,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -12622,6 +12930,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -12710,10 +13026,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) const;
@@ -12844,33 +13168,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -12973,6 +13290,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -13061,10 +13386,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) const;
@@ -13195,33 +13528,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -13324,6 +13650,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -13412,10 +13746,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) const;
@@ -13546,33 +13888,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -13675,6 +14010,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -13763,10 +14106,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) const;
@@ -13897,33 +14248,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -14026,6 +14370,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -14114,10 +14466,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) const;
@@ -14248,33 +14608,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -14377,6 +14730,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -14465,10 +14826,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) const;
@@ -14599,33 +14968,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -14728,6 +15090,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -14816,10 +15186,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) const;
@@ -14950,33 +15328,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -15079,6 +15450,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -15167,10 +15546,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) const;
@@ -15301,33 +15688,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -15430,6 +15810,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -15518,10 +15906,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) const;
@@ -15652,33 +16048,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -15781,6 +16170,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -15869,10 +16266,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) const;
@@ -16003,33 +16408,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -16132,6 +16530,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -16220,10 +16626,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) const;
@@ -16354,33 +16768,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -16483,6 +16890,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -16571,10 +16986,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) const;
@@ -16705,33 +17128,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -16834,6 +17250,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -16922,10 +17346,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) const;
@@ -17056,33 +17488,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -17185,6 +17610,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -17273,10 +17706,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)) const;
@@ -17407,33 +17848,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -17536,6 +17970,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -17624,10 +18066,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)) const;
@@ -17758,33 +18208,26 @@ namespace Yuni
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		Bind();
-		/*!
-		** \brief Copy constructor
-		**
-		** \param rhs Another bind object
-		*/
+		//! Copy constructor
 		Bind(const Bind& rhs);
-		/*!
-		** \brief Constructor from a library symbol
-		**
-		** \param symbol Symbol from a dynamic library
-		*/
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Bind(Bind&& rhs);
+		# endif
+		//! Constructor from a library symbol
 		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
-		/*!
-		** \brief Constructor from a pointer-to-function
-		*/
-		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
-		/*!
-		** \brief Constructor, from a pointer-to-method
-		*/
+		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
-		/*!
-		** \brief Destructor
-		*/
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Constructor from a functor, most likely a lambda
+		template<class C> Bind(C&& functor);
+		# else
+		//! Constructor from a pointer-to-function
+		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
+		# endif
+		//! Destructor
 		~Bind();
 		//@}
 
@@ -17887,6 +18330,14 @@ namespace Yuni
 		** \param symbol A symbol from a dynamic library
 		*/
 		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		/*!
+		** \brief Bind from a functor, most likely a lambda
+		*/
+		template<class C> void bind(C&& functor);
+		# endif
+
 		//@} // Bind
 
 
@@ -17975,10 +18426,18 @@ namespace Yuni
 		R operator () (A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const;
 		//! Assignment with another Bind object
 		Bind& operator = (const Bind& rhs);
+		# ifdef YUNI_HAS_CPP_MOVE
+		//! Assignment move
+		Bind& operator = (Bind&& symbol);
+		# endif
 		//! Assignment with a pointer-to-function
 		Bind& operator = (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		//! Assignment with a library symbol
 		Bind& operator = (const Yuni::DynamicLibrary::Symbol& symbol);
+		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+		//! Assignment from a functor, most likely a lambda
+		template<class C> Bind& operator = (C&& functor);
+		# endif
 
 		//! Comparison with a pointer-to-function
 		bool operator == (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)) const;

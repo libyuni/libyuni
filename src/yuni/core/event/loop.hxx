@@ -90,10 +90,10 @@ namespace EventLoop
 	template<class ParentT, template<class> class FlowT, template<class> class StatsT,
 		bool DetachedT>
 	inline IEventLoop<ParentT,FlowT,StatsT,DetachedT>::IEventLoop() :
-		pHasRequests(0),
-		pRequests(NULL),
+		pHasRequests(),
+		pRequests(nullptr),
 		pIsRunning(false),
-		pThread(NULL)
+		pThread(nullptr)
 	{
 		// Note: Visual Studio does not like `this` in the initialization section
 		// Broadcast the pointer of the event loop to the policies
@@ -140,10 +140,7 @@ namespace EventLoop
 				pIsRunning = true;
 			}
 			// Initializing the request list
-// 			if (pRequests)
-// 				delete pRequests;
-// 			pRequests = new RequestListType();
-			if (!pRequests)
+			if (not pRequests)
 				pRequests = new RequestListType();
 		}
 		if (detached)
@@ -173,7 +170,7 @@ namespace EventLoop
 		{
 			typename ThreadingPolicy::MutexLocker locker(*this);
 			// Aborting if the event loop is already stopped
-			if (!pIsRunning || !FlowPolicy::onStop())
+			if (not pIsRunning or not FlowPolicy::onStop())
 				return;
 
 			// Posting a request that will fail (return false) in order to stop
@@ -190,7 +187,7 @@ namespace EventLoop
 		// Informing the event loop that a new request is available
 		// We perform the reset after that the mutex has been unlocked to
 		// reduce lock contention.
-		pHasRequests = 1;
+		pHasRequests = true;
 
 
 		if (detached)
@@ -211,7 +208,7 @@ namespace EventLoop
 				// This check is performed first. With luck the loop is already stopped.
 				{
 					typename ThreadingPolicy::MutexLocker locker(*this);
-					if (!pIsRunning)
+					if (not pIsRunning)
 						break;
 					// unlocking the inner mutex
 				}
@@ -243,10 +240,10 @@ namespace EventLoop
 		{
 			typename ThreadingPolicy::MutexLocker locker(*this);
 			// Initializing pRequests allows for dispatching a request before calling start()
-			if (!pRequests)
+			if (not pRequests)
 				pRequests = new RequestListType();
 			// Flow
-			if (!FlowPolicy::onRequestPosted(request))
+			if (not FlowPolicy::onRequestPosted(request))
 				return;
 			// Inserting the new request
 			pRequests->push_back(request);
@@ -254,7 +251,7 @@ namespace EventLoop
 			StatisticsPolicy::onRequestPosted(request);
 		}
 		// Informing the event loop that a new request is available
-		pHasRequests = 1;
+		pHasRequests = true;
 	}
 
 
@@ -277,7 +274,7 @@ namespace EventLoop
 		while (true)
 		{
 			// Run the cycle
-			if (!FlowPolicy::onNewCycle() || !runCycleWL())
+			if (not FlowPolicy::onNewCycle() or not runCycleWL())
 				break;
 		}
 
@@ -296,7 +293,7 @@ namespace EventLoop
 		// Performing requests, if any
 		if (pHasRequests)
 		{
-			if (!performAllRequestsWL())
+			if (not performAllRequestsWL())
 			{
 				// At least one request has failed. Aborting
 				return false;
@@ -329,7 +326,7 @@ namespace EventLoop
 			// Locking
 			typename ThreadingPolicy::MutexLocker locker(*this);
 			// No request will remain into the queue after this method
-			pHasRequests = 0;
+			pHasRequests = false;
 
 			// This method may sometimes be called even if there is no request
 			// in the list.
@@ -356,7 +353,7 @@ namespace EventLoop
 			StatisticsPolicy::onProcessRequest(*i);
 
 			// Processing the request
-			if (! (*i)())
+			if (not (*i)())
 			{
 				// The request has failed. Aborting now.
 				delete requests;
@@ -380,6 +377,7 @@ namespace EventLoop
 			// In detached mode, the thread pointer is valid. We will use the
 			// method suspend which is far better (cancellation point) than a mere
 			// sleep.
+			assert(pThread and "invalid thread pointer");
 			pThread->suspendTheThread(timeout);
 		}
 		else

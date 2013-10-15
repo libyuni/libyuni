@@ -16,6 +16,18 @@ namespace Gfx3D
 	class Texture
 	{
 	public:
+		enum DataType
+		{
+			UInt8,
+			Int8,
+			UInt16,
+			Int16,
+			UInt32,
+			Int32,
+			Float,
+		};
+
+	public:
 		//! Smart pointer
 		typedef SmartPtr<Texture>  Ptr;
 
@@ -30,7 +42,7 @@ namespace Gfx3D
 		** \note It is valid to pass `nullptr` for the `data` parameter to delay construction.
 		** \note Call `update()` to set the data afterwards.
 		*/
-		static Texture::Ptr New(uint width, uint height, uint colorDepth,
+		static Texture::Ptr New(uint width, uint height, uint colorDepth, DataType type = UInt8,
 			const uint8* data = nullptr, bool mipmaps = true);
 
 		/*!
@@ -40,7 +52,11 @@ namespace Gfx3D
 		** \note Call `update()` to set the data afterwards.
 		*/
 		static Texture::Ptr New3D(uint width, uint height, uint depth, uint colorDepth,
-			const uint8* data = nullptr, bool mipmaps = true);
+			DataType type = UInt8, const uint8* data = nullptr, bool mipmaps = true);
+
+		//! Create a new 2D multisample texture
+		static Texture::Ptr NewMS(uint width, uint height, uint colorDepth,
+			DataType type = UInt8, uint samples = 1, const uint8* data = nullptr);
 
 		//! Load texture from file
 		static Texture::Ptr LoadFromFile(const AnyString& filePath);
@@ -54,10 +70,6 @@ namespace Gfx3D
 		//! Release several OpenGL textures at once
 		static void ReleaseGLTextures(uint nbTextures, uint* textures);
 
-	private:
-		//! Convert a color depth in bytes to the probable corresponding GL format
-		static int DepthToGLEnum(uint colorDepth);
-
 
 	public:
 		//! Destructor
@@ -69,6 +81,9 @@ namespace Gfx3D
 		** \warning Invalidates all data in the texture !
 		*/
 		void resize(uint width, uint height);
+
+		//! Update all the data for this texture
+		void update(const unsigned char* data);
 
 		//! Update the data for this texture
 		void update(uint offsetX, uint offsetY, uint width, uint height, uint colorDepth, const uint8* data);
@@ -89,8 +104,14 @@ namespace Gfx3D
 		//! Texture height
 		uint height() const;
 
+		//! Texture depth
+		uint depth() const;
+
 		//! Texture color depth (in bytes per pixel)
 		uint colorDepth() const;
+
+		//! Data type
+		DataType type() const;
 
 	private:
 		//! Private empty constructor
@@ -100,7 +121,10 @@ namespace Gfx3D
 		Texture(const Texture&);
 
 		//! Private constructor that takes ownership of an already-loaded texture
-		Texture(ID id, uint width, uint height, uint depth);
+		Texture(ID id, uint width, uint height, uint colorDepth, DataType type);
+
+		//! Private constructor that takes ownership of a 3D already-loaded texture
+		Texture(ID id, uint width, uint height, uint depth, uint colorDepth, DataType type);
 
 	private:
 		//! GL Texture ID
@@ -112,8 +136,14 @@ namespace Gfx3D
 		//! Texture height
 		uint pHeight;
 
-		//! Texture color depth (in bytes per pixel)
+		//! Texture depth (3D-texture only !)
 		uint pDepth;
+
+		//! Texture color depth (in bytes per pixel)
+		uint pColorDepth;
+
+		//! Data type
+		DataType pType;
 
 		//! Does the texture have mipmaps ?
 		bool pMipmapped;

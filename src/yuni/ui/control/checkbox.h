@@ -17,18 +17,20 @@ namespace Control
 	class CheckBox: public IControl
 	{
 	public:
-		//! Type of bind for the checkbox callback
-		typedef Yuni::Bind<void (bool newValue)>  Callback;
+		//! Checkbox checked callback
+		Yuni::Bind<void (IControl* sender, bool newValue)>  onCheckChanged;
 
 	public:
-		CheckBox(int x, int y):
-			IControl(x, y, 0u, 0u),
-			pChecked(false)
+		CheckBox(int x, int y, uint width, uint height):
+			IControl(x, y, width, height),
+			pChecked(false),
+			pBeingClicked(false)
 		{}
 
-		CheckBox(const Point2D<int>& position):
-			IControl(position.x, position.y, 0u, 0u),
-			pChecked(false)
+		CheckBox(const Point2D<int>& position, const Point2D<uint>& size):
+			IControl(position, size),
+			pChecked(false),
+			pBeingClicked(false)
 		{}
 
 		//! Virtual destructor
@@ -37,32 +39,53 @@ namespace Control
 		const String& text() const { return pText; }
 		void text(const AnyString& text) { pText = text; invalidate(); }
 
-		//! Modify the value
-		void value(bool newValue) { pChecked = newValue; invalidate(); pOnChanged(newValue); }
-		//! Get the current value
-		bool value() const { return pChecked; }
-
-		//! Bind the onClick event
-		template<class FuncT>
-		void onChanged(const FuncT& function) { pOnChanged.bind(function); }
-
-		//! Bind the onClick event
-		template<class ClassT, class MethodT>
-		void onChanged(const ClassT& object, const MethodT& method) { pOnChanged.bind(object, method); }
+		//! Modify whether the checkbox is checked
+		void checked(bool newValue)
+		{
+			if (pChecked == newValue)
+				return;
+			pChecked = newValue;
+			invalidate();
+			// Callback
+			onCheckChanged(this, newValue);
+		}
+		//! Get whether the checkbox is checked
+		bool checked() const { return pChecked; }
 
 		//! Draw the checkbox on the surface
-		//		virtual void draw(DrawingSurface::Ptr& surface, bool root);
+		virtual void draw(DrawingSurface::Ptr& surface, bool root) override;
 
 	private:
-		Callback pOnChanged;
+		//! Control reaction to mouse down
+		virtual void mouseDown(Input::IMouse::Button btn, int, int) override
+		{
+			if (Input::IMouse::ButtonLeft == btn)
+				pBeingClicked = true;
+		}
+		//! Control reaction to mouse up
+		virtual void mouseUp(Input::IMouse::Button btn, int, int) override
+		{
+			if (Input::IMouse::ButtonLeft == btn && pBeingClicked)
+			{
+				pChecked = !pChecked;
+				invalidate();
+				onCheckChanged(this, pChecked);
+			}
+			pBeingClicked = false;
+		}
 
+	private:
 		bool pChecked;
+
+		bool pBeingClicked;
 
 		String pText;
 
 		String pHoverText;
 
 	}; // class CheckBox
+
+
 
 
 

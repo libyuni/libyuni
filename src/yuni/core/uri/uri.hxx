@@ -10,22 +10,6 @@ namespace Yuni
 	}
 
 
-	template<class StringT>
-	inline void Uri::path(const StringT& s)
-	{
-		pInfos.path = s;
-		pInfos.isValid = true;
-	}
-
-
-	template<class StringT>
-	inline void Uri::user(const StringT& s)
-	{
-		pInfos.user = s;
-		pInfos.isValid = true;
-	}
-
-
 	inline void Uri::clear()
 	{
 		pInfos.clear();
@@ -64,14 +48,6 @@ namespace Yuni
 	}
 
 
-	template<class StringT>
-	void Uri::password(const StringT& s)
-	{
-		pInfos.password = s;
-		pInfos.isValid = true;
-	}
-
-
 	inline const String& Uri::path() const
 	{
 		return pInfos.path;
@@ -83,25 +59,9 @@ namespace Yuni
 	}
 
 
-	template<class StringT>
-	void Uri::query(const StringT& s)
-	{
-		pInfos.query = s;
-		pInfos.isValid = true;
-	}
-
-
 	inline const String& Uri::fragment() const
 	{
 		return pInfos.fragment;
-	}
-
-
-	template<class StringT>
-	void Uri::fragment(const StringT& s)
-	{
-		pInfos.fragment = s;
-		pInfos.isValid = true;
 	}
 
 
@@ -183,28 +143,10 @@ namespace Yuni
 	}
 
 
-	inline void Uri::scheme(const Net::Protocol::Type& type)
+	inline String Uri::toString() const
 	{
-		pInfos.scheme = Net::Protocol::ToScheme(type);
-		pInfos.isValid = true;
+		return pInfos.toString();
 	}
-
-
-	template<class StringT>
-	void Uri::server(const StringT& s)
-	{
-		pInfos.server = s;
-		pInfos.isValid = true;
-	}
-
-
-	template<class StringT>
-	void Uri::scheme(const StringT& s)
-	{
-		pInfos.scheme = s;
-		pInfos.isValid = true;
-	}
-
 
 
 
