@@ -1,0 +1,10 @@
+<title>Doxygen</title>
+<pragma:weight value="0.55" />
+<pragma:directoryindex content="nofollow" />
+
+<h2>API Reference</h2>
+<p><b>Beware: THIS DOCUMENTATION IS INCOMPLETE AND WE'RE CURRENTLY WORKING ON IT</b></p>
+<ul>
+<li><a href="class/@{INDEX}">All classes</a></li>
+<li><a href="namespace/@{INDEX}">All namespaces</a></li>
+</ul>

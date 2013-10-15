@@ -1,0 +1,180 @@
+<title>Event-Based Programming</title>
+
+<h2>Why use events ?</h2>
+
+<p>
+Event-based programming is a solution to a specific problem, namely :
+<em>how to implement a program that does mostly nothing but at some point gets
+an input that should trigger a behaviour ?</em> This is typically the case in
+graphical user interfaces (GUI) where, logically, event-based programming is
+very widely used. More generally, it is an abstraction that allows to execute
+some code "when a certain event occurs", rather than procedurally, one
+instruction after the other.
+</p>
+
+
+<h2>Events and Handlers</h2>
+
+<p>
+Event-based programming is based on messages that are sent when certain
+conditions are met. The piece of code triggering events is called a sender
+and the piece of code receiving the event and processing it is called a
+handler, listener, or observer. A simple Java example would be :
+</p>
+<source type="java">
+import javax.swing.JButton
+import java.awt.event.ActionListener
+import java.awt.event.ActionEvent;
+
+public class HelloWorldListener implements ActionListener
+{
+	// Constructor
+	public HelloWorldListener(JButton button)
+	{
+		// Our class listens to the events occurring on the button
+		button.addActionListener(this);
+	}
+
+	// Override the method from ActionListener
+	public void actionPerformed(ActionEvent e)
+	{
+		// Event was caught, do something !
+		System.out.println("Hello, world !");
+    }
+}
+</source>
+
+<p>
+In this example, the button is the sender, and our custom class is the
+listener. As you can see, Java's library offers event management out of the
+box. Unfortunately, this is not the case with C++.
+</p>
+
+<p>
+It is important to note that several handlers can listen for the same event and
+all be informed when the event is sent.
+</p>
+
+
+<h2>Thread Safety</h2>
+
+<p>
+Thread safety and events are a notoriously shaky combination, so much so that
+some people advise not to mix them at all (if you are interested for in-depth
+information, see
+<a href="http://www.codeproject.com/Articles/37474/Threadsafe-Events">this article</a>).
+Events being often used in UI, this is a critical use case for them. As it
+is, most systems only allow the main thread to manipulate UI, and thus avoid
+the bigger part of the problems.
+</p>
+
+
+<h2>Event Loop</h2>
+
+<p>
+An Event Loop is a construct in which events being sent are fed into an event
+queue, while an infinite loop reads from the event queue to execute the listeners.
+Let us consider the following example :
+</p>
+<source type="cpp">
+class EventLoop
+{
+public:
+	void run()
+	{
+		Message message;
+		do
+		{
+			message := getNextMessage();
+			processMessage(message);
+		}
+		while (message.type() != Message::Type::Quit);
+   }
+};
+</source>
+<p>
+As you might notice, this looks a lot like a window system message pump. This
+is hardly surprising since Message Pump is actually another name for the Event
+Loop construct. However, an event loop can be useful in many other situations,
+whenever some events need to be aggregated in a single place for management.
+The common process behind all event loops is :
+</p>
+<ol>
+<li>Read a message from the event queue</li>
+<li>If we found a message pending, handle it</li>
+<li>If the loop is not finished, go to 1.</li>
+</ol>
+
+
+<h2>Events in Yuni</h2>
+
+<h3>Simple case</h3>
+
+<p>
+In order to create a simple event and have a listener subscribe to it, these
+are the useful classes included from <code>yuni/core/event.h</code> :
+</p>
+<ul>
+<!-- TODO : Add links to the API -->
+<li><code>Yuni::Event</code> is the class representing an event</li>
+<li><code>Yuni::IEventObserver</code> is an abstract base class with a
+<a href="../../../glossary/crtp/@{INDEX}">CRTP</a> for event listeners</li>
+</ul>
+<p>
+<!-- For the moment, point to the repository, since the samples are not in the web site -->
+For an example of how to use these classes, please see
+<a href="https://dev.libyuni.org/projects/yuni-framework/repository/entry/tags/0.1.1/src/samples/core/events/00.simple/main.cpp">the corresponding sample</a>.
+</p>
+
+<h3>Event Loop</h3>
+
+<p>
+Yuni offers a generic event loop, which can be run in the main thread as the
+main program loop, or in a new thread. The corresponding class can be found in
+<code>yuni/core/event/loop.h</code> :
+</p>
+<ul>
+<!-- TODO : Add links to the API -->
+<li><code>Yuni::Core::EventLoop::IEventLoop</code> is an abstract base class
+with a <a href="../../../glossary/crtp/@{INDEX}">CRTP</a> for event loops</li>
+</ul>
+<p>
+In addition to its first template parameter used for the
+<a href="../../../glossary/crtp/@{INDEX}">CRTP</a>,
+<code>IEventLoop</code> has three other template parameters that act as options
+to configure its behaviour :
+</p>
+<ul>
+<li>
+<b>FlowT :</b>
+The flow policy describes the way the loop runs. Possible values are :
+  <ul>
+  <li><code>Yuni::Core::EventLoop::Flow::Continuous</code> for continuous execution</li>
+  <li><code>Yuni::Core::EventLoop::Flow::Timer</code> for timer-based execution</li>
+  </ul>
+</li>
+<li>
+<b>StatsT :</b>
+The statistics policy manages debug / logging details for the loop. For the
+moment, the only statistics value offered is :
+  <ul>
+  <li>
+  <code>Yuni::Core::EventLoop::Statistics::None</code> runs no statistics at all
+  </li>
+  </ul>
+</li>
+<li>
+<b>DetachedT :</b>
+This boolean manages whether the loop should be run in a detached thread, or
+in the calling thread.
+</li>
+</ul>
+<p>
+For both policies, it is possible to write your own as long as they conform to
+the implicit interface (see <a href="../policies/@{INDEX}">Policies</a>).
+</p>
+
+<p>
+For your information, <code>Yuni::Audio::QueueService</code> uses a <code>
+Yuni::Core::EventLoop::IEventLoop</code> in its bowels.
+</p>

@@ -1,0 +1,3 @@
+<title>User's manual</title>
+<tag name="manual" inherit="1" />
+<pragma:directoryindex src="." />

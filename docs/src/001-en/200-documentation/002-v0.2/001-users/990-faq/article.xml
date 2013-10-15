@@ -1,0 +1,113 @@
+<title>F.A.Q. (Frequently asked questions)</title>
+
+<h2>What is Yuni ?</h2>
+
+<h3><b>Q:</b> Yuni seems to cover many domains, is it some kind of ultimate program ?</h3>
+<p><b>A:</b>
+Not quite. It is not a program, but a set of libraries (both dynamic
+and static).
+It is not meant to be an entity on its own, but a basis for advanced
+high-level cross-platform development in C++.
+</p>
+
+<h3><b>Q:</b> Oh I see, one more magic swiss army knife library...</h3>
+<p><b>A:</b>
+Yes, it might seem a bit of a utopia. However, it is clear there is a need
+for something like that for C++ and no other project has yet managed to
+provide for this need. We strive for excellency and will do our very best;
+we sincerely hope the result will be up to our expectations and yours.
+</p>
+
+<h3><b>Q:</b> What do you mean by high-level ?</h3>
+<p><b>A:</b>
+We mean that low-level aspects of development (memory management, threading,
+network, ...) are wrapped up in abstracted objects and interfaces to provide
+these features with a more intuitive API.
+</p>
+
+<h3><b>Q:</b> Is Yuni a 3D engine ?</h3>
+<p><b>A:</b>
+No it is not. However Yuni will offer a 3D engine as one of its many features.
+</p>
+
+<h3><b>Q:</b> You offer "bind"s, threading, static asserts, smart pointers. Are you competing with Boost and / or Loki ?</h3>
+<p><b>A:</b>
+We have some common features with Boost, clearly, but our purpose is not to
+rewrite Boost, simply to provide what is necessary for everyday C++ development.
+We are not competing with Loki either, first because M. Alexandrescu's work is an
+inspiration to us, and second because Loki and Yuni's scope are not comparable.
+We tend to offer only the features we deem useful to our much larger context.
+</p>
+
+<!--
+<h3><b>Q:</b> Seems like you also offer cross-platform window / controls management. Are you competing with QT and wxWidgets then ? </h3>
+<p><b>A:</b>
+On those points, yes. Our Yuni::UI module is a possible replacement for
+these libraries, but follows our guidelines. Our strong point is that all
+graphic controls are distributed objects. Naturally, we offer seamless
+visual integration for all supported systems.
+</p>
+-->
+
+<h3><b>Q:</b> Is it <b>really</b> portable ? How many platforms are supported ?</h3>
+<p><b>A:</b>
+Yuni is portable stricto sensu. It offers the same public interface
+whatever the platform. It should compile on recent Microsoft Windows
+systems (XP and upwards), GNU/Linux, Mac OS X, FreeBSD and most other
+Unices. It is important to us that Yuni behaves exactly the same on all
+supported platforms.
+</p>
+
+
+
+
+<h2>When to use Yuni ?</h2>
+
+<h3><b>Q:</b> Should I use Yuni to write a very simple program ? Is there a benefit ?</h3>
+<p><b>A:</b>
+It depends on the program, but most C++ programs can benefit from at least
+some features in Yuni. For example, you might want to use Yuni::String,
+Yuni::GetOpt, Yuni::Math, or even Yuni::SmartPtr, even in a 100-line
+command-line-only program.
+</p>
+
+<!--
+<h3><b>Q:</b> Yuni seems to be 3D-oriented. Can I do simple 2D graphics ?</h3>
+<p><b>A:</b>
+Of course. We offer bitmap graphics using OpenGL / DirectX, because
+everyone needs that, but we advise to use vector graphics. We embed Cairo
+for those.
+</p>
+-->
+
+
+
+<h2>How to use Yuni ?</h2>
+
+<h3><b>Q:</b> What compiler should I use to compile Yuni ?</h3>
+<p><b>A:</b>
+GCC 4.x, MS Visual Studio 9+ and MinGW 4.x are officially supported.
+It should work with ICC. We hope to provide Clang support in a near future.
+</p>
+
+<h3><b>Q:</b> Does Yuni support 64-bit operating systems ?</h3>
+<p><b>A:</b>
+Yes (requires Visual Studio 10 on Windows)
+</p>
+
+<h3><b>Q:</b> Does Yuni provide a scripting language ?</h3>
+<p><b>A:</b>
+Not yet
+</p>
+
+<h3><b>Q:</b> I fixed a bug in Yuni's head revision. May I commit it ? Will I get a medal ?</h3>
+<p><b>A:</b>
+Thank you, not immediately and no, sorry. In order to commit any code to
+Yuni's SVN, the coding style must be strictly followed. Also, the code
+should compile on all supported platforms and compilers (although we are
+of course very lenient in this area for the moment, for technical reasons).
+Finally, it is not allowed for anonymous users to commit on the SVN. You
+have to submit your patch on Yuni's mailing list: dev@libyuni.org
+(Subscription at: dev-subscribe@libyuni.org)
+</p>
+

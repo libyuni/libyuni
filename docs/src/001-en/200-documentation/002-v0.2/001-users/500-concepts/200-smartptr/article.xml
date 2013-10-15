@@ -1,0 +1,396 @@
+<title>Smart pointers</title>
+
+<h2>The Problems</h2>
+
+<h3>Memory management</h3>
+
+<p>
+In C++, all data allocation and deallocation has to be done by hand using
+<code>new</code> and <code>delete</code>.
+Although this allows for a lot of control over object lifetime, this management
+unfortunately becomes very tedious and error-prone on the scale of a large
+program. In particular, some deletions might be forgotten and lead to memory
+leaks, or the program might even crash if a pointer is deleted twice.
+</p>
+
+<h3>Threading</h3>
+
+<p>
+The main problem with multi-threaded applications is to synchronize access to
+resources shared by several threads. Each time an object is used, it has to be
+properly protected by one of many mechanisms to avoid some dreadful problems
+(deadlocks, race conditions and who-knows-what-else). This protection has a
+high programming cost, since it is up to the developer to add for example the
+specific mutex locking each time the resource is being used. This is a
+time-consuming and error-prone process that we would gladly do without.
+</p>
+
+
+<h2>Definition</h2>
+
+<p>
+A smart pointer is a class that has pointer semantics, and hides the real data
+behind a layer that allows additional data access management. The way the data
+are stored and how they are precisely managed determines the type of smart
+pointer.
+</p>
+
+<h2>Smart Pointer Types</h2>
+
+<p>
+Several types of smart pointer exist. They have different lifetimes, different
+ways to consider the pointer's ownership. For this reason, each one corresponds
+to a precise usage, and is only adapted to a limited number of situations.
+Using an improper smart pointer to solve a problem may bring a lot more
+problems than you already had. For this listing, we shall use denominations
+that are fairly common, although other literature may use other terms.
+</p>
+
+<h3>Scoped pointer</h3>
+<p>
+As the name indicates, the scope pointer carries the internal pointer only over
+a limited scope. It is meant to be created on the stack to hold an allocated
+pointer. It will then simply delete the pointer when going out of scope. A
+typical usage of the scoped pointer is object return values. Consider the
+following :
+</p>
+<source type="cpp">
+class A;
+
+A* foo();
+
+int main()
+{
+	A* a = foo();
+	// Should I delete a ?
+	return 0;
+}
+</source>
+<p>
+It is impossible to know whether we should delete variable <code>a</code>
+without reading the implementation of function <code>foo</code>. To solve this,
+<code>foo</code> could return a scoped pointer.
+</p>
+<source type="cpp">
+ScopedPtr&lt;A&gt; foo();
+
+int main()
+{
+	ScopedPtr&lt;A&gt; a = foo();
+	return 0;
+}
+</source>
+<p>
+Here, by returning a scoped pointer, <code>foo</code> specifically surrenders
+the ownership of the returned pointer. When going out of scope, the scoped
+pointer will delete its internal <code>A*</code>. For those who wondered,
+by definition smart pointers are small objects and can be returned on the
+stack and copied without too much overhead. The scoped pointer has full
+ownership of the internal pointer, so you should never have several scoped
+pointers managing the same data.
+</p>
+
+<h3>Shared pointer</h3>
+<p>
+A shared pointer allows to share ownership of the internal pointer with other
+shared pointers. The data will be deleted when the last shared pointer managing
+it is destroyed. For this reason, the lifetime of the data is linked to the
+lifetime of all the shared pointers managing it. Implementations of the shared
+pointer can rely on reference counting or on a linked list of shared pointers.
+This is clearly the most useful of smart pointers as it caters to most
+situations. It allows for full-scale garbage collection without the massive
+overhead of a garbage collector, and also helps a lot with multi-threading.
+</p>
+<source type="cpp">
+struct A
+{
+	void doSomething() {}
+};
+
+// A new shared pointer is created that copies the value parameter
+void foo(SharedPtr&lt;A&gt; ptr2)
+{
+	// On entry, reference count is 2
+
+	// Do something with our object
+	ptr2->doSomething();
+
+} // "ptr2" goes out of scope, reference count decreases to 1
+
+int main()
+{
+	// Create a shared pointer on an allocated instance of A
+	SharedPtr&lt;A&gt; ptr(new A());
+	// Here, the reference count is 1
+	foo(ptr);
+	// Do something with our object again
+	ptr->doSomething();
+	return 0;
+} // "ptr" goes out of scope, reference count is 0, the object is deleted
+</source>
+<p>
+Notice that if we had used a scope pointer here instead of the shared pointer,
+our object would have been deleted when exiting function <code>foo</code>. This
+would have lead to a crash on the second call to <code>A::doSomething</code>.
+</p>
+
+<h3>Weak Pointer</h3>
+
+<p>
+A weak pointer acts as an observer of an object. As such, it does not take
+ownership of the data. It is meant to be used in conjunction with one or
+several shared pointers on the same object. When the last shared pointer is
+destroyed, the object is released and all weak pointers to it become invalid.
+Depending on the implementation, they can be set to null, throw on access or
+simply have undefined behaviour. A possible usage example could be :
+</p>
+<source type="cpp">
+struct A
+{
+	A() { valid = false; }
+	bool valid;
+};
+
+struct Observer
+{
+	Observer(Shared&lt;A&gt; sharedA)
+	{
+		// Get a weak pointer on our object
+		weakA = sharedA;
+	}
+
+	bool finished()
+	{
+		// A good smart pointer should overload operator!= to handle this
+		if (weakA != nullptr)
+			return weakA-&gt;valid;
+	}
+
+	WeakPtr&lt;A&gt; weakA;
+};
+
+int main()
+{
+	SharedPtr&lt;A&gt; sharedA(new A());
+	Observer observer(sharedA);
+
+	for (uint i = 0; i &lt; 200; ++i)
+	{
+		if (i &gt; 42)
+			sharedA-&gt;valid = true;
+		if (observer.finished())
+			break;
+	}
+	return 0;
+}
+</source>
+
+
+<h2>Smart Pointer Implementations</h2>
+
+<p>
+Some well-known implementations of a smart pointer exist :
+</p>
+<ul>
+<li><a href="http://www.boost.org/doc/libs/1_47_0/libs/smart_ptr/smart_ptr.htm">Boost</a> offers several types of smart pointers. These classes should be directly available in C++0x</li>
+<li><a href="http://loki-lib.sourceforge.net/index.php">Loki</a> offers Loki::SmartPtr, a generic policy-configured smart pointer from which Yuni's is inspired</li>
+<li>The <a href="http://www.cplusplus.com/reference/std/memory/auto_ptr/">Standard Template Library</a> offers auto_ptr (which is a scoped pointer - deprecated in C++0x)</li>
+</ul>
+<p>
+For a discussion of these three implementations and how they differ, you may
+read Herb Sutter's <a href="http://drdobbs.com/184403837/">The New C++:Smart(er)
+Pointers</a>.
+</p>
+
+<h2>Smart Pointers in Yuni</h2>
+
+<p>
+Yuni provides an implementation of a shared pointer.
+The smart pointer class is located in the <code>yuni/core/smartptr.h</code>
+header and has the following name :
+</p>
+<!-- TODO : add the API link -->
+<ul>
+<li><code>Yuni::SmartPtr</code></li>
+</ul>
+<p>
+It is a class template that uses <a href="../policies/@{INDEX}">Policies</a>
+to allow for user customization. It accepts six type parameters, among which
+there are five policies.
+</p>
+<ul>
+<li>
+<b>T :</b>
+This is the type pointed to. It allows the smart pointer to be used on any
+type.
+</li>
+<li>
+<b>OwspP :</b>
+The ownership policy describes the way ownership is managed when the smart
+pointer is copied. Possible values are :
+  <ul>
+  <li><code>Yuni::Policy::Ownership::ReferenceCounted</code>
+  offers reference counting for a single-threaded use
+  </li>
+  <li><code>Yuni::Policy::Ownership::ReferenceCountedMT</code>
+  offers reference counting for multi-threaded use (this is the default)
+  </li>
+  <li><code>Yuni::Policy::Ownership::COMReferenceCounted</code>
+  offers intrusive reference counting (COM object-style)
+  </li>
+  <li><code>Yuni::Policy::Ownership::DestructiveCopy</code>
+  destroys the current smart pointer and gives ownership to the other smart pointer
+  </li>
+  <li><code>Yuni::Policy::Ownership::NoCopy</code>
+  forbids copying the smart pointer using a compile-time assertion
+  </li>
+  </ul>
+</li>
+<li>
+<b>ChckP :</b>
+The checking policy can accomplish some value checking on the internal pointer.
+  <ul>
+  <li><code>Yuni::Policy::Checking::None</code>
+  does nothing (this is the default)
+  </li>
+  <li><code>Yuni::Policy::Checking::NeverNull</code>
+  forbids initializing the smart pointer to <code>null</code> at compile time, and will
+  throw an exception if it is assigned <code>null</code> at run time.
+  </li>
+  </ul>
+</li>
+<li>
+<b>ConvP :</b>
+The conversion policy specifies whether conversion to the raw pointer type is
+allowed.
+  <ul>
+  <li><code>Yuni::Policy::Conversion::Allow</code>
+  allows conversion to the raw pointer type (this is the default)
+  </li>
+  <li><code>Yuni::Policy::Conversion::Disallow</code>
+  forbids conversion to the raw pointer type
+  </li>
+  </ul>
+</li>
+<li>
+<b>StorP :</b>
+The storage policy defines how the raw data is actually stored inside the smart
+pointer. The interface to access it through the smart pointer remains of course
+the same.
+  <ul>
+  <li><code>Yuni::Policy::Storage::Pointer</code>
+  stores a single raw pointer to the type (this is the default)
+  </li>
+  <li><code>Yuni::Policy::Storage::Array</code>
+  stores an array of values of the given type
+  </li>
+  </ul>
+</li>
+<li>
+<b>ConsP :</b>
+The constness policy determines whether constness should be propagated from the
+pointer to pointee.
+  <ul>
+  <li><code>Yuni::Policy::Constness::DontPropagateConst</code>
+  does not propagate constness of the smart pointer to the pointee (this is the default)
+  </li>
+  <li><code>Yuni::Policy::Constness::PropagateConst</code>
+  propagates constness of the smart pointer to the pointee
+  </li>
+  </ul>
+</li>
+</ul>
+
+<p>
+Some examples of <code>Yuni::SmartPtr</code> instantiations follow :
+</p>
+<source type="cpp">
+#include &lt;yuni/yuni.h&gt;
+#include &lt;yuni/core/smartptr.h&gt;
+
+class MyClass
+{};
+
+int main()
+{
+	// Smart pointer on type MyClass with default policy values
+	Yuni::SmartPtr&lt;MyClass&gt; ptr1;
+	// Smart pointer on type MyClass with destructive copy, and rejecting null values.
+	Yuni::SmartPtr&lt;MyClass, Policy::Ownership::DestructiveCopy, Policy::Checking::NeverNull&gt; ptr2;
+	// Smart pointer on type MyClass with no MT support, no conversion, array storage, and const propagation.
+	Yuni::SmartPtr&lt;MyClass, Policy::Ownership::ReferenceCounted, Policy::Checking::None,
+		Policy::Conversion::Disallow, Policy::Storage::Array, Policy::Constness::PropagateConst&gt; ptr3;
+	return 0;
+}
+</source>
+<p>
+It is important to note that depending on the Storage Policy, it may be
+necessary to have complete type in order to create a smart pointer containing
+the type.
+</p>
+
+<p>
+Because each class may require some special treatments which might change over
+time, Yuni's coding style recommends the use of a <code>Ptr</code> typedef for
+any reference to a smart pointer.
+</p>
+<source type="cpp">
+#include &lt;yuni/yuni.h&gt;
+#include &lt;yuni/core/smartptr.h&gt;
+#include &lt;iostream&gt;
+
+
+class Fibonacci
+{
+public:
+	//! The most suitable smart pointer for the class
+	typedef Yuni::SmartPtr&lt;Fibonacci, Yuni::Policy::Ownership::ReferenceCounted> Ptr;
+
+public:
+	Fibonacci() :
+		result(0)
+	{
+	}
+
+	void calculateNth(unsigned int n)
+	{
+		unsigned int fn1 = 1;
+		unsigned int fn  = 0;
+
+		for (unsigned int i = 0; i != n; ++i)
+		{
+			unsigned int tmpFn1 = fn1;
+			unsigned int tmpFn  = fn + fn1;
+			fn1 = tmpFn1;
+			fn  = tmpFn;
+		}
+		result = fn;
+	}
+
+public:
+	unsigned int result;
+};
+
+
+void PrintResults(Fibonacci::Ptr fibonacci)
+{
+	std::cout &lt;&lt; "Result : " &lt;&lt; fibonacci->result &lt;&lt; std::endl;
+}
+
+
+int main()
+{
+	// A class, with a non thread-safe smart pointer.
+	//
+	// We don't need thread safe variables since the program has only one thread.
+	// However, things may evolve in the future. We will only have to modify the
+	// typedef 'Ptr' without changing another line of code.
+	Fibonacci::Ptr  fibonacci = new Fibonacci();
+	// Compute the 12th fibonacci number
+	fibonacci->calculateNth(12);
+
+	// Example of another class or function which would use our class
+	PrintResults(fibonacci);
+	return 0;
+}
+</source>

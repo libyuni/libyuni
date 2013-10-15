@@ -1,0 +1,76 @@
+<title>Pragma directives</title>
+
+<h2>All pragma directives</h2>
+
+
+<table class="nostyle">
+
+<!-- PRAGMA:TAG -->
+<tr>
+<td><p><code>pragma:tag</code></p></td>
+<td><p><b>Register a tag for the article</b></p></td>
+</tr>
+<tr><td></td>
+<td>
+	<code>name</code> : Tag ID<br />
+	<p>Example : </p>
+	<source type="html">&lt;pragma:tag name="mytag" /&gt;</source>
+</td></tr>
+
+
+<!-- PRAGMA:TOC -->
+<tr>
+<td><p><code>pragma:toc</code></p></td>
+<td><p><b>Control the behavior of the table of content</b></p></td>
+</tr>
+<tr><td></td>
+<td>
+	<code>visible</code> : True/False to display or not the table of content (true by default)<br />
+	<p>Example : </p>
+	<source type="html">&lt;pragma:toc visible="false" /&gt;</source>
+</td></tr>
+
+
+<!-- PRAGMA:LANG -->
+<tr>
+<td><p><code>pragma:lang</code></p></td>
+<td><p><b>Specify the article's language</b></p></td>
+</tr>
+<tr><td></td>
+<td>
+	<code>value</code> : The language ID<br />
+	<p>Example : </p>
+	<source type="html">&lt;pragma:lang value="fr" /&gt;</source>
+	<p>
+	<a href="http://www.seoconsultants.com/meta-tags/language">ISO 639 2 letter language codes</a>
+	</p>
+</td></tr>
+
+
+<!-- PRAGMA:DIRECTORYINDEX -->
+<tr>
+<td><p><code>pragma:directoryindex</code></p></td>
+<td><p><b>Append the directory listing of a given location</b></p></td>
+</tr>
+<tr><td></td>
+<td>
+	<code>src</code> : Location (default: the current folder)<br />
+	<p>Example : </p>
+	<source type="html">&lt;pragma:directoryindex src="." /&gt;</source>
+</td></tr>
+
+
+<!-- PRAGMA:WEIGHT -->
+<tr>
+<td><p><code>pragma:weight</code></p></td>
+<td><p><b>Set the article's weight for the search engine</b></p></td>
+</tr>
+<tr><td></td>
+<td>
+	<code>value</code> : Decimal value between 0.0 and 10.0<br />
+	<p>Example : </p>
+	<source type="html">&lt;pragma:weight value="0.8" /&gt;</source>
+</td></tr>
+
+
+</table>

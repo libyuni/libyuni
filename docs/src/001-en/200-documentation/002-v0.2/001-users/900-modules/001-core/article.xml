@@ -1,0 +1,125 @@
+<title>Core</title>
+
+
+<h2>Description</h2>
+<p>
+The Core module is the heart of Yuni. It is required as a dependency
+for all the other modules. It includes features that any C++ application
+may have a need for at some point. When compiling Yuni, the Core module
+is compiled by default.
+</p>
+
+
+<h2>Contents</h2>
+
+<ul>
+<li><b>Yuni::Any :</b>
+Container for any type, with limited behaviour.
+</li>
+<li><b>Yuni::Atomic :</b>
+Atomic integers for threading.
+</li>
+<li><b>Yuni::Bind :</b>
+Generic function or method binding.
+</li>
+<li><b>Yuni::Bit :</b>
+Bit array manipulation.
+</li>
+<li><b>Yuni::Charset :</b>
+Charset manipulation.
+</li>
+<li><b>Yuni::Color :</b>
+Generic color manipulation and conversion.
+</li>
+<li><b>Yuni::DynamicLibrary :</b>
+Dynamic library loading and access.
+</li>
+<li><b>Yuni::Event :</b>
+Synchronous events management.
+</li>
+<li><b>Yuni::Exceptions :</b>
+Exception definitions.
+</li>
+<li><b>Yuni::GetOpt :</b>
+Command-line arguments parser.
+</li>
+<li><b>Yuni::Hash :</b>
+Hash table and checksum.
+</li>
+<li><a href="../io/@{INDEX}">Yuni::IO</a> : Input / Output management, file and directory access.</li>
+<li><b>Yuni::Iterator :</b>
+Generic iterator for any kind of collection.
+</li>
+<li><b>Yuni::Logs :</b>
+Logging for output or debug uses.
+</li>
+<li><b>Yuni::Math :</b>
+Mathematical calculations and constants.
+</li>
+<li><b>Yuni::Nullable :</b>
+Generic type to offer nullable semantics to a value type.
+</li>
+<li><b>Yuni::Policies :</b>
+Set of generic policies for various uses (see the chapter on policies).
+</li>
+<li><b>Yuni::Predicate :</b>
+Generic predicates in the form of functors.
+</li>
+<li><b>Yuni::Preprocessor :</b>
+Set of miscellaneous macros.
+</li>
+<li><b>Yuni::Process :</b>
+Process forking.
+</li>
+<li><b>Yuni::Singleton :</b>
+Generic singleton pattern.
+</li>
+<li><b>Yuni::SList :</b>
+Generic single-linked list.
+</li>
+<li><b>Yuni::SmartPtr :</b>
+Generic smart pointer.
+</li>
+<li><b>Yuni::Static :</b>
+Set of static computations (done at compile time).
+</li>
+<li><b>Yuni::STL :</b>
+Additional algorithms for the standard template library.
+</li>
+<li><a href="string/@{INDEX}">Yuni::String</a> : Fast and full-featured character string.</li>
+<li><b>Yuni::System :</b>
+System capabilities detection and replacements, and OS-dependent features.
+</li>
+<li><b>Yuni::Traits :</b>
+Some C++ traits, mainly for string features.
+</li>
+<li><b>Yuni::Tree :</b>
+Generic N-tree.
+</li>
+<li><b>Yuni::Unit :</b>
+Unit conversions.
+</li>
+<li><b>Yuni::Uri :</b>
+Uniform Resource Identifiers management.
+</li>
+<li><b>Yuni::Utils :</b>
+Various utilities, for the moment a HexDump.
+</li>
+<li><b>Yuni::Validator :</b>
+Type validation on a string's value.
+</li>
+<li><b>Yuni::Variant :</b>
+Container for a limited range of types, also offering conversions.
+</li>
+<li><b>Yuni::Version :</b>
+Version management (major / minor).
+</li>
+</ul>
+
+
+<h2>System dependencies</h2>
+<ul>
+<li>None</li>
+</ul>
+
+

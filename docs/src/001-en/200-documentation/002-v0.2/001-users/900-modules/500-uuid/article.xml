@@ -1,0 +1,109 @@
+<title>UUID</title>
+
+
+<h2>Description</h2>
+<p>
+The UUID module provides a platform-independent API for generating Universally
+unique identifiers (UUID).
+A UUID is 16 bytes (128 bits) long, which gives approximately
+3.4x10<sup>38</sup> unique values.
+A new UUID can reasonably be considered unique among all UUIDs created on the
+local system, and among UUIDs created on other systems in the past and in the
+future.
+</p>
+<p>
+In its canonical form, a UUID is represented by 32 hexadecimal digits. For example :
+</p>
+<source type="none">
+bf348fb0-63e9-4355-888d-23aef99f6bfd
+</source>
+<p>
+See the <a href="http://en.wikipedia.org/wiki/Universally_unique_identifier">article on Wikipedia</a> for more informations.
+</p>
+
+<h2>Generating a UUID</h2>
+<source type="cpp">
+#include &lt;yuni/yuni.h&gt;
+#include &lt;yuni/core/string.h&gt;
+#include &lt;yuni/uuid/uuid.h&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+	Yuni::UUID myuuid;
+	myuuid.generate();
+	std::cout &lt;&lt; myuuid &lt;&lt; std::endl;
+	return 0;
+}
+</source>
+
+<h2>Conversion from / to the canonical form</h2>
+<p>
+The class is able to directly perform conversion with strings in both ways.
+</p>
+<source type="cpp">
+#include &lt;yuni/yuni.h&gt;
+#include &lt;yuni/core/string.h&gt;
+#include &lt;yuni/uuid/uuid.h&gt;
+
+int main()
+{
+	Yuni::UUID myuuid;
+	myuuid.generate();
+	Yuni::String s;
+	s &lt;&lt; "The new UUID is " &lt;&lt; myuuid;
+	return 0;
+}
+</source>
+
+<p>
+Here are several ways to convert a string to a UUID. The provided UUID can be
+both lower or upper case. However no space must remain.
+</p>
+<source type="cpp">
+#include &lt;yuni/yuni.h&gt;
+#include &lt;yuni/core/string.h&gt;
+#include &lt;yuni/uuid/uuid.h&gt;
+#include &lt;iostream&gt;
+
+int main()
+{
+	Yuni::UUID myuuid;
+	Yuni::String s;
+
+	// Direct assignment
+	myuuid = "13DDB0E7-F626-4A90-B129-D108E61FA710";
+	std::cout &lt;&lt; myuuid &lt;&lt; std::endl;
+
+	// From a string (Yuni::String, std::string, char*...)
+	s = "58CD8D53-Ef31-4119-A7bc-B8FE4B8ACF66";
+	myuuid = s;
+	std::cout &lt;&lt; myuuid &lt;&lt; std::endl;
+
+	// From a string, with error handling
+	s = "invalid uuid";
+	if (s.to(myuuid))
+		std::cout &lt;&lt; myuuid &lt;&lt; std::endl;
+	else
+		std::cout &lt;&lt; "The conversion has failed." &lt;&lt; std::endl;
+
+	return 0;
+}
+</source>
+
+
+
+
+<h2>System dependencies</h2>
+<ul>
+<li><a href="../core/@{INDEX}">Yuni::Core</a></li>
+<li>Linux : libuuid
+	<ul>
+	<li>Debian : libuuid1, uuid-dev</li>
+	<li>Redhat / CentOS / Fedora : libuuid (>=2.17), libuuid-devel (>=2.17)</li>
+	</ul>
+</li>
+<li>Windows : ole32.dll, rpcrt4.dll</li>
+</ul>
+
+

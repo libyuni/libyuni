@@ -1,0 +1,209 @@
+<title>Reading from and writing to files</title>
+
+
+<h2>Convenient routines</h2>
+<ul>
+<li><b>include : </b><code>&lt;yuni/io/file.h&gt;</code></li>
+</ul>
+<p>
+The class <code>Yuni::IO::File</code> provides some convenient routines
+for reading from and writing to a file without pain.
+</p>
+<h3>Reading a whole file at once</h3>
+<source type="cpp">
+String content;
+switch (IO::File::LoadFromFile(content, "myfile.txt"))
+{
+	case IO::errNone:
+		break;
+	case IO::errMemoryLimit:
+		std::cout &lt;&lt; "The file size exceeds the limit." &lt;&lt; std::endl;
+		break;
+	default:
+		std::cout &lt;&lt; "impossible to read the file\n" &lt;&lt; std::endl;
+		break;
+}
+
+// Display the content of the file
+std::cout &lt;&lt; content &lt;&lt; std::endl;
+</source>
+
+<h3>Writing to a file</h3>
+<source type="cpp">
+// If the file already exists, it will be truncated
+if (!IO::File::SetContent("myfile.txt", "Hello world !\n"))
+	std::cout &lt;&lt; "impossible to write to the file" &lt;&lt; std::endl;
+</source>
+
+
+<h3>Appending to a file</h3>
+<source type="cpp">
+// The content will be added at the end of the file
+if (!IO::File::AppendContent("myfile.txt", "Some text !\n"))
+	std::cout &lt;&lt; "impossible to append to the file" &lt;&lt; std::endl;
+</source>
+
+
+<h3>Drawbacks</h3>
+<p>
+Although convenient, those routines can be memory hungry in some cases. In a
+critical code, you may prefer other ways, with a finer-grained access control,
+like using the class <code>Yuni::IO::File::Stream</code>.
+</p>
+
+
+<h2>Fine-grained access to file data (<code>Yuni::IO::File::Stream</code>)</h2>
+<ul>
+<li><b>class : </b><code>Yuni::IO::File::Stream</code></li>
+<li><b>include : </b><code>&lt;yuni/io/file.h&gt;</code></li>
+</ul>
+<p>
+The class <code>IO::File::Stream</code> provides an independent platform
+interface for reading from and writing to files.
+All filenames passed to this interface must be UTF-8 encoded. This class can be
+used as a data stream (like <code>Yuni::String</code> or <code>std::cout</code>).
+Contrary to some other implementations, this class reads and writes data 'as is'.
+It means that no conversion is performed when reading or writing.
+</p>
+<p>
+A file is opened with <code>open</code> or directly from the constructor.
+These methods may accept an additional parameter to indicate how to open the file
+(see <a href="#">IO::OpenMode::Type</a>). In any case, the method
+<code>opened</code> indicates at any time if the file is opened (for reading or
+writing, according to the flags).
+Data are usually read with <code>read</code> or <code>readline</code>. Writing
+to the file is the same as writing to a data stream.
+</p>
+<p>
+Closing a file is implicit. It will be automatically closed at the destruction
+of the object or when another file is opened. You can however force it by
+using <code>close</code>.
+</p>
+
+
+
+<h3>Reading from raw data files</h3>
+<p>
+This example reads each file given from the command line and writes them to the
+console (<code>std::cout</code>).
+</p>
+<source type="cpp">
+#include &lt;yuni/yuni.h&gt;
+#include &lt;yuni/io/file.h&gt;
+#include &lt;iostream&gt;
+
+
+int main(int argc, char** argv)
+{
+	if (argc &lt;= 1)
+		return 0;
+
+	// We will read our file chunk by chunk (4K for each chunk)
+	Yuni::Clob buffer;
+
+	// For each filename given from the command line
+	for (int i = 1; i &lt; argc; ++i)
+	{
+		// The filename to read
+		const char* filename = argv[i];
+
+		Yuni::IO::File::Stream file;
+		if (file.open(filename))
+		{
+			std::cout &lt;&lt; "reading " &lt;&lt; filename &lt;&lt; std::endl;
+			while (file.read(buffer))
+				std::cout &lt;&lt; buffer; // Writing it to the standard output
+
+			// We have reached the end of the file
+			std::cout &lt;&lt; std::endl;
+		}
+		else
+			std::cout &lt;&lt; "!! impossible to open " &lt;&lt; filename &lt;&lt; std::endl;
+	}
+	return 0;
+}
+</source>
+
+
+<h3>Reading from a file line by line</h3>
+<p>
+This example is the same as before, except we will read the file line by line
+and print the line number at the same time.
+</p>
+<source type="cpp">
+#include &lt;yuni/yuni.h&gt;
+#include &lt;yuni/io/file.h&gt;
+#include &lt;iostream&gt;
+
+
+int main(int argc, char** argv)
+{
+	if (argc &lt;= 1)
+		return 0;
+
+	// We will read our file chunk by chunk (4K for each chunk)
+	Yuni::Clob line;
+
+	for (int i = 1; i &lt; argc; ++i)
+	{
+		// The filename to read
+		const char* filename = argv[i];
+
+		Yuni::IO::File::Stream file;
+		if (file.open(filename))
+		{
+			std::cout &lt;&lt; "reading " &lt;&lt; filename &lt;&lt; std::endl;
+			unsigned int line = 0;
+			// Read a single line
+			while (file.readline(line))
+				std::cout &lt;&lt; (++line) &lt;&lt; ": " &lt;&lt; buffer;
+
+			// We have reached the end of the file
+			std::cout &lt;&lt; std::endl;
+		}
+		else
+			std::cout &lt;&lt; "!! impossible to open " &lt;&lt; filename &lt;&lt; std::endl;
+	}
+	return 0;
+}
+</source>
+
+
+
+<h3>Writing to a file</h3>
+<p>
+Writing to a file is as simple as writing to any data stream.
+This example will write <code>"Hello world !\n"</code> to a filename given from the command line.
+</p>
+<source type="cpp">
+#include &lt;yuni/yuni.h&gt;
+#include &lt;yuni/io/file.h&gt;
+#include &lt;iostream&gt;
+
+
+int main(int argc, char** argv)
+{
+	if (argv &lt;= 1)
+		return 0;
+
+	// The filename where to write some data
+	const char* filename = argv[1];
+
+	Yuni::IO::File::Stream file;
+	// Trying to open the filename in read/write mode. If the file exists it will
+	// be truncated.
+	if (file.openRW(filename))
+	{
+		file &lt;&lt; "Hello world !\n";
+	}
+	else
+		std::cout &lt;&lt; "impossible to write " &lt;&lt; filename &lt;&lt; std::endl;
+	return 0;
+}
+</source>
+<p>
+Any datatype that a <code>Yuni::String</code> understands can be used here.
+</p>
+
+
+

@@ -1,0 +1,16 @@
+<title>Yuni Framework</title>
+<pragma:toc visible="0" />
+<pragma:history value="0" />
+<pragma:directoryindex src="." />
+<pragma:accesspath value="quicklinks" />
+
+
+<h2>What is Yuni ?</h2>
+<p>
+Yuni is a cross-platform C++ framework for developing high-level, complex and
+fast applications. Yuni can be useful in all kinds of applications, from simple
+100-line programs to full-blown 3D applications. It intends to provide a complete
+set of coherent API and to be a reliable and simple bridge between different
+worlds, allowing to write all sorts of applications while letting the developer
+focus on her real work.
+</p>

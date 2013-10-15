@@ -1,0 +1,54 @@
+<title>Downloads</title>
+<pragma:toc vsible="0" />
+<pragma:history value="0" />
+<pragma:accesspath value="quicklinks" />
+
+
+<h2>Source Code</h2>
+
+<table class="nostyle vspace">
+<tr>
+<td class="borderright">
+	<img src="../../theme/default/images/archive.png" title="cpp" alt="cpp" />
+</td>
+<td>
+	<b>Last stable (v0.1.1)</b>
+	<table class="nostyle">
+	<tr><td>tar/gz</td><td><a href="../../downloads/yuni-v0.1.1.tar.gz">yuni-v0.1.1.tar.gz</a> (2.0Mo)</td></tr>
+	<tr><td>zip</td><td><a href="../../downloads/yuni-v0.1.1.zip">yuni-v0.1.1.zip</a> (2.4Mo)</td></tr>
+	<tr><td>svn repos.</td><td><a href="https://svn.iwi.me/yuni/tags/0.1.1">https://svn.iwi.me/yuni/tags/0.1.1</a></td></tr>
+	</table>
+
+	<b>Head revision</b>
+	<table class="nostyle">
+	<tr><td>svn repos.</td><td><a href="https://svn.iwi.me/yuni/trunk">https://svn.iwi.me/yuni/trunk</a></td></tr>
+	</table>
+
+
+	<br />
+
+	<p>
+	<b>Anonymous (guest) access to the repository</b>
+	<br />
+	To connect to the Yuni SVN Respository for anonymous checkout use your SVN client command line tool :
+	<pre>$ svn co https://guest@svn.iwi.me/yuni/trunk yuni</pre>
+	</p>
+
+	<!--
+	<h3>Daily snapshot</h3>
+	<table class="nostyle">
+	<tr><td>tar/gz</td><td><a href="#">libyuni-src-v0.1-20110809.tar.gz</a></td></tr>
+	<tr><td>zip</td><td><a href="#">libyuni-src-v0.1-20110809.zip</a></td></tr>
+	</table>
+	-->
+</td>
+</tr>
+</table>
+
+<h2>External dependencies, DevPacks</h2>
+<p>
+All devpacks are available here : <a href="http://devpacks.libyuni.org">http://devpacks.libyuni.org</a>
+</p>
+
+
+

@@ -1,0 +1,120 @@
+<title>Formatting</title>
+
+<h2>Text formatting markup</h2>
+<table>
+
+<tr><th>Description</th><th>You type</th><th>You get</th></tr>
+
+<!-- CHARACTER -->
+<tr><th colspan="3"><br /><b>Character formatting</b></th></tr>
+
+<!-- ITALIC -->
+<tr>
+<td>Itatic text</td>
+<td><source type="html"  style="border-style:none;padding-left:0">&lt;i&gt;italic&lt;/i&gt;</source></td>
+<td><i>italic</i></td>
+</tr>
+<!-- BOLD -->
+<tr>
+<td>Bold text</td>
+<td><source type="html"  style="border-style:none;padding-left:0">&lt;b&gt;bold&lt;/b&gt;</source></td>
+<td><b>bold</b></td>
+</tr>
+<!-- BOLD / ITALIC-->
+<tr>
+<td>Bold and italic</td>
+<td><source type="html"  style="border-style:none;padding-left:0">&lt;b&gt;&lt;i&gt;bold &amp; italic&lt;/i&gt;&lt;/b&gt;</source></td>
+<td><b><i>bold &amp; italic</i></b></td>
+</tr>
+
+
+<!-- SECTION -->
+<tr><th colspan="3"><br /><b>Section formatting</b></th></tr>
+
+<!-- Page title -->
+<tr>
+<td>Page title</td>
+<td><source type="html"  style="border-style:none;padding-left:0">&lt;title&gt;Formatting&lt;/title&gt;</source></td>
+<td></td>
+</tr>
+
+
+<!-- Headings -->
+<tr>
+<td><p>Headings of different levels</p><p><b>Skip Level 1</b>, it is page name level.</p></td>
+<td><source type="html"  style="border-style:none;padding-left:0">
+&lt;h2&gt;Level 2&lt;/h2&gt;
+&lt;h3&gt;Level 2&lt;/h3&gt;
+&lt;h4&gt;Level 2&lt;/h4&gt;
+</source></td>
+<td></td>
+</tr>
+
+<!-- Paragraph -->
+<tr>
+<td>Paragraph</td>
+<td><source type="html"  style="border-style:none;padding-left:0">&lt;p&gt;Lorem Ipsum&lt;/p&gt;</source></td>
+<td><p>Lorem Ipsum</p></td>
+</tr>
+
+<!-- Bullet list -->
+<tr>
+<td>Bullet list</td>
+<td><source type="html"  style="border-style:none;padding-left:0">
+&lt;ul&gt;
+	&lt;li&gt;Item 1&lt;/li&gt;
+	&lt;li&gt;Item 2&lt;/li&gt;
+&lt;/ul&gt;
+</source></td>
+<td>
+<ul>
+	<li>Item 1</li>
+	<li>Item 2</li>
+</ul>
+</td>
+</tr>
+
+<!-- Line break -->
+<tr>
+<td>Line break</td>
+<td><source type="html"  style="border-style:none;padding-left:0">&lt;br /&gt;</source></td>
+<td></td>
+</tr>
+
+<!-- Preformatted text blocks -->
+<tr>
+<td>Preformatted text blocks</td>
+<td><source type="html"  style="border-style:none;padding-left:0">
+&lt;source type="cpp" &gt;
+int main()
+{
+	return 0;
+}
+&lt;/source&gt;
+</source></td>
+<td>
+<source type="cpp">
+int main()
+{
+	return 0;
+}
+</source>
+</td>
+</tr>
+
+
+<!-- Preformatted text -->
+<tr>
+<td>Preformatted text</td>
+<td><source type="html"  style="border-style:none;padding-left:0">
+&lt;code&gt;Yuni::String&lt;/code&gt;
+</source></td>
+<td>
+<code>Yuni::String</code>
+</td>
+</tr>
+
+
+
+
+</table>

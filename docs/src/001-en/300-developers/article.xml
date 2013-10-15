@@ -1,0 +1,61 @@
+<title>Developers</title>
+<pragma:toc visible="0" />
+<pragma:history value="0" />
+<pragma:directoryindex src="." />
+<pragma:accesspath value="quicklinks" />
+
+
+<h2>Source Code Repository</h2>
+<table class="nostyle vspace">
+<tr>
+<td class="borderright">
+	<img src="../../theme/default/images/cpp.png" title="cpp" alt="cpp" />
+</td>
+<td>
+	<p>
+	You can access to the subversion repository anonymously. If you just wish to browse around or to
+	view a few individual files, you should prefer the web-based interface :
+	</p>
+	<ul>
+	<li><a href="https://dev.libyuni.org/projects/yuni-framework/repository">Repository</a> through Redmine</li>
+	</ul>
+	<p>
+	Otherwise, you can use the public repository from your favorite subversion client :
+	</p>
+	<ul>
+	<li><a href="https://svn.iwi.me/yuni/trunk">https://svn.iwi.me/yuni/trunk</a></li>
+	</ul>
+</td>
+</tr>
+</table>
+
+
+<h2>Bug tracking system</h2>
+<table class="nostyle vspace">
+<tr>
+<td class="borderright">
+	<img src="../../theme/default/images/db.png" title="cpp" alt="cpp" />
+</td>
+<td>
+	<p>
+	We use redmine as our project management application, available at this
+	address : <a href="https://dev.libyuni.org">https://dev.libyuni.org</a>
+	</p>
+	<ul>
+	<li><a href="https://dev.libyuni.org/projects/yuni-framework/activity">Repository ctivity</a></li>
+	<li><a href="https://dev.libyuni.org/projects/yuni-framework/issues?query_id=2">All tickets for the current milestone</a> (v0.2)</li>
+	<li><a href="https://dev.libyuni.org/projects/yuni-framework/issues">All tickets</a></li>
+	<li><a href="https://dev.libyuni.org/projects/yuni-framework/roadmap">Roadmap</a> of the project</li>
+	<li><a href="https://dev.libyuni.org/projects/yuni-framework/repository">Browse the source of the current development version</a></li>
+	</ul>
+</td>
+</tr>
+</table>
+
+
+<h2>Documentation</h2>
+<ul>
+<li><a href="http://www.cmake.org/cmake/help/cmake-2-8-docs.html">CMake 2.8</a> Documentation</li>
+<li><a href="http://svnbook.red-bean.com/">Version control with Subversion</a></li>
+</ul>
+

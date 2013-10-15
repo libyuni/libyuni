@@ -1,0 +1,29 @@
+<title>Curiously Recurring Template Pattern (CRTP)</title>
+
+<h2>Definition</h2>
+<p>
+The Curiously Recurring Template Pattern is a pattern in which a base class
+uses its derived class as a template parameter.
+</p>
+
+
+<h2>Sample</h2>
+
+<source type="cpp">
+template&lt;class T&gt;
+class Base
+{
+};
+
+class Derived : public Base&lt;Derived&gt;
+{
+};
+</source>
+
+
+<h2>Links</h2>
+
+<p>
+For more information, please refer to
+<a href="http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern"> the Wikipedia page</a>.
+</p>

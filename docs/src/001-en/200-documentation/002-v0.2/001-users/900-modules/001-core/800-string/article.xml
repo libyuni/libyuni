@@ -1,0 +1,135 @@
+<title>String</title>
+
+
+<h2>Description</h2>
+<ul>
+<li><b>class : </b><code>Yuni::String</code></li>
+<li><b>include : </b><code>&lt;yuni/core/string.h&gt;</code></li>
+</ul>
+<p>
+The class <code>Yuni::String</code> (or <code>Yuni::CString&lt;&gt;</code>, which stands for `custom string`) represents an UTF-8 character string of arbitrary length (limited by MAX_UINT, which is 4294967296).
+</p>
+
+<h2>Comparison of <code>Yuni::String</code> with other string classes</h2>
+
+
+
+<h2>Basic usage</h2>
+<p>
+This class behaves like a <code>std::ostream</code>
+</p>
+<source type="cpp">
+#include &lt;yuni/yuni.h&gt;
+#include &lt;yuni/core/string.h&gt;
+#include &lt;iostream&gt;
+
+
+using namespace Yuni;
+
+int main()
+{
+	String s;
+	s += "basic usage : ";
+	s &lt;&lt; "Hello " &lt;&lt; "world !";
+	std::cout &lt;&lt; s &lt;&lt; std::endl;
+	return 0;
+}
+</source>
+
+
+<h2>Type conversions</h2>
+<p>
+This string is already able to perform a lot of conversions on its own. All standard types are supported.
+</p>
+<h3>Type to String</h3>
+<source type="cpp">
+String s;
+s &lt;&lt; "Hello world : " &lt;&lt; 42;
+std::cout &lt;&lt; "int : " &lt;&lt; s &lt;&lt; std::endl;
+
+s.clear();
+s = 1.42;
+std::cout &lt;&lt; "double : " &lt;&lt; s &lt;&lt; std::endl;
+
+s.clear();
+s = true;
+std::cout &lt;&lt; "bool : " &lt;&lt; s &lt;&lt; std::endl;
+
+
+s.clear();
+std::string stdstr = "Hello world";
+s = stdstr;
+std::cout &lt;&lt; "std::string : " &lt;&lt; s &lt;&lt; std::endl;
+</source>
+
+
+<h3>String to Type</h3>
+<source type="cpp">
+String s;
+int i;
+double d;
+bool b;
+
+s = "42";
+i = s.to&lt;int&gt;(); // i = 42
+
+s = "42.3";
+i = s.to&lt;int&gt;(); // i = 42
+d = s.to&lt;double&gt;(); // d = 42.3
+
+s = "yes"; // or true, 1, y...
+b = s.to&lt;bool&gt;(); // b = true
+</source>
+<p>
+To know if the conversion has been properly done :
+</p>
+<source type="cpp">
+String s;
+int i;
+
+s = "not a number";
+if (!s.to(i))
+	std::cerr &lt;&lt; "error" &lt;&lt; std::endl;
+</source>
+<p>
+The string also supports hexadecimal conversions :
+</p>
+<source type="cpp">
+String s;
+unsigned int u;
+
+s = "0xaf34e2";
+u = s.to&lt;unsigned int&gt;();
+
+s = "#af34e2";
+u = s.to&lt;unsigned int&gt;();
+</source>
+
+
+
+<h3>Supported types by default</h3>
+<p>Here is the list of all default supported types for conversion :</p>
+<ul>
+<li><code>char*</code></li>
+<li><code>char</code></li>
+<li><code>bool</code></li>
+<li><code>sint16</code></li>
+<li><code>sint32</code> (<code>int</code>)</li>
+<li><code>sint64</code></li>
+<li><code>uint16</code></li>
+<li><code>uint32</code> (<code>unsigned int</code>)</li>
+<li><code>uint64</code></li>
+<li><code>float</code></li>
+<li><code>double</code></li>
+<li><code>void*</code></li>
+<li><code>std::string</code></li>
+<li><code>std::vector&lt;T&gt;</code>, with <code>T</code> any type that the string can convert.</li>
+<li><code>std::list&lt;T&gt;</code>, with <code>T</code> any type that the string can convert.</li>
+</ul>
+
+
+
+<h2>Tuning <code>Yuni::String</code> for your application</h2>
+<p>
+<code>Yuni::String</code> is actually a typedef on <code>Yuni::CustomString&lt;&gt;</code>
+</p>

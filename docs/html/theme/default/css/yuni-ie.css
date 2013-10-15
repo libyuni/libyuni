@@ -1,0 +1,12 @@
+body {
+	font-size:105%;
+}
+.path ul li ul li a {
+	padding:0.10em 30px 0.10em 15px;
+}
+.content pre {
+	font-size:0.83em;
+}
+.content code {
+	font-size:0.83em;
+}

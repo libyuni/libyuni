@@ -1,0 +1,13 @@
+<title>Transactions</title>
+
+<h2>Definition</h2>
+<ul>
+  <li>ACID properties</li>
+</ul>
+
+<h2>Main benefits</h2>
+<ul>
+  <li>Threading synchronization made easy</li>
+  <li>Ensure consistency</li>
+  <li>Isolate processes</li>
+</ul>

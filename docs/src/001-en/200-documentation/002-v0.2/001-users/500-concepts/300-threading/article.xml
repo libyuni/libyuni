@@ -1,0 +1,45 @@
+<title>Threading</title>
+
+<h2>Definition</h2>
+<ul>
+  <li>What is a thread ?</li>
+  <li>Difference with processes</li>
+</ul>
+
+<h2>Main benefits</h2>
+<ul>
+  <li>UI response during processes (UI from main thread only)</li>
+  <li>Parallel computation</li>
+  <li>Aspect-oriented development</li>
+</ul>
+
+<h2>Inter-thread communication</h2>
+<ul>
+  <li>Shared resources</li>
+  <li>Mutual exclusion</li>
+  <li>Thread synchronization</li>
+</ul>
+
+<h2>Use cases</h2>
+<ul>
+  <li>Timer</li>
+  <li>Jobs / Background worker</li>
+  <li>Event loop (lien vers la bonne page)</li>
+</ul>
+
+
+<h2>Atomicity</h2>
+<h3>What it is</h3>
+<h3>Why it is useful</h3>
+<!-- Not how it is done ! -->
+
+<h2>Threading in Yuni</h2>
+<ul>
+  <li>Yuni::Job::IJob</li>
+  <li>Yuni::Job::QueueService</li>
+  <li>Yuni::Mutex</li>
+  <li>Yuni::Thread::IThread</li>
+  <li>Yuni::Thread::Array</li>
+  <li>Yuni::Thread::Timer</li>
+  <li>...</li>
+</ul>

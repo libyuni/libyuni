@@ -1,0 +1,132 @@
+<title>Compiling your project with Yuni</title>
+
+<h2>Requirements</h2>
+<h3>Minimal requirements</h3>
+<ul>
+  <li>CMake &ge; 2.8 available at <a href="http://www.cmake.org">http://www.cmake.org</a></li>
+  <li>
+	<ul>
+	  <li>
+		<b>Unices (*BSD, Mac OS X, GNU / Linux, &ldots; :</b>
+		<ul>
+		  <li>Git &ge; 1.7.6</li>
+		  <li>g++ &ge; 4.1</li>
+		  <li>BSD make or GNU make</li>
+		  <li>wget (required for automatic devpacking)</li>
+		  <li>Doxygen (optional)</li>
+		</ul>
+	  </li>
+	  <li>
+		<b>Mac OS X :</b>
+		<ul>
+		  <li>XCode</li>
+		  <li>git available from MacPorts at <a href="http://www.macports.org/">http://www.macports.org/</a></li>
+		</ul>
+	  </li>
+	  <li>
+		<b>MS Windows XP SP3 or greater :</b>
+		<ul>
+		  <li>msysgit available at <a href="http://code.google.com/p/msysgit/">http://code.google.com/p/msysgit/</a></li>
+		  <li>TortoiseGIT available at <a href="http://code.google.com/p/tortoisegit/">http://code.google.com/p/tortoisegit/</a></li>
+		  <li>Visual Studio 2008 or greater <b>OR</b> MinGW available at <a href="http://www.mingw.org">http://www.mingw.org</a></li>
+		</ul>
+	  </li>
+	</ul>
+  </li>
+</ul>
+
+<h3>Specific requirements</h3>
+<p>
+If you decide to get Yuni from the repository
+(current head revision or tagged), additional requirements are involved.
+</p>
+<ul>
+  <li>
+	<b>Unices (*BSD, Mac OS X, GNU / Linux, &ldots; :</b>
+	<ul>
+	  <li>Git &ge; 1.7.6</li>
+	  <li>g++ &ge; 4.1</li>
+	  <li>BSD make or GNU make</li>
+	  <li>wget (required for automatic devpacking)</li>
+	  <li>Doxygen (optional)</li>
+	</ul>
+  </li>
+  <li>
+	<b>Mac OS X :</b>
+	<ul>
+	  <li>XCode</li>
+	  <li>git available from MacPorts at <a href="http://www.macports.org/">http://www.macports.org/</a></li>
+	</ul>
+  </li>
+  <li>
+	<b>MS Windows XP SP3 or greater :</b>
+	<ul>
+	  <li>msysgit available at <a href="http://code.google.com/p/msysgit/">http://code.google.com/p/msysgit/</a></li>
+	  <li>TortoiseGIT available at <a href="http://code.google.com/p/tortoisegit/">http://code.google.com/p/tortoisegit/</a></li>
+	  <li>Visual Studio 2008 or greater <b>OR</b> MinGW available at <a href="http://www.mingw.org">http://www.mingw.org</a></li>
+	</ul>
+  </li>
+</ul>
+
+<h3>Devpacks</h3>
+<p>
+For some modules, Yuni requires additional external libraries (e.g. ffmpeg, lua, &ldots;).
+If these dependencies are not available during the configuration step, Yuni will try to automatically download the corresponding devpacks to save you the trouble of installing them.
+</p>
+<p>
+Should the download fail, you may download the devpacks manually from <a href="http://devpacks.libyuni.org">http://devpacks.libyuni.org</a>.
+</p>
+
+
+<h2>Compiling Yuni</h2>
+
+<h3>CMake options</h3>
+<ul>
+  <li>For GCC + make :
+  <source>
+	$ cmake . -DMODULES="core"
+	$ make
+  </source>
+  </li>
+  <li>For XCode :
+  <source>
+	$ cmake . -G Xcode -DMODULES="core"
+	$ open Yuni-Framework.xcode
+  </source>
+  </li>
+  <li>For Visual C++ :
+	<source>
+	  REM Example for Visual Studio 10 64-bits, try cmake --help for other generators
+	  $ cmake . -G "Visual Studio 10 Win64" -DMODULES="core"
+	</source>
+  </li>
+</ul>
+<p>
+  The option <code>-DMODULES="core"</code> is implicit because the core module is mandatory.
+  However, you may specify other modules using + or - modifiers. For example,
+  <code>-DMODULES="all -audio"</code> enables all modules except audio.
+</p>
+<p>
+  For a full list, use <code>-DMODULES=help</code>.
+</p>
+
+<h3>yuni-config</h3>
+<p>
+  Once Yuni is compiled, yuni-config is available from <code>yuni/build/&lt;target&gt;/bin</code>.
+</p>
+<ul>
+	<li>
+	  <code>yuni-config --cxxflags</code> for includes and defines.
+	</li>
+	<li>
+	  <code>yuni-config --libs</code> for linker options.
+	</li>
+</ul>
+
+<!--
+<h2>Embedding Yuni in your CMake-using project</h2>
+<h3>CMakeLists</h3>
+<h3>Profile</h3>
+<h3>Skipping yuni-config compilation</h3>
+-->
+

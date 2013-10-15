@@ -1,0 +1,35 @@
+<title>Links to external websites</title>
+<pragma:toc visible="0" />
+<pragma:history value="0" />
+<pragma:accesspath value="quicklinks" />
+
+
+<h2>Books</h2>
+<ul>
+<li><a href="http://www.amazon.fr/Templates-Complete-Guide-David-Vandevoorde/dp/0201734842/ref=pd_sim_eb_8">C++ Templates</a> : The Complete Guide</li>
+<li><a href="http://www.amazon.fr/Modern-Design-Generic-Programming-Patterns/dp/0201704315">Modern C++ Design</a> : Generic Programming and Design Patterns Applied</li>
+</ul>
+
+<h2>C / C++</h2>
+<ul>
+<li><a href="http://loki-lib.sourceforge.net/">Loki</a> : C++ library of designs, containing flexible implementations of common design patterns and idioms</li>
+<li><a href="http://www.ffmpeg.org">ffmpeg</a> : Tools to record, convert, stream and play multimedia content including libavcodec and libavformat, two libraries used by many other open source projects</li>
+<li><a href="http://www.sqlite.org">SQLite</a> : Cross-platform C library that implements a self-contained, embeddable, zero-configuration SQL database engine</li>
+<li><a href="http://connect.creativelabs.com/openal/default.aspx">OpenAL</a> : Cross-platform 3D audio API</li>
+</ul>
+
+<h2>Mac OS Tools</h2>
+<ul>
+<li><a href="http://developer.apple.com/technologies/tools/features.html">Mac OS Developer Tools</a></li>
+</ul>
+
+<h2>Linux Tools</h2>
+<ul>
+<li><a href="http://valgrind.org/">Valgrind</a> : Memory leaks detection and Code profiling</li>
+<li><a href="http://kcachegrind.sourceforge.net/html/Home.html">KCacheGrind</a> : Profile data visualization</li>
+</ul>
+
+<h2>Windows Tools</h2>
+<ul>
+<li><a href="http://www.dependencywalker.com/">Dependency Walker</a></li>
+</ul>

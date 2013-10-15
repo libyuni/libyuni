@@ -1,0 +1,9 @@
+<title>Node</title>
+
+<h2>Definition</h2>
+<p>
+Physical calculation unit, several nodes form a cluster.
+</p>
+<p>
+A node can be uniquely represented by an IP address, and a port number.
+</p>
