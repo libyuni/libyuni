@@ -35,7 +35,6 @@ namespace Thread
 	}
 
 
-
 	Timer::Timer(const Timer& rhs) :
 		IThread()
 	{
