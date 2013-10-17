@@ -9,6 +9,7 @@ Changes:
 
  * IIntrusiveSmartPtr now uses a non recursive mutex
  * msinttypes for Visual Studio has been updated to r29 (http://code.google.com/p/msinttypes/)
+ * `Yuni::Job::IJob` and `Yuni::Thread::IThread` now use intrusive smartptr.
 
 Features:
 

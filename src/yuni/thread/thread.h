@@ -8,6 +8,7 @@
 # include <vector>
 # include "fwd.h"
 # include "../core/noncopyable.h"
+# include "../core/smartptr/intrusive.h"
 
 
 
@@ -50,7 +51,6 @@ namespace Thread
 	** \endcode
 	**
 	**
-	**
 	** \internal The thread is really created when started (with the method start()), and
 	**   destroyed when stopped by the method stop() (or when the object is
 	**   destroyed too).
@@ -58,24 +58,23 @@ namespace Thread
 	** \warning : Windows Server 2003 and Windows XP:  The target thread's initial
 	**   stack is not freed when stopping the native thread, causing a resource leak
 	*/
-	class YUNI_DECL IThread : public Policy::ObjectLevelLockable<IThread>, private NonCopyable<IThread>
+	class YUNI_DECL IThread : public IIntrusiveSmartPtr<IThread, false>, private NonCopyable<IThread>
 	{
 	public:
-		//! The threading policy
-		typedef Policy::ObjectLevelLockable<IThread>  ThreadingPolicy;
+		//! Ancestor
+		typedef IIntrusiveSmartPtr<IThread, false>  Ancestor;
 		//! The most suitable smart pointer for the class
-		typedef SmartPtr<IThread> Ptr;
+		typedef typename Ancestor::SmartPtrType<IThread>::PtrThreadSafe Ptr;
+		//! The threading policy
+		typedef typename Ancestor::ThreadingPolicy ThreadingPolicy;
+
 
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default constructor
-		*/
+		//! Default constructor
 		IThread();
-		/*!
-		** \brief Destructor
-		*/
+		//! Destructor
 		virtual ~IThread();
 		//@}
 
@@ -276,8 +275,7 @@ namespace Thread
 		//! ID of the thread, for pthread
 		pthread_t pThreadID;
 		//! Flag to determine whether pThreadID is valid or not
-		// There is no portable value to determine if pThreadID is valid or not
-		// We have to use a separate flag
+		// There is no portable value to determine if pThreadID is valid or not. We have to use a separate flag
 		bool pThreadIDValid;
 		# endif // YUNI_OS_WINDOWS
 		# endif // YUNI_NO_THREAD_SAFE

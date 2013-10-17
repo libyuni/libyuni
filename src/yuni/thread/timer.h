@@ -234,9 +234,9 @@ namespace Thread
 
 	private:
 		//! The time interval
-		uint pTimeInterval;
+		volatile uint pTimeInterval;
 		//! The maximum number of cycles before stopping, 0 means infinite
-		uint pCycleCount;
+		volatile uint pCycleCount;
 		//! A bool value to indicate if the settings should be reloaded
 		Atomic::Bool pShouldReload;
 		//! Mutex

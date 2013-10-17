@@ -59,7 +59,7 @@ namespace Thread
 
 	bool Timer::internalRunInfiniteLoop()
 	{
-		uint nnTimeInterval(pTimeInterval);
+		uint nnTimeInterval = pTimeInterval;
 		pTimerMutex.unlock();
 
 		do
@@ -86,7 +86,7 @@ namespace Thread
 		do
 		{
 			// Wait then execute the timer
-			if (suspend(nnTimeInterval) || !onInterval(cycleIndex))
+			if (suspend(nnTimeInterval) or not onInterval(cycleIndex))
 				return true;
 			if (++cycleIndex >= pCycleCount) // the maximum number of cycle is reached
 				return true;
