@@ -1,0 +1,23 @@
+Yuni's ChangeLOG
+================
+
+
+release version 1.0.0
+---------------------
+
+Changes:
+
+ * IIntrusiveSmartPtr now uses a non recursive mutex
+ * msinttypes for Visual Studio has been updated to r29 (http://code.google.com/p/msinttypes/)
+
+Features:
+
+ * Introduced new convenient utility routines: `spawn`, `every`, `async` and `sync`
+   (see `yuni/thread/core.h` for more details)
+ * `Yuni::Bind` now supports C++11 lambda
+ * `Yuni::String` now supports move semantic
+
+Fixes :
+
+ * Fixed Clang compiler detection
+
