@@ -3,13 +3,7 @@
 
 # include "../yuni.h"
 # include "../core/atomic/bool.h"
-# ifndef __YUNI_THREAD_CORE_H__
-#	define __YUNI_THREAD_CORE_H__ // temporary avoid include of thread/core.h
-#	include "thread.h"
-#	undef __YUNI_THREAD_CORE_H__
-# else
-#	include "thread.h"
-# endif
+# include "thread.h"
 
 
 
@@ -253,6 +247,5 @@ namespace Thread
 } // namespace Yuni
 
 # include "timer.hxx"
-# include "core.h" // for yuni standard helpers
 
 #endif // __YUNI_THREAD_TIMER_H__

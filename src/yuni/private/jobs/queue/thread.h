@@ -1,30 +1,25 @@
-#ifndef __YUNI_JOB_QUEUE_THREAD_H__
-# define __YUNI_JOB_QUEUE_THREAD_H__
+#ifndef __YUNI_PRIVATE_JOBS_QUEUE_THREAD_H__
+# define __YUNI_PRIVATE_JOBS_QUEUE_THREAD_H__
 
-# include "../../thread/thread.h"
-# include "../job.h"
+# include "../../../thread/thread.h"
+# include "../../../job/queue/service.h"
 
 
 namespace Yuni
 {
 namespace Private
 {
-namespace Jobs
+namespace QueueService
 {
 
 	/*!
 	** \brief A single thread for a queue service
 	*/
-	template<class SchedulerT>
 	class YUNI_DECL QueueThread final : public Yuni::Thread::IThread
 	{
 	public:
-		//! QueueThread
-		typedef QueueThread<SchedulerT> QueueThreadType;
 		//! The most suitable smart pointer for the class
-		typedef SmartPtr<QueueThreadType> Ptr;
-		//! Scheduler Policy
-		typedef SchedulerT SchedulerType;
+		typedef Yuni::Thread::IThread::Ptr::Typedef<QueueThread>::Ptr Ptr;
 
 	public:
 		//! \name Constructor & Destructor
@@ -32,11 +27,10 @@ namespace Jobs
 		/*!
 		** \brief Default Constructor
 		*/
-		explicit QueueThread(SchedulerType& scheduler);
+		explicit QueueThread(Yuni::Job::QueueService& scheduler);
 		//! Destructor
 		virtual ~QueueThread();
 		//@}
-
 
 		/*!
 		** \brief Get the Job currently running
@@ -58,7 +52,7 @@ namespace Jobs
 
 	private:
 		//! The scheduler
-		SchedulerType& pScheduler;
+		Yuni::Job::QueueService& pScheduler;
 		//! The current job
 		Yuni::Job::IJob::Ptr pJob;
 
@@ -69,10 +63,10 @@ namespace Jobs
 
 
 
-} // namespace Jobs
+} // namespace QueueService
 } // namespace Private
 } // namespace Yuni
 
 # include "thread.hxx"
 
-#endif // __YUNI_JOB_QUEUE_THREAD_H__
+#endif // __YUNI_PRIVATE_JOBS_QUEUE_THREAD_H__

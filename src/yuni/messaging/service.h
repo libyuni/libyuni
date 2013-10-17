@@ -9,7 +9,7 @@
 # include "transport.h"
 # include "../core/noncopyable.h"
 # include "protocol.h"
-# include "../job/queue.h"
+# include "../job/queue/service.h"
 # include "../core/atomic/bool.h"
 
 
@@ -155,7 +155,7 @@ namespace Messaging
 
 		public:
 			//! Queue service for heavy tasks
-			Job::QueueService<> queue;
+			Job::QueueService queue;
 
 		private:
 			Atomic::Bool pEnabled; // 0 default

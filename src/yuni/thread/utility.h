@@ -3,11 +3,43 @@
 
 # include "../yuni.h"
 # include "timer.h"
+# include "../job/job.h"
+# include "../job/queue/service.h"
 # include "../core/bind.h"
 
 
 namespace Yuni
 {
+
+	/*!
+	** \brief Convenient wrapper for executing a new job
+	**
+	**
+	** From sample:
+	** \code
+	** #include <yuni/yuni.h>
+	** #include <yuni/thread/thread.h>
+	** #include <yuni/core/system/suspend.h>
+	** #include <iostream>
+	** using namespace Yuni;
+	**
+	** int main()
+	** {
+	**	async([&] () {
+	**		std::cout << "thread1: some complex computations here..." << std::endl;
+	**		// suspend the execution of the thread for 3 seconds for the demo
+	**		thread1->suspend(3000);
+	**		std::cout << "thread1: done here !" << std::endl;
+	**	});
+	**	return 0;
+	** }
+	** \endcode
+	**
+	** \param queueservice The queueservice to dispatch the new job
+	** \param callback The callback to execute
+	*/
+	Job::IJob::Ptr  async(Job::QueueService& queueservice, const Bind<void ()>& callback);
+
 
 	/*!
 	** \brief Convenient wrapper for executing some code into another thread

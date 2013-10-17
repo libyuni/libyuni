@@ -191,6 +191,17 @@ namespace Yuni
 		//! The Reference type (const)
 		typedef typename ConstnessPolicy::Type&        ConstReferenceType;
 
+		/*!
+		** \brief Class Helper to determine the most suitable smart pointer for a class
+		**   according the current threading policy
+		*/
+		template<class V>
+		class Typedef
+		{
+		public:
+			//! A thread-safe type
+			typedef Yuni::SmartPtr<V, OwspP, ChckP, ConvP, StorP, ConsP> Ptr;
+		};
 
 		//! Alias to itself
 		typedef SmartPtr<T,OwspP,ChckP,ConvP,StorP,ConsP> SmartPtrType;

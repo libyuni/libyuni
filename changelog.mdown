@@ -8,18 +8,24 @@ release version 1.0.0
 Features:
 
  * [core] Introduced new convenient utility routines for Multithreading Programming :
-   `spawn`, `every`, `async` and `sync` (see `yuni/thread/core.h` for more details)
+   `spawn`, `every`, `async` and `sync` (see `yuni/thread/utility.h` for more details)
  * [core] `Yuni::Bind` now supports C++11 lambda
  * [core] `Yuni::String` now supports move semantic
 
 Changes:
 
+* [core] `Yuni::Job::IJob` and `Yuni::Thread::IThread` now use intrusive smartptr
+   to reduce memory allocation in high workload environments. Consequently it may not compile
+   for some old program. Use `IJob::Ptr::Typedef<T>::Ptr` or `Thread::IThread::Ptr::Typedef<T>::Ptr`
+   to get the appropriate smartptr type.
  * [core] `<yuni/job/queue/queue.h>` has been remamed to `<yuni/job/queue/service.h>` for consistency
  * [core] `<yuni/job/queue.h>` has been removed. Please use `<yuni/job/queue/service.h>` instead
- * [core] IIntrusiveSmartPtr now uses a non recursive mutex
+ * [core] IIntrusiveSmartPtr now uses a non recursive mutex.
+   `Yuni::SmartPtr` won't compile if the underlying object has inherited
+   from IIntrusiveSmartPtr and a non-appropriate ownership is used
  * [core] msinttypes for Visual Studio has been updated to r29 (http://code.google.com/p/msinttypes/)
- * [core] `Yuni::Job::IJob` and `Yuni::Thread::IThread` now use intrusive smartptr
-   to reduce memory allocation in high workload environments
+ * [core] `Yuni::Job::QueueService` is no longer a template class and has been
+   internally revamped
 
 Fixes :
 

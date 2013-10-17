@@ -617,30 +617,38 @@ set(SRC_THREADS
 		thread/array.h
 		thread/array.hxx
 
-		thread/core.h
+		thread/utility.h
 		thread/spawn.cpp
+		thread/async-sync.cpp
 		thread/every.cpp)
 source_group(threads FILES ${SRC_THREADS})
 
 # Jobs
 set(SRC_JOBS
+		# Jobs
 		job/enum.h
 		job/fwd.h
 		job/job.h
 		job/job.hxx
 		job/job.cpp
+
+		# QueueService
 		job/queue/service.h
 		job/queue/service.hxx
-		job/queue/thread.h
-		job/queue/thread.hxx
+		job/queue/service.cpp
 		job/queue/waitingroom.h
 		job/queue/waitingroom.hxx
 		job/queue/waitingroom.cpp
 
 		# Scheduler
-		job/scheduler/highestpriorityfirst.h
-		job/scheduler/highestpriorityfirst.cpp
-		job/scheduler/highestpriorityfirst.hxx
+		#job/scheduler/highestpriorityfirst.h
+		#job/scheduler/highestpriorityfirst.cpp
+		#job/scheduler/highestpriorityfirst.hxx
+
+		# Internal threads
+		private/jobs/queue/thread.h
+		private/jobs/queue/thread.cpp
+		private/jobs/queue/thread.hxx
 		)
 source_group(jobs FILES ${SRC_JOBS})
 

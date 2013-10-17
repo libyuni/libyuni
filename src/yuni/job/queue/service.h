@@ -4,7 +4,6 @@
 # include "../../yuni.h"
 # include "../job.h"
 # include "waitingroom.h"
-# include "../scheduler/highestpriorityfirst.h"
 # include "../../core/atomic/bool.h"
 
 
@@ -15,40 +14,23 @@ namespace Job
 {
 
 	/*!
-	** \brief A Multithreaded Job QueueService
-	**
-	** - Breve description du fonctionnement (file d'attente et mode d'execution)
-	** - Exemple d'utilisation centré sur la file (comment on déclare un job: \see Job::IJob)
-	**
-	** \tparam SchedulerT The thread Scheduler policy
+	** \brief Multithreaded Job QueueService
 	*/
-	template<
-		class SchedulerT = Scheduler::HighestPriorityFirst // The Scheduler Policy
-		>
 	class YUNI_DECL QueueService final
-		:public Policy::ObjectLevelLockableNotRecursive<QueueService<SchedulerT> >
-		,public SchedulerT
+		: public Policy::ObjectLevelLockableNotRecursive<QueueService>
 	{
 	public:
-		//! QueueService
-		typedef QueueService<SchedulerT> QueueServiceType;
 		//! The threading policy
-		typedef Policy::ObjectLevelLockableNotRecursive<QueueServiceType> ThreadingPolicy;
+		typedef Policy::ObjectLevelLockableNotRecursive<QueueService> ThreadingPolicy;
 		//! The most suitable smart pointer for the class
-		typedef SmartPtr<QueueServiceType> Ptr;
-
-		//! The Scheduler policy
-		typedef SchedulerT  SchedulerPolicy;
-
+		typedef SmartPtr<QueueService> Ptr;
 		enum
 		{
 			//! A default timeout
 			defaultTimeout = Yuni::Thread::defaultTimeout,
 		};
 
-		/*!
-		** \brief Information about a single thread
-		*/
+		//! Information about a single thread
 		class ThreadInfo final
 		{
 		public:
@@ -136,10 +118,11 @@ namespace Job
 		*/
 		bool restart(uint timeout = defaultTimeout);
 
-		/*!
-		** \brief Get if the service is started
-		*/
+		//! Get if the service is started
 		bool started() const;
+
+		//! Get if the scheduler is idle (no worker is in active duty)
+		bool idle() const;
 		//@}
 
 
@@ -201,18 +184,28 @@ namespace Job
 		** This value does not take into account the number of jobs
 		** currently running.
 		*/
-		uint size() const;
-
-		//! \see size()
-		uint count() const;
+		uint waitingJobsCount() const;
 		//@}
 
 
 		//! \name Threads
 		//@{
-		/*!
-		** \brief Get the number of threads
-		*/
+		//! Get the minimum number of threads
+		uint minimumThreadCount() const;
+		//! Set the minimum number of threads (must be less than maximumNu)
+		bool minimumThreadCount(uint count);
+
+		//! Get the maximum number of threads
+		uint maximumThreadCount() const;
+		//! Set the maximum number of threads (must be >= 1)
+		bool maximumThreadCount(uint count);
+
+		//! Get the minimum and the maximum number of threads
+		std::pair<uint,uint> minmaxThreadCount() const;
+		//! Set the minimum and the maximum number of threads
+		bool minmaxThreadCount(const std::pair<uint, uint>& minmaxcount);
+
+		//! Get the current number of working threads
 		uint threadCount() const;
 		//@}
 
@@ -235,6 +228,20 @@ namespace Job
 		Atomic::Bool pStarted;
 		//! The list of all remaining jobs
 		Yuni::Private::QueueService::WaitingRoom pWaitingRoom;
+
+		// Scheduler
+
+		//! The minimum number of threads (must be protected by the internal mutex)
+		volatile uint pMinimumThreadCount;
+		//! The maximum number of threads (must be protected by the internal mutex)
+		volatile uint pMaximumThreadCount;
+		//! Array of threads
+		volatile void* pThreads;
+		//! Number of workers in active duty
+		Atomic::Int<32> pWorkerCountInActiveDuty;
+
+		// Nakama !
+		friend class Yuni::Private::QueueService::QueueThread;
 
 	}; // class QueueService
 

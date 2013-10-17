@@ -26,6 +26,7 @@ namespace QueueService
 
 	// Forward declaration
 	class WaitingRoom;
+	class QueueThread;
 
 
 	template<class JobT>

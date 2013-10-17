@@ -1,5 +1,5 @@
 
-#include "core.h"
+#include "../thread/utility.h"
 #ifdef YUNI_HAS_CPP_MOVE
 # include <utility>
 #endif
@@ -9,14 +9,14 @@
 namespace Yuni
 {
 
-	class AsyncThread final : public Thread::IThread
+	class SpawnThread final : public Thread::IThread
 	{
 	public:
-		AsyncThread(const Bind<void ()>& callback) :
+		SpawnThread(const Bind<void ()>& callback) :
 			pCallback(callback)
 		{}
 
-		virtual ~AsyncThread()
+		virtual ~SpawnThread()
 		{
 			// mandatory, the user is unlikely to call it when using 'Async'
 			if (started())
@@ -43,9 +43,9 @@ namespace Yuni
 	Thread::IThread::Ptr  spawn(const Bind<void ()>& callback, bool autostart)
 	{
 		# ifdef YUNI_HAS_CPP_MOVE
-		Thread::IThread* thread = new AsyncThread(std::move(callback));
+		Thread::IThread* thread = new SpawnThread(std::move(callback));
 		# else
-		Thread::IThread* thread = new AsyncThread(callback);
+		Thread::IThread* thread = new SpawnThread(callback);
 		# endif
 
 		if (autostart)
