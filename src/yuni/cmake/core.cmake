@@ -625,13 +625,12 @@ source_group(threads FILES ${SRC_THREADS})
 # Jobs
 set(SRC_JOBS
 		job/enum.h
-		job/forward.h
+		job/fwd.h
 		job/job.h
 		job/job.hxx
 		job/job.cpp
-		job/queue.h
-		job/queue/queue.h
-		job/queue/queue.hxx
+		job/queue/service.h
+		job/queue/service.hxx
 		job/queue/thread.h
 		job/queue/thread.hxx
 		job/queue/waitingroom.h

@@ -1,5 +1,5 @@
-#ifndef __YUNI_JOB_FORWARD_H__
-# define __YUNI_JOB_FORWARD_H__
+#ifndef __YUNI_JOB_FWD_H__
+# define __YUNI_JOB_FWD_H__
 
 # include "enum.h"
 
@@ -29,7 +29,7 @@ namespace QueueService
 
 
 	template<class JobT>
-	class JobAccessor
+	class JobAccessor final
 	{
 	public:
 		template<class ThreadT>
@@ -49,7 +49,8 @@ namespace QueueService
 			job.pState = Yuni::Job::stateWaiting;
 			job.pProgression = 0;
 		}
-	};
+
+	}; // class JobAccessor
 
 
 
@@ -59,6 +60,4 @@ namespace QueueService
 } // namespace Private
 } // namespace Yuni
 
-
-
-#endif // __YUNI_JOB_FORWARD_H__
+#endif // __YUNI_JOB_FWD_H__

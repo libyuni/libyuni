@@ -1,9 +1,8 @@
 #include <yuni/yuni.h>
-#include <yuni/thread/thread.h>
 #include <yuni/job/job.h>
-#include <yuni/job/queue.h>
-#include <iostream>
+#include <yuni/job/queue/service.h>
 #include <yuni/core/system/cpu.h>
+#include <iostream>
 
 using namespace Yuni;
 
@@ -27,7 +26,6 @@ public:
 	MyJob(int identifier) :
 		x(identifier)
 	{
-		nameWL("Bottle counting");
 	}
 	virtual ~MyJob() { }
 

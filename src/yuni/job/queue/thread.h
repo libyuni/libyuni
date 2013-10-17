@@ -12,7 +12,6 @@ namespace Private
 namespace Jobs
 {
 
-
 	/*!
 	** \brief A single thread for a queue service
 	*/

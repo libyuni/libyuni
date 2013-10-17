@@ -1,5 +1,5 @@
-#ifndef __YUNI_JOB_QUEUE_QUEUE_H__
-# define __YUNI_JOB_QUEUE_QUEUE_H__
+#ifndef __YUNI_JOB_QUEUE_SERVICE_H__
+# define __YUNI_JOB_QUEUE_SERVICE_H__
 
 # include "../../yuni.h"
 # include "../job.h"
@@ -246,6 +246,6 @@ namespace Job
 } // namespace Job
 } // namespace Yuni
 
-# include "queue.hxx"
+# include "service.hxx"
 
-#endif // __YUNI_JOB_QUEUE_QUEUE_H__
+#endif // __YUNI_JOB_QUEUE_SERVICE_H__

@@ -14,6 +14,8 @@ Features:
 
 Changes:
 
+ * [core] `<yuni/job/queue/queue.h>` has been remamed to `<yuni/job/queue/service.h>` for consistency
+ * [core] `<yuni/job/queue.h>` has been removed. Please use `<yuni/job/queue/service.h>` instead
  * [core] IIntrusiveSmartPtr now uses a non recursive mutex
  * [core] msinttypes for Visual Studio has been updated to r29 (http://code.google.com/p/msinttypes/)
  * [core] `Yuni::Job::IJob` and `Yuni::Thread::IThread` now use intrusive smartptr

@@ -2,7 +2,7 @@
 # define __YUNI_JOB_JOB_H__
 
 # include "../yuni.h"
-# include "forward.h"
+# include "fwd.h"
 # include "../thread/thread.h"
 # include "../core/string.h"
 # include "../core/atomic/bool.h"
@@ -19,7 +19,6 @@ namespace Yuni
 */
 namespace Job
 {
-
 
 	/*!
 	** \brief Job Interface (time consuming operations)
@@ -40,7 +39,7 @@ namespace Job
 	**
 	** \code
 	**
-	** class MyJob : public Job::IJob
+	** class MyJob final : public Job::IJob
 	** {
 	** public:
 	**   virtual ~MyJob() { }

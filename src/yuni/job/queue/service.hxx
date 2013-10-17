@@ -1,5 +1,5 @@
-#ifndef __YUNI_JOB_QUEUE_QUEUE_HXX__
-# define __YUNI_JOB_QUEUE_QUEUE_HXX__
+#ifndef __YUNI_JOB_QUEUE_SERVICE_HXX__
+# define __YUNI_JOB_QUEUE_SERVICE_HXX__
 
 # include "../../thread/timer.h"
 # include <iostream>
@@ -306,4 +306,4 @@ namespace Job
 } // namespace Job
 } // namespace Yuni
 
-#endif // __YUNI_JOB_QUEUE_QUEUE_H__
+#endif // __YUNI_JOB_QUEUE_SERVICE_H__
