@@ -103,10 +103,10 @@
 #		endif
 #	endif /* Sun */
 /* Lynx */
-# 	ifdef __Lynx__
+#	ifdef __Lynx__
 #		define YUNI_OS_LYNX
 #		define YUNI_OS_NAME "Lynx"
-# 	endif
+#	endif
 /* Cygwin */
 #	ifdef __CYGWIN__
 #	   define YUNI_OS_CYGWIN
@@ -116,6 +116,11 @@
 
 # endif /* Linux */
 
+
+# if defined(VMS) || defined(__VMS)
+#	define YUNI_OS_VMS
+#   define YUNI_OS_NAME "VMS"
+# endif
 
 
 #endif /* __YUNI_CORE_PREPROCESSOR_CAPABILITIES_UNIXES_H__ */

@@ -57,6 +57,9 @@
 ** YUNI_OS_SOLARIS
 ** YUNI_OS_SUNOS
 **
+** - VMS
+** YUNI_OS_VMS
+**
 ** - Unknown
 ** YUNI_OS_UNKNOWN
 ** YUNI_OS_COMPILER
@@ -79,6 +82,8 @@
 ** - Gcc/G++ : YUNI_OS_GCC, YUNI_OS_GCC_VERSION : if YUNI_OS_GCC_VERSION > 30200  (> 3.2.0)
 ** - Intel Compiler: YUNI_OS_INTELCOMPILER
 ** - Sun Studio: YUNI_OS_SUNSTUDIO
+** - Comeau C++: YUNI_OS_COMO
+** - Cray C compiler: YUNI_OS_CRAYC
 **
 ** 32/64 Bits
 ** YUNI_OS_32 or YUNI_OS_64
@@ -116,13 +121,14 @@
 #	endif
 # endif
 
-
+/* LLVM */
 # ifdef __llvm__
 #	define YUNI_OS_LLVM
 # endif
 
 # ifdef __clang__
 #	define YUNI_OS_CLANG
+#	define YUNI_COMPILER_NAME "Compatible Clang Compiler"
 # else
 /* GNU C and C++ compiler */
 #	ifdef __GNUC__
@@ -144,6 +150,24 @@
 #		undef YUNI_COMPILER_NAME
 #	endif
 #	define YUNI_COMPILER_NAME "ICC (Intel C++ Compiler)"
+# endif
+
+/* Como Compiler */
+# ifdef __COMO__
+#	define YUNI_OS_COMO
+#	ifdef YUNI_COMPILER_NAME
+#		undef YUNI_COMPILER_NAME
+#	endif
+#	define YUNI_COMPILER_NAME "Comeau C++"
+# endif
+
+/* CrayC Compiler */
+# ifdef __CRAYC__
+#	define YUNI_OS_CRAYC
+#	ifdef YUNI_COMPILER_NAME
+#		undef YUNI_COMPILER_NAME
+#	endif
+#	define YUNI_COMPILER_NAME "Cray C/C++"
 # endif
 
 
@@ -250,11 +274,9 @@
 # endif
 
 /* Compiler Detection */
-# ifndef YUNI_OS_NAME
-#	ifndef YUNI_COMPILER_NAME
-#		define YUNI_COMPILER_NAME "Unknown"
-#	endif
+# ifndef YUNI_COMPILER_NAME
 #	define YUNI_COMPILER_UNKNOWN
+#	define YUNI_COMPILER_NAME "Unknown"
 #	warning "Compiler Detection: Unable to guess the compiler"
 # endif
 
@@ -408,6 +430,9 @@
 
 
 
+# ifdef YUNI_OS_GCC
+# else
+# endif
 
 
 
