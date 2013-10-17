@@ -172,6 +172,7 @@ namespace Thread
 
 
 
+
 } // namespace Thread
 } // namespace Private
 } // namespace Yuni
@@ -280,7 +281,7 @@ namespace Thread
 		// Checking if the thread has really started
 		// The thread may have been aborted by the startup handler.
 		Yuni::MutexLocker flagLocker(pInnerFlagMutex);
-		return (!pStarted) ? errAborted : errNone;
+		return (not pStarted) ? errAborted : errNone;
 	}
 	# endif
 

@@ -62,7 +62,7 @@ namespace Thread
 		uint nnTimeInterval(pTimeInterval);
 		pTimerMutex.unlock();
 
-		while (true)
+		do
 		{
 			if (IThread::suspend(nnTimeInterval))
 				break;
@@ -71,6 +71,8 @@ namespace Thread
 			if (pShouldReload)
 				return false;
 		}
+		while (true);
+
 		return true;
 	}
 
@@ -81,7 +83,7 @@ namespace Thread
 		uint nnTimeInterval = pTimeInterval;
 		pTimerMutex.unlock();
 
-		while (true)
+		do
 		{
 			// Wait then execute the timer
 			if (suspend(nnTimeInterval) || !onInterval(cycleIndex))
@@ -91,6 +93,8 @@ namespace Thread
 			if (pShouldReload)
 				return false;
 		}
+		while (true);
+
 		return true;
 	}
 
@@ -98,9 +102,8 @@ namespace Thread
 	bool Timer::onExecute()
 	{
 		pShouldReload = false;
-		while (true)
+		do
 		{
-			// Lock
 			// Note : pTimerMutex will be unlocked by internalRunInfiniteLoop
 			// and internalRunFixedNumberOfCycles
 			pTimerMutex.lock();
@@ -115,17 +118,25 @@ namespace Thread
 			// infinite loop
 			if (infinite == pCycleCount)
 			{
+				// pTimerMutex will be unlocked by internalRunInfiniteLoop
 				if (internalRunInfiniteLoop())
+				{
 					// Stopping the thread
 					return false;
+				}
 			}
 			else
 			{
+				// pTimerMutex will be unlocked by internalRunFixesNumberOfCycles
 				if (internalRunFixedNumberOfCycles())
+				{
 					// Stopping the thread
 					return false;
+				}
 			}
 		}
+		while (true);
+
 		return false;
 	}
 
