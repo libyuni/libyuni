@@ -43,9 +43,9 @@ namespace Job
 	template<class SchedulerT>
 	bool QueueService<SchedulerT>::start()
 	{
-		if (!pStarted)
+		if (not pStarted)
 		{
-			pStarted = 1;
+			pStarted = true;
 			SchedulerPolicy::schedulerStart();
 		}
 		return true;
@@ -57,7 +57,7 @@ namespace Job
 	{
 		if (pStarted)
 		{
-			pStarted = 0;
+			pStarted = false;
 			SchedulerPolicy::schedulerStop(timeout);
 		}
 		return true;

@@ -3,6 +3,7 @@
 
 # include "../job.h"
 # include "../../core/slist/slist.h"
+# include "../../core/atomic/bool.h"
 
 
 
@@ -13,16 +14,12 @@ namespace Private
 namespace QueueService
 {
 
-
 	/*!
 	** \brief Container for all jobs waiting to be executed
 	*/
-	class YUNI_DECL WaitingRoom
+	class YUNI_DECL WaitingRoom final
 	{
 	public:
-		//! Type used for atomic flags
-		typedef Atomic::Int<32>  AtomicFlagType;
-
 		enum
 		{
 			//! Alias for The default priority
@@ -32,17 +29,6 @@ namespace QueueService
 		};
 
 	public:
-		//! \name Constructor & Destructor
-		//@{
-		/*!
-		** \brief Default Constructor
-		*/
-		WaitingRoom();
-		//! Destructor
-		~WaitingRoom();
-		//@}
-
-
 		//! \name Container manipulation
 		//@{
 		/*!
@@ -77,17 +63,14 @@ namespace QueueService
 		*/
 		bool pop(Yuni::Job::IJob::Ptr& out, const Yuni::Job::Priority priority);
 
-
-		/*!
-		** \brief Get the number of jobs waiting to be executed
-		*/
+		//! Get the number of jobs waiting to be executed
 		uint size() const;
 		//@}
 
 
 	public:
 		//! Flags to indicate if there are some remaining jobs by priority
-		AtomicFlagType hasJob[priorityCount];
+		Atomic::Bool hasJob[priorityCount];
 
 	private:
 		//! Number of job waiting to be executed

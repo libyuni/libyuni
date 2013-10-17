@@ -5,6 +5,7 @@
 # include "../job.h"
 # include "waitingroom.h"
 # include "../scheduler/highestpriorityfirst.h"
+# include "../../core/atomic/bool.h"
 
 
 
@@ -24,7 +25,7 @@ namespace Job
 	template<
 		class SchedulerT = Scheduler::HighestPriorityFirst // The Scheduler Policy
 		>
-	class YUNI_DECL QueueService
+	class YUNI_DECL QueueService final
 		:public Policy::ObjectLevelLockableNotRecursive<QueueService<SchedulerT> >
 		,public SchedulerT
 	{
@@ -48,7 +49,7 @@ namespace Job
 		/*!
 		** \brief Information about a single thread
 		*/
-		class ThreadInfo
+		class ThreadInfo final
 		{
 		public:
 			//! The most suitable smart pointer for the class
@@ -231,7 +232,7 @@ namespace Job
 
 	private:
 		//! Flag to know if the service is started
-		Atomic::Int<32> pStarted;
+		Atomic::Bool pStarted;
 		//! The list of all remaining jobs
 		Yuni::Private::QueueService::WaitingRoom pWaitingRoom;
 

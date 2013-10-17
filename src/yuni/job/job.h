@@ -73,9 +73,7 @@ namespace Job
 	public:
 		//! \name Contructor & Destructor
 		//@{
-		/*!
-		** \brief Default constructor
-		*/
+		//! Default constructor
 		IJob();
 		//! Destructor
 		virtual ~IJob();
@@ -84,9 +82,7 @@ namespace Job
 
 		//! \name Informations about the job itself
 		//@{
-		/*!
-		** \brief Get the progression in percent (value between 0 and 100)
-		*/
+		//! Get the progression in percent (value between 0 and 100)
 		int progression() const;
 
 		/*!

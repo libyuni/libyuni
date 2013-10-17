@@ -10,17 +10,6 @@ namespace Private
 namespace QueueService
 {
 
-	WaitingRoom::WaitingRoom() :
-		pJobCount(0)
-	{
-	}
-
-
-	WaitingRoom::~WaitingRoom()
-	{
-	}
-
-
 	void WaitingRoom::add(const Yuni::Job::IJob::Ptr& job)
 	{
 		// Locking the priority queue
@@ -34,7 +23,7 @@ namespace QueueService
 		pJobs[priorityDefault].push_back(job);
 
 		// Resetting our internal state
-		hasJob[priorityDefault] = 1;
+		hasJob[priorityDefault] = true;
 		++pJobCount;
 	}
 
@@ -52,7 +41,7 @@ namespace QueueService
 		pJobs[priority].push_back(job);
 
 		// Resetting our internal state
-		hasJob[priority] = 1;
+		hasJob[priority] = true;
 		++pJobCount;
 	}
 
@@ -63,14 +52,14 @@ namespace QueueService
 		// the good threading policy for these mutexes
 		Yuni::MutexLocker locker(pMutexes[priority]);
 
-		if (!pJobs[priority].empty())
+		if (not pJobs[priority].empty())
 		{
 			// It remains at least one job to run !
 			out = pJobs[priority].front();
 			// Removing it from the list of waiting jobs
 			pJobs[priority].pop_front();
 			// Resetting atomic variables about the internal status
-			hasJob[priority] = (pJobs[priority].empty() ? 0 : 1);
+			hasJob[priority] = (not pJobs[priority].empty());
 
 			--pJobCount;
 			return true;
@@ -78,7 +67,7 @@ namespace QueueService
 
 		// It does not remain any job for this priority. Aborting.
 		// Resetting some variable
-		hasJob[priority] = 0;
+		hasJob[priority] = false;
 		return false;
 	}
 
