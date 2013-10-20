@@ -7,16 +7,13 @@ Makefile
 CMakeCache.txt
 src/ProfileBuild.cmake
 src/build/
-src/cmake_install.cmake
+cmake_install.cmake
 
 # Yuni generated files
 src/compiler-flags-debug-cc
 src/compiler-flags-debug-cxx
 src/compiler-flags-release-cc
 src/compiler-flags-release-cxx
-src/tools/cmake_install.cmake
-src/tools/yuni-config/cmake_install.cmake
-src/yuni/cmake_install.cmake
 src/yuni/config.h
 src/yuni/platform.h
 src/yuni/yuni.config.*
@@ -24,3 +21,32 @@ src/yuni/yuni.version
 
 # DevPacks
 devpacks/*
+
+# Samples
+src/samples/core/colors/00.rgb/color_00_rgb*
+src/samples/core/colors/01.rgba/color_01_rgba*
+src/samples/core/events/00.simple/events_00_simple*
+src/samples/core/getopt/00.simple/getopt_00_simple*
+src/samples/core/getopt/01.varioustypes/getopt_01_varioustypes*
+src/samples/core/getopt/02.remainingarguments/getopt_02_remainingargs*
+src/samples/core/getopt/03.paragraph/getopt_03_paragraph*
+src/samples/core/getopt/04.customhelpusage/getopt_04_customhelpusage*
+src/samples/core/hash/00.md5/hash_00_md5*
+src/samples/core/hash/01.md5.fromfile/hash_01_md5_fromfile*
+src/samples/core/logs/00.simple/logs_00_simple*
+src/samples/core/logs/01.logfile/logs_01_file*
+src/samples/core/math/randomnumbers/00.simple/math_rn_00_simple*
+src/samples/core/math/randomnumbers/01.interval/math_rn_01_range*
+src/samples/core/math/randomnumbers/02.table/math_rn_02_table*
+src/samples/core/math/randomnumbers/03.tableplusrange/math_rn_03_table_plus_range*
+src/samples/core/singleton/00.simple/singleton_00_simple*
+src/samples/core/singleton/01.phoenix/singleton_01_phoenix*
+src/samples/io/00.iterator/io_00_iterator*
+src/samples/io/01.threadediterator/io_01_threadediterator*
+src/samples/io/02.root-directory-from-argv0/io_02_root-directory-from-argv0*
+src/samples/jobs/00.basics/jobs_00_basic_usage*
+src/samples/marshal/00.json-export/marshal_00_json-export*
+src/samples/messaging/00.simple.rest.server/messaging_00_simple-rest-server*
+src/samples/parser/00.calculator/parser_00_calculator*
+src/samples/parser/00.calculator/parser_00_generator*
+
