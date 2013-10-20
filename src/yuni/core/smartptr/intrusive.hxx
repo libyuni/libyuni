@@ -38,13 +38,6 @@ namespace Yuni
 
 
 	template<class ChildT, bool VirtualT, template<class> class TP>
-	inline bool IIntrusiveSmartPtr<ChildT,VirtualT,TP>::unique() const
-	{
-		return (pRefCount == 1);
-	}
-
-
-	template<class ChildT, bool VirtualT, template<class> class TP>
 	inline void	IIntrusiveSmartPtr<ChildT,VirtualT,TP>::addRef() const
 	{
 		++pRefCount;
@@ -110,13 +103,6 @@ namespace Yuni
 	{
 		// Does nothing
 		return *this;
-	}
-
-
-	template<class ChildT, template<class> class TP>
-	inline bool IIntrusiveSmartPtr<ChildT,false,TP>::unique() const
-	{
-		return (pRefCount == 1);
 	}
 
 

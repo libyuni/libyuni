@@ -11,6 +11,9 @@ Features:
    `spawn`, `every`, `async` and `sync` (see `yuni/thread/utility.h` for more details)
  * [core] `Yuni::Bind` now supports C++11 lambda
  * [core] `Yuni::String` now supports move semantic
+ * [core] `Yuni::SmartPtr` is now able to detect if an ownership policy does not seem appropriate
+ * [core] An helper class is now available to detect if a specific typedef is available within
+   a given class and his ancestors (see `yuni/core/static/typedef.h`)
 
 Changes:
 
@@ -26,6 +29,7 @@ Changes:
  * [core] msinttypes for Visual Studio has been updated to r29 (http://code.google.com/p/msinttypes/)
  * [core] `Yuni::Job::QueueService` is no longer a template class and has been
    internally revamped
+ * [core] The method `SmartPtr::unique()` has been removed for thread-safety issues
 
 Fixes :
 

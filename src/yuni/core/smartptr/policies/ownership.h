@@ -18,6 +18,7 @@
 # include <cassert>
 # include "../../../thread/policy.h"
 # include "../../static/assert.h"
+# include "../../static/typedef.h"
 # include "../../atomic/int.h"
 
 
@@ -46,8 +47,12 @@ namespace Ownership
 		enum
 		{
 			//! Get if the ownership policy is destructive
-			destructiveCopy = false
+			destructiveCopy = false,
 		};
+
+		// Check if T is a compatible class for this kind of ownership
+		// If it does not compile, COMReferenceCounted is probably more suitable
+		YUNI_STATIC_ASSERT(Static::HasTypedef::IntrusiveSmartPtrType<T>::no, IncompatibleSmartPtrType);
 
 	public:
 		//! \name Constructors
@@ -73,11 +78,6 @@ namespace Ownership
 		*/
 		void initFromRawPointer(const T&)
 		{
-		}
-
-		bool unique() const
-		{
-			return (*pCount == 1);
 		}
 
 		/*!
@@ -133,6 +133,10 @@ namespace Ownership
 			destructiveCopy = false
 		};
 
+		// Check if T is a compatible class for this kind of ownership
+		// If it does not compile, `ReferenceCountedMT` is probably more suitable
+		YUNI_STATIC_ASSERT(Static::HasTypedef::IntrusiveSmartPtrType<T>::yes, IncompatibleSmartPtrType);
+
 	public:
 		//! \name Constructors
 		//@{
@@ -144,13 +148,6 @@ namespace Ownership
 		{}
 		//@}
 
-
-		bool unique() const
-		{
-			assert(false and "unique() for COMReferenceCounted<> not implemented");
-			return false;
-			//return !rhs or rhs->unique();
-		}
 
 		/*!
 		** \brief Initialization from a raw pointer
@@ -201,6 +198,10 @@ namespace Ownership
 		};
 		typedef Atomic::Int<>  AtomicType;
 
+		// Check if T is a compatible class for this kind of ownership
+		// If it does not compile, COMReferenceCounted is probably more suitable
+		YUNI_STATIC_ASSERT(Static::HasTypedef::IntrusiveSmartPtrType<T>::no, IncompatibleSmartPtrType);
+
 	public:
 		//! \name Constructors
 		//@{
@@ -225,11 +226,6 @@ namespace Ownership
 		*/
 		void initFromRawPointer(const T&)
 		{
-		}
-
-		bool unique() const
-		{
-			return (*pCount == 1);
 		}
 
 		/*!
@@ -285,6 +281,10 @@ namespace Ownership
 			destructiveCopy = true
 		};
 
+		// Check if T is a compatible class for this kind of ownership
+		// If it does not compile, COMReferenceCounted is probably more suitable
+		YUNI_STATIC_ASSERT(Static::HasTypedef::IntrusiveSmartPtrType<T>::no, IncompatibleSmartPtrType);
+
 	public:
 		//! \name Constructors
 		//@{
@@ -295,11 +295,6 @@ namespace Ownership
 		template<class U> DestructiveCopy(const DestructiveCopy<U>&)
 		{}
 		//@}
-
-		bool unique() const
-		{
-			return true;
-		}
 
 		/*!
 		** \brief Initialization from a raw pointer
@@ -343,6 +338,10 @@ namespace Ownership
 			destructiveCopy = false
 		};
 
+		// Check if T is a compatible class for this kind of ownership
+		// If it does not compile, COMReferenceCounted is probably more suitable
+		YUNI_STATIC_ASSERT(Static::HasTypedef::IntrusiveSmartPtrType<T>::no, IncompatibleSmartPtrType);
+
 	public:
 		//! \name Constructors
 		//@{
@@ -357,11 +356,6 @@ namespace Ownership
 		*/
 		void initFromRawPointer(const T&)
 		{
-		}
-
-		bool unique() const
-		{
-			return true;
 		}
 
 		/*!

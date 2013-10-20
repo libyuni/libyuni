@@ -4,6 +4,7 @@
 # include <sstream>
 # include "../../static/types.h"
 # include "../../math/math.h"
+# include "../../smartptr/intrusive.h"
 
 
 namespace Yuni
@@ -16,29 +17,31 @@ namespace Variant
 	template<class T>
 	struct InternalType
 	{
-		enum { value = Yuni::Variant::tNil };
+		enum { value = Yuni::variantTNil };
 	};
 
-	template<> struct InternalType<bool>   { enum { value = Yuni::Variant::tBool }; };
-	template<> struct InternalType<char>   { enum { value = Yuni::Variant::tChar }; };
-	template<> struct InternalType<sint32> { enum { value = Yuni::Variant::tInt32 }; };
-	template<> struct InternalType<sint64> { enum { value = Yuni::Variant::tInt64 }; };
-	template<> struct InternalType<uint32> { enum { value = Yuni::Variant::tUInt32 }; };
-	template<> struct InternalType<uint64> { enum { value = Yuni::Variant::tUInt64 }; };
-	template<> struct InternalType<String> { enum { value = Yuni::Variant::tString }; };
+	template<> struct InternalType<bool>   { enum { value = Yuni::variantTBool }; };
+	template<> struct InternalType<char>   { enum { value = Yuni::variantTChar }; };
+	template<> struct InternalType<sint32> { enum { value = Yuni::variantTInt32 }; };
+	template<> struct InternalType<sint64> { enum { value = Yuni::variantTInt64 }; };
+	template<> struct InternalType<uint32> { enum { value = Yuni::variantTUInt32 }; };
+	template<> struct InternalType<uint64> { enum { value = Yuni::variantTUInt64 }; };
+	template<> struct InternalType<String> { enum { value = Yuni::variantTString }; };
 
 
 
 	/*!
 	** \brief Abstract container for variant data.
 	*/
-	class IDataHolder : public Yuni::Policy::SingleThreaded<IDataHolder>
+	class IDataHolder : public Yuni::IIntrusiveSmartPtr<IDataHolder, false, Yuni::Policy::SingleThreaded>
 	{
 	public:
+		//! Ancestor
+		typedef Yuni::IIntrusiveSmartPtr<IDataHolder, false, Yuni::Policy::SingleThreaded> Ancestor;
 		//! Threading policy
-		typedef Yuni::Policy::SingleThreaded<IDataHolder>  ThreadingPolicy;
+		typedef typename Ancestor::ThreadingPolicy  ThreadingPolicy;
 		//! The most suitable smart pointer to this object
-		typedef IDataHolderPtr  Ptr;
+		typedef typename Ancestor::Ptr::Promote<IDataHolder>::Ptr  Ptr;
 		//! Vector
 		typedef std::vector<Ptr>  Vector;
 
@@ -55,7 +58,7 @@ namespace Variant
 		template<class T> bool to(T& out) const;
 
 		//! Internal data type
-		virtual Yuni::Variant::InnerType type() const = 0;
+		virtual Yuni::VariantInnerType type() const = 0;
 
 		/*!
 		** \brief Clear the inner content
@@ -212,16 +215,6 @@ namespace Variant
 		//@}
 
 
-		//! \name Pointer management
-		//@{
-		//! Increment the internal reference counter
-		void addRef() const;
-		//! Decrement the internal reference counter
-		bool release() const;
-		//! Get if the object is an unique reference
-		bool unique() const;
-		//@}
-
 	protected:
 		/*!
 		** \brief Runs the conversion using the specified converter.
@@ -230,9 +223,6 @@ namespace Variant
 		** \param[in] A reference on an instancied DataConverter<DestinationType>.
 		*/
 		virtual bool convertUsing(IDataConverter& cvtr) const = 0;
-
-	private:
-		mutable Yuni::Atomic::Int<> pRefCount;
 
 	}; // class IDataHolder
 
@@ -430,7 +420,7 @@ namespace Variant
 		virtual IDataHolder* clone() const
 		{ return new Data<T>(pValue); }
 
-		virtual Yuni::Variant::InnerType type() const {return (Yuni::Variant::InnerType) InternalType<T>::value;}
+		virtual Yuni::VariantInnerType type() const {return (Yuni::VariantInnerType) InternalType<T>::value;}
 
 		virtual void clear() { pValue = T(); }
 
@@ -531,7 +521,7 @@ namespace Variant
 		virtual IDataHolder* clone() const
 		{ return new Data<T>(pValue); }
 
-		virtual Yuni::Variant::InnerType type() const {return Yuni::Variant::tChar;}
+		virtual Yuni::VariantInnerType type() const {return Yuni::variantTChar;}
 
 		virtual void clear() { pValue = '\0'; }
 
@@ -630,7 +620,7 @@ namespace Variant
 		virtual IDataHolder* clone() const
 		{ return new Data<T>(pValue); }
 
-		virtual Yuni::Variant::InnerType type() const {return Yuni::Variant::tBool;}
+		virtual Yuni::VariantInnerType type() const {return Yuni::variantTBool;}
 
 		virtual void clear() { pValue = false; }
 

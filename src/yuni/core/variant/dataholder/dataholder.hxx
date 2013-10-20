@@ -46,32 +46,6 @@ namespace Variant
 	}
 
 
-	inline void IDataHolder::addRef() const
-	{
-		ThreadingPolicy::MutexLocker locker(*this);
-		++pRefCount;
-	}
-
-
-	inline bool IDataHolder::release() const
-	{
-		{
-			ThreadingPolicy::MutexLocker locker(*this);
-			assert(pRefCount > 0);
-			if (--pRefCount != 0)
-				return false;
-			// Early clean-up here
-		}
-		return true;
-	}
-
-
-	inline bool IDataHolder::unique() const
-	{
-		ThreadingPolicy::MutexLocker locker(*this);
-		return pRefCount == 1;
-	}
-
 
 
 

@@ -6,6 +6,10 @@
 # include "../static/remove.h"
 # include "../static/if.h"
 # include "fwd.h"
+# include "types.h"
+# include "dataholder/dataholder.h"
+# include "dataholder/string.h"
+# include "dataholder/array.h"
 
 
 namespace Yuni
@@ -32,9 +36,9 @@ namespace Yuni
 	** // with conversion checking
 	** String s;
 	** if (v.to(s))
-	** 	std::cout << s << std::endl;
+	**	std::cout << s << std::endl;
 	** else
-	** 	std::cout << "impossible to converter the variant into a string" << std::endl;
+	**	std::cout << "impossible to converter the variant into a string" << std::endl;
 	** \endcode
 	**
 	** \ingroup Core
@@ -54,36 +58,10 @@ namespace Yuni
 		//! Data holder
 		typedef Private::Variant::IDataHolder  IDataHolder;
 
-		//! Variant internal data type
-		enum InnerType
-		{
-			//! Nil / Not assigned
-			tNil,
-			//! Bool
-			tBool,
-			//! char
-			tChar,
-			//! sint32
-			tInt32,
-			//! sint64
-			tInt64,
-			//! uint32
-			tUInt32,
-			//! uint64
-			tUInt64,
-			//! string
-			tString,
-			//! struct, with members
-			tClass,
-			//! array of variants
-			tArray
-		};
-
 		template<class T>
 		struct SupportedType
 		{
 			enum { yes = 0, no = 1 };
-
 			//! Type used for operator overloading
 			typedef SupportedType<T> OperatorType;
 		};
@@ -198,7 +176,7 @@ namespace Yuni
 		/*!
 		** \brief Get the type held by the inner value
 		*/
-		InnerType type() const;
+		VariantInnerType type() const;
 		/*!
 		** \brief Returns true if the Variant is empty.
 		*/
@@ -274,7 +252,7 @@ namespace Yuni
 
 	private:
 		//! Pointer to storage object
-		Private::Variant::IDataHolderPtr pData;
+		Private::Variant::IDataHolder::Ptr pData;
 		//! Flag to know if the content is currently shared
 		bool pShareContent;
 
@@ -287,9 +265,6 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "dataholder/dataholder.h"
-# include "dataholder/string.h"
-# include "dataholder/array.h"
 # include "variant.hxx"
 
 #endif // __YUNI_CORE_VARIANT_VARIANT_H__

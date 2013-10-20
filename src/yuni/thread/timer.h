@@ -33,8 +33,8 @@ namespace Thread
 	**
 	** bool Timer::onInterval(uint cycle)
 	** {
-	** 	std::cout << cycle << std::endl;
-	** 	return true;
+	**	std::cout << cycle << std::endl;
+	**	return true;
 	** }
 	**
 	** int main(void)
@@ -65,7 +65,7 @@ namespace Thread
 			defaultInterval = 1000,
 		};
 		//! The most suitable smart pointer for the class
-		typedef SmartPtr<Timer> Ptr;
+		typedef IThread::Ptr::Promote<Timer>::Ptr Ptr;
 
 	public:
 		//! \name Constructor & Destructor

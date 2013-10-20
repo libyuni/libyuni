@@ -19,7 +19,7 @@ namespace QueueService
 	{
 	public:
 		//! The most suitable smart pointer for the class
-		typedef Yuni::Thread::IThread::Ptr::Typedef<QueueThread>::Ptr Ptr;
+		typedef Yuni::Thread::IThread::Ptr::Promote<QueueThread>::Ptr Ptr;
 
 	public:
 		//! \name Constructor & Destructor

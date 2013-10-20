@@ -19,9 +19,9 @@ namespace Yuni
 	}
 
 
-	Variant::InnerType  Variant::type() const
+	VariantInnerType  Variant::type() const
 	{
-		return (not pData) ? tNil : pData->type();
+		return (not pData) ? variantTNil : pData->type();
 	}
 
 

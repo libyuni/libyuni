@@ -23,7 +23,7 @@ namespace Messaging
 	{
 	public:
 		//! The most suitable smart pointer
-		typedef Yuni::SmartPtr<Worker>  Ptr;
+		typedef Yuni::Thread::IThread::Ptr::Promote<Worker>::Ptr  Ptr;
 		//! Alias to the queue service
 		typedef Yuni::Messaging::Service Service;
 		//! Transport layer (abstract)

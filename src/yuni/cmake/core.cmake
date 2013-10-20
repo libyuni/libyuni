@@ -120,6 +120,7 @@ set(SRC_CORE_STATIC
 		core/static/inherit.h
 		core/static/dynamiccast.h
 		core/static/moveconstructor.h
+		core/static/typedef.h
 )
 source_group(core\\static FILES ${SRC_CORE_STATIC})
 
@@ -257,6 +258,7 @@ set(SRC_CORE_VARIANT
 		core/variant/variant.hxx
 		core/variant/variant.cpp
 		core/variant/fwd.h
+		core/variant/types.h
 		core/variant/dataholder/dataholder.cpp
 		core/variant/dataholder/dataholder.h
 		core/variant/dataholder/dataholder.hxx
@@ -727,7 +729,6 @@ add_library(yuni-static-core STATIC
 		${SRC_CORE_ANY}
 		${SRC_CORE_COLOR}
 		${SRC_CORE_SLIST}
-		${SRC_CORE_VARIANT}
 		${SRC_CORE_DYNAMICLIBRARY}
 		${SRC_CORE_BIND}
 		#${SRC_CORE_CHARSET}
@@ -742,7 +743,9 @@ add_library(yuni-static-core STATIC
 		${SRC_CORE_URI}
 		${SRC_CORE_GETOPT}
 		${SRC_PREDICATES_RESULTS}
-		${SRC_THREADS} ${SRC_JOBS}
+		${SRC_THREADS}
+		${SRC_JOBS}
+		${SRC_CORE_VARIANT}
 	)
 
 if (WIN32 OR WIN64)

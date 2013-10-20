@@ -162,17 +162,6 @@ namespace Yuni
 	}
 
 
-	// unique()
-	template<typename T, template <class> class OwspP, template <class> class ChckP,
-		class ConvP,
-		template <class> class StorP, template <class> class ConsP>
-	inline bool
-	SmartPtr<T,OwspP,ChckP,ConvP,StorP,ConsP>::unique() const
-	{
-		return OwnershipPolicy::unique();
-	}
-
-
 	// Operator =
 	template<typename T, template <class> class OwspP, template <class> class ChckP,
 		class ConvP,

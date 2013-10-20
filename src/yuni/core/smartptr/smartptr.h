@@ -196,7 +196,7 @@ namespace Yuni
 		**   according the current threading policy
 		*/
 		template<class V>
-		class Typedef
+		class Promote
 		{
 		public:
 			//! A thread-safe type
@@ -319,15 +319,6 @@ namespace Yuni
 		PointerType pointer();
 		//! Get a pointer to the object, like operator -> would do
 		ConstPointerType pointer() const;
-		//@}
-
-
-		//! \name Unicity
-		//@{
-		/*!
-		** \brief Get if the inner data is held by an unique reference
-		*/
-		bool unique() const;
 		//@}
 
 

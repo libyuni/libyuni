@@ -24,9 +24,9 @@ namespace Static
 	**
 	** int main()
 	** {
-	** 	std::cout << "A inherits from Base :" << Yuni::Static::InheritsFrom<A,Base>::Yes << "\n";
-	** 	std::cout << "B inherits from Base :" << Yuni::Static::InheritsFrom<B,Base>::Yes << "\n";
-	** 	return 0;
+	**	std::cout << "A inherits from Base :" << Yuni::Static::InheritsFrom<A,Base>::Yes << "\n";
+	**	std::cout << "B inherits from Base :" << Yuni::Static::InheritsFrom<B,Base>::Yes << "\n";
+	**	return 0;
 	** }
 	** \endcode
 	**
@@ -34,7 +34,7 @@ namespace Static
 	** \tparam BaseT The base class to compare with (may be virtual)
 	*/
 	template<class C, class BaseT>
-	class InheritsFrom
+	class InheritsFrom final
 	{
 	private:
 		typedef int   TrueType;
@@ -55,7 +55,7 @@ namespace Static
 			//! A non-zero value if C does not inherit from BaseT
 			No = sizeof(CheckIfCInheritsFromBaseT(DummyClassCMaker())) == sizeof(FalseType),
 		};
-	};
+	}; // class InheritsFrom
 
 
 

@@ -20,6 +20,8 @@ namespace Yuni
 	public:
 		//! Simplified type name of the instance for the current child type & threading policy.
 		typedef IIntrusiveSmartPtr<ChildT, VirtualT, TP> IntrusiveRef;
+		//! Typedef used for detecting misuse of smartptr. The real type does not really matter
+		typedef IntrusiveRef IntrusiveSmartPtrType;
 		//! Threading policy type
 		typedef TP<IntrusiveRef> ThreadingPolicy;
 
@@ -36,17 +38,16 @@ namespace Yuni
 			//! A default type
 			typedef Yuni::SmartPtr<T, Yuni::Policy::Ownership::COMReferenceCounted>    PtrSingleThreaded;
 			//! The most suitable smart pointer for T
-			typedef typename Yuni::Static::If<ThreadingPolicy::threadSafe, PtrThreadSafe, PtrSingleThreaded>::ResultType Ptr;
+			typedef typename Yuni::Static::If<ThreadingPolicy::threadSafe, PtrThreadSafe, PtrSingleThreaded>::ResultType  Ptr;
 
 		}; // class SmartPtrType
 
+		//! Most convenient smartptr for this class
+		typedef typename SmartPtrType<IntrusiveRef>::Ptr  Ptr;
 
 	public:
 		//! \name Pointer management
 		//@{
-		//! Get if the object is an unique reference (COW idiom)
-		bool unique() const;
-
 		//! Increment the internal reference counter (should not be called directly)
 		void addRef() const;
 		//! Decrement the internal reference counter and returns true if it should
@@ -116,6 +117,8 @@ namespace Yuni
 	public:
 		//! Simplified type name of the instance for the current child type & threading policy.
 		typedef IIntrusiveSmartPtr<ChildT, false, TP> IntrusiveRef;
+		//! Typedef used for detecting misuse of smartptr. The real type does not really matter
+		typedef IntrusiveRef IntrusiveSmartPtrType;
 		//! Threading policy type
 		typedef TP<IntrusiveRef> ThreadingPolicy;
 
@@ -136,13 +139,12 @@ namespace Yuni
 
 		}; // class SmartPtrType
 
+		//! Most convenient smartptr for this class
+		typedef typename SmartPtrType<IntrusiveRef>::Ptr  Ptr;
 
 	public:
 		//! \name Pointer management
 		//@{
-		//! Get if the object is an unique reference (COW idiom)
-		bool unique() const;
-
 		//! Increment the internal reference counter (should not be called directly)
 		void addRef() const;
 		//! Decrement the internal reference counter and returns true if it should

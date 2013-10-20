@@ -13,9 +13,6 @@ namespace Variant
 	class IDataConverter;
 	class IDataHolder;
 
-	typedef Yuni::SmartPtr<IDataHolder, Yuni::Policy::Ownership::COMReferenceCounted>  IDataHolderPtr;
-
-
 
 } // namespace Variant
 } // namespace Private

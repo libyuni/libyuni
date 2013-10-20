@@ -31,7 +31,7 @@ namespace Variant
 		virtual IDataHolder* clone() const
 		{ return new Data<String>(pValue); }
 
-		virtual Yuni::Variant::InnerType type() const {return Yuni::Variant::tString;}
+		virtual Yuni::VariantInnerType type() const {return Yuni::variantTString;}
 
 		virtual void clear() { pValue.clear(); }
 
