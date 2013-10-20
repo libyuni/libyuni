@@ -20,7 +20,7 @@ static Yuni::Mutex mutex;
 ** This task is implemented in the onExecute() method, and consists
 ** here of a sample: counting beer bottles.
 */
-class MyJob final : public Yuni::Job::IJob
+class MyJob final : public Job::IJob
 {
 public:
 	MyJob(int identifier) :
@@ -77,7 +77,7 @@ int main(void)
 	// We can use it as an abstract or specific class, depending
 	// on the way we want to manage it.
 
-	Yuni::Job::QueueService<> qs;
+	Job::QueueService qs;
 
 	for (int job = 1; job <= 5; ++job)
 		qs.add(new MyJob(job));
@@ -90,18 +90,18 @@ int main(void)
 	// because of the mutual access to the standard output, we
 	// should lock a mutex before printing anything on it.
 
-//	mutex.lock();
-//	std::cout << "[M] Doing some processing here too." << std::endl;
-//	mutex.unlock();
+	//	mutex.lock();
+	//	std::cout << "[M] Doing some processing here too." << std::endl;
+	//	mutex.unlock();
 
 	// Simulate a long processing
-//	Yuni::Suspend(5 /* seconds */);
+	//	Yuni::Suspend(5 /* seconds */);
 
 	// Waiting for our tasks to complete.
-//	mutex.lock();
-//	std::cout << "[M] Main thread processing is over." << std::endl;
-//	std::cout << "[M] Waiting bottle counting tasks..." << std::endl;
-//	mutex.unlock();
+	//	mutex.lock();
+	//	std::cout << "[M] Main thread processing is over." << std::endl;
+	//	std::cout << "[M] Waiting bottle counting tasks..." << std::endl;
+	//	mutex.unlock();
 
 	mutex.lock();
 	std::cout << "[M] Wait #1" << std::endl;

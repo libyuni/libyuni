@@ -6,6 +6,6 @@ if(Yuni_FOUND)
 	link_libraries("${Yuni_LIBS}")
 
 	message(STATUS "Sample: Multi-Threading / A Simple custom thread")
-	add_executable(threads_00_basics main.cpp)
+	add_executable(threads_02_thread main.cpp)
 endif(Yuni_FOUND)
 

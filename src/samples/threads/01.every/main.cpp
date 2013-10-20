@@ -1,6 +1,6 @@
 
 #include <yuni/yuni.h>
-#include <yuni/thread/every.h>
+#include <yuni/thread/utility.h>
 #include <yuni/core/system/suspend.h>
 
 using namespace Yuni;
@@ -11,7 +11,7 @@ using namespace Yuni;
 int main(void)
 {
 	uint counter = 0;
-	auto timer = Every(1000, [&] () -> bool {
+	auto timer = every(1000, [&] () -> bool {
 		std::cout << "counter: " << ++counter << std::endl;
 		return true; // continue looping
 	});
@@ -20,6 +20,8 @@ int main(void)
 	Suspend(5);
 	return 0;
 }
+
+
 
 
 
@@ -35,7 +37,7 @@ static bool TimerCallback()
 
 int main(void)
 {
-	Thead::Timer::Ptr timer = Every(1000, & TimerCallback);
+	Thead::Timer::Ptr timer = every(1000, & TimerCallback);
 
 	// wait for 10 seconds
 	Suspend(5);
