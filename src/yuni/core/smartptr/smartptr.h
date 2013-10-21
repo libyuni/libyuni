@@ -420,7 +420,7 @@ namespace Yuni
 		SmartPtr(SmartPtr<T1,OwspP1,ChckP1,ConvP1,StorP1,ConsP1>& rhs, const DynamicCastArg&);
 
 		//! Empty class to allow  `if (mySmartPtr) ...`
-		struct AutomaticConversion
+		struct AutomaticConversion final
 		{
 			//! Disabling the delete operator
 			void operator delete (void*);

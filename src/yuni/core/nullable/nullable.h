@@ -63,7 +63,7 @@ namespace Yuni
 	** \tparam Alloc An allocator. Actually not used but here for compatibility with the STL
 	*/
 	template<class T, class Alloc = std::allocator<typename Static::Remove::Const<T>::Type> >
-	class YUNI_DECL Nullable
+	class YUNI_DECL Nullable final
 	{
 	public:
 		//! The type of object, T, stored in the container
@@ -347,7 +347,7 @@ namespace Yuni
 
 	private:
 		//! Empty class to allow  `if (mySmartPtr) ...`
-		struct AutomaticConversion
+		struct AutomaticConversion final
 		{
 			//! Disabling the delete operator
 			void operator delete (void*);
