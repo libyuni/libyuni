@@ -19,7 +19,7 @@ Changes:
 
 * [core] `Yuni::Job::IJob` and `Yuni::Thread::IThread` now use intrusive smartptr
    to reduce memory allocation in high workload environments. Consequently it may not compile
-   for some old program. Use `IJob::Ptr::Typedef<T>::Ptr` or `Thread::IThread::Ptr::Typedef<T>::Ptr`
+   for some old program. Use `IJob::Ptr::Promote<T>::Ptr` or `Thread::IThread::Ptr::Promote<T>::Ptr`
    to get the appropriate smartptr type.
  * [core] `<yuni/job/queue/queue.h>` has been remamed to `<yuni/job/queue/service.h>` for consistency
  * [core] `<yuni/job/queue.h>` has been removed. Please use `<yuni/job/queue/service.h>` instead
