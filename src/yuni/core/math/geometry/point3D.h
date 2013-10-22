@@ -317,6 +317,25 @@ namespace Yuni
 			return x;
 		}
 
+		/*!
+		** \brief Const Operator [] overload.
+		*/
+		const T& operator [] (const uint i) const
+		{
+			switch (i)
+			{
+				case 0:
+					return x;
+				case 1:
+					return y;
+				case 2:
+					return z;
+				default:
+					assert(false and "Index out of bounds !");
+			}
+			return x;
+		}
+
 		//} Operators
 
 
