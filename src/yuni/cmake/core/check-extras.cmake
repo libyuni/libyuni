@@ -13,7 +13,7 @@ endif()
 
 # posix_fallocate - Linux only
 if (UNIX)
-	check_c_source_compiles("
+	check_cxx_source_compiles("
 		#include <fcntl.h>
 		int main() {
 			return (0 != posix_fallocate(42, 0, 1024)) ? EXIT_FAILURE : 0;
@@ -21,14 +21,24 @@ if (UNIX)
 endif()
 
 
-# pthread_getthreadid_np();
+# pthread_getthreadid_np()
 if (UNIX)
-	check_c_source_compiles("
+	check_cxx_source_compiles("
 		#include <pthread.h>
 		int main() {
 			int ret = pthread_getthreadid_np();
 			return 0;
 		} " YUNI_HAS_PTHREAD_GETTHREADID_NP)
+endif()
+
+# pthread_attr_setstacksize()
+if (UNIX)
+	check_cxx_source_compiles("
+		#include <pthread.h>
+		int main() {
+			pthread_attr_setstacksize(NULL, 4096);
+			return 0;
+		} " YUNI_HAS_PTHREAD_ATTR_SETSTACKSIZE)
 endif()
 
 

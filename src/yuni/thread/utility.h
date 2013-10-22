@@ -12,36 +12,6 @@ namespace Yuni
 {
 
 	/*!
-	** \brief Convenient wrapper for executing a new job
-	**
-	**
-	** From sample:
-	** \code
-	** #include <yuni/yuni.h>
-	** #include <yuni/thread/thread.h>
-	** #include <yuni/core/system/suspend.h>
-	** #include <iostream>
-	** using namespace Yuni;
-	**
-	** int main()
-	** {
-	**	async([&] () {
-	**		std::cout << "thread1: some complex computations here..." << std::endl;
-	**		// suspend the execution of the thread for 3 seconds for the demo
-	**		thread1->suspend(3000);
-	**		std::cout << "thread1: done here !" << std::endl;
-	**	});
-	**	return 0;
-	** }
-	** \endcode
-	**
-	** \param queueservice The queueservice to dispatch the new job
-	** \param callback The callback to execute
-	*/
-	Job::IJob::Ptr  async(Job::QueueService& queueservice, const Bind<void ()>& callback);
-
-
-	/*!
 	** \brief Convenient wrapper for executing some code into another thread
 	**
 	** The callback will be executed into another thread.
@@ -49,21 +19,21 @@ namespace Yuni
 	** From sample:
 	** \code
 	** #include <yuni/yuni.h>
-	** #include <yuni/thread/thread.h>
+	** #include <yuni/thread/utility.h>
 	** #include <yuni/core/system/suspend.h>
 	** #include <iostream>
 	** using namespace Yuni;
 	**
 	** int main()
 	** {
-	**	spawn([&] () {
+	**	auto thread1 = spawn([&] () {
 	**		std::cout << "thread1: some complex computations here..." << std::endl;
 	**		// suspend the execution of the thread for 3 seconds for the demo
 	**		thread1->suspend(3000);
 	**		std::cout << "thread1: done here !" << std::endl;
 	**	});
 	**
-	**	spawn([&] () {
+	**	auto thread2 = spawn([&] () {
 	**		std::cout << "thread2: some complex computations here..." << std::endl;
 	**		// suspend the execution of the thread for 3 seconds for the demo
 	**		thread2->suspend(2000);
@@ -71,9 +41,8 @@ namespace Yuni
 	**	});
 	**
 	**	// Suspend the execution of the main thread until all threads are terminated
-	**	// Another way is to retrieve the variable returned by spawn (IThread) and to use
-	**	// the method wait() on it.
-	**	Thread::WaitForAllThreads();
+	**	thread1->wait();
+	**	thread2->wait();
 	**	return 0;
 	** }
 	** \endcode
@@ -146,6 +115,32 @@ namespace Yuni
 	*/
 	Thread::Timer::Ptr  every(uint ms, bool precise, const Bind<bool (uint64 /*elapsed*/)>& callback, bool autostart = true);
 
+
+	/*!
+	** \brief Convenient wrapper for executing a new job
+	**
+	** \code
+	** #include <yuni/yuni.h>
+	** #include <yuni/thread/utility.h>
+	** #include <yuni/core/system/suspend.h>
+	** #include <iostream>
+	** using namespace Yuni;
+	**
+	** int main()
+	** {
+	**	async([&] () {
+	**		std::cout << "thread1: some complex computations here..." << std::endl;
+	**		std::cout << "thread1: done here !" << std::endl;
+	**	});
+	**	Suspend(2);
+	**	return 0;
+	** }
+	** \endcode
+	**
+	** \param queueservice The queueservice to dispatch the new job
+	** \param callback The callback to execute
+	*/
+	Job::IJob::Ptr  async(Job::QueueService& queueservice, const Bind<void ()>& callback);
 
 
 

@@ -187,7 +187,7 @@ namespace Thread
 {
 
 
-	IThread::IThread() :
+	IThread::IThread(uint stacksize) :
 		# ifndef YUNI_NO_THREAD_SAFE
 		# ifdef YUNI_OS_WINDOWS
 		pThreadHandle(nullptr),
@@ -196,12 +196,16 @@ namespace Thread
 		pThreadIDValid(false),
 		# endif
 		# endif
-		pStarted(false)
+		pStarted(false),
 		# ifndef YUNI_NO_THREAD_SAFE
-		,pShouldStop(true)
+		pShouldStop(true),
+		# endif
+		# ifdef YUNI_HAS_PTHREAD_ATTR_SETSTACKSIZE
+		pStackSize((stacksize < PTHREAD_STACK_MIN ? PTHREAD_STACK_MIN : stacksize))
+		# else
+		pStackSize(stacksize)
 		# endif
 	{
-		// does nothing, only variable initialization
 	}
 
 
@@ -257,16 +261,26 @@ namespace Thread
 		pSignalWakeUp.reset();
 
 		# ifdef YUNI_OS_WINDOWS
-		pThreadHandle = CreateThread(nullptr, 0, Yuni::Private::Thread::threadCallbackExecute,
+		pThreadHandle = CreateThread(nullptr, pStackSize * 1024, Yuni::Private::Thread::threadCallbackExecute,
 			this, 0, nullptr);
 		if (not pThreadHandle)
 		# else
+
+		// Thread attributes
+		pthread_attr_t attr;
+		pthread_attr_init(&attr);
+		// reset the thread stack size
+		# ifdef YUNI_HAS_PTHREAD_ATTR_SETSTACKSIZE
+		if (0 != pthread_attr_setstacksize(&attr, pStackSize * 1024))
+			std::cerr << "Yuni::Thread: impossible to set thread stack size to " << (pStackSize * 1024) << " bytes" << std::endl;
+		# endif
+
 		// Lock the startup condition before creating the thread,
 		// then wait for it. The thread will signal the condition when it
 		// successfully have set isRunning _and_ called the triggers.
 		// Then we can check the isRunning status and determine if the startup
 		// was a success or not.
-		pThreadIDValid = (0 == ::pthread_create(&pThreadID, nullptr, Yuni::Private::Thread::threadCallbackExecute, this));
+		pThreadIDValid = (0 == ::pthread_create(&pThreadID, &attr, Yuni::Private::Thread::threadCallbackExecute, this));
 		if (not pThreadIDValid)
 		# endif
 		{

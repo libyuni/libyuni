@@ -72,8 +72,12 @@ namespace Thread
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		//! Default constructor
-		IThread();
+		/*!
+		** \brief Constructor
+		**
+		** \param stacksize The stack size for the new thread (in KByte)
+		*/
+		IThread(uint stacksize = 512);
 		//! Destructor
 		virtual ~IThread();
 		//@}
@@ -286,6 +290,9 @@ namespace Thread
 		//! Should stop the thread ? (must be protected by pInnerFlagMutex)
 		volatile bool pShouldStop;
 		# endif
+
+		//! Thread stack size
+		const uint pStackSize;
 
 		# ifndef YUNI_NO_THREAD_SAFE
 		// our friend

@@ -14,6 +14,9 @@ Features:
  * [core] `Yuni::SmartPtr` is now able to detect if an ownership policy does not seem appropriate
  * [core] An helper class is now available to detect if a specific typedef is available within
    a given class and his ancestors (see `yuni/core/static/typedef.h`)
+ * [core] `Yuni::IThread` is now able to set the internal thread stack size via a parameter
+   from its constructor, mainly to reduce memory consumption when a lot of threads are involved.
+   The default value has been set to 512K, which should be large enough for most scenarios.
 
 Changes:
 

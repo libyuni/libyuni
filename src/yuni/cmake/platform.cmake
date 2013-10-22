@@ -102,6 +102,18 @@
 /* ssize_t */
 #cmakedefine YUNI_HAS_SSIZE_T
 
+
+
+/* pthread pthread_getthreadid_np */
+#cmakedefine YUNI_HAS_PTHREAD_GETTHREADID_NP
+
+/* pthread pthread_attr_setstacksize */
+#cmakedefine YUNI_HAS_PTHREAD_ATTR_SETSTACKSIZE
+
+
+
+
+
 /* C++0x support: nullptr (GCC: only >= 4.6 with -std=gnu++0x, VS: only >= 10) */
 #cmakedefine YUNI_HAS_NULLPTR
 
@@ -140,9 +152,6 @@
 
 /* C++11 static_assert */
 #cmakedefine YUNI_HAS_CPP_STATIC_ASSERT
-
-/* pthread pthread_getthreadid_np */
-#cmakedefine YUNI_HAS_PTHREAD_GETTHREADID_NP
 
 /* lambda for Yuni::Bind / Yuni::Event */
 #if defined(YUNI_HAS_CPP_MOVE) && defined(YUNI_HAS_CPP_LAMBDA)
