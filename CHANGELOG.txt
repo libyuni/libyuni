@@ -1,3 +1,8 @@
+release 1.0
+-----------
+
+* Math/Geometry : Added missing `const operator[]` for Point2D, Point3D, Vector3D.
+
 release 0.2
 -----------
 

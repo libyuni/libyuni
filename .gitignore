@@ -19,7 +19,8 @@ src/tools/yuni-config/cmake_install.cmake
 src/yuni/cmake_install.cmake
 src/yuni/config.h
 src/yuni/platform.h
-src/yuni/yuni.config.gcc
-src/yuni/yuni.config.gcc.target
+src/yuni/yuni.config.*
 src/yuni/yuni.version
 
+# DevPacks
+devpacks/*
