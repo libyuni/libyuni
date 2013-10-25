@@ -196,16 +196,18 @@ namespace Thread
 		pThreadIDValid(false),
 		# endif
 		# endif
-		pStarted(false),
+		pStarted(false)
 		# ifndef YUNI_NO_THREAD_SAFE
+		,
 		pShouldStop(true),
-		# endif
-		# ifdef YUNI_HAS_PTHREAD_ATTR_SETSTACKSIZE
+		#	ifdef YUNI_HAS_PTHREAD_ATTR_SETSTACKSIZE
 		pStackSize((stacksize < PTHREAD_STACK_MIN ? PTHREAD_STACK_MIN : stacksize))
-		# else
+		#	else
 		pStackSize(stacksize)
+		#	endif
 		# endif
 	{
+		(void) stacksize; // ignore warning (unused variable) ifdef YUNI_NO_THREAD_SAFE
 	}
 
 
