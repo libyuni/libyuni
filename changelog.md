@@ -5,7 +5,7 @@ Yuni's ChangeLOG
 release version 1.0.0
 ---------------------
 
-Features:
+**Features**
 
  * [core] Introduced new convenient utility routines for Multithreading Programming :
    `spawn`, `every`, `async` and `sync` (see `yuni/thread/utility.h` for more details)
@@ -18,7 +18,7 @@ Features:
    from its constructor, mainly to reduce memory consumption when a lot of threads are involved.
    The default value has been set to 512K, which should be large enough for most scenarios.
 
-Changes:
+**Changes**
 
 * [core] `Yuni::Job::IJob` and `Yuni::Thread::IThread` now use intrusive smartptr
    to reduce memory allocation in high workload environments. Consequently it may not compile
@@ -34,8 +34,9 @@ Changes:
    internally revamped
  * [core] The method `SmartPtr::unique()` has been removed for thread-safety issues
 
-Fixes :
+**Fixes**
 
  * [core] Fixed Clang compiler detection
  * [core] Fixed a potential race condition in `Yuni::Timer`
+ * [core] Math/Geometry : added missing `operator[] const` for `Point2D`, `Point3D`, and `Vector3D`.
 
