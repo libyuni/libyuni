@@ -12,7 +12,7 @@ namespace Yuni
 	/*!
 	** \brief Represents a 3D-point
 	*/
-	template<typename T = float>
+	template<class T = float>
 	class Point3D
 	{
 	public:
@@ -23,7 +23,7 @@ namespace Yuni
 		** \param p2 Second point
 		** \return A new instance of Point3D
 		*/
-		template<typename U, typename V>
+		template<class U, class V>
 		static Point3D<T>& Mean(const Point3D<U>& p1, const Point3D<V>& p2)
 		{ return Point3D<T>().mean(p1, p2); }
 
@@ -39,7 +39,7 @@ namespace Yuni
 		** \param x1 The default X coordinate
 		** \param y1 The default Y coordinate
 		*/
-		template<typename U, typename V>
+		template<class U, class V>
 		Point3D(const U x1, const V y1): x((T)x1), y((T)y1), z(T()) {}
 
 		/*!
@@ -48,11 +48,11 @@ namespace Yuni
 		** \param y1 The default Y coordinate
 		** \param z1 The default Z coordinate
 		*/
-		template<typename U, typename V, typename W>
+		template<class U, class V, class W>
 		Point3D(const U x1, const V y1, const W z1): x((T)x1), y((T)y1), z((T)z1) {}
 
 		//! Constructor by copy
-		template<typename U>
+		template<class U>
 		Point3D(const Point3D<U>& p) : x((T)p.x), y((T)p.y), z((T)p.z) {}
 		//@} // Constructors
 
@@ -67,13 +67,13 @@ namespace Yuni
 		** \param y1 The new Y coordinate
 		** \param z1 The new Z coordinate
 		*/
-		template<typename U, typename V, typename W>
+		template<class U, class V, class W>
 		void move(const U x1, const V y1, const W z1) { x = (T)x1; y = (T)y1; z = (T)z1; }
 		/*!
 		** \brief Move the point to new coordinates
 		** \param p The new coordinates
 		*/
-		template<typename U>
+		template<class U>
 		void move(const Point3D<U>& p) { x = (T)p.x; y = (T)p.y; z = (T)p.z; }
 
 
@@ -81,7 +81,7 @@ namespace Yuni
 		** \brief Translate the point with the same value for all coordinates
 		** \param k The value to add to all coordinates
 		*/
-		template<typename U>
+		template<class U>
 		void translate(const U k) { x += (T)k; y += (T)k; z += (T)k; }
 		/*!
 		** \brief Translate the point with relative coordinates
@@ -89,13 +89,13 @@ namespace Yuni
 		** \param y1 The value to add to the Y coordinate
 		** \param z1 The value to add to the Z coordinate
 		*/
-		template<typename U, typename V, typename W>
+		template<class U, class V, class W>
 		void translate(const U x1, const V y1, const W z1) { x += (T)x1; y += (T)y1; z += (T)z1; }
 		/*!
 		** \brief Translate the point with relative coordinates from another Point
 		** \param p The values to add to the coordinates
 		*/
-		template<typename U>
+		template<class U>
 		void translate(const Point3D<U>& p) { x += (T)p.x; y += (T)p.y; z += (T)p.z; }
 
 
@@ -104,7 +104,7 @@ namespace Yuni
 		** The calling object is modified to store the value
 		** \param p Point to compute the mean with
 		*/
-		template<typename U>
+		template<class U>
 		void mean(const Point3D<U>& p)
 		{
 			x = (T) ((x + p.x) / 2.0f);
@@ -121,7 +121,7 @@ namespace Yuni
 		** \param p2 Second point to compute the mean with
 		** \return Always *this
 		*/
-		template<typename U, typename V>
+		template<class U, class V>
 		Point3D<T>& mean(const Point3D<U>& p1, const Point3D<V>& p2)
 		{
 			x = (T) ((p1.x + p2.x) / 2.0f);
@@ -136,8 +136,8 @@ namespace Yuni
 		** \param rhs The other point
 		** \param delta Delta value
 		*/
-		template<typename U, typename V>
-		bool closeTo(const Point3D<U>& rhs, const V delta) const
+		template<class U, class V>
+		bool isCloseTo(const Point3D<U>& rhs, const V delta) const
 		{ return Math::Abs(x-rhs.x) < delta and Math::Abs(y-rhs.y) < delta and Math::Abs(z-rhs.z) < delta; }
 
 		/*!
@@ -148,8 +148,8 @@ namespace Yuni
 		** \param z1 The Z coordinate of the other point
 		** \param delta Delta value
 		*/
-		template<typename U, typename V, typename W, typename D>
-		bool closeTo(const U x1, const V y1, const W z1, const D delta) const
+		template<class U, class V, class W, class D>
+		bool isCloseTo(const U x1, const V y1, const W z1, const D delta) const
 		{ return Math::Abs(x-x1) < delta and Math::Abs(y-y1) < delta and Math::Abs(z-z1) < delta; }
 
 
@@ -164,7 +164,7 @@ namespace Yuni
 		** \param z1 The new value for the Z coordinate
 		** \see move()
 		*/
-		template<typename U, typename V, typename W>
+		template<class U, class V, class W>
 		void operator () (const U x1, const V y1, const W z1) { x = (T)x1; y = (T)y1; z = (T)z1; }
 		/*!
 		** \brief Copy all coordinates from another point
@@ -173,7 +173,7 @@ namespace Yuni
 		**
 		** \see move()
 		*/
-		template<typename U>
+		template<class U>
 		void operator () (const Point3D<U>& p) { x = (T)p.x; y = (T)p.y; z = (T)p.z; }
 
 
@@ -185,7 +185,7 @@ namespace Yuni
 		**
 		** \see translate()
 		*/
-		template<typename U>
+		template<class U>
 		Point3D<T>& operator += (const U k) { x += (T)k; y += (T)k; z += (T)k; return (*this); }
 
 		/*!
@@ -196,7 +196,7 @@ namespace Yuni
 		**
 		** \see translate()
 		*/
-		template<typename U>
+		template<class U>
 		Point3D<T>& operator += (const Point3D<U>& p) { x += (T)p.x; y += (T)p.y; z += (T)p.z; return (*this); }
 
 		/*!
@@ -205,7 +205,7 @@ namespace Yuni
 		** \param rhs The other point to compare with
 		** \return True if the two points are equal
 		*/
-		template<typename U> bool operator == (const Point3D<U>& rhs) const
+		template<class U> bool operator == (const Point3D<U>& rhs) const
 		{ return Math::Equals<T>(rhs.x, x) and Math::Equals<T>(rhs.y, y) and Math::Equals<T>(rhs.z, z); }
 
 		/*!
@@ -214,7 +214,7 @@ namespace Yuni
 		** \param rhs The other point to compare with
 		** \return True if the two points are not equal
 		*/
-		template<typename U> bool operator != (const Point3D<U>& rhs) const
+		template<class U> bool operator != (const Point3D<U>& rhs) const
 		{ return !(*this == rhs); }
 
 		/*!
@@ -235,7 +235,7 @@ namespace Yuni
 		**
 		** \see move()
 		*/
-		template<typename U>
+		template<class U>
 		Point3D<T>& operator = (const Point3D<U>& p) { x = (T)p.x; y = (T)p.y; z = (T)p.z; return (*this); }
 
 		/*!
@@ -246,12 +246,12 @@ namespace Yuni
 		**
 		** \remarks X is compared first, then if necessary Y, then Z.
 		*/
-		template<typename U>
+		template<class U>
 		bool operator < (const Point3D<U>& p) const
 		{
-			if (!Math::Equals(x, (T)p.x))
+			if (not Math::Equals(x, (T)p.x))
 				return x < (T)p.x;
-			if (!Math::Equals(y, (T)p.y))
+			if (not Math::Equals(y, (T)p.y))
 				return y < (T)p.y;
 			return z < (T)p.z;
 		}
@@ -264,7 +264,7 @@ namespace Yuni
 		**
 		** \remarks X is compared first, then if necessary Y, then Z.
 		*/
-		template<typename U>
+		template<class U>
 		bool operator <= (const Point3D<U>& p) const
 		{
 			return !(*this > p);
@@ -278,7 +278,7 @@ namespace Yuni
 		**
 		** \remarks X is compared first, then if necessary Y, then Z.
 		*/
-		template<typename U>
+		template<class U>
 		bool operator > (const Point3D<U>& p) const
 		{
 			return x > (T)p.x or y > (T)p.y or z > (T)p.z;
@@ -292,7 +292,7 @@ namespace Yuni
 		**
 		** \remarks X is compared first, then if necessary Y, then Z.
 		*/
-		template<typename U>
+		template<class U>
 		bool operator >= (const Point3D<U>& p) const
 		{
 			return !(*this < p);
@@ -372,11 +372,11 @@ namespace Yuni
 //! \name Operator overload for stream printing
 //@{
 
-template<typename T>
+template<class T>
 inline std::ostream& operator << (std::ostream& out, const Yuni::Point3D<T>& p)
 { return p.print(out); }
 
-template<typename T>
+template<class T>
 inline const Yuni::Point3D<T> operator + (const Yuni::Point3D<T>& lhs, const Yuni::Point3D<T>& rhs)
 { return Yuni::Point3D<T>(lhs) += rhs; }
 

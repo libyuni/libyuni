@@ -354,6 +354,7 @@ set(SRC_CORE_MATH
 		core/math/geometry/vector3D.hxx
 		core/point2D.h
 		core/math/geometry/point2D.h
+		core/math/geometry/point2D.hxx
 		core/point3D.h
 		core/math/geometry/point3D.h
 		core/quaternion.h
