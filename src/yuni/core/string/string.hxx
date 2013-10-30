@@ -2957,8 +2957,14 @@ namespace Yuni
 			Size len  = 0;
 			Size newIndx;
 
+			// If the target element is a string, an temporary AnyString would be more efficient
+			// and will allow list or vectors of AnyString, which can not be done in the intermediate
+			// data type is a new string (the AnyString will used invalid pointer)
+			typedef typename Static::If<Static::HasTypedef::CStringType<UType>::yes,
+				AnyString, WritableType>::Type   SegmentType;
+
 			// Temporary buffer
-			WritableType segment;
+			SegmentType segment;
 
 			do
 			{

@@ -4,6 +4,7 @@
 # include "../../yuni.h"
 # include "../static/remove.h"
 # include "../static/assert.h"
+# include "../static/typedef.h"
 # include "../traits/cstring.h"
 # include "../traits/length.h"
 # include "../smartptr.h"

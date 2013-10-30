@@ -45,4 +45,7 @@ Release version 1.0.0
  * [core] Fixed Clang compiler detection
  * [core] Fixed a potential race condition in `Yuni::Timer`
  * [core] Math/Geometry : added missing `operator[] const` for `Point2D`, `Point3D`, and `Vector3D`.
+ * [core] Fixed the method `Yuni::String::split()` with list or vector of `AnyString`,
+   which was producing unpredictable results (ex: calling `String("1,2,3").split(mylist, ",")`
+   with `mylist` as `AnyString::Vector`)
 

@@ -55,6 +55,15 @@ namespace HasTypedef
 	YUNI_IMPL_STATIC_HAS_TYPEDEF(IntrusiveSmartPtrType);
 
 
+	/*!
+	** \brief Determine whether a class has the typedef `CStringType` or not
+	**
+	** This test is mainly used to detect Yuni string where templates can not be used.
+	*/
+	YUNI_IMPL_STATIC_HAS_TYPEDEF(CStringType);
+
+
+
 
 } // namespace HasMethod
 } // namespace Static
