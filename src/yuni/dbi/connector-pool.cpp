@@ -79,23 +79,17 @@ namespace DBI
 
 	void ConnectorPool::close()
 	{
-		// switching the connector data
+		// acquiring / swapping the data, to destroy it in the same time
 		Yuni::Private::DBI::ConnectorDataPtr data;
 		data.swap(pData);
 
 		if (!(!data))
 		{
-			// The connector data may be shared by several instance of
-			// the class `ConnectorPool`. We should close the channels
-			// only if this is the last one
-			if (data.unique())
-			{
-				// try to close as many connections as possible.
-				// with a null idle time, the only remaining connections will be
-				// still in use, probably by another thread
-				uint dummy;
-				data->closeTooOldChannels(/*idletime:*/0, dummy);
-			}
+			// try to close as many connections as possible.
+			// with a null idle time, the only remaining connections will be
+			// still in use, probably by another thread
+			uint dummy;
+			data->closeTooOldChannels(/*idletime:*/ 0, dummy);
 		}
 	}
 
