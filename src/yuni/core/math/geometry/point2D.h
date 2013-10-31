@@ -197,18 +197,15 @@ namespace Yuni
 		**
 		** \remarks X is compared first, then if necessary Y, then Z.
 		*/
-		template<class U> bool operator < (const Point3D<U>& p) const
+		template<class U> bool operator < (const Point2D<U>& p) const
 		{
 			if (not Math::Equals(x, (T)p.x))
 				return x < (T)p.x;
-			if (not Math::Equals(y, (T)p.y))
-				return y < (T)p.y;
-			return z < (T)p.z;
+			return y < (T)p.y;
 		}
 
-
 		//! Operator [] overload.
-		T& operator [] (uint i)
+		T& operator [] (uint i);
 		//! Const Operator [] overload.
 		const T& operator [] (uint i) const;
 		//} Operators
