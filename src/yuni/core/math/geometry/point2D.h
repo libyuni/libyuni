@@ -197,12 +197,7 @@ namespace Yuni
 		**
 		** \remarks X is compared first, then if necessary Y, then Z.
 		*/
-		template<class U> bool operator < (const Point2D<U>& p) const
-		{
-			if (not Math::Equals(x, (T)p.x))
-				return x < (T)p.x;
-			return y < (T)p.y;
-		}
+		template<class U> bool operator < (const Point2D<U>& p) const;
 
 		//! Operator [] overload.
 		T& operator [] (uint i);
@@ -234,6 +229,7 @@ namespace Yuni
 } // namespace Yuni
 
 
+# include "point2D.hxx"
 
 //! name Operator overload for stream printing
 //@{

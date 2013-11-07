@@ -180,7 +180,7 @@ namespace Yuni
 
 	template<class T>
 	template<class U>
-	inline bool Point2D<T>::operator < (const Point3D<U>& p) const
+	inline bool Point2D<T>::operator < (const Point2D<U>& p) const
 	{
 		if (not Math::Equals(x, (T)p.x))
 			return x < (T)p.x;
