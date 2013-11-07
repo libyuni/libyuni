@@ -10,8 +10,8 @@ namespace Core
 
 	template<class T, template<class> class TP, template <class> class ChckP,
 		class ConvP>
-	inline TreeN<T,TP,ChckP,ConvP>::TreeN()
-		:pParent(nullptr), pChildrenCount(0), pRefCount(0)
+	inline TreeN<T,TP,ChckP,ConvP>::TreeN() :
+		pParent(nullptr), pChildrenCount(0)
 	{}
 
 

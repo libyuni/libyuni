@@ -7,6 +7,7 @@
 # include <stack>
 # include "../../static/if.h"
 # include "../../smartptr/smartptr.h"
+# include "../../smartptr/intrusive.h"
 # include "../../iterator/iterator.h"
 # include "iterator/iterator.h"
 # include <ostream>
@@ -30,47 +31,47 @@ namespace Core
 	** class MyNode : public Core::TreeN<MyNode, Policy::SingleThreaded>
 	** {
 	** public:
-	** 		MyNode()
-	** 			:pValue()
+	**		MyNode()
+	**			:pValue()
 	**		{}
 	**
-	** 		explicit MyNode(const String& v)
-	** 			:pValue(v)
-	** 		{}
+	**		explicit MyNode(const String& v)
+	**			:pValue(v)
+	**		{}
 	**
-	** 		virtual ~MyNode() {}
+	**		virtual ~MyNode() {}
 	**
-	** 		String value()
-	** 		{
-	** 			MyNode::ThreadingPolicy::MutexLocker locker(*this);
-	** 			return pValue;
-	** 		}
+	**		String value()
+	**		{
+	**			MyNode::ThreadingPolicy::MutexLocker locker(*this);
+	**			return pValue;
+	**		}
 	**
-	** 		void value(const String& s)
-	** 		{
-	** 			MyNode::ThreadingPolicy::MutexLocker locker(*this);
-	** 			pValue = s;
-	** 		}
+	**		void value(const String& s)
+	**		{
+	**			MyNode::ThreadingPolicy::MutexLocker locker(*this);
+	**			pValue = s;
+	**		}
 	**
 	** private:
-	** 		//! Put here variables for each node
-	** 		String pValue;
+	**		//! Put here variables for each node
+	**		String pValue;
 	** };
 	**
 	** int main(void)
 	** {
-	** 		MyNode::Ptr root(new MyNode("Here is a root node"));
-	** 		MyNode* n = new MyNode("SubNode 1");
+	**		MyNode::Ptr root(new MyNode("Here is a root node"));
+	**		MyNode* n = new MyNode("SubNode 1");
 	**
-	** 		// Adding `n` as a child for the root node
-	** 		*root += n;
+	**		// Adding `n` as a child for the root node
+	**		*root += n;
 	**
-	** 		// A few children for the node `n`
-	** 		// The operator `+=` and `<<` are equivalent
-	** 		n << new MyNode("SubSubNode 1") << new MyNode("SubSubNode 2")
-	** 			<< new MyNode("SubSubNode 3");
+	**		// A few children for the node `n`
+	**		// The operator `+=` and `<<` are equivalent
+	**		n << new MyNode("SubSubNode 1") << new MyNode("SubSubNode 2")
+	**			<< new MyNode("SubSubNode 3");
 	**
-	** 		return 0;
+	**		return 0;
 	** }
 	** \endcode
 	**
@@ -209,6 +210,9 @@ namespace Core
 		//   Infix
 		typedef IIterator<Private::Core::Tree::DepthInfixIterator<Node>, false> depth_infix_iterator;
 		typedef IIterator<Private::Core::Tree::DepthInfixIterator<Node>, true> const_depth_infix_iterator;
+
+		//! Typedef used for detecting misuse of smartptr. The real type does not really matter
+		typedef Ptr IntrusiveSmartPtrType;
 
 		// class iterator;
 
