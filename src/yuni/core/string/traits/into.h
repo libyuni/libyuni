@@ -527,28 +527,14 @@ namespace CString
 
 		template<class StringT> static bool Perform(const StringT& s, const void*& out)
 		{
-			if (sizeof(void*) == 4)
+			Static::If<sizeof(void*) == 4, uint32, uint64>::Type  p;
+			if (Into<uint32>::Perform(s, p))
 			{
-				uint32 p;
-				if (Into<uint32>::Perform(s, p))
-				{
-					out = (void*) p;
-					return true;
-				}
-				out = 0x0;
-				return false;
+				out = (void*) p;
+				return true;
 			}
-			else
-			{
-				uint64 p;
-				if (Into<uint64>::Perform(s, p))
-				{
-					out = (void*) p;
-					return true;
-				}
-				out = 0x0;
-				return false;
-			}
+			out = 0x0;
+			return false;
 		}
 
 		template<class StringT> static void* Perform(const StringT& s)

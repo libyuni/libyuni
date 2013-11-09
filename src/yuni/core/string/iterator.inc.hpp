@@ -442,7 +442,7 @@ struct Model
 			return pString[pOffset];
 		}
 
-		const char& operator * () const
+		char operator * () const
 		{
 			//assert(pOffset < pString.size());
 			return pString[pOffset];

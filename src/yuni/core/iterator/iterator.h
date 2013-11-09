@@ -38,6 +38,8 @@ namespace Yuni
 		typedef typename Static::If<ConstT, const value_type&, value_type&>::Type reference;
 		//! Const reference
 		typedef const value_type& const_reference;
+		//! Const this if required
+		typedef typename Static::If<ConstT, const AncestorType*, AncestorType*>::Type ConstSelfPtr;
 		enum
 		{
 			//! A non-zero value for const qualifier
