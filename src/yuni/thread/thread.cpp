@@ -17,6 +17,7 @@
 #endif
 
 #include "thread.h"
+#include <limits.h> // for PTHREAD_STACK_MIN
 
 
 
@@ -192,14 +193,13 @@ namespace Thread
 		# ifdef YUNI_OS_WINDOWS
 		pThreadHandle(nullptr),
 		# else
-		// pThreadID((pthread_t) NULL), // no portable value
 		pThreadIDValid(false),
 		# endif
 		# endif
 		pStarted(false)
+
 		# ifndef YUNI_NO_THREAD_SAFE
-		,
-		pShouldStop(true),
+		,pShouldStop(true),
 		#	ifdef YUNI_HAS_PTHREAD_ATTR_SETSTACKSIZE
 		pStackSize((stacksize < PTHREAD_STACK_MIN ? PTHREAD_STACK_MIN : stacksize))
 		#	else

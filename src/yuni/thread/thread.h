@@ -289,6 +289,9 @@ namespace Thread
 		# ifndef YUNI_NO_THREAD_SAFE
 		//! Should stop the thread ? (must be protected by pInnerFlagMutex)
 		volatile bool pShouldStop;
+		# endif
+
+		# ifndef YUNI_NO_THREAD_SAFE
 		//! Thread stack size
 		const uint pStackSize;
 		# endif
