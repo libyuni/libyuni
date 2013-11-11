@@ -18,6 +18,8 @@ Release version 1.0.0
  * [core] `Yuni::SmartPtr` is now able to detect if an ownership policy does not seem appropriate
  * [core] An helper class is now available to detect at compile time if a specific typedef
    is available within a given class and his ancestors (see `yuni/core/static/typedef.h`)
+ * [core] `System::Console`: new routines `IsStdoutTTY()` and `IsStderrTTY()` to determine
+   whether the standard output (or standard error output) is a TTY or not
 
 **Changes**
 

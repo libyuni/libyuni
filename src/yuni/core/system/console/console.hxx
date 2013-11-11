@@ -115,25 +115,25 @@ namespace Console
 	{ template<class U> static void Set(U& out) { out << "[1;30m"; } };
 
 	template<> struct TextColor<red>
-	{ template<class U> static void Set(U& out) { out << "[1;31m"; } };
+	{ template<class U> static void Set(U& out) { out << "[0;31m"; } };
 
 	template<> struct TextColor<green>
-	{ template<class U> static void Set(U& out) { out << "[1;32m"; } };
+	{ template<class U> static void Set(U& out) { out << "[0;32m"; } };
 
 	template<> struct TextColor<blue>
-	{ template<class U> static void Set(U& out) { out << "[1;34m"; } };
+	{ template<class U> static void Set(U& out) { out << "[0;34m"; } };
 
 	template<> struct TextColor<yellow>
-	{ template<class U> static void Set(U& out) { out << "[1;33m"; } };
+	{ template<class U> static void Set(U& out) { out << "[0;33m"; } };
 
 	template<> struct TextColor<purple>
-	{ template<class U> static void Set(U& out) { out << "[1;35m"; } };
+	{ template<class U> static void Set(U& out) { out << "[0;35m"; } };
 
 	template<> struct TextColor<lightblue>
-	{ template<class U> static void Set(U& out) { out << "[1;36m"; } };
+	{ template<class U> static void Set(U& out) { out << "[0;36m"; } };
 
 	template<> struct TextColor<gray>
-	{ template<class U> static void Set(U& out) { out << "[1;37m"; } };
+	{ template<class U> static void Set(U& out) { out << "[0;37m"; } };
 
 	template<> struct TextColor<white>
 	{ template<class U> static void Set(U& out) { out << "[1;37m[1m"; } };

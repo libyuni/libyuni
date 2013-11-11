@@ -31,12 +31,12 @@ namespace Console
 		blue,
 		//! Purple (or Magenta on Windows)
 		purple,
-		//! Lightblue (or cyan on Windows)
-		lightblue,
 		//! Gray
 		gray,
 		//! White
 		white,
+		//! Lightblue (or cyan on Windows)
+		lightblue,
 	};
 
 
@@ -64,6 +64,19 @@ namespace Console
 	** \param[in,out] out An ostream (std::cout or std::cerr)
 	*/
 	template<class U> void ResetTextColor(U& out);
+
+
+
+	/*!
+	** \brief Get if the standard output is a TTY
+	*/
+	bool IsStdoutTTY();
+
+
+	/*!
+	** \brief Get if the standard error output is a TTY
+	*/
+	bool IsStderrTTY();
 
 
 

@@ -678,6 +678,7 @@ source_group(core\\predicate\\Result FILES ${SRC_CORE_PREDICATES_RESULTS})
 set(SRC_CORE_SYSTEM_CONSOLE
 		core/system/console.h
 		core/system/console/console.h
+		core/system/console/console.cpp
 		core/system/console/console.hxx
 		)
 source_group(core\\system\\Console FILES ${SRC_CORE_SYSTEM_CONSOLE})
