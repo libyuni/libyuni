@@ -131,21 +131,21 @@ add_definitions("-D_REENTRANT -DXUSE_MTSAFE_API")
 
 
 if(NOT WIN32)
-	set(CMAKE_CXX_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_COMMON_CXX_OPTIONS} ${YUNI_HAS_COMPILER_OPTIMIZATION_LEVEL_4} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mfpmath=sse -msse -msse2 -Wuninitialized")
-	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_COMMON_CXX_OPTIONS} ${YUNI_HAS_COMPILER_OPTIMIZATION_LEVEL_4} -fomit-frame-pointer -mfpmath=sse -msse -msse2")
+	set(CMAKE_CXX_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_COMMON_CXX_OPTIONS} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mfpmath=sse -msse -msse2 -Wuninitialized")
+	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_COMMON_CXX_OPTIONS} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -mfpmath=sse -msse -msse2")
 	set(CMAKE_CXX_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_COMMON_CXX_OPTIONS} -g")
 
-	set(CMAKE_C_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_HAS_COMPILER_OPTIMIZATION_LEVEL_4} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mfpmath=sse -msse -msse2 -Wuninitialized")
-	set(CMAKE_C_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_HAS_COMPILER_OPTIMIZATION_LEVEL_4} -fomit-frame-pointer -mfpmath=sse -msse -msse2")
+	set(CMAKE_C_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS_UNIX} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mfpmath=sse -msse -msse2 -Wuninitialized")
+	set(CMAKE_C_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS_UNIX} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -mfpmath=sse -msse -msse2")
 	set(CMAKE_C_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS_UNIX} -g")
 endif()
 
 if(MINGW)
-	set(CMAKE_CXX_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS} ${YUNI_COMMON_CXX_OPTIONS} ${YUNI_HAS_COMPILER_OPTIMIZATION_LEVEL_4} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mthreads -Wuninitialized")
+	set(CMAKE_CXX_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS} ${YUNI_COMMON_CXX_OPTIONS} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mthreads -Wuninitialized")
 	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS} ${YUNI_COMMON_CXX_OPTIONS} -mthreads")
 	set(CMAKE_CXX_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS} ${YUNI_COMMON_CXX_OPTIONS} -mthreads")
 
-	set(CMAKE_C_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS} ${YUNI_HAS_COMPILER_OPTIMIZATION_LEVEL_4} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mthreads -Wuninitialized")
+	set(CMAKE_C_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mthreads -Wuninitialized")
 	set(CMAKE_C_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS} -mthreads")
 	set(CMAKE_C_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS} -mthreads")
 endif()
