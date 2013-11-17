@@ -8,6 +8,7 @@ CMakeCache.txt
 src/ProfileBuild.cmake
 src/build/
 cmake_install.cmake
+.ninja_*
 
 # Yuni generated files
 src/compiler-flags-debug-cc
