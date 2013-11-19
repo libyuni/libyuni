@@ -1,6 +1,16 @@
 # hidden / vim files
 .*
 
+# Visual Studio
+Debug
+Release
+*.vcxproj*
+Win32
+*.sln
+*.suo
+*.sdf
+*.opensdf
+
 # CMake stuff
 CMakeFiles
 Makefile
