@@ -39,9 +39,9 @@ namespace Variant
 		//! Ancestor
 		typedef Yuni::IIntrusiveSmartPtr<IDataHolder, false, Yuni::Policy::SingleThreaded> Ancestor;
 		//! Threading policy
-		typedef typename Ancestor::ThreadingPolicy  ThreadingPolicy;
+		typedef Ancestor::ThreadingPolicy  ThreadingPolicy;
 		//! The most suitable smart pointer to this object
-		typedef typename Ancestor::Ptr::Promote<IDataHolder>::Ptr  Ptr;
+		typedef Ancestor::Ptr::Promote<IDataHolder>::Ptr  Ptr;
 		//! Vector
 		typedef std::vector<Ptr>  Vector;
 

@@ -64,9 +64,9 @@ namespace Thread
 		//! Ancestor
 		typedef IIntrusiveSmartPtr<IThread, false>  Ancestor;
 		//! The most suitable smart pointer for the class
-		typedef typename Ancestor::SmartPtrType<IThread>::PtrThreadSafe Ptr;
+		typedef Ancestor::template SmartPtrType<IThread>::PtrThreadSafe Ptr;
 		//! The threading policy
-		typedef typename Ancestor::ThreadingPolicy ThreadingPolicy;
+		typedef Ancestor::ThreadingPolicy ThreadingPolicy;
 
 
 	public:

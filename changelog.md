@@ -45,6 +45,7 @@ Release version 1.0.0
 **Fixes**
 
  * [core] Fixed Clang compiler detection
+ * [core] Fixed compilation on Visual Studio 2013
  * [core] Fixed a potential race condition in `Yuni::Timer`
  * [core] Math/Geometry : added missing `operator[] const` for `Point2D`, `Point3D`, and `Vector3D`.
  * [core] Fixed the method `Yuni::String::split()` with list or vector of `AnyString`,

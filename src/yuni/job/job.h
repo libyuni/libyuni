@@ -63,9 +63,9 @@ namespace Job
 		//! Ancestor
 		typedef IIntrusiveSmartPtr<IJob, false>  Ancestor;
 		//! The most suitable smart pointer for the class
-		typedef typename Ancestor::SmartPtrType<IJob>::PtrThreadSafe Ptr;
+		typedef Ancestor::SmartPtrType<IJob>::PtrThreadSafe Ptr;
 		//! The threading policy
-		typedef typename Ancestor::ThreadingPolicy ThreadingPolicy;
+		typedef Ancestor::ThreadingPolicy ThreadingPolicy;
 		//! List of jobs
 		typedef std::list<Ptr> List;
 

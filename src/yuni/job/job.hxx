@@ -39,7 +39,7 @@ namespace Job
 
 	inline bool IJob::canceling() const
 	{
-		return (pCanceling);
+		return (0 != pCanceling);
 	}
 
 
