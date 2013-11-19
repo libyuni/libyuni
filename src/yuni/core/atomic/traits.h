@@ -1,6 +1,7 @@
 #ifndef __YUNI_CORE_ATOMIC_TRAITS_H__
 # define __YUNI_CORE_ATOMIC_TRAITS_H__
 
+# include "int.h" // avoid invalid includes
 # include "../static/if.h"
 # ifdef YUNI_OS_WINDOWS
 #	include "../system/windows.hdr.h"
