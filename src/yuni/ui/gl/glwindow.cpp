@@ -33,7 +33,12 @@ namespace UI
 		// Init GLEW
 		GLenum error = ::glewInit();
 		if (GLEW_OK != error)
+		{
+#ifndef NDEBUG
 			logs.error() << ::glewGetErrorString(error);
+#endif
+			return false;
+		}
 
 		// Wait for the context to be ready before initializing some GL objects in the main window
 		RenderWindow::initialize();
