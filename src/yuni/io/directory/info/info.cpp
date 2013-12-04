@@ -1,5 +1,6 @@
 
 #include "info.h"
+#include "../../file.h"
 
 
 namespace Yuni
@@ -39,8 +40,19 @@ namespace Directory
 		iterator i(pDirectory);
 		for (; i.valid(); ++i)
 		{
-			// Removing the folder
-			result = IO::Directory::Remove(*i) and result;
+			if (i.isFile())
+			{
+				// removing the file
+				result = (IO::errNone == IO::File::Delete(i.filename())) and result;
+			}
+			else
+			{
+				if (i.isFolder())
+				{
+					// Removing the folder
+					result = IO::Directory::Remove(i.filename()) and result;
+				}
+			}
 		}
 		return result;
 	}

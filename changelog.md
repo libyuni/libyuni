@@ -51,4 +51,4 @@ Release version 1.0.0
  * [core] Fixed the method `Yuni::String::split()` with list or vector of `AnyString`,
    which was producing unpredictable results (ex: calling `String("1,2,3").split(mylist, ",")`
    with `mylist` as `AnyString::Vector`)
-
+ * [core] Fixed the method `IO::Directory::Info::clean()`, which was only deleting subfolders
