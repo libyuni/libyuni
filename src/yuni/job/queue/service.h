@@ -97,7 +97,7 @@ namespace Job
 		**
 		** \param timeout Timeout
 		** \param pollInterval Interval in milliseconds between each poll when waiting
-		** \return True if no all jobs are finished, false if the timeout has been reached
+		** \return True if all jobs are finished, false if the timeout has been reached
 		*/
 		bool wait(uint timeout, uint pollInterval = 150);
 

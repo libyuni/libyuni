@@ -254,19 +254,26 @@ namespace Job
 	void QueueService::wait()
 	{
 		// TODO QueueService::wait: Find a more efficient way for doing this
-		QueueServiceWaitHelper helper(*this, pWaitingRoom, 150);
-		helper.start();
-		helper.wait();
+		if (not pWaitingRoom.empty() or not idle())
+		{
+			QueueServiceWaitHelper helper(*this, pWaitingRoom, 150);
+			helper.start();
+			helper.wait();
+		}
 	}
 
 
 	bool QueueService::wait(uint timeout, uint pollInterval)
 	{
 		// TODO QueueService::wait: Find a more efficient way for doing this
-		QueueServiceWaitHelper helper(*this, pWaitingRoom, pollInterval);
-		helper.start();
-		helper.wait(timeout);
-		return helper.status();
+		if (not pWaitingRoom.empty() or not idle())
+		{
+			QueueServiceWaitHelper helper(*this, pWaitingRoom, pollInterval);
+			helper.start();
+			helper.wait(timeout);
+			return helper.status();
+		}
+		return true;
 	}
 
 
