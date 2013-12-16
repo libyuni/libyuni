@@ -21,67 +21,6 @@ inline std::ostream& operator << (std::ostream& out, const Yuni::UTF8::Char& rhs
 }
 
 
-namespace Yuni
-{
-namespace Private
-{
-
-	template<class ContainerT>
-	class OStreamYuniHelper
-	{
-	public:
-		static void Print(std::ostream& out, const ContainerT& rhs)
-		{
-			switch (rhs.size())
-			{
-				case 0:
-					break;
-				case 1:
-					{
-						out << rhs[0];
-						break;
-					}
-				default:
-					{
-						const Yuni::String::Vector::const_iterator end = rhs.end();
-						Yuni::String::Vector::const_iterator i = rhs.begin();
-						out << *i;
-						++i;
-						for (; i != end; ++i)
-						{
-							out.write(", ", 2);
-							out << *i;
-						}
-						break;
-					}
-			}
-		}
-
-	}; // class OStreamYuniHelper
-
-} // namespace Private
-} // namespace Yuni
-
-
-
-template<class T, class AllocatorT>
-inline std::ostream& operator << (std::ostream& out, const std::vector<T, AllocatorT>& rhs)
-{
-	typedef std::vector<T, AllocatorT>  SourceType;
-	Yuni::Private::OStreamYuniHelper<SourceType>::Print(out, rhs);
-	return out;
-}
-
-
-template<class T, class AllocatorT>
-inline std::ostream& operator << (std::ostream& out, const std::list<T, AllocatorT>& rhs)
-{
-	typedef std::list<T, AllocatorT>  SourceType;
-	Yuni::Private::OStreamYuniHelper<SourceType>::Print(out, rhs);
-	return out;
-}
-
-
 template<class CharT, class TraitsT, uint SizeT, bool ExpT>
 inline std::basic_istream<CharT, TraitsT>& operator >> (std::basic_istream<CharT, TraitsT>& stream, Yuni::CString<SizeT,ExpT>& string)
 {
