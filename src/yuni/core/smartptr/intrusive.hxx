@@ -92,6 +92,7 @@ namespace Yuni
 
 	template<class ChildT, template<class> class TP>
 	inline IIntrusiveSmartPtr<ChildT,false,TP>::IIntrusiveSmartPtr(const IIntrusiveSmartPtr<ChildT,false,TP>&) :
+		ThreadingPolicy(),
 		pRefCount()
 	{
 	}
