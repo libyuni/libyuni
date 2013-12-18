@@ -31,15 +31,15 @@ namespace Random
 	**
 	** int main()
 	** {
-	** 		// A table for pre-cached random numbers
-	** 		Math::Random::Table<Math::Random::Default>  randomTable;
-	** 		// Generating a set pre-cached random numbers
-	** 		std::cout << "Generating " << randomTable.size() << " random numbers..." << std::endl;
-	** 		randomTable.reset();
+	**		// A table for pre-cached random numbers
+	**		Math::Random::Table<Math::Random::Default>  randomTable;
+	**		// Generating a set pre-cached random numbers
+	**		std::cout << "Generating " << randomTable.size() << " random numbers..." << std::endl;
+	**		randomTable.reset();
 	**
-	** 		std::cout << "A random number : " << randomTable() << std::endl;
-	** 		std::cout << "Another one     : " << randomTable() << std::endl;
-	** 		return 0;
+	**		std::cout << "A random number : " << randomTable() << std::endl;
+	**		std::cout << "Another one     : " << randomTable() << std::endl;
+	**		return 0;
 	** }
 	** \endcode
 	**
@@ -65,8 +65,8 @@ namespace Random
 		template<class> class TP = Policy::SingleThreaded     // The Threading policy
 		>
 	class YUNI_DECL Table
-		:public TP<Table<D,TableSize, Cyclic, TP> >
-		,public D
+		: public TP<Table<D,TableSize, Cyclic, TP> >
+		, public D
 	{
 	public:
 		//! Type for a single random number
@@ -76,7 +76,6 @@ namespace Random
 
 		// Assert about the table size
 		YUNI_STATIC_ASSERT((TableSize > 10), MathRandomTable_InvalidTableSize);
-
 		enum
 		{
 			//! The table size
@@ -113,19 +112,13 @@ namespace Random
 		*/
 		void reset();
 
-		/*!
-		** \brief Get the number of random number in the table
-		*/
+		//! Get the number of random number in the table
 		static int size();
 
-		/*!
-		** \brief Get the next random number
-		*/
+		//! Get the next random number
 		const Value next();
 
-		/*!
-		** \brief Fill the table with a new set of random numbers
-		*/
+		//! Fill the table with a new set of random numbers
 		void fill();
 
 		//! The operator `>>`
@@ -133,6 +126,7 @@ namespace Random
 
 		//! The operator `()`
 		const Value operator () ();
+
 
 	private:
 		void fillWL();
