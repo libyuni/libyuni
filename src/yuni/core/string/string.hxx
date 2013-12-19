@@ -286,7 +286,7 @@ namespace Yuni
 			static inline void Perform(const U& u, CStringT& string)
 			{
 				YUNI_STATIC_ASSERT(!AdapterT, CString_Adapter_ReadOnly);
-				typedef typename Static::Remove::Const<U>::Type UType;
+				typedef typename Static::Remove::Const<typename Static::Remove::RefOnly<U>::Type>::Type UType;
 				Yuni::Extension::CString::Assign<CStringT, UType>::Perform(string, u);
 			}
 		};
@@ -306,7 +306,7 @@ namespace Yuni
 			template<class U, class CStringT>
 			static inline void Perform(const U& u, CStringT& string)
 			{
-				typedef typename Static::Remove::Const<U>::Type UType;
+				typedef typename Static::Remove::Const<typename Static::Remove::RefOnly<U>::Type>::Type UType;
 				Yuni::Extension::CString::Append<CStringT, UType>::Perform(string, u);
 			}
 		};
@@ -693,7 +693,7 @@ namespace Yuni
 	void CString<ChunkSizeT,ExpandableT>::fill(const StringT& pattern)
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
-		typedef typename Static::Remove::Const<StringT>::Type UType;
+		typedef typename Static::Remove::Const<typename Static::Remove::RefOnly<StringT>::Type>::Type UType;
 		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
 
 		if (AncestorType::size)
@@ -708,7 +708,7 @@ namespace Yuni
 	void CString<ChunkSizeT,ExpandableT>::fill(Size offset, const StringT& pattern)
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
-		typedef typename Static::Remove::Const<StringT>::Type UType;
+		typedef typename Static::Remove::Const<typename Static::Remove::RefOnly<StringT>::Type>::Type UType;
 		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
 
 		if (offset < AncestorType::size)
@@ -1908,7 +1908,7 @@ namespace Yuni
 	inline U
 	CString<ChunkSizeT,ExpandableT>::to() const
 	{
-		typedef typename Static::Remove::Const<U>::Type UType;
+		typedef typename Static::Remove::Const<typename Static::Remove::RefOnly<U>::Type>::Type UType;
 		return Yuni::Extension::CString::Into<UType>::Perform(*this);
 	}
 
@@ -1917,7 +1917,7 @@ namespace Yuni
 	inline bool
 	CString<ChunkSizeT,ExpandableT>::to(U& out) const
 	{
-		typedef typename Static::Remove::Const<U>::Type UType;
+		typedef typename Static::Remove::Const<typename Static::Remove::RefOnly<U>::Type>::Type UType;
 		return Yuni::Extension::CString::Into<UType>::Perform(*this, out);
 	}
 
