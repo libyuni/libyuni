@@ -28,7 +28,7 @@ namespace UI
 	** The main usage is split-screen games.
 	**
 	** For overlapping, views have a Z-order.
-	** Higher Z-order means closer to the viewer, 0 is furthest.
+	** Higher Z-order means closer to the viewer, 0 is furthest, 255 is closest.
 	** Default Z-order is 127 (at mid-way).
 	**
 	** \warning Overlapping is not recommended for the moment, because the implementation is sub-efficient.

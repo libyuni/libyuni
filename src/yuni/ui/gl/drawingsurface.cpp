@@ -3,6 +3,7 @@
 # include "../../private/graphics/opengl/glew/glew.h"
 # include "framebuffer.h"
 # include "shadermanager.h"
+# include "shaders.h"
 # include "linerenderer.h"
 # include "../textoverlay.h"
 # include <vector>
@@ -67,7 +68,7 @@ namespace UI
 		fb(width, height)
 	{
 		fb.initialize(Gfx3D::FrameBuffer::fbDraw);
-		baseShader = Gfx3D::ShaderManager::Instance().get("data/shaders/transformonly.vert", "data/shaders/uniformcolor.frag");
+		baseShader = Gfx3D::ShaderManager::Instance().getFromMemory(Gfx3D::vsTransformOnly, Gfx3D::fsColorUniform);
 		if (!baseShader)
 		{
 			std::cerr << "Shader loading or compilation for UI drawing failed ! " << std::endl;
@@ -84,7 +85,7 @@ namespace UI
 			}
 		}
 
-		lineShader = Gfx3D::ShaderManager::Instance().get("data/shaders/colorattr.vert", "data/shaders/colorattr.frag");
+		lineShader = Gfx3D::ShaderManager::Instance().getFromMemory(Gfx3D::vsColorAttr, Gfx3D::fsColorAttr);
 		if (!lineShader)
 		{
 			std::cerr << "Shader loading or compilation for line drawing failed !" << std::endl;
@@ -103,7 +104,7 @@ namespace UI
 			}
 		}
 
-		textShader = Gfx3D::ShaderManager::Instance().get("data/shaders/minimal.vert", "data/shaders/text.frag");
+		textShader = Gfx3D::ShaderManager::Instance().getFromMemory(Gfx3D::vsMinimal, Gfx3D::fsText);
 		if (!textShader)
 		{
 			std::cerr << "Shader loading or compilation for line drawing failed !" << std::endl;

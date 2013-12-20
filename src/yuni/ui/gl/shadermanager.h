@@ -33,7 +33,7 @@ namespace Gfx3D
 		** \code
 		** bool loadShaders(ShaderProgram::Ptr& program)
 		** {
-		**   program = ShaderManager::get("vertexshader.glsl", "fragmentshader.glsl");
+		**   program = ShaderManager::getFromFiles("vertexshader.glsl", "fragmentshader.glsl");
 		**   if (!program)
 		**   {
 		**     std::cerr << "Could not find shaders !" << std::endl;
@@ -59,7 +59,15 @@ namespace Gfx3D
 		** }
 		** \endcode
 		*/
-		const ShaderProgram::Ptr get(const AnyString& vShader, const AnyString& fShader);
+		const ShaderProgram::Ptr getFromFiles(const AnyString& vsPath, const AnyString& fsPath);
+
+		/*
+		** \brief Get a shader program from strings containing the vertex and fragment shaders
+		**
+		** \returns The shader program if both shaders were successfully loaded. nullptr otherwise.
+		** \warning The attributes need to be binded after this, and load() must be called.
+		*/
+		const ShaderProgram::Ptr getFromMemory(const AnyString& vsCode, const AnyString& fsCode);
 
 	private:
 		//! Private constructor

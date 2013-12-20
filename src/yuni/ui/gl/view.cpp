@@ -2,6 +2,7 @@
 #include "view.h"
 #include "shadermanager.h"
 #include "texture.h"
+#include "shaders.h"
 
 namespace Yuni
 {
@@ -33,7 +34,8 @@ namespace UI
 		if (!pTextShaders and !pPictureShaders)
 		{
 			auto& shaderManager = Gfx3D::ShaderManager::Instance();
-			pTextShaders = shaderManager.get("data/shaders/minimal.vert", "data/shaders/text.frag");
+			pTextShaders = shaderManager.getFromMemory(Gfx3D::vsMinimal, Gfx3D::fsText);
+			assert(pTextShaders && "Failed to load necessary shaders for text overlay !");
 			// Bind attributes before linking
 			pTextShaders->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
 			pTextShaders->bindAttribute("attrTexCoord", Gfx3D::Vertex<>::vaTextureCoord);
@@ -45,7 +47,8 @@ namespace UI
 			pTextShaders->activate();
 			pTextShaders->deactivate();
 
-			pPictureShaders = shaderManager.get("data/shaders/minimal.vert", "data/shaders/simpletexture.frag");
+			pPictureShaders = shaderManager.getFromMemory(Gfx3D::vsMinimal, Gfx3D::fsSimpleTexture);
+			assert(pPictureShaders && "Failed to load necessary shaders for picture overlay !");
 			// Bind attributes before linking
 			pPictureShaders->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
 			pPictureShaders->bindAttribute("attrTexCoord", Gfx3D::Vertex<>::vaTextureCoord);

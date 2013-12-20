@@ -429,8 +429,11 @@ namespace UI
 
 	WGLWindow::~WGLWindow()
 	{
-		// Unregister Window Class only when on the last window
-		if (WindowCount() == 1 and not UnregisterClass(L"OpenGL", pHInstance))
+		if (pHWnd)
+			kill();
+
+		// Unregister Window Class only when all windows are gone
+		if (WindowCount() == 0 and not ::UnregisterClass(L"OpenGL", pHInstance))
 		{
 			std::cerr << "Window closing error : Could not unregister Window Class !" << std::endl;
 		}
@@ -978,9 +981,9 @@ namespace UI
 
 	void WGLWindow::kill()
 	{
-		closeWindowForReinit();
-
 		GLWindow::kill();
+
+		closeWindowForReinit();
 
 		// Delete the RC
 		if (pHRC and !::wglDeleteContext(pHRC))

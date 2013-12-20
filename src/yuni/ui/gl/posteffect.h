@@ -25,7 +25,7 @@ namespace Gfx3D
 			pName(name),
 			pSize(width, height)
 		{
-			pShaders = ShaderManager::Instance().get(vertexShader, fragmentShader);
+			pShaders = ShaderManager::Instance().getFromFiles(vertexShader, fragmentShader);
 			//pShaders.bindAttribute("attrVertex", Yuni::Gfx3D::Vertex<>::vaPosition);
 			pShaders->load();
 		}

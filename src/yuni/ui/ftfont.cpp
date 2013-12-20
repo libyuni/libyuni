@@ -145,9 +145,9 @@ namespace UI
 			pFace(nullptr),
 			pValid(false)
 		{
-			if (not FT() or ::FT_New_Face(FT(), faceName.c_str(), 0, &pFace) or  not pFace)
+			if (not FT() or ::FT_New_Face(FT(), faceName.c_str(), 0, &pFace) or not pFace)
 			{
-				std::cerr << "Could not open font \"" << pFace << "\" !" << std::endl;
+				std::cerr << "Could not open font \"" << faceName << "\" !" << std::endl;
 				return;
 			}
 			::FT_Set_Char_Size(pFace, 0, (long int)(size * 64), 96, 96);
