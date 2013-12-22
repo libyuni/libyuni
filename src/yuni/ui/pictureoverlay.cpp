@@ -20,11 +20,11 @@ namespace UI
 		// Set texture coordinates
 		const float texCoord[] =
 			{
-				0.0f, 1.0f,
 				0.0f, 0.0f,
-				1.0f, 0.0f,
 				0.0f, 1.0f,
 				1.0f, 0.0f,
+				1.0f, 0.0f,
+				0.0f, 1.0f,
 				1.0f, 1.0f
 			};
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
@@ -32,13 +32,13 @@ namespace UI
 		// Set vertex positions
 		const float vertices[] =
 			{
-				(float)pX, (float)(pY + height()),
 				(float)pX, (float)pY,
-				(float)(pX + width()), (float)pY,
 				(float)pX, (float)(pY + height()),
 				(float)(pX + width()), (float)pY,
+				(float)(pX + width()), (float)pY,
+				(float)pX, (float)(pY + height()),
 				(float)(pX + width()), (float)(pY + height())
-			};
+				};
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
 		// Draw

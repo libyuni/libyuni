@@ -3,8 +3,6 @@
 
 # include "../yuni.h"
 # include "../core/smartptr.h"
-# include "../core/color/rgb.h"
-# include "../core/color/rgba.h"
 # include <vector>
 # include "gl/shaderprogram.h"
 # include "gl/texture.h"
@@ -30,7 +28,7 @@ namespace UI
 		PictureOverlay();
 
 		//! Constructor
-		PictureOverlay(const Gfx3D::Texture::Ptr& texture, int x, int y, unsigned int width, unsigned int height);
+		PictureOverlay(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width, uint height);
 
 		//! Destructor
 		~PictureOverlay();
@@ -42,12 +40,6 @@ namespace UI
 		void texture(const Gfx3D::Texture::Ptr& texture);
 		//! Get the picture data
 		const Gfx3D::Texture::Ptr& texture() const;
-
-		//! Modify the transparent color used
-		void color(const Color::RGB<float>& color);
-		void color(const Color::RGBA<float>& color);
-		//! Get the transparent color
-		const Color::RGB<float>& color() const;
 
 		//! Move the picture to another position
 		void move(int x, int y);

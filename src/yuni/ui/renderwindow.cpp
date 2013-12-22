@@ -24,6 +24,7 @@ namespace UI
 		pMultiSampling(MultiSampling::msNone),
 		pState(fullScreen ? wsMaximized : wsNormal),
 		pRefreshFunc(),
+		pResizeFunc(),
 		pMouse(nullptr)
 	{
 		pActiveView = new View(0, 0, width, height, 127, true);

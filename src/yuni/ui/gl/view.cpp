@@ -206,7 +206,6 @@ namespace UI
 	void View::drawOverlay(const PictureOverlay& picture) const
 	{
 		picture.draw(pPictureShaders);
-		//drawPicture(picture.texture(), picture.x(), picture.y(), picture.width(), picture.height());
 	}
 
 
