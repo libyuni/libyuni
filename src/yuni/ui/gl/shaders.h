@@ -172,8 +172,8 @@ uniform vec4 TextColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 // This shader displays them with the proper color.
 void main(void)
 {
-	vec4 material = texture(Texture0, texCoord);
-	vec4 alpha = texture(Texture1, texCoord);
+	vec4 alpha = texture(Texture0, texCoord);
+	vec4 material = texture(Texture1, texCoord);
 
 	gl_FragColor = vec4(TextColor.r, TextColor.g, TextColor.b, alpha.r);
 }
