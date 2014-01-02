@@ -8,10 +8,12 @@ namespace Yuni
 namespace Gfx3D
 {
 
+
+
 	/////////////// VERTEX SHADERS
 
 
-	static const char vsTransformOnly[] =
+	static const char vsTransform[] =
 		R"(
 #version 130
 
@@ -26,7 +28,7 @@ void main()
 
 
 	// Minimal vertex shader : transform coordinates and propagate texture coordinates
-	static const char vsMinimal[] =
+	static const char vsTexCoord[] =
 		R"(
 #version 130
 
@@ -101,10 +103,30 @@ void main(void)
 		)";
 
 
+	static const char vsCubeMap[] =
+		R"(
+#version 130
+
+in vec3 attrVertex;
+out vec3 texCoord;
+
+// 3D texture coordinates for a cubemap are actually the vertex' position
+void main()
+{
+	gl_Position = gl_ModelViewProjectionMatrix * vec4(attrVertex, 1.0f);
+	texCoord = normalize(attrVertex);
+}
+		)";
+
+
+
+
 
 
 
 	/////////////// FRAGMENT SHADERS
+
+
 
 
 	// Use a single color given as uniform
@@ -198,6 +220,23 @@ void main()
 	float low = ((ObjectID >> 8u) & 0xff) / 255.0f;
 	float lowest = (ObjectID & 0xff) / 255.0f;
 	gl_FragColor = vec4(highest, high, low, lowest);
+}
+		)";
+
+
+	// Skybox : cube map sampling
+	static const char fsSkybox[] =
+		R"(
+#version 130
+
+in vec3 texCoord;
+out vec4 gl_FragColor;
+uniform samplerCube Texture0;
+
+// Cube map access
+void main()
+{
+	gl_FragColor = texture(Texture0, texCoord);
 }
 		)";
 

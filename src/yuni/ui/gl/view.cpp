@@ -34,7 +34,7 @@ namespace UI
 		if (!pTextShaders and !pPictureShaders)
 		{
 			auto& shaderManager = Gfx3D::ShaderManager::Instance();
-			pTextShaders = shaderManager.getFromMemory(Gfx3D::vsMinimal, Gfx3D::fsText);
+			pTextShaders = shaderManager.getFromMemory(Gfx3D::vsTexCoord, Gfx3D::fsText);
 			assert(pTextShaders && "Failed to load necessary shaders for text overlay !");
 			// Bind attributes before linking
 			pTextShaders->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
@@ -47,7 +47,7 @@ namespace UI
 			pTextShaders->activate();
 			pTextShaders->deactivate();
 
-			pPictureShaders = shaderManager.getFromMemory(Gfx3D::vsMinimal, Gfx3D::fsSimpleTexture);
+			pPictureShaders = shaderManager.getFromMemory(Gfx3D::vsTexCoord, Gfx3D::fsSimpleTexture);
 			assert(pPictureShaders && "Failed to load necessary shaders for picture overlay !");
 			// Bind attributes before linking
 			pPictureShaders->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
