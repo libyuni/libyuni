@@ -62,10 +62,10 @@ namespace EventLoop
 		bool DetachedT = true                             // Use a separate thread or not
 		>
 	class IEventLoop
-		:public Policy::ObjectLevelLockableNotRecursive<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
-		,public FlowT<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
-		,public StatsT<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
-		,private NonCopyable<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
+		: public Policy::ObjectLevelLockableNotRecursive<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
+		, public FlowT<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
+		, public StatsT<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
+		, private NonCopyable<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
 	{
 	public:
 		//! Parent
@@ -76,7 +76,7 @@ namespace EventLoop
 		typedef LinkedList<RequestType>  RequestListType;
 
 		//! The Event loop
-		typedef IEventLoop<ParentType,FlowT,StatsT,DetachedT>  EventLoopType;
+		typedef IEventLoop<ParentType, FlowT, StatsT, DetachedT>  EventLoopType;
 		//! The most suitable smart pointer for the class
 		typedef SmartPtr<EventLoopType>  Ptr;
 		//! The threading policy
@@ -174,7 +174,7 @@ namespace EventLoop
 
 	private:
 		//! Empty method only used to stop the running event loop
-		bool requestStop();
+		static bool requestStop();
 
 		//! Run an infinite loop
 		void runInfiniteLoopWL();

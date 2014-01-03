@@ -12,7 +12,7 @@ namespace EventLoop
 {
 
 	template<class EventLoopT>
-	class Thread : public Yuni::Thread::IThread
+	class Thread final : public Yuni::Thread::IThread
 	{
 	public:
 		//! The type of the calling event loop
@@ -117,8 +117,10 @@ namespace EventLoop
 			// Destroying the thread
 			if (detached)
 				delete pThread;
+			pThread = NULL; // for code safety
 			// Destroying the request list
 			delete pRequests;
+			pRequests = NULL; // for code safety
 		}
 	}
 
@@ -152,12 +154,10 @@ namespace EventLoop
 		{
 			// Launching the event loop from the calling thread
 			this->runInfiniteLoopWL();
+
 			// Resetting internal status
-			{
-				typename ThreadingPolicy::MutexLocker locker(*this);
-				pIsRunning = false;
-				// unlocking the inner mutex
-			}
+			typename ThreadingPolicy::MutexLocker locker(*this);
+			pIsRunning = false;
 		}
 	}
 
@@ -177,16 +177,12 @@ namespace EventLoop
 			// the event loop.
 			// The object is still locked and we directly inject the request into
 			// the request list.
-			RequestType request;
-			request.bind(this, &EventLoopType::requestStop);
 			if (pRequests)
-				pRequests->push_back(request);
-			// unlocking the inner mutex
+				pRequests->push_back(& EventLoopType::requestStop);
 		}
 
 		// Informing the event loop that a new request is available
-		// We perform the reset after that the mutex has been unlocked to
-		// reduce lock contention.
+		// We perform the reset after that the mutex has been unlocked to reduce lock contention
 		pHasRequests = true;
 
 
@@ -210,11 +206,10 @@ namespace EventLoop
 					typename ThreadingPolicy::MutexLocker locker(*this);
 					if (not pIsRunning)
 						break;
-					// unlocking the inner mutex
 				}
 
 				// Sleeping a bit...
-				Yuni::SuspendMilliSeconds(80u); // 50ms
+				Yuni::SuspendMilliSeconds(80u);
 				elapsed += 80u;
 			}
 			while (elapsed < timeout);
@@ -250,6 +245,7 @@ namespace EventLoop
 			// Statistics
 			StatisticsPolicy::onRequestPosted(request);
 		}
+
 		// Informing the event loop that a new request is available
 		pHasRequests = true;
 	}
