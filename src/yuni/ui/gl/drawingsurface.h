@@ -76,6 +76,9 @@ namespace UI
 			const Color::RGBA<float>& backColor, int x, int y, uint width, uint height,
 			float lineWidth);
 
+		//! Draw a rectangular image
+		void drawImage(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width, uint height);
+
 		//! Fill with a color. Use clipping to control the filled area
 		void fill(const Color::RGBA<float>& color);
 

@@ -55,6 +55,9 @@ namespace UI
 		//! Shader program used to draw text
 		Gfx3D::ShaderProgram::Ptr textShader;
 
+		//! Shader program used to draw images
+		Gfx3D::ShaderProgram::Ptr pictureShader;
+
 		//! A texture overlay used for text rendering, reused for all kinds of text
 		TextOverlay text;
 
@@ -68,7 +71,8 @@ namespace UI
 		fb(width, height)
 	{
 		fb.initialize(Gfx3D::FrameBuffer::fbDraw);
-		baseShader = Gfx3D::ShaderManager::Instance().getFromMemory(Gfx3D::vsTransform, Gfx3D::fsColorUniform);
+		auto& shaderManager = Gfx3D::ShaderManager::Instance();
+		baseShader = shaderManager.getFromMemory(Gfx3D::vsTransform, Gfx3D::fsColorUniform);
 		if (!baseShader)
 		{
 			std::cerr << "Shader loading or compilation for UI drawing failed ! " << std::endl;
@@ -85,7 +89,7 @@ namespace UI
 			}
 		}
 
-		lineShader = Gfx3D::ShaderManager::Instance().getFromMemory(Gfx3D::vsColorAttr, Gfx3D::fsColorAttr);
+		lineShader = shaderManager.getFromMemory(Gfx3D::vsColorAttr, Gfx3D::fsColorAttr);
 		if (!lineShader)
 		{
 			std::cerr << "Shader loading or compilation for line drawing failed !" << std::endl;
@@ -104,24 +108,30 @@ namespace UI
 			}
 		}
 
-		textShader = Gfx3D::ShaderManager::Instance().getFromMemory(Gfx3D::vsTexCoord, Gfx3D::fsText);
-		if (!textShader)
+		textShader = shaderManager.getFromMemory(Gfx3D::vsTexCoord, Gfx3D::fsText);
+		assert(textShader && "Shader loading or compilation for line drawing failed !");
+		textShader->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
+		textShader->bindAttribute("attrColor", Gfx3D::Vertex<>::vaColor);
+		if (!lineShader->load())
 		{
-			std::cerr << "Shader loading or compilation for line drawing failed !" << std::endl;
+			std::cerr << "Shader program link for text drawing failed !" << std::endl
+					  << textShader->errorMessage() << std::endl;
 			textShader = nullptr;
-			return;
 		}
-		else
+
+		pictureShader = shaderManager.getFromMemory(Gfx3D::vsTexCoord, Gfx3D::fsSimpleTexture);
+		assert(pictureShader && "Failed to load necessary shaders for picture overlay !");
+		pictureShader->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
+		pictureShader->bindAttribute("attrTexCoord", Gfx3D::Vertex<>::vaTextureCoord);
+		if (!pictureShader->load())
 		{
-			textShader->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
-			textShader->bindAttribute("attrColor", Gfx3D::Vertex<>::vaColor);
-			if (!lineShader->load())
-			{
-				std::cerr << "Shader program link for text drawing failed !" << std::endl
-						  << textShader->errorMessage() << std::endl;
-				textShader = nullptr;
-			}
+			std::cerr << "Shader program link for picture drawing failed !" << std::endl
+					  << pictureShader->errorMessage() << std::endl;
+			pictureShader = nullptr;
 		}
+		pictureShader->activate();
+		pictureShader->bindUniform("Texture0", Yuni::Gfx3D::Vertex<>::vaTexture0);
+		pictureShader->deactivate();
 
 	}
 
@@ -371,6 +381,44 @@ namespace UI
 	{
 		::glClearColor(color.red, color.green, color.blue, color.alpha);
 		::glClear(GL_COLOR_BUFFER_BIT);
+	}
+
+
+	void DrawingSurface::drawImage(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width, uint height)
+	{
+		pImpl->pictureShader->activate();
+		::glBindTexture(GL_TEXTURE_2D, texture->id());
+		// Tex coords
+		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
+		const float texCoord[] =
+			{
+				0.0f, 1.0f,
+				0.0f, 0.0f,
+				1.0f, 0.0f,
+				0.0f, 1.0f,
+				1.0f, 0.0f,
+				1.0f, 1.0f
+			};
+		::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
+		// Vertices
+		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
+		const float vertices[] =
+			{
+				(float)x, (float)(y + height),
+				(float)x, (float)y,
+				(float)(x + width), (float)y,
+				(float)x, (float)(y + height),
+				(float)(x + width), (float)y,
+				(float)(x + width), (float)(y + height)
+			};
+		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
+		// Draw
+		::glDrawArrays(GL_TRIANGLES, 0, 6);
+		// Clean up
+		::glDisableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
+		::glDisableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
+
+		pImpl->baseShader->activate();
 	}
 
 
