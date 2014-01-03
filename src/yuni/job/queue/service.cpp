@@ -332,8 +332,8 @@ namespace Job
 		{
 		public:
 			//!
-			typedef QueueService::ThreadInfo ThreadInfoType;
-			typedef ThreadInfoType::Vector VectorType;
+			typedef typename QueueService::ThreadInfo ThreadInfoType;
+			typedef typename ThreadInfoType::Vector VectorType;
 
 		public:
 			QueueActivityPredicate(VectorType* out) :

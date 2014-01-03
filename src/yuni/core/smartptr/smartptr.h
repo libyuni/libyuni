@@ -122,14 +122,14 @@ namespace Yuni
 	**
 	** struct Foo
 	** {
-	**		int bar;
+	** 		int bar;
 	** };
 	**
 	** void doSomething(SmartPtr<Foo> p)
 	** {
-	**	std::cout << p->bar << std::endl; // Displays 42
+	** 		std::cout << p->bar << std::endl; // Displays 42
 	**
-	**	// The pointer owned by `p` will be deleted at the end of the function
+	** 		// The pointer owned by `p` will be deleted at the end of the function
 	** }
 	**
 	** int main()

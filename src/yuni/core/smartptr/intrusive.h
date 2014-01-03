@@ -30,7 +30,7 @@ namespace Yuni
 		**   according the current threading policy
 		*/
 		template<class T>
-		class SmartPtrType
+		class SmartPtrType final
 		{
 		public:
 			//! A thread-safe type
@@ -104,7 +104,7 @@ namespace Yuni
 
 	private:
 		//! Intrusive reference count
-		mutable Atomic::Int<> pRefCount;
+		mutable Atomic::Int<8 * sizeof(void*), TP> pRefCount;
 
 	}; // class IIntrusiveSmartPtr
 
@@ -127,7 +127,7 @@ namespace Yuni
 		**   according the current threading policy
 		*/
 		template<class T>
-		class SmartPtrType
+		class SmartPtrType final
 		{
 		public:
 			//! A thread-safe type
@@ -190,7 +190,7 @@ namespace Yuni
 
 	private:
 		//! Intrusive reference count
-		mutable Atomic::Int<> pRefCount;
+		mutable Atomic::Int<8 * sizeof(void*), TP> pRefCount;
 
 	}; // class IIntrusiveSmartPtr
 
