@@ -46,10 +46,10 @@ namespace Color
 				? static_cast<CalculationType>(value)
 				: static_cast<CalculationType>(value) * RGBType::upperBound / upperBound;
 
-			return color.red   == v
-				and color.green == v
-				and color.blue  == v
-				and color.alpha == v;
+			return Math::Equals(color.red, v)
+				and Math::Equals(color.green, v)
+				and Math::Equals(color.blue, v)
+				and Math::Equals(color.alpha, v);
 		}
 
 		template<bool PlusT>
@@ -115,18 +115,18 @@ namespace Color
 				and (int)Yuni::Color::RGBA<U>::lowerBound == (int)Yuni::Color::RGBA<V>::lowerBound)
 			{
 				return
-					color.red      == static_cast<U>(value.red)
-					and color.green == static_cast<U>(value.green)
-					and color.blue  == static_cast<U>(value.blue)
-					and color.alpha == static_cast<U>(value.alpha);
+					Math::Equals(color.red, static_cast<U>(value.red))
+					and Math::Equals(color.green, static_cast<U>(value.green))
+					and Math::Equals(color.blue, static_cast<U>(value.blue))
+					and Math::Equals(color.alpha, static_cast<U>(value.alpha));
 			}
 			else
 			{
 				return
-					color.red      == static_cast<U>(static_cast<CalculationType>(value.red)   * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGBA<V>::upperBound)
-					and color.green == static_cast<U>(static_cast<CalculationType>(value.green) * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGBA<V>::upperBound)
-					and color.blue  == static_cast<U>(static_cast<CalculationType>(value.blue)  * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGBA<V>::upperBound)
-					and color.alpha == static_cast<U>(static_cast<CalculationType>(value.alpha) * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGBA<V>::upperBound);
+					Math::Equals(color.red, static_cast<U>(static_cast<CalculationType>(value.red)   * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGBA<V>::upperBound))
+					and Math::Equals(color.green, static_cast<U>(static_cast<CalculationType>(value.green) * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGBA<V>::upperBound))
+					and Math::Equals(color.blue, static_cast<U>(static_cast<CalculationType>(value.blue)  * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGBA<V>::upperBound))
+					and Math::Equals(color.alpha, static_cast<U>(static_cast<CalculationType>(value.alpha) * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGBA<V>::upperBound));
 			}
 		}
 
@@ -219,18 +219,18 @@ namespace Color
 				and (int)Yuni::Color::RGBA<U>::lowerBound == (int)Yuni::Color::RGB<V>::lowerBound)
 			{
 				return
-					value.alpha    == Yuni::Color::RGBA<U>::upperBound
-					and color.red   == static_cast<U>(value.red)
-					and color.green == static_cast<U>(value.green)
-					and color.blue  == static_cast<U>(value.blue);
+					Math::Equals(value.alpha, Yuni::Color::RGBA<U>::upperBound)
+					and Math::Equals(color.red, static_cast<U>(value.red))
+					and Math::Equals(color.green, static_cast<U>(value.green))
+					and Math::Equals(color.blue, static_cast<U>(value.blue));
 			}
 			else
 			{
 				return
-					value.alpha    == Yuni::Color::RGBA<U>::upperBound
-					and color.red   == static_cast<U>(static_cast<CalculationType>(value.red)   * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGB<V>::upperBound)
-					and color.green == static_cast<U>(static_cast<CalculationType>(value.green) * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGB<V>::upperBound)
-					and color.blue  == static_cast<U>(static_cast<CalculationType>(value.blue)  * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGB<V>::upperBound);
+					Math::Equals(value.alpha, Yuni::Color::RGBA<U>::upperBound)
+					and Math::Equals(color.red, static_cast<U>(static_cast<CalculationType>(value.red)   * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGB<V>::upperBound))
+					and Math::Equals(color.green, static_cast<U>(static_cast<CalculationType>(value.green) * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGB<V>::upperBound))
+					and Math::Equals(color.blue, static_cast<U>(static_cast<CalculationType>(value.blue)  * Yuni::Color::RGBA<U>::upperBound / Yuni::Color::RGB<V>::upperBound));
 			}
 		}
 
