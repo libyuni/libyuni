@@ -85,7 +85,7 @@ namespace UI
 		//float A = alphablend ? Br : 1.0f;
 		float A = Ca;
 
-		float f = w - static_cast<int>(w);
+		float f = w - Math::Trunc(w);
 
 		//determine parameters t,R
 		double t;
@@ -238,14 +238,14 @@ namespace UI
 		//draw the line by triangle strip
 		float line_vertex[] =
 		{
-			x1-tx-Rx, y1-ty-Ry,	//fading edge1
-			x2-tx-Rx, y2-ty-Ry,
-			x1-tx, y1-ty,		//core
-			x2-tx, y2-ty,
-			x1+tx, y1+ty,
-			x2+tx, y2+ty,
-			x1+tx+Rx, y1+ty+Ry,	//fading edge2
-			x2+tx+Rx, y2+ty+Ry
+			(float)(x1 - tx - Rx), (float)(y1 - ty - Ry),	// fading edge 1
+			(float)(x2 - tx - Rx), (float)(y2 - ty - Ry),
+			(float)(x1 - tx),      (float)(y1 - ty),		// core
+			(float)(x2 - tx),      (float)(y2 - ty),
+			(float)(x1 + tx),      (float)(y1 + ty),
+			(float)(x2 + tx),      (float)(y2 + ty),
+			(float)(x1 + tx + Rx), (float)(y1 + ty + Ry),	// fading edge 2
+			(float)(x2 + tx + Rx), (float)(y2 + ty + Ry)
 		};
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, false, 0, line_vertex);
 
@@ -311,14 +311,14 @@ namespace UI
 			//draw cap
 			float line_vertex[] =
 			{
-				x1-Rx+cx, y1-Ry+cy,	//cap1
-				x1+Rx+cx, y1+Ry+cy,
-				x1-tx-Rx, y1-ty-Ry,
-				x1+tx+Rx, y1+ty+Ry,
-				x2-Rx-cx, y2-Ry-cy,	//cap2
-				x2+Rx-cx, y2+Ry-cy,
-				x2-tx-Rx, y2-ty-Ry,
-				x2+tx+Rx, y2+ty+Ry
+				(float)(x1 - Rx + cx), (float)(y1 - Ry + cy),	//cap1
+				(float)(x1 + Rx + cx), (float)(y1 + Ry + cy),
+				(float)(x1 - tx - Rx), (float)(y1 - ty - Ry),
+				(float)(x1 + tx + Rx), (float)(y1 + ty + Ry),
+				(float)(x2 - Rx - cx), (float)(y2 - Ry - cy),	//cap2
+				(float)(x2 + Rx - cx), (float)(y2 + Ry - cy),
+				(float)(x2 - tx - Rx), (float)(y2 - ty - Ry),
+				(float)(x2 + tx + Rx), (float)(y2 + ty + Ry)
 			};
 			::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, false, 0, line_vertex);
 			//::glVertexPointer(2, GL_FLOAT, 0, line_vertex);
@@ -373,7 +373,7 @@ void hair_line(double x1, double y1, double x2, double y2, bool alphablend = 0)
 {
 	double t = 0.05;
 	double R = 0.768;
-	double C = 0.0;
+	//double C = 0.0;
 
 	//determine angle of the line to horizontal
 	double tx=0,ty=0, Rx=0,Ry=0;
@@ -410,14 +410,14 @@ void hair_line(double x1, double y1, double x2, double y2, bool alphablend = 0)
 	//draw the line by triangle strip
 	float line_vertex[]=
 	{
-		x1-tx-Rx, y1-ty-Ry,	//fading edge1
-		x2-tx-Rx, y2-ty-Ry,
-		x1-tx,y1-ty,		//core
-		x2-tx,y2-ty,
-		x1+tx,y1+ty,
-		x2+tx,y2+ty,
-		x1+tx+Rx, y1+ty+Ry,	//fading edge2
-		x2+tx+Rx, y2+ty+Ry
+		(float)(x1 - tx - Rx), (float)(y1 - ty - Ry),	//fading edge1
+		(float)(x2 - tx - Rx), (float)(y2 - ty - Ry),
+		(float)(x1 - tx),      (float)(y1 - ty),		//core
+		(float)(x2 - tx),      (float)(y2 - ty),
+		(float)(x1 + tx),      (float)(y1 + ty),
+		(float)(x2 + tx),      (float)(y2 + ty),
+		(float)(x1 + tx + Rx), (float)(y1 + ty + Ry),	//fading edge2
+		(float)(x2 + tx + Rx), (float)(y2 + ty + Ry)
 	};
 	::glVertexPointer(2, GL_FLOAT, 0, line_vertex);
 
@@ -460,16 +460,16 @@ void line_raw( double x1, double y1, double x2, double y2,
 	double Cr, double Cg, double Cb,
 	double,double,double, bool)
 {
-	::glLineWidth(w);
+	::glLineWidth((float)w);
 	float line_vertex[]=
 	{
-		x1,y1,
-		x2,y2
+		(float)x1, (float)y1,
+		(float)x2, (float)y2
 	};
 	float line_color[]=
 	{
-		Cr,Cg,Cb,
-		Cr,Cg,Cb
+		(float)Cr, (float)Cg, (float)Cb,
+		(float)Cr, (float)Cg, (float)Cb
 	};
 	::glVertexPointer(2, GL_FLOAT, 0, line_vertex);
 	::glColorPointer(3, GL_FLOAT, 0, line_color);
