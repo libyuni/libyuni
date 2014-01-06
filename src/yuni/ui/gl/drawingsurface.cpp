@@ -373,7 +373,8 @@ namespace UI
 		::glDrawArrays(GL_TRIANGLES, 0, 6);
 		::glDisableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 
-		drawRectangle(frontColor, backColor, x, y, width, height, lineWidth);
+		if (frontColor != backColor)
+			drawRectangle(frontColor, backColor, x, y, width, height, lineWidth);
 	}
 
 
@@ -393,11 +394,11 @@ namespace UI
 		const float texCoord[] =
 			{
 				0.0f, 1.0f,
+				1.0f, 0.0f,
 				0.0f, 0.0f,
-				1.0f, 0.0f,
 				0.0f, 1.0f,
-				1.0f, 0.0f,
-				1.0f, 1.0f
+				1.0f, 1.0f,
+				1.0f, 0.0f
 			};
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
 		// Vertices
@@ -405,11 +406,11 @@ namespace UI
 		const float vertices[] =
 			{
 				(float)x, (float)(y + height),
+				(float)(x + width), (float)y,
 				(float)x, (float)y,
-				(float)(x + width), (float)y,
 				(float)x, (float)(y + height),
-				(float)(x + width), (float)y,
-				(float)(x + width), (float)(y + height)
+				(float)(x + width), (float)(y + height),
+				(float)(x + width), (float)y
 			};
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
 		// Draw

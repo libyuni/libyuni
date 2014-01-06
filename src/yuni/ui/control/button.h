@@ -21,11 +21,14 @@ namespace Control
 		typedef Yuni::Bind<void (void)>  Callback;
 
 	public:
+		Button()
+		{}
+
 		Button(int x, int y, uint width, uint height):
 			IControl(x, y, width, height)
 		{}
 
-		Button(const Point2D<>& position, const Point2D<uint>& size):
+		Button(const Point2D<int>& position, const Point2D<uint>& size):
 			IControl(position, size)
 		{}
 

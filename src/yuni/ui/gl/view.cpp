@@ -10,7 +10,7 @@ namespace UI
 {
 
 
-	View::View(uint x, uint y, uint w, uint h, uint8 z, bool visible) :
+	View::View(int x, int y, uint w, uint h, uint8 z, bool visible) :
 		pID(UUID::fGenerate),
 		pX(x),
 		pY(y),
@@ -127,7 +127,6 @@ namespace UI
 
 	void View::draw2D() const
 	{
-
 		// Save current states
 		::glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT);
 		// Disable depth test to avoid having the overlay hidden
@@ -149,13 +148,11 @@ namespace UI
 		::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Draw the overlays
-		PictureOverlay::Vector::const_iterator endP = pPictures.end();
-		for (PictureOverlay::Vector::const_iterator it = pPictures.begin(); endP != it; ++it)
-			drawOverlay(**it);
+		for (auto picOverlay : pPictures)
+			drawOverlay(*picOverlay);
 
-		TextOverlay::Vector::const_iterator endT = pTexts.end();
-		for (TextOverlay::Vector::const_iterator it = pTexts.begin(); endT != it; ++it)
-			drawOverlay(**it);
+		for (auto textOverlay : pTexts)
+			drawOverlay(*textOverlay);
 
 		// Render the control tree
 		if (!(!pControl) and pControl->visible())
@@ -178,7 +175,7 @@ namespace UI
 			if (pPictureShaders and pPictureShaders->valid())
 			{
 				drawPicture(pUISurface->texture(), pControl->x(), pControl->y(),
-					pControl->width(), pControl->height(), true);
+							pControl->width(), pControl->height(), true, true);
 			}
 		}
 
@@ -209,7 +206,8 @@ namespace UI
 	}
 
 
-	void View::drawPicture(const Gfx3D::Texture::Ptr& texture, int x, int y, unsigned int width, unsigned int height, bool flip) const
+	void View::drawPicture(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width,
+		uint height, bool flip, bool invert) const
 	{
 		if (!texture)
 			return;
@@ -222,36 +220,32 @@ namespace UI
 
 		// Set texture coordinates
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
+		float texCoord[] =
+			{
+				0.0f, 1.0f,
+				0.0f, 0.0f,
+				1.0f, 0.0f,
+				0.0f, 1.0f,
+				1.0f, 0.0f,
+				1.0f, 1.0f
+			};
 		if (flip)
 		{
-			const float texCoord[] =
-				{
-					0.0f, 0.0f,
-					0.0f, 1.0f,
-					1.0f, 1.0f,
-					0.0f, 0.0f,
-					1.0f, 1.0f,
-					1.0f, 0.0f
-				};
-			::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
+			for (uint i = 1; i < 12; i += 2)
+				texCoord[i] = -1.0f * texCoord[i] + 1.0f; // Switch 1s and 0s
 		}
-		else
+		if (invert)
 		{
-			const float texCoord[] =
-				{
-					0.0f, 1.0f,
-					0.0f, 0.0f,
-					1.0f, 0.0f,
-					0.0f, 1.0f,
-					1.0f, 0.0f,
-					1.0f, 1.0f
-				};
-			::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
+			std::swap(texCoord[2], texCoord[4]);
+			std::swap(texCoord[3], texCoord[5]);
+			std::swap(texCoord[8], texCoord[10]);
+			std::swap(texCoord[9], texCoord[11]);
 		}
+		::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
 
 		// Set vertices
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
-		const float vertices[] =
+		float vertices[] =
 			{
 				(float)x, (float)(y + height),
 				(float)x, (float)y,
@@ -260,6 +254,13 @@ namespace UI
 				(float)(x + width), (float)y,
 				(float)(x + width), (float)(y + height)
 			};
+		if (invert)
+		{
+			std::swap(vertices[2], vertices[4]);
+			std::swap(vertices[3], vertices[5]);
+			std::swap(vertices[8], vertices[10]);
+			std::swap(vertices[9], vertices[11]);
+		}
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
 
 		// Draw

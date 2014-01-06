@@ -42,6 +42,7 @@ namespace UI
 
 		// Wait for the context to be ready before initializing some GL objects in the main window
 		RenderWindow::initialize();
+		activeView()->initShaders();
 
 		return true;
 	}

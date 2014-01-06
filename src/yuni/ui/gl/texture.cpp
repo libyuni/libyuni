@@ -81,7 +81,7 @@ namespace Gfx3D
 
 
 
-	Texture::Ptr Texture::LoadFromFile(const AnyString& filePath)
+	Texture::Ptr Texture::LoadFromFile(const AnyString& filePath, bool mipmaps)
 	{
 		int width;
 		int height;
@@ -90,7 +90,7 @@ namespace Gfx3D
 		uint8* data = ::stbi_load(filePath.c_str(), &width, &height, &depth, 0); // 0 means auto-detect
 		if (!data)
 			return nullptr;
-		Texture::Ptr texture = Texture::New((uint)width, (uint)height, (uint)depth, UInt8, data, true);
+		Texture::Ptr texture = Texture::New((uint)width, (uint)height, (uint)depth, UInt8, data, mipmaps);
 
 		// free buffer
 		::stbi_image_free(data);

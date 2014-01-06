@@ -50,6 +50,8 @@ list(APPEND SRC_UI
 	ui/control/control.h
 	ui/control/checkbox.cpp
 	ui/control/checkbox.h
+	ui/control/panel.cpp
+	ui/control/panel.h
 	ui/control/window.cpp
 	ui/control/window.h
 

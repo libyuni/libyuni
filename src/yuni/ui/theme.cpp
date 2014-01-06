@@ -19,6 +19,7 @@ namespace UI
 		menuColorDisabled(0.2863f, 0.5451f, 0.651f), // (103, 120, 139)
 		borderColor(0.1882f, 0.3490f, 0.451f), // (48, 89, 115)
 		borderColorDisabled(0.1882f, 0.3490f, 0.451f), // (102, 100, 126)
+		panelColor(0.0f, 0.0f, 0.0f, 0.0f), // full transparent
 		margin(10),
 		borderWidth(2.5f),
 		menuHeight(20),
@@ -36,6 +37,7 @@ namespace UI
 		menuColorDisabled(other.menuColorDisabled),
 		borderColor(other.borderColor),
 		borderColorDisabled(other.borderColorDisabled),
+		panelColor(other.panelColor),
 		margin(other.margin),
 		borderWidth(other.borderWidth),
 		menuHeight(other.menuHeight),

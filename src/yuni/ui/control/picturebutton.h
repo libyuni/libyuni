@@ -21,24 +21,32 @@ namespace Control
 		typedef Yuni::Bind<void (void)>  Callback;
 
 	public:
+		PictureButton()
+		{}
+
 		PictureButton(int x, int y, uint width, uint height):
-			IControl(x, y, width, height)
+			IControl(x, y, width, height),
+			pBeingClicked(false)
 		{}
 
 		PictureButton(const Point2D<>& position, const Point2D<uint>& size):
-			IControl(position, size)
+			IControl(position, size),
+			pBeingClicked(false)
 		{}
 
 		//! Virtual destructor
 		virtual ~PictureButton() {}
 
+		//! Image shown on the button
 		void image(const Gfx3D::Texture::Ptr& image) { pImage = image; }
 
+		//! Image displayed while clicking (same as standard image if `null`)
 		void imageClicking(const Gfx3D::Texture::Ptr& image) { pImageClicking = image; }
 
+		//! Image displayed while hovering (same as standard image if `null`)
 		void imageHovering(const Gfx3D::Texture::Ptr& image) { pImageHovering = image; }
 
-		//! Launch a click event
+		//! On mouse button down
 		virtual void mouseDown(Input::IMouse::Button btn, int, int) override
 		{
 			if (btn != Input::IMouse::ButtonLeft)
@@ -48,6 +56,7 @@ namespace Control
 				pModified = true;
 		}
 
+		//! On mouse button up
 		virtual void mouseUp(Input::IMouse::Button btn, int, int) override
 		{
 			if (btn != Input::IMouse::ButtonLeft)
@@ -55,6 +64,7 @@ namespace Control
 			if (pBeingClicked)
 				pOnClick();
 			pBeingClicked = false;
+			pModified = true;
 		}
 
 		//! Bind the onClick event
@@ -66,7 +76,7 @@ namespace Control
 		void onClick(const ClassT& object, const MethodT& method) { pOnClick.bind(object, method); }
 
 		//! Draw the button on the surface
-		virtual void draw(DrawingSurface::Ptr& surface, bool root);
+		virtual void draw(DrawingSurface::Ptr& surface, bool root) override;
 
 	private:
 		Callback pOnClick;

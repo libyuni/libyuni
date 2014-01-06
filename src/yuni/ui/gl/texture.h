@@ -59,7 +59,7 @@ namespace Gfx3D
 			DataType type = UInt8, uint samples = 1, const uint8* data = nullptr);
 
 		//! Load texture from file
-		static Texture::Ptr LoadFromFile(const AnyString& filePath);
+		static Texture::Ptr LoadFromFile(const AnyString& filePath, bool mipmaps = true);
 
 		//! Load skybox from a .box file. Returns a cubemap texture
 		static Texture::Ptr LoadFromBoxFile(const AnyString& filePath);

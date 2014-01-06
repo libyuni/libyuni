@@ -169,6 +169,10 @@ namespace UI
 		EventPropagation doMouseDblClick(Input::IMouse::Button btn, int x, int y);
 		//! Launch a mouse scroll event
 		EventPropagation doMouseScroll(float delta, int x, int y);
+		//! Launch a mouse enter event
+		EventPropagation doMouseEnter(int x, int y);
+		//! Launch a mouse leave event
+		EventPropagation doMouseLeave(int x, int y);
 		//! Launch a mouse hover event
 		EventPropagation doMouseHover(int x, int y);
 		//! Launch a key down event
@@ -186,6 +190,10 @@ namespace UI
 		virtual void mouseDblClick(Input::IMouse::Button, int, int) {}
 		//! Control reaction to mouse scroll
 		virtual void mouseScroll(float, int, int) {}
+		//! Control reaction to mouse enter
+		virtual void mouseEnter(int, int) {}
+		//! Control reaction to mouse enter
+		virtual void mouseLeave(int, int) {}
 		//! Control reaction to mouse hover
 		virtual void mouseHover(int, int) {}
 		//! Control reaction to key up

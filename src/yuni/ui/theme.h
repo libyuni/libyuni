@@ -53,6 +53,8 @@ namespace UI
 		//! Color for control borders
 		Color::RGBA<float> borderColor;
 		Color::RGBA<float> borderColorDisabled;
+		//! Color for panel background
+		Color::RGBA<float> panelColor;
 		//! Margin for automatic placement of child controls (in pixels)
 		uint margin;
 		//! Width of control borders (in pixels)

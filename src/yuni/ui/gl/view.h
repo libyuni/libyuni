@@ -43,7 +43,7 @@ namespace UI
 
 	public:
 		//! Constructor
-		View(uint x, uint y, uint w, uint h, uint8 z = 127, bool visible = true);
+		View(int x, int y, uint w, uint h, uint8 z = 127, bool visible = true);
 
 		//! Destructor
 		virtual ~View();
@@ -70,7 +70,7 @@ namespace UI
 		uint height() const { return pHeight; }
 
 		//! Move the view to an absolute position
-		void moveTo(uint x, uint y) { pX = x; pY = y; }
+		void moveTo(int x, int y) { pX = x; pY = y; }
 		//! Move the view by a relative amount
 		void moveBy(int x, int y) { pX += x; pY += y; }
 
@@ -139,8 +139,8 @@ namespace UI
 		void drawOverlay(const PictureOverlay& text) const;
 
 		//! Draw a texture at the given coordinates (in pixels)
-		void drawPicture(const Gfx3D::Texture::Ptr& texture, int x, int y, unsigned int width,
-			unsigned int height, bool flip = false) const;
+		void drawPicture(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width,
+			uint height, bool flip = false, bool invert = false) const;
 
 		//! Draw all 2D elements : overlays and UI
 		void draw2D() const;
