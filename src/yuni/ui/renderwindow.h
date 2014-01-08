@@ -37,6 +37,9 @@ namespace UI
 		//! Delegate type for the Resize callback
 		typedef Yuni::Bind<void (uint width, uint height)>  ResizeDelegate;
 
+		//! Delegate type for the CleanUp callback
+		typedef Yuni::Bind<void ()> CleanUpDelegate;
+
 
 	public:
 		//! State of the render window
@@ -140,6 +143,13 @@ namespace UI
 		void setResizeCallback(const ClassT& object, const MethodT& method)
 		{
 			pResizeFunc.bind(object, method);
+		}
+		//! Set the function for clean-up callback
+		void setCleanUpCallback(CleanUpDelegate func) { pCleanUpFunc = func; }
+		template<class ClassT, class MethodT>
+		void setCleanUpCallback(const ClassT& object, const MethodT& method)
+		{
+			pCleanUpFunc.bind(object, method);
 		}
 
 		//! Refresh the display
@@ -308,6 +318,9 @@ namespace UI
 
 		//! Callback for window resize
 		ResizeDelegate pResizeFunc;
+
+		//! Callback for window clean-up, called before closing
+		CleanUpDelegate pCleanUpFunc;
 
 		//! Currently active view, all operations are done on this one
 		View::Ptr pActiveView;

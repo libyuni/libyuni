@@ -36,6 +36,7 @@ namespace UI
 	{
 		pRefreshFunc.unbind();
 		pResizeFunc.unbind();
+		pCleanUpFunc.unbind();
 		delete pMouse;
 	}
 
@@ -44,6 +45,9 @@ namespace UI
 	{
 		pRefreshFunc.unbind();
 		pResizeFunc.unbind();
+		// Call the clean-up callback
+		pCleanUpFunc();
+		pCleanUpFunc.unbind();
 		pActiveView = nullptr;
 		pViewList.clear();
 		pDefaultFont = nullptr;
