@@ -23,8 +23,6 @@ namespace UI
 		pFullScreen(fullScreen),
 		pMultiSampling(MultiSampling::msNone),
 		pState(fullScreen ? wsMaximized : wsNormal),
-		pRefreshFunc(),
-		pResizeFunc(),
 		pMouse(nullptr)
 	{
 		pActiveView = new View(0, 0, width, height, 127, true);
@@ -34,20 +32,20 @@ namespace UI
 
 	RenderWindow::~RenderWindow()
 	{
-		pRefreshFunc.unbind();
-		pResizeFunc.unbind();
-		pCleanUpFunc.unbind();
+		onRefresh.unbind();
+		onResize.unbind();
+		onCleanUp.unbind();
 		delete pMouse;
 	}
 
 
 	void RenderWindow::kill()
 	{
-		pRefreshFunc.unbind();
-		pResizeFunc.unbind();
+		onRefresh.unbind();
+		onResize.unbind();
 		// Call the clean-up callback
-		pCleanUpFunc();
-		pCleanUpFunc.unbind();
+		onCleanUp();
+		onCleanUp.unbind();
 		pActiveView = nullptr;
 		pViewList.clear();
 		pDefaultFont = nullptr;
@@ -338,6 +336,8 @@ namespace UI
 
 	void RenderWindow::doMouseHover(int x, int y)
 	{
+		assert(pMouse and "invalid mouse pointer");
+
 		EventPropagation propagate = epContinue;
 		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
@@ -346,7 +346,6 @@ namespace UI
 				break;
 		}
 
-		assert(pMouse and "invalid mouse pointer");
 		pMouse->doHover(x, y);
 	}
 

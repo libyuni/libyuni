@@ -55,7 +55,7 @@ namespace UI
 		virtual void swapBuffers() override { ::SwapBuffers(pHDC); }
 
 		//! Refresh and swap buffers with a single polymorphic call
-		virtual void refreshAndSwap() override { pRefreshFunc(); ::SwapBuffers(pHDC); }
+		virtual void refreshAndSwap() override { onRefresh(); ::SwapBuffers(pHDC); }
 
 		//! Set window icon
 		virtual void setIcon(const AnyString& path) override;

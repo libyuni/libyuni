@@ -103,7 +103,7 @@ namespace UI
 			pWidth = width;
 			pHeight = height;
 			// pFB.resize(width, height);
-			pResizeFunc(width, height);
+			onResize(width, height);
 		}
 
 		/*!
@@ -130,30 +130,8 @@ namespace UI
 
 		//! \name Callbacks
 		//@{
-		//! Set the function for refresh callback
-		void setRefreshCallback(RefreshDelegate func) { pRefreshFunc = func; }
-		template<class ClassT, class MethodT>
-		void setRefreshCallback(const ClassT& object, const MethodT& method)
-		{
-			pRefreshFunc.bind(object, method);
-		}
-		//! Set the function for resize callback
-		void setResizeCallback(ResizeDelegate func) { pResizeFunc = func; }
-		template<class ClassT, class MethodT>
-		void setResizeCallback(const ClassT& object, const MethodT& method)
-		{
-			pResizeFunc.bind(object, method);
-		}
-		//! Set the function for clean-up callback
-		void setCleanUpCallback(CleanUpDelegate func) { pCleanUpFunc = func; }
-		template<class ClassT, class MethodT>
-		void setCleanUpCallback(const ClassT& object, const MethodT& method)
-		{
-			pCleanUpFunc.bind(object, method);
-		}
-
 		//! Refresh the display
-		virtual void refresh() { pRefreshFunc(); }
+		virtual void refresh() { onRefresh(); }
 
 		//! Refresh the display then swap buffers
 		virtual void refreshAndSwap() = 0;
@@ -264,8 +242,6 @@ namespace UI
 
 		//! \name Events
 		//@{
-		void doWindowResize(uint width, int height);
-
 		void doMouseMove(int x, int y);
 		void doMouseDown(Input::IMouse::Button btn);
 		void doMouseUp(Input::IMouse::Button btn);
@@ -277,6 +253,17 @@ namespace UI
 		void doKeyDown(Input::Key key);
 		void doKeyUp(Input::Key key);
 		//@}
+
+	public:
+		//! Callback for window refresh
+		RefreshDelegate onRefresh;
+
+		//! Callback for window resize
+		ResizeDelegate onResize;
+
+		//! Callback for window clean-up, called before closing
+		CleanUpDelegate onCleanUp;
+
 
 	protected:
 		//! Text displayed in the title bar
@@ -312,15 +299,6 @@ namespace UI
 
 		//! Is the window maximized ? Minimized ?
 		WindowState pState;
-
-		//! Callback for window refresh
-		RefreshDelegate pRefreshFunc;
-
-		//! Callback for window resize
-		ResizeDelegate pResizeFunc;
-
-		//! Callback for window clean-up, called before closing
-		CleanUpDelegate pCleanUpFunc;
 
 		//! Currently active view, all operations are done on this one
 		View::Ptr pActiveView;

@@ -20,6 +20,11 @@ namespace UI
 {
 
 
+	//! Forward declarations (for friend)
+	class RenderWindow;
+	class GLWindow;
+
+
 	/*!
 	** \brief A view is a rectangle where 3D data is rendered inside a window
 	**
@@ -48,9 +53,6 @@ namespace UI
 		//! Destructor
 		virtual ~View();
 
-		//! Necessary shaders for overlay
-		bool initShaders();
-
 		//! Identifier of the view
 		const UUID& id() const { return pID; }
 
@@ -62,6 +64,7 @@ namespace UI
 
 		//! Z order position, 0 is bottom / back, 255 is top / front
 		uint8 z() const { return pZ; }
+		void z(uint8 z) { pZ = z; }
 
 		//! Width of the view
 		uint width() const { return pWidth; }
@@ -145,6 +148,9 @@ namespace UI
 		//! Draw all 2D elements : overlays and UI
 		void draw2D() const;
 
+		//! Necessary shaders for overlay
+		bool initShaders();
+
 	protected:
 		//! ID of the view
 		UUID pID;
@@ -193,6 +199,10 @@ namespace UI
 
 		//! Drawing surface for UI controls
 		mutable DrawingSurface::Ptr pUISurface;
+
+		//! Friend declarations
+		friend class RenderWindow;
+		friend class GLWindow;
 
 	}; // class View
 
