@@ -129,6 +129,7 @@ namespace EventLoop
 		bool DetachedT>
 	void IEventLoop<ParentT,FlowT,StatsT,DetachedT>::start()
 	{
+		// startup process
 		{
 			// Locking for inserting the new request
 			typename ThreadingPolicy::MutexLocker locker(*this);
@@ -141,10 +142,12 @@ namespace EventLoop
 				// The event loop is running
 				pIsRunning = true;
 			}
+
 			// Initializing the request list
-			if (not pRequests)
+			if (NULL == pRequests)
 				pRequests = new RequestListType();
 		}
+
 		if (detached)
 		{
 			// The loop is launched from another thread
@@ -164,6 +167,30 @@ namespace EventLoop
 
 	template<class ParentT, template<class> class FlowT, template<class> class StatsT,
 		bool DetachedT>
+	void IEventLoop<ParentT,FlowT,StatsT,DetachedT>::gracefulStop()
+	{
+		// Locking for checking internal status and inserting a 'stop' request
+		typename ThreadingPolicy::MutexLocker locker(*this);
+		// Aborting if the event loop is already stopped
+		if (not pIsRunning or not FlowPolicy::onStop())
+			return;
+
+		// Posting a request that will fail (return false) in order to stop
+		// the event loop.
+		// The object is still locked and we directly inject the request into
+		// the request list.
+		if (NULL == pRequests)
+			pRequests = new RequestListType();
+
+		pRequests->push_back(RequestStop);
+
+		// Informing the event loop that a new request is available
+		pHasRequests = true;
+	}
+
+
+	template<class ParentT, template<class> class FlowT, template<class> class StatsT,
+		bool DetachedT>
 	void IEventLoop<ParentT,FlowT,StatsT,DetachedT>::stop(uint timeout)
 	{
 		// Locking for checking internal status and inserting a 'stop' request
@@ -177,13 +204,14 @@ namespace EventLoop
 			// the event loop.
 			// The object is still locked and we directly inject the request into
 			// the request list.
-			if (pRequests)
-				pRequests->push_back(& EventLoopType::requestStop);
-		}
+			if (NULL == pRequests)
+				pRequests = new RequestListType();
 
-		// Informing the event loop that a new request is available
-		// We perform the reset after that the mutex has been unlocked to reduce lock contention
-		pHasRequests = true;
+			pRequests->push_back(RequestStop);
+
+			// Informing the event loop that a new request is available
+			pHasRequests = true;
+		}
 
 
 		if (detached)
@@ -201,7 +229,7 @@ namespace EventLoop
 			do
 			{
 				// Checking for the thread termination
-				// This check is performed first. With luck the loop is already stopped.
+				// This check is performed first. With luck, the loop may have already stopped.
 				{
 					typename ThreadingPolicy::MutexLocker locker(*this);
 					if (not pIsRunning)
@@ -209,8 +237,8 @@ namespace EventLoop
 				}
 
 				// Sleeping a bit...
-				Yuni::SuspendMilliSeconds(80u);
-				elapsed += 80u;
+				Yuni::SuspendMilliSeconds(50u);
+				elapsed += 50u;
 			}
 			while (elapsed < timeout);
 		}
@@ -250,14 +278,6 @@ namespace EventLoop
 		pHasRequests = true;
 	}
 
-
-	template<class ParentT, template<class> class FlowT, template<class> class StatsT,
-		bool DetachedT>
-	bool IEventLoop<ParentT,FlowT,StatsT,DetachedT>::requestStop()
-	{
-		// Returning false to stop the event loop
-		return false;
-	}
 
 
 	template<class ParentT, template<class> class FlowT, template<class> class StatsT,

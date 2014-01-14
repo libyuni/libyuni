@@ -122,6 +122,13 @@ namespace EventLoop
 		void start();
 
 		/*!
+		** \brief Ask to Stop the execution of the event loop as soon as possible
+		**
+		** This method will not wait the event loop termination
+		*/
+		void gracefulStop();
+
+		/*!
 		** \brief Gracefully stop the execution of the event loop, and wait for it
 		**
 		** In detached mode, the method will wait for the end of the execution
@@ -173,9 +180,6 @@ namespace EventLoop
 		void suspend(uint timeout);
 
 	private:
-		//! Empty method only used to stop the running event loop
-		static bool requestStop();
-
 		//! Run an infinite loop
 		void runInfiniteLoopWL();
 
@@ -202,6 +206,12 @@ namespace EventLoop
 	}; // class IEventLoop<>
 
 
+
+
+
+
+	//! Empty method which always returns false, only used to stop the running event loop
+	bool RequestStop();
 
 
 
