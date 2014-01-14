@@ -17,15 +17,56 @@ namespace UI
 		::glBindTexture(GL_TEXTURE_2D, pTexture->id());
 		shader->bindUniform("Texture0", Yuni::Gfx3D::Vertex<>::vaTexture0);
 
+		int offsetX = 0;
+		int offsetY = 0;
+		if (pDisplay == podOffset)
+		{
+			offsetX = pOffsetX;
+			offsetY = pOffsetY;
+		}
+		float minX = 0.0f;
+		float maxX = 1.0f;
+		float minY = 0.0f;
+		float maxY = 1.0f;
+		switch (pDisplay)
+		{
+			case podStretch:
+				// Nothing to do, coordinates are perfect
+				break;
+			case podNone:
+				if (pTexture->width() > pWidth)
+					maxX = (float)pWidth / (float)pTexture->width();
+				else if (pTexture->width() < pWidth)
+				{
+					// TODO : Fix vertices
+				}
+				if (pTexture->height() > pHeight)
+					maxY = (float)pHeight / (float)pTexture->height();
+				else if (pTexture->height() < pHeight)
+				{
+					// TODO : Fix vertices
+				}
+				break;
+			case podOffset:
+			case podCenter:
+			case podFit:
+			case podFill:
+				// TODO
+				break;
+			default:
+				assert(false && "Invalid enum value for PictureOverlay::Display !");
+				break;
+		}
+
 		// Set texture coordinates
 		const float texCoord[] =
 			{
-				0.0f, 0.0f,
-				0.0f, 1.0f,
-				1.0f, 0.0f,
-				1.0f, 0.0f,
-				0.0f, 1.0f,
-				1.0f, 1.0f
+				minX, minY,
+				minX, maxY,
+				maxX, minY,
+				maxX, minY,
+				minX, maxY,
+				maxX, maxY
 			};
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);

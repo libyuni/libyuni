@@ -13,10 +13,38 @@ namespace UI
 {
 
 	/*!
-	** \brief A picture overlay is a 2D picture that is displayed on screen on top of the 3D view
+	** \brief A picture overlay is a 2D picture meant to be displayed on screen over a 3D view
 	*/
 	class PictureOverlay
 	{
+	public:
+		enum Display
+		{
+			// Display the image aligned on the top-left of the overlay.
+			// The image may be cropped or parts of the overlay may be left empty (transparent).
+			// This is equivalent to Offset with `offsetX` and `offsetY` equal to 0.
+			podNone,
+
+			// Grow / reduce the image to fill the overlay, maintaining aspect ratio.
+			// The image may be cropped
+			podFill,
+
+			// Grow / reduce the image to fit the overlay, maintaining aspect ratio.
+			// Parts of the overlay may be left empty (transparent)
+			podFit,
+
+			// Stretch the image on both dimensions to fit the overlay, losing aspect ratio.
+			podStretch,
+
+			// Center the image in the overlay.
+			// The image may be cropped or parts of the overlay may be left empty (transparent).
+			podCenter,
+
+			// Offset the image to display a part of it in the overlay, uses `offsetX` and `offsetY`
+			// The image may be cropped or parts of the overlay may be left empty (transparent).
+			podOffset
+		};
+
 	public:
 		//! Smart pointer
 		typedef SmartPtr<PictureOverlay>  Ptr;
@@ -27,8 +55,8 @@ namespace UI
 		//! Empty constructor
 		PictureOverlay();
 
-		//! Constructor
-		PictureOverlay(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width, uint height);
+		//! Constructor. Passing 0 as a dimension indicates to use the value from the texture.
+		PictureOverlay(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width = 0, uint height = 0);
 
 		//! Destructor
 		~PictureOverlay();
@@ -57,10 +85,27 @@ namespace UI
 		//! Height of the picture (in pixels)
 		uint height() const;
 
+		//! Enable visibility
 		void show() { pVisible = true; }
+		//! Disable visibility
 		void hide() { pVisible = false; }
+		//! Set visibility
 		void show(bool visible) { pVisible = visible; }
+		//! Get visibility
 		bool visible() const { return pVisible; }
+
+		//! Current display mode
+		Display display() const { return pDisplay; }
+		//! Set display mode to Fit
+		void fit() { pDisplay = podFit; }
+		//! Set display mode to Fill
+		void fill() { pDisplay = podFill; }
+		//! Set display mode to Center
+		void center() { pDisplay = podCenter; }
+		//! Set display mode to Stretch
+		void stretch() { pDisplay = podStretch; }
+		//! Set display mode to Offset and set offset values
+		void offset(int x, int y) { pDisplay = podOffset; pOffsetX = x; pOffsetY = y; }
 
 	private:
 		//! Picture to display
@@ -84,6 +129,15 @@ namespace UI
 
 		//! Height of the picture (in pixels)
 		uint pHeight;
+
+		//! Offset of the overlay over the image in X (only used in Offset display)
+		int pOffsetX;
+
+		//! Offset of the overlay over the image in Y (only used in Offset display)
+		int pOffsetY;
+
+		//! Type of display of the image inside the overlay
+		Display pDisplay;
 	};
 
 

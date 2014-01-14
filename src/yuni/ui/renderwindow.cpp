@@ -70,6 +70,8 @@ namespace UI
 	{
 		View::Ptr newView = new View(x, y, w, h, z);
 		newView->initShaders();
+		if (activeView() != nullptr)
+			newView->camera(activeView()->camera());
 		attachView(newView);
 		return newView;
 	}

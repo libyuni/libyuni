@@ -14,9 +14,11 @@ namespace UI
 		pX(0),
 		pY(0),
 		pWidth(1),
-		pHeight(1)
-	{
-	}
+		pHeight(1),
+		pOffsetX(0),
+		pOffsetY(0),
+		pDisplay(podNone)
+	{}
 
 
 	inline PictureOverlay::PictureOverlay(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width, uint height):
@@ -24,10 +26,13 @@ namespace UI
 		pVisible(true),
 		pX(x),
 		pY(y),
-		pWidth(width),
-		pHeight(height)
-	{
-	}
+		// Resize to the texture's size if `width` or `height` are left null
+		pWidth(width ? width : !!texture ? texture->width() : 1),
+		pHeight(height ? height : !!texture ? texture->height() : 1),
+		pOffsetX(0),
+		pOffsetY(0),
+		pDisplay(podNone)
+	{}
 
 
 	inline PictureOverlay::~PictureOverlay()

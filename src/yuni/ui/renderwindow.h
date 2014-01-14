@@ -151,6 +151,7 @@ namespace UI
 		//@{
 		//! Clear the rendering area to black
 		virtual void clear() const = 0;
+		//! Clear the rendering area to a given color
 		virtual void clear(const Color::RGB<>& color) const = 0;
 
 		//! Clear a rectangle in the rendering area to black
