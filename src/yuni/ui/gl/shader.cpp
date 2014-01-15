@@ -74,11 +74,9 @@ namespace Gfx3D
 		String data;
 		if (IO::errNone != IO::File::LoadFromFile(data, filePath))
 		{
-#if defined(DEBUG) && !defined(NDEBUG)
-
-			Yuni::Logs::Logger<> logs;
-			logs.error() << "Failed to load shader \"" << filePath << "\" !";
-#endif
+			# if defined(DEBUG) && !defined(NDEBUG)
+			std::cerr << "Failed to load shader \"" << filePath << "\" !" << std::endl;
+			# endif
 			return false;
 		}
 		return loadFromMemory(data);
@@ -89,6 +87,7 @@ namespace Gfx3D
 	{
 		if (pID == invalidID)
 			pID = ::glCreateShader(GL_FRAGMENT_SHADER);
+
 		const char* data = source.data();
 		::glShaderSource(pID, 1, &data, nullptr);
 		::glCompileShader(pID);
@@ -129,6 +128,7 @@ namespace Gfx3D
 	{
 		if (pID == invalidID)
 			pID = ::glCreateShader(GL_COMPUTE_SHADER);
+
 		const char* data = source.data();
 		::glShaderSource(pID, 1, &data, nullptr);
 		::glCompileShader(pID);

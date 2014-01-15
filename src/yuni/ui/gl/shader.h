@@ -1,10 +1,13 @@
-#ifndef __YUNI_GFX3D_SHADER_H__
-# define __YUNI_GFX3D_SHADER_H__
+#ifndef __YUNI_UI_GL_SHADER_H__
+# define __YUNI_UI_GL_SHADER_H__
 
 # include <yuni/yuni.h>
 # include <yuni/core/dictionary.h>
 # include <yuni/core/smartptr.h>
 # include <yuni/core/string.h>
+# include <yuni/core/noncopyable>
+
+
 
 namespace Yuni
 {
@@ -18,7 +21,7 @@ namespace Gfx3D
 	/*!
 	** \brief Shader loading
 	*/
-	class IShader
+	class IShader : public NonCopyable<IShader>
 	{
 	public:
 		//! ID type
@@ -30,8 +33,10 @@ namespace Gfx3D
 
 	public:
 		//! Constructor
-		IShader(): pID((uint) -1)
-		{}
+		IShader();
+		# ifdef YUNI_HAS_CPP_MOVE
+		IShader(IShader&& rhs);
+		# endif
 		//! Virtual destructor
 		virtual ~IShader() {}
 
@@ -42,10 +47,10 @@ namespace Gfx3D
 		virtual bool loadFromMemory(const AnyString& source) = 0;
 
 		//! Is the shader valid ?
-		bool valid() const { return pID != (uint) -1; }
+		bool valid() const;
 
 		//! Get the ID
-		uint id() const { return pID; }
+		uint id() const;
 
 	protected:
 		uint pID;
@@ -54,6 +59,9 @@ namespace Gfx3D
 		friend class ShaderProgram;
 
 	}; // class IShader
+
+
+
 
 
 	/*!
@@ -135,4 +143,4 @@ namespace Gfx3D
 } // namespace Gfx3D
 } // namespace Yuni
 
-#endif // __YUNI_GFX3D_SHADER_H__
+#endif // __YUNI_UI_GL_SHADER_H__

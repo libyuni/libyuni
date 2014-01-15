@@ -1,5 +1,8 @@
+
 #include <yuni/io/filename-manipulation.h>
 #include "shadermanager.h"
+
+
 
 namespace Yuni
 {
@@ -12,6 +15,7 @@ namespace Gfx3D
 		String fullPath;
 		// Use the canonicalized path as key
 		Yuni::IO::Canonicalize(fullPath, vShader);
+
 		// Search for this shader in the vertex shader cache
 		VertexShader::Ptr vertex;
 		auto vsIt = pVertexShaders.find(fullPath);
@@ -101,6 +105,8 @@ namespace Gfx3D
 		pPrograms[key] = newProg;
 		return newProg;
 	}
+
+
 
 
 

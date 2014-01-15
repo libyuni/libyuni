@@ -1,10 +1,10 @@
-#pragma once
+#ifndef __YUNI_UI_GL_SHADERS_H__
+# define __YUNI_UI_GL_SHADERS_H__
 
 // This file contains necessary GLSL shaders for internal use
 
 namespace Yuni
 {
-
 namespace Gfx3D
 {
 
@@ -301,5 +301,8 @@ void main()
 
 
 
+
 } // namespace Gfx3D
 } // namespace Yuni
+
+#endif // __YUNI_UI_GL_SHADERS_H__

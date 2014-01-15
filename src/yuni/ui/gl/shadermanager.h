@@ -1,5 +1,5 @@
-#ifndef __YUNI_GFX3D_SHADERMANAGER_H__
-# define __YUNI_GFX3D_SHADERMANAGER_H__
+#ifndef __YUNI_UI_GL_SHADERMANAGER_H__
+# define __YUNI_UI_GL_SHADERMANAGER_H__
 
 # include <yuni/yuni.h>
 # include <yuni/core/dictionary.h>
@@ -23,6 +23,7 @@ namespace Gfx3D
 
 		//! Cache for shader programs, by vertex + fragment shader IDs
 		typedef Dictionary<ShaderPair, ShaderProgram::Ptr>::Ordered ProgramCache;
+
 
 	public:
 		/*!
@@ -69,6 +70,7 @@ namespace Gfx3D
 		*/
 		const ShaderProgram::Ptr getFromMemory(const AnyString& vsCode, const AnyString& fsCode);
 
+
 	private:
 		//! Private constructor
 		ShaderManager() {}
@@ -79,25 +81,21 @@ namespace Gfx3D
 	private:
 		//! Current programs as referenced by the IDs of the shaders they contain
 		ProgramCache pPrograms;
-
 		//! Currently loaded vertex shaders
 		VertexShader::Map pVertexShaders;
-
 		//! Currently loaded fragment shaders
 		FragmentShader::Map pFragmentShaders;
 
-	private:
 		//! Friend declaration for constructor access
-		template<class T>
-		friend class Yuni::Policy::Creation::EmptyConstructor;
+		template<class T> friend class Yuni::Policy::Creation::EmptyConstructor;
 
 	}; // class ShaderManager
+
+
 
 
 
 } // namespace Gfx3D
 } // namespace Yuni
 
-
-
-#endif // __YUNI_GFX3D_SHADERMANAGER_H__
+#endif // __YUNI_UI_GL_SHADERMANAGER_H__

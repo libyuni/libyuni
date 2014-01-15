@@ -1,5 +1,5 @@
-#ifndef __YUNI_GFX3D_SHADERPROGRAM_HXX__
-# define __YUNI_GFX3D_SHADERPROGRAM_HXX__
+#ifndef __YUNI_UI_GL_SHADERPROGRAM_HXX__
+# define __YUNI_UI_GL_SHADERPROGRAM_HXX__
 
 # include "../../core/static/assert.h"
 # include "glerror.h"
@@ -73,4 +73,4 @@ namespace Gfx3D
 } // namespace Gfx3D
 } // namespace Yuni
 
-#endif // __YUNI_GFX3D_SHADERPROGRAM_HXX__
+#endif // __YUNI_UI_GL_SHADERPROGRAM_HXX__

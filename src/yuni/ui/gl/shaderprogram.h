@@ -1,5 +1,5 @@
-#ifndef __YUNI_GFX3D_SHADERPROGRAM_H__
-# define __YUNI_GFX3D_SHADERPROGRAM_H__
+#ifndef __YUNI_UI_GL_SHADERPROGRAM_H__
+# define __YUNI_UI_GL_SHADERPROGRAM_H__
 
 # include "../../yuni.h"
 # include "../../core/smartptr.h"
@@ -129,9 +129,10 @@ namespace Gfx3D
 
 
 
+
 } // namespace Gfx3D
 } // namespace Yuni
 
 # include "shaderprogram.hxx"
 
-#endif // __YUNI_GFX3D_SHADERPROGRAM_H__
+#endif // __YUNI_UI_GL_SHADERPROGRAM_H__

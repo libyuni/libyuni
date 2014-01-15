@@ -104,19 +104,19 @@ namespace Gfx3D
 				return false;
 			}
 
-			if (pVertexShader and pVertexShader->pID)
+			if (!(!pVertexShader) and pVertexShader->pID)
 			{
 				::glAttachShader(pID, pVertexShader->pID);
 				GLTestError("ShaderProgram::load, glAttachShader, attaching vertex shader");
 			}
 
-			if (pFragmentShader and pFragmentShader->pID)
+			if (!(!pFragmentShader) and pFragmentShader->pID)
 			{
 				::glAttachShader(pID, pFragmentShader->pID);
 				GLTestError("ShaderProgram::load, glAttachShader, attaching fragment shader");
 			}
 
-			if (pComputeShader and pComputeShader->pID)
+			if (!(!pComputeShader) and pComputeShader->pID)
 			{
 				::glAttachShader(pID, pComputeShader->pID);
 				GLTestError("ShaderProgram::load, glAttachShader, attaching compute shader");
@@ -129,6 +129,7 @@ namespace Gfx3D
 			int linked;
 			::glGetProgramiv(pID, GL_LINK_STATUS, &linked);
 			GLTestError("ShaderProgram::load, glGetProgramiv");
+
 			pLinked = (linked == GL_TRUE);
 			if (0 == pLinked)
 			{
@@ -252,6 +253,7 @@ namespace Gfx3D
 		GLint location = GetUniformLocation(pID, pUniformCache, name);
 		if (location < 0)
 			return;
+
 		switch (components)
 		{
 			case 1:

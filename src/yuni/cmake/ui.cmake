@@ -89,6 +89,7 @@ list(APPEND SRC_UI_GL
 	ui/gl/materialsurface.h
 	ui/gl/shader.cpp
 	ui/gl/shader.h
+	ui/gl/shader.hxx
 	ui/gl/shadermanager.cpp
 	ui/gl/shadermanager.h
 	ui/gl/shaderprogram.cpp
