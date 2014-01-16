@@ -146,24 +146,30 @@ namespace UI
 
 	void GLWindow::clear() const
 	{
+		pFB.activate();
 		::glClear(GL_COLOR_BUFFER_BIT);
+		pFB.deactivate();
 	}
 
 	void GLWindow::clear(const Color::RGB<>& color) const
 	{
+		pFB.activate();
 		::glClearColor(color.red, color.green, color.blue, 1.0f);
 		::glClear(GL_COLOR_BUFFER_BIT);
+		pFB.deactivate();
 	}
 
 
 	void GLWindow::clearRect(int x, int y, uint width, uint height) const
 	{
+		pFB.activate();
 		// We offer coordinates top-left to bottom-right
 		// but GL coordinates are bottom-left to top-right, so convert Y
 		::glEnable(GL_SCISSOR_TEST);
 		::glScissor(x, pHeight - height - y, width, height);
 		::glClear(GL_COLOR_BUFFER_BIT);
 		::glDisable(GL_SCISSOR_TEST);
+		pFB.deactivate();
 	}
 
 
