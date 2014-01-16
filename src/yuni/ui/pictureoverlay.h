@@ -94,6 +94,11 @@ namespace UI
 		//! Get visibility
 		bool visible() const { return pVisible; }
 
+		//! Get the fill color
+		const Color::RGBA<float>& fillColor() const { return pFillColor; }
+		//! Set the fill color
+		void fillColor(const Color::RGBA<float>& color) { pFillColor = color; }
+
 		//! Current display mode
 		Display display() const { return pDisplay; }
 		//! Set display mode to Fit
@@ -135,6 +140,9 @@ namespace UI
 
 		//! Offset of the overlay over the image in Y (only used in Offset display)
 		int pOffsetY;
+
+		//! Fill color for when a part of the overlay is empty
+		Color::RGBA<float> pFillColor;
 
 		//! Type of display of the image inside the overlay
 		Display pDisplay;

@@ -143,4 +143,8 @@ namespace Gfx3D
 } // namespace Gfx3D
 } // namespace Yuni
 
+
+#include "shader.hxx"
+
+
 #endif // __YUNI_UI_GL_SHADER_H__

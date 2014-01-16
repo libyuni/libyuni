@@ -47,7 +47,7 @@ namespace UI
 			pTextShaders->activate();
 			pTextShaders->deactivate();
 
-			pPictureShaders = shaderManager.getFromMemory(Gfx3D::vsTexCoord, Gfx3D::fsSimpleTexture);
+			pPictureShaders = shaderManager.getFromMemory(Gfx3D::vsImageRect, Gfx3D::fsImageRect);
 			assert(pPictureShaders && "Failed to load necessary shaders for picture overlay !");
 			// Bind attributes before linking
 			pPictureShaders->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
@@ -217,6 +217,8 @@ namespace UI
 		// Bind the texture
 		::glBindTexture(GL_TEXTURE_2D, texture->id());
 		pPictureShaders->bindUniform("Texture0", Yuni::Gfx3D::Vertex<>::vaTexture0);
+		pPictureShaders->bindUniform("FillColor", Color::RGBA<float>(0.0f, 0.0f, 0.0f, 0.0f));
+		pPictureShaders->bindUniform("Bounds", (float)x, (float)y, (float)(x + width), (float)(y + height));
 
 		// Set texture coordinates
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);

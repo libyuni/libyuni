@@ -13,13 +13,14 @@ namespace Gfx3D
 	/////////////// VERTEX SHADERS
 
 
+	// Minimal vertex shader : only transform the vertex coordinates
 	static const char vsTransform[] =
 		R"(
 #version 130
 
 in vec3 attrVertex;
 
-// More than minimal vertex shader : transform coordinates only
+// Minimal vertex shader : only transform the vertex coordinates
 void main()
 {
 	gl_Position = gl_ModelViewProjectionMatrix * vec4(attrVertex, 1.0f);
@@ -27,7 +28,7 @@ void main()
 		)";
 
 
-	// Minimal vertex shader : transform coordinates and propagate texture coordinates
+	// Very simple vertex shader : transform coordinates and propagate texture coordinates
 	static const char vsTexCoord[] =
 		R"(
 #version 130
@@ -36,7 +37,7 @@ in vec3 attrVertex;
 in vec2 attrTexCoord;
 out vec2 texCoord;
 
-// Minimal vertex shader : transform coordinates and propagate texture coordinates
+// Very simple vertex shader : transform coordinates and propagate texture coordinates
 void main()
 {
 	gl_Position = gl_ModelViewProjectionMatrix * vec4(attrVertex, 1.0f);
@@ -59,6 +60,28 @@ void main()
 {
 	color = attrColor;
 	gl_Position = gl_ModelViewProjectionMatrix * vec4(attrVertex, 1.0f);
+}
+		)";
+
+
+	// Sample a texture using a rectangle, do not resize the image, fill empty parts with a color
+	static const char vsImageRect[] =
+		R"(
+#version 130
+
+in vec3 attrVertex;
+in vec2 attrTexCoord;
+out vec2 texCoord;
+out float isEmpty; // Used as a boolean (0 = false, 1 = true)
+uniform vec4 Bounds; // Stored as (xMin, yMin, xMax, yMax)
+
+// Use a rectangle overlay over a texture, store which parts of the overlay are out of bounds
+void main()
+{
+	texCoord = attrTexCoord;
+	vec4 vertex = vec4(attrVertex, 1.0f);
+	isEmpty = (vertex.x < Bounds.x || vertex.x > Bounds.z || vertex.y < Bounds.y || vertex.y > Bounds.w) ? 1.0f : 0.0f;
+	gl_Position = gl_ModelViewProjectionMatrix * vertex;
 }
 		)";
 
@@ -174,6 +197,24 @@ uniform sampler2D Texture0;
 void main()
 {
 	gl_FragColor = texture(Texture0, texCoord);
+}
+		)";
+
+
+	// Sample a texture using a rectangle, do not resize the image, fill empty parts with a color
+	static const char fsImageRect[] =
+		R"(
+#version 130
+
+in vec2 texCoord;
+in float isEmpty; // Used as a boolean (0 = false, 1 = true)
+out vec4 gl_FragColor;
+uniform sampler2D Texture0;
+uniform vec4 FillColor;
+
+void main()
+{
+	gl_FragColor = mix(texture(Texture0, texCoord), FillColor, isEmpty);
 }
 		)";
 
@@ -299,6 +340,32 @@ void main()
 		)";
 
 
+
+
+
+
+
+	/////////////// GEOMETRY SHADERS
+
+
+
+
+	// Generate empty borders for image rectangles
+	static const char gsImageRect[] =
+		R"(
+#version 130
+#extension GL_ARB_geometry_shader4 : enable
+
+void main()
+{
+	for(i = 0; i < gl_VerticesIn; i++)
+	{
+		gl_Position = gl_PositionIn[i];
+		EmitVertex();
+	}
+	EndPrimitive();
+}
+		)";
 
 
 

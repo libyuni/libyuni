@@ -34,18 +34,14 @@ namespace UI
 			offsetX = (texWidth - overlayWidth) / 2.0f;
 			offsetY = (texHeight - overlayHeight) / 2.0f;
 		}
-		// Check if the whole overlay is out of bounds of the texture
-		if (offsetX > texWidth || offsetY > texHeight ||
-			offsetX + overlayWidth < 0.0f || offsetY + overlayHeight < 0.0f)
-			return;
 		float minTexX = 0.0f;
 		float maxTexX = 1.0f;
 		float minTexY = 0.0f;
 		float maxTexY = 1.0f;
-		float xStart = pX;
-		float yStart = pY;
-		float xEnd = pX + overlayWidth;
-		float yEnd = pY + overlayHeight;
+		float xStart = (float)pX;
+		float yStart = (float)pY;
+		float xEnd = xStart + overlayWidth;
+		float yEnd = yStart + overlayHeight;
 		switch (pDisplay)
 		{
 			case podStretch:
@@ -64,7 +60,7 @@ namespace UI
 				if (texWidth > overlayWidth + offsetX)
 				{
 					// Fix texture coordinates
-					maxTexX = pWidth + offsetX / texWidth;
+					maxTexX = (overlayWidth + offsetX) / texWidth;
 					if (maxTexX > 1.0f)
 						maxTexX = 1.0f;
 				}
@@ -80,7 +76,7 @@ namespace UI
 				}
 				if (texHeight > overlayHeight + offsetY)
 				{
-					maxTexY = pHeight + offsetY / texHeight;
+					maxTexY = (overlayHeight + offsetY) / texHeight;
 					if (maxTexY > 1.0f)
 						maxTexY = 1.0f;
 				}
@@ -99,6 +95,9 @@ namespace UI
 				assert(false && "Invalid enum value for PictureOverlay::Display !");
 				break;
 		}
+
+		shader->bindUniform("Bounds", (float)pX, float(pY), texWidth + (float)pX, texHeight + (float)pY);
+		shader->bindUniform("FillColor", pFillColor);
 
 		// Set texture coordinates
 		const float texCoord[] =
