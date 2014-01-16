@@ -111,6 +111,8 @@ namespace UI
 		void stretch() { pDisplay = podStretch; }
 		//! Set display mode to Offset and set offset values
 		void offset(int x, int y) { pDisplay = podOffset; pOffsetX = x; pOffsetY = y; }
+		//! Get current offset (might not be used if display mode is not podOffset)
+		Point2D<int> offset() const { return Point2D<int>(pOffsetX, pOffsetY); }
 
 	private:
 		//! Picture to display
