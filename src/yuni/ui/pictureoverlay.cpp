@@ -21,15 +21,15 @@ namespace UI
 		const float texHeight = (float)pTexture->height();
 		const float overlayWidth = (float)pWidth;
 		const float overlayHeight = (float)pHeight;
-		// pDisplay == podNone
+		// pDisplay == dmNone
 		float offsetX = 0.0f;
 		float offsetY = 0.0f;
-		if (pDisplay == podOffset)
+		if (pDisplay == dmOffset)
 		{
 			offsetX = (float)pOffsetX;
 			offsetY = (float)pOffsetY;
 		}
-		else if (pDisplay == podCenter)
+		else if (pDisplay == dmCenter)
 		{
 			offsetX = (texWidth - overlayWidth) / 2.0f;
 			offsetY = (texHeight - overlayHeight) / 2.0f;
@@ -44,12 +44,12 @@ namespace UI
 		float yEnd = yStart + overlayHeight;
 		switch (pDisplay)
 		{
-			case podStretch:
+			case dmStretch:
 				// Nothing to do, coordinates are perfect
 				break;
-			case podNone:
-			case podOffset:
-			case podCenter:
+			case dmNone:
+			case dmOffset:
+			case dmCenter:
 				if (offsetX > 0.0f)
 				{
 					// Fix texture coordinates
@@ -64,10 +64,6 @@ namespace UI
 					if (maxTexX > 1.0f)
 						maxTexX = 1.0f;
 				}
-				else
-				{
-					// Fix vertices
-				}
 				if (offsetY > 0.0f)
 				{
 					minTexY = offsetY / texHeight;
@@ -80,15 +76,11 @@ namespace UI
 					if (maxTexY > 1.0f)
 						maxTexY = 1.0f;
 				}
-				else
-				{
-					// Fix vertices
-				}
 				break;
-			case podFit:
+			case dmFit:
 				// TODO
 				break;
-			case podFill:
+			case dmFill:
 				// TODO
 				break;
 			default:
@@ -96,7 +88,7 @@ namespace UI
 				break;
 		}
 
-		shader->bindUniform("Bounds", (float)pX, float(pY), texWidth + (float)pX, texHeight + (float)pY);
+		shader->bindUniform("Bounds", xStart, yStart, texWidth + xStart, texHeight + yStart);
 		shader->bindUniform("FillColor", pFillColor);
 
 		// Set texture coordinates

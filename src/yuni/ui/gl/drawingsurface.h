@@ -8,6 +8,7 @@
 # include <cassert>
 # include "../ftfont.h"
 # include "texture.h"
+# include "../displaymode.h"
 
 namespace Yuni
 {
@@ -77,7 +78,7 @@ namespace UI
 			float lineWidth);
 
 		//! Draw a rectangular image
-		void drawImage(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width, uint height);
+		void drawImage(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width, uint height, const Color::RGBA<float>& fillColor, DisplayMode dispMode = dmNone, int offsetX = 0, int offsetY = 0);
 
 		//! Fill with a color. Use clipping to control the filled area
 		void fill(const Color::RGBA<float>& color);

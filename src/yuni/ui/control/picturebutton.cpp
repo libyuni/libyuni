@@ -17,10 +17,6 @@ namespace Control
 		// If the button is the root control, use absolute coordinates
 		if (root)
 			pos(0, 0);
-		if (pBeingClicked && !(!pImageClicking))
-			surface->drawImage(pImageClicking, pos.x, pos.y, pSize.x, pSize.y);
-		else if (!(!pImage))
-			surface->drawImage(pImage, pos.x, pos.y, pSize.x, pSize.y);
 		pModified = false;
 	}
 

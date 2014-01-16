@@ -119,7 +119,7 @@ namespace UI
 			textShader = nullptr;
 		}
 
-		pictureShader = shaderManager.getFromMemory(Gfx3D::vsTexCoord, Gfx3D::fsSimpleTexture);
+		pictureShader = shaderManager.getFromMemory(Gfx3D::vsImageRect, Gfx3D::fsImageRect);
 		assert(pictureShader && "Failed to load necessary shaders for picture overlay !");
 		pictureShader->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
 		pictureShader->bindAttribute("attrTexCoord", Gfx3D::Vertex<>::vaTextureCoord);
@@ -385,32 +385,108 @@ namespace UI
 	}
 
 
-	void DrawingSurface::drawImage(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width, uint height)
+	void DrawingSurface::drawImage(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width,
+		uint height, const Color::RGBA<float>& fillColor, DisplayMode dispMode,
+		int reqOffsetX, int reqOffsetY)
 	{
 		pImpl->pictureShader->activate();
+
+		const float texWidth = (float)texture->width();
+		const float texHeight = (float)texture->height();
+		const float overlayWidth = (float)width;
+		const float overlayHeight = (float)height;
+		// dispMode == dmNone
+		float offsetX = 0.0f;
+		float offsetY = 0.0f;
+		if (dispMode == dmOffset)
+		{
+			offsetX = (float)reqOffsetX;
+			offsetY = (float)reqOffsetY;
+		}
+		else if (dispMode == dmCenter)
+		{
+			offsetX = (texWidth - overlayWidth) / 2.0f;
+			offsetY = (texHeight - overlayHeight) / 2.0f;
+		}
+		float minTexX = 0.0f;
+		float maxTexX = 1.0f;
+		float minTexY = 0.0f;
+		float maxTexY = 1.0f;
+		float xStart = (float)x;
+		float yStart = (float)y;
+		float xEnd = xStart + overlayWidth;
+		float yEnd = yStart + overlayHeight;
+		switch (dispMode)
+		{
+			case dmStretch:
+				// Nothing to do, coordinates are perfect
+				break;
+			case dmNone:
+			case dmOffset:
+			case dmCenter:
+				if (offsetX > 0.0f)
+				{
+					// Fix texture coordinates
+					minTexX = offsetX / texWidth;
+					if (minTexX < 0.0f)
+						minTexX = 0.0f;
+				}
+				if (texWidth > overlayWidth + offsetX)
+				{
+					// Fix texture coordinates
+					maxTexX = (overlayWidth + offsetX) / texWidth;
+					if (maxTexX > 1.0f)
+						maxTexX = 1.0f;
+				}
+				if (offsetY > 0.0f)
+				{
+					minTexY = offsetY / texHeight;
+					if (minTexY < 0.0f)
+						minTexY = 0.0f;
+				}
+				if (texHeight > overlayHeight + offsetY)
+				{
+					maxTexY = (overlayHeight + offsetY) / texHeight;
+					if (maxTexY > 1.0f)
+						maxTexY = 1.0f;
+				}
+				break;
+			case dmFit:
+				// TODO
+				break;
+			case dmFill:
+				// TODO
+				break;
+			default:
+				assert(false && "Invalid enum value for PictureOverlay::Display !");
+				break;
+		}
+
+		pImpl->pictureShader->bindUniform("FillColor", fillColor);
+		pImpl->pictureShader->bindUniform("Bounds", xStart, yStart, texWidth + xStart, texHeight + yStart);
 		::glBindTexture(GL_TEXTURE_2D, texture->id());
 		// Tex coords
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
 		const float texCoord[] =
 			{
-				0.0f, 1.0f,
-				1.0f, 0.0f,
-				0.0f, 0.0f,
-				0.0f, 1.0f,
-				1.0f, 1.0f,
-				1.0f, 0.0f
+				minTexX, maxTexY,
+				maxTexX, minTexY,
+				minTexX, minTexY,
+				minTexX, maxTexY,
+				maxTexX, maxTexY,
+				maxTexX, minTexY
 			};
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
 		// Vertices
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 		const float vertices[] =
 			{
-				(float)x, (float)(y + height),
-				(float)(x + width), (float)y,
-				(float)x, (float)y,
-				(float)x, (float)(y + height),
-				(float)(x + width), (float)(y + height),
-				(float)(x + width), (float)y
+				xStart, yEnd,
+				xEnd, yStart,
+				xStart, yStart,
+				xStart, yEnd,
+				xEnd, yEnd,
+				xEnd, yStart
 			};
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
 		// Draw

@@ -6,6 +6,7 @@
 # include <vector>
 # include "gl/shaderprogram.h"
 # include "gl/texture.h"
+# include "displaymode.h"
 
 namespace Yuni
 {
@@ -17,34 +18,6 @@ namespace UI
 	*/
 	class PictureOverlay
 	{
-	public:
-		enum Display
-		{
-			// Display the image aligned on the top-left of the overlay.
-			// The image may be cropped or parts of the overlay may be left empty (transparent).
-			// This is equivalent to Offset with `offsetX` and `offsetY` equal to 0.
-			podNone,
-
-			// Grow / reduce the image to fill the overlay, maintaining aspect ratio.
-			// The image may be cropped
-			podFill,
-
-			// Grow / reduce the image to fit the overlay, maintaining aspect ratio.
-			// Parts of the overlay may be left empty (transparent)
-			podFit,
-
-			// Stretch the image on both dimensions to fit the overlay, losing aspect ratio.
-			podStretch,
-
-			// Center the image in the overlay.
-			// The image may be cropped or parts of the overlay may be left empty (transparent).
-			podCenter,
-
-			// Offset the image to display a part of it in the overlay, uses `offsetX` and `offsetY`
-			// The image may be cropped or parts of the overlay may be left empty (transparent).
-			podOffset
-		};
-
 	public:
 		//! Smart pointer
 		typedef SmartPtr<PictureOverlay>  Ptr;
@@ -100,17 +73,17 @@ namespace UI
 		void fillColor(const Color::RGBA<float>& color) { pFillColor = color; }
 
 		//! Current display mode
-		Display display() const { return pDisplay; }
+		DisplayMode display() const { return pDisplay; }
 		//! Set display mode to Fit
-		void fit() { pDisplay = podFit; }
+		void fit() { pDisplay = dmFit; }
 		//! Set display mode to Fill
-		void fill() { pDisplay = podFill; }
+		void fill() { pDisplay = dmFill; }
 		//! Set display mode to Center
-		void center() { pDisplay = podCenter; }
+		void center() { pDisplay = dmCenter; }
 		//! Set display mode to Stretch
-		void stretch() { pDisplay = podStretch; }
+		void stretch() { pDisplay = dmStretch; }
 		//! Set display mode to Offset and set offset values
-		void offset(int x, int y) { pDisplay = podOffset; pOffsetX = x; pOffsetY = y; }
+		void offset(int x, int y) { pDisplay = dmOffset; pOffsetX = x; pOffsetY = y; }
 		//! Get current offset (might not be used if display mode is not podOffset)
 		Point2D<int> offset() const { return Point2D<int>(pOffsetX, pOffsetY); }
 
@@ -147,7 +120,7 @@ namespace UI
 		Color::RGBA<float> pFillColor;
 
 		//! Type of display of the image inside the overlay
-		Display pDisplay;
+		DisplayMode pDisplay;
 	};
 
 

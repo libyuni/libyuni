@@ -18,7 +18,7 @@ namespace UI
 		pOffsetX(0),
 		pOffsetY(0),
 		pFillColor(0.0f, 0.0f, 1.0f, 1.0f), // Full transparent
-		pDisplay(podNone)
+		pDisplay(dmNone)
 	{}
 
 
@@ -33,7 +33,7 @@ namespace UI
 		pOffsetX(0),
 		pOffsetY(0),
 		pFillColor(0.0f, 0.0f, 1.0f, 1.0f), // Full transparent
-		pDisplay(podNone)
+		pDisplay(dmNone)
 	{}
 
 
