@@ -5,7 +5,7 @@
 # include <yuni/core/dictionary.h>
 # include <yuni/core/smartptr.h>
 # include <yuni/core/string.h>
-# include <yuni/core/noncopyable>
+# include <yuni/core/noncopyable.h>
 
 
 
