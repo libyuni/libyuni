@@ -10,12 +10,12 @@ namespace Gfx3D
 
 
 	inline IShader::IShader()
-		: pID((uint) -1)
+		: pID(invalidID)
 	{}
 
 
 	# ifdef YUNI_HAS_CPP_MOVE
-	inline IShader(IShader&& rhs)
+	inline IShader::IShader(IShader&& rhs)
 		: pID(rhs.pID)
 	{
 		rhs.pID = invalidID;
@@ -25,7 +25,7 @@ namespace Gfx3D
 
 	inline bool IShader::valid() const
 	{
-		return pID != (uint) -1;
+		return pID != invalidID;
 	}
 
 
