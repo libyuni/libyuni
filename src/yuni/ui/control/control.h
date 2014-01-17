@@ -37,8 +37,12 @@ namespace UI
 		Yuni::Bind<EventPropagation (IControl* sender, Input::IMouse::Button btn, int x, int y)>  onMouseUp;
 		//! Mouse double-click callback
 		Yuni::Bind<EventPropagation (IControl* sender, Input::IMouse::Button btn, int x, int y)>  onMouseDblClick;
-		//! Mouse scrol callback
+		//! Mouse scroll callback
 		Yuni::Bind<EventPropagation (IControl* sender, float delta)>  onMouseScroll;
+		//! Mouse enter callback
+		Yuni::Bind<EventPropagation (IControl* sender, int x, int y)>  onMouseEnter;
+		//! Mouse leave callback
+		Yuni::Bind<EventPropagation (IControl* sender, int x, int y)>  onMouseLeave;
 		//! Mouse hover callback
 		Yuni::Bind<EventPropagation (IControl* sender, int x, int y)>  onMouseHover;
 		//! Key down callback

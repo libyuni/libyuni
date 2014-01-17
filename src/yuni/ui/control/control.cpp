@@ -229,6 +229,59 @@ namespace UI
 	}
 
 
+	EventPropagation IControl::doMouseEnter(int x, int y)
+	{
+		if (!pVisible)
+			return epContinue;
+
+		std::vector<IControl*> stack;
+		getControlStackAt(x, y, stack);
+		EventPropagation finalProp = epContinue;
+		while (!stack.empty())
+		{
+			IControl* child = stack.back();
+			stack.pop_back();
+			EventPropagation prop = child->onMouseEnter(child, x, y);
+			if (epStop == prop)
+				return epStop;
+			else if (prop > finalProp)
+				finalProp = prop;
+			prop = onMouseEnter(this, x, y);
+			if (epStop == prop)
+				return epStop;
+			else if (prop > finalProp)
+				finalProp = prop;
+		}
+		return finalProp;
+	}
+
+	EventPropagation IControl::doMouseLeave(int x, int y)
+	{
+		if (!pVisible)
+			return epContinue;
+
+		std::vector<IControl*> stack;
+		getControlStackAt(x, y, stack);
+		EventPropagation finalProp = epContinue;
+		while (!stack.empty())
+		{
+			IControl* child = stack.back();
+			stack.pop_back();
+			EventPropagation prop = child->onMouseLeave(child, x, y);
+			if (epStop == prop)
+				return epStop;
+			else if (prop > finalProp)
+				finalProp = prop;
+			prop = onMouseLeave(this, x, y);
+			if (epStop == prop)
+				return epStop;
+			else if (prop > finalProp)
+				finalProp = prop;
+		}
+		return finalProp;
+	}
+
+
 	EventPropagation IControl::doMouseHover(int x, int y)
 	{
 		if (!pVisible)
