@@ -44,8 +44,6 @@ list(APPEND SRC_UI
 	# Components
 	ui/control/button.cpp
 	ui/control/button.h
-	ui/control/picturebutton.cpp
-	ui/control/picturebutton.h
 	ui/control/control.cpp
 	ui/control/control.h
 	ui/control/checkbox.cpp
