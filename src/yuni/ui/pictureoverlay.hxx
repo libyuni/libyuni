@@ -17,7 +17,7 @@ namespace UI
 		pHeight(1),
 		pOffsetX(0),
 		pOffsetY(0),
-		pFillColor(0.0f, 0.0f, 1.0f, 1.0f), // Full transparent
+		pFillColor(0.0f, 0.0f, 0.0f, 0.0f), // Full transparent
 		pDisplay(dmNone)
 	{}
 
@@ -32,7 +32,7 @@ namespace UI
 		pHeight(height ? height : !!texture ? texture->height() : 1),
 		pOffsetX(0),
 		pOffsetY(0),
-		pFillColor(0.0f, 0.0f, 1.0f, 1.0f), // Full transparent
+		pFillColor(0.0f, 0.0f, 0.0f, 0.0f), // Full transparent
 		pDisplay(dmNone)
 	{}
 

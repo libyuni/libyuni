@@ -84,7 +84,7 @@ namespace Input
 
 	protected:
 		//! Keep button state
-		bool pKeyDown[KeyCount];
+		volatile bool pKeyDown[KeyCount];
 
 		//! Friend declaration : RenderWindow manages data in this class
 		friend class Yuni::UI::RenderWindow;
