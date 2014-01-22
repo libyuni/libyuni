@@ -62,13 +62,12 @@ namespace Job
 	{
 		if (pStarted)
 		{
-			// For the execution of all jobs
+			// wait for the execution of all jobs
 			wait();
 
-			// Lightweight Stop - the service wahtever the result of the previous method
-			ThreadArray* threads; // the thread pool
+			ThreadArray* threads = nullptr; // the thread pool
 
-			// The method stop must avoid as much as possible to lock the inner mutex
+			// remove the reference to avoid useless mutex locks
 			{
 				MutexLocker locker(*this);
 				threads = (ThreadArray*) pThreads;
@@ -77,10 +76,13 @@ namespace Job
 
 			// Destroying the thread pool
 			if (threads)
+			{
 				threads->stop(defaultTimeout);
+				delete threads;
+			}
 		}
-
-		delete ((ThreadArray*) pThreads);
+		else
+			delete ((ThreadArray*) pThreads);
 	}
 
 
