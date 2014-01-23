@@ -51,6 +51,18 @@ namespace UI
 
 		}; // enum WindowState
 
+
+	public:
+		//! Callback for window refresh
+		RefreshDelegate onRefresh;
+
+		//! Callback for window resize
+		ResizeDelegate onResize;
+
+		//! Callback for window clean-up, called before closing
+		CleanUpDelegate onCleanUp;
+
+
 	public:
 		//! \name Constructors & Destructor
 		//@{
@@ -241,6 +253,7 @@ namespace UI
 		//@}
 
 
+	protected:
 		//! \name Events
 		//@{
 		void doMouseMove(int x, int y);
@@ -254,16 +267,6 @@ namespace UI
 		void doKeyDown(Input::Key key);
 		void doKeyUp(Input::Key key);
 		//@}
-
-	public:
-		//! Callback for window refresh
-		RefreshDelegate onRefresh;
-
-		//! Callback for window resize
-		ResizeDelegate onResize;
-
-		//! Callback for window clean-up, called before closing
-		CleanUpDelegate onCleanUp;
 
 
 	protected:

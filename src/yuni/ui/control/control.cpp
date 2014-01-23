@@ -87,10 +87,26 @@ namespace UI
 	}
 
 
-	EventPropagation IControl::doMouseMove(int x, int y)
+	EventPropagation IControl::doMouseMove(int x, int y, Set& enteredControls)
 	{
 		if (!pVisible)
 			return epContinue;
+
+		// Check first which controls have been left
+		{
+			Set toRemoveControls;
+			for (auto control : enteredControls)
+			{
+				if (!control->contains(x, y))
+				{
+					// Control has been left
+					toRemoveControls.insert(control);
+					control->doMouseLeave(x, y);
+				}
+			}
+			for (auto toRemove : toRemoveControls)
+				enteredControls.erase(toRemove);
+		}
 
 		// Get the stack of controls under the (x,y) point
 		std::vector<IControl*> stack;
@@ -100,6 +116,13 @@ namespace UI
 		{
 			IControl* child = stack.back();
 			stack.pop_back();
+
+			// Mouse enter check
+			if (enteredControls.end() == enteredControls.find(child))
+			{
+				enteredControls.insert(child);
+				child->onMouseEnter(child, x, y);
+			}
 			// Allow the control to react to the event before the callback
 			child->mouseMove(x, y);
 			// Event callback
@@ -231,54 +254,18 @@ namespace UI
 
 	EventPropagation IControl::doMouseEnter(int x, int y)
 	{
-		if (!pVisible)
-			return epContinue;
-
-		std::vector<IControl*> stack;
-		getControlStackAt(x, y, stack);
-		EventPropagation finalProp = epContinue;
-		while (!stack.empty())
-		{
-			IControl* child = stack.back();
-			stack.pop_back();
-			EventPropagation prop = child->onMouseEnter(child, x, y);
-			if (epStop == prop)
-				return epStop;
-			else if (prop > finalProp)
-				finalProp = prop;
-			prop = onMouseEnter(this, x, y);
-			if (epStop == prop)
-				return epStop;
-			else if (prop > finalProp)
-				finalProp = prop;
-		}
-		return finalProp;
+		EventPropagation prop = onMouseEnter(this, x, y);
+		if (epStop == prop)
+			return epStop;
+		return onMouseEnter(this, x, y);
 	}
 
 	EventPropagation IControl::doMouseLeave(int x, int y)
 	{
-		if (!pVisible)
-			return epContinue;
-
-		std::vector<IControl*> stack;
-		getControlStackAt(x, y, stack);
-		EventPropagation finalProp = epContinue;
-		while (!stack.empty())
-		{
-			IControl* child = stack.back();
-			stack.pop_back();
-			EventPropagation prop = child->onMouseLeave(child, x, y);
-			if (epStop == prop)
-				return epStop;
-			else if (prop > finalProp)
-				finalProp = prop;
-			prop = onMouseLeave(this, x, y);
-			if (epStop == prop)
-				return epStop;
-			else if (prop > finalProp)
-				finalProp = prop;
-		}
-		return finalProp;
+		EventPropagation prop = onMouseLeave(this, x, y);
+		if (epStop == prop)
+			return epStop;
+		return onMouseLeave(this, x, y);
 	}
 
 

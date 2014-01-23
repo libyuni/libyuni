@@ -2,9 +2,9 @@
 # define __YUNI_UI_VIEW_H__
 
 # include <yuni/yuni.h>
+# include <yuni/core/dictionary.h>
 # include <yuni/core/smartptr.h>
 # include <yuni/uuid/uuid.h>
-# include <list>
 # include "../scene/camera.h"
 # include "../control/control.h"
 # include "../eventpropagation.h"
@@ -12,6 +12,7 @@
 # include "shaderprogram.h"
 # include "../textoverlay.h"
 # include "../pictureoverlay.h"
+# include <list>
 
 
 namespace Yuni
@@ -108,21 +109,18 @@ namespace UI
 		void addOverlay(const PictureOverlay::Ptr& picture) { pPictures.push_back(picture); }
 		void clearOverlays() { pTexts.clear(); pPictures.clear(); }
 
-		//! Set the root UI control
-		void rootControl(const IControl::Ptr& control) { pControl = control; }
-		//! Get the root UI control
+		//! Add a UI control to the view
+		void rootControl(const IControl::Ptr& control)
+		{
+			if (pControl != control)
+			{
+				pEnteredControls.clear();
+				pControl = control;
+			}
+		}
+		//! Get the UI controls
 		const IControl::Ptr& rootControl() const { return pControl; }
-		IControl::Ptr rootControl() { return pControl; }
-
-		EventPropagation doMouseMove(int x, int y);
-		virtual EventPropagation doMouseDown(Input::IMouse::Button btn, int x, int y);
-		EventPropagation doMouseUp(Input::IMouse::Button btn, int x, int y);
-		EventPropagation doMouseDblClick(Input::IMouse::Button btn, int x, int y);
-		EventPropagation doMouseScroll(float delta, int x, int y);
-		EventPropagation doMouseHover(int x, int y);
-
-		EventPropagation doKeyDown(Input::Key key);
-		EventPropagation doKeyUp(Input::Key key);
+		IControl::Ptr& rootControl() { return pControl; }
 
 		//! Get the top-most control at given coordinates. (Mainly useful for clicking)
 		IControl* getControlAt(int x, int y);
@@ -135,6 +133,16 @@ namespace UI
 		virtual void draw(uint msMultiplier = 1) const;
 
 	protected:
+		EventPropagation doMouseMove(int x, int y);
+		virtual EventPropagation doMouseDown(Input::IMouse::Button btn, int x, int y);
+		EventPropagation doMouseUp(Input::IMouse::Button btn, int x, int y);
+		EventPropagation doMouseDblClick(Input::IMouse::Button btn, int x, int y);
+		EventPropagation doMouseScroll(float delta, int x, int y);
+		EventPropagation doMouseHover(int x, int y);
+
+		EventPropagation doKeyDown(Input::Key key);
+		EventPropagation doKeyUp(Input::Key key);
+
 		//! Draw a text overlay
 		void drawOverlay(TextOverlay& text) const;
 
@@ -190,6 +198,9 @@ namespace UI
 
 		//! UI Control root for this view
 		IControl::Ptr pControl;
+
+		//! UI Controls that currently under the mouse cursor
+		IControl::Set pEnteredControls;
 
 		//! Shaders for text rendering
 		mutable Gfx3D::ShaderProgram::Ptr pTextShaders;

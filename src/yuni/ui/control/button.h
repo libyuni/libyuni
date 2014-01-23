@@ -19,7 +19,11 @@ namespace Control
 	{
 	public:
 		//! Type of bind for the button callback
-		typedef Yuni::Bind<void (void)>  Callback;
+		typedef Yuni::Bind<EventPropagation (IControl*)>  Callback;
+
+	public:
+		//! Callback for button click
+		Callback onClick;
 
 	public:
 		Button()
@@ -48,15 +52,7 @@ namespace Control
 		void text(const AnyString& text) { pText = text; invalidate(); }
 
 		//! Launch a click event
-		void click() const { pOnClick(); }
-
-		//! Bind the onClick event
-		template<class FuncT>
-		void onClick(const FuncT& function) { pOnClick.bind(function); }
-
-		//! Bind the onClick event
-		template<class ClassT, class MethodT>
-		void onClick(const ClassT& object, const MethodT& method) { pOnClick.bind(object, method); }
+		void click() { onClick(this); }
 
 		//! Draw the button on the surface
 		virtual void draw(DrawingSurface::Ptr& surface, bool root);
@@ -86,7 +82,7 @@ namespace Control
 			if (btn != Input::IMouse::ButtonLeft)
 				return;
 			if (pBeingClicked)
-				pOnClick();
+				onClick(this);
 			pBeingClicked = false;
 			pModified = true;
 		}
@@ -99,21 +95,19 @@ namespace Control
 		//! Current display mode
 		DisplayMode display() const { return pDisplay; }
 		//! Set display mode to Fit
-		void fit() { pDisplay = dmFit; }
+		void fit() { pDisplay = dmFit; invalidate(); }
 		//! Set display mode to Fill
-		void fill() { pDisplay = dmFill; }
+		void fill() { pDisplay = dmFill; invalidate(); }
 		//! Set display mode to Center
-		void center() { pDisplay = dmCenter; }
+		void center() { pDisplay = dmCenter; invalidate(); }
 		//! Set display mode to Stretch
-		void stretch() { pDisplay = dmStretch; }
+		void stretch() { pDisplay = dmStretch; invalidate(); }
 		//! Set display mode to Offset and set offset values
-		void offset(int x, int y) { pDisplay = dmOffset; pOffsetX = x; pOffsetY = y; }
+		void offset(int x, int y) { pDisplay = dmOffset; pOffsetX = x; pOffsetY = y; invalidate(); }
 		//! Get current offset (might not be used if display mode is not podOffset)
 		Point2D<int> offset() const { return Point2D<int>(pOffsetX, pOffsetY); }
 
 	private:
-		Callback pOnClick;
-
 		String pText;
 
 		String pHoverText;

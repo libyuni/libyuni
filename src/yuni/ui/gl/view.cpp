@@ -291,7 +291,7 @@ namespace UI
 		// If there are UI controls in this view
 		if (!(!pControl))
 			// Dispatch the event
-			propagate = pControl->doMouseMove(x, y);
+			propagate = pControl->doMouseMove(x, y, pEnteredControls);
 		if (epContinue != propagate)
 			return propagate;
 		// If the event was not managed by UI in this view, try 3D picking

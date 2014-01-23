@@ -4,6 +4,7 @@
 # include "../../yuni.h"
 # include "../../core/smartptr.h"
 # include "../../core/point2D.h"
+# include "../../core/dictionary.h"
 # include <vector>
 # include "../gl/drawingsurface.h"
 # include "../input/key.h"
@@ -27,6 +28,9 @@ namespace UI
 		typedef SmartPtr<IControl>  Ptr;
 		//! Vector of Controls
 		typedef std::vector<Ptr>  Vector;
+
+		//! Unordered set of controls (by ptr)
+		typedef Yuni::Set<IControl*>::Ordered  Set;
 
 	public:
 		//! Mouse move callback
@@ -144,6 +148,9 @@ namespace UI
 		void addChild(const IControl::Ptr& child) { pChildren.push_back(child); }
 		void addChild(IControl* child) { pChildren.push_back(child); }
 
+		//! Remove all child controls
+		void clearChildren() { pChildren.clear(); }
+
 		//! Invalidate the control (force redraw)
 		void invalidate()
 		{
@@ -153,6 +160,19 @@ namespace UI
 		bool modified() const;
 
 	protected:
+		//! Check if a given point is inside the control's rectangle
+		template<class T>
+		bool contains(const T& point) const
+		{
+			return contains(point.x, point.y);
+		}
+		template<class T>
+		bool contains(T x, T y) const
+		{
+			return x >= pPosition.x && x <= pPosition.x + pSize.x &&
+				y >= pPosition.y && y <= pPosition.y + pSize.y;
+		}
+
 		//! Recursively search for the controls containing the given point, return them stacked
 		void getControlStackAt(int x, int y, std::vector<IControl*>& stack);
 
@@ -164,7 +184,7 @@ namespace UI
 		}
 
 		//! Launch a mouse move event
-		EventPropagation doMouseMove(int x, int y);
+		EventPropagation doMouseMove(int x, int y, Set& enteredControls);
 		//! Launch a mouse down event
 		EventPropagation doMouseDown(Input::IMouse::Button btn, int x, int y);
 		//! Launch a mouse up event
