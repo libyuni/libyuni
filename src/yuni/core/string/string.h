@@ -1009,11 +1009,6 @@ namespace Yuni
 		uint countChar(char c) const;
 
 		/*!
-		** \brief Get the number of occurrences of a single uchar
-		*/
-		uint countChar(uchar c) const;
-
-		/*!
 		** \brief Find the offset of a sub-string from the left
 		**
 		** \param offset Position of the first character in the string to be taken

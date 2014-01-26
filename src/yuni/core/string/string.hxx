@@ -755,14 +755,6 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	uint
-	CString<ChunkSizeT,ExpandableT>::countChar(unsigned char c) const
-	{
-		return countChar(static_cast<char>(c));
-	}
-
-
-	template<uint ChunkSizeT, bool ExpandableT>
 	typename CString<ChunkSizeT,ExpandableT>::Size
 	CString<ChunkSizeT,ExpandableT>::find(char c) const
 	{
