@@ -28,6 +28,7 @@ Release version 1.0.0
       `Yuni::SmartPtr` won't compile if the underlying object has inherited
       from IIntrusiveSmartPtr and a non-appropriate ownership is used
     - The method `SmartPtr::unique()` has been removed for thread-safety issues
+    - IIntrusiveSmartPtr::onRelease is now const.
 * [core] Jobs:
    - `Yuni::Job::IJob` and `Yuni::Thread::IThread` now use intrusive smartptr
      to reduce memory allocation in high workload environments. Consequently it may not compile

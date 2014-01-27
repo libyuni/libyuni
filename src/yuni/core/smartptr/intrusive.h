@@ -11,6 +11,16 @@ namespace Yuni
 	/*!
 	** \brief Give to inherited classes an intrusive counting through CRTP.
 	**
+	** \code
+	** class IControl : public IIntrusiveSmartPtr<IControl>
+	** {
+	** public:
+	**	typedef IIntrusiveSmartPtr<IControl> Ancestor;
+	**	typedef Ancestor::SmartPtrType<IControl>::Ptr  Ptr;
+	**
+	**  virtual ~IControl() {}
+	** };
+	** \endcode
 	** \tparam ChildT Child class type
 	** \tparam TP  Threading policy. Set by default for a single thread
 	*/
@@ -76,7 +86,7 @@ namespace Yuni
 		** This method can be useful to avoid issues with a corrupted vtable
 		** (ex: in UI, detaching the object from its parent before calling the destructor)
 		*/
-		virtual void onRelease() {}
+		virtual void onRelease() const {}
 		//@}
 
 		//! \name Constructor & Destructor
