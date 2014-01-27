@@ -437,7 +437,7 @@ namespace PEG
 				else
 				{
 					uint from = ++sp;
-					sp += children.size();
+					sp += (uint)children.size();
 					if (match.negate)
 						stmt << neg << '(';
 					uint helpersFrom = (uint) helpers.size();
