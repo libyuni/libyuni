@@ -29,7 +29,7 @@ namespace Control
 		virtual ~Window() {}
 
 		//! Draw the window
-		virtual void draw(DrawingSurface::Ptr& surface, bool root);
+		virtual void draw(DrawingSurface::Ptr& surface, bool root) const override;
 
 	}; // class Window
 

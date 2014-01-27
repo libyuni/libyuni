@@ -3,6 +3,7 @@
 
 # include "../../yuni.h"
 # include "../../core/smartptr.h"
+# include "../../core/smartptr/intrusive.h"
 # include "../../core/point2D.h"
 # include "../../core/dictionary.h"
 # include <vector>
@@ -10,6 +11,8 @@
 # include "../input/key.h"
 # include "../input/mouse.h"
 # include "../eventpropagation.h"
+
+
 
 namespace Yuni
 {
@@ -20,17 +23,21 @@ namespace UI
 	class View;
 
 
+
+
 	//! A UI control is a part of 2D overlay that reacts to certain events
-	class IControl
+	class IControl : public IIntrusiveSmartPtr<IControl>
 	{
 	public:
+		typedef IIntrusiveSmartPtr<IControl> Ancestor;
 		//! Smart pointer
-		typedef SmartPtr<IControl>  Ptr;
+		typedef Ancestor::SmartPtrType<IControl>::Ptr  Ptr;
 		//! Vector of Controls
 		typedef std::vector<Ptr>  Vector;
 
 		//! Unordered set of controls (by ptr)
-		typedef Yuni::Set<IControl*>::Ordered  Set;
+		typedef Yuni::Set<Ptr>::Ordered  Set;
+
 
 	public:
 		//! Mouse move callback
@@ -139,7 +146,7 @@ namespace UI
 		void show(bool visible);
 
 		//! Draw the control
-		virtual void draw(DrawingSurface::Ptr& surface, bool root = true) = 0;
+		virtual void draw(DrawingSurface::Ptr& surface, bool root = true) const = 0;
 
 		//! Recursively search for the deepest child control containing the given point
 		IControl* getControlAt(int x, int y);
@@ -177,7 +184,7 @@ namespace UI
 		void getControlStackAt(int x, int y, std::vector<IControl*>& stack);
 
 		//! Draw the child controls
-		void drawChildren(DrawingSurface::Ptr& surface)
+		void drawChildren(DrawingSurface::Ptr& surface) const
 		{
 			for (auto& child : pChildren)
 				child->draw(surface, false);
@@ -232,7 +239,7 @@ namespace UI
 
 		bool pVisible;
 
-		bool pModified;
+		mutable bool pModified;
 
 		bool pReadOnly;
 

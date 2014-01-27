@@ -93,14 +93,15 @@ namespace UI
 			return epContinue;
 
 		// Check first which controls have been left
+		if (not enteredControls.empty())
 		{
-			Set toRemoveControls;
+			Vector toRemoveControls;
 			for (auto control : enteredControls)
 			{
 				if (!control->contains(x, y))
 				{
 					// Control has been left
-					toRemoveControls.insert(control);
+					toRemoveControls.push_back(control);
 					control->doMouseLeave(x, y);
 				}
 			}

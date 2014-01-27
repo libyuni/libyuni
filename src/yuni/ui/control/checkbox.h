@@ -53,7 +53,7 @@ namespace Control
 		bool checked() const { return pChecked; }
 
 		//! Draw the checkbox on the surface
-		virtual void draw(DrawingSurface::Ptr& surface, bool root) override;
+		virtual void draw(DrawingSurface::Ptr& surface, bool root) const override;
 
 	private:
 		//! Control reaction to mouse down

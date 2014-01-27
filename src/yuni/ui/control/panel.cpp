@@ -9,7 +9,7 @@ namespace Control
 {
 
 
-	void Panel::draw(DrawingSurface::Ptr& surface, bool root)
+	void Panel::draw(DrawingSurface::Ptr& surface, bool root) const
 	{
 		if (!pVisible)
 			return;
