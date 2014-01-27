@@ -108,7 +108,7 @@ namespace Media
 		//! Bind a sound buffer to an OpenAL source
 		static bool BindBufferToSource(uint buffer, uint source);
 
-		//! Unind an OpenAL source from any buffer
+		//! Unbind an OpenAL source from any buffer
 		static void UnbindBufferFromSource(uint source);
 
 		//! Queue a sound buffer for playing on a source

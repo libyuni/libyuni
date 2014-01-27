@@ -162,6 +162,8 @@ namespace Media
 	{
 		for (uint i = 0; i < pBufferCount; ++i)
 			Private::Media::OpenAL::UnqueueBufferFromSource(source);
+		Private::Media::OpenAL::UnbindBufferFromSource(source);
+		Private::Media::OpenAL::DestroyBuffers(pBufferCount, pIDs);
 		if (pAStream)
 			pAStream->rewind();
 		if (pVStream)

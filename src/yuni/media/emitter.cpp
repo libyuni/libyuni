@@ -98,8 +98,7 @@ namespace Media
 			return false;
 
 		Private::Media::OpenAL::StopSource(pID);
-		pSource->rewindDispatched(pID);
-		return true;
+		return pSource->rewindDispatched(pID);
 	}
 
 
