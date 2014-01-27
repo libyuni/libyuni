@@ -54,7 +54,6 @@ namespace Media
 		// Audio
 		if (nullptr != pAStream)
 		{
-			std::cout << "Audio prepare !" << std::endl;
 			pBufferCount = maxBufferCount;
 
 			if (!Private::Media::OpenAL::CreateBuffers(pBufferCount, pIDs))
@@ -79,7 +78,6 @@ namespace Media
 		// Video
 		if (nullptr != pVStream)
 		{
-			std::cout << "Video prepare !" << std::endl;
 			fillQueue();
 		}
 
@@ -89,7 +87,6 @@ namespace Media
 
 	bool Source::updateDispatched(uint source)
 	{
-		//std::cout << "Source update !" << std::endl;
 		if (!valid())
 			return false;
 

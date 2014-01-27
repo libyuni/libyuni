@@ -119,7 +119,7 @@ namespace Media
 				std::cerr << "Source position update failed !" << std::endl;
 				return false;
 			}
-			if (!Private::Media::OpenAL::ModifySource(pID, DefaultPitch, pGain, DefaultAttenuation, pLoop))
+			if (!Private::Media::OpenAL::ModifySource(pID, DefaultPitch, pGain, DefaultAttenuation, false))
 			{
 				std::cerr << "Source characteristics update failed !" << std::endl;
 				return false;
@@ -127,7 +127,14 @@ namespace Media
 		}
 		if (pSource)
 		{
-			pSource->updateDispatched(pID);
+			if (!pSource->updateDispatched(pID))
+			{
+				if (pLoop)
+				{
+					pSource->rewindDispatched(pID);
+					pSource->updateDispatched(pID);
+				}
+			}
 		}
 		return true;
 	}

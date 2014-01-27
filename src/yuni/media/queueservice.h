@@ -66,11 +66,6 @@ namespace Media
 			//! Detach an emitter from any source
 			void detach(Emitter::Ptr name);
 
-			//! Modify an emitter's data
-			bool modify(const AnyString& name, bool loop);
-			//! Modify an emitter's data
-			bool modify(Emitter::Ptr name, bool loop);
-
 			//! Move an emitter around
 			bool move(const AnyString& name, const Point3D<>& position);
 			//! Move an emitter around

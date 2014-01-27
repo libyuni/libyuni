@@ -121,6 +121,23 @@ namespace Media
 	}
 
 
+	inline void Emitter::loop(bool looping)
+	{
+		ThreadingPolicy::MutexLocker locker(*this);
+		if (pLoop != looping)
+		{
+			pLoop = looping;
+			pModified = true;
+		}
+	}
+
+	inline bool Emitter::loop() const
+	{
+		ThreadingPolicy::MutexLocker locker(*this);
+		return pLoop;
+	}
+
+
 	inline void Emitter::gain(float newGain)
 	{
 		ThreadingPolicy::MutexLocker locker(*this);

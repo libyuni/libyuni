@@ -125,6 +125,11 @@ namespace Media
 		//! Get the direction of the emitter
 		Vector3D<> direction() const;
 
+		//! Set whether the emitter should loop
+		void loop(bool looping);
+		//! Get whether the emitter loops
+		bool loop() const;
+
 		/*!
 		** \brief Set the volume modifier on the emitter
 		** \param newGain 0.0f for no sound, 1.0f to keep sound as is, > 1.0f to amplify sound

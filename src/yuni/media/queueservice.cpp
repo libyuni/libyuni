@@ -334,7 +334,6 @@ namespace Media
 	}
 
 
-
 	bool QueueService::Emitters::move(const AnyString& emitterName,
 		const Point3D<>& position)
 	{
