@@ -146,7 +146,7 @@ namespace Media
 
 		// At that point, if we have no valid stream, we should fail,
 		// even on the non-strict case.
-		if ((!vStream or !vStream->valid()) and (not aStream or !aStream->valid()))
+		if (not (vStream and vStream->valid()) and not (aStream and aStream->valid()))
 		{
 			delete file;
 			return false;

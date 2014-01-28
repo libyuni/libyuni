@@ -93,6 +93,8 @@ list(APPEND SRC_UI_GL
 	ui/gl/shaderprogram.cpp
 	ui/gl/shaderprogram.h
 	ui/gl/shaderprogram.hxx
+	ui/gl/shaders.cpp
+	ui/gl/shaders.h
 	ui/gl/texture.cpp
 	ui/gl/texture.h
 	ui/gl/vertex.h
