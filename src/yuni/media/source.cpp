@@ -79,6 +79,8 @@ namespace Media
 		if (nullptr != pVStream)
 		{
 			fillQueue();
+			if (not pFrames.size())
+				return false;
 		}
 
 		return true;

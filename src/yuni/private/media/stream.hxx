@@ -135,7 +135,9 @@ namespace Media
 						pCrtPts = packet->dts;
 					else
 						pCrtPts = 0.0;
-					pCrtPts *= ::av_q2d(pCodec->time_base);
+					// pCrtPts = ::av_frame_get_best_effort_timestamp(pFrame);
+					pCrtPts *= ::av_q2d(pFormat->streams[pIndex]->time_base);
+					pCrtPts -= pFormat->start_time;
 					break;
 				}
 			}
@@ -189,8 +191,9 @@ namespace Media
 			readFrame();
 		}
 
+		static uint i = 1u;
 		// TODO : Give the real frame index
-		Frame* frame = new Frame(0u, pCrtPts);
+		Frame* frame = new Frame(i++, pCrtPts);
 		// Our Frame object takes custody of the AVFrame
 		// and will take care of its deletion
 		frame->setData(pFrame);
@@ -255,16 +258,17 @@ namespace Media
 		assert(pFormat);
 		assert(pFormat->streams[pIndex]);
 
-		float avgFrameRateDen = pFormat->streams[pIndex]->avg_frame_rate.den;
+		auto* avStream = pFormat->streams[pIndex];
+		float avgFrameRateDen = avStream->avg_frame_rate.den;
 		if (avgFrameRateDen <= 0)
-			return 0;
+			return (float)avStream->time_base.num / avStream->time_base.den;
 
-		float variable = (float) pFormat->streams[pIndex]->avg_frame_rate.num / avgFrameRateDen;
+		float variable = (float)avStream->avg_frame_rate.num / avgFrameRateDen;
 
 		float ticks = pCodec->time_base.num * pCodec->ticks_per_frame;
 		if (ticks <= 0)
 			return 0;
-		float constant = (float) pCodec->time_base.den / (ticks);
+		float constant = (float)pCodec->time_base.den / ticks;
 
 		return Math::Min(variable, constant);
 	}

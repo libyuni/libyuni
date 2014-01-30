@@ -58,12 +58,11 @@ namespace Media
 			signal.wait();
 		}
 
-		if (pReady)
-		{
-			sHasRunningInstance = 1;
-			return true;
-		}
-		return false;
+		if (!pReady)
+			return false;
+
+		sHasRunningInstance = 1;
+		return true;
 	}
 
 
