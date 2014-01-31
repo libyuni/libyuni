@@ -254,7 +254,7 @@ namespace UI
 		uint width = 0u;
 		uint height = 0u;
 		uint highestYBearing = 0u;
-		uint lowestUnderBaseline = 0u;
+		int lowestUnderBaseline = 0;
 		int xDelta = 0;
 		int yDelta = 0;
 		Glyph::Ptr glyph;
@@ -272,7 +272,7 @@ namespace UI
 				pImpl->getKerning(prev->index(), glyph->index(), xDelta, yDelta);
 			width += glyph->advance() + xDelta;
 			highestYBearing = Math::Max(highestYBearing, glyph->yBearing());
-			lowestUnderBaseline = Math::Max(lowestUnderBaseline, glyph->height() - glyph->yBearing());
+			lowestUnderBaseline = Math::Max(lowestUnderBaseline, (int)(glyph->height() - glyph->yBearing()));
 		}
 
 		height = highestYBearing + lowestUnderBaseline + 1;
