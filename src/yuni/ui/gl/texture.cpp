@@ -305,7 +305,7 @@ namespace Gfx3D
 
 
 	Texture::Ptr Texture::NewMS(uint width, uint height, uint colorDepth,
-		DataType type, uint samples, const uint8* data)
+		DataType type, uint samples, const uint8* /*data*/)
 	{
 		assert(width > 0 && "Creating texture with width=0 !");
 		assert(height > 0 && "Creating texture with height=0 !");
@@ -357,6 +357,8 @@ namespace Gfx3D
 
 	void Texture::resize(uint width, uint height)
 	{
+		assert(width > 0 && "Texture resize : width is null !");
+		assert(height > 0 && "Texture resize : height is null !");
 		// Update sizes
 		pWidth = width;
 		pHeight = height;
@@ -387,7 +389,10 @@ namespace Gfx3D
 	void Texture::update(uint offsetX, uint offsetY, uint width, uint height, uint colorDepth,
 		const unsigned char* data)
 	{
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		if (width <= 0 || height <= 0)
+			// No update to do
+			return;
 		assert(offsetX + width <= pWidth && "Texture update : X + width is out of bounds !");
 		assert(offsetY + height <= pHeight && "Texture update : Y + height is out of bounds !");
 		::glBindTexture(GL_TEXTURE_2D, pID);
