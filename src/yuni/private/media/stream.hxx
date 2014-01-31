@@ -136,8 +136,10 @@ namespace Media
 					else
 						pCrtPts = 0.0;
 					// pCrtPts = ::av_frame_get_best_effort_timestamp(pFrame);
-					pCrtPts *= ::av_q2d(pFormat->streams[pIndex]->time_base);
-					pCrtPts -= pFormat->start_time;
+					float timeRatio = ::av_q2d(pFormat->streams[pIndex]->time_base);
+					pCrtPts *= timeRatio;
+					//pCrtPts -= pFormat->streams[pIndex]->start_time * timeRatio;
+					pCrtPts -= 6.84017; // FIXME !
 					break;
 				}
 			}
