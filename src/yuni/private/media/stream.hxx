@@ -122,6 +122,7 @@ namespace Media
 				#endif
 				{
 					std::cerr << "Error while decoding video !" << std::endl;
+					continue;
 					// Do not do anything here, just act normally and try to recover from the error
 				}
 
@@ -138,8 +139,7 @@ namespace Media
 					// pCrtPts = ::av_frame_get_best_effort_timestamp(pFrame);
 					float timeRatio = ::av_q2d(pFormat->streams[pIndex]->time_base);
 					pCrtPts *= timeRatio;
-					//pCrtPts -= pFormat->streams[pIndex]->start_time * timeRatio;
-					pCrtPts -= 6.84017; // FIXME !
+					pCrtPts -= (pFormat->streams[pIndex]->start_time * timeRatio);
 					break;
 				}
 			}

@@ -99,7 +99,7 @@ namespace Media
 		float fps() const { assert(hasVideo()); return pVStream->fps(); }
 
 		//! Get the next video frame. Only valid if there is video !
-		Private::Media::Frame::Ptr nextFrame() { assert(hasVideo()); return pVStream->nextFrame(); }
+		Private::Media::Frame::Ptr nextFrame();
 
 	private:
 		//! Refill audio buffer

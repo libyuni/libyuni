@@ -78,9 +78,9 @@ namespace Media
 		// Video
 		if (nullptr != pVStream)
 		{
-			fillQueue();
-			if (not pFrames.size())
-				return false;
+			// fillQueue();
+			// if (not pFrames.size())
+			// 	return false;
 		}
 
 		return true;
@@ -132,24 +132,26 @@ namespace Media
 		// Video
 		if (hasVideo())
 		{
-			// if (hasAudio() and Private::Media::OpenAL::IsSourcePlaying(source))
-			// {
-			// 	std::cout << "Video and audio sync !" << std::endl;
-			// 	// Try to sync with audio
-			// 	ALfloat elapsed;
-			// 	::alGetSourcef(source, AL_SEC_OFFSET, &elapsed);
-			// 	while (!pFrames.empty() and elapsed > pFrames.front()->timestamp())
-			// 	{
-			// 		pFrames.pop_front();
-			// 		if (pFrames.empty())
-			// 			fillQueue();
-			// 	}
-			// }
+			/*
+			if (hasAudio() and Private::Media::OpenAL::IsSourcePlaying(source))
+			{
+				std::cout << "Video and audio sync !" << std::endl;
+				// Try to sync with audio
+				ALfloat elapsed;
+				::alGetSourcef(source, AL_SEC_OFFSET, &elapsed);
+				while (!pFrames.empty() and elapsed > pFrames.front()->timestamp())
+				{
+					pFrames.pop_front();
+					if (pFrames.empty())
+						fillQueue();
+				}
+			}
+			*/
 
 			// TEMPORARY
 			// The sync code is not working yet, just get some frames when we need them for now
-			if (pFrames.empty())
-				fillQueue();
+			// if (pFrames.empty())
+			// 	fillQueue();
 
 			if (pFrames.empty())
 				// Failed to load anymore
@@ -195,6 +197,20 @@ namespace Media
 		return true;
 	}
 
+
+	Private::Media::Frame::Ptr Source::nextFrame()
+	{
+		assert(hasVideo() && "Source::nextFrame : Cannot get a video frame from an audio-only source !");
+		// FIXME : There is probably a race condition here !
+		// We need a mutex lock
+		if (pFrames.empty())
+		{
+			return pVStream->nextFrame();
+		}
+		auto frame = pFrames.front();
+		pFrames.pop_front();
+		return frame;
+	}
 
 
 
