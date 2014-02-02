@@ -261,18 +261,18 @@ namespace Media
 		assert(pFormat->streams[pIndex]);
 
 		auto* avStream = pFormat->streams[pIndex];
-		float avgFrameRateDen = avStream->avg_frame_rate.den;
-		if (avgFrameRateDen <= 0)
-			return (float)avStream->time_base.num / avStream->time_base.den;
 
-		float variable = (float)avStream->avg_frame_rate.num / avgFrameRateDen;
+		float den = avStream->avg_frame_rate.den;
+		float variable = 0.0f;
+		if (den > 0.0f) // avoid divide by 0
+			variable = ::av_q2d(avStream->avg_frame_rate);
 
-		float ticks = pCodec->time_base.num * pCodec->ticks_per_frame;
-		if (ticks <= 0)
-			return 0;
-		float constant = (float)pCodec->time_base.den / ticks;
+		den = avStream->time_base.num;
+		float constant = 0.0f;
+		if (den > 0.0f) // avoid divide by 0
+			constant = pCodec->ticks_per_frame * avStream->time_base.den / den;
 
-		return Math::Min(variable, constant);
+		return Math::Max(variable, constant);
 	}
 
 
