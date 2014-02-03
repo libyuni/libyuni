@@ -9,7 +9,9 @@ namespace Media
 	Loop::Loop(QueueService* mediaService):
 		pMediaService(mediaService),
 		pClosing(false)
-	{}
+	{
+		timeout(50);
+	}
 
 	void Loop::beginClose()
 	{

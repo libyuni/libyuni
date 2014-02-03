@@ -275,7 +275,7 @@ void main(void)
 	vec4 alpha = texture(Texture0, texCoord);
 	vec4 material = texture(Texture1, texCoord);
 
-	gl_FragColor = vec4(TextColor.r, TextColor.g, TextColor.b, alpha.r);
+	gl_FragColor = vec4(TextColor.r, TextColor.g, TextColor.b, TextColor.a * alpha.r);
 }
 		)";
 
