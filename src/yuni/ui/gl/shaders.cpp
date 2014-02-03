@@ -82,6 +82,26 @@ void main()
 
 
 	// Sample a texture using a rectangle, do not resize the image, fill empty parts with a color
+	const char* const vsImageRectWithGeom =
+		R"(
+#version 130
+
+in vec3 attrVertex;
+in vec2 attrTexCoord;
+out vec2 texCoord;
+out bool hasBlank; // The rect leaves some blank on the borders
+uniform vec4 Bounds; // Stored as (xMin, yMin, xMax, yMax)
+
+// Use a rectangle overlay over a texture, store which parts of the overlay are out of bounds
+void main()
+{
+	texCoord = attrTexCoord;
+	vec4 vertex = vec4(attrVertex, 1.0f);
+	hasBlank = (vertex.x < Bounds.x || vertex.x > Bounds.z || vertex.y < Bounds.y || vertex.y > Bounds.w) ? 1.0f : 0.0f;
+	gl_Position = gl_ModelViewProjectionMatrix * vertex;
+}
+		)";
+
 	const char* const vsImageRect =
 		R"(
 #version 130
@@ -404,17 +424,33 @@ void main()
 	// Generate empty borders for image rectangles
 	const char* const gsImageRect =
 		R"(
-#version 130
-#extension GL_ARB_geometry_shader4 : enable
+// Necessary version for the new geometry shader syntax
+#version 150
+
+layout(triangles) in;
+layout(triangle_strip, max_vertices = ) out;
+
+uniform vec4 Bounds; // Stored as (xMin, yMin, xMax, yMax)
+in bool hasBlank[3]; // Which vertices leave blank on their side
+in vec2 texCoord[3]; // Texture coordinates
+out float isEmpty; // Used as a boolean (0 = false, 1 = true)
+out vec3 texCoord[3];
 
 void main()
 {
-	for(i = 0; i < gl_VerticesIn; i++)
+	vec4 vertex;
+	for (int i = 0; i < gl_in.length(); ++i)
 	{
-		gl_Position = gl_PositionIn[i];
+		gl_Position = gl_in[i].gl_Position;
+		isEmpty = false;
 		EmitVertex();
 	}
 	EndPrimitive();
+	for (int i = 0; i < gl_in.length(); ++i)
+		if (hasBlank[i])
+		{
+			
+		}
 }
 		)";
 
