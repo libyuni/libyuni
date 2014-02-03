@@ -19,7 +19,7 @@ namespace System
 	/*!
 	** \brief Get the temporary folder
 	**
-	** \param[out] out Variable of type 'string'/'container' where the value will be appened
+	** \param[out] out Variable of type 'string'/'container' where the value will be appended
 	** \param emptyBefore True to empty the variable \p out before anything else
 	** \return True if the operation succeeded, false otherwise
 	*/
@@ -30,7 +30,7 @@ namespace System
 	/*!
 	** \brief Get the user's home folder
 	**
-	** \param[out] out Variable of type 'string'/'container' where the value will be appened
+	** \param[out] out Variable of type 'string'/'container' where the value will be appended
 	** \param emptyBefore True to clear the given variable \p out before
 	** \return True if the operation succeeded, false otherwise
 	*/
@@ -38,6 +38,15 @@ namespace System
 	bool UserHome(StringT& out, bool emptyBefore = true);
 
 
+	/*!
+	** \brief Get the system fonts folder
+	**
+	** \param[out] out Variable of type 'string'/'container' where the value will be appended
+	** \param emptyBefore True to clear the given variable \p out before
+	** \return True if the operation succeeded, false otherwise
+	*/
+	template<class StringT>
+	bool Fonts(StringT& out, bool emptyBefore = true);
 
 
 

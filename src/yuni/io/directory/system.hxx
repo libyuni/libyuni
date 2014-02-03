@@ -62,6 +62,24 @@ namespace System
 
 
 
+	template<class StringT>
+	bool Fonts(StringT& out, bool emptyBefore = true)
+	{
+		if (emptyBefore)
+			out.clear();
+
+		# ifdef YUNI_OS_WINDOWS
+		if (!Yuni::System::Environment::Read("WINDIR", out, false))
+			out += "C:\\Windows"; // C by default
+		out += "\\Fonts\\";
+		return true;
+		# else
+		out = "/usr/share/fonts/truetype/";
+		return true;
+		# endif
+	}
+
+
 
 
 
