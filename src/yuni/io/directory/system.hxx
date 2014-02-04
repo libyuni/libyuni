@@ -70,13 +70,15 @@ namespace System
 
 		# ifdef YUNI_OS_WINDOWS
 		if (!Yuni::System::Environment::Read("WINDIR", out, false))
-			out += "C:\\Windows"; // C by default
+			out += "C:\\Windows"; // C:\Windows by default
 		out += "\\Fonts\\";
-		return true;
-		# else
+		# elifdef YUNI_OS_MACOS
+		out = "/Library/Fonts/";
+		# else // YUNI_OS_LINUX
 		out = "/usr/share/fonts/truetype/";
-		return true;
 		# endif
+
+		return true;
 	}
 
 
