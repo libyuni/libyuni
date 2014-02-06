@@ -11,6 +11,14 @@ if (NOT MSVC)
 endif()
 
 
+if (NOT MSVC)
+	check_c_compiler_flag("-w" YUNI_HAS_GCC_NOWARNING)
+else()
+	check_c_compiler_flag("/nowarn" YUNI_HAS_VS_NOWARNING)
+endif()
+
+
+
 # posix_fallocate - Linux only
 if (UNIX)
 	check_cxx_source_compiles("

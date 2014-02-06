@@ -34,16 +34,11 @@ set (SRC_PRIVATE_DBI_ADAPTER_SQLITE
 source_group("DBI\\Adapter\\SQLite" FILES ${SRC_PRIVATE_DBI_ADAPTER_SQLITE})
 
 
-if (NOT MSVC)
-	check_c_compiler_flag("-w" YUNI_HAS_GCC_NOWARNING)
-	if (YUNI_HAS_GCC_NOWARNING)
-		set_source_files_properties(private/dbi/adapter/sqlite/sqlite3.c PROPERTIES COMPILE_FLAGS -w)
-	endif()
-else()
-	check_c_compiler_flag("/nowarn" YUNI_HAS_VS_NOWARNING)
-	if (YUNI_HAS_VS_NOWARNING)
-		set_source_files_properties(private/dbi/adapter/sqlite/sqlite3.c PROPERTIES COMPILE_FLAGS /nowarn)
-	endif()
+if (YUNI_HAS_GCC_NOWARNING)
+	set_source_files_properties(private/dbi/adapter/sqlite/sqlite3.c PROPERTIES COMPILE_FLAGS -w)
+endif()
+if (YUNI_HAS_VS_NOWARNING)
+	set_source_files_properties(private/dbi/adapter/sqlite/sqlite3.c PROPERTIES COMPILE_FLAGS /nowarn)
 endif()
 
 

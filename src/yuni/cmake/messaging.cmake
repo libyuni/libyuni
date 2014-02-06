@@ -39,10 +39,6 @@ set(SRC_NET_MESSAGE_TRANSPORT_REST
 	messaging/transport/rest/request.inc.hpp
 )
 source_group("Messaging\\Transport\\REST" FILES ${SRC_NET_MESSAGE_TRANSPORT_REST})
-if (YUNI_HAS_STDINT_H)
-	set_source_files_properties(net/messaging/transport/rest/mongoose.c PROPERTIES COMPILE_FLAGS -DHAVE_STDINT)
-endif()
-
 
 set(SRC_NET_MESSAGE_API
 	messaging/api/methods.cpp
