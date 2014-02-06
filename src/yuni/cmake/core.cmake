@@ -37,11 +37,6 @@ endif()
 
 
 
-include(CheckCSourceCompiles)
-include(CheckCXXSourceCompiles)
-include(CheckIncludeFiles)
-include(CheckIncludeFileCXX)
-
 
 set(CMAKE_REQUIRED_FLAGS_PREVIOUS ${CMAKE_REQUIRED_FLAGS})
 set(CMAKE_REQUIRED_FLAGS "")
