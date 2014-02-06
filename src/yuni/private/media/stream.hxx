@@ -87,7 +87,11 @@ namespace Media
 		// Frame allocation
 		if (!pFrame)
 		{
+			#if LIBAVUTIL_VERSION_INT > AV_VERSION_INT(52, 20, 100)
+			if (!(pFrame = ::av_frame_alloc()))
+			#else
 			if (!(pFrame = ::avcodec_alloc_frame()))
+			#endif
 			{
 				std::cerr << "Error allocating a frame for audio decoding !" << std::endl;
 				return 0;
@@ -96,7 +100,11 @@ namespace Media
 		else
 		{
 			// Should not happen, but this is a security.
+			#if LIBAVUTIL_VERSION_INT > AV_VERSION_INT(52, 20, 100)
+			::av_frame_unref(pFrame);
+			#else
 			::avcodec_get_frame_defaults(pFrame);
+			#endif
 		}
 
 		int bytesRead = 0;
@@ -248,7 +256,11 @@ namespace Media
 	inline uint Stream<TypeT>::depth() const
 	{
 		YUNI_STATIC_ASSERT(IsVideo, NotAccessibleInAudio);
+		#if LIBAVCODEC_VERSION_INT > AV_VERSION_INT(52,30,0)
+		return ::av_get_bits_per_pixel(::av_pix_fmt_desc_get(pCodec->pix_fmt));
+		#else
 		return ::av_get_bits_per_pixel(&::av_pix_fmt_descriptors[pCodec->pix_fmt]);
+		#endif
 	}
 
 
