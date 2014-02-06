@@ -87,6 +87,12 @@ set(SRC_CORE_ATOMIC
 )
 source_group(core\\atomic FILES ${SRC_CORE_ATOMIC})
 
+set(SRC_CORE_FUNCTIONAL
+		core/functional/fold.h
+		core/functional/fold.hxx
+)
+source_group(core\\functional FILES ${SRC_CORE_FUNCTIONAL})
+
 
 
 set(SRC_CORE_PREPROCESSOR
@@ -706,6 +712,7 @@ add_library(yuni-static-core STATIC
 		${SRC_CORE_MISC}
 		${SRC_CORE_PREDICATES_RESULTS}
 		${SRC_CORE_STATIC}
+		${SRC_CORE_FUNCTIONAL}
 		${SRC_CORE_ITERATOR}
 		${SRC_CORE_TRAITS}
 		${SRC_CORE_PREPROCESSOR}

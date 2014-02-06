@@ -20,6 +20,7 @@ Release version 1.0.0
    is available within a given class and his ancestors (see `yuni/core/static/typedef.h`)
  * [core] `System::Console`: new routines `IsStdoutTTY()` and `IsStderrTTY()` to determine
    whether the standard output (or standard error output) is a TTY or not
+ * [core/functional] added `Functional::Fold()` routine
 
 **Changes**
 
