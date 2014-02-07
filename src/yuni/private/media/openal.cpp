@@ -285,9 +285,6 @@ namespace Media
 	{
 		float pos = 0;
 		::alGetSourcef(source, AL_SEC_OFFSET, &pos);
-		# ifndef NDEBUG
-		std::cout << "Getting position at " << pos << std::endl;
-		# endif
 		return pos / 60.0f; // Normalize the time
 	}
 
