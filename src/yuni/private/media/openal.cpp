@@ -80,9 +80,9 @@ namespace Media
 				if (::alIsExtensionPresent("AL_EXT_MCFORMATS"))
 				{
 					if (channels == 4)
-						return alGetEnumValue("AL_FORMAT_QUAD8");
+						return ::alGetEnumValue("AL_FORMAT_QUAD8");
 					if (channels == 6)
-						return alGetEnumValue("AL_FORMAT_51CHN8");
+						return ::alGetEnumValue("AL_FORMAT_51CHN8");
 				}
 				break;
 			}
@@ -135,15 +135,15 @@ namespace Media
 
 	void OpenAL::DestroyBuffers(int nbBuffers, uint* buffers)
 	{
-		alDeleteBuffers(nbBuffers, buffers);
+		::alDeleteBuffers(nbBuffers, buffers);
 	}
 
 
 	void OpenAL::SetListener(float position[3], float velocity[3], float orientation[6])
 	{
-		alListenerfv(AL_POSITION, position);
-		alListenerfv(AL_VELOCITY, velocity);
-		alListenerfv(AL_ORIENTATION, orientation);
+		::alListenerfv(AL_POSITION, position);
+		::alListenerfv(AL_VELOCITY, velocity);
+		::alListenerfv(AL_ORIENTATION, orientation);
 	}
 
 
@@ -153,7 +153,7 @@ namespace Media
 		::alGetError();
 		uint source;
 		::alGenSources(1, &source);
-		if (alGetError() != AL_NO_ERROR)
+		if (::alGetError() != AL_NO_ERROR)
 			return 0;
 
 		UnbindBufferFromSource(source);
@@ -216,7 +216,7 @@ namespace Media
 	{
 		ALint state;
 		::alGetSourcei(source, AL_SOURCE_STATE, &state);
-		return AL_NO_ERROR == alGetError() and AL_PAUSED == state;
+		return AL_NO_ERROR == ::alGetError() and AL_PAUSED == state;
 	}
 
 

@@ -67,7 +67,7 @@ namespace Media
 
 				// Buffer the data with OpenAL
 				if (!Private::Media::OpenAL::SetBufferData(pIDs[i], pAStream->alFormat(),
-					pData.data(), size, pAStream->rate()))
+					pData.data(), size, pAStream->rate() / pAStream->channels()))
 					return false;
 				// Queue the buffers onto the source
 				if (!Private::Media::OpenAL::QueueBufferToSource(pIDs[i], source))
@@ -107,15 +107,12 @@ namespace Media
 			ALuint buffer = Private::Media::OpenAL::UnqueueBufferFromSource(source);
 			// Reset current buffer time
 			pSecondsCurrent = 0.0f;
+			uint bits = pAStream->bits();
+			uint channels = pAStream->channels();
+			uint frequency = pAStream->rate();
 			int bufferSize;
-			int bits;
-			int channels;
-			int frequency;
 			::alGetBufferi(buffer, AL_SIZE, &bufferSize);
-			::alGetBufferi(buffer, AL_BITS, &bits);
-			::alGetBufferi(buffer, AL_CHANNELS, &channels);
-			::alGetBufferi(buffer, AL_FREQUENCY, &frequency);
-			pSecondsElapsed += (float)bufferSize / channels * 8.0f / bits / frequency;
+			pSecondsElapsed += bufferSize * 8.0f / bits / frequency;
 			// Get the next data to feed the buffer
 			uint size = fillBuffer();
 			if (!size)
@@ -123,7 +120,7 @@ namespace Media
 
 			// Buffer the data with OpenAL and queue the buffer onto the source
 			if (!Private::Media::OpenAL::SetBufferData(buffer, pAStream->alFormat(), pData.data(),
-				size, pAStream->rate()))
+				size, frequency / channels))
 				return false;
 			if (!Private::Media::OpenAL::QueueBufferToSource(buffer, source))
 				return false;

@@ -187,14 +187,24 @@ namespace Media
 			*/
 			bool unload(const AnyString& name);
 
-			//! Get the duration of a loaded source
-			uint duration(const AnyString& name);
+			//! Get the duration of a source
+			uint duration(const AnyString& name) const;
+
+			//! Get the sampling rate of a source
+			uint samplingRate(const AnyString& name) const;
+
+			//! Get the number of channels of a source
+			uint channels(const AnyString& name) const;
+
+			//! Get the number of bits per sample of a source
+			uint bitsPerSample(const AnyString& name) const;
 
 			//! Get elapsed time (current playing time) in the source
-			float elapsedTime(const AnyString& name);
+			float elapsedTime(const AnyString& name) const;
 
 			//! Get a source from the library
 			Source::Ptr get(const AnyString& name);
+			const Source::Ptr get(const AnyString& name) const;
 
 		private:
 			//! Friend declaration

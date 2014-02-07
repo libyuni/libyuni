@@ -98,6 +98,15 @@ namespace Media
 		//! Frames per second of the video. Only valid if there is video !
 		float fps() const { assert(hasVideo()); return pVStream->fps(); }
 
+		//! Audio sampling rate. Only valid if there is audio !
+		uint samplingRate() const { assert(hasAudio()); return pAStream->rate(); }
+
+		//! Number of audio channels. Only valid if there is audio !
+		uint channels() const { assert(hasAudio()); return pAStream->channels(); }
+
+		//! Bits per sample for audio. Only valid if there is audio !
+		uint bitsPerSample() const { assert(hasAudio()); return pAStream->bits(); }
+
 		//! Get the next video frame. Only valid if there is video !
 		Private::Media::Frame::Ptr nextFrame();
 

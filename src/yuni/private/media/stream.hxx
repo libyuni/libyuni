@@ -20,6 +20,7 @@ namespace Media
 		pALFormat(0),
 		pSize(0),
 		pCrtPts(AV_NOPTS_VALUE),
+		pCrtFrameIndex(0),
 		pFrame(nullptr),
 		pParent(parent)
 	{
@@ -42,7 +43,7 @@ namespace Media
 		}
 
 		if (IsAudio)
-			pALFormat = Private::Media::OpenAL::GetFormat(16, pCodec->channels);
+			pALFormat = Private::Media::OpenAL::GetFormat(16u, pCodec->channels);
 	}
 
 
@@ -162,6 +163,7 @@ namespace Media
 				#endif
 				{
 					std::cerr << "Error while decoding audio !" << std::endl;
+					continue;
 					// Do not do anything here, just act normally and try to recover from the error
 				}
 
@@ -175,6 +177,8 @@ namespace Media
 			delete packet;
 			packet = nullptr;
 		}
+
+		++pCrtFrameIndex;
 
 		// Free packet before quitting
 		if (packet)
@@ -190,20 +194,10 @@ namespace Media
 	template<StreamType TypeT>
 	inline Frame::Ptr Stream<TypeT>::nextFrame()
 	{
-		//YUNI_STATIC_ASSERT(IsVideo, nextFrameNotAccessibleInAudio);
-		if (IsVideo)
-		{
-			readFrame();
-		}
-		else // IsAudio
-		{
-			//readAudioFrame();
-			readFrame();
-		}
+		if (!readFrame())
+			return nullptr;
 
-		static uint i = 1u;
-		// TODO : Give the real frame index
-		Frame* frame = new Frame(i++, pCrtPts);
+		Frame* frame = new Frame(pCrtFrameIndex, pCrtPts);
 		// Our Frame object takes custody of the AVFrame
 		// and will take care of its deletion
 		frame->setData(pFrame);
@@ -293,7 +287,7 @@ namespace Media
 	{
 		YUNI_STATIC_ASSERT(IsAudio, NotAccessibleInVideo);
 		assert(pCodec);
-		return (pCodec->channels > 0) ? (pCodec->sample_rate / pCodec->channels) : 0;
+		return pCodec->sample_rate;
 	}
 
 
@@ -312,7 +306,7 @@ namespace Media
 		YUNI_STATIC_ASSERT(IsAudio, NotAccessibleInVideo);
 		assert(pCodec);
 		// Internal FFMpeg format is always 16 bits
-		return 16;
+		return 16u;
 	}
 
 

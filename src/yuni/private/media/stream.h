@@ -139,6 +139,9 @@ namespace Media
 		//! Current presentation time stamp
 		double pCrtPts;
 
+		//! Current frame index
+		uint pCrtFrameIndex;
+
 		//! Currently read frame
 		AVFrame* pFrame;
 

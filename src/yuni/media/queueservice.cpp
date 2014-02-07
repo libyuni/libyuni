@@ -439,6 +439,16 @@ namespace Media
 		return it->second;
 	}
 
+	const Source::Ptr QueueService::Library::get(const AnyString& name) const
+	{
+		ThreadingPolicy::MutexLocker locker(*this);
+
+		Source::Map::const_iterator it = pSources.find(name);
+		if (it == pSources.end())
+			return nullptr;
+		return it->second;
+	}
+
 
 	void QueueService::Library::clear()
 	{
@@ -553,7 +563,7 @@ namespace Media
 	}
 
 
-	unsigned int QueueService::Library::duration(const AnyString& name)
+	uint QueueService::Library::duration(const AnyString& name) const
 	{
 		Source::Ptr source = get(name);
 		if (not source)
@@ -566,7 +576,52 @@ namespace Media
 	}
 
 
-	float QueueService::Library::elapsedTime(const AnyString& name)
+	uint QueueService::Library::samplingRate(const AnyString& name) const
+	{
+		Source::Ptr source = get(name);
+		if (not source)
+			return 0;
+
+		ThreadingPolicy::MutexLocker locker(*this);
+		if (not pQueueService->pReady)
+			return 0;
+		if (!source->hasAudio())
+			return 0;
+		return source->samplingRate();
+	}
+
+
+	uint QueueService::Library::channels(const AnyString& name) const
+	{
+		Source::Ptr source = get(name);
+		if (not source)
+			return 0;
+
+		ThreadingPolicy::MutexLocker locker(*this);
+		if (not pQueueService->pReady)
+			return 0;
+		if (!source->hasAudio())
+			return 0;
+		return source->channels();
+	}
+
+
+	uint QueueService::Library::bitsPerSample(const AnyString& name) const
+	{
+		Source::Ptr source = get(name);
+		if (not source)
+			return 0;
+
+		ThreadingPolicy::MutexLocker locker(*this);
+		if (not pQueueService->pReady)
+			return 0;
+		if (!source->hasAudio())
+			return 0;
+		return source->bitsPerSample();
+	}
+
+
+	float QueueService::Library::elapsedTime(const AnyString& name) const
 	{
 		Source::Ptr source = get(name);
 		if (not source)
