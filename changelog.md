@@ -20,6 +20,7 @@ Release version 1.0.0
    is available within a given class and his ancestors (see `yuni/core/static/typedef.h`)
  * [core] `System::Console`: new routines `IsStdoutTTY()` and `IsStderrTTY()` to determine
    whether the standard output (or standard error output) is a TTY or not
+ * [core/functional] added `Functional::Fold()` routine
 
 **Changes**
 
@@ -43,6 +44,7 @@ Release version 1.0.0
    - the methods `Point3D::closeTo()` have been renamed to `Point3D::isCloseTo()`
  * [core] Misc: msinttypes for Visual Studio has been updated to r29 (http://code.google.com/p/msinttypes/)
  * [core] Event::Loop: added the method `gracefulStop()`
+ * [dbi] Updated sqlite to v3.8.3
 
 **Fixes**
 

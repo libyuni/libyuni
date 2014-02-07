@@ -71,6 +71,14 @@ endif()
 set(YUNI_INSTALL_CXX_FLAGS   "")
 set(YUNI_INSTALL_CXX_DEFINES "")
 
+include(CheckCSourceCompiles)
+include(CheckCXXSourceCompiles)
+include(CheckIncludeFiles)
+include(CheckIncludeFileCXX)
+include(CheckCCompilerFlag)
+include(CheckCXXCompilerFlag)
+
+
 # ICC Detection
 # CMake does not handle ICC at all, mainly because ICC behaves like Visual Studio and
 # it seems there is no reliable way to make the distinction

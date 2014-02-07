@@ -25,6 +25,23 @@ set (SRC_PRIVATE_DBI
 )
 source_group("DBI\\Private" FILES ${SRC_PRIVATE_DBI})
 
+
+set (SRC_PRIVATE_DBI_ADAPTER_SQLITE
+	private/dbi/adapter/sqlite/sqlite3.c
+	private/dbi/adapter/sqlite/sqlite3.h
+	private/dbi/adapter/sqlite/sqlite3ext.h
+)
+source_group("DBI\\Adapter\\SQLite" FILES ${SRC_PRIVATE_DBI_ADAPTER_SQLITE})
+
+
+if (YUNI_HAS_GCC_NOWARNING)
+	set_source_files_properties(private/dbi/adapter/sqlite/sqlite3.c PROPERTIES COMPILE_FLAGS -w)
+endif()
+if (YUNI_HAS_VS_NOWARNING)
+	set_source_files_properties(private/dbi/adapter/sqlite/sqlite3.c PROPERTIES COMPILE_FLAGS /nowarn)
+endif()
+
+
 set(SRC_DBI
 	dbi/dbi.h
 	dbi/connector-pool.h
@@ -60,6 +77,7 @@ source_group("DBI" FILES ${SRC_DBI})
 
 add_Library(yuni-static-dbi STATIC
 	${SRC_DBI}
+	${SRC_PRIVATE_DBI_ADAPTER_SQLITE}
 	${SRC_PRIVATE_DBI}
 )
 

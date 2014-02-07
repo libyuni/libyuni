@@ -37,11 +37,6 @@ endif()
 
 
 
-include(CheckCSourceCompiles)
-include(CheckCXXSourceCompiles)
-include(CheckIncludeFiles)
-include(CheckIncludeFileCXX)
-
 
 set(CMAKE_REQUIRED_FLAGS_PREVIOUS ${CMAKE_REQUIRED_FLAGS})
 set(CMAKE_REQUIRED_FLAGS "")
@@ -86,6 +81,12 @@ set(SRC_CORE_ATOMIC
 		core/atomic/bool.h
 )
 source_group(core\\atomic FILES ${SRC_CORE_ATOMIC})
+
+set(SRC_CORE_FUNCTIONAL
+		core/functional/fold.h
+		core/functional/fold.hxx
+)
+source_group(core\\functional FILES ${SRC_CORE_FUNCTIONAL})
 
 
 
@@ -706,6 +707,7 @@ add_library(yuni-static-core STATIC
 		${SRC_CORE_MISC}
 		${SRC_CORE_PREDICATES_RESULTS}
 		${SRC_CORE_STATIC}
+		${SRC_CORE_FUNCTIONAL}
 		${SRC_CORE_ITERATOR}
 		${SRC_CORE_TRAITS}
 		${SRC_CORE_PREPROCESSOR}
