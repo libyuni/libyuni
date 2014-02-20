@@ -22,6 +22,7 @@ Release version 1.0.0
    whether the standard output (or standard error output) is a TTY or not
  * [core/functional] added `Functional::Fold()` routine
  * [dbi] The DBI/sqlite adapter is now ready for production
+ * Multiple fixes related to C++11 standard
 
 **Changes**
 
