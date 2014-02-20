@@ -110,17 +110,20 @@ namespace UI
 		void moveTo(int x, int y)
 		{
 			pPosition(x, y);
+			invalidate();
 		}
 
 		void moveBy(int x, int y)
 		{
 			pPosition.x += x;
 			pPosition.y += y;
+			invalidate();
 		}
 
 		void moveTo(const Point2D<int>& position)
 		{
 			pPosition(position);
+			invalidate();
 		}
 
 		void resize(uint width, uint height)
