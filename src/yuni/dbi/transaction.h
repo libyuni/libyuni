@@ -75,6 +75,22 @@ namespace DBI
 		** \brief Perform a query and discard the resultset
 		*/
 		DBI::Error perform(const AnyString& script);
+
+		//! Perform a query and discard the resultset with one bound parameter
+		template<class A1>
+		DBI::Error perform(const AnyString& script, const A1& a1);
+
+		//! Perform a query and discard the resultset with two bound parameters
+		template<class A1, class A2>
+		DBI::Error perform(const AnyString& script, const A1& a1, const A2& a2);
+
+		//! Perform a query and discard the resultset with two bound parameters
+		template<class A1, class A2, class A3>
+		DBI::Error perform(const AnyString& script, const A1& a1, const A2& a2, const A3& a3);
+
+		//! Perform a query and discard the resultset with two bound parameters
+		template<class A1, class A2, class A3, class A4>
+		DBI::Error perform(const AnyString& script, const A1& a1, const A2& a2, const A3& a3, const A4& a4);
 		//@}
 
 
