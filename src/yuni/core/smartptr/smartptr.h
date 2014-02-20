@@ -458,12 +458,18 @@ namespace std
 	template< typename T,
 		template <class> class OwspP, template <class> class ChckP, class ConvP,
 		template <class> class StorP, template <class> class ConsP>
-	struct less<Yuni::SmartPtr<T, OwspP,ChckP,ConvP,StorP,ConsP> >
+	struct less<Yuni::SmartPtr<T, OwspP,ChckP,ConvP,StorP,ConsP> > final
 	{
 		//! SmartPtr
 		typedef Yuni::SmartPtr<T, OwspP,ChckP,ConvP,StorP,ConsP>  SmartPtrType;
 
-		bool operator()(const SmartPtrType& lhs, const SmartPtrType& rhs)
+		// C++11 compatibility
+		typedef SmartPtrType first_argument_type;
+		typedef SmartPtrType second_argument_type;
+		typedef bool result_type;
+
+
+		bool operator()(const SmartPtrType& lhs, const SmartPtrType& rhs) const
 		{
 			return lhs < rhs;
 		}
