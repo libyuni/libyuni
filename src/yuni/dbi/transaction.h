@@ -80,17 +80,37 @@ namespace DBI
 		template<class A1>
 		DBI::Error perform(const AnyString& script, const A1& a1);
 
-		//! Perform a query and discard the resultset with two bound parameters
+		//! Perform a query and discard the resultset with 2 parameters
 		template<class A1, class A2>
 		DBI::Error perform(const AnyString& script, const A1& a1, const A2& a2);
 
-		//! Perform a query and discard the resultset with two bound parameters
+		//! Perform a query and discard the resultset with 3 parameters
 		template<class A1, class A2, class A3>
 		DBI::Error perform(const AnyString& script, const A1& a1, const A2& a2, const A3& a3);
 
-		//! Perform a query and discard the resultset with two bound parameters
+		//! Perform a query and discard the resultset with 4 parameters
 		template<class A1, class A2, class A3, class A4>
 		DBI::Error perform(const AnyString& script, const A1& a1, const A2& a2, const A3& a3, const A4& a4);
+
+		//! Iterate over all rows of the resultset of a query (without any parameter)
+		template<class CallbackT>
+		DBI::Error each(const AnyString& query, const CallbackT& callback);
+
+		//! Iterate over all rows of the resultset of a query with 1 parameter
+		template<class CallbackT, class A1>
+		DBI::Error each(const AnyString& query, const A1& a1, const CallbackT& callback);
+
+		//! Iterate over all rows of the resultset of a query with 2 parameters
+		template<class CallbackT, class A1, class A2>
+		DBI::Error each(const AnyString& query, const A1& a1, const A2& a2, const CallbackT& callback);
+
+		//! Iterate over all rows of the resultset of a query with 3 parameters
+		template<class CallbackT, class A1, class A2, class A3>
+		DBI::Error each(const AnyString& query, const A1& a1, const A2& a2, const A3& a3, const CallbackT& callback);
+
+		//! Iterate over all rows of the resultset of a query with 4 parameters
+		template<class CallbackT, class A1, class A2, class A3, class A4>
+		DBI::Error each(const AnyString& query, const A1& a1, const A2& a2, const A3& a3, const A4& a4, const CallbackT& callback);
 		//@}
 
 
