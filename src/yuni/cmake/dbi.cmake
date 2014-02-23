@@ -7,6 +7,8 @@ LIBYUNI_CONFIG_LIB("both"   "dbi"  "yuni-static-dbi")
 LIBYUNI_CONFIG_LIB("both" "dbi"  "dl")
 
 
+add_definitions("-DSQLITE_THREADSAFE=1")
+
 # Sources for parsing JSON are imported from nany and no relative paths
 # is currently provided
 include_directories("..")
