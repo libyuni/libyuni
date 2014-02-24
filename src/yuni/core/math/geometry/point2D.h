@@ -13,7 +13,7 @@ namespace Yuni
 	** \brief Represents a 2D-point
 	*/
 	template<class T = float>
-	class Point2D final
+	class Point2D /* final */
 	{
 	public:
 		/*!
@@ -142,25 +142,14 @@ namespace Yuni
 		template<class U> void operator () (const Point2D<U>& p);
 
 
-		/*!
-		** \brief Translate the point with the same value for all coordinates
-		**
-		** \param k The value to add to all coordinates
-		** \return Always *this
-		**
-		** \see translate()
-		*/
-		Point2D<T>& operator += (const T& k);
+		//! Translate the point with the same value for all coordinates
+		template<class U> Point2D<T>& operator += (const U& k);
 
-		/*!
-		** \brief Translate the point with relative coordinates
-		**
-		** \param p Point to use as reference x and y for the translation
-		** \return Always *this
-		**
-		** \see translate()
-		*/
+		//! Translate the point with relative coordinates
 		template<class U> Point2D<T>& operator += (const Point2D<U>& p);
+
+		//! Apply ratio to the point with the same value for all coordinates
+		template<class U> Point2D<T>& operator *= (const U& k);
 
 		/*!
 		** \brief Comparison operator (equal with)
@@ -236,8 +225,17 @@ namespace Yuni
 template<class T>
 inline std::ostream& operator << (std::ostream& out, const Yuni::Point2D<T>& p);
 
-template<class T>
-inline const Yuni::Point2D<T> operator + (const Yuni::Point2D<T>& lhs, const Yuni::Point2D<T>& rhs);
+template<class T, class U>
+inline Yuni::Point2D<T> operator + (const Yuni::Point2D<T>& lhs, const U& rhs);
+
+template<class T, class U>
+inline Yuni::Point2D<T> operator + (const U& lhs, const Yuni::Point2D<T>& rhs);
+
+template<class T, class U>
+inline Yuni::Point2D<T> operator * (const Yuni::Point2D<T>& lhs, const U& rhs);
+
+template<class T, class U>
+inline Yuni::Point2D<T> operator * (const U& lhs, const Yuni::Point2D<T>& rhs);
 //@}
 
 

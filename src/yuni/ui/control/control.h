@@ -126,6 +126,11 @@ namespace UI
 			invalidate();
 		}
 
+		const Point2D<uint>& size() const
+		{
+			return pSize;
+		}
+
 		void resize(uint width, uint height)
 		{
 			pSize(width, height);

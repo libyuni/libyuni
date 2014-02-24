@@ -13,7 +13,7 @@ namespace Yuni
 	** \brief Represents a 3D-point
 	*/
 	template<class T = float>
-	class Point3D
+	class Point3D /* final */
 	{
 	public:
 		/*!
@@ -186,7 +186,7 @@ namespace Yuni
 		** \see translate()
 		*/
 		template<class U>
-		Point3D<T>& operator += (const U k) { x += (T)k; y += (T)k; z += (T)k; return (*this); }
+		Point3D<T>& operator += (const U& k) { x += (T)k; y += (T)k; z += (T)k; return (*this); }
 
 		/*!
 		** \brief Translate the point with relative coordinates
@@ -198,6 +198,42 @@ namespace Yuni
 		*/
 		template<class U>
 		Point3D<T>& operator += (const Point3D<U>& p) { x += (T)p.x; y += (T)p.y; z += (T)p.z; return (*this); }
+
+
+		/*!
+		** \brief Translate the point with the same value for all coordinates
+		**
+		** \param k The value to add to all coordinates
+		** \return Always *this
+		**
+		** \see translate()
+		*/
+		template<class U>
+		Point3D<T>& operator *= (const U& k)
+		{
+			x = (T)(x * k);
+			y = (T)(y * k);
+			z = (T)(z * k);
+			return (*this);
+		}
+
+		/*!
+		** \brief Translate the point with relative coordinates
+		**
+		** \param p The values to add to coordinates
+		** \return Always *this
+		**
+		** \see translate()
+		*/
+		template<class U>
+		Point3D<T>& operator *= (const Point3D<U>& p)
+		{
+			x = (T)(x * p.x);
+			y = (T)(y * p.y);
+			z = (T)(z * p.z);
+			return (*this);
+		}
+
 
 		/*!
 		** \brief Comparison operator (equal with)
@@ -376,9 +412,21 @@ template<class T>
 inline std::ostream& operator << (std::ostream& out, const Yuni::Point3D<T>& p)
 { return p.print(out); }
 
-template<class T>
-inline const Yuni::Point3D<T> operator + (const Yuni::Point3D<T>& lhs, const Yuni::Point3D<T>& rhs)
+template<class T, class U>
+inline Yuni::Point3D<T> operator + (const Yuni::Point3D<T>& lhs, const U& rhs)
 { return Yuni::Point3D<T>(lhs) += rhs; }
+
+template<class T, class U>
+inline Yuni::Point3D<T> operator + (const U& lhs, const Yuni::Point3D<U>& rhs)
+{ return Yuni::Point3D<T>(rhs) += lhs; }
+
+template<class T, class U>
+inline Yuni::Point3D<T> operator * (const Yuni::Point3D<T>& lhs, const U& rhs)
+{ return Yuni::Point3D<T>(lhs) *= rhs; }
+
+template<class T, class U>
+inline Yuni::Point3D<T> operator * (const U& lhs, const Yuni::Point3D<T>& rhs)
+{ return Yuni::Point3D<T>(rhs) *= lhs; }
 
 //@}
 

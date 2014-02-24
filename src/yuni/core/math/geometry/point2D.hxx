@@ -134,10 +134,11 @@ namespace Yuni
 
 
 	template<class T>
-	inline Point2D<T>& Point2D<T>::operator += (const T& k)
+	template<class U>
+	inline Point2D<T>& Point2D<T>::operator += (const U& k)
 	{
-		x += k;
-		y += k;
+		x += (T)k;
+		y += (T)k;
 		return (*this);
 	}
 
@@ -148,6 +149,16 @@ namespace Yuni
 	{
 		x += (T) p.x;
 		y += (T) p.y;
+		return (*this);
+	}
+
+
+	template<class T>
+	template<class U>
+	inline Point2D<T>& Point2D<T>::operator *= (const U& k)
+	{
+		x = (T)(x * k);
+		y = (T)(y * k);
 		return (*this);
 	}
 
@@ -243,10 +254,31 @@ inline std::ostream& operator << (std::ostream& out, const Yuni::Point2D<T>& p)
 }
 
 
-template<class T>
-inline const Yuni::Point2D<T> operator + (const Yuni::Point2D<T>& lhs, const Yuni::Point2D<T>& rhs)
+template<class T, class U>
+inline Yuni::Point2D<T> operator + (const Yuni::Point2D<T>& lhs, const U& rhs)
 {
 	return Yuni::Point2D<T>(lhs) += rhs;
+}
+
+
+template<class T, class U>
+inline Yuni::Point2D<T> operator + (const U& lhs, const Yuni::Point2D<T>& rhs)
+{
+	return Yuni::Point2D<T>(rhs) += lhs;
+}
+
+
+template<class T, class U>
+inline Yuni::Point2D<T> operator * (const Yuni::Point2D<T>& lhs, const U& rhs)
+{
+	return Yuni::Point2D<T>(lhs) *= rhs;
+}
+
+
+template<class T, class U>
+inline Yuni::Point2D<T> operator * (const U& lhs, const Yuni::Point2D<T>& rhs)
+{
+	return Yuni::Point2D<T>(rhs) *= lhs;
 }
 
 

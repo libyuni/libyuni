@@ -46,6 +46,7 @@ Release version 1.0.0
    - the methods `Point3D::closeTo()` have been renamed to `Point3D::isCloseTo()`
  * [core] Misc: msinttypes for Visual Studio has been updated to r29 (http://code.google.com/p/msinttypes/)
  * [core] Event::Loop: added the method `gracefulStop()`
+ * [core] Point2D and Point3D : Added operator * and *=.
  * [dbi] Updated sqlite to v3.8.3
 
 **Fixes**
