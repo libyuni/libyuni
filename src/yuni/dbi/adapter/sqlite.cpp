@@ -4,8 +4,12 @@
 #include "../../core/noncopyable.h"
 #include "../adapter/sqlite.h"
 #include "../../private/dbi/adapter/sqlite/sqlite3.h"
+#include "../../core/system/suspend.h"
+#include "../../thread/signal.h"
 #include <string.h>
 #include <cassert>
+
+
 
 
 namespace Yuni
@@ -47,11 +51,7 @@ namespace Adapter
 			delete[] columns;
 		}
 
-		inline int next()
-		{
-			++rowIndex;
-			return ::sqlite3_step(statement);
-		}
+		inline int next();
 
 		int move(uint64 index);
 
@@ -71,6 +71,98 @@ namespace Adapter
 		uint columnCount;
 
 	}; // class SQLiteQuery
+
+
+
+
+	static int BusyHandle(void* /*pArg*/, int /*nBusy*/)
+	{
+		SuspendMilliSeconds(10);
+		return 1; // non-zero, try again
+	}
+
+
+	static void unlock_notify_cb(void** apArg, int nArg)
+	{
+		for (int i = 0; i < nArg; ++i)
+		{
+			Thread::Signal* signal = (Thread::Signal*) apArg[i];
+			assert(signal != NULL);
+			signal->notify();
+		}
+	}
+
+	static inline int WaitForUnlockNotify(sqlite3* db)
+	{
+		Thread::Signal signal;
+
+		// Register for an unlock-notify callback. */
+		int rc = ::sqlite3_unlock_notify(db, unlock_notify_cb, (void*)&signal);
+		assert(rc == SQLITE_LOCKED or rc == SQLITE_OK);
+
+		// The call to sqlite3_unlock_notify() always returns either SQLITE_LOCKED
+		// or SQLITE_OK.
+		//
+		// If SQLITE_LOCKED was returned, then the system is deadlocked. In this
+		// case this function needs to return SQLITE_LOCKED to the caller so
+		// that the current transaction can be rolled back. Otherwise, block
+		// until the unlock-notify callback is invoked, then return SQLITE_OK.
+		if (rc == SQLITE_OK)
+			signal.wait();
+		return rc;
+	}
+
+
+	// This function is a wrapper around the SQLite function sqlite3_step().
+	// It functions in the same way as step(), except that if a required
+	// shared-cache lock cannot be obtained, this function may block waiting for
+	// the lock to become available. In this scenario the normal API step()
+	// function always returns SQLITE_LOCKED.
+	//
+	// If this function returns SQLITE_LOCKED, the caller should rollback
+	// the current transaction (if any) and try again later. Otherwise, the
+	// system may become deadlocked.
+	static inline int sqlite3_blocking_step(sqlite3_stmt* stmt)
+	{
+		int rc;
+		while (SQLITE_LOCKED == (rc = ::sqlite3_step(stmt)))
+		{
+			rc = WaitForUnlockNotify(::sqlite3_db_handle(stmt));
+			if (rc != SQLITE_OK)
+				break;
+			::sqlite3_reset(stmt);
+		}
+		return rc;
+	}
+
+
+	// This function is a wrapper around the SQLite function sqlite3_prepare_v2().
+	// It functions in the same way as prepare_v2(), except that if a required
+	// shared-cache lock cannot be obtained, this function may block waiting for
+	// the lock to become available. In this scenario the normal API prepare_v2()
+	// function always returns SQLITE_LOCKED.
+	//
+	// If this function returns SQLITE_LOCKED, the caller should rollback
+	// the current transaction (if any) and try again later. Otherwise, the
+	// system may become deadlocked.
+	int sqlite3_blocking_prepare_v2(sqlite3* db, const char *zSql, int nSql, sqlite3_stmt** ppStmt, const char** pz)
+	{
+		int rc;
+		while (SQLITE_LOCKED == (rc = ::sqlite3_prepare_v2(db, zSql, nSql, ppStmt, pz)))
+		{
+			rc = WaitForUnlockNotify(db);
+			if (rc != SQLITE_OK)
+				break;
+		}
+		return rc;
+	}
+
+
+	inline int SQLiteQuery::next()
+	{
+		++rowIndex;
+		return sqlite3_blocking_step(statement);
+	}
 
 
 	inline void SQLiteQuery::analyzeResultSet()
@@ -103,7 +195,7 @@ namespace Adapter
 				--rowIndex;
 				for (uint64 i = 0; i != rowIndex; ++i)
 				{
-					error = ::sqlite3_step(statement);
+					error = sqlite3_blocking_step(statement);
 					if (error != SQLITE_ROW)
 					{
 						if (error == SQLITE_DONE)
@@ -130,7 +222,7 @@ namespace Adapter
 			rowIndex = 0;
 			do
 			{
-				error = ::sqlite3_step(statement);
+				error = sqlite3_blocking_step(statement);
 				if (error != SQLITE_ROW)
 				{
 					if (error == SQLITE_DONE)
@@ -151,7 +243,7 @@ namespace Adapter
 
 
 
-	static inline yn_dbierr ynsqliteError(int error, void* dbh = nullptr)
+	static inline yn_dbierr ynsqliteError(int error, void* dbh = NULL)
 	{
 		if (SQLITE_OK == error or SQLITE_DONE == error)
 			return yerr_dbi_none;
@@ -178,6 +270,10 @@ namespace Adapter
 		return e;
 	}
 
+	static inline yn_dbierr ynsqliteError(int error, sqlite3_stmt* stmt)
+	{
+		return ynsqliteError(error, ::sqlite3_db_handle(stmt));
+	}
 
 
 	static yn_dbierr ynsqliteDirectQuery(void* dbh, const char* stmt, uint length)
@@ -186,14 +282,23 @@ namespace Adapter
 		if (YUNI_UNLIKELY(length == 0))
 			return yerr_dbi_none;
 
-		//std::cout << "debug: sqlite exec: " << AnyString(stmt, length) << std::endl;
-
 		sqlite3_stmt* cursor = nullptr;
-		int error = ::sqlite3_prepare_v2((::sqlite3*) dbh, stmt, (int)length, &cursor, nullptr);
+		int error;
+		do
+		{
+			error = sqlite3_blocking_prepare_v2((::sqlite3*) dbh, stmt, (int)length, &cursor, nullptr);
+			if (error == SQLITE_BUSY)
+			{
+				SuspendMilliSeconds(10);
+				continue;
+			}
+			break;
+		}
+		while (true);
 
 		if (YUNI_LIKELY(error == SQLITE_OK))
 		{
-			error = ::sqlite3_step(cursor);
+			error = sqlite3_blocking_step(cursor);
 			if (YUNI_LIKELY(error == SQLITE_ROW or error == SQLITE_DONE))
 			{
 				error = yerr_dbi_none;
@@ -221,11 +326,17 @@ namespace Adapter
 
 		enum
 		{
-			flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_URI,
+			flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_SHAREDCACHE
+				| SQLITE_OPEN_URI | SQLITE_OPEN_NOMUTEX,
 		};
 
+		int error;
+		// enable shared cache
+		if (YUNI_UNLIKELY(SQLITE_OK != (error = sqlite3_enable_shared_cache(1))))
+			return yerr_dbi_connection_failed;
+
 		::sqlite3* handle = nullptr;
-		int error = ::sqlite3_open_v2(host, &handle, flags, nullptr);
+		error = ::sqlite3_open_v2(host, &handle, flags, nullptr);
 
 		if (YUNI_UNLIKELY(SQLITE_OK != error))
 		{
@@ -246,6 +357,7 @@ namespace Adapter
 
 		*dbh = handle;
 
+		::sqlite3_busy_handler(handle, BusyHandle, nullptr);
 
 		yn_dbierr err = QueryExecute(*dbh, "PRAGMA encoding = \"UTF-8\";");
 		if (YUNI_UNLIKELY(err != yerr_dbi_none))
@@ -278,9 +390,11 @@ namespace Adapter
 		// First, delete all rows from the table
 		ShortString512 query("DELETE FROM ");
 		query.append(tablename, length);
-		yn_dbierr error = QueryExecute(dbh, query);
-		if (error != yerr_dbi_none)
-			return error;
+		{
+			yn_dbierr err = QueryExecute(dbh, query);
+			if (err != yerr_dbi_none)
+				return err;
+		}
 
 		// secondly, reseting the autoincrement
 		// note: the table name must have been checked
@@ -288,26 +402,29 @@ namespace Adapter
 		// note: The table `sqlite_sequence` may not exist (if there is no autoincrement)
 		//
 		AnyString select("SELECT name FROM sqlite_master WHERE type='table' AND name='sqlite_sequence'");
-
-		sqlite3_stmt* cursor = nullptr;
-		bool hasRow =
-			(SQLITE_OK == ::sqlite3_prepare_v2((::sqlite3*) dbh, select.c_str(), (int)select.size(), &cursor, nullptr)
-			and (SQLITE_ROW == ::sqlite3_step(cursor)));
-		::sqlite3_finalize(cursor);
-
-		if (hasRow)
 		{
-			// the table `sqlite_sequence` exists, removing any reference to our table
-			query.clear();
-			query.append("DELETE FROM sqlite_sequence WHERE name = '");
-			query.append(tablename, length);
-			query.append('\'');
-			return QueryExecute(dbh, query);
-		}
-		else
-		{
-			// The table does not exist. Exiting now.
-			return yerr_dbi_none;
+			sqlite3_stmt* cursor = nullptr;
+			int error = sqlite3_blocking_prepare_v2((::sqlite3*) dbh, select.c_str(), (int)select.size(), &cursor, nullptr);
+
+			// found something ?
+			bool hasRow = (error == SQLITE_OK) and (SQLITE_ROW == sqlite3_blocking_step(cursor));
+
+			::sqlite3_finalize(cursor);
+
+			if (hasRow)
+			{
+				// the table `sqlite_sequence` exists, removing any reference to our table
+				query.clear();
+				query.append("DELETE FROM sqlite_sequence WHERE name = '");
+				query.append(tablename, length);
+				query.append('\'');
+				return QueryExecute(dbh, query);
+			}
+			else
+			{
+				// The table does not exist. Exiting now.
+				return yerr_dbi_none;
+			}
 		}
 	}
 
@@ -315,7 +432,9 @@ namespace Adapter
 	static yn_dbierr ynsqliteBegin(void* dbh)
 	{
 		assert(dbh != NULL);
-		return QueryExecute(dbh, "BEGIN");
+		// BEGIN IMMEDIATE is used here to prevent deadlock with the database
+		// in several cases
+		return QueryExecute(dbh, "BEGIN IMMEDIATE");
 	}
 
 	static yn_dbierr ynsqliteCommit(void* dbh)
@@ -362,7 +481,7 @@ namespace Adapter
 		assert(qh != NULL);
 
 		sqlite3_stmt* cursor;
-		int error = ::sqlite3_prepare_v2((::sqlite3*) dbh, stmt, (int)length, &cursor, nullptr);
+		int error = sqlite3_blocking_prepare_v2((::sqlite3*) dbh, stmt, (int)length, &cursor, nullptr);
 
 		if (YUNI_LIKELY(error == SQLITE_OK))
 		{
@@ -403,9 +522,11 @@ namespace Adapter
 	{
 		assert(qh != NULL);
 
-		int error = ::sqlite3_step(((SQLiteQuery*) qh)->statement);
+		sqlite3_stmt* stmt = ((SQLiteQuery*) qh)->statement;
+		int error = sqlite3_blocking_step(stmt);
+
 		yn_dbierr result = (error == SQLITE_ROW or error == SQLITE_DONE)
-			? yerr_dbi_none : ynsqliteError(error);
+			? yerr_dbi_none : ynsqliteError(error, stmt);
 
 		// release
 		if (0 == -- (((SQLiteQuery*) qh)->refcount))
@@ -490,6 +611,7 @@ namespace Adapter
 
 	static yn_dbierr ynsqliteGoTo(void* qh, yuint64 rowindex)
 	{
+		assert(qh != NULL);
 		int error = ((SQLiteQuery*) qh)->move(rowindex);
 
 		if (error == SQLITE_ROW)

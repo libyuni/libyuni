@@ -7,7 +7,20 @@ LIBYUNI_CONFIG_LIB("both"   "dbi"  "yuni-static-dbi")
 LIBYUNI_CONFIG_LIB("both" "dbi"  "dl")
 
 
-add_definitions("-DSQLITE_THREADSAFE=1")
+add_definitions("-DSQLITE_THREADSAFE=2")
+
+# This option enables the sqlite3_unlock_notify() interface and its associated functionality
+add_definitions("-DSQLITE_ENABLE_UNLOCK_NOTIFY=1")
+
+# foreign keys !
+add_definitions("-DSQLITE_DEFAULT_FOREIGN_KEYS=1")
+
+# full text search engine
+add_definitions("-DSQLITE_ENABLE_FTS4")
+
+# omit UTF16 support
+add_definitions("-DSQLITE_OMIT_UTF16")
+
 
 # Sources for parsing JSON are imported from nany and no relative paths
 # is currently provided
