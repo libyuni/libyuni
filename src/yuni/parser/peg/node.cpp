@@ -10,6 +10,20 @@ namespace Parser
 namespace PEG
 {
 
+	static inline AnyString RuleTypeToString(Node::Type rule)
+	{
+		switch (rule)
+		{
+			case Node::asRule:   return "rule";
+			case Node::asString: return "string";
+			case Node::asSet:    return "set";
+			case Node::asAND:    return "and";
+			case Node::asOR:     return "or";
+		}
+		return "";
+	}
+
+
 	template<class StreamT>
 	static inline void PrintText(StreamT& out, const String& text)
 	{
@@ -88,7 +102,7 @@ namespace PEG
 			out << " shape = diamond";
 
 		out << "];\n";
-		for (uint i = 0; i != node.children.size(); ++i)
+		for (uint i = 0; i != (uint) node.children.size(); ++i)
 			PrintSubNodesIDs(out, node.children[i]);
 	}
 
@@ -160,14 +174,14 @@ namespace PEG
 				case Node::asOR:
 				{
 					PrintSubNodesLinks(out, rules, node.children[0], node.id, not inverseColor);
-					for (uint i = 1; i != node.children.size(); ++i)
+					for (uint i = 1; i < (uint) node.children.size(); ++i)
 						PrintSubNodesLinks(out, rules, node.children[i], node.id, not inverseColor);
 					break;
 				}
 				default:
 				{
 					PrintSubNodesLinks(out, rules, node.children[0], node.id, not inverseColor);
-					for (uint i = 1; i != node.children.size(); ++i)
+					for (uint i = 1; i < (uint) node.children.size(); ++i)
 						PrintSubNodesLinks(out, rules, node.children[i], node.children[i - 1].id, not inverseColor);
 				}
 			}
@@ -187,6 +201,11 @@ namespace PEG
 		match.max = 1;
 		rule.type = asRule;
 		rule.text.clear();
+		attributes.inlined = false;
+		attributes.whitespaces = true;
+		attributes.capture = true;
+		attributes.important = false;
+		attributes.canEat = true;
 		children.clear();
 	}
 
@@ -195,7 +214,7 @@ namespace PEG
 	{
 		id.clear() << "n" << base;
 		++base;
-		for (uint i = 0; i != children.size(); ++i)
+		for (uint i = 0; i != (uint) children.size(); ++i)
 			children[i].resetIndex(base);
 	}
 
@@ -211,7 +230,7 @@ namespace PEG
 			}
 			else
 			{
-				Node::Map::const_iterator i = rules.find(rule.text);
+				const Node::Map::const_iterator i = rules.find(rule.text);
 				if (i != rules.end())
 				{
 					id = (i->second).id;
@@ -220,7 +239,7 @@ namespace PEG
 			}
 		}
 
-		for (uint i = 0; i != children.size(); ++i)
+		for (uint i = 0; i != (uint) children.size(); ++i)
 			children[i].resetRuleIndexesFromMap(rules);
 	}
 
@@ -231,11 +250,9 @@ namespace PEG
 		enumID << "rg";
 
 		bool maj = false;
-		AnyString::const_utf8iterator end = rulename.utf8end();
-		AnyString::const_utf8iterator i   = rulename.utf8begin();
-		for (; i != end; ++i)
+		for (uint i = 0; i != rulename.size(); ++i)
 		{
-			char c = (char) *i;
+			const char c = rulename[i];
 			if (c == '-' or c == '_' or c == ' ')
 			{
 				maj = true;
@@ -244,15 +261,12 @@ namespace PEG
 			{
 				if (not maj)
 				{
-					enumID += *i;
+					enumID += c;
 				}
 				else
 				{
 					maj = false;
-					if (i->size() > 1)
-						enumID += *i;
-					else
-						enumID += (char) String::ToUpper(c);
+					enumID += (char) String::ToUpper(c);
 				}
 			}
 		}
@@ -306,6 +320,20 @@ namespace PEG
 	template<class StreamT>
 	static inline StreamT& PrintTabs(StreamT& out, uint depth)
 	{
+		assert(depth < 1000u); // arbitrary value
+		assert(out.size() < 1024 * 1024 * 10);
+		assert(out.capacity() < 1024 * 1024 * 10);
+		for (uint i = 0; i != depth; ++i)
+			out << '\t';
+
+		assert(out.size() < 1024 * 1024 * 10);
+		assert(out.capacity() < 1024 * 1024 * 10);
+		return out;
+	}
+
+	static inline std::ostream& PrintTabs(std::ostream& out, uint depth)
+	{
+		assert(depth < 10000u); // arbitrary value
 		for (uint i = 0; i != depth; ++i)
 			out << '\t';
 		return out;
@@ -315,6 +343,8 @@ namespace PEG
 	template<class StreamT>
 	static inline StreamT& PrintString(StreamT& out, const String& text)
 	{
+		assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
+		assert(out.size() < 1024 * 1024 * 500);
 		String::const_utf8iterator end = text.utf8end();
 		String::const_utf8iterator i   = text.utf8begin();
 
@@ -330,13 +360,13 @@ namespace PEG
 					case '\f': out << "\\f"; break;
 					case '\v': out << "\\v"; break;
 					case '"' : out << "\\\""; break;
+					case '\\': out << "\\\\";break;
 					default: out << *i;
 				}
 			}
 			else
 				out << *i;
 		}
-
 		return out;
 	}
 
@@ -344,8 +374,12 @@ namespace PEG
 	template<class StreamT>
 	static inline void PrintAsciiChar(StreamT& out, char c)
 	{
+		assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
+		assert(out.size() < 1024 * 1024 * 500);
+
 		switch (c)
 		{
+			case '\\':  out << "\\\\";break;
 			case '\'':  out << "\\\'";break;
 			case '\n':  out << "\\n";break;
 			case '\t':  out << "\\t";break;
@@ -358,15 +392,23 @@ namespace PEG
 
 
 
-	void Node::exportCPP(Clob& out, const Map& rules, Clob::Vector& helpers, uint depth, bool canreturn, uint& sp) const
+	void Node::exportCPP(Clob& out, const Map& rules, Clob::Vector& helpers, String::Vector& datatext, uint depth, bool canreturn, uint& sp) const
 	{
-		uint d = depth;
+		assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
+		assert(out.size() < 1024 * 1024 * 500);
 
+		// the current node depth
+		uint d = depth;
+		// negate expression
 		AnyString neg;
-		if (not match.negate)
+		if (match.negate) // reverse check
 			neg = "not ";
+		// return or break ?
 		AnyString returnfalse = (canreturn) ? "return false;" : "break;";
+		// temporary string for statement building
 		String stmt;
+		// determine whether a stack barrier is required or not
+		bool safeFromComplexity = false;
 
 
 		switch (rule.type)
@@ -387,40 +429,75 @@ namespace PEG
 			case Node::asString:
 			{
 				// matchSingleAscii is guaranted to not modify the stack if it does not match
-				if (rule.text.size() == 1)
+				if (rule.text.size() > 1)
 				{
-					stmt << neg << "ctx.matchSingleAsciiChar('";
-					PrintAsciiChar(stmt, rule.text[0]);
-					stmt << "')";
+					datatext.push_back(nullptr);
+					uint sIX = ++sp;
+					datatext.back() << "static const AnyString datatext" << sIX << "(\"";
+					PrintString(datatext.back(), rule.text) << "\", " << rule.text.size() << ");";
+
+					safeFromComplexity = true;
+					stmt << neg << "ctx.matchString(datatext" << sIX << " /* ";
+					String s;
+					PrintString(s, rule.text);
+					s.replace("/", " / ");
+					stmt << s << " */)";
+					break;
 				}
-				else
-				{
-					stmt << neg << "ctx.matchString(AnyString(\"";
-					PrintString(stmt, rule.text) << "\", " << rule.text.size() << "), " << rule.text.utf8size() << ")";
-				}
-				break;
+				// if equals to 1, do not break but treat it as a character set
+				// break;
 			}
 
 			case Node::asSet:
 			{
-				if (rule.text.size() == 1)
+				safeFromComplexity = true;
+
+				switch (rule.text.size())
 				{
-					stmt << neg << "ctx.matchSingleAsciiChar('";
-					PrintAsciiChar(stmt, rule.text[0]);
-					stmt << "')";
-				}
-				else
-				{
-					// not utf8 chars
-					if (rule.text.utf8size() == rule.text.size())
+					case 0:
 					{
-						stmt << neg << "ctx.matchOneOf(AnyString(\"";
-						PrintString(stmt, rule.text) << "\", " << rule.text.size() << "), " << rule.text.utf8size() << ")";
+						if (match.negate)
+							stmt << "ctx.notMatchOneOf(\"\")";
+						else
+							stmt << "ctx.matchOneOf(\"\")";
+						break;
 					}
-					else
+					case 1:
 					{
-						// Not handled yet
-						PrintTabs(out, d) << "# error Sequence of chars with UTF8 chars not handled yet\n";
+						if (not match.negate)
+							stmt << "ctx.matchSingleAsciiChar('";
+						else
+							stmt << "ctx.notMatchSingleAsciiChar('";
+						PrintAsciiChar(stmt, rule.text[0]);
+						stmt << "')";
+
+						break;
+					}
+					default:
+					{
+						// not utf8 chars
+						if (rule.text.utf8size() == rule.text.size())
+						{
+							datatext.push_back(nullptr);
+							uint sIX = ++sp;
+							datatext.back() << "static const AnyString datatext" << sIX << "(\"";
+							PrintString(datatext.back(), rule.text) << "\", " << rule.text.size() << ");";
+
+							if (match.negate)
+								stmt << "ctx.notMatchOneOf(datatext" << sIX << " /* ";
+							else
+								stmt << "ctx.matchOneOf(datatext" << sIX << " /* ";
+
+							String s;
+							PrintString(s, rule.text);
+							s.replace("/", " / ");
+							stmt << s << " */)";
+						}
+						else
+						{
+							// Not handled yet
+							PrintTabs(out, d) << "# error Sequence of chars with UTF8 chars not handled yet\n";
+						}
 					}
 				}
 				break;
@@ -430,29 +507,41 @@ namespace PEG
 			{
 				if (not match.negate and match.min == 1 and match.max == 1)
 				{
-					for (uint i = 0; i != children.size(); ++i)
-						children[i].exportCPP(out, rules, helpers, d, canreturn, sp);
+					for (uint i = 0; i != (uint) children.size(); ++i)
+					{
+						children[i].exportCPP(out, rules, helpers, datatext, d, canreturn, sp);
+						assert(out.size() < 1024 * 1024 * 10);
+						assert(out.capacity() < 1024 * 1024 * 10);
+					}
 					return;
 				}
 				else
 				{
 					uint from = ++sp;
-					sp += (uint)children.size();
+					sp += (uint) children.size();
 					if (match.negate)
-						stmt << neg << '(';
-					uint helpersFrom = (uint) helpers.size();
-					helpers.resize(helpersFrom + children.size());
+						stmt << "not (";
 
-					for (uint i = 0; i != children.size(); ++i)
+					uint helpersFrom = (uint) helpers.size();
+					// the vector `helpers` must already have the good size
+					// it is mandatory to avoid bad reference due to std::vector::resize()
+					assert(helpersFrom + children.size() < helpers.capacity());
+					helpers.resize(helpersFrom + (uint) children.size());
+
+					for (uint i = 0; i != (uint) children.size(); ++i)
 					{
-						helpers.push_back(nullptr);
-						Clob& datacpp = helpers[i + helpersFrom];
-						datacpp << "\ttemplate<class ContextT>\n";
-						datacpp << "\tstatic inline bool __helper" << (from + i) << "(ContextT& ctx)\n";
-						datacpp << "\t{\n";
-						children[i].exportCPP(datacpp, rules, helpers, 2, true, sp);
-						datacpp << "\t\treturn true;\n";
-						datacpp << "\t}\n";
+						// The reference to helpers[X] may change (because of std::vector::resize)
+						// using index instead of reference
+						uint hi = i + helpersFrom;
+						assert(hi < (uint) helpers.size());
+
+						helpers[hi] << "\tstatic inline bool __helper" << (from + i) << "(Datasource& ctx)\n";
+						helpers[hi] << "\t{\n";
+						helpers[hi] << "\t\tTRACE(\"    :: entering helper " << (from + i) << "\");\n";
+						children[i].exportCPP(helpers[hi], rules, helpers, datatext, 2, true, sp);
+
+						helpers[hi] << "\t\treturn true;\n";
+						helpers[hi] << "\t}\n";
 
 						if (i != 0)
 							stmt << " and ";
@@ -466,81 +555,147 @@ namespace PEG
 
 			case Node::asOR:
 			{
+				assert(children.size() == 2 and "invalid OR node");
+				if (children.size() != 2)
+					return;
+
 				uint lsp = ++sp;
 				uint osp = ++sp;
 				PrintTabs(out, d) << "uint sp" << osp << " = ctx.push();\n";
 				PrintTabs(out, d) << "bool rt" << lsp << " = false;\n";
+				PrintTabs(out, d) << "// condition: first part\n";
 				PrintTabs(out, d) << "do\n";
 				PrintTabs(out, d) << "{\n";
-				children[0].exportCPP(out, rules, helpers, d + 1, false, sp);
+				children[0].exportCPP(out, rules, helpers, datatext, d + 1, false, sp);
 				PrintTabs(out, d) << "\trt" << lsp << " = true;\n";
 				PrintTabs(out, d) << "}\n";
 				PrintTabs(out, d) << "while (false);\n";
 
+				PrintTabs(out, d) << "// condition: second part\n";
 				PrintTabs(out, d) << "while (not rt" << lsp << ")\n";
 				PrintTabs(out, d) << "{\n";
 				PrintTabs(out, d) << "\tctx.restart(sp" << osp << ");\n";
-				children[1].exportCPP(out, rules, helpers, d + 1, false, sp);
+				children[1].exportCPP(out, rules, helpers, datatext, d + 1, false, sp);
 				PrintTabs(out, d) << "\trt" << lsp << " = true;\n";
 				PrintTabs(out, d) << "\tbreak;\n";
 				PrintTabs(out, d) << "}\n";
 				out << '\n';
+
 				PrintTabs(out, d) << "if (not rt" << lsp << ")\n";
-				PrintTabs(out, d) << "{\n";
-				PrintTabs(out, d) << "\tctx.offset = sp" << osp << "; // restore context before if\n";
-				PrintTabs(out, d) << "\t" << returnfalse << "\n";
-				PrintTabs(out, d) << "}\n";
+				if (not canreturn)
+				{
+					PrintTabs(out, d) << "{\n";
+					PrintTabs(out, d) << "\tassert(sp" << osp << " < ctx.offset and \"invalid offset if\");\n";
+					PrintTabs(out, d) << "\tctx.offset = sp" << osp << "; // restore context before if\n";
+				}
+				PrintTabs(out, d) << '\t' << returnfalse << '\n';
+				if (not canreturn)
+					PrintTabs(out, d) << "}\n";
 				return; // nothing to do here
 				break;
 			}
 		}
 
+		assert(rule.type != Node::asOR and "case already handle above");
+		assert(out.size() < 1024 * 1024 * 100); // arbitrary - consistency check - 100MiB should be enough
+		assert(out.capacity() < 1024 * 1024 * 100);
+
+		if (not attributes.canEat)
+		{
+			out << "\n";
+			PrintTabs(out, d) << "// not allowed to eat :(\n";
+			PrintTabs(out, d) << "OffsetAutoReset autoreset(ctx);\n\n";
+		}
 
 		if (match.min == 0 and match.max == 1)
 		{
-			if (rule.type == Node::asRule)
+			if (not safeFromComplexity and attributes.canEat)
 			{
 				uint osp = ++sp;
 				PrintTabs(out, d) << "uint sp" << osp << " = ctx.push(); // 0 or 1\n";
-				PrintTabs(out, d) << "if (" << stmt << ")\n";
-				PrintTabs(out, d) << "\tctx.offset = sp" << osp << ";\n";
+				PrintTabs(out, d) << "if (not (" << stmt << ")) // ?\n";
+				PrintTabs(out, d) << "{\n";
+				PrintTabs(out, d) << "\tassert(sp" << osp << " < ctx.offset and \"invalid offset match ?\");\n";
+				PrintTabs(out, d) << "\tctx.offset = sp" << osp << "; // ignore the results if it does not match\n";
+				PrintTabs(out, d) << "}\n";
 			}
 			else
 			{
 				// others are guaranted to not modify the stack
-				PrintTabs(out, d) << "if (" << stmt << ")\n";
-				PrintTabs(out, d) << "\t{} // exec stmt - don't care of the result\n";
+				PrintTabs(out, d) << "(" << stmt << "); // ? - ignore the result if it does not match\n";
 			}
 			return;
 		}
 
 		if (match.min == 1)
 		{
-			PrintTabs(out, d) << "if (" << stmt << ")\n";
-			PrintTabs(out, d) << "\t" << returnfalse << '\n';
+			if (not safeFromComplexity)
+			{
+				if (canreturn)
+				{
+					if (attributes.canEat)
+						PrintTabs(out, d) << "ctx.push(); // 0 or 1\n";
+					PrintTabs(out, d) << "if (not (" << stmt << ")) // ?\n";
+					PrintTabs(out, d) << "\treturn false;\n";
+				}
+				else
+				{
+					uint osp = ++sp;
+					if (attributes.canEat)
+						PrintTabs(out, d) << "uint sp" << osp << " = ctx.push(); // 0 or 1\n";
+					PrintTabs(out, d) << "if (not (" << stmt << ")) // ?\n";
+					if (attributes.canEat)
+					{
+						PrintTabs(out, d) << "{\n";
+						PrintTabs(out, d) << "\tassert(sp" << osp << " < ctx.offset and \"invalid offset match min == 1\");\n";
+						PrintTabs(out, d) << "\tctx.offset = sp" << osp << ";\n";
+						PrintTabs(out, d) << "\t" << returnfalse << '\n';
+						PrintTabs(out, d) << "}\n";
+					}
+					else
+						PrintTabs(out, d) << "\t" << returnfalse << '\n';
+				}
+			}
+			else
+			{
+				// others are guaranted to not modify the stack
+				PrintTabs(out, d) << "if (not (" << stmt << ")) // ?\n";
+				PrintTabs(out, d) << '\t' << returnfalse << '\n';
+			}
 		}
 		if (match.max == 1)
 			return;
 
 		if (match.min <= 1 and match.max == (uint) -1)
 		{
-			if (rule.type == Node::asRule)
+			if (not safeFromComplexity)
 			{
 				uint osp = ++sp;
-				PrintTabs(out, d) << "while (true)\n";
+				if (match.min == 1)
+					PrintTabs(out, d) << "do // 1 or more\n";
+				else
+					PrintTabs(out, d) << "do // 0 or more\n";
+
 				PrintTabs(out, d) << "{\n";
-				PrintTabs(out, d) << "\tuint sp" << osp << " = ctx.push(); // 0 or 1\n";
-				PrintTabs(out, d) << "\tif (" << stmt << ")\n";
-				PrintTabs(out, d) << "\t{\n";
-				PrintTabs(out, d) << "\t\tctx.offset = sp" << osp << ";\n";
-				PrintTabs(out, d) << "\t\tbreak;\n";
-				PrintTabs(out, d) << "\t}\n";
+				if (attributes.canEat)
+					PrintTabs(out, d) << "\tuint sp" << osp << " = ctx.push(); // 0 or 1\n";
+				PrintTabs(out, d) << "\tif (not (" << stmt << "))\n";
+				if (attributes.canEat)
+				{
+					PrintTabs(out, d) << "\t{\n";
+					PrintTabs(out, d) << "\t\tassert(sp" << osp << " < ctx.offset and \"invalid offset match *\");\n";
+					PrintTabs(out, d) << "\t\tctx.offset = sp" << osp << ";\n";
+					PrintTabs(out, d) << "\t\tbreak;\n";
+					PrintTabs(out, d) << "\t}\n";
+				}
+				else
+					PrintTabs(out, d) << "\t\tbreak;\n";
 				PrintTabs(out, d) << "}\n";
+				PrintTabs(out, d) << "while (true);\n";
 			}
 			else
 			{
-				// others are guaranted to not modify the stack
-				PrintTabs(out, d) << "while (" << stmt << ")\n";
+				PrintTabs(out, d) << "while (" << stmt << ") // 0-1 or more\n";
 				PrintTabs(out, d) << "{}\n";
 			}
 			return;

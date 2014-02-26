@@ -1,6 +1,7 @@
 #ifndef __YUNI_PARSER_GENERATOR_NODE_HXX__
 # define __YUNI_PARSER_GENERATOR_NODE_HXX__
 
+# include "node.h"
 
 
 namespace Yuni
@@ -16,6 +17,34 @@ namespace PEG
 		match.min = 1;
 		match.max = 1;
 		rule.type = asRule;
+		attributes.inlined = false;
+		attributes.whitespaces = true;
+		attributes.capture = true;
+		attributes.important = false;
+		attributes.canEat = true;
+	}
+
+
+	inline bool Node::isSimpleTextCapture() const
+	{
+		return (rule.type == asString) and (not rule.text.empty())
+			and (not match.negate)
+			and (not attributes.inlined)
+			and (not attributes.important)
+			and (match.min == 1 and match.min == 1);
+	}
+
+
+	inline uint Node::depth() const
+	{
+		uint depth = 0;
+		for (uint i = 0; i != children.size(); ++i)
+		{
+			uint d = children[i].depth();
+			if (d > depth)
+				depth = d;
+		}
+		return depth + 1;
 	}
 
 

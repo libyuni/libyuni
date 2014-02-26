@@ -65,3 +65,7 @@ src/samples/parser/00.calculator/parser_00_generator*
 
 # DevPacks
 devpacks/*
+
+# private
+src/yuni/private/parser/peg/__parser.include.cpp.hxx
+

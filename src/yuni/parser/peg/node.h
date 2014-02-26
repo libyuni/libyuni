@@ -40,11 +40,13 @@ namespace PEG
 
 		void exportStd(std::ostream& out, uint depth = 1) const;
 		void exportDOTSubgraph(Clob& out, const Map& rules, const String& rulename) const;
-		void exportCPP(Clob& out, const Map& rules, Clob::Vector& helpers, uint depth, bool canreturn, uint& sp) const;
+		void exportCPP(Clob& out, const Map& rules, Clob::Vector& helpers, String::Vector& datatext, uint depth, bool canreturn, uint& sp) const;
 		void resetIndex(uint& base);
 		void resetEnumID(const AnyString& rulename);
 		void resetRuleIndexesFromMap(const Node::Map& rules);
 		uint treeCount() const;
+		uint depth() const;
+		bool isSimpleTextCapture() const;
 
 	public:
 		struct
@@ -68,6 +70,21 @@ namespace PEG
 			String text;
 		}
 		rule;
+
+		struct
+		{
+			//! Flag to determine whether this rule should be inlined or not
+			bool inlined;
+			//! Flag to determine whether this rule contains whitespaces
+			bool whitespaces;
+			//! Flag to determine whether this node will capture the matching text
+			bool capture;
+			//! Flag to determine whether this node is important or not (affect printing only)
+			bool important;
+			//! Flag to determine whether this node can eat characters or not (true most of the time)
+			bool canEat;
+		}
+		attributes;
 
 		//! Sub nodes
 		Vector children;

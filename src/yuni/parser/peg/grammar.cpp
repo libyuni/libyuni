@@ -25,7 +25,7 @@ namespace // anonymous
 
 
 
-	typedef std::vector<std::pair<uint, AnyString> > VectorPairYAndLine;
+	typedef std::vector<std::pair<uint, String> > VectorPairYAndLine;
 
 	class SubRulePart final
 	{
@@ -90,7 +90,8 @@ namespace // anonymous
 
 	private:
 		bool analyzeEachRule();
-		bool prepareRuleIdentifierName(AnyString& line, uint lineIndex);
+		bool prepareRuleIdentifierName(AnyString& line, uint lineIndex, VectorPairYAndLine& inlinePragmas);
+		bool prepareNodeFromPragmas(Node& node, const VectorPairYAndLine& pragmas);
 		bool prepareNodeFromSubrules(const String& rulename, Node& node, SubRulePart::Vector& rules);
 		bool checkForRulesExistence() const;
 
@@ -170,15 +171,28 @@ namespace // anonymous
 	}
 
 
-	inline bool RuleParser::prepareRuleIdentifierName(AnyString& line, uint lineIndex)
+	inline bool RuleParser::prepareRuleIdentifierName(AnyString& line, uint lineIndex, VectorPairYAndLine& inlinePragmas)
 	{
-		if (line.last() != ':')
+		uint offset = line.find(':');
+		if (not (offset < line.size()))
 		{
-			errmsg.clear() << source << ": l" << lineIndex << ": invalid rule name, missing semicolon";
+			errmsg.clear() << source << ": l" << lineIndex << ": invalid rule name, missing ':'";
 			return error(errmsg);
 		}
 
-		line.removeLast();
+		// automatically add inline pragmas as it were standard pragmas
+		AnyString options(line, offset + 1);
+		options.trim();
+		if (not options.empty())
+		{
+			AnyString::Vector list;
+			options.split(list, ", ");
+			for (uint i = 0; i != (uint) list.size(); ++i)
+				inlinePragmas.push_back(std::make_pair(lineIndex, list[i]));
+		}
+
+		line.resize(offset);
+		line.trimRight();
 		if (not CheckIdentifier(line))
 		{
 			errmsg.clear() << source << ": l" << lineIndex << ": invalid rule identifier '" << line << "'";
@@ -204,20 +218,23 @@ namespace // anonymous
 		{
 			bool loopAgain = false;
 
-			for (uint i = 0; i != node.children.size(); ++i)
+			for (uint i = 0; i != (uint) node.children.size(); ++i)
 			{
 				Node& subnode = node.children[i];
 				if (subnode.rule.type == Node::asRule and subnode.rule.text == '|')
 				{
 					loopAgain = true;
 
-					if (i == 0 or i == node.children.size() - 1)
+					if (i == 0 or i == (uint) node.children.size() - 1)
 					{
 						// empty but not really invalid
 						node.children.erase(node.children.begin() + i);
 					}
 					else
 					{
+						assert(i - 1 < (uint) node.children.size());
+						assert(i + 1 < (uint) node.children.size());
+
 						subnode.children.push_back(node.children[i - 1]);
 						subnode.children.push_back(node.children[i + 1]);
 						subnode.rule.type = Node::asOR;
@@ -237,7 +254,7 @@ namespace // anonymous
 		while (true);
 
 		// recursive update
-		for (uint i = 0; i != node.children.size(); ++i)
+		for (uint i = 0; i != (uint) node.children.size(); ++i)
 		{
 			if (not node.children[i].children.empty())
 				PostProcessConditionalNode(node.children[i]);
@@ -267,10 +284,26 @@ namespace // anonymous
 		Node::Map::const_iterator i = grammarRules.begin();
 		Node::Map::const_iterator end = grammarRules.end();
 		bool ok = true;
+		bool hasStart = false;
 		AnyString errRulename;
+		ShortString128 rulename;
 
 		for (; i != end; ++i)
 		{
+			rulename = i->first;
+			rulename.toLower();
+
+			if (rulename == "start")
+				hasStart = true;
+
+			if (rulename == "eof" or rulename == "unknown" or rulename == "eol")
+			{
+				errmsg.clear() << "rule '" << i->first<< "': this name is reserved";
+				error(errmsg);
+				ok = false;
+				continue;
+			}
+
 			const Node& node = i->second;
 			if (not node.checkRules(errRulename, grammarRules))
 			{
@@ -278,6 +311,75 @@ namespace // anonymous
 				error(errmsg);
 				ok = false;
 			}
+		}
+
+		if (not hasStart)
+		{
+			errmsg.clear() << "A rule named 'start' is required to be the first called rule";
+			error(errmsg);
+			return false;
+		}
+
+		return ok;
+	}
+
+
+	inline bool RuleParser::prepareNodeFromPragmas(Node& node, const VectorPairYAndLine& pragmas)
+	{
+		AnyString::Vector list;
+		list.reserve(2);
+		bool ok = true;
+
+		for (uint i = 0; i != pragmas.size(); ++i)
+		{
+			AnyString source = "piko";
+			uint line = pragmas[i].first;
+
+			pragmas[i].second.split(list, ":");
+			if (list.size() > 1)
+				list[1].trim();
+
+			if (list[0] == "whitespaces")
+			{
+				bool value = (list.size() == 1) or list[1].to<bool>();
+				node.attributes.whitespaces = value;
+				continue;
+			}
+			if (list[0] == "block")
+			{
+				if (list.size() > 1)
+					warns(errmsg.clear() << source << ": l" << line << ": the value has been ignored");
+				node.attributes.whitespaces = false;
+				continue;
+			}
+			if (list[0] == "hidden")
+			{
+				bool value = (list.size() == 1) or list[1].to<bool>();
+				node.attributes.inlined = value;
+				continue;
+			}
+			if (list[0] == "capture")
+			{
+				bool value = (list.size() == 1) or list[1].to<bool>();
+				node.attributes.capture = value;
+				continue;
+			}
+			if (list[0] == "notext")
+			{
+				if (list.size() > 1)
+					warns(errmsg.clear() << source << ": l" << line << ": the value has been ignored");
+				node.attributes.capture = false;
+				continue;
+			}
+			if (list[0] == "important")
+			{
+				bool value = (list.size() == 1) or list[1].to<bool>();
+				node.attributes.important = value;
+				continue;
+			}
+
+			ok = false;
+			error(errmsg.clear() << source << ": l" << line << ": unknown pragma '" << list[0] << "'");
 		}
 
 		return ok;
@@ -332,9 +434,7 @@ namespace // anonymous
 						}
 						else
 							subnode.rule.text = text;
-
-						if (not subnode.rule.text.empty())
-							break;
+						break;
 					}
 					errmsg.clear() << source << ": l" << line << ": empty set of chars";
 					return error(errmsg);
@@ -419,6 +519,8 @@ namespace // anonymous
 						last.match.reset(0, 1);
 					else if (text == '+')
 						last.match.reset(1, (uint) -1);
+					else if (text == '^')
+						last.attributes.canEat = false;
 					else
 					{
 						errmsg.clear() << source << ": l" << firstLine << ": invalid repeat pattern " << text;
@@ -473,7 +575,8 @@ namespace // anonymous
 				// new rule
 				line.trimRight();
 
-				if (not prepareRuleIdentifierName(line, lineIndex))
+				VectorPairYAndLine inlinePragmas;
+				if (not prepareRuleIdentifierName(line, lineIndex, inlinePragmas))
 					return false;
 
 				currentRuleName = line;
@@ -484,6 +587,8 @@ namespace // anonymous
 				}
 
 				rules[currentRuleName].reset();
+				for (uint i = 0; i != (uint)inlinePragmas.size(); ++i)
+					rules[currentRuleName].pragmas.push_back(inlinePragmas[i]);
 			}
 			else
 			{
@@ -493,6 +598,8 @@ namespace // anonymous
 				if (not line.startsWith("@pragma "))
 				{
 					rules[currentRuleName].subrules.push_back(std::make_pair(lineIndex, line));
+					// adding an extra space to make sure to not concatenate lines together
+					rules[currentRuleName].subrules.back().second += ' ';
 				}
 				else
 				{
@@ -541,6 +648,7 @@ namespace // anonymous
 			uint bracketDepth = 0;
 			char stringQuote = '\0';
 			bool localerror = false;
+			const VectorPairYAndLine& pragmas = i->second.pragmas;
 
 			// for each line of the rule
 			VectorPairYAndLine::const_iterator send = i->second.subrules.end();
@@ -548,8 +656,8 @@ namespace // anonymous
 			for (; si != send; ++si)
 			{
 				uint lineIndex = si->first;
-				AnyString::const_utf8iterator cend = si->second.utf8end();
-				AnyString::const_utf8iterator ci   = si->second.utf8begin();
+				String::const_utf8iterator cend = si->second.utf8end();
+				String::const_utf8iterator ci   = si->second.utf8begin();
 				uint offset = 0;
 				uint offsetutf8 = 0;
 
@@ -715,8 +823,8 @@ namespace // anonymous
 								{
 									if (hasBackslash)
 										hasBackslash = false;
-									else
-										++bracketDepth;
+									//else
+									//	++bracketDepth;
 
 									newsubrules.back().text += '[';
 									break;
@@ -798,7 +906,8 @@ namespace // anonymous
 				}
 				if (state == stInCharList)
 				{
-					error(errmsg.clear() << source << ": l" << lineIndex << ": unfinished list of char at offset " << instringStartUtf8);
+					error(errmsg.clear() << source << ": l" << lineIndex << ": unfinished list of char at offset "
+						  << instringStartUtf8 << ", got " << newsubrules.back().text);
 					localerror = true;
 					break;
 				}
@@ -819,6 +928,8 @@ namespace // anonymous
 					Node& node = grammarRules[currentRuleName];
 					node.clear();
 
+					if (not prepareNodeFromPragmas(node, pragmas))
+						result = false; // continue on errors
 					if (not prepareNodeFromSubrules(currentRuleName, node, newsubrules))
 						result = false; // continue on errors
 				}
