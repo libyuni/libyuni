@@ -104,6 +104,13 @@ namespace Job
 	}
 
 
+	uint QueueService::maximumThreadCount() const
+	{
+		MutexLocker locker(*this);
+		return pMaximumThreadCount;
+	}
+
+
 	bool QueueService::minimumThreadCount(uint count)
 	{
 		if (count > maxNumberOfThreads) // hard-coded value
@@ -119,6 +126,13 @@ namespace Job
 		// reseting the lower bound
 		pMinimumThreadCount = count;
 		return true;
+	}
+
+
+	uint QueueService::minimumThreadCount() const
+	{
+		MutexLocker locker(*this);
+		return pMinimumThreadCount;
 	}
 
 
