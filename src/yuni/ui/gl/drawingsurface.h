@@ -77,8 +77,14 @@ namespace UI
 			const Color::RGBA<float>& backColor, int x, int y, uint width, uint height,
 			float lineWidth);
 
-		//! Draw a rectangular image
-		void drawImage(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width, uint height, const Color::RGBA<float>& fillColor, DisplayMode dispMode = dmNone, int offsetX = 0, int offsetY = 0);
+		/*!
+		** \brief Draw a rectangular image
+		**
+		** \warning `imageOpacity` is used only for the image, the alpha from `fillColor` is used for out of bounds opacity
+		*/
+		void drawImage(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width, uint height,
+			const Color::RGBA<float>& fillColor, DisplayMode dispMode = dmNone,
+			int offsetX = 0, int offsetY = 0, float imageOpacity = 1.0f);
 
 		//! Fill with a color. Use clipping to control the filled area
 		void fill(const Color::RGBA<float>& color);

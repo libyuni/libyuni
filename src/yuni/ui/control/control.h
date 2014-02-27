@@ -69,7 +69,8 @@ namespace UI
 			pVisible(true),
 			pModified(true),
 			pReadOnly(false),
-			pEnabled(true)
+			pEnabled(true),
+			pOpacity(1.0f)
 		{}
 
 		//! Constructor with integers for position and size
@@ -79,7 +80,8 @@ namespace UI
 			pVisible(true),
 			pModified(true),
 			pReadOnly(false),
-			pEnabled(true)
+			pEnabled(true),
+			pOpacity(1.0f)
 		{}
 
 		//! Constructor with points for position and size
@@ -89,7 +91,8 @@ namespace UI
 			pVisible(true),
 			pModified(true),
 			pReadOnly(false),
-			pEnabled(true)
+			pEnabled(true),
+			pOpacity(1.0f)
 		{}
 
 		//! Virtual destructor
@@ -173,6 +176,11 @@ namespace UI
 		//! Is the control or any of its children modified ?
 		bool modified() const;
 
+		//! Get control opacity
+		float opacity() const { return pOpacity; }
+		//! Set control opacity
+		void opacity(float newOpacity) { pOpacity = newOpacity; invalidate(); }
+
 	protected:
 		//! Check if a given point is inside the control's rectangle
 		template<class T>
@@ -251,6 +259,9 @@ namespace UI
 		bool pReadOnly;
 
 		bool pEnabled;
+
+		//! Opacity of the control : 0 is transparent, 1 is opaque
+		float pOpacity;
 
 		//! Child controls
 		Vector pChildren;

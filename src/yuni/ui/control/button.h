@@ -33,7 +33,7 @@ namespace Control
 			IControl(x, y, width, height),
 			pOffsetX(0),
 			pOffsetY(0),
-			pFillColor(0.0f, 0.0f, 0.0f, 0.0f),
+			pFillColor(0.0f, 0.0f, 0.0f, 1.0f),
 			pDisplay(dmNone)
 		{}
 
@@ -41,7 +41,7 @@ namespace Control
 			IControl(position, size),
 			pOffsetX(0),
 			pOffsetY(0),
-			pFillColor(0.0f, 0.0f, 0.0f, 0.0f),
+			pFillColor(0.0f, 0.0f, 0.0f, 1.0f),
 			pDisplay(dmNone)
 		{}
 

@@ -24,10 +24,10 @@ namespace Control
 		// Try drawing images first
 		if (pBeingClicked && !(!pImageClicking))
 			surface->drawImage(pImageClicking, pos.x, pos.y, pSize.x, pSize.y, pFillColor, pDisplay,
-				pOffsetX, pOffsetY);
+				pOffsetX, pOffsetY, pOpacity);
 		else if (!(!pImage))
 			surface->drawImage(pImage, pos.x, pos.y, pSize.x, pSize.y, pFillColor, pDisplay,
-				pOffsetX, pOffsetY);
+				pOffsetX, pOffsetY, pOpacity);
 		else
 			// Fallback on manual drawing
 			surface->drawFilledRectangle(theme.borderColor, theme.buttonColor, pos.x, pos.y,

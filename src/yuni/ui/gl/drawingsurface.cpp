@@ -387,7 +387,7 @@ namespace UI
 
 	void DrawingSurface::drawImage(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width,
 		uint height, const Color::RGBA<float>& fillColor, DisplayMode dispMode,
-		int reqOffsetX, int reqOffsetY)
+		int reqOffsetX, int reqOffsetY, float imageOpacity)
 	{
 		pImpl->pictureShader->activate();
 
@@ -463,6 +463,7 @@ namespace UI
 		}
 
 		pImpl->pictureShader->bindUniform("FillColor", fillColor);
+		pImpl->pictureShader->bindUniform("Opacity", imageOpacity);
 		pImpl->pictureShader->bindUniform("Bounds", xStart, yStart, texWidth + xStart, texHeight + yStart);
 		::glBindTexture(GL_TEXTURE_2D, texture->id());
 		// Tex coords

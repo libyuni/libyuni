@@ -247,11 +247,17 @@ in vec2 texCoord;
 in float isEmpty; // Used as a boolean (0 = false, 1 = true)
 out vec4 gl_FragColor;
 uniform sampler2D Texture0;
-uniform vec4 FillColor;
+uniform vec4 FillColor = vec4(0.0f, 0.0f, 0.0f, 0.0f); // Full transparent
+uniform float Opacity = 1.0f; // Opaque
 
 void main()
 {
-	gl_FragColor = mix(texture(Texture0, texCoord), FillColor, isEmpty);
+	// Sample the texture
+	vec4 texColor = texture(Texture0, texCoord);
+	// Multiply by the given opacity
+	texColor = vec4(texColor.rgb, texColor.a * Opacity);
+	// Take either the texture color or the fill color depending on if we are out of bounds
+	gl_FragColor = mix(texColor, FillColor, isEmpty);
 }
 		)";
 
