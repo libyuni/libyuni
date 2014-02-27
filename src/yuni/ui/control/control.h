@@ -95,24 +95,24 @@ namespace UI
 		//! Virtual destructor
 		virtual ~IControl() {}
 
+		//! Get X position
 		int x() const { return pPosition.x; }
-
+		//! Get Y position
 		int y() const { return pPosition.y; }
-
-		uint width() const { return pSize.x; }
-
-		uint height() const { return pSize.y; }
-
-		//! Cursor used when hovering the control
-		// const Cursor& cursor() const;
-		// void cursor(const Cursor& c);
-
+		//! Get position
+		const Point2D<int> position() const { return pPosition; }
+		//! Set position to an absolute value
 		void moveTo(int x, int y)
 		{
 			pPosition(x, y);
 			invalidate();
 		}
-
+		void moveTo(const Point2D<int>& position)
+		{
+			pPosition(position);
+			invalidate();
+		}
+		//! Move position by a relative value
 		void moveBy(int x, int y)
 		{
 			pPosition.x += x;
@@ -120,28 +120,27 @@ namespace UI
 			invalidate();
 		}
 
-		void moveTo(const Point2D<int>& position)
-		{
-			pPosition(position);
-			invalidate();
-		}
-
-		const Point2D<uint>& size() const
-		{
-			return pSize;
-		}
-
-		void resize(uint width, uint height)
+		//! Get width
+		uint width() const { return pSize.x; }
+		//! Get height
+		uint height() const { return pSize.y; }
+		//! Get size
+		const Point2D<uint>& size() const { return pSize; }
+		//! Set size
+		void size(uint width, uint height)
 		{
 			pSize(width, height);
 			invalidate();
 		}
-
-		void resize(const Point2D<uint>& size)
+		void size(const Point2D<uint>& size)
 		{
 			pSize(size);
 			invalidate();
 		}
+
+		//! Cursor used when hovering the control
+		// const Cursor& cursor() const;
+		// void cursor(const Cursor& c);
 
 		//! Get whether the control is currently enabled
 		bool enabled() const { return pEnabled; }
