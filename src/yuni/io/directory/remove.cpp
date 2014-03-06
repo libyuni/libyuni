@@ -81,56 +81,59 @@ namespace Directory
 	namespace // anonymous
 	{
 
-		static bool RecursiveDeleteWindow(const wchar_t* path)
+		static bool RecursiveDeleteWindow(const wchar_t* path, uint size)
 		{
-			// WARNING This function requires a final backslash !
 			enum
 			{
 				maxLen = (MAX_PATH < 1024) ? 1024 : MAX_PATH,
 			};
 
+			// temporary buffer for filename manipulation
+			wchar_t* filename = new wchar_t[maxLen];
+			::wcsncpy(filename, path, size);
+			if (size + 2 < maxLen)
+			{
+				filename[size++] = L'\\';
+				filename[size++] = L'*';
+				filename[size] = L'\0';
+			}
 			// temporary buffer
 			WIN32_FIND_DATAW filedata;
-			HANDLE handle = FindFirstFileW(path, &filedata);
+			HANDLE handle = ::FindFirstFileW(filename, &filedata);
 			if (handle != INVALID_HANDLE_VALUE)
 			{
-				// temporary buffer for filename manipulation
-				// The creation of this variable is delayed to avoid useless
-				// memory allocation on empty folders
-				wchar_t* filename = nullptr;
 				do
 				{
 					// Dots folders are meaningless (`.` and `..`)
 					if (filedata.cFileName[0] == L'.')
 					{
-						if (!wcscmp(filedata.cFileName, L".") or !wcscmp(filedata.cFileName, L".."))
+						if (not ::wcscmp(filedata.cFileName, L".") or
+							not ::wcscmp(filedata.cFileName, L".."))
 							continue;
 					}
 
-					if (!filename)
-						filename = new wchar_t[maxLen];
-
+					// Overwrite the '*'
+					int newSize = size - 1;
 					// Prepare the new filename
 					{
-						#ifdef YUNI_OS_MINGW
-						int written = snwprintf(filename, maxLen, L"%s\\%s", path, filedata.cFileName);
-						#else
-						int written = swprintf_s(filename, maxLen, L"%s\\%s", path, filedata.cFileName);
-						#endif // YUNI_OS_MINGW
-						if (written <= 0 or written == maxLen)
+						int written = 0;
+						for (; newSize < maxLen && filedata.cFileName[written]; ++newSize, ++written)
+							filename[newSize] = filedata.cFileName[written];
+						if (written <= 0 or newSize >= maxLen)
 						{
-							FindClose(handle);
+							::FindClose(handle);
 							delete[] filename;
 							return false;
 						}
+						filename[newSize] = L'\0';
 					}
 
 					// Recursively delete the sub-folder
 					if ((filedata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 					{
-						if (!RecursiveDeleteWindow(filename))
+						if (!RecursiveDeleteWindow(filename, newSize))
 						{
-							FindClose(handle);
+							::FindClose(handle);
 							delete[] filename;
 							return false;
 						}
@@ -141,25 +144,26 @@ namespace Directory
 						// If the file has the read-only attribute, trying to
 						// remove it first.
 						if (0 != (filedata.dwFileAttributes & FILE_ATTRIBUTE_READONLY))
-							SetFileAttributesW(filename, FILE_ATTRIBUTE_NORMAL);
+							::SetFileAttributesW(filename, FILE_ATTRIBUTE_NORMAL);
 						// Trying to delete the file
-						if (!DeleteFileW(filename))
+						if (not ::DeleteFileW(filename))
 						{
-							FindClose(handle);
+							::FindClose(handle);
 							delete[] filename;
 							return false;
 						}
 					}
 				}
-				while (FindNextFileW(handle, &filedata));
+				while (::FindNextFileW(handle, &filedata));
 
 				// resource cleanup
-				delete[] filename;
-				FindClose(handle);
+				::FindClose(handle);
 			}
 
+			delete[] filename;
+
 			// Remove the directory itself
-			return (0 != RemoveDirectoryW(path));
+			return (0 != ::RemoveDirectoryW(path));
 		}
 
 	} // anonymous
@@ -179,11 +183,23 @@ namespace Directory
 		String canon;
 		Canonicalize(canon, path);
 
-		Private::WString<true, true> fsource(canon);
+		Private::WString<true /*false*/, false> fsource(canon);
 		if (fsource.empty())
 			return false;
 
-		return RecursiveDeleteWindow(fsource.c_str());
+		/*
+		SHFILEOPSTRUCT operation;
+		operation.hwnd = nullptr;
+		operation.wFunc = FO_DELETE;
+		operation.fFlags |= FOF_NOCONFIRMATION;
+		// Requires double '\0' termination
+		auto doubleTerminated = new wchar_t[fsource.size() + 2];
+		::wcsncpy(doubleTerminated, fsource.c_str(), fsource.size() + 1);
+		doubleTerminated[fsource.size() + 1] = L'\0';
+		operation.pFrom = doubleTerminated;
+		return 0 == ::SHFileOperation(&operation);
+		*/
+		return RecursiveDeleteWindow(fsource.c_str(), fsource.size());
 		# else
 		String p(path);
 		return RmDirRecursiveInternal(p);
