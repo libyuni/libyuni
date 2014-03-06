@@ -1,5 +1,6 @@
 
 #include "../io.h"
+#include "../filename-manipulation.h"
 #include "../directory.h"
 #include <errno.h>
 #ifdef YUNI_HAS_STDLIB_H
@@ -175,11 +176,13 @@ namespace Directory
 		# ifdef YUNI_OS_WINDOWS
 		using namespace std;
 
-		Private::WString<true, true> fsource(path);
+		String canon;
+		Canonicalize(canon, path);
+
+		Private::WString<true, true> fsource(canon);
 		if (fsource.empty())
 			return false;
-		// In case we were given UNIX slashes
-		fsource.replace(L'/', L'\\');
+
 		return RecursiveDeleteWindow(fsource.c_str());
 		# else
 		String p(path);
