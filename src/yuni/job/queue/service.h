@@ -5,7 +5,7 @@
 # include "../job.h"
 # include "waitingroom.h"
 # include "../../core/atomic/bool.h"
-
+# include "../../thread/signal.h"
 
 
 namespace Yuni
@@ -18,6 +18,7 @@ namespace Job
 	*/
 	class YUNI_DECL QueueService final
 		: public Policy::ObjectLevelLockableNotRecursive<QueueService>
+		, public NonCopyable<QueueService>
 	{
 	public:
 		//! The threading policy
@@ -73,9 +74,8 @@ namespace Job
 		** \param autostart True to automatically start the service
 		*/
 		explicit QueueService(bool autostart);
-		/*!
-		** \brief Destructor
-		*/
+
+		//! Destructor
 		~QueueService();
 		//@}
 
@@ -239,6 +239,8 @@ namespace Job
 		volatile void* pThreads;
 		//! Number of workers in active duty
 		Atomic::Int<32> pWorkerCountInActiveDuty;
+		//! Signal, for being notified when all threads have stopped to work
+		Yuni::Thread::Signal pSignalAllThreadHaveStopped;
 
 		// Nakama !
 		friend class Yuni::Private::QueueService::QueueThread;

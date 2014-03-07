@@ -44,10 +44,16 @@ namespace QueueService
 	}
 
 
+	inline void QueueThread::notifyEndOfWork()
+	{
+		// Notify the scheduler that this thread goes to sleep
+		if (0 == --pScheduler.pWorkerCountInActiveDuty)
+			pSignalAllThreadHaveStopped.notify(); // nobody is working !
+	}
+
 
 	bool QueueThread::onExecute()
 	{
-		// assert
 		assert(this != NULL and "Queue: Thread: Oo `this' is null !?");
 
 		// Notify the scheduler that this thread has begun its work
@@ -67,21 +73,25 @@ namespace QueueService
 			pJob = nullptr;
 
 			// Cancellation point
-			if (shouldAbort())
-			{
-				// Notify the scheduler that this thread goes to sleep
-				--pScheduler.pWorkerCountInActiveDuty;
-				// We have to stop as soon as possible, no need for hibernation
+			if (YUNI_UNLIKELY(shouldAbort())) // We have to stop as soon as possible, no need for hibernation
 				return false;
-			}
+
 		} // loop for retrieving jobs to execute
-
-
-		// Notify the scheduler that this thread goes to sleep
-		--pScheduler.pWorkerCountInActiveDuty;
 
 		// Returning true, for hibernation
 		return true;
+	}
+
+
+	void QueueThread::onStop()
+	{
+		notifyEndOfWork(); // we are done here !
+	}
+
+
+	void QueueThread::onPause()
+	{
+		notifyEndOfWork(); // we are done here !
 	}
 
 
@@ -95,6 +105,8 @@ namespace QueueService
 			// Release the pointer, if possible of course
 			pJob = nullptr;
 		}
+
+		notifyEndOfWork(); // we are done here !
 	}
 
 

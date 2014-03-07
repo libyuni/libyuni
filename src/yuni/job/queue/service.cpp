@@ -3,7 +3,7 @@
 #include "../../core/system/cpu.h"
 #include "../../thread/array.h"
 #include "../../private/jobs/queue/thread.h"
-
+#include <unistd.h>
 
 
 namespace Yuni
@@ -37,8 +37,8 @@ namespace Job
 
 
 
-	QueueService::QueueService() :
-		pThreads(((void*) new ThreadArray()))
+	QueueService::QueueService()
+		: pThreads(((void*) new ThreadArray()))
 	{
 		uint count = OptimalCPUCount();
 		pMinimumThreadCount = count;
@@ -46,14 +46,14 @@ namespace Job
 	}
 
 
-	QueueService::QueueService(bool autostart) :
-		pThreads(((void*) new ThreadArray()))
+	QueueService::QueueService(bool autostart)
+		: pThreads(((void*) new ThreadArray()))
 	{
 		uint count = OptimalCPUCount();
 		pMinimumThreadCount = count;
 		pMaximumThreadCount = count;
 
-		if (autostart)
+		if (YUNI_LIKELY(autostart))
 			start();
 	}
 
@@ -63,11 +63,11 @@ namespace Job
 		if (pStarted)
 		{
 			// wait for the execution of all jobs
-			wait();
+			if (not idle())
+				pSignalAllThreadHaveStopped.wait();
 
+			// retrieve the thread pool
 			ThreadArray* threads = nullptr; // the thread pool
-
-			// remove the reference to avoid useless mutex locks
 			{
 				MutexLocker locker(*this);
 				threads = (ThreadArray*) pThreads;
@@ -82,7 +82,10 @@ namespace Job
 			}
 		}
 		else
+		{
+			// the queueservice might be stopped, but the thread pool might have been created
 			delete ((ThreadArray*) pThreads);
+		}
 	}
 
 
@@ -167,7 +170,7 @@ namespace Job
 	bool QueueService::start()
 	{
 		MutexLocker locker(*this);
-		if (not pStarted)
+		if (YUNI_LIKELY(not pStarted))
 		{
 			// alias to the thread pool
 			ThreadArray& array = *((ThreadArray*) pThreads);
@@ -176,7 +179,7 @@ namespace Job
 			// adding the minimum number of threads
 			array.clear();
 			for (uint i = 0; i != pMinimumThreadCount; ++i)
-				array += new Yuni::Private::QueueService::QueueThread(*this);
+				array += new Yuni::Private::QueueService::QueueThread(*this, pSignalAllThreadHaveStopped);
 
 			// Start all threads at once
 			array.start();
@@ -208,7 +211,7 @@ namespace Job
 			}
 
 			// Destroying the thread pool
-			if (threads)
+			if (YUNI_LIKELY(threads))
 			{
 				threads->stop(timeout);
 				delete threads;
@@ -218,84 +221,36 @@ namespace Job
 	}
 
 
-
-	namespace // anonymous
-	{
-
-		class QueueServiceWaitHelper final : public Thread::Timer
-		{
-		public:
-			QueueServiceWaitHelper(QueueService& scheduler, Yuni::Private::QueueService::WaitingRoom& room,
-				uint pollInterval) :
-				Thread::Timer(pollInterval),
-				pRoom(room),
-				pScheduler(scheduler),
-				pStatus(false)
-			{}
-			virtual ~QueueServiceWaitHelper()
-			{
-				stop();
-			}
-
-			bool status() const {return pStatus;}
-
-		protected:
-			virtual bool onInterval(uint) override
-			{
-				// Checking if the scheduler still has workers
-				if (pRoom.empty() and pScheduler.idle())
-				{
-					pStatus = true;
-					// We can stop now
-					return false;
-				}
-				// Continuing...
-				return true;
-			}
-
-		private:
-			//! Reference to the waiting room
-			Yuni::Private::QueueService::WaitingRoom& pRoom;
-			//! Reference to the scheduler
-			QueueService& pScheduler;
-			//! The returned status
-			bool pStatus;
-
-		}; // class QueueServiceWaitHelper
-
-	} // anonymous namespace
-
-
-
 	void QueueService::wait()
 	{
-		// TODO QueueService::wait: Find a more efficient way for doing this
-		if (not pWaitingRoom.empty() or not idle())
+		while (not idle())
 		{
-			QueueServiceWaitHelper helper(*this, pWaitingRoom, 150);
-			helper.start();
-			helper.wait();
+			pSignalAllThreadHaveStopped.wait();
+			pSignalAllThreadHaveStopped.reset();
 		}
 	}
 
 
-	bool QueueService::wait(uint timeout, uint pollInterval)
+	bool QueueService::wait(uint timeout, uint /*pollInterval*/)
 	{
-		// TODO QueueService::wait: Find a more efficient way for doing this
-		if (not pWaitingRoom.empty() or not idle())
+		// note: the timeout may not be respected here
+		while (not idle())
 		{
-			QueueServiceWaitHelper helper(*this, pWaitingRoom, pollInterval);
-			helper.start();
-			helper.wait(timeout);
-			return helper.status();
+			if (not pSignalAllThreadHaveStopped.wait(timeout))
+				return false; // timeout reached
+
+			// we have been notified
+			pSignalAllThreadHaveStopped.reset();
+			if (idle())
+				return true;
 		}
-		return true;
+		return false;
 	}
 
 
 	void QueueService::add(IJob* job)
 	{
-		if (job)
+		if (YUNI_LIKELY(job))
 		{
 			pWaitingRoom.add(job);
 			((ThreadArray*) pThreads)->wakeUp();
@@ -305,7 +260,7 @@ namespace Job
 
 	void QueueService::add(const IJob::Ptr& job)
 	{
-		if (!(!job))
+		if (YUNI_LIKELY(!(!job)))
 		{
 			pWaitingRoom.add(job);
 			((ThreadArray*) pThreads)->wakeUp();
@@ -315,7 +270,7 @@ namespace Job
 
 	void QueueService::add(const IJob::Ptr& job, Priority priority)
 	{
-		if (!(!job))
+		if (YUNI_LIKELY(!(!job)))
 		{
 			pWaitingRoom.add(job, priority);
 			((ThreadArray*) pThreads)->wakeUp();
@@ -325,7 +280,7 @@ namespace Job
 
 	void QueueService::add(IJob* job, Priority priority)
 	{
-		if (!(!job))
+		if (YUNI_LIKELY(!(!job)))
 		{
 			pWaitingRoom.add(job, priority);
 			((ThreadArray*) pThreads)->wakeUp();

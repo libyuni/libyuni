@@ -3,6 +3,7 @@
 
 # include "../../../thread/thread.h"
 # include "../../../job/queue/service.h"
+# include "../../../thread/signal.h"
 
 
 namespace Yuni
@@ -27,7 +28,7 @@ namespace QueueService
 		/*!
 		** \brief Default Constructor
 		*/
-		explicit QueueThread(Yuni::Job::QueueService& scheduler);
+		explicit QueueThread(Yuni::Job::QueueService& scheduler, Yuni::Thread::Signal& signal);
 		//! Destructor
 		virtual ~QueueThread();
 		//@}
@@ -39,22 +40,26 @@ namespace QueueService
 
 
 	protected:
-		/*!
-		** \brief Implementation of the `onExecute` method to run the jobs from the waiting room
-		*/
-		virtual bool onExecute() final;
+		//! Implementation of the `onExecute` method to run the jobs from the waiting room
+		virtual bool onExecute() override;
+		//! Implementation of the `onKill` method when the thread is killed without mercy
+		virtual void onKill() override;
+		//! Implementation of the `onStop` method when the thread is killed without mercy
+		virtual void onStop() override;
+		//! Implementation of the `onPause` method when the thread is killed without mercy
+		virtual void onPause() override;
 
-		/*!
-		** \brief Implementation of the `onKill` method when the thread is killed without mercy
-		*/
-		virtual void onKill() final;
-
+	private:
+		//! Notify the queueservice that we have stopped to work
+		void notifyEndOfWork();
 
 	private:
 		//! The scheduler
 		Yuni::Job::QueueService& pScheduler;
 		//! The current job
 		Yuni::Job::IJob::Ptr pJob;
+		//! Signal, for notifying the queue service when this thread stops working
+		Yuni::Thread::Signal& pSignalAllThreadHaveStopped;
 
 	}; // class QueueThread
 

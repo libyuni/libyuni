@@ -9,9 +9,11 @@ namespace Private
 namespace QueueService
 {
 
-	inline QueueThread::QueueThread(Yuni::Job::QueueService& scheduler) :
-		pScheduler(scheduler)
-	{}
+	inline QueueThread::QueueThread(Yuni::Job::QueueService& scheduler, Yuni::Thread::Signal& signal)
+		: pScheduler(scheduler)
+		,  pSignalAllThreadHaveStopped(signal)
+	{
+	}
 
 
 	inline QueueThread::~QueueThread()
