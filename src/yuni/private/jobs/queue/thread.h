@@ -28,7 +28,7 @@ namespace QueueService
 		/*!
 		** \brief Default Constructor
 		*/
-		explicit QueueThread(Yuni::Job::QueueService& scheduler, Yuni::Thread::Signal& signal);
+		explicit QueueThread(Yuni::Job::QueueService& queueservice);
 		//! Destructor
 		virtual ~QueueThread();
 		//@}
@@ -55,11 +55,9 @@ namespace QueueService
 
 	private:
 		//! The scheduler
-		Yuni::Job::QueueService& pScheduler;
+		Yuni::Job::QueueService& pQueueService;
 		//! The current job
 		Yuni::Job::IJob::Ptr pJob;
-		//! Signal, for notifying the queue service when this thread stops working
-		Yuni::Thread::Signal& pSignalAllThreadHaveStopped;
 
 	}; // class QueueThread
 

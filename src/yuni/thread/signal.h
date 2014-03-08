@@ -56,6 +56,11 @@ namespace Thread
 		bool wait(uint timeout);
 
 		/*!
+		** \brief Wait for being notified and atomically reset for reuse
+		*/
+		void waitAndReset();
+
+		/*!
 		** \brief Notify the waiter
 		*/
 		bool notify();

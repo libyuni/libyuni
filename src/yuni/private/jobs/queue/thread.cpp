@@ -10,63 +10,71 @@ namespace Private
 namespace QueueService
 {
 
-
-	static inline bool FetchNextJob(Yuni::Job::IJob::Ptr& out, Yuni::Private::QueueService::WaitingRoom& waitingRoom)
+	namespace // anonymous
 	{
-		using namespace ::Yuni::Job;
 
-		while (not waitingRoom.empty())
+		static inline
+		bool FetchNextJob(Yuni::Job::IJob::Ptr& out, Yuni::Private::QueueService::WaitingRoom& waitingRoom)
 		{
-			if (waitingRoom.hasJob[priorityHigh])
-			{
-				if (waitingRoom.pop(out, priorityHigh))
-					return true;
-				continue;
-			}
+			using namespace ::Yuni::Job;
 
-			// medium priority
-			if (waitingRoom.hasJob[priorityDefault])
+			while (not waitingRoom.empty())
 			{
-				if (waitingRoom.pop(out, priorityDefault))
-					return true;
-				continue;
-			}
+				if (waitingRoom.hasJob[priorityHigh])
+				{
+					if (waitingRoom.pop(out, priorityHigh))
+						return true;
+					continue;
+				}
 
-			// low
-			if (waitingRoom.hasJob[priorityLow])
-			{
-				if (waitingRoom.pop(out, priorityLow))
-					return true;
-				continue;
+				// medium priority
+				if (waitingRoom.hasJob[priorityDefault])
+				{
+					if (waitingRoom.pop(out, priorityDefault))
+						return true;
+					continue;
+				}
+
+				// low
+				if (waitingRoom.hasJob[priorityLow])
+				{
+					if (waitingRoom.pop(out, priorityLow))
+						return true;
+					continue;
+				}
 			}
+			return false;
 		}
-		return false;
-	}
+
+
+	} // anonymous namespace
+
+
+
+
 
 
 	inline void QueueThread::notifyEndOfWork()
 	{
 		// Notify the scheduler that this thread goes to sleep
-		if (0 == --pScheduler.pWorkerCountInActiveDuty)
-			pSignalAllThreadHaveStopped.notify(); // nobody is working !
+		if (0 == --pQueueService.pWorkerCountInActiveDuty)
+			pQueueService.pSignalAllThreadHaveStopped.notify();
 	}
 
 
 	bool QueueThread::onExecute()
 	{
-		assert(this != NULL and "Queue: Thread: Oo `this' is null !?");
-
 		// Notify the scheduler that this thread has begun its work
-		++pScheduler.pWorkerCountInActiveDuty;
+		++pQueueService.pWorkerCountInActiveDuty;
 
 		// Asking for the next job
-		while (FetchNextJob(pJob, pScheduler.pWaitingRoom))
+		while (FetchNextJob(pJob, pQueueService.pWaitingRoom))
 		{
 			// Execute the job, via a wrapper for symbol visibility issues
 			Yuni::Private::QueueService::JobAccessor<Yuni::Job::IJob>::Execute(*pJob, this);
 
 			// We must release our pointer to the job here to avoid its destruction
-			// in `pScheduler.nextJob()` (when `pJob` is re-assigned).
+			// in `pQueueService.nextJob()` (when `pJob` is re-assigned).
 			// This method uses a lock and the destruction of the job may take some time.
 			// Obviously, there is absolutely no guarantee that the job will be destroyed
 			// at this point but we don't really care

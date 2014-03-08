@@ -63,7 +63,7 @@ namespace Job
 		if (pStarted)
 		{
 			// wait for the execution of all jobs
-			if (not idle())
+			if (not idle() or not pWaitingRoom.empty())
 				pSignalAllThreadHaveStopped.wait();
 
 			// retrieve the thread pool
@@ -179,7 +179,7 @@ namespace Job
 			// adding the minimum number of threads
 			array.clear();
 			for (uint i = 0; i != pMinimumThreadCount; ++i)
-				array += new Yuni::Private::QueueService::QueueThread(*this, pSignalAllThreadHaveStopped);
+				array += new Yuni::Private::QueueService::QueueThread(*this);
 
 			// Start all threads at once
 			array.start();
@@ -223,27 +223,26 @@ namespace Job
 
 	void QueueService::wait()
 	{
-		while (not idle())
-		{
-			pSignalAllThreadHaveStopped.wait();
-			pSignalAllThreadHaveStopped.reset();
-		}
+		while (not idle() or not pWaitingRoom.empty())
+			pSignalAllThreadHaveStopped.waitAndReset();
 	}
 
 
 	bool QueueService::wait(uint timeout, uint /*pollInterval*/)
 	{
 		// note: the timeout may not be respected here
-		while (not idle())
+		do
 		{
+			if (idle() and pWaitingRoom.empty())
+				return true;
+
 			if (not pSignalAllThreadHaveStopped.wait(timeout))
 				return false; // timeout reached
 
 			// we have been notified
 			pSignalAllThreadHaveStopped.reset();
-			if (idle())
-				return true;
 		}
+		while (true);
 		return false;
 	}
 

@@ -131,6 +131,48 @@ namespace Thread
 	}
 
 
+	void Signal::waitAndReset()
+	{
+		#ifndef YUNI_NO_THREAD_SAFE
+		# ifdef YUNI_OS_WINDOWS
+
+		if (pHandle)
+		{
+			WaitForSingleObject(pHandle, INFINITE);
+			ResetEvent(pHandle);
+		}
+
+		# else
+
+		// The pthread_cond_wait will unlock the mutex and wait for
+		// signalling.
+		::pthread_mutex_lock(&pMutex);
+
+		while (not pSignalled)
+		{
+			// Wait for signal
+			// Note that the pthread_cond_wait routine will automatically and
+			// atomically unlock mutex while it waits.
+			//
+			// Spurious wakeups from this function can occur.
+			// Therefore we must check out pSignalled variable to ensure we have
+			// really been signalled.
+			::pthread_cond_wait(&pCondition, &pMutex);
+		}
+
+		// reset
+		pSignalled = false;
+
+		// The condition was signalled: the mutex is now locked again.
+		::pthread_mutex_unlock(&pMutex);
+		# endif
+
+		# else // NO THREADSAFE
+		# endif
+
+	}
+
+
 	bool Signal::wait(uint timeout)
 	{
 		#ifndef YUNI_NO_THREAD_SAFE
