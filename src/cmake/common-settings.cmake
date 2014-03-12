@@ -20,6 +20,25 @@ endif()
 
 
 #
+# Macro for automatically detect compiler flag
+#
+macro(compile_flag  flag varname)
+	check_cxx_compiler_flag("${flag}" "YUNI_HAS_CXX_FLAG_${varname}")
+	if ("${YUNI_HAS_CXX_FLAG_${varname}}")
+		foreach (arg ${ARGN})
+			set("CMAKE_CXX_FLAGS_${arg}" "${CMAKE_CXX_FLAGS_${arg}} ${flag}")
+		endforeach()
+	endif()
+	check_c_compiler_flag("${flag}" "YUNI_HAS_C_FLAG_${varname}")
+	if ("${YUNI_HAS_C_FLAG_${varname}}")
+		foreach (arg ${ARGN})
+			set("CMAKE_C_FLAGS_${arg}" "${CMAKE_C_FLAGS_${arg}} ${flag}")
+		endforeach()
+	endif()
+endmacro()
+
+
+#
 # Clang Detection
 #
 if (CMAKE_CXX_COMPILER MATCHES ".*clang")
@@ -41,20 +60,10 @@ include("${CurrentFolder}/DetectInstructionsSets.cmake")
 
 
 # Common options to all GCC-based compilers
-set(YUNI_COMMON_CC_OPTIONS   "-Wall -Wextra -Wunused-parameter -Wconversion")
-set(YUNI_COMMON_CXX_OPTIONS  "-Woverloaded-virtual")
-if(NOT MSVC)
-	check_cxx_compiler_flag("-Wunused-but-set-variable -Wunused-but-set-parameter"
-		YUNI_HAS_GCC_UNUSED_BUT_PARAM)
-	if (YUNI_HAS_GCC_UNUSED_BUT_PARAM)
-		set(YUNI_COMMON_CC_OPTIONS  "${YUNI_COMMON_CC_OPTIONS} -Wunused-but-set-variable -Wunused-but-set-parameter")
-	endif (YUNI_HAS_GCC_UNUSED_BUT_PARAM)
-endif()
-
-set(YUNI_COMMON_CC_OPTIONS  "${YUNI_COMMON_CC_OPTIONS} -Wmissing-noreturn -Wcast-align  -Wfloat-equal -Wundef")
+set(YUNI_COMMON_CC_OPTIONS   "")
 set(YUNI_COMMON_CC_OPTIONS  "${YUNI_COMMON_CC_OPTIONS} -D_REENTRANT -DXUSE_MTSAFE_API")
 set(YUNI_COMMON_CC_OPTIONS  "${YUNI_COMMON_CC_OPTIONS} -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64")
-
+set(YUNI_COMMON_CXX_OPTIONS  "")
 
 set(COMMON_MSVC_FLAGS "/W3 /MP4 /Zi")
 set(COMMON_MSVC_FLAGS "${COMMON_MSVC_FLAGS} /DREENTRANT /D_LARGEFILE_SOURCE /D_LARGEFILE64_SOURCE /D_FILE_OFFSET_BITS=64")
@@ -71,12 +80,6 @@ if(NOT MSVC)
 	check_cxx_compiler_flag("-std=c++11"     YUNI_HAS_CPP11_SUPPORT)
 	check_cxx_compiler_flag("-std=c++0x"     YUNI_HAS_GCC_CPP0X_SUPPORT)
 	check_cxx_compiler_flag("-stdlib=libc++" YUNI_HAS_LIB_CPP11_SUPPORT) # clang, Apple gcc...
-	check_cxx_compiler_flag("-g"             YUNI_HAS_COMPILER_DEBUG_INFORMATION)
-	check_cxx_compiler_flag("-O3"            YUNI_HAS_COMPILER_OPTIMIZATION_LEVEL_3)
-	if (CLANG)
-		# currently, only clang really supports -O4
-		check_cxx_compiler_flag("-O4"        YUNI_HAS_COMPILER_OPTIMIZATION_LEVEL_4)
-	endif()
 
 	if (YUNI_HAS_CPP14_SUPPORT)
 		set(YUNI_COMMON_CXX_OPTIONS  "${YUNI_COMMON_CXX_OPTIONS} -std=c++14")
@@ -92,26 +95,13 @@ if(NOT MSVC)
 	if (YUNI_HAS_LIB_CPP11_SUPPORT)
 		set(YUNI_COMMON_CXX_OPTIONS  "${YUNI_COMMON_CXX_OPTIONS} -stdlib=libc++")
 	endif()
-endif()
-if (NOT MSVC AND NOT CLANG)
-	# clang produces the warning "argument unused during compilation"
-	check_cxx_compiler_flag("-ggdb"  YUNI_HAS_GCC_FLAG_GGDB)
-	# clang produces the warning "argument unused during compilation"
-	check_cxx_compiler_flag("-ggdb3" YUNI_HAS_GCC_FLAG_GGDB3)
+
 endif()
 
-if (APPLE)
+if (APPLE AND CLANG)
 	# http://lists.cs.uiuc.edu/pipermail/cfe-dev/2011-January/012999.html
 	# Temporary workaround for compiling with Clang on OS X
 	set(YUNI_COMMON_CC_OPTIONS_UNIX  "${YUNI_COMMON_CC_OPTIONS_UNIX} -U__STRICT_ANSI__")
-endif()
-
-set(COMPILER_OPTIMIZATION_LEVEL "")
-if (YUNI_HAS_COMPILER_OPTIMIZATION_LEVEL_3)
-	set(COMPILER_OPTIMIZATION_LEVEL "-O3")
-endif()
-if (YUNI_HAS_COMPILER_OPTIMIZATION_LEVEL_4)
-	set(COMPILER_OPTIMIZATION_LEVEL "-O4")
 endif()
 
 
@@ -131,23 +121,23 @@ add_definitions("-D_REENTRANT -DXUSE_MTSAFE_API")
 
 
 if(NOT WIN32)
-	set(CMAKE_CXX_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_COMMON_CXX_OPTIONS} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mfpmath=sse -msse -msse2 -Wuninitialized")
-	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_COMMON_CXX_OPTIONS} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -mfpmath=sse -msse -msse2")
-	set(CMAKE_CXX_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_COMMON_CXX_OPTIONS} -g")
+	set(CMAKE_CXX_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_COMMON_CXX_OPTIONS}")
+	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_COMMON_CXX_OPTIONS}")
+	set(CMAKE_CXX_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS_UNIX} ${YUNI_COMMON_CXX_OPTIONS}")
 
-	set(CMAKE_C_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS_UNIX} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mfpmath=sse -msse -msse2 -Wuninitialized")
-	set(CMAKE_C_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS_UNIX} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -mfpmath=sse -msse -msse2")
-	set(CMAKE_C_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS_UNIX} -g")
+	set(CMAKE_C_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS_UNIX}")
+	set(CMAKE_C_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS_UNIX}")
+	set(CMAKE_C_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS_UNIX}")
 endif()
 
 if(MINGW)
-	set(CMAKE_CXX_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS} ${YUNI_COMMON_CXX_OPTIONS} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mthreads -Wuninitialized")
-	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS} ${YUNI_COMMON_CXX_OPTIONS} -mthreads")
-	set(CMAKE_CXX_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS} ${YUNI_COMMON_CXX_OPTIONS} -mthreads")
+	set(CMAKE_CXX_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS} ${YUNI_COMMON_CXX_OPTIONS}")
+	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS} ${YUNI_COMMON_CXX_OPTIONS}")
+	set(CMAKE_CXX_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS} ${YUNI_COMMON_CXX_OPTIONS}")
 
-	set(CMAKE_C_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS} ${COMPILER_OPTIMIZATION_LEVEL} -fomit-frame-pointer -fstrict-aliasing -momit-leaf-frame-pointer -fno-tree-pre -falign-loops -mthreads -Wuninitialized")
-	set(CMAKE_C_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS} -mthreads")
-	set(CMAKE_C_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS} -mthreads")
+	set(CMAKE_C_FLAGS_RELEASE         "${YUNI_COMMON_CC_OPTIONS}")
+	set(CMAKE_C_FLAGS_RELWITHDEBINFO  "${YUNI_COMMON_CC_OPTIONS}")
+	set(CMAKE_C_FLAGS_DEBUG           "${YUNI_COMMON_CC_OPTIONS}")
 endif()
 
 if(MSVC)
@@ -181,29 +171,48 @@ if(MSVC)
 	set(CMAKE_C_FLAGS_RELEASE    "${CMAKE_C_FLAGS_RELEASE} ${MSVC_RELEASE_FLAGS}")
 endif()
 
+if (NOT MSVC)
+	# Optimisation
+	compile_flag("-O3"                   O3  RELEASE)
+	compile_flag("-fomit-frame-pointer"  FOMIT_FRAME_POINTER  RELEASE RELWITHDEBINFO)
+	compile_flag("-fstrict-aliasing"     STRICT_ALIASING      RELEASE RELWITHDEBINFO)
+	compile_flag("-msse"                 MSSE                 RELEASE RELWITHDEBINFO)
+	compile_flag("-msse2"                MSSE2                RELEASE RELWITHDEBINFO)
+	compile_flag("-mfpmath=sse"          FPMATH_MSSE          RELEASE RELWITHDEBINFO)
+	compile_flag("-fvisibility=hidden"   VISIBILITY_HIDDEN    RELEASE DEBUG RELWITHDEBINFO)
 
-if(APPLE)
-	# The SSE instruction set is mandatory
-	set(CMAKE_CXX_FLAGS_RELEASE         "${CMAKE_CXX_FLAGS_RELEASE} -msse2 -fvisibility=hidden")
-	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${CMAKE_CXX_FLAGS_RELEASE} -msse2 -fvisibility=hidden")
-	set(CMAKE_CXX_FLAGS_DEBUG           "${CMAKE_CXX_FLAGS_DEBUG}   -msse2 -gfull -fvisibility=hidden")
+	# link
+	compile_flag("-flto"                 FLTO  RELEASE RELWITHDEBINFO)
 
-	set(CMAKE_C_FLAGS_RELEASE           "${CMAKE_C_FLAGS_RELEASE} -msse2")
-	set(CMAKE_C_FLAGS_RELWITHDEBINFO    "${CMAKE_C_FLAGS_RELEASE} -msse2")
-	set(CMAKE_C_FLAGS_DEBUG             "${CMAKE_C_FLAGS_DEBUG}   -msse2 -gfull")
+	# debugging symbols
+	compile_flag("-g"     DEBUG_G     DEBUG RELWITHDEBINFO)
+	compile_flag("-gfull" DEBUG_GFULL DEBUG RELWITHDEBINFO)
+	compile_flag("-ggdb"  DEBUG_GDB   DEBUG RELWITHDEBINFO)
+	compile_flag("-ggdb3" DEBUG_GDB3  DEBUG RELWITHDEBINFO)
+
+	# warnings
+	compile_flag("-W"                         W   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wall"                      W_ALL   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wextra"                    W_EXTRA   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wunused-parameter"         W_UNUSED_PARAMETER   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wconversion"               W_CONVERSION   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Woverloaded-virtual"       W_OVERLOADED_VIRTUAL   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wundef"                    W_UNDEF   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wfloat-equal"              W_FLOAT_EQUAL   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wmissing-noreturn"         W_MISSING_NORETURN   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wcast-align"               W_CAST_ALIGN   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wuninitialized"            W_UNINITIALIZED   RELEASE DEBUG RELWITHDEBINFO)
+
 endif()
-if (YUNI_HAS_COMPILER_DEBUG_INFORMATION)
-	set(CMAKE_CXX_FLAGS_DEBUG           "${CMAKE_CXX_FLAGS_DEBUG} -g")
-	set(CMAKE_C_FLAGS_DEBUG             "${CMAKE_C_FLAGS_DEBUG} -g")
+
+
+if (MINGW)
+	# mthreads is required on windows with mingw
+	compile_flag("-mthreads"   MTHREADS   RELEASE DEBUG RELWITHDEBINFO)
 endif()
-if (YUNI_HAS_GCC_FLAG_GGDB)
-	set(CMAKE_CXX_FLAGS_DEBUG           "${CMAKE_CXX_FLAGS_DEBUG} -ggdb")
-	set(CMAKE_C_FLAGS_DEBUG             "${CMAKE_C_FLAGS_DEBUG}   -ggdb")
-endif()
-if (YUNI_HAS_GCC_FLAG_GGDB3)
-	set(CMAKE_CXX_FLAGS_DEBUG           "${CMAKE_CXX_FLAGS_DEBUG} -ggdb3")
-	set(CMAKE_C_FLAGS_DEBUG             "${CMAKE_C_FLAGS_DEBUG}   -ggdb3")
-endif()
+
+
+
 
 # NDEBUG
 if(MSVC)
