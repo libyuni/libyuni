@@ -73,6 +73,8 @@ namespace UI
 		// Clear depth buffer
 		::glClear(GL_DEPTH_BUFFER_BIT);
 
+		::glPushAttrib(GL_VIEWPORT_BIT);
+
 		// Reset The Current Viewport
 		::glViewport(pX, pY, pWidth, pHeight);
 
@@ -122,6 +124,8 @@ namespace UI
 		*/
 
 		draw2D();
+
+		::glPopAttrib();
 	}
 
 
