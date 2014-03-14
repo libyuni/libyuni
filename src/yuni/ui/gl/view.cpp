@@ -163,14 +163,17 @@ namespace UI
 		{
 			if (!pUISurface)
 			{
-				pUISurface = new DrawingSurface(pControl->width(), pControl->height());
+				// Avoid texture creation with a 0 dimension
+				pUISurface = new DrawingSurface(Math::Max(pControl->width(), 1),
+					Math::Max(pControl->height(), 1));
 				pUISurface->begin();
 				pControl->draw(pUISurface);
 				pUISurface->commit();
 			}
 			else if (pControl->modified())
 			{
-				pUISurface->resize(pControl->width(), pControl->height());
+				pUISurface->resize(Math::Max(pControl->width(), 1),
+					Math::Max(pControl->height(), 1));
 				pUISurface->begin();
 				pControl->draw(pUISurface);
 				pUISurface->commit();
