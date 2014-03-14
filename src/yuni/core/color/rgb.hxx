@@ -281,7 +281,7 @@ namespace Color
 
 	template<class T>
 	inline RGB<T>::RGB()
-		:red(), green(), blue()
+		:red(lowerBound), green(lowerBound), blue(lowerBound)
 	{}
 
 

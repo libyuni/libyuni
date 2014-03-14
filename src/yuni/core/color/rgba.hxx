@@ -298,7 +298,7 @@ namespace Color
 
 	template<class T>
 	inline RGBA<T>::RGBA()
-		:red(), green(), blue(), alpha()
+		:red(lowerBound), green(lowerBound), blue(lowerBound), alpha(upperBound) // Opaque black
 	{}
 
 
