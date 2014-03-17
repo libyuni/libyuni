@@ -2,7 +2,6 @@
 #include <sys/stat.h>
 #include "../file.h"
 #include "../directory.h"
-#include <string>
 #include <cctype>
 #include <cstring>
 #include "../../core/string/wstring.h"

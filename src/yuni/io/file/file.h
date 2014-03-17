@@ -3,6 +3,7 @@
 
 # include "../io.h"
 # include "openmode.h"
+# include <string>
 
 
 
@@ -82,6 +83,16 @@ namespace File
 
 	//! \name Load the content of a file
 	//@{
+	/*!
+	** \brief Load the entire content of a file into memory
+	**
+	** If the file size is greater than \p hardlimit, the content will be truncated (see 'errMemoryLimit').
+	** \param[out] out The content of the file
+	** \param filename The filename to open
+	** \param hardlimit If the size of the file exceeds this limit, it will not be loaded
+	** \return errNone if successful
+	*/
+	IO::Error LoadFromFile(std::string& out, const AnyString& filename, uint64 hardlimit = sizeHardLimit);
 	/*!
 	** \brief Load the entire content of a file into memory
 	**
