@@ -23,6 +23,7 @@ Release version 1.0.0
  * [core/functional] added `Functional::Fold()` routine
  * [dbi] The DBI/sqlite adapter is now ready for production
  * Multiple fixes related to C++11 standard
+ * [io] `Yuni::IO::LoadFromFile` now accepts std::string as a destination
 
 **Changes**
 

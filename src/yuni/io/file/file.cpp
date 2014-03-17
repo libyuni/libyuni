@@ -2,8 +2,9 @@
 #include <sys/stat.h>
 #include "../file.h"
 #include "../directory.h"
-#include <ctype.h>
-#include <string.h>
+#include <string>
+#include <cctype>
+#include <cstring>
 #include "../../core/string/wstring.h"
 
 #ifndef YUNI_OS_WINDOWS
@@ -245,11 +246,11 @@ namespace File
 			uint64 offset = 0;
 			do
 			{
-				out.reserve(((typename StringT::Size) offset) + smallFragment);
+				out.reserve(((typename StringT::size_type) offset) + smallFragment);
 				uint64 numread = f.read((char*)out.data() + offset, smallFragment);
 				if (numread != smallFragment)
 				{
-					out.resize((typename StringT::Size) (offset + numread));
+					out.resize((typename StringT::size_type) (offset + numread));
 					return errNone;
 				}
 				offset += smallFragment;
@@ -266,7 +267,7 @@ namespace File
 			return errMemoryLimit;
 
 		// resize the buffer accordingly
-		out.resize((typename StringT::Size) filesize);
+		out.resize((typename StringT::size_type) filesize);
 		// replace the cursor within the file
 		f.seekFromBeginning(0);
 
@@ -289,7 +290,7 @@ namespace File
 				uint64 numread = f.read((char*)out.data() + offset, fragment);
 				if (numread != fragment)
 				{
-					out.resize((typename StringT::Size)offset);
+					out.resize((typename StringT::size_type)offset);
 					return errReadFailed;
 				}
 				offset += fragment;
@@ -300,7 +301,7 @@ namespace File
 				uint64 numread = f.read((char*)out.data() + offset, filesize);
 				if (numread != filesize)
 				{
-					out.resize((typename StringT::Size)offset);
+					out.resize((typename StringT::size_type)offset);
 					return errReadFailed;
 				}
 			}
@@ -309,6 +310,12 @@ namespace File
 		return errNone;
 	}
 
+
+
+	IO::Error LoadFromFile(std::string& out, const AnyString& filename, uint64 hardlimit)
+	{
+		return LoadFromFileImpl(out, filename, hardlimit);
+	}
 
 
 	IO::Error LoadFromFile(String& out, const AnyString& filename, uint64 hardlimit)
