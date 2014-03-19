@@ -182,7 +182,7 @@ if (NOT MSVC)
 	compile_flag("-fvisibility=hidden"   VISIBILITY_HIDDEN    RELEASE DEBUG RELWITHDEBINFO)
 
 	# link
-	compile_flag("-flto"                 FLTO  RELEASE RELWITHDEBINFO)
+	#compile_flag("-flto"                 FLTO  RELEASE RELWITHDEBINFO)
 
 	# debugging symbols
 	compile_flag("-g"     DEBUG_G     DEBUG RELWITHDEBINFO)
