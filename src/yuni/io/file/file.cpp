@@ -218,96 +218,100 @@ namespace File
 
 
 
-
-	template<class StringT>
-	IO::Error
-	LoadFromFileImpl(StringT& out, const AnyString& filename, const uint64 hardlimit)
+	namespace // anonymous
 	{
-		out.clear();
-		Yuni::IO::File::Stream f(filename);
-		if (not f.opened())
-			return errNotFound;
 
-		// retrieve the file size in bytes
-		f.seekFromEndOfFile(0);
-		uint64 filesize = (uint64) f.tell();
-
-		if (filesize == 0)
+		template<class StringT>
+		static inline
+		IO::Error LoadFromFileImpl(StringT& out, const AnyString& filename, const uint64 hardlimit)
 		{
-			# ifndef YUNI_OS_WINDOWS
-			// On unix, some special files can have a size equals to zero, but
-			// not being empty (like files on /proc)
-			// swithing to the standard method for reading a file
+			out.clear();
+			Yuni::IO::File::Stream f(filename);
+			if (not f.opened())
+				return errNotFound;
 
-			// we will use here a smaller fragment size, since those kind of files
-			// are unlikely big ones
-			enum { smallFragment = 512 * 1024 };
-			uint64 offset = 0;
-			do
+			// retrieve the file size in bytes
+			f.seekFromEndOfFile(0);
+			uint64 filesize = (uint64) f.tell();
+
+			if (filesize == 0)
 			{
-				out.reserve(((typename StringT::size_type) offset) + smallFragment);
-				uint64 numread = f.read((char*)out.data() + offset, smallFragment);
-				if (numread != smallFragment)
-				{
-					out.resize((typename StringT::size_type) (offset + numread));
-					return errNone;
-				}
-				offset += smallFragment;
-				if (offset >= hardlimit)
-					return errMemoryLimit;
-			}
-			while (true);
+				# ifndef YUNI_OS_WINDOWS
+				// On unix, some special files can have a size equals to zero, but
+				// not being empty (like files on /proc)
+				// swithing to the standard method for reading a file
 
-			# endif
+				// we will use here a smaller fragment size, since those kind of files
+				// are unlikely big ones
+				enum { smallFragment = 512 * 1024 };
+				uint64 offset = 0;
+				do
+				{
+					out.reserve(((typename StringT::size_type) offset) + smallFragment);
+					uint64 numread = f.read((char*)out.data() + offset, smallFragment);
+					if (numread != smallFragment)
+					{
+						out.resize((typename StringT::size_type) (offset + numread));
+						return errNone;
+					}
+					offset += smallFragment;
+					if (offset >= hardlimit)
+						return errMemoryLimit;
+				}
+				while (true);
+
+				# endif
+				return errNone;
+			}
+
+			if (filesize > hardlimit or filesize > (uint) -10)
+				return errMemoryLimit;
+
+			// resize the buffer accordingly
+			out.resize((typename StringT::size_type) filesize);
+			// replace the cursor within the file
+			f.seekFromBeginning(0);
+
+			// we would prefer to read the file by chunk instead (to be interruptible)
+			enum { fragment = 4 * 1024 * 1024 };
+			if (filesize < fragment)
+			{
+				uint64 numread = f.read((char*)out.data(), filesize);
+				if (numread != filesize)
+				{
+					out.clear();
+					return errReadFailed;
+				}
+			}
+			else
+			{
+				uint64 offset = 0;
+				while (filesize >= fragment)
+				{
+					uint64 numread = f.read((char*)out.data() + offset, fragment);
+					if (numread != fragment)
+					{
+						out.resize((typename StringT::size_type) offset);
+						return errReadFailed;
+					}
+					offset += fragment;
+					filesize -= fragment;
+				}
+				if (filesize != 0)
+				{
+					uint64 numread = f.read((char*)out.data() + offset, filesize);
+					if (numread != filesize)
+					{
+						out.resize((typename StringT::size_type) offset);
+						return errReadFailed;
+					}
+				}
+			}
+
 			return errNone;
 		}
 
-		if (filesize > hardlimit or filesize > (uint) -10)
-			return errMemoryLimit;
-
-		// resize the buffer accordingly
-		out.resize((typename StringT::size_type) filesize);
-		// replace the cursor within the file
-		f.seekFromBeginning(0);
-
-		// we would prefer to read the file by chunk instead (to be interruptible)
-		enum { fragment = 4 * 1024 * 1024 };
-		if (filesize < fragment)
-		{
-			uint64 numread = f.read((char*)out.data(), filesize);
-			if (numread != filesize)
-			{
-				out.clear();
-				return errReadFailed;
-			}
-		}
-		else
-		{
-			uint64 offset = 0;
-			while (filesize >= fragment)
-			{
-				uint64 numread = f.read((char*)out.data() + offset, fragment);
-				if (numread != fragment)
-				{
-					out.resize((typename StringT::size_type)offset);
-					return errReadFailed;
-				}
-				offset += fragment;
-				filesize -= fragment;
-			}
-			if (filesize != 0)
-			{
-				uint64 numread = f.read((char*)out.data() + offset, filesize);
-				if (numread != filesize)
-				{
-					out.resize((typename StringT::size_type)offset);
-					return errReadFailed;
-				}
-			}
-		}
-
-		return errNone;
-	}
+	} // anonymous namespace
 
 
 

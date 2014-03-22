@@ -2,6 +2,10 @@
 #include "../io.h"
 #include "../filename-manipulation.h"
 #include "../directory.h"
+
+#ifndef _BSD_SOURCE
+#define _BSD_SOURCE
+#endif
 #include <errno.h>
 #ifdef YUNI_HAS_STDLIB_H
 # include <stdlib.h>
@@ -40,30 +44,32 @@ namespace Directory
 
 		static bool RmDirRecursiveInternal(const AnyString& path)
 		{
-			DIR* dp;
-			if (NULL != (dp = ::opendir(path.c_str())))
+			DIR* dp = ::opendir(path.c_str());
+			if (dp)
 			{
-				struct dirent* ep = nullptr;
-				Clob buffer;
-
-				while (NULL != (ep = ::readdir(dp)))
+				struct dirent* ep = ::readdir(dp);
+				if (ep)
 				{
-					buffer.clear() << path << SEP << (const char*) ep->d_name;
-					struct stat st;
-
-					if (0 == ::stat(buffer.c_str(), &st))
+					CString<1024> buffer;
+					do
 					{
-						if (S_ISDIR(st.st_mode))
+						if (ep->d_type == DT_DIR)
 						{
-							if (strcmp(".", (ep->d_name)) != 0 and strcmp("..", (ep->d_name)) != 0)
+							const char* const p = ep->d_name;
+							bool sysfolder = (p[0] == '.' and (p[1] == '\0' or (p[1] == '.' and p[2] == '\0')));
+							if (not sysfolder)
 							{
+								buffer.clear() << path << SEP << (const char*) ep->d_name;
 								RmDirRecursiveInternal(buffer.c_str());
-								::rmdir(buffer.c_str());
 							}
 						}
 						else
+						{
+							buffer.clear() << path << SEP << (const char*) ep->d_name;
 							::unlink(buffer.c_str());
+						}
 					}
+					while (NULL != (ep = ::readdir(dp)));
 				}
 				(void)::closedir(dp);
 			}
@@ -107,8 +113,7 @@ namespace Directory
 					// Dots folders are meaningless (`.` and `..`)
 					if (filedata.cFileName[0] == L'.')
 					{
-						if (not ::wcscmp(filedata.cFileName, L".") or
-							not ::wcscmp(filedata.cFileName, L".."))
+						if (not ::wcscmp(filedata.cFileName, L".") or not ::wcscmp(filedata.cFileName, L".."))
 							continue;
 					}
 

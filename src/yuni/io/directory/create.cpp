@@ -58,8 +58,7 @@ namespace Directory
 
 	static bool UnixMake(const AnyString& path, uint mode)
 	{
-		uint len = path.size();
-
+		const uint len = path.size();
 		char* buffer = new char[len + 1];
 		YUNI_MEMCPY(buffer, len, path.c_str(), len);
 		buffer[len] = '\0';
