@@ -49,6 +49,7 @@ Release version 1.0.0
  * [core] Event::Loop: added the method `gracefulStop()`
  * [core] Point2D and Point3D : Added operator * and *=.
  * [dbi] Updated sqlite to v3.8.3
+ * [gl] Updated glew to v1.10
 
 **Fixes**
 
