@@ -22,6 +22,8 @@ if (NOT "${YUNI_EXT_FREETYPE_INCLUDE}" STREQUAL "")
 endif()
 
 list(APPEND SRC_UI
+	ui/dimension.cpp
+	ui/dimension.h
 	ui/eventpropagation.h
 	ui/font.h
 	ui/ftfont.cpp
