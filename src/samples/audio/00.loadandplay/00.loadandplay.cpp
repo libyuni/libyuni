@@ -80,9 +80,12 @@ int main(int argc, char* argv[])
 		media.emitter.play(emitterName);
 
 		while (!media.playing())
-			Yuni::SuspendMilliSeconds(100);
+			Yuni::SuspendMilliSeconds(50);
 
 		std::cout << "Playing \"" << argv[i] << "\"" << std::endl;
+		std::cout << media.library.samplingRate(argv[i]) << "Hz, "
+				  << media.library.bitsPerSample(argv[i]) << " bits, "
+				  << (media.library.channels(argv[i]) < 2 ? "mono" : "stereo") << std::endl;
 
 		// Get stream duration
 		uint duration = media.library.duration(argv[i]);

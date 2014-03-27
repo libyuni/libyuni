@@ -135,7 +135,7 @@ namespace Ownership
 
 		// Check if T is a compatible class for this kind of ownership
 		// If it does not compile, `ReferenceCountedMT` is probably more suitable
-		YUNI_STATIC_ASSERT(Static::HasTypedef::IntrusiveSmartPtrType<T>::yes, IncompatibleSmartPtrType);
+		//YUNI_STATIC_ASSERT(Static::HasTypedef::IntrusiveSmartPtrType<T>::yes, IncompatibleSmartPtrType);
 
 	public:
 		//! \name Constructors

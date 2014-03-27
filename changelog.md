@@ -62,4 +62,4 @@ Release version 1.0.0
    with `mylist` as `AnyString::Vector`)
  * [core] Fixed the method `IO::Directory::Info::clean()`, which was only deleting subfolders
  * [core] removed overload on std::vector/std::list with std::ostream
-
+ * [io] Fixed directory and file iterators when given a path containing mixed slashes and backslashes.

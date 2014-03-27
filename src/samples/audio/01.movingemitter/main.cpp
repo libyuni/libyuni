@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 	if (!media.running())
 		return 1;
 
-	static const float LIMIT = 300.0f;
+	static const float LIMIT = 150.0f;
 
 	// adding a new emitter
 	AnyString emitterName("Emitter");
@@ -49,6 +49,9 @@ int main(int argc, char* argv[])
 	// attaching it to our emitter
 	media.emitter.attach(emitterName, filename);
 	media.emitter.play(emitterName);
+
+	if (media.library.channels(filename) > 1)
+		std::cerr << "Warning : 3D sound only works with mono sources !" << std::endl;
 
 	// emitter position
 	Point3D<> position; // [0, 0, 0]

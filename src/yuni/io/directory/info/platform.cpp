@@ -72,13 +72,15 @@ namespace Directory
 		void open()
 		# endif
 		{
+			String canonPath;
+			Yuni::IO::Canonicalize(canonPath, parent);
 			# ifdef YUNI_OS_WINDOWS
 			// Convert the filename
 			wbuffer[0] = L'\\';
 			wbuffer[1] = L'\\';
 			wbuffer[2] = L'?';
 			wbuffer[3] = L'\\';
-			int n = MultiByteToWideChar(CP_UTF8, 0, parent.c_str(), parent.size(), wbuffer + 4, wbufferMax - 10);
+			int n = ::MultiByteToWideChar(CP_UTF8, 0, canonPath.c_str(), canonPath.size(), wbuffer + 4, wbufferMax - 10);
 			if (!n)
 			{
 				h = -1;
@@ -93,12 +95,12 @@ namespace Directory
 			wbuffer[n + 8] = L'\0';
 
 			// Opening the folder
-			h = _wfindfirsti64(wbuffer, &data);
+			h = ::_wfindfirsti64(wbuffer, &data);
 			callNext = false;
 
 			# else
 
-			pdir = ::opendir(parent.c_str());
+			pdir = ::opendir(canonPath.c_str());
 
 			# endif
 
