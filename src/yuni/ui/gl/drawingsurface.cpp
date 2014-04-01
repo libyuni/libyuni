@@ -373,7 +373,7 @@ namespace UI
 		::glDrawArrays(GL_TRIANGLES, 0, 6);
 		::glDisableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 
-		if (frontColor != backColor)
+		if (frontColor != backColor && lineWidth > 0)
 			drawRectangle(frontColor, backColor, x, y, width, height, lineWidth);
 	}
 
