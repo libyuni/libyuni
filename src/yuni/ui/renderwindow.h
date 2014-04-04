@@ -114,7 +114,7 @@ namespace UI
 		{
 			pWidth = width;
 			pHeight = height;
-			// pFB.resize(width, height);
+			pFB.resize(width, height);
 			onResize(width, height);
 		}
 
