@@ -515,7 +515,7 @@ set(SRC_IO_DIRECTORY
 		io/directory/info.h
 		io/directory/iterator.h
 		io/directory/system.h
-		io/directory/system.hxx
+		io/directory/system.cpp
 )
 source_group(io\\directory FILES ${SRC_IO_DIRECTORY})
 
