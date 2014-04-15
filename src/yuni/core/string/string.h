@@ -356,8 +356,22 @@ namespace Yuni
 
 		//! Constructor with a default boolean
 		CString(bool value);
+		//! Constructor with a int32
+		CString(yint32 value);
+		//! Constructor with a int64
+		CString(yint64 value);
+		//! Constructor with a uint32
+		CString(yuint32 value);
+		//! Constructor with a uint64
+		CString(yuint64 value);
+		//! Constructor with a float
+		CString(float value);
+		//! Constructor with a double
+		CString(double value);
 
 		//! Constructor with a default value
+		// \internal The keyword 'explicit' is mandatory here to avoid invalid and unwanted conversion
+		//  to string when used in overloaded methods
 		template<class U> explicit CString(const U& rhs);
 
 		//! Destructor
