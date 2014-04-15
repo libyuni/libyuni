@@ -120,6 +120,42 @@ namespace Yuni
 	}
 
 	template<uint ChunkSizeT, bool ExpandableT>
+	inline CString<ChunkSizeT,ExpandableT>::CString(yint64 value)
+	{
+		assign(value);
+	}
+
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline CString<ChunkSizeT,ExpandableT>::CString(yint32 value)
+	{
+		assign(value);
+	}
+
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline CString<ChunkSizeT,ExpandableT>::CString(yuint64 value)
+	{
+		assign(value);
+	}
+
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline CString<ChunkSizeT,ExpandableT>::CString(yuint32 value)
+	{
+		assign(value);
+	}
+
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline CString<ChunkSizeT,ExpandableT>::CString(float value)
+	{
+		assign(value);
+	}
+
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline CString<ChunkSizeT,ExpandableT>::CString(double value)
+	{
+		assign(value);
+	}
+
+	template<uint ChunkSizeT, bool ExpandableT>
 	template<uint SizeT, bool ExpT>
 	inline CString<ChunkSizeT,ExpandableT>::CString(const CString<SizeT, ExpT>& rhs)
 	{
