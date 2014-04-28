@@ -5,7 +5,7 @@ Yuni's ChangeLOG
 Release version 1.0.0
 ---------------------
 
-**Features**
+**New**
 
  * [core] Multihreading:
    - Introduced new convenient utility routines for Multithreading Programming :
@@ -24,6 +24,7 @@ Release version 1.0.0
  * [dbi] The DBI/sqlite adapter is now ready for production
  * Multiple fixes related to C++11 standard
  * [io] `Yuni::IO::LoadFromFile` now accepts std::string as a destination
+
 
 **Changes**
 
@@ -51,6 +52,7 @@ Release version 1.0.0
  * [dbi] Updated sqlite to v3.8.3
  * [gl] Updated glew to v1.10
 
+
 **Fixes**
 
  * [core] Fixed Clang compiler detection
@@ -64,3 +66,5 @@ Release version 1.0.0
  * [core] removed overload on std::vector/std::list with std::ostream
  * [core] #462: string: fixes implicit cast to bool when assigning an int from the constructor
  * [io] Fixed directory and file iterators when given a path containing mixed slashes and backslashes.
+
+
