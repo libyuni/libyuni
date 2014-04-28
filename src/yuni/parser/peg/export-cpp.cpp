@@ -233,6 +233,7 @@ namespace PEG
 			h << "		Parser();\n";
 			h << "		~Parser();\n";
 			h << '\n';
+			h << "		void clear();\n";
 			h << "		bool loadFromFile(const AnyString& filename);\n";
 			h << "		bool load(const AnyString& content);\n";
 			h << '\n';
@@ -267,13 +268,13 @@ namespace PEG
 				hxx << "::" << namespaces[i];
 			hxx << "::Node& node)\n";
 			hxx << "{\n";
-			hxx << "\t::Yuni::Clob content;\n";
-			hxx << "\t";
+			hxx << "	::Yuni::Clob content;\n";
+			hxx << "	";
 			for (uint i = 0; i != namespaces.size(); ++i)
 				hxx << "::" << namespaces[i];
 			hxx << "::Node::Export(content, node);";
 			hxx << "out << content;\n";
-			hxx << "\treturn out;\n";
+			hxx << "	return out;\n";
 			hxx << "}\n";
 			hxx << '\n';
 			hxx << '\n';
@@ -285,11 +286,11 @@ namespace PEG
 				hxx << "::" << namespaces[i];
 			hxx << "::Node* node)\n";
 			hxx << "{\n";
-			hxx << "\tif (node)\n";
-			hxx << "\t\tout << *node;\n";
-			hxx << "\telse\n";
-			hxx << "\t\tout << \"<invalid ast node>\";\n";
-			hxx << "\treturn out;\n";
+			hxx << "	if (node)\n";
+			hxx << "		out << *node;\n";
+			hxx << "	else\n";
+			hxx << "		out << \"<invalid ast node>\";\n";
+			hxx << "	return out;\n";
 			hxx << "}\n";
 			hxx << '\n';
 			hxx << '\n';
@@ -487,7 +488,7 @@ namespace PEG
 				if (not datatext.empty())
 				{
 					for (uint i = 0; i != (uint) datatext.size(); ++i)
-						cpp << '\t' << datatext[i] << '\n';
+						cpp << '	' << datatext[i] << '\n';
 					cpp << "\n\n\n";
 				}
 
@@ -522,26 +523,26 @@ namespace PEG
 				}
 			}
 
-			cpp << "\t//! Rule " << name << '\n';
-			cpp << "\t";
+			cpp << "	//! Rule " << name << '\n';
+			cpp << "	";
 			cpp << ((node.enumID != "rgStart") ? "static inline " : "static ");
 
 			cpp << "bool yy" << node.enumID << "(Datasource& ctx)\n";
-			cpp << "\t{\n";
-			cpp << "\t\tTRACE(\"entering " << node.enumID;
+			cpp << "	{\n";
+			cpp << "		TRACE(\"entering " << node.enumID;
 			if (node.attributes.inlined)
 				cpp << " [inline]";
 			cpp << "\");\n";
 
 			if (not node.attributes.inlined)
-				cpp << "\t\tuint _ruleOffset = ctx.enterRule(" << node.enumID << ");\n";
+				cpp << "		uint _ruleOffset = ctx.enterRule(" << node.enumID << ");\n";
 			cpp << '\n';
 			cpp << body;
 			cpp << '\n';
 			if (not node.attributes.inlined)
-				cpp << "\t\tctx.commit(_ruleOffset, " << node.enumID << ");\n";
-			cpp << "\t\treturn true;\n";
-			cpp << "\t}\n";
+				cpp << "		ctx.commit(_ruleOffset, " << node.enumID << ");\n";
+			cpp << "		return true;\n";
+			cpp << "	}\n";
 			cpp << "\n\n";
 		}
 
@@ -569,38 +570,38 @@ namespace PEG
 			cpp << "namespace // anonymous\n{\n";
 			cpp << "\n\n";
 
-			cpp << "\tstatic inline bool  RuleAttributeCapture(enum Rule ruleid)\n";
-			cpp << "\t{\n";
-			cpp << "\t\tstatic const bool attr[] = {\n";
-			cpp << "\t\t\tfalse, // rgUnknown\n";
+			cpp << "	static inline bool  RuleAttributeCapture(enum Rule ruleid)\n";
+			cpp << "	{\n";
+			cpp << "		static const bool attr[] = {\n";
+			cpp << "			false, // rgUnknown\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
-				cpp << "\t\t\t" << (i->second.attributes.capture ? "true" : "false") << ", // " << i->second.enumID << "\n";
-			cpp << "\t\t\tfalse, // rgEOF\n";
-			cpp << "\t\t};\n";
-			cpp << "\t\tassert((uint) ruleid < (uint) ruleCount);\n";
-			cpp << "\t\treturn attr[(uint) ruleid];\n";
-			cpp << "\t}\n\n\n\n";
+				cpp << "			" << (i->second.attributes.capture ? "true" : "false") << ", // " << i->second.enumID << "\n";
+			cpp << "			false, // rgEOF\n";
+			cpp << "		};\n";
+			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
+			cpp << "		return attr[(uint) ruleid];\n";
+			cpp << "	}\n\n\n\n";
 
-			cpp << "\tstatic inline bool  RuleAttributeImportant(enum Rule ruleid)\n";
-			cpp << "\t{\n";
-			cpp << "\t\tstatic const bool attr[] = {\n";
-			cpp << "\t\t\tfalse, // rgUnknown\n";
+			cpp << "	static inline bool  RuleAttributeImportant(enum Rule ruleid)\n";
+			cpp << "	{\n";
+			cpp << "		static const bool attr[] = {\n";
+			cpp << "			false, // rgUnknown\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
-				cpp << "\t\t\t" << (i->second.attributes.important ? "true" : "false") << ", // " << i->second.enumID << "\n";
-			cpp << "\t\t\tfalse, // rgEOF\n";
-			cpp << "\t\t};\n";
-			cpp << "\t\tassert((uint) ruleid < (uint) ruleCount);\n";
-			cpp << "\t\treturn attr[(uint) ruleid];\n";
-			cpp << "\t}\n\n\n\n";
+				cpp << "			" << (i->second.attributes.important ? "true" : "false") << ", // " << i->second.enumID << "\n";
+			cpp << "			false, // rgEOF\n";
+			cpp << "		};\n";
+			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
+			cpp << "		return attr[(uint) ruleid];\n";
+			cpp << "	}\n\n\n\n";
 
-			cpp << "\tstatic inline AnyString  RuleAttributeSimpleTextCapture(enum Rule ruleid)\n";
-			cpp << "\t{\n";
-			cpp << "\t\tstatic const AnyString attr[] = {\n";
-			cpp << "\t\t\tnullptr, // rgUnknown\n";
+			cpp << "	static inline AnyString  RuleAttributeSimpleTextCapture(enum Rule ruleid)\n";
+			cpp << "	{\n";
+			cpp << "		static const AnyString attr[] = {\n";
+			cpp << "			nullptr, // rgUnknown\n";
 			String textCapture;
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
 			{
-				cpp << "\t\t\t";
+				cpp << "			";
 				if (i->second.children.size() == 1 and i->second.children[0].isSimpleTextCapture())
 				{
 					textCapture = i->second.children[0].rule.text;
@@ -612,17 +613,17 @@ namespace PEG
 
 				cpp << ", // " << i->second.enumID << "\n";
 			}
-			cpp << "\t\t\tnullptr, // rgEOF\n";
-			cpp << "\t\t};\n";
-			cpp << "\t\tassert((uint) ruleid < (uint) ruleCount);\n";
-			cpp << "\t\treturn attr[(uint) ruleid];\n";
-			cpp << "\t}\n\n\n\n";
+			cpp << "			nullptr, // rgEOF\n";
+			cpp << "		};\n";
+			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
+			cpp << "		return attr[(uint) ruleid];\n";
+			cpp << "	}\n\n\n\n";
 
 			PrepareCPPInclude(cpp);
 
-			cpp << "\t// Forward declarations\n";
+			cpp << "	// Forward declarations\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
-				cpp << "\tstatic inline bool yy" << i->second.enumID << "(Datasource& ctx);\n";
+				cpp << "	static inline bool yy" << i->second.enumID << "(Datasource& ctx);\n";
 
 			cpp << "\n\n\n";
 
@@ -637,83 +638,92 @@ namespace PEG
 			cpp << "\n\n\n";
 			cpp << "} // anonymous namespace\n\n\n\n\n\n";
 
-			cpp << "\tAnyString RuleToString(enum Rule ruleid)\n";
-			cpp << "\t{\n";
-			cpp << "\t\tswitch (ruleid)\n";
-			cpp << "\t\t{\n";
-			cpp << "\t\t\tcase rgUnknown:\n";
-			cpp << "\t\t\t\treturn \"<unknown>\";\n";
+			cpp << "	AnyString RuleToString(enum Rule ruleid)\n";
+			cpp << "	{\n";
+			cpp << "		switch (ruleid)\n";
+			cpp << "		{\n";
+			cpp << "			case rgUnknown:\n";
+			cpp << "				return \"<unknown>\";\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
 			{
-				cpp << "\t\t\tcase " << i->second.enumID << ":\n";
-				cpp << "\t\t\t\treturn \"" << i->first << "\";\n";
+				cpp << "			case " << i->second.enumID << ":\n";
+				cpp << "				return \"" << i->first << "\";\n";
 			}
-			cpp << "\t\t\tcase rgEOF:\n";
-			cpp << "\t\t\t\treturn \"EOF\";\n";
-			cpp << "\t\t}\n";
-			cpp << "\t\treturn \"<error>\";\n";
-			cpp << "\t}\n";
+			cpp << "			case rgEOF:\n";
+			cpp << "				return \"EOF\";\n";
+			cpp << "		}\n";
+			cpp << "		return \"<error>\";\n";
+			cpp << "	}\n";
 			cpp << "\n\n\n\n";
 
-			cpp << "\tParser::Parser() :\n";
-			cpp << "\t\troot(nullptr),\n";
-			cpp << "\t\tpData()\n";
-			cpp << "\t{\n";
-			cpp << "\t\tonURILoading.bind(& StandardURILoaderHandler);\n";
-			cpp << "\t}\n\n\n";
+			cpp << "	Parser::Parser() :\n";
+			cpp << "		root(nullptr),\n";
+			cpp << "		pData()\n";
+			cpp << "	{\n";
+			cpp << "		onURILoading.bind(& StandardURILoaderHandler);\n";
+			cpp << "	}\n\n\n";
 
-			cpp << "\tParser::~Parser()\n";
-			cpp << "\t{\n";
-			cpp << "\t\tdelete (Datasource*) pData;\n";
-			cpp << "\t}\n\n\n";
+			cpp << "	Parser::~Parser()\n";
+			cpp << "	{\n";
+			cpp << "		delete (Datasource*) pData;\n";
+			cpp << "	}\n\n\n";
 
-			cpp << "\tbool Parser::loadFromFile(const AnyString& filename)\n";
-			cpp << "\t{\n";
-			cpp << "\t\tif (!pData)\n";
-			cpp << "\t\t\tpData = new Datasource(notifications);\n";
+			cpp << "	void Parser::clear()\n";
+			cpp << "	{\n";
+			cpp << "		root = nullptr;\n";
+			cpp << "		delete (Datasource*) pData;\n";
+			cpp << "		pData = nullptr;\n";
+			cpp << "		if (not notifications.empty())\n";
+			cpp << "			Notification::Vector().swap(notifications);\n";
+			cpp << "	}\n\n\n";
+
+			cpp << "	bool Parser::loadFromFile(const AnyString& filename)\n";
+			cpp << "	{\n";
+			cpp << "		if (!pData)\n";
+			cpp << "			pData = new Datasource(notifications);\n";
 			cpp << "\n";
-			cpp << "\t\tDatasource& ctx = *((Datasource*) pData);\n";
-			cpp << "\t\tctx.open(filename);\n";
-			cpp << "\t\tDATASOURCE_PARSE(ctx);\n";
-			cpp << "\t\treturn ctx.success;\n";
-			cpp << "\t}\n\n\n";
+			cpp << "		Datasource& ctx = *((Datasource*) pData);\n";
+			cpp << "		ctx.open(filename);\n";
+			cpp << "		DATASOURCE_PARSE(ctx);\n";
+			cpp << "		return ctx.success;\n";
+			cpp << "	}\n\n\n";
 
-			cpp << "\tbool Parser::load(const AnyString& content)\n";
-			cpp << "\t{\n";
-			cpp << "\t\tif (!pData)\n";
-			cpp << "\t\t\tpData = new Datasource(notifications);\n";
+			cpp << "	bool Parser::load(const AnyString& content)\n";
+			cpp << "	{\n";
+			cpp << "		if (!pData)\n";
+			cpp << "			pData = new Datasource(notifications);\n";
 			cpp << "\n";
-			cpp << "\t\tDatasource& ctx = *((Datasource*) pData);\n";
-			cpp << "\t\tctx.openContent(content);\n";
-			cpp << "\t\tDATASOURCE_PARSE(ctx);\n";
-			cpp << "\t\treturn ctx.success;\n";
-			cpp << "\t}\n\n\n";
+			cpp << "		Datasource& ctx = *((Datasource*) pData);\n";
+			cpp << "		ctx.openContent(content);\n";
+			cpp << "		DATASOURCE_PARSE(ctx);\n";
+			cpp << "		return ctx.success;\n";
+			cpp << "	}\n\n\n";
 
-			cpp << "\tvoid Node::ExportToHTML(Clob& out, const Node& node)\n";
-			cpp << "\t{\n";
-			cpp << "\t\tassert(&node and \"invalid reference to node\");\n";
+			cpp << "	void Node::ExportToHTML(Clob& out, const Node& node)\n";
+			cpp << "	{\n";
+			cpp << "		assert(&node and \"invalid reference to node\");\n";
 			cpp << '\n';
-			cpp << "\t\tString tmp;\n";
-			cpp << "\t\tString indent;\n";
-			cpp << "\t\tInternalNodeExportHTML(out, node, indent, tmp);\n";
-			cpp << "\t}\n\n\n";
+			cpp << "		String tmp;\n";
+			cpp << "		String indent;\n";
+			cpp << "		InternalNodeExportHTML(out, node, indent, tmp);\n";
+			cpp << "	}\n\n\n";
 
-			cpp << "\tvoid Node::Export(Clob& out, const Node& node, bool color)\n";
-			cpp << "\t{\n";
-			cpp << "\t\tassert(&node and \"invalid reference to node\");\n";
+			cpp << "	void Node::Export(Clob& out, const Node& node, bool color)\n";
+			cpp << "	{\n";
+			cpp << "		assert(&node and \"invalid reference to node\");\n";
 			cpp << '\n';
-			cpp << "\t\tString tmp;\n";
-			cpp << "\t\tString indent;\n";
-			cpp << "\t\tif (not color)\n";
-			cpp << "\t\t\tInternalNodeExportConsole<false>(out, node, false, indent, tmp);\n";
-			cpp << "\t\telse\n";
-			cpp << "\t\t\tInternalNodeExportConsole<true>(out, node, false, indent, tmp);\n";
-			cpp << "\t}\n\n\n";
+			cpp << "		String tmp;\n";
+			cpp << "		String indent;\n";
+			cpp << "		if (not color)\n";
+			cpp << "			InternalNodeExportConsole<false>(out, node, false, indent, tmp);\n";
+			cpp << "		else\n";
+			cpp << "			InternalNodeExportConsole<true>(out, node, false, indent, tmp);\n";
+			cpp << "	}\n\n\n";
 
-			cpp << "\tvoid Node::Export(Clob& out, const Node& node)\n";
-			cpp << "\t{\n";
-			cpp << "\t\tExport(out, node, ::Yuni::System::Console::IsStdoutTTY());\n";
-			cpp << "\t}\n\n\n";
+			cpp << "	void Node::Export(Clob& out, const Node& node)\n";
+			cpp << "	{\n";
+			cpp << "		Export(out, node, ::Yuni::System::Console::IsStdoutTTY());\n";
+			cpp << "	}\n\n\n";
 		}
 
 
