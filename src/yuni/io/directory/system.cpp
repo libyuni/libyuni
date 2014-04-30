@@ -89,7 +89,7 @@ namespace System
 					out += "C:\\Windows"; // C:\Windows by default
 				out += "\\Fonts\\";
 			}
-			# elseif defined(YUNI_OS_MACOS)
+			# elif defined(YUNI_OS_MACOS)
 			{
 				out = "/Library/Fonts/";
 			}
