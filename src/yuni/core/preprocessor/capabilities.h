@@ -129,6 +129,7 @@
 # ifdef __clang__
 #	define YUNI_OS_CLANG
 #	define YUNI_COMPILER_NAME "Compatible Clang Compiler"
+#	define YUNI_OS_CLANG_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__) // compatible mode
 # else
 /* GNU C and C++ compiler */
 #	ifdef __GNUC__
@@ -144,7 +145,7 @@
 
 
 /* Intel Compiler */
-# ifdef __INTEL_COMPILER
+# if defined(__INTEL_COMPILER) || defined(__ICC)
 #	define YUNI_OS_INTELCOMPILER
 #	ifdef YUNI_COMPILER_NAME /* in some cases, the compiler may already have been detected as Visual Studio */
 #		undef YUNI_COMPILER_NAME
