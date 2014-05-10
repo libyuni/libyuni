@@ -223,27 +223,33 @@ namespace Job
 
 	void QueueService::wait()
 	{
-		while (not idle() or not pWaitingRoom.empty())
-			pSignalAllThreadHaveStopped.waitAndReset();
+		if (pStarted)
+		{
+			while (not idle() or not pWaitingRoom.empty())
+				pSignalAllThreadHaveStopped.waitAndReset();
+		}
 	}
 
 
 	bool QueueService::wait(uint timeout, uint /*pollInterval*/)
 	{
-		// note: the timeout may not be respected here
-		do
+		if (pStarted)
 		{
-			if (idle() and pWaitingRoom.empty())
-				return true;
+			// note: the timeout may not be respected here
+			do
+			{
+				if (idle() and pWaitingRoom.empty())
+					return true;
 
-			if (not pSignalAllThreadHaveStopped.wait(timeout))
-				return false; // timeout reached
+				if (not pSignalAllThreadHaveStopped.wait(timeout))
+					return false; // timeout reached
 
-			// we have been notified
-			pSignalAllThreadHaveStopped.reset();
+				// we have been notified
+				pSignalAllThreadHaveStopped.reset();
+			}
+			while (true);
 		}
-		while (true);
-		return false;
+		return true;
 	}
 
 
