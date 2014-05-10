@@ -4,6 +4,12 @@
 #include <iostream>
 #include <cerrno>
 
+#include "../core/atomic/int.h"
+#if YUNI_ATOMIC_MUST_USE_MUTEX != 0
+#warning Atomic types must ue mutex. the implementation should be checked YUNI_OS_GCC_VERSION
+#endif
+
+
 
 namespace Yuni
 {

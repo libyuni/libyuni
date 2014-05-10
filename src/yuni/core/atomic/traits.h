@@ -1,7 +1,6 @@
 #ifndef __YUNI_CORE_ATOMIC_TRAITS_H__
 # define __YUNI_CORE_ATOMIC_TRAITS_H__
 
-# include "int.h" // avoid invalid includes
 # include "../static/if.h"
 # ifdef YUNI_OS_WINDOWS
 #	include "../system/windows.hdr.h"
@@ -9,7 +8,7 @@
 
 
 // Determine if we must use a mutex or not
-# if defined(YUNI_OS_WINDOWS) || YUNI_OS_GCC_VERSION >= 40102
+# if defined(YUNI_OS_WINDOWS) || YUNI_OS_GCC_VERSION >= 40102 || defined(YUNI_OS_CLANG)
 #	if !defined(YUNI_OS_WINDOWS) && !defined(YUNI_HAS_SYNC_ADD_AND_FETCH)
 #		define YUNI_ATOMIC_MUST_USE_MUTEX 1
 #	else
