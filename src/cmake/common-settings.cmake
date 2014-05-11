@@ -178,8 +178,8 @@ if (NOT MSVC)
 	compile_flag("-fstrict-aliasing"     STRICT_ALIASING      RELEASE RELWITHDEBINFO)
 	compile_flag("-msse"                 MSSE                 RELEASE RELWITHDEBINFO)
 	compile_flag("-msse2"                MSSE2                RELEASE RELWITHDEBINFO)
-	compile_flag("-mfpmath=sse"          FPMATH_MSSE          RELEASE RELWITHDEBINFO)
 	compile_flag("-fvisibility=hidden"   VISIBILITY_HIDDEN    RELEASE DEBUG RELWITHDEBINFO)
+	#compile_flag("-mfpmath=sse"          FPMATH_MSSE          RELEASE RELWITHDEBINFO)
 
 	# link
 	#compile_flag("-flto"                 FLTO  RELEASE RELWITHDEBINFO)
