@@ -134,13 +134,14 @@ namespace AtomicImpl
 	template<template<class> class TP>
 	struct Operator<32, TP> final
 	{
-		static typename Yuni::Atomic::Int<32,TP>::Type Increment(Yuni::Atomic::Int<32,TP>& t)
+		template<class T>
+		static typename Yuni::Atomic::Int<32,TP>::Type Increment(T& t)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			return ::InterlockedIncrement((LONG*)&t.pValue);
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<32,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			return (++t.pValue);
 			#	else
 			return __sync_add_and_fetch(&t.pValue, 1);
@@ -148,13 +149,14 @@ namespace AtomicImpl
 			# endif
 		}
 
-		static typename Yuni::Atomic::Int<32,TP>::Type Increment(Yuni::Atomic::Int<32,TP>& t, typename Yuni::Atomic::Int<32,TP>::ScalarType value)
+		template<class T>
+		static typename Yuni::Atomic::Int<32,TP>::Type Increment(const T& t, typename T::ScalarType value)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			return InterlockedExchange((LONG*)&t.pValue, (LONG)(t.pValue + value));
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<32,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			return (t.pValue += value);
 			#	else
 			return __sync_add_and_fetch(&t.pValue, value);
@@ -162,7 +164,8 @@ namespace AtomicImpl
 			# endif
 		}
 
-		static typename Yuni::Atomic::Int<32,TP>::Type Decrement(Yuni::Atomic::Int<32,TP>& t)
+		template<class T>
+		static typename Yuni::Atomic::Int<32,TP>::Type Decrement(T& t)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			#   ifdef YUNI_OS_MINGW
@@ -172,7 +175,7 @@ namespace AtomicImpl
 			#   endif
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<32,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			return (--t.pValue);
 			#	else
 			return __sync_add_and_fetch(&t.pValue, -1);
@@ -180,13 +183,14 @@ namespace AtomicImpl
 			# endif
 		}
 
-		static typename Yuni::Atomic::Int<32,TP>::Type Decrement(Yuni::Atomic::Int<32,TP>& t, typename Yuni::Atomic::Int<32,TP>::ScalarType value)
+		template<class T>
+		static typename Yuni::Atomic::Int<32,TP>::Type Decrement(T& t, typename T::ScalarType value)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			return InterlockedExchange((LONG*)&t.pValue, (LONG)(t.pValue - value));
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<32,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			return (t.pValue -= value);
 			#	else
 			return __sync_add_and_fetch(&t.pValue, -value);
@@ -194,13 +198,14 @@ namespace AtomicImpl
 			# endif
 		}
 
-		static void Zero(Yuni::Atomic::Int<32,TP>& t)
+		template<class T>
+		static void Zero(T& t)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			::InterlockedExchange((LONG*)&t.pValue, 0);
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<32,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			t.pValue = 0;
 			#	else
 			__sync_and_and_fetch(&t.pValue, 0);
@@ -208,14 +213,14 @@ namespace AtomicImpl
 			# endif
 		}
 
-		template<int Size>
-		static void Set(Yuni::Atomic::Int<Size, TP>& t, sint32 newvalue)
+		template<class T>
+		static void Set(T& t, sint32 newvalue)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			::InterlockedExchange((LONG*)&t.pValue, newvalue);
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<32,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			t.pValue = newvalue;
 			#	else
 			__sync_synchronize();
@@ -233,7 +238,8 @@ namespace AtomicImpl
 	template<template<class> class TP>
 	struct Operator<64, TP> final
 	{
-		static typename Yuni::Atomic::Int<64,TP>::Type Increment(Yuni::Atomic::Int<64,TP>& t)
+		template<class T>
+		static typename Yuni::Atomic::Int<64,TP>::Type Increment(T& t)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
@@ -243,7 +249,7 @@ namespace AtomicImpl
 			#	endif
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<64,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			return (++t.pValue);
 			#	else
 			return __sync_add_and_fetch(&t.pValue, 1);
@@ -251,7 +257,8 @@ namespace AtomicImpl
 			# endif
 		}
 
-		static typename Yuni::Atomic::Int<64,TP>::Type Increment(Yuni::Atomic::Int<64,TP>& t, typename Yuni::Atomic::Int<64,TP>::ScalarType value)
+		template<class T>
+		static typename Yuni::Atomic::Int<64,TP>::Type Increment(const T& t, typename T::ScalarType value)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
@@ -261,7 +268,7 @@ namespace AtomicImpl
 			#   endif
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<64,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			return (t.pValue += value);
 			#	else
 			return __sync_add_and_fetch(&t.pValue, value);
@@ -269,7 +276,8 @@ namespace AtomicImpl
 			# endif
 		}
 
-		static typename Yuni::Atomic::Int<64,TP>::Type Decrement(Yuni::Atomic::Int<64,TP>& t)
+		template<class T>
+		static typename Yuni::Atomic::Int<64,TP>::Type Decrement(T& t)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
@@ -279,7 +287,7 @@ namespace AtomicImpl
 			#	endif
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<64,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			return (--t.pValue);
 			#	else
 			return __sync_add_and_fetch(&t.pValue, -1);
@@ -287,7 +295,8 @@ namespace AtomicImpl
 			# endif
 		}
 
-		static typename Yuni::Atomic::Int<64,TP>::Type Decrement(Yuni::Atomic::Int<64,TP>& t, typename Yuni::Atomic::Int<64,TP>::ScalarType value)
+		template<class T>
+		static typename Yuni::Atomic::Int<64,TP>::Type Decrement(T& t, typename T::ScalarType value)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
@@ -297,7 +306,7 @@ namespace AtomicImpl
 			#   endif
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<64,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			return (t.pValue -= value);
 			#	else
 			return __sync_add_and_fetch(&t.pValue, -value);
@@ -305,7 +314,8 @@ namespace AtomicImpl
 			# endif
 		}
 
-		static void Zero(Yuni::Atomic::Int<64,TP>& t)
+		template<class T>
+		static void Zero(T& t)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
@@ -315,7 +325,7 @@ namespace AtomicImpl
 			#   endif
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<64,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			t.pValue = 0;
 			#	else
 			__sync_and_and_fetch(&t.pValue, 0);
@@ -323,7 +333,8 @@ namespace AtomicImpl
 			# endif
 		}
 
-		static void Set(Yuni::Atomic::Int<64,TP>& t, sint64 newvalue)
+		template<class T>
+		static void Set(T& t, sint64 newvalue)
 		{
 			# ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
@@ -333,7 +344,7 @@ namespace AtomicImpl
 			#   endif
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
-			typename Yuni::Atomic::Int<64,TP>::ThreadingPolicy::MutexLocker locker(t);
+			typename T::ThreadingPolicy::MutexLocker locker(t);
 			t.pValue = newvalue;
 			#	else
 			__sync_synchronize();

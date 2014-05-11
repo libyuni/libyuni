@@ -144,9 +144,9 @@ namespace Atomic
 
 	private:
 		//! The real variable
-		InnerType pValue;
+		mutable InnerType pValue;
 		// A friend !
-		template<int Size2, template<class> class TP2> friend struct Private::AtomicImpl::Operator;
+		template<int, template<class> class> friend struct Yuni::Private::AtomicImpl::Operator;
 
 	}; // class Int
 

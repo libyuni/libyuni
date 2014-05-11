@@ -77,7 +77,9 @@ namespace Atomic
 	template<int Size, template<class> class TP>
 	inline Int<Size,TP>::operator ScalarType () const
 	{
-		return pValue;
+		return (threadSafe)
+			? Private::AtomicImpl::Operator<size,TP>::Increment(*this, 0)
+			: (pValue);
 	}
 
 
@@ -120,7 +122,10 @@ namespace Atomic
 	template<int Size, template<class> class TP>
 	inline bool Int<Size,TP>::operator ! () const
 	{
-		return (0 == pValue);
+		return (threadSafe)
+			? (0 == Private::AtomicImpl::Operator<size,TP>::Increment(*this, 0))
+			: (0 == pValue);
+
 	}
 
 
