@@ -202,8 +202,8 @@ namespace Gfx3D
 	Texture::Ptr Texture::New(uint width, uint height, uint colorDepth, DataType type,
 		const uint8* data, bool mipmaps)
 	{
-		assert(width > 0 && "Creating texture with width=0 !");
-		assert(height > 0 && "Creating texture with height=0 !");
+		assert(width > 0 && "Creating texture with width = 0 !");
+		assert(height > 0 && "Creating texture with height = 0 !");
 		ID id;
 
 		// Allocate a texture name

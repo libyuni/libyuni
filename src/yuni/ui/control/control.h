@@ -41,21 +41,21 @@ namespace UI
 
 	public:
 		//! Mouse move callback
-		Yuni::Bind<EventPropagation (IControl* sender, int x, int y)>  onMouseMove;
+		Yuni::Bind<EventPropagation (IControl* sender, float x, float y)>  onMouseMove;
 		//! Mouse down callback
-		Yuni::Bind<EventPropagation (IControl* sender, Input::IMouse::Button btn, int x, int y)>  onMouseDown;
+		Yuni::Bind<EventPropagation (IControl* sender, Input::IMouse::Button btn, float x, float y)>  onMouseDown;
 		//! Mouse up callback
-		Yuni::Bind<EventPropagation (IControl* sender, Input::IMouse::Button btn, int x, int y)>  onMouseUp;
+		Yuni::Bind<EventPropagation (IControl* sender, Input::IMouse::Button btn, float x, float y)>  onMouseUp;
 		//! Mouse double-click callback
-		Yuni::Bind<EventPropagation (IControl* sender, Input::IMouse::Button btn, int x, int y)>  onMouseDblClick;
+		Yuni::Bind<EventPropagation (IControl* sender, Input::IMouse::Button btn, float x, float y)>  onMouseDblClick;
 		//! Mouse scroll callback
 		Yuni::Bind<EventPropagation (IControl* sender, float delta)>  onMouseScroll;
 		//! Mouse enter callback
-		Yuni::Bind<EventPropagation (IControl* sender, int x, int y)>  onMouseEnter;
+		Yuni::Bind<EventPropagation (IControl* sender, float x, float y)>  onMouseEnter;
 		//! Mouse leave callback
-		Yuni::Bind<EventPropagation (IControl* sender, int x, int y)>  onMouseLeave;
+		Yuni::Bind<EventPropagation (IControl* sender, float x, float y)>  onMouseLeave;
 		//! Mouse hover callback
-		Yuni::Bind<EventPropagation (IControl* sender, int x, int y)>  onMouseHover;
+		Yuni::Bind<EventPropagation (IControl* sender, float x, float y)>  onMouseHover;
 		//! Key down callback
 		Yuni::Bind<EventPropagation (IControl* sender, Input::Key)>  onKeyDown;
 		//! Key up callback
@@ -74,9 +74,9 @@ namespace UI
 		{}
 
 		//! Constructor with integers for position and size
-		IControl(int x, int y, uint width, uint height):
+		IControl(float x, float y, float width, float height):
 			pPosition(x, y),
-			pSize(width, height),
+			pSize(Math::Max(width, 0.0f), Math::Max(height, 0.0f)),
 			pVisible(true),
 			pModified(true),
 			pReadOnly(false),
@@ -85,7 +85,7 @@ namespace UI
 		{}
 
 		//! Constructor with points for position and size
-		IControl(const Point2D<int>& position, const Point2D<uint>& size):
+		IControl(const Point2D<float>& position, const Point2D<float>& size):
 			pPosition(position),
 			pSize(size),
 			pVisible(true),
@@ -99,24 +99,24 @@ namespace UI
 		virtual ~IControl() {}
 
 		//! Get X position
-		int x() const { return pPosition.x; }
+		float x() const { return pPosition.x; }
 		//! Get Y position
-		int y() const { return pPosition.y; }
+		float y() const { return pPosition.y; }
 		//! Get position
-		const Point2D<int> position() const { return pPosition; }
+		const Point2D<float> position() const { return pPosition; }
 		//! Set position to an absolute value
-		void moveTo(int x, int y)
+		void moveTo(float x, float y)
 		{
 			pPosition(x, y);
 			invalidate();
 		}
-		void moveTo(const Point2D<int>& position)
+		void moveTo(const Point2D<float>& position)
 		{
 			pPosition(position);
 			invalidate();
 		}
 		//! Move position by a relative value
-		void moveBy(int x, int y)
+		void moveBy(float x, float y)
 		{
 			pPosition.x += x;
 			pPosition.y += y;
@@ -124,18 +124,19 @@ namespace UI
 		}
 
 		//! Get width
-		uint width() const { return pSize.x; }
+		float width() const { return pSize.x; }
 		//! Get height
-		uint height() const { return pSize.y; }
+		float height() const { return pSize.y; }
 		//! Get size
-		const Point2D<uint>& size() const { return pSize; }
+		const Point2D<float>& size() const { return pSize; }
 		//! Set size
-		void size(uint width, uint height)
+		void size(float width, float height)
 		{
 			pSize(width, height);
 			invalidate();
 		}
-		void size(const Point2D<uint>& size)
+		template<class T>
+		void size(const Point2D<T>& size)
 		{
 			pSize(size);
 			invalidate();
@@ -159,7 +160,8 @@ namespace UI
 		virtual void draw(DrawingSurface::Ptr& surface, bool root = true) const = 0;
 
 		//! Recursively search for the deepest child control containing the given point
-		IControl* getControlAt(int x, int y);
+		IControl* getControlAt(float x, float y);
+		IControl* getControlAt(const Point2D<float>& point) { return getControlAt(point.x, point.y); }
 
 		//! Add child controls
 		void addChild(const IControl::Ptr& child) { pChildren.push_back(child); }
@@ -196,7 +198,7 @@ namespace UI
 		}
 
 		//! Recursively search for the controls containing the given point, return them stacked
-		void getControlStackAt(int x, int y, std::vector<IControl*>& stack);
+		void getControlStackAt(float x, float y, std::vector<IControl*>& stack);
 
 		//! Draw the child controls
 		void drawChildren(DrawingSurface::Ptr& surface) const
@@ -206,51 +208,51 @@ namespace UI
 		}
 
 		//! Launch a mouse move event
-		EventPropagation doMouseMove(int x, int y, Set& enteredControls);
+		EventPropagation doMouseMove(float x, float y, Set& enteredControls);
 		//! Launch a mouse down event
-		EventPropagation doMouseDown(Input::IMouse::Button btn, int x, int y);
+		EventPropagation doMouseDown(Input::IMouse::Button btn, float x, float y);
 		//! Launch a mouse up event
-		EventPropagation doMouseUp(Input::IMouse::Button btn, int x, int y);
+		EventPropagation doMouseUp(Input::IMouse::Button btn, float x, float y);
 		//! Launch a mouse double-click event
-		EventPropagation doMouseDblClick(Input::IMouse::Button btn, int x, int y);
+		EventPropagation doMouseDblClick(Input::IMouse::Button btn, float x, float y);
 		//! Launch a mouse scroll event
-		EventPropagation doMouseScroll(float delta, int x, int y);
+		EventPropagation doMouseScroll(float delta, float x, float y);
 		//! Launch a mouse enter event
-		EventPropagation doMouseEnter(int x, int y);
+		EventPropagation doMouseEnter(float x, float y);
 		//! Launch a mouse leave event
-		EventPropagation doMouseLeave(int x, int y);
+		EventPropagation doMouseLeave(float x, float y);
 		//! Launch a mouse hover event
-		EventPropagation doMouseHover(int x, int y);
+		EventPropagation doMouseHover(float x, float y);
 		//! Launch a key down event
 		EventPropagation doKeyDown(Input::Key key);
 		//! Launch a key up event
 		EventPropagation doKeyUp(Input::Key key);
 
 		//! Control reaction to mouse move
-		virtual void mouseMove(int, int) const {}
+		virtual void mouseMove(float, float) {}
 		//! Control reaction to mouse down
-		virtual void mouseDown(Input::IMouse::Button, int, int) {}
+		virtual void mouseDown(Input::IMouse::Button, float, float) {}
 		//! Control reaction to mouse up
-		virtual void mouseUp(Input::IMouse::Button, int, int) {}
+		virtual void mouseUp(Input::IMouse::Button, float, float) {}
 		//! Control reaction to mouse double-click
-		virtual void mouseDblClick(Input::IMouse::Button, int, int) {}
+		virtual void mouseDblClick(Input::IMouse::Button, float, float) {}
 		//! Control reaction to mouse scroll
-		virtual void mouseScroll(float, int, int) {}
+		virtual void mouseScroll(float, float, float) {}
 		//! Control reaction to mouse enter
-		virtual void mouseEnter(int, int) {}
+		virtual void mouseEnter(float, float) {}
 		//! Control reaction to mouse enter
-		virtual void mouseLeave(int, int) {}
+		virtual void mouseLeave(float, float) {}
 		//! Control reaction to mouse hover
-		virtual void mouseHover(int, int) {}
+		virtual void mouseHover(float, float) {}
 		//! Control reaction to key up
 		virtual void keyDown(Input::Key) {}
 		//! Control reaction to key down
 		virtual void keyUp(Input::Key) {}
 
 	protected:
-		Point2D<int> pPosition;
+		Point2D<float> pPosition;
 
-		Point2D<uint> pSize;
+		Point2D<float> pSize;
 
 		bool pVisible;
 

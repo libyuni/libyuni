@@ -36,7 +36,7 @@ namespace UI
 		TextOverlay(const FTFont::Ptr& font);
 
 		//! Constructor
-		TextOverlay(const AnyString& text, int x, int y, const Color::RGBA<float>& color);
+		TextOverlay(const AnyString& text, float x, float y, const Color::RGBA<float>& color);
 
 		//! Destructor
 		~TextOverlay();
@@ -69,10 +69,10 @@ namespace UI
 		const Gfx3D::MaterialSurface::Ptr& material() const;
 
 		//! Current width of the internal texture
-		uint width() const;
+		float width() const;
 
 		//! Current height of the internal texture
-		uint height() const;
+		float height() const;
 
 		//! Modify the color used
 		void color(float r, float g, float b);
@@ -89,12 +89,12 @@ namespace UI
 		void antiAliased(bool newValue);
 
 		//! Move the text to another position
-		void move(int x, int y);
+		void move(float x, float y);
 
 		//! Get the X coordinate
-		int x() const;
+		float x() const;
 		//! Get the Y coordinate
-		int y() const;
+		float y() const;
 
 	private:
 		//! Text to display
@@ -107,10 +107,10 @@ namespace UI
 		Gfx3D::Texture::Ptr pTexture;
 
 		//! X coordinate for the left of the text (in pixels, 0 -> ScreenWidth = left -> right)
-		int pX;
+		float pX;
 
 		//! Y coordinate for the bottom of the text (in pixels, 0 -> ScreenHeight = top -> bottom)
-		int pY;
+		float pY;
 
 		//! Font to use
 		FTFont::Ptr pFont;

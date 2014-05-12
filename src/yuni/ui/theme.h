@@ -56,13 +56,13 @@ namespace UI
 		//! Color for panel background
 		Color::RGBA<float> panelColor;
 		//! Margin for automatic placement of child controls (in pixels)
-		uint margin;
+		float margin;
 		//! Width of control borders (in pixels)
 		float borderWidth;
 		//! Height of window menus (in pixels)
-		uint menuHeight;
+		float menuHeight;
 		//! Checkbox size (both width and height, checkboxes are squares)
-		uint checkBoxSize;
+		float checkBoxSize;
 
 	private:
 		static Theme::Ptr sCurrent;

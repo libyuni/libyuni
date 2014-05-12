@@ -3,7 +3,7 @@
 
 # include "../../yuni.h"
 # include "control.h"
-//# include "drawingsurface.h"
+
 
 namespace Yuni
 {
@@ -17,11 +17,11 @@ namespace Control
 	class Window: public IControl
 	{
 	public:
-		Window(int x, int y, uint width, uint height):
+		Window(float x, float y, float width, float height):
 			IControl(x, y, width, height)
 		{}
 
-		Window(const Point2D<>& position, const Point2D<>& size):
+		Window(const Point2D<float>& position, const Point2D<float>& size):
 			IControl(position, size)
 		{}
 

@@ -21,13 +21,13 @@ namespace Control
 		Yuni::Bind<void (IControl* sender, bool newValue)>  onCheckChanged;
 
 	public:
-		CheckBox(int x, int y, uint width, uint height):
+		CheckBox(float x, float y, float width, float height):
 			IControl(x, y, width, height),
 			pChecked(false),
 			pBeingClicked(false)
 		{}
 
-		CheckBox(const Point2D<int>& position, const Point2D<uint>& size):
+		CheckBox(const Point2D<float>& position, const Point2D<float>& size):
 			IControl(position, size),
 			pChecked(false),
 			pBeingClicked(false)
@@ -57,13 +57,13 @@ namespace Control
 
 	private:
 		//! Control reaction to mouse down
-		virtual void mouseDown(Input::IMouse::Button btn, int, int) override
+		virtual void mouseDown(Input::IMouse::Button btn, float, float) override
 		{
 			if (Input::IMouse::ButtonLeft == btn)
 				pBeingClicked = true;
 		}
 		//! Control reaction to mouse up
-		virtual void mouseUp(Input::IMouse::Button btn, int, int) override
+		virtual void mouseUp(Input::IMouse::Button btn, float, float) override
 		{
 			if (Input::IMouse::ButtonLeft == btn && pBeingClicked)
 			{

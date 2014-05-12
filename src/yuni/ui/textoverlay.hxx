@@ -42,7 +42,7 @@ namespace UI
 	}
 
 
-	inline TextOverlay::TextOverlay(const AnyString& text, int x, int y, const Color::RGBA<float>& color):
+	inline TextOverlay::TextOverlay(const AnyString& text, float x, float y, const Color::RGBA<float>& color):
 		pText(text),
 		pPrevText(),
 		pTexture(nullptr),
@@ -116,15 +116,15 @@ namespace UI
 	}
 
 
-	inline uint TextOverlay::width() const
+	inline float TextOverlay::width() const
 	{
-		return nullptr != pTexture ? pTexture->width() : 0u;
+		return nullptr != pTexture ? (float)pTexture->width() : 0.0f;
 	}
 
 
-	inline uint TextOverlay::height() const
+	inline float TextOverlay::height() const
 	{
-		return nullptr != pTexture ? pTexture->height() : 0u;
+		return nullptr != pTexture ? (float)pTexture->height() : 0.0f;
 	}
 
 
@@ -174,18 +174,18 @@ namespace UI
 	}
 
 
-	inline void TextOverlay::move(int x, int y)
+	inline void TextOverlay::move(float x, float y)
 	{
 		pX = x;
 		pY = y;
 	}
 
-	inline int TextOverlay::x() const
+	inline float TextOverlay::x() const
 	{
 		return pX;
 	}
 
-	inline int TextOverlay::y() const
+	inline float TextOverlay::y() const
 	{
 		return pY;
 	}

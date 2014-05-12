@@ -29,7 +29,7 @@ namespace Control
 		Button()
 		{}
 
-		Button(int x, int y, uint width, uint height):
+		Button(float x, float y, float width, float height):
 			IControl(x, y, width, height),
 			pOffsetX(0),
 			pOffsetY(0),
@@ -37,7 +37,7 @@ namespace Control
 			pDisplay(dmNone)
 		{}
 
-		Button(const Point2D<int>& position, const Point2D<uint>& size):
+		Button(const Point2D<float>& position, const Point2D<float>& size):
 			IControl(position, size),
 			pOffsetX(0),
 			pOffsetY(0),
@@ -67,7 +67,7 @@ namespace Control
 		void imageHovering(const Gfx3D::Texture::Ptr& image) { pImageHovering = image; }
 
 		//! On mouse button down
-		virtual void mouseDown(Input::IMouse::Button btn, int, int) override
+		virtual void mouseDown(Input::IMouse::Button btn, float, float) override
 		{
 			if (btn != Input::IMouse::ButtonLeft)
 				return;
@@ -77,7 +77,7 @@ namespace Control
 		}
 
 		//! On mouse button up
-		virtual void mouseUp(Input::IMouse::Button btn, int, int) override
+		virtual void mouseUp(Input::IMouse::Button btn, float, float) override
 		{
 			if (btn != Input::IMouse::ButtonLeft)
 				return;
@@ -103,9 +103,15 @@ namespace Control
 		//! Set display mode to Stretch
 		void stretch() { pDisplay = dmStretch; invalidate(); }
 		//! Set display mode to Offset and set offset values
-		void offset(int x, int y) { pDisplay = dmOffset; pOffsetX = x; pOffsetY = y; invalidate(); }
+		void offset(float x, float y)
+		{
+			pDisplay = dmOffset;
+			pOffsetX = x;
+			pOffsetY = y;
+			invalidate();
+		}
 		//! Get current offset (might not be used if display mode is not podOffset)
-		Point2D<int> offset() const { return Point2D<int>(pOffsetX, pOffsetY); }
+		Point2D<float> offset() const { return Point2D<float>(pOffsetX, pOffsetY); }
 
 	private:
 		String pText;
@@ -121,10 +127,10 @@ namespace Control
 		bool pBeingClicked;
 
 		//! Offset of the rectangle over the image in X (only used in Offset display mode)
-		int pOffsetX;
+		float pOffsetX;
 
 		//! Offset of the rectangle over the image in Y (only used in Offset display mode)
-		int pOffsetY;
+		float pOffsetY;
 
 		//! Fill color for when a part of the overlay is empty
 		Color::RGBA<float> pFillColor;

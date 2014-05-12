@@ -6,23 +6,23 @@ namespace UI
 {
 
 
-	IControl* IControl::getControlAt(int x, int y)
+	IControl* IControl::getControlAt(float x, float y)
 	{
 		// Invisible controls don't answer to events
 		if (!pVisible)
 			return nullptr;
 		// If the point is outside the control, return null
 		if (x < pPosition.x || y < pPosition.y ||
-			x > pPosition.x + (int)pSize.x ||
-			y > pPosition.y + (int)pSize.y)
+			x > pPosition.x + pSize.x ||
+			y > pPosition.y + pSize.y)
 			return nullptr;
 
 		// If no child contains the point, return this control
 		IControl* result = this;
 
 		// Try to find a child that contains the point
-		int relativeX = x - pPosition.x;
-		int relativeY = y - pPosition.y;
+		float relativeX = x - pPosition.x;
+		float relativeY = y - pPosition.y;
 		Vector::iterator end = pChildren.end();
 		for (Vector::iterator it = pChildren.begin(); it != end; ++it)
 		{
@@ -37,23 +37,23 @@ namespace UI
 		return result;
 	}
 
-	void IControl::getControlStackAt(int x, int y, std::vector<IControl*>& stack)
+	void IControl::getControlStackAt(float x, float y, std::vector<IControl*>& stack)
 	{
 		// Invisible controls don't answer to events
 		if (!pVisible)
 			return;
 		// If the point is outside the control, return null
 		if (x < pPosition.x || y < pPosition.y ||
-			x > pPosition.x + (int)pSize.x ||
-			y > pPosition.y + (int)pSize.y)
+			x > pPosition.x + pSize.x ||
+			y > pPosition.y + pSize.y)
 			return;
 
 		// Push this control in the stack
 		stack.push_back(this);
 
 		// Try to find a child that contains the point
-		int relativeX = x - pPosition.x;
-		int relativeY = y - pPosition.y;
+		float relativeX = x - pPosition.x;
+		float relativeY = y - pPosition.y;
 		Vector::iterator end = pChildren.end();
 		for (Vector::iterator it = pChildren.begin(); it != end; ++it)
 		{
@@ -87,7 +87,7 @@ namespace UI
 	}
 
 
-	EventPropagation IControl::doMouseMove(int x, int y, Set& enteredControls)
+	EventPropagation IControl::doMouseMove(float x, float y, Set& enteredControls)
 	{
 		if (!pVisible)
 			return epContinue;
@@ -144,7 +144,7 @@ namespace UI
 		return finalProp;
 	}
 
-	EventPropagation IControl::doMouseDown(Input::IMouse::Button btn, int x, int y)
+	EventPropagation IControl::doMouseDown(Input::IMouse::Button btn, float x, float y)
 	{
 		if (!pVisible)
 			return epContinue;
@@ -172,7 +172,7 @@ namespace UI
 		return finalProp;
 	}
 
-	EventPropagation IControl::doMouseUp(Input::IMouse::Button btn, int x, int y)
+	EventPropagation IControl::doMouseUp(Input::IMouse::Button btn, float x, float y)
 	{
 		if (!pVisible)
 			return epContinue;
@@ -200,7 +200,7 @@ namespace UI
 		return finalProp;
 	}
 
-	EventPropagation IControl::doMouseDblClick(Input::IMouse::Button btn, int x, int y)
+	EventPropagation IControl::doMouseDblClick(Input::IMouse::Button btn, float x, float y)
 	{
 		if (!pVisible)
 			return epContinue;
@@ -226,7 +226,7 @@ namespace UI
 		return finalProp;
 	}
 
-	EventPropagation IControl::doMouseScroll(float delta, int x, int y)
+	EventPropagation IControl::doMouseScroll(float delta, float x, float y)
 	{
 		if (!pVisible)
 			return epContinue;
@@ -253,7 +253,7 @@ namespace UI
 	}
 
 
-	EventPropagation IControl::doMouseEnter(int x, int y)
+	EventPropagation IControl::doMouseEnter(float x, float y)
 	{
 		EventPropagation prop = onMouseEnter(this, x, y);
 		if (epStop == prop)
@@ -261,7 +261,7 @@ namespace UI
 		return onMouseEnter(this, x, y);
 	}
 
-	EventPropagation IControl::doMouseLeave(int x, int y)
+	EventPropagation IControl::doMouseLeave(float x, float y)
 	{
 		EventPropagation prop = onMouseLeave(this, x, y);
 		if (epStop == prop)
@@ -270,7 +270,7 @@ namespace UI
 	}
 
 
-	EventPropagation IControl::doMouseHover(int x, int y)
+	EventPropagation IControl::doMouseHover(float x, float y)
 	{
 		if (!pVisible)
 			return epContinue;

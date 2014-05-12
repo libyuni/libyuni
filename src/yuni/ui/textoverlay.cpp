@@ -57,12 +57,12 @@ namespace UI
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 		const float vertices[] =
 			{
-				(float)pX, (float)pY,
-				(float)pX, (float)(pY + height()),
-				(float)(pX + width()), (float)pY,
-				(float)(pX + width()), (float)pY,
-				(float)pX, (float)(pY + height()),
-				(float)(pX + width()), (float)(pY + height())
+				pX, pY,
+				pX, pY + height(),
+				pX + width(), pY,
+				pX + width(), pY,
+				pX, pY + height(),
+				pX + width(), pY + height()
 			};
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
 

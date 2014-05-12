@@ -25,7 +25,7 @@ namespace UI
 		pState(fullScreen ? wsMaximized : wsNormal),
 		pMouse(nullptr)
 	{
-		pActiveView = new View(0, 0, width, height, 127, true);
+		pActiveView = new View(0.0f, 0.0f, (float)width, (float)height, 127, true);
 		pViewList.push_back(pActiveView);
 	}
 
@@ -62,11 +62,11 @@ namespace UI
 	{
 		if (!view)
 			return;
-		clearRect(view->x(), view->y(), view->width(), view->height());
+		clearRect((int)view->x(), (int)view->y(), (uint)view->width(), (uint)view->height());
 	}
 
 
-	View::Ptr RenderWindow::createView(int x, int y, uint w, uint h, uint8 z)
+	View::Ptr RenderWindow::createView(float x, float y, float w, float h, uint8 z)
 	{
 		View::Ptr newView = new View(x, y, w, h, z);
 		newView->initShaders();

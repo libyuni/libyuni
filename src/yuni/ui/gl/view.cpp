@@ -1,4 +1,3 @@
-#include <yuni/core/math.h>
 #include "view.h"
 #include "shadermanager.h"
 #include "texture.h"
@@ -10,12 +9,12 @@ namespace UI
 {
 
 
-	View::View(int x, int y, uint w, uint h, uint8 z, bool visible) :
+	View::View(float x, float y, float w, float h, uint8 z, bool visible) :
 		pID(UUID::fGenerate),
 		pX(x),
 		pY(y),
 		pWidth(w),
-		pHeight(h > 0 ? h : 1), // Forbid null height to avoid divide by 0
+		pHeight(Math::Max(h, 1.0f)), // Forbid null height to avoid divide by 0
 		pZ(z),
 		pVisible(visible),
 		pTextShaders(nullptr),
@@ -76,7 +75,7 @@ namespace UI
 		::glPushAttrib(GL_VIEWPORT_BIT);
 
 		// Reset The Current Viewport
-		::glViewport(pX, pY, pWidth, pHeight);
+		::glViewport((int)pX, (int)pY, (uint)pWidth, (uint)pHeight);
 
 		/*
 		if (!(!pCamera))
@@ -164,16 +163,16 @@ namespace UI
 			if (!pUISurface)
 			{
 				// Avoid texture creation with a 0 dimension
-				pUISurface = new DrawingSurface(Math::Max(pControl->width(), 1),
-					Math::Max(pControl->height(), 1));
+				pUISurface = new DrawingSurface(Math::Max(pControl->width(), 1.0f),
+					Math::Max(pControl->height(), 1.0f));
 				pUISurface->begin();
 				pControl->draw(pUISurface);
 				pUISurface->commit();
 			}
 			else if (pControl->modified())
 			{
-				pUISurface->resize(Math::Max(pControl->width(), 1),
-					Math::Max(pControl->height(), 1));
+				pUISurface->resize(Math::Max(pControl->width(), 1.0f),
+					Math::Max(pControl->height(), 1.0f));
 				pUISurface->begin();
 				pControl->draw(pUISurface);
 				pUISurface->commit();
@@ -213,8 +212,8 @@ namespace UI
 	}
 
 
-	void View::drawPicture(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width,
-		uint height, bool flip, bool invert) const
+	void View::drawPicture(const Gfx3D::Texture::Ptr& texture, float x, float y, float width,
+		float height, bool flip, bool invert) const
 	{
 		if (!texture)
 			return;
@@ -225,7 +224,7 @@ namespace UI
 		::glBindTexture(GL_TEXTURE_2D, texture->id());
 		pPictureShaders->bindUniform("Texture0", Yuni::Gfx3D::Vertex<>::vaTexture0);
 		pPictureShaders->bindUniform("FillColor", Color::RGBA<float>(0.0f, 0.0f, 0.0f, 0.0f));
-		pPictureShaders->bindUniform("Bounds", (float)x, (float)y, (float)(x + width), (float)(y + height));
+		pPictureShaders->bindUniform("Bounds", x, y, x + width, y + height);
 
 		// Set texture coordinates
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
@@ -256,12 +255,12 @@ namespace UI
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 		float vertices[] =
 			{
-				(float)x, (float)(y + height),
-				(float)x, (float)y,
-				(float)(x + width), (float)y,
-				(float)x, (float)(y + height),
-				(float)(x + width), (float)y,
-				(float)(x + width), (float)(y + height)
+				x, y + height,
+				x, y,
+				x + width, y,
+				x, y + height,
+				x + width, y,
+				x + width, y + height
 			};
 		if (invert)
 		{
@@ -284,7 +283,7 @@ namespace UI
 	}
 
 
-	IControl* View::getControlAt(int x, int y)
+	IControl* View::getControlAt(float x, float y)
 	{
 		if (!pControl)
 			return nullptr;
@@ -298,7 +297,7 @@ namespace UI
 		// If there are UI controls in this view
 		if (!(!pControl))
 			// Dispatch the event
-			propagate = pControl->doMouseMove(x, y, pEnteredControls);
+			propagate = pControl->doMouseMove((float)x, (float)y, pEnteredControls);
 		if (epContinue != propagate)
 			return propagate;
 		// If the event was not managed by UI in this view, try 3D picking
@@ -313,7 +312,7 @@ namespace UI
 		if (!(!pControl))
 		{
 			// Dispatch the event
-			EventPropagation propagate = pControl->doMouseDown(btn, x, y);
+			EventPropagation propagate = pControl->doMouseDown(btn, (float)x, (float)y);
 			if (epContinue != propagate)
 				return propagate;
 		}
@@ -334,7 +333,7 @@ namespace UI
 		// If there are UI controls in this view
 		if (!(!pControl))
 			// Dispatch the event
-			propagate = pControl->doMouseUp(btn, x, y);
+			propagate = pControl->doMouseUp(btn, (float)x, (float)y);
 		if (epContinue != propagate)
 			return propagate;
 		// If the event was not managed by UI in this view, try 3D picking
@@ -349,7 +348,7 @@ namespace UI
 		// If there are UI controls in this view
 		if (!(!pControl))
 			// Dispatch the event
-			propagate = pControl->doMouseDblClick(btn, x, y);
+			propagate = pControl->doMouseDblClick(btn, (float)x, (float)y);
 		if (epContinue != propagate)
 			return propagate;
 		// If the event was not managed by UI in this view, try 3D picking
@@ -364,7 +363,7 @@ namespace UI
 		// If there are UI controls in this view
 		if (!(!pControl))
 			// Dispatch the event
-			propagate = pControl->doMouseScroll(delta, x, y);
+			propagate = pControl->doMouseScroll(delta, (float)x, (float)y);
 		if (epContinue != propagate)
 			return propagate;
 		// If the event was not managed by UI in this view, try 3D picking
@@ -379,7 +378,7 @@ namespace UI
 		// If there are UI controls in this view
 		if (!(!pControl))
 			// Dispatch the event
-			propagate = pControl->doMouseHover(x, y);
+			propagate = pControl->doMouseHover((float)x, (float)y);
 		if (epContinue != propagate)
 			return propagate;
 		// If the event was not managed by UI in this view, try 3D picking

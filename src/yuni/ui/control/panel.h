@@ -16,11 +16,11 @@ namespace Control
 	class Panel: public IControl
 	{
 	public:
-		Panel(int x, int y, uint width, uint height):
+		Panel(float x, float y, float width, float height):
 			IControl(x, y, width, height)
 		{}
 
-		Panel(const Point2D<>& position, const Point2D<>& size):
+		Panel(const Point2D<float>& position, const Point2D<float>& size):
 			IControl(position, size)
 		{}
 

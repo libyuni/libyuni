@@ -16,10 +16,10 @@ namespace Control
 
 		auto themeptr = Theme::Current();
 		auto& theme = *themeptr;
-		Point2D<int> pos(pPosition);
+		Point2D<float> pos(pPosition);
 		// If the panel is the root control, use absolute coordinates
 		if (root)
-			pos(0, 0);
+			pos(0.0f, 0.0f);
 		surface->beginRectangleClipping(pos.x, pos.y, pSize.x, pSize.y);
 		if (theme.panelColor.alpha > 0)
 		{

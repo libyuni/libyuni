@@ -1,10 +1,11 @@
 #ifndef __YUNI_UI_VIEW_H__
 # define __YUNI_UI_VIEW_H__
 
-# include <yuni/yuni.h>
-# include <yuni/core/dictionary.h>
-# include <yuni/core/smartptr.h>
-# include <yuni/uuid/uuid.h>
+# include "../../yuni.h"
+# include "../../core/dictionary.h"
+# include "../../core/math.h"
+# include "../../core/smartptr.h"
+# include "../../uuid/uuid.h"
 # include "../scene/camera.h"
 # include "../control/control.h"
 # include "../eventpropagation.h"
@@ -49,7 +50,7 @@ namespace UI
 
 	public:
 		//! Constructor
-		View(int x, int y, uint w, uint h, uint8 z = 127, bool visible = true);
+		View(float x, float y, float w, float h, uint8 z = 127, bool visible = true);
 
 		//! Destructor
 		virtual ~View();
@@ -58,32 +59,32 @@ namespace UI
 		const UUID& id() const { return pID; }
 
 		//! X position
-		int x() const { return pX; }
+		float x() const { return pX; }
 
 		//! Y position
-		int y() const { return pY; }
+		float y() const { return pY; }
 
 		//! Z order position, 0 is bottom / back, 255 is top / front
 		uint8 z() const { return pZ; }
 		void z(uint8 z) { pZ = z; }
 
 		//! Width of the view
-		uint width() const { return pWidth; }
+		float width() const { return pWidth; }
 
 		//! Height of the view
-		uint height() const { return pHeight; }
+		float height() const { return pHeight; }
 
 		//! Move the view to an absolute position
-		void moveTo(int x, int y) { pX = x; pY = y; }
+		void moveTo(float x, float y) { pX = x; pY = y; }
 		//! Move the view by a relative amount
-		void moveBy(int x, int y) { pX += x; pY += y; }
+		void moveBy(float x, float y) { pX += x; pY += y; }
 
 		//! Resize the view
-		void resize(uint width, uint height)
+		void resize(float width, float height)
 		{
 			assert(height > 0 && "Resizing view to a null or negative height !");
 			pWidth = width;
-			pHeight = height > 0 ? height : 1;
+			pHeight = Math::Max(height, 1.0f);
 		}
 
 		//! Get the visibility of the view : the view must have a camera to be visible !
@@ -123,7 +124,7 @@ namespace UI
 		IControl::Ptr& rootControl() { return pControl; }
 
 		//! Get the top-most control at given coordinates. (Mainly useful for clicking)
-		IControl* getControlAt(int x, int y);
+		IControl* getControlAt(float x, float y);
 
 		/*!
 		** \brief Draw the view
@@ -150,8 +151,8 @@ namespace UI
 		void drawOverlay(const PictureOverlay& text) const;
 
 		//! Draw a texture at the given coordinates (in pixels)
-		void drawPicture(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width,
-			uint height, bool flip = false, bool invert = false) const;
+		void drawPicture(const Gfx3D::Texture::Ptr& texture, float x, float y, float width,
+			float height, bool flip = false, bool invert = false) const;
 
 		//! Draw all 2D elements : overlays and UI
 		void draw2D() const;
@@ -164,15 +165,15 @@ namespace UI
 		UUID pID;
 
 		//! X position in pixels (relative to the window)
-		int pX;
+		float pX;
 		//! Y position in pixels (relative to the window)
-		int pY;
+		float pY;
 
 		//! Width of the view in pixels
-		uint pWidth;
+		float pWidth;
 
 		//! Height of the view in pixels
-		uint pHeight;
+		float pHeight;
 
 		//! Z-order, the higher the closer to the viewer
 		uint8 pZ;

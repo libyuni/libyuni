@@ -16,7 +16,7 @@ namespace Control
 
 		auto themeptr = Theme::Current();
 		auto& theme = *themeptr;
-		Point2D<int> pos(pPosition);
+		Point2D<float> pos(pPosition);
 		// If the button is the root control, use absolute coordinates
 		if (root)
 			pos(0, 0);

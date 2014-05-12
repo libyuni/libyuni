@@ -1,4 +1,5 @@
 # include "drawingsurface.h"
+# include "../../core/math.h"
 # include "../../io/file.h"
 # include "../../private/graphics/opengl/glew/glew.h"
 # include "framebuffer.h"
@@ -21,18 +22,18 @@ namespace UI
 	{
 	public:
 		//! Clipping coordinates
-		typedef std::pair<Point2D<int>, Point2D<int> > ClipCoord;
+		typedef std::pair<Point2D<float>, Point2D<float> > ClipCoord;
 
 		//! Stack type to store clipping coordinates
 		typedef std::vector<ClipCoord>  ClipStack;
 
 	public:
-		DrawingSurfaceImpl(uint width, uint height);
+		DrawingSurfaceImpl(float width, float height);
 		~DrawingSurfaceImpl();
 
 	public:
 		//! Surface size
-		Point2D<uint> size;
+		Point2D<float> size;
 
 		//! Is the surface locked for drawing ?
 		bool locked;
@@ -65,10 +66,10 @@ namespace UI
 
 
 
-	DrawingSurfaceImpl::DrawingSurfaceImpl(uint width, uint height):
+	DrawingSurfaceImpl::DrawingSurfaceImpl(float width, float height):
 		size(width, height),
 		locked(false),
-		fb(width, height)
+		fb(Math::Max((uint)Math::Ceil(width), 0u), Math::Max((uint)Math::Ceil(height), 0u))
 	{
 		fb.initialize(Gfx3D::FrameBuffer::fbDraw);
 		auto& shaderManager = Gfx3D::ShaderManager::Instance();
@@ -145,7 +146,7 @@ namespace UI
 	///////////////////// DrawingSurface
 
 
-	DrawingSurface::DrawingSurface(uint width, uint height):
+	DrawingSurface::DrawingSurface(float width, float height):
 		pImpl(new DrawingSurfaceImpl(width, height))
 	{
 	}
@@ -188,7 +189,7 @@ namespace UI
 		::glEnable(GL_SCISSOR_TEST);
 		::glEnable(GL_BLEND);
 
-		::glViewport(0, 0, pImpl->size.x, pImpl->size.y);
+		::glViewport(0, 0, (uint)Math::Ceil(pImpl->size.x), (uint)Math::Ceil(pImpl->size.y));
 
 		clear();
 	}
@@ -235,18 +236,19 @@ namespace UI
 	}
 
 
-	void DrawingSurface::resize(uint width, uint height)
+	void DrawingSurface::resize(float width, float height)
 	{
 		auto& size = pImpl->size;
-		if (width == size.x && height == size.y)
+		if (width <= 0 || height <= 0 ||
+			(Math::Equals(width, size.x) && Math::Equals(height, size.y)))
 			return;
 		size(width, height);
-		pImpl->fb.resize(width, height);
+		pImpl->fb.resize((uint)Math::Ceil(width), (uint)Math::Ceil(height));
 	}
 
 
 	void DrawingSurface::drawText(const String& text, const FTFont::Ptr& font,
-		const Color::RGBA<float>& color, int x, int y)
+		const Color::RGBA<float>& color, float x, float y)
 	{
 		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
 
@@ -261,7 +263,7 @@ namespace UI
 
 		// Update
 		overlay.update();
-		if (!overlay.width() || !overlay.height())
+		if (Math::Zero(overlay.width()) || Math::Zero(overlay.height()))
 			return;
 		// Draw
 		overlay.draw(pImpl->textShader);
@@ -271,11 +273,11 @@ namespace UI
 
 
 	void DrawingSurface::drawTextInRect(const String& text, const FTFont::Ptr& font,
-		const Color::RGBA<float>& color, int x, int y, uint width, uint height)
+		const Color::RGBA<float>& color, float x, float y, float width, float height)
 	{
 		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
 
-		if (text.empty() || !width || !height)
+		if (text.empty() || Math::Zero(width) || Math::Zero(height))
 			return;
 
 		auto& overlay = pImpl->text;
@@ -285,10 +287,10 @@ namespace UI
 		// Update to get the correct necessary size
 		overlay.update();
 
-		if (!overlay.width() || !overlay.height())
+		if (Math::Zero(overlay.width()) || Math::Zero(overlay.height()))
 			return;
-		int middleX = width / 2;
-		int middleY = height / 2;
+		float middleX = width / 2.0f;
+		float middleY = height / 2.0f;
 		// Moving does not require to call update() again
 		overlay.move(x + middleX - overlay.width() / 2, y + middleY - overlay.height() / 2);
 
@@ -300,28 +302,29 @@ namespace UI
 	}
 
 
-	void DrawingSurface::drawLine(const Color::RGBA<float>& color, int startX, int startY,
-		int endX, int endY, float lineWidth)
+	void DrawingSurface::drawLine(const Color::RGBA<float>& color, float startX, float startY,
+		float endX, float endY, float lineWidth)
 	{
 		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
 
-		line((double)startX, (double)startY, (double)endX, (double)endY, lineWidth,
+		line(startX, startY, endX, endY, lineWidth,
 			 color.red, color.green, color.blue, color.alpha, 0, 0, 0, 0, true);
 	}
 
 	void DrawingSurface::drawLine(const Color::RGBA<float>& color, const Color::RGBA<float>& bgColor,
-		int startX, int startY, int endX, int endY, float lineWidth)
+		float startX, float startY, float endX, float endY, float lineWidth)
 	{
 		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
 
-		line((double)startX, (double)startY, (double)endX, (double)endY, lineWidth,
+		line(startX, startY, endX, endY, lineWidth,
 			 color.red, color.green, color.blue, color.alpha,
 			 bgColor.red, bgColor.green, bgColor.blue, bgColor.alpha, true);
 	}
 
 
 	void DrawingSurface::drawRectangle(const Color::RGBA<float>& frontColor,
-		const Color::RGBA<float>& backColor, int x, int y, uint width, uint height, float lineWidth)
+		const Color::RGBA<float>& backColor, float x, float y, float width, float height,
+		float lineWidth)
 	{
 		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
 
@@ -331,21 +334,21 @@ namespace UI
 		pImpl->lineShader->activate();
 
 		// Top line
-		line((double)x, (double)y, (double)(x + width), (double)y, lineWidth,
+		line(x, y, x + width, y, lineWidth,
 			frontColor.red, frontColor.green, frontColor.blue, frontColor.alpha,
 			backColor.red, backColor.green, backColor.blue, backColor.alpha, true);
 		// Bottom line
-		line((double)x, (double)(y + height) - lineWidth,
-		 	(double)(x + width), (double)(y + height) - lineWidth, lineWidth,
+		line(x, y + height - lineWidth,
+		 	x + width, y + height - lineWidth, lineWidth,
 			frontColor.red, frontColor.green, frontColor.blue, frontColor.alpha,
 			backColor.red, backColor.green, backColor.blue, backColor.alpha, true);
 		// Left line
-		line((double)x, (double)y, (double)x, (double)(y + height), lineWidth,
+		line(x, y, x, y + height, lineWidth,
 			frontColor.red, frontColor.green, frontColor.blue, frontColor.alpha,
 			backColor.red, backColor.green, backColor.blue, backColor.alpha, true);
 		// Right line
-		line((double)(x + width) - lineWidth, (double)y,
-			(double)(x + width) - lineWidth, (double)(y + height), lineWidth,
+		line(x + width - lineWidth, y,
+			x + width - lineWidth, y + height, lineWidth,
 			frontColor.red, frontColor.green, frontColor.blue, frontColor.alpha,
 			backColor.red, backColor.green, backColor.blue, backColor.alpha, true);
 
@@ -354,18 +357,18 @@ namespace UI
 
 
 	void DrawingSurface::drawFilledRectangle(const Color::RGBA<float>& frontColor,
-		const Color::RGBA<float>& backColor, int x, int y, uint width, uint height, float lineWidth)
+		const Color::RGBA<float>& backColor, float x, float y, float width, float height, float lineWidth)
 	{
 		// Draw the back as a quad with the proper color
 		pImpl->baseShader->bindUniform("Color", backColor);
 		const float vertices[] =
 			{
-				(float)x, (float)(y + height),
-				(float)x, (float)y,
-				(float)(x + width), (float)y,
-				(float)x, (float)(y + height),
-				(float)(x + width), (float)y,
-				(float)(x + width), (float)(y + height)
+				x, y + height,
+				x, y,
+				x + width, y,
+				x, y + height,
+				x + width, y,
+				x + width, y + height
 			};
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, false, 0, vertices);
@@ -385,23 +388,23 @@ namespace UI
 	}
 
 
-	void DrawingSurface::drawImage(const Gfx3D::Texture::Ptr& texture, int x, int y, uint width,
-		uint height, const Color::RGBA<float>& fillColor, DisplayMode dispMode,
-		int reqOffsetX, int reqOffsetY, float imageOpacity)
+	void DrawingSurface::drawImage(const Gfx3D::Texture::Ptr& texture, float x, float y,
+		float width, float height, const Color::RGBA<float>& fillColor, DisplayMode dispMode,
+		float reqOffsetX, float reqOffsetY, float imageOpacity)
 	{
 		pImpl->pictureShader->activate();
 
 		const float texWidth = (float)texture->width();
 		const float texHeight = (float)texture->height();
-		const float overlayWidth = (float)width;
-		const float overlayHeight = (float)height;
+		const float overlayWidth = width;
+		const float overlayHeight = height;
 		// dispMode == dmNone
 		float offsetX = 0.0f;
 		float offsetY = 0.0f;
 		if (dispMode == dmOffset)
 		{
-			offsetX = (float)reqOffsetX;
-			offsetY = (float)reqOffsetY;
+			offsetX = reqOffsetX;
+			offsetY = reqOffsetY;
 		}
 		else if (dispMode == dmCenter)
 		{
@@ -412,8 +415,8 @@ namespace UI
 		float maxTexX = 1.0f;
 		float minTexY = 0.0f;
 		float maxTexY = 1.0f;
-		float xStart = (float)x;
-		float yStart = (float)y;
+		float xStart = x;
+		float yStart = y;
 		float xEnd = xStart + overlayWidth;
 		float yEnd = yStart + overlayHeight;
 		switch (dispMode)
@@ -500,12 +503,12 @@ namespace UI
 	}
 
 
-	void DrawingSurface::beginRectangleClipping(int x, int y, uint width, uint height)
+	void DrawingSurface::beginRectangleClipping(float x, float y, float width, float height)
 	{
 		assert(pImpl->locked && "DrawingSurface error : Cannot manage clipping on an unlocked surface !");
-		::glScissor(x, pImpl->size.y - height - y, width, height);
+		::glScissor((int)x, (int)(pImpl->size.y - height - y), (uint)width, (uint)height);
 		pImpl->clippings.push_back(DrawingSurfaceImpl::ClipCoord(
-			Point2D<int>(x, pImpl->size.y - height - y), Point2D<int>(width, height)));
+			Point2D<float>(x, pImpl->size.y - height - y), Point2D<float>(width, height)));
 	}
 
 
@@ -517,7 +520,8 @@ namespace UI
 		{
 			// Reapply previous clipping
 			const auto& coord = pImpl->clippings.back();
-			::glScissor(coord.first.x, coord.first.y, coord.second.x, coord.second.y);
+			::glScissor((int)coord.first.x, (int)coord.first.y,
+				(uint)coord.second.x, (uint)coord.second.y);
 		}
 	}
 
@@ -528,13 +532,13 @@ namespace UI
 	}
 
 
-	uint DrawingSurface::width() const
+	float DrawingSurface::width() const
 	{
 		return pImpl->size.x;
 	}
 
 
-	uint DrawingSurface::height() const
+	float DrawingSurface::height() const
 	{
 		return pImpl->size.y;
 	}

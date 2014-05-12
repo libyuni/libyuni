@@ -222,7 +222,7 @@ namespace UI
 		//! \name View management
 		//@{
 		//! Create a view
-		View::Ptr createView(int x, int y, uint w, uint h, uint8 z = 127);
+		View::Ptr createView(float x, float y, float w, float h, uint8 z = 127);
 
 		//! Destroy a view, active view cannot be destroyed !
 		bool destroyView(const UUID& id);
