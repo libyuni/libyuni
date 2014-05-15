@@ -130,13 +130,13 @@ namespace System
 
 	bool UserHome(Clob& out, bool emptyBefore)
 	{
-		return UserHome(out, emptyBefore);
+		return UserHomeImpl(out, emptyBefore);
 	}
 
 
 	bool UserHome(String& out, bool emptyBefore)
 	{
-		return UserHome(out, emptyBefore);
+		return UserHomeImpl(out, emptyBefore);
 	}
 
 

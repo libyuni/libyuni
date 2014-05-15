@@ -89,14 +89,14 @@ namespace Directory
 
 		static bool RecursiveDeleteWindow(const wchar_t* path, uint size)
 		{
-			enum
-			{
-				maxLen = (MAX_PATH < 1024) ? 1024 : MAX_PATH,
-			};
+			enum { maxLen = (MAX_PATH < 1024) ? 1024 : MAX_PATH };
+
+			if (size >= maxLen)
+				return false;
 
 			// temporary buffer for filename manipulation
 			wchar_t* filename = new wchar_t[maxLen];
-			::wcsncpy(filename, path, size);
+			::wcsncpy_s(filename, maxLen, path, size);
 			if (size + 2 < maxLen)
 			{
 				filename[size++] = L'\\';

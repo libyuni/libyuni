@@ -176,7 +176,7 @@ namespace Job
 		** \note Event if in the list, a job may already have finished
 		**   its work at the end of this method.
 		*/
-		void activitySnapshot(typename ThreadInfo::Vector& out);
+		void activitySnapshot(ThreadInfo::Vector& out);
 
 		/*!
 		** \brief Get the number of jobs waiting to be executed

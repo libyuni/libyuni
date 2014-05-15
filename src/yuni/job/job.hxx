@@ -69,7 +69,7 @@ namespace Job
 		// The first important value is the state
 		info.state = (Yuni::Job::State) ((int) (pState));
 		// Then, if the job is canceling its work
-		info.canceling = pCanceling;
+		info.canceling = (0 != pCanceling);
 
 		info.progression = pProgression;
 		info.name = caption();

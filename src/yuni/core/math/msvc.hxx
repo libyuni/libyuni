@@ -2,7 +2,8 @@
 # define __YUNI_CORE_MATH_MSVC_HXX__
 
 
-# ifdef YUNI_OS_MSVC
+# if defined(YUNI_OS_MSVC) && _MSC_VER < 1800
+
 
 /* Those functions are not available on Windows... */
 
