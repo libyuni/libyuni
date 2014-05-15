@@ -3,7 +3,9 @@
 #include "../../core/system/cpu.h"
 #include "../../thread/array.h"
 #include "../../private/jobs/queue/thread.h"
-#include <unistd.h>
+#ifndef YUNI_OS_WINDOWS
+	#include <unistd.h>
+#endif
 
 
 namespace Yuni
