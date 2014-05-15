@@ -5,10 +5,10 @@
 #
 macro(DEVPACK_IMPORT_FFMPEG)
 	if(WIN64)
-		DEVPACK_IMPORT("ffmpeg" "gitf97e28e" "1" "windows" "x86_64" "all" "all" "all")
+		DEVPACK_IMPORT("ffmpeg" "git09cd228" "1" "windows" "x86_64" "all" "all" "all")
 	else()
 		if (WIN32)
-			DEVPACK_IMPORT("ffmpeg" "gitf97e28e" "1" "windows" "i386" "all" "all" "all")
+			DEVPACK_IMPORT("ffmpeg" "git09cd228" "1" "windows" "i386" "all" "all" "all")
 		else()
 			DEVPACK_IMPORT("ffmpeg" "1.1.1" "1" "all" "all" "${DEVPACK_COMPILER}" "all")
 		endif()
