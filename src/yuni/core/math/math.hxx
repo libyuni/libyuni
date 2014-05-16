@@ -10,7 +10,7 @@
 
 
 
-# ifdef YUNI_OS_MSVC
+# if defined(YUNI_OS_MSVC) && _MSC_VER < 1800
 /* Those functions are not available on Windows... */
 double rint(double nr);
 #	ifdef YUNI_HAS_LONG_DOUBLE
@@ -591,8 +591,7 @@ namespace Math
 } // namespace Math
 } // namespace Yuni
 
-
-# ifdef YUNI_OS_MSVC
+# if defined(YUNI_OS_MSVC) && _MSC_VER < 1800
 #	include "msvc.hxx"
 # endif
 
