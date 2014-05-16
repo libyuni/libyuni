@@ -140,13 +140,13 @@ namespace Media
 				{
 					if ((uint64)AV_NOPTS_VALUE == (uint64)packet->dts and pFrame->opaque
 						&& (uint64)AV_NOPTS_VALUE != *(uint64*)pFrame->opaque)
-						pCrtPts = *(uint64*)pFrame->opaque;
+						pCrtPts = (double)*(uint64*)pFrame->opaque;
 					else if ((uint64)AV_NOPTS_VALUE != (uint64)packet->dts)
-						pCrtPts = packet->dts;
+						pCrtPts = (double)packet->dts;
 					else
 						pCrtPts = 0.0;
 					// pCrtPts = ::av_frame_get_best_effort_timestamp(pFrame);
-					float timeRatio = ::av_q2d(pFormat->streams[pIndex]->time_base);
+					double timeRatio = ::av_q2d(pFormat->streams[pIndex]->time_base);
 					pCrtPts *= timeRatio;
 					pCrtPts -= (pFormat->streams[pIndex]->start_time * timeRatio);
 					break;
@@ -268,15 +268,15 @@ namespace Media
 
 		auto* avStream = pFormat->streams[pIndex];
 
-		float den = avStream->avg_frame_rate.den;
+		float den = (float)avStream->avg_frame_rate.den;
 		float variable = 0.0f;
 		if (den > 0.0f) // avoid divide by 0
-			variable = ::av_q2d(avStream->avg_frame_rate);
+			variable = (float)::av_q2d(avStream->avg_frame_rate);
 
-		den = avStream->time_base.num;
+		den = (float)avStream->time_base.num;
 		float constant = 0.0f;
 		if (den > 0.0f) // avoid divide by 0
-			constant = pCodec->ticks_per_frame * avStream->time_base.den / den;
+			constant = (float)(pCodec->ticks_per_frame * avStream->time_base.den) / den;
 
 		return Math::Max(variable, constant);
 	}

@@ -63,7 +63,7 @@ namespace Media
 	uint File::duration() const
 	{
 		assert(pFormat and "invalid format");
-		return pFormat ? (pFormat->duration / AV_TIME_BASE) : 0;
+		return pFormat ? (uint)(pFormat->duration / AV_TIME_BASE) : 0;
 	}
 
 

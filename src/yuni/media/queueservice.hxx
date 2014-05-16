@@ -7,13 +7,13 @@ namespace Yuni
 namespace Media
 {
 
-	inline sint64 QueueService::Emitters::elapsedTime(const AnyString& name)
+	inline float QueueService::Emitters::elapsedTime(const AnyString& name)
 	{
 		return elapsedTime(get(name));
 	}
 
 
-	inline sint64 QueueService::Emitters::elapsedTime(Emitter::Ptr emitter)
+	inline float QueueService::Emitters::elapsedTime(Emitter::Ptr emitter)
 	{
 		return !emitter ? 0 : emitter->elapsedTime();
 	}

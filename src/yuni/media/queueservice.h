@@ -78,9 +78,9 @@ namespace Media
 				const Vector3D<>& velocity, const Vector3D<>& direction);
 
 			//! Get elapsed playback time on an emitter
-			sint64 elapsedTime(const AnyString& name);
+			float elapsedTime(const AnyString& name);
 			//! Get elapsed playback time on an emitter
-			sint64 elapsedTime(Emitter::Ptr emitter);
+			float elapsedTime(Emitter::Ptr emitter);
 
 			//! Get whether an emitter is playing
 			bool playing(const AnyString& name);

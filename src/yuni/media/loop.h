@@ -57,6 +57,8 @@ namespace Media
 		//! When closing we must not execute onLoop()
 		bool pClosing;
 
+		friend LoopType::FlowPolicy;
+
 	}; // class Loop
 
 
