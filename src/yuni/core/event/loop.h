@@ -200,7 +200,7 @@ namespace EventLoop
 		ThreadType* pThread;
 
 		// Our friends
-		friend class FlowT<EventLoopType>;
+		friend FlowT<EventLoopType>;
 		template<class EventLoopT> friend class Yuni::Private::Core::EventLoop::Thread;
 
 	}; // class IEventLoop<>
