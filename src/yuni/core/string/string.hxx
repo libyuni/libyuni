@@ -2687,9 +2687,11 @@ namespace Yuni
 		do
 		{
 			bool hasTrimmed = false;
+			char c = AncestorType::data[AncestorType::size - 1];
+
 			for (uint i = 0; i != whitespaces.size(); ++i)
 			{
-				if (whitespaces[i] == AncestorType::data[AncestorType::size - 1])
+				if (whitespaces[i] == c)
 				{
 					--AncestorType::size;
 					hasTrimmed = true;
