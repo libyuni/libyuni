@@ -31,7 +31,7 @@ namespace LogImpl
 	** \tparam E A non-zero value if the message must be managed
 	*/
 	template<class LogT, class V, int E>
-	class Buffer
+	class YUNI_DECL Buffer final
 	{
 	public:
 		//! Type of the calling logger
@@ -101,7 +101,7 @@ namespace LogImpl
 
 	// Specialization when a verbosty level is disabled
 	template<class LogT, class V>
-	class Buffer<LogT,V,0>
+	class YUNI_DECL Buffer<LogT, V, 0> final
 	{
 	public:
 		//! Type of the calling logger

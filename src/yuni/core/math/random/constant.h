@@ -19,7 +19,7 @@ namespace Random
 	** Provides always the same value, given through the constructor
 	*/
 	template<typename T>
-	class Constant : public Distribution<T, Constant>
+	class YUNI_DECL Constant final : public Distribution<T, Constant>
 	{
 	public:
 		// Name of the distribution
@@ -38,6 +38,7 @@ namespace Random
 		const T pValue;
 
 	}; // class Constant
+
 
 
 

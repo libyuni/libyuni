@@ -11,7 +11,6 @@ namespace System
 namespace Memory
 {
 
-
 	/*!
 	** \brief Get the amount of total physical memory
 	**
@@ -19,7 +18,7 @@ namespace Memory
 	** value will be used. (see defaultAvailable)
 	** \return A value in bytes
 	*/
-	uint64 Total();
+	YUNI_DECL uint64 Total();
 
 
 	/*!
@@ -29,7 +28,7 @@ namespace Memory
 	** value will be used. (see defaultAvailable)
 	** \return A value in bytes
 	*/
-	uint64 Available();
+	YUNI_DECL uint64 Available();
 
 
 
@@ -45,7 +44,7 @@ namespace Memory
 	**   the corresponding global routine instead, which will be at least as
 	**   fast as this this class, sometimes better.
 	*/
-	class Usage
+	YUNI_DECL class Usage final
 	{
 	public:
 		//! \name Constructor

@@ -11,7 +11,7 @@ namespace Logs
 {
 
 	template<class LeftType = NullDecorator>
-	class VerbosityLevel : public LeftType
+	class YUNI_DECL VerbosityLevel : public LeftType
 	{
 	public:
 		template<class Handler, class VerbosityType, class O>

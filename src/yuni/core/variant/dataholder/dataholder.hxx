@@ -14,7 +14,7 @@ namespace Variant
 	** \brief Specialisation for Bool to String.
 	*/
 	template<>
-	struct Converter<bool, String>
+	struct Converter<bool, String> final
 	{
 		// Please use Yuni::String << bool
 		static bool Value(const bool& from, String& to)

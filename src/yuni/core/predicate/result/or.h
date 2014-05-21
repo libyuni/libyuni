@@ -9,7 +9,7 @@ namespace Result
 
 
 	template<typename T>
-	struct Or
+	struct Or final
 	{
 	public:
 		//! Type of the result

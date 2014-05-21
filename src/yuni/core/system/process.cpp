@@ -10,12 +10,6 @@
 #endif
 
 
-#if defined(YUNI_OS_WINDOWS)
-#	define YUNI_OS_GETPID  GetCurrentProcessId
-#else
-#	define YUNI_OS_GETPID   getpid
-#endif
-
 
 
 namespace Yuni
@@ -23,7 +17,11 @@ namespace Yuni
 
 	uint64 ProcessID()
 	{
-		return (uint64) YUNI_OS_GETPID();
+		#if defined(YUNI_OS_WINDOWS)
+		return (uint64) GetCurrentProcessId();
+		#else
+		return (uint64) getpid();
+		#endif
 	}
 
 

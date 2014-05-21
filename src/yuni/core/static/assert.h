@@ -89,9 +89,9 @@ namespace Yuni
 namespace Static
 {
 
-	template<int N> struct Assert   { enum {result =  1}; }; // No error
+	template<int N> struct Assert   final { enum {result =  1}; }; // No error
 
-	template<> struct Assert<false> { enum {result = -1}; }; // Error
+	template<> struct Assert<false> final { enum {result = -1}; }; // Error
 
 
 } // namespace Static

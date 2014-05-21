@@ -17,7 +17,7 @@ namespace Memory
 
 
 	inline Usage::Usage(const Usage& copy)
-		:available(copy.available), total(copy.total)
+		: available(copy.available), total(copy.total)
 	{}
 
 

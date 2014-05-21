@@ -2,7 +2,9 @@
 #include "server.h"
 #include "../../../thread/signal.h"
 #include <cassert>
-#define _MSC_VER 0 // seems to be required with this version
+#ifndef _MSC_VER
+#define _MSC_VER 0 // seems to be required with this version of mongoose
+#endif
 #include "../../../private/net/messaging/transport/rest/mongoose.h"
 #include "request.inc.hpp"
 #include "../../../io/filename-manipulation.h"
@@ -27,12 +29,15 @@ namespace REST
 
 	Server::~Server()
 	{
-		delete pData;
+		ServerData* ptr = pData;
+		pData = nullptr;
+		delete ptr;
 	}
 
 
 	Net::Error  Server::start()
 	{
+		assert(pData and "internal error");
 		pData->service = pService;
 		assert(pService != NULL and "invalid reference to Messaging::Service");
 
@@ -58,7 +63,7 @@ namespace REST
 
 	void Server::wait()
 	{
-		if (pData)
+		if (YUNI_LIKELY(pData))
 		{
 			// wait for being stopped
 			if (pData->signal.valid())
@@ -67,8 +72,7 @@ namespace REST
 			}
 			else
 			{
-				// the code should never reach this location
-				// (unless the signal is invalid)
+				// the code should never reach this location (unless the signal is invalid)
 				pData->waitWithoutSignal();
 			}
 		}

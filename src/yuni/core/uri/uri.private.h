@@ -16,7 +16,7 @@ namespace Uri
 	/*!
 	** \brief Carrier for informations about an URI
 	*/
-	class YUNI_DECL Informations
+	class YUNI_DECL Informations final
 	{
 	public:
 		//! \name Constructors

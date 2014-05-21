@@ -14,7 +14,7 @@ namespace Yuni
 	** This routine does nothing on Windows
 	** This routine is an implementation of setproctitle
 	*/
-	char** RenameProcess(int argc, char** argv, const AnyString& newprocessname);
+	YUNI_DECL char** RenameProcess(int argc, char** argv, const AnyString& newprocessname);
 
 
 

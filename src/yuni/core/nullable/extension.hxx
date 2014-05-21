@@ -10,7 +10,7 @@ namespace CString
 {
 
 	template<class CStringT, class T, class Alloc>
-	struct Append<CStringT, Yuni::Nullable<T, Alloc> >
+	struct Append<CStringT, Yuni::Nullable<T, Alloc> > final
 	{
 		static void Perform(CStringT& s, const Yuni::Nullable<T,Alloc>& rhs)
 		{
@@ -22,7 +22,7 @@ namespace CString
 
 
 	template<class T, class Alloc>
-	class Into<Yuni::Nullable<T,Alloc> >
+	class Into<Yuni::Nullable<T,Alloc> > final
 	{
 	public:
 		typedef Yuni::Nullable<T,Alloc> TargetType;
@@ -42,7 +42,6 @@ namespace CString
 		{
 			return s.template to<T>();
 		}
-
 	};
 
 

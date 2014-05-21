@@ -45,7 +45,7 @@ namespace Yuni
 		sint64 tv_usec;
 	};
 
-	int gettimeofday(struct timeval *tv, struct timezone *tz);
+	YUNI_DECL int gettimeofday(struct timeval *tv, struct timezone *tz);
 
 	# define YUNI_SYSTEM_GETTIMEOFDAY  ::Yuni::gettimeofday
 

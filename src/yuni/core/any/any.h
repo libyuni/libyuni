@@ -41,10 +41,8 @@ namespace Yuni
 	public:
 		//! \name Constructors
 		//@{
-
 		//! Copy of an existing variable
-		template <typename T>
-		Any(const T& source);
+		template<class T> Any(const T& source);
 
 		//! Copy of an existing const C string
 		Any(const char* source)
@@ -62,7 +60,6 @@ namespace Yuni
 
 		//! Destructor
 		~Any();
-
 		//@}
 
 
@@ -81,7 +78,7 @@ namespace Yuni
 		** \param[in] rhs The object to assign from
 		** \return This Any
 		*/
-		template <typename T>
+		template<class T>
 		Any& assign(const T& rhs);
 
 		/*!
@@ -93,7 +90,7 @@ namespace Yuni
 		/*!
 		** \brief Assignment operator for convenience
 		*/
-		template <typename T>
+		template<class T>
 		Any& operator = (T const& rhs) {return assign(rhs);}
 
 		/*!
@@ -117,7 +114,7 @@ namespace Yuni
 		/*!
 		** \brief Returns true if the object is of the specified type
 		*/
-		template <typename T>
+		template<class T>
 		bool is() const {return type() == typeid(T);}
 
 
@@ -138,16 +135,14 @@ namespace Yuni
 		** if not possible.
 		** \return A T object.
 		*/
-		template <typename T>
+		template<class T>
 		const T& to() const;
 
 		//@}
 
 	private:
-
 		//! Special initializer for C Strings copys
-		template <typename T>
-		void initFromCString(T source);
+		template<class T> void initFromCString(T source);
 
 	private:
 		//! Static function pointer table storage

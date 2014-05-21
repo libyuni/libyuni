@@ -26,7 +26,7 @@ namespace CString
 
 	// C*
 	template<class CStringT, class T>
-	class Append<CStringT, T*>
+	class Append<CStringT, T*> final
 	{
 	public:
 		static void Perform(CStringT& s, const T* rhs)
@@ -38,7 +38,7 @@ namespace CString
 
 	// char*
 	template<class CStringT>
-	class Append<CStringT, char*>
+	class Append<CStringT, char*> final
 	{
 	public:
 		typedef typename CStringT::Type TypeC;
@@ -52,7 +52,7 @@ namespace CString
 
 	// C[N]
 	template<class CStringT, int N>
-	class Append<CStringT, char[N]>
+	class Append<CStringT, char[N]> final
 	{
 	public:
 		typedef typename CStringT::Type C;
@@ -69,7 +69,7 @@ namespace CString
 
 	// C
 	template<class CStringT>
-	class Append<CStringT, char>
+	class Append<CStringT, char> final
 	{
 	public:
 		typedef char C;
@@ -82,7 +82,7 @@ namespace CString
 
 	// C
 	template<class CStringT>
-	class Append<CStringT, unsigned char>
+	class Append<CStringT, unsigned char> final
 	{
 	public:
 		typedef unsigned char C;
@@ -94,7 +94,7 @@ namespace CString
 
 	// nullptr
 	template<class CStringT>
-	class Append<CStringT, YuniNullPtr>
+	class Append<CStringT, YuniNullPtr> final
 	{
 	public:
 		static void Perform(CStringT&, const YuniNullPtr&)
@@ -104,7 +104,7 @@ namespace CString
 
 	// bool
 	template<class CStringT>
-	class Append<CStringT, bool>
+	class Append<CStringT, bool> final
 	{
 	public:
 		static void Perform(CStringT& s, const bool rhs)
@@ -119,38 +119,45 @@ namespace CString
 
 	// void*
 	template<class CStringT>
-	class Append<CStringT, void*>
+	class Append<CStringT, void*> final
 	{
 	public:
 		static void Perform(CStringT& s, const void* rhs)
 		{
-			if (!rhs)
+			if (not rhs)
+			{
 				s.appendWithoutChecking("0x0", 3);
+			}
 			else
 			{
 				# ifdef YUNI_OS_MSVC
-				// With Visual Studio, the option %p does not provide the prefix 0x
-				typename CStringT::Type buffer[32];
-				buffer[0] = '0';
-				buffer[1] = 'x';
-				// On Windows, it may return a negative value
-				if (YUNI_PRIVATE_MEMBUF_SPTRINF(buffer + 2, sizeof(buffer) - 2, "%p", rhs) >= 0)
 				{
-					s.appendWithoutChecking(buffer,
-						Yuni::Traits::Length<typename CStringT::Type*, typename CStringT::Size>::Value(buffer));
+					// With Visual Studio, the option %p does not provide the prefix 0x
+					typename CStringT::Type buffer[32];
+					buffer[0] = '0';
+					buffer[1] = 'x';
+
+					// On Windows, it may return a negative value
+					if (YUNI_PRIVATE_MEMBUF_SPTRINF(buffer + 2, sizeof(buffer)-2, "%p", rhs) >= 0)
+					{
+						s.appendWithoutChecking(buffer,
+							Yuni::Traits::Length<typename CStringT::Type*, typename CStringT::Size>::Value(buffer));
+					}
+					else
+						s.appendWithoutChecking("0x0", 3);
 				}
-				else
-					s.appendWithoutChecking("0x0", 3);
 				# else
-				typename CStringT::Type buffer[32];
-				// On Windows, it may return a negative value
-				if (YUNI_PRIVATE_MEMBUF_SPTRINF(buffer, sizeof(buffer), "%p", rhs) >= 0)
 				{
-					s.appendWithoutChecking(buffer,
-						Yuni::Traits::Length<typename CStringT::Type*, typename CStringT::Size>::Value(buffer));
+					typename CStringT::Type buffer[32];
+					// On Windows, it may return a negative value
+					if (YUNI_PRIVATE_MEMBUF_SPTRINF(buffer, sizeof(buffer), "%p", rhs) >= 0)
+					{
+						s.appendWithoutChecking(buffer,
+							Yuni::Traits::Length<typename CStringT::Type*, typename CStringT::Size>::Value(buffer));
+					}
+					else
+						s.appendWithoutChecking("0x0", 3);
 				}
-				else
-					s.appendWithoutChecking("0x0", 3);
 				# endif
 			}
 		}
@@ -159,7 +166,7 @@ namespace CString
 
 	// void*
 	template<class CStringT>
-	class Append<CStringT, Yuni::UTF8::Char>
+	class Append<CStringT, Yuni::UTF8::Char> final
 	{
 	public:
 		static void Perform(CStringT& s, const Yuni::UTF8::Char& rhs)
@@ -174,7 +181,7 @@ namespace CString
 
 # define YUNI_PRIVATE_MEMORY_BUFFER_APPEND_IMPL(BUFSIZE, FORMAT, TYPE) \
 	template<class CStringT> \
-	class Append<CStringT, TYPE> \
+	class Append<CStringT, TYPE> final \
 	{ \
 	public: \
 		static void Perform(CStringT& s, const TYPE rhs) \
@@ -192,7 +199,7 @@ namespace CString
 
 # define YUNI_PRIVATE_MEMORY_BUFFER_APPEND_IMPL_INT(TYPE) \
 	template<class CStringT> \
-	class Append<CStringT, TYPE> \
+	class Append<CStringT, TYPE> final \
 	{ \
 	public: \
 		static void Perform(CStringT& s, const TYPE rhs) \
@@ -220,14 +227,14 @@ namespace CString
 
 	// std::vector<>
 	template<class CStringT, class T>
-	class Append<CStringT, std::vector<T> >
+	class Append<CStringT, std::vector<T> > final
 	{
 	public:
 		typedef std::vector<T> ListType;
 		static void Perform(CStringT& s, const ListType& rhs)
 		{
 			s += '[';
-			if (!rhs.empty())
+			if (not rhs.empty())
 			{
 				const typename ListType::const_iterator end = rhs.end();
 				typename ListType::const_iterator i = rhs.begin();
@@ -243,14 +250,14 @@ namespace CString
 
 	// std::vector<>
 	template<class CStringT, class T>
-	class Append<CStringT, std::list<T> >
+	class Append<CStringT, std::list<T> > final
 	{
 	public:
 		typedef std::list<T> ListType;
 		static void Perform(CStringT& s, const ListType& rhs)
 		{
 			s += '[';
-			if (!rhs.empty())
+			if (not rhs.empty())
 			{
 				const typename ListType::const_iterator end = rhs.end();
 				typename ListType::const_iterator i = rhs.begin();

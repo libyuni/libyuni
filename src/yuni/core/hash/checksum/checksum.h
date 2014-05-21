@@ -25,7 +25,7 @@ namespace Checksum
 	/*!
 	** \brief Checksum Implementation (Abstract)
 	*/
-	class IChecksum
+	class YUNI_DECL IChecksum
 	{
 	public:
 		//! \name Constructor & Destructor

@@ -13,7 +13,7 @@ namespace Statistics
 
 
 	template<class EventLoopT>
-	class None
+	class YUNI_DECL None
 	{
 	public:
 		//! Type of the event loop

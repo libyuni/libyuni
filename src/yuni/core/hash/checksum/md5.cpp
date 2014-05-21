@@ -92,7 +92,7 @@ namespace Checksum
 {
 
 
-	namespace
+	namespace // anonymous
 	{
 
 		typedef unsigned char MD5TypeByte; // 8-bit byte
@@ -114,7 +114,7 @@ namespace Checksum
 
 
 
-		void md5_process(MD5TypeState* pms, const MD5TypeByte* data /*[64]*/)
+		void md5process(MD5TypeState* pms, const MD5TypeByte* data /*[64]*/)
 		{
 			MD5TypeUInt32
 				a = pms->abcd[0], b = pms->abcd[1],
@@ -126,7 +126,7 @@ namespace Checksum
 			# else
 			// Define storage for little-endian or both types of CPUs
 			MD5TypeUInt32 xbuf[16];
-			const MD5TypeUInt32 *X;
+			const MD5TypeUInt32* X;
 			# endif
 
 			{
@@ -136,7 +136,7 @@ namespace Checksum
 				// algorithm on the latter.
 				static const int w = 1;
 
-				if (*((const MD5TypeByte *)&w)) /* dynamic little-endian */
+				if (*((const MD5TypeByte*)&w)) /* dynamic little-endian */
 				# endif
 				# if BYTE_ORDER <= 0		/* little-endian */
 				{
@@ -162,7 +162,7 @@ namespace Checksum
 				{
 					// On big-endian machines, we must arrange the bytes in the
 					// right order.
-					const MD5TypeByte *xp = data;
+					const MD5TypeByte* xp = data;
 
 				#  if BYTE_ORDER == 0
 					X = xbuf;       // (dynamic only)
@@ -291,7 +291,7 @@ namespace Checksum
 		}
 
 
-		void md5ImplInit(MD5TypeState *pms)
+		void md5ImplInit(MD5TypeState* pms)
 		{
 			pms->count[0] = pms->count[1] = 0;
 			pms->abcd[0]  = 0x67452301;
@@ -301,7 +301,7 @@ namespace Checksum
 		}
 
 
-		void md5ImplAppend(MD5TypeState *pms, const MD5TypeByte *data, uint nbytes)
+		void md5ImplAppend(MD5TypeState* pms, const MD5TypeByte* data, uint nbytes)
 		{
 			const MD5TypeByte* p = data;
 			uint left = nbytes;
@@ -327,12 +327,12 @@ namespace Checksum
 					return;
 				p += copy;
 				left -= copy;
-				md5_process(pms, pms->buf);
+				md5process(pms, pms->buf);
 			}
 
 			// Process full blocks
 			for (; left >= 64; p += 64, left -= 64)
-				md5_process(pms, p);
+				md5process(pms, p);
 
 			// Process a final partial block
 			if (left)
@@ -341,7 +341,7 @@ namespace Checksum
 
 
 
-		void md5ImplFinish(MD5TypeState *pms, MD5TypeByte digest[16])
+		void md5ImplFinish(MD5TypeState* pms, MD5TypeByte digest[16])
 		{
 			static const MD5TypeByte pad[64] =
 			{

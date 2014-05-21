@@ -61,7 +61,7 @@ namespace EventLoop
 		template<class> class StatsT = Statistics::None,  // The statistics policy
 		bool DetachedT = true                             // Use a separate thread or not
 		>
-	class IEventLoop
+	class YUNI_DECL IEventLoop
 		: public Policy::ObjectLevelLockableNotRecursive<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
 		, public FlowT<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >
 		, public StatsT<IEventLoop<ParentT,FlowT,StatsT,DetachedT> >

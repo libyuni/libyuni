@@ -8,7 +8,6 @@ namespace Yuni
 namespace Static
 {
 
-
 	/*!
 	** \brief Move Constructor (C++ idiom)
 	**

@@ -13,7 +13,7 @@ namespace Extension
 	/*!
 	** \brief Extension: Convert any type into a mere C-String
 	*/
-	template<class C> class IntoCString
+	template<class C> class IntoCString final
 	{
 	public:
 		enum { valid = 0, converted = 0, zeroTerminated = 0, };
@@ -38,7 +38,7 @@ namespace Traits
 	** \tparam U Any class. See the specialization of the class Yuni::Extension::IntoCString
 	*/
 	template<class U>
-	class CString
+	class CString final
 	{
 	public:
 		//! The original type without its const qualifier

@@ -16,7 +16,7 @@ namespace Yuni
 	** \brief An edge is a segment between two vertices
 	** \ingroup Gfx
 	*/
-	class Edge
+	class YUNI_DECL Edge final
 	{
 	public:
 		typedef SmartPtr<Edge> Ptr;

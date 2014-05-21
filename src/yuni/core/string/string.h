@@ -2089,7 +2089,7 @@ namespace Traits
 	** \brief Class helper to know if a type is a valid string representation
 	*/
 	template<class U>
-	class IsString
+	class YUNI_DECL IsString final
 	{
 	public:
 		enum

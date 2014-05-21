@@ -10,7 +10,7 @@
 */
 # define YUNI_IMPL_STATIC_HAS_TYPEDEF(TYPEDEF)  \
 		template<class T> \
-		class TYPEDEF \
+		class TYPEDEF final \
 		{ \
 			typedef struct {char a[2];}   TrueType; \
 			typedef char  FalseType; \

@@ -429,7 +429,7 @@ namespace Math
 
 
 	template<class T, class R>
-	struct RoundToInt final
+	struct YUNI_DECL RoundToInt final
 	{
 		typedef T Type;
 		typedef R ResultType;
@@ -441,7 +441,7 @@ namespace Math
 	};
 
 	template<class T>
-	struct RoundToInt<T,T> final
+	struct YUNI_DECL RoundToInt<T, T> final
 	{
 		typedef T Type;
 		typedef T ResultType;
@@ -454,25 +454,25 @@ namespace Math
 
 
 	template<>
-	struct RoundToInt<float, double> final
+	struct YUNI_DECL RoundToInt<float, double> final
 	{
 		typedef float Type;
 		typedef double ResultType;
-		static inline ResultType Value(Type x) { return (ResultType)x; }
+		static inline ResultType Value(Type x) { return (ResultType) x; }
 	};
 
 	template<>
-	struct RoundToInt<double, float> final
+	struct YUNI_DECL RoundToInt<double, float> final
 	{
 		typedef double Type;
 		typedef float ResultType;
-		static inline ResultType Value(Type x) { return (ResultType)x; }
+		static inline ResultType Value(Type x) { return (ResultType) x; }
 	};
 
 
 
 	template<>
-	struct RoundToInt<float, long int> final
+	struct YUNI_DECL RoundToInt<float, long int> final
 	{
 		typedef float Type;
 		typedef long int ResultType;
@@ -480,7 +480,7 @@ namespace Math
 	};
 
 	template<>
-	struct RoundToInt<double, long int> final
+	struct YUNI_DECL RoundToInt<double, long int> final
 	{
 		typedef double Type;
 		typedef long int ResultType;
@@ -490,7 +490,7 @@ namespace Math
 
 	# ifdef YUNI_HAS_LONG_DOUBLE
 	template<>
-	struct RoundToInt<long double, long int> final
+	struct YUNI_DECL RoundToInt<long double, long int> final
 	{
 		typedef long double Type;
 		typedef long int ResultType;
@@ -501,7 +501,7 @@ namespace Math
 
 
 	template<>
-	struct RoundToInt<float, long long int> final
+	struct YUNI_DECL RoundToInt<float, long long int> final
 	{
 		typedef float Type;
 		typedef long long int ResultType;
@@ -509,7 +509,7 @@ namespace Math
 	};
 
 	template<>
-	struct RoundToInt<double, long long int> final
+	struct YUNI_DECL RoundToInt<double, long long int> final
 	{
 		typedef double Type;
 		typedef long long int ResultType;
@@ -518,7 +518,7 @@ namespace Math
 
 	# ifdef YUNI_HAS_LONG_DOUBLE
 	template<>
-	struct RoundToInt<long double, long long int> final
+	struct YUNI_DECL RoundToInt<long double, long long int> final
 	{
 		typedef long double Type;
 		typedef long long int ResultType;
@@ -570,11 +570,12 @@ namespace Math
 
 
 	template<class U, class V>
-	U GCD(U u, V v)
+	inline U GCD(U u, V v)
 	{
 		// Euclidean algorithm
 		if (!u)
 			return v;
+
 		while (v)
 		{
 			if (u > v)

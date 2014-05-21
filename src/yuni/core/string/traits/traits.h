@@ -23,13 +23,13 @@ namespace CStringImpl
 
 
 
-	int Compare(const char* const s1, uint l1, const char* const s2, uint l2);
-	int CompareInsensitive(const char* const s1, uint l1, const char* const s2, uint l2);
+	YUNI_DECL int Compare(const char* const s1, uint l1, const char* const s2, uint l2);
+	YUNI_DECL int CompareInsensitive(const char* const s1, uint l1, const char* const s2, uint l2);
 
-	bool Equals(const char* const s1, const char* const s2, uint len);
-	bool EqualsInsensitive(const char* const s1, const char* const s2, uint len);
+	YUNI_DECL bool Equals(const char* const s1, const char* const s2, uint len);
+	YUNI_DECL bool EqualsInsensitive(const char* const s1, const char* const s2, uint len);
 
-	bool Glob(const char* const s, uint l1, const char* const pattern, uint patternlen);
+	YUNI_DECL bool Glob(const char* const s, uint l1, const char* const pattern, uint patternlen);
 
 
 

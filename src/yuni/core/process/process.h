@@ -21,8 +21,9 @@ namespace Yuni
 	** process.argumentAdd("/tmp");
 	** process.execute();
 	** process.wait();
+	** \endcode
 	*/
-	class Process final
+	class YUNI_DECL Process final
 	{
 	public:
 		/*!
@@ -78,7 +79,8 @@ namespace Yuni
 		public:
 			Clob cout;
 			Clob cerr;
-		};
+
+		}; // class CaptureOutput
 
 
 	public:
@@ -196,7 +198,7 @@ namespace Yuni
 		bool dispatchExecution(const Bind<void (const Callback&)>& dispatcher, uint timeout);
 
 	private:
-		class ProcessEnvironment final
+		class YUNI_DECL ProcessEnvironment final
 		{
 		public:
 			//! Smart pointer

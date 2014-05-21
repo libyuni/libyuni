@@ -13,7 +13,7 @@ namespace Yuni
 	** \brief Represents a 2D-point
 	*/
 	template<class T = float>
-	class Point2D /* final */
+	class YUNI_DECL Point2D /* final */
 	{
 	public:
 		/*!

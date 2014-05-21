@@ -21,10 +21,10 @@ namespace CStringImpl
 	};
 
 
-	template<class T> struct TypeInfo { enum { kind = kindIntegral, }; };
-	template<> struct TypeInfo<float> { enum { kind = kindDecimal, }; };
-	template<> struct TypeInfo<double> { enum { kind = kindDecimal, }; };
-	template<> struct TypeInfo<long double> { enum { kind = kindDecimal, }; };
+	template<class T> struct TypeInfo final { enum { kind = kindIntegral, }; };
+	template<> struct TypeInfo<float> final { enum { kind = kindDecimal, }; };
+	template<> struct TypeInfo<double> final { enum { kind = kindDecimal, }; };
+	template<> struct TypeInfo<long double> final { enum { kind = kindDecimal, }; };
 
 
 
@@ -36,7 +36,7 @@ namespace CStringImpl
 
 
 	template<class BaseT, class T>
-	class From<BaseT, T, kindIntegral>
+	class From<BaseT, T, kindIntegral> final
 	{
 	public:
 		//! Type
@@ -122,7 +122,7 @@ namespace CStringImpl
 	// The conversion may not be what expected since no rounding
 	// is done.
 	template<class BaseT, class T>
-	class From<BaseT, T, kindDecimal>
+	class From<BaseT, T, kindDecimal> final
 	{
 	public:
 		//! Type
@@ -191,15 +191,14 @@ namespace CStringImpl
 		{
 			switch (precision)
 			{
-				// The most widely used value first
-				case 3: return 1000;
-				case 6: return 1000000;
-				case 1: return 10;
-				case 2: return 100;
-				case 4: return 10000;
-				case 5: return 100000;
-				case 7: return 10000000;
-				case 8: return 100000000;
+				case 3:  return 1000;      // The most widely used value first
+				case 6:  return 1000000;
+				case 1:  return 10;
+				case 2:  return 100;
+				case 4:  return 10000;
+				case 5:  return 100000;
+				case 7:  return 10000000;
+				case 8:  return 100000000;
 				default: return 1000000000;
 			}
 		}

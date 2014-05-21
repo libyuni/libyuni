@@ -15,7 +15,7 @@ namespace Logs
 	**
 	** This handler does produce nothing and skip all messages
 	*/
-	class NullHandler
+	class YUNI_DECL NullHandler
 	{
 	public:
 		template<class LoggerT, class VerbosityType>
@@ -31,7 +31,7 @@ namespace Logs
 	**
 	** This handler does produce nothing and skip all messages
 	*/
-	class NullDecorator
+	class YUNI_DECL NullDecorator
 	{
 	public:
 		template<class Handler, class VerbosityType, class O>

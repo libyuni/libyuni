@@ -15,21 +15,16 @@ namespace Yuni
 	** \brief A bounding box in 3D that grows with what is added inside
 	** \ingroup Gfx
 	*/
-	template <typename T = float>
-	class BoundingBox
+	template <class T = float>
+	class YUNI_DECL BoundingBox final
 	{
 	public:
 		//! \name Constructors and destructor
 		//@{
-
 		//! Default constructor
 		BoundingBox();
-
-		/*!
-		** \brief Constructor
-		*/
+		//! Constructor
 		BoundingBox(const Point3D<T>& min, const Point3D<T>& max);
-
 		//@}
 
 		/*!
@@ -67,8 +62,8 @@ namespace Yuni
 		**
 		** \param newCenter Reset the bounding box to a given position
 		*/
-		template<typename U>
-		void reset(Point3D<U> newCenter = Point3D<U>());
+		template<class U> void reset(Point3D<U> newCenter = Point3D<U>());
+
 
 	private:
 		//! Minimum X,Y,Z coordinates of the box

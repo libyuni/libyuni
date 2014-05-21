@@ -7,13 +7,13 @@ namespace Yuni
 namespace Messaging
 {
 
-	inline Service::Transports::Transports() :
-		pService()
+	inline Service::Transports::Transports()
+		: pService()
 	{}
 
 
-	inline Service::HeavyTasks::HeavyTasks() :
-		pService()
+	inline Service::HeavyTasks::HeavyTasks()
+		: pService()
 	{}
 
 
@@ -25,7 +25,7 @@ namespace Messaging
 
 	inline bool Service::HeavyTasks::enabled() const
 	{
-		return pEnabled;
+		return (0 != pEnabled);
 	}
 
 

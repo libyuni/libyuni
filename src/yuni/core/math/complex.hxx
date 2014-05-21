@@ -12,7 +12,7 @@ namespace IStringImpl
 
 	// std::complex
 	template<class MemBufT, class U>
-	struct Append<MemBufT, std::complex<U> >
+	struct YUNI_DECL Append<MemBufT, std::complex<U> > final
 	{
 		static void Do(MemBufT& memoryBuffer, const std::complex<U>& rhs)
 		{

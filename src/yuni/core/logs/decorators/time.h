@@ -13,9 +13,9 @@ namespace LogsDecorator
 
 	// Forward declarations
 	# if defined(YUNI_OS_MINGW)
-	char* WriteCurrentTimestampToBufferMinGW(void);
+	YUNI_DECL char* WriteCurrentTimestampToBufferMinGW(void);
 	# else
-	void WriteCurrentTimestampToBuffer(char buffer[32]);
+	YUNI_DECL void WriteCurrentTimestampToBuffer(char buffer[32]);
 	# endif
 
 } // namespace LogsDecorator
@@ -30,7 +30,7 @@ namespace Logs
 {
 
 	template<class LeftType = NullDecorator>
-	class Time : public LeftType
+	class YUNI_DECL Time : public LeftType
 	{
 	public:
 		template<class Handler, class VerbosityType, class O>

@@ -18,7 +18,7 @@ namespace Yuni
 	** The triangle is the base element for all meshes
 	** It knows its edges, and its vertices.
 	*/
-	class Triangle
+	class YUNI_DECL Triangle final
 	{
 	public:
 		typedef SmartPtr<Triangle> Ptr;

@@ -1,6 +1,7 @@
 #ifndef __YUNI_CORE_SYSTEM_CONSOLE_CONSOLE_H__
 # define __YUNI_CORE_SYSTEM_CONSOLE_CONSOLE_H__
 
+# include "../../../yuni.h"
 # include <iostream>
 
 
@@ -45,7 +46,7 @@ namespace Console
 	** \brief Set the text color from a static constant
 	*/
 	template<int C>
-	struct TextColor
+	struct YUNI_DECL TextColor final
 	{
 		template<class U> static void Set(U& out);
 	};
@@ -56,27 +57,27 @@ namespace Console
 	** \param[in,out] out An ostream (std::cout or std::cerr)
 	** \param color The new color
 	*/
-	template<class U> void SetTextColor(U& out, const Color color);
+	template<class U> YUNI_DECL void SetTextColor(U& out, const Color color);
 
 	/*!
 	** \brief Reset the text color to its default value
 	**
 	** \param[in,out] out An ostream (std::cout or std::cerr)
 	*/
-	template<class U> void ResetTextColor(U& out);
+	template<class U> YUNI_DECL void ResetTextColor(U& out);
 
 
 
 	/*!
 	** \brief Get if the standard output is a TTY
 	*/
-	bool IsStdoutTTY();
+	YUNI_DECL bool IsStdoutTTY();
 
 
 	/*!
 	** \brief Get if the standard error output is a TTY
 	*/
-	bool IsStderrTTY();
+	YUNI_DECL bool IsStderrTTY();
 
 
 

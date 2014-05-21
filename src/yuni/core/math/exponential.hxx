@@ -8,7 +8,7 @@ namespace Yuni
 namespace Math
 {
 
-	template<typename T> inline T Exp(T x)
+	template<class T> inline T Exp(T x)
 	{
 		return (T)::exp((T)x);
 	}

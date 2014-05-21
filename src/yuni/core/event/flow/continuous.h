@@ -16,7 +16,7 @@ namespace Flow
 
 
 	template<class EventLoopT>
-	class Continuous
+	class YUNI_DECL Continuous
 	{
 	public:
 		//! Type of the event loop

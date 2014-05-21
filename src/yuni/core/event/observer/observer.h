@@ -11,7 +11,7 @@ namespace Event
 	** \brief Observer (Interface)
 	** \ingroup Events
 	*/
-	class IObserver
+	class YUNI_DECL IObserver
 	{
 		YUNI_EVENT_ALLFRIEND_DECL_E;
 	public:
@@ -179,7 +179,7 @@ namespace Event
 	** \tparam TP The threading policy
 	*/
 	template<class D, template<class> class TP = Policy::ObjectLevelLockable>
-	class Observer : public TP<D>, public IObserver
+	class YUNI_DECL Observer : public TP<D>, public IObserver
 	{
 		YUNI_EVENT_ALLFRIEND_DECL_E;
 	public:

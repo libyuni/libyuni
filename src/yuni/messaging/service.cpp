@@ -17,7 +17,7 @@ namespace Private
 namespace Messaging
 {
 
-	class ServiceData
+	class ServiceData final
 	{
 	public:
 		//! All workers
@@ -299,7 +299,7 @@ namespace Messaging
 	namespace // anonymous
 	{
 
-		class WorkerStopper
+		class WorkerStopper final
 		{
 		public:
 			bool operator () (Yuni::Private::Messaging::Worker::Ptr& worker) const
@@ -316,7 +316,7 @@ namespace Messaging
 		ThreadingPolicy::MutexLocker locker(*this);
 
 		// checking if the service is still alive
-		if (pState == stStarting or pState == stRunning)
+		if ((pState == stStarting) or (pState == stRunning))
 		{
 			if (pData != NULL and !(!pData->workers))
 			{

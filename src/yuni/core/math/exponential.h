@@ -9,11 +9,12 @@ namespace Yuni
 namespace Math
 {
 
-
 	/*!
 	** \brief The exponential function
 	*/
-	template<typename T> inline T Exp(T x);
+	template<class T> YUNI_DECL T Exp(T x);
+
+
 
 
 } // namespace Math

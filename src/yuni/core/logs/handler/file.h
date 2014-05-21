@@ -15,7 +15,7 @@ namespace Logs
 	** \brief Log Handler: Single Log file
 	*/
 	template<class NextHandler = NullHandler>
-	class File : public NextHandler
+	class YUNI_DECL File : public NextHandler
 	{
 	public:
 		enum Settings

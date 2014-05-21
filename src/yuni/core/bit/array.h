@@ -38,7 +38,7 @@ namespace Bit
 	** std::cout << bits << "\n";
 	** \endcode
 	*/
-	class Array final
+	class YUNI_DECL Array final
 	{
 	public:
 		//! Size

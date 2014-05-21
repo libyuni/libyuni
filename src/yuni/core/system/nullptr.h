@@ -24,7 +24,7 @@ typedef decltype(nullptr) YuniNullPtr;
 **
 ** \see proposal (N2431)
 */
-const class YuniNullPtr
+const class YuniNullPtr final
 {
 public:
 	/*! Convertible to any type of null non-member */

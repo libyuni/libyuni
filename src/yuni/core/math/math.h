@@ -68,18 +68,18 @@ namespace Math
 	/*!
 	** \brief Get if two values are equal
 	*/
-	template<class U> bool Equals(U a, U b);
+	template<class U> YUNI_DECL bool Equals(U a, U b);
 
 	/*!
 	** \brief Get if a value is equals to zero
 	*/
-	template<class U> bool Zero(U a);
+	template<class U> YUNI_DECL bool Zero(U a);
 
 
 	/*!
 	** \brief Get the integer absolute value
 	*/
-	template<class T> T Abs(const T a);
+	template<class T> YUNI_DECL T Abs(const T a);
 
 	/*!
 	** \brief Get the greater expression
@@ -88,7 +88,7 @@ namespace Math
 	** \param b The second expression
 	** \return The expression considered as the grater
 	*/
-	template<class U, class V> U Max(U a, V b);
+	template<class U, class V> YUNI_DECL U Max(U a, V b);
 
 	/*!
 	** \brief Maximum of three values
@@ -98,7 +98,7 @@ namespace Math
 	** \param c The third expression
 	** \return The expression considered as the grater
 	*/
-	template<class U, class V, class W> U Max(U a, V b, W c);
+	template<class U, class V, class W> YUNI_DECL U Max(U a, V b, W c);
 
 	/*!
 	** \brief Get the smallest expression
@@ -107,7 +107,7 @@ namespace Math
 	** \param b The second expression
 	** \return The expression considered as the smaller
 	*/
-	template<class U, class V> U Min(U a, V b);
+	template<class U, class V> YUNI_DECL U Min(U a, V b);
 
 	/*!
 	** \brief Minimum of three values
@@ -117,7 +117,7 @@ namespace Math
 	** \param c The third expression
 	** \return The expression considered as the smaller
 	*/
-	template<class U, class V, class W> U Min(U a, V b, W c);
+	template<class U, class V, class W> YUNI_DECL U Min(U a, V b, W c);
 
 
 	/*!
@@ -128,7 +128,7 @@ namespace Math
 	** \param max The upper bound limit allowed for the expression `v`
 	** \return The expression itself, or a bound limit
 	*/
-	template<class T> const T& MinMax(const T& expr, const T& min, const T& max);
+	template<class T> YUNI_DECL const T& MinMax(const T& expr, const T& min, const T& max);
 
 
 	/*!
@@ -155,7 +155,7 @@ namespace Math
 	** \return The expression itself, or a bound limit
 	*/
 	template<class T, class Expr, class MinT, class MaxT>
-	T MinMaxEx(const Expr& expr, const MinT& min, const MaxT& max);
+	YUNI_DECL T MinMaxEx(const Expr& expr, const MinT& min, const MaxT& max);
 
 	/*!
 	** \brief Swap two values
@@ -163,7 +163,7 @@ namespace Math
 	** \param a The first value
 	** \param b the second value
 	*/
-	template<class T> void Swap(T& a, T&b);
+	template<class T> YUNI_DECL void Swap(T& a, T&b);
 
 
 
@@ -175,7 +175,7 @@ namespace Math
 	** \endcode
 	*/
 	template <int N>
-	struct Factorial final
+	struct YUNI_DECL Factorial final
 	{
 		//! The Formula for the factorial function
 		enum { value = N * Factorial<N-1>::value };
@@ -191,8 +191,8 @@ namespace Math
 	** \param y The power y
 	** \return x**y
 	*/
-	float Power(float x, float y);
-	double Power(double x, double y);
+	YUNI_DECL float Power(float x, float y);
+	YUNI_DECL double Power(double x, double y);
 
 	/*!
 	** \brief The power function for Integer values
@@ -222,14 +222,14 @@ namespace Math
 	**
 	** This routine is safe for zero or negative values
 	*/
-	template<class U> U SquareRoot(U x);
+	template<class U> YUNI_DECL U SquareRoot(U x);
 
 	/*!
 	** \brief Get the square root value
 	**
 	** The standard square root function, without any check on the input
 	*/
-	template<class U> U SquareRootNoCheck(U x);
+	template<class U> YUNI_DECL U SquareRootNoCheck(U x);
 
 
 	/*!
@@ -259,7 +259,7 @@ namespace Math
 	** std::cout << Math::PowerOfTwo(64) << std::endl; // 1
 	** \endcode
 	*/
-	bool PowerOfTwo(int x);
+	YUNI_DECL bool PowerOfTwo(int x);
 
 
 
@@ -269,7 +269,7 @@ namespace Math
 	** \note This method is provided for convenience only. You should
 	**       see Yuni::Unit for more functionalities.
 	*/
-	template<class T> T DegreeToRadian(T x);
+	template<class T> YUNI_DECL T DegreeToRadian(T x);
 
 
 	/*!
@@ -278,38 +278,38 @@ namespace Math
 	** \note This method is provided for convenience only. You should
 	**       see Yuni::Unit for more functionalities.
 	*/
-	template<class T> T RadianToDegree(T x);
+	template<class T> YUNI_DECL T RadianToDegree(T x);
 
 
 
 	/*!
 	** \brief Determine whether the argument value is a NaN
 	*/
-	template<class T> bool NaN(const T& x);
+	template<class T> YUNI_DECL bool NaN(const T& x);
 
 	/*!
 	** \brief Determine whether the argument value is an infinite value
 	**
 	** \return  1 if x is positive infinity, and -1 if x is negative infinity, 0 otherwise
 	*/
-	template<class T> int Infinite(const volatile T& x);
+	template<class T> YUNI_DECL int Infinite(const volatile T& x);
 
 
 	/*!
 	** \brief Floor function
 	*/
-	template<class T> T Floor(T x);
+	template<class T> YUNI_DECL T Floor(T x);
 
 	/*!
 	** \brief Ceil function
 	*/
-	template<class T> T Ceil(T x);
+	template<class T> YUNI_DECL T Ceil(T x);
 
 
 	/*!
 	** \brief The fractional part function
 	*/
-	template<class T> T Fract(T x);
+	template<class T> YUNI_DECL T Fract(T x);
 
 
 	/*!
@@ -322,7 +322,7 @@ namespace Math
 	** \param x A number
 	** \param place The place of the decimal number to round
 	*/
-	template<class T> T Round(T x, uint place = 0);
+	template<class T> YUNI_DECL T Round(T x, uint place = 0);
 
 
 	/*!
@@ -333,13 +333,13 @@ namespace Math
 	** \param x A number
 	** \param place The place of the decimal number to round
 	*/
-	template<class T> T Trunc(T x, uint place = 0);
+	template<class T> YUNI_DECL T Trunc(T x, uint place = 0);
 
 
 	/*!
 	** \brief Trunc decimal places
 	*/
-	double Trunc(double x, uint places);
+	YUNI_DECL double Trunc(double x, uint places);
 
 	/*!
 	** \brief Integral value nearest to x
@@ -349,7 +349,7 @@ namespace Math
 	** int i = RoundToInt<float,int>::Value(10.2f);
 	** \endcode
 	*/
-	template<class T, class R> struct RoundToInt;
+	template<class T, class R> struct YUNI_DECL RoundToInt;
 
 
 	/*!
@@ -362,7 +362,7 @@ namespace Math
 	** IsInteger(2.000001); // false
 	** \endcode
 	*/
-	template<class T> bool IsInteger(T x);
+	template<class T> YUNI_DECL bool IsInteger(T x);
 
 
 	/*!
@@ -372,7 +372,7 @@ namespace Math
 	** ** \param v An integer
 	** ** \return gcd(u, v)
 	** */
-	template<class U, class V> U  GCD(U u, V v);
+	template<class U, class V> YUNI_DECL U GCD(U u, V v);
 
 
 

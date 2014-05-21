@@ -9,7 +9,7 @@ namespace Result
 
 
 	template<typename T>
-	struct And
+	struct And final
 	{
 	public:
 		//! Type of the result

@@ -44,7 +44,7 @@ namespace Checksum
 	** std::cout << md5["Hello world"] << std::endl;
 	** \endcode
 	*/
-	class MD5 : public Hash::Checksum::IChecksum
+	class YUNI_DECL MD5 final : public Hash::Checksum::IChecksum
 	{
 	public:
 		/*!
@@ -73,8 +73,8 @@ namespace Checksum
 		virtual ~MD5() {}
 		//@}
 
-		virtual const String& fromRawData(const void* rawdata, uint64 size = AutoDetectNullChar);
-		virtual const String& fromFile(const String& filename);
+		virtual const String& fromRawData(const void* rawdata, uint64 size = AutoDetectNullChar) override;
+		virtual const String& fromFile(const String& filename) override;
 
 	}; // class Hash::Checksum::MD5
 

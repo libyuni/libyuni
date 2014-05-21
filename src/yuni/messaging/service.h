@@ -19,7 +19,8 @@ namespace Messaging
 {
 
 
-	class YUNI_DECL Service final : private Yuni::NonCopyable<Service>, public Policy::ObjectLevelLockable<Service>
+	class YUNI_DECL Service final
+		: private Yuni::NonCopyable<Service>, public Policy::ObjectLevelLockable<Service>
 	{
 	public:
 		//! The threading policy
@@ -44,9 +45,7 @@ namespace Messaging
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default constructor
-		*/
+		//! Default constructor
 		Service();
 		//! Destructor
 		~Service();

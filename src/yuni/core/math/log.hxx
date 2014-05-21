@@ -10,8 +10,7 @@ namespace Math
 {
 
 
-
-	template<typename T> inline T Log(T x)
+	template<class T> inline T Log(T x)
 	{
 		return ::log(x);
 	}
@@ -27,7 +26,7 @@ namespace Math
 	}
 
 
-	template<typename T> inline T Log2(T x)
+	template<class T> inline T Log2(T x)
 	{
 		# if defined(YUNI_OS_MSVC)
 		return static_cast<T>(log(x) / YUNI_LOG_2);
@@ -56,7 +55,7 @@ namespace Math
 	}
 
 
-	template<typename T> inline T LogOnePlusX(T x)
+	template<class T> inline T LogOnePlusX(T x)
 	{
 		/* Assert */
 		assert(x > -1. && "x must be greater than -1.0");

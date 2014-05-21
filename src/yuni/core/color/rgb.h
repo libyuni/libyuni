@@ -18,7 +18,7 @@ namespace Color
 	** \brief 32Bits RGB Color Model (additive color model + transparency)
 	*/
 	template<class T = uint8>
-	class RGB
+	class YUNI_DECL RGB final
 	{
 	public:
 		//! Type used for channels

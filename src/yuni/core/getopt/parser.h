@@ -16,7 +16,7 @@ namespace GetOpt
 	/*!
 	** \brief A command line options parser
 	*/
-	class Parser final
+	class YUNI_DECL Parser final
 	{
 	public:
 		//! \name Constructor & Destructor

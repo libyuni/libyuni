@@ -14,13 +14,13 @@ namespace NullableImpl
 {
 
 	template<class T>
-	struct IsNullable
+	struct IsNullable final
 	{
 		enum { Yes = 0, No = 1 };
 	};
 
 	template<class U, class Alloc>
-	struct IsNullable< Nullable<U, Alloc> >
+	struct IsNullable< Nullable<U, Alloc> > final
 	{
 		enum { Yes = 1, No = 0 };
 	};
@@ -31,7 +31,7 @@ namespace NullableImpl
 
 	// Forward declaration
 	template<class T, int S>
-	class YUNI_DECL Holder
+	class YUNI_DECL Holder final
 	{
 	public:
 		Holder() :
@@ -89,7 +89,7 @@ namespace NullableImpl
 
 
 	template<class T>
-	class YUNI_DECL Holder<T,0>
+	class YUNI_DECL Holder<T,0> final
 	{
 	public:
 		Holder()

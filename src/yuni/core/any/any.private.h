@@ -46,7 +46,7 @@ namespace Any
 	** bigger objects can be stored faster if you use 64-bit addresses.
 	*/
 	template <bool isSmall>
-	struct Functions
+	struct Functions final
 	{
 		template <typename T>
 		struct TypeManipulator
@@ -82,7 +82,7 @@ namespace Any
 	** object in pObject.)
 	*/
 	template <>
-	struct Functions<false>
+	struct Functions<false> final
 	{
 		template <typename T>
 		struct TypeManipulator
@@ -118,7 +118,7 @@ namespace Any
 	** a given type in an allegedly sexy way. (like Table<T>::get())
 	*/
 	template<typename T>
-	struct Table
+	struct Table final
 	{
 		/*!
 		** \brief Returns a pointer on a static function table

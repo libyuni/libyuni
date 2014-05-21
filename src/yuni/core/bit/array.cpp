@@ -8,71 +8,74 @@ namespace Yuni
 namespace Bit
 {
 
-
-	template<bool ValueT>
-	static inline uint Find(const Bit::Array::BufferType& pBuffer, uint pCount, uint offset)
+	namespace // anonymous
 	{
-		// bitmask
-		static const uchar mask[] = { 128, 64, 32, 16, 8, 4, 2, 1 };
-		// alias to npos
-		enum { npos = Yuni::Bit::Array::npos };
 
-		for (uint i = (offset >> 3); i < pBuffer.size(); ++i)
+		template<bool ValueT>
+		static inline uint Find(const Bit::Array::BufferType& pBuffer, uint pCount, uint offset)
 		{
-			if ((uchar)(pBuffer[i]) != (ValueT ? (uchar)0 : (uchar)0xFF))
+			// bitmask
+			static const uchar mask[] = { 128, 64, 32, 16, 8, 4, 2, 1 };
+			// alias to npos
+			enum { npos = Yuni::Bit::Array::npos };
+
+			for (uint i = (offset >> 3); i < pBuffer.size(); ++i)
 			{
-				const uchar c = static_cast<uchar>(pBuffer[i]);
-
-				// trivial cases
-				if (ValueT and c == 0xFF)
+				if ((uchar)(pBuffer[i]) != (ValueT ? (uchar)0 : (uchar)0xFF))
 				{
-					uint p = i * 8;
-					p = (p < offset) ? offset : p;
-					return (p < pCount) ? p : npos;
-				}
-				if (not ValueT and c == 0)
-				{
-					uint p = i * 8;
-					p = (p < offset) ? offset : p;
-					return (p < pCount) ? p : npos;
-				}
+					const uchar c = static_cast<uchar>(pBuffer[i]);
 
-				// the current absolute position
-				const uint absOffset = i * 8;
-
-				// bit scan
-				if (absOffset < offset)
-				{
-					for (uint p = 0; p != 8; ++p)
+					// trivial cases
+					if (ValueT and c == 0xFF)
 					{
-						if (ValueT == (0 != (c & mask[p])))
+						uint p = i * 8;
+						p = (p < offset) ? offset : p;
+						return (p < pCount) ? p : npos;
+					}
+					if (not ValueT and c == 0)
+					{
+						uint p = i * 8;
+						p = (p < offset) ? offset : p;
+						return (p < pCount) ? p : npos;
+					}
+
+					// the current absolute position
+					const uint absOffset = i * 8;
+
+					// bit scan
+					if (absOffset < offset)
+					{
+						for (uint p = 0; p != 8; ++p)
 						{
-							p += absOffset;
-							if (p >= offset)
+							if (ValueT == (0 != (c & mask[p])))
+							{
+								p += absOffset;
+								if (p >= offset)
+									return (p < pCount) ? p : npos;
+								// restoring previous value
+								p -= absOffset;
+							}
+						}
+					}
+					else
+					{
+						// TODO : we can use ffs here
+						for (uint p = 0; p != 8; ++p)
+						{
+							if (ValueT == (0 != (c & mask[p])))
+							{
+								p += absOffset;
 								return (p < pCount) ? p : npos;
-							// restoring previous value
-							p -= absOffset;
+							}
 						}
-					}
-				}
-				else
-				{
-					// TODO : we can use ffs here
-					for (uint p = 0; p != 8; ++p)
-					{
-						if (ValueT == (0 != (c & mask[p])))
-						{
-							p += absOffset;
-							return (p < pCount) ? p : npos;
-						}
-					}
 
+					}
 				}
 			}
+			return npos;
 		}
-		return npos;
-	}
 
+	} // anonymous namespace
 
 
 

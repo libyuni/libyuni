@@ -6,14 +6,13 @@ namespace Yuni
 {
 
 
-	template<typename T>
-	inline
-	BoundingBox<T>::BoundingBox()
+	template<class T>
+	inline BoundingBox<T>::BoundingBox()
 		:pMin(), pMax(), pCenter()
 	{}
 
 
-	template<typename T>
+	template<class T>
 	inline
 	BoundingBox<T>::BoundingBox(const Point3D<T>& min, const Point3D<T>& max)
 		:pMin(min), pMax(max),
@@ -21,7 +20,7 @@ namespace Yuni
 	{}
 
 
-	template<typename T>
+	template<class T>
 	void BoundingBox<T>::addPoint(const Point3D<T>& point)
 	{
 		// Update the minimum
@@ -41,7 +40,7 @@ namespace Yuni
 	}
 
 
-	template<typename T>
+	template<class T>
 	inline void BoundingBox<T>::addTriangle(const Triangle& tri)
 	{
 		addPoint(tri.vertex1());
@@ -50,7 +49,7 @@ namespace Yuni
 	}
 
 
-	template<typename T>
+	template<class T>
 	inline bool BoundingBox<T>::contains(const Point3D<T>& point) const
 	{
 		if (pMin.x > point.x || pMax.x < point.x)
@@ -62,8 +61,8 @@ namespace Yuni
 		return true;
 	}
 
-	template<typename T>
-	template<typename U>
+	template<class T>
+	template<class U>
 	inline void BoundingBox<T>::reset(Point3D<U> newCenter)
 	{
 		pCenter.move(newCenter);

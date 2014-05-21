@@ -14,7 +14,7 @@ namespace Yuni
 	** \brief Represents a 3D-vector, with generic homogeneous content
 	*/
 	template<class T = float>
-	class Vector3D
+	class YUNI_DECL Vector3D final
 	{
 	public:
 		/*!

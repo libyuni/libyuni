@@ -77,7 +77,7 @@ namespace Logs
 		class Decorators = Time< VerbosityLevel<Message<> > >,  // List of all static decorators
 		template<class> class TP = Policy::ObjectLevelLockableNotRecursive // The Threading Policy
 		>
-	class YUNI_DECL Logger :
+	class YUNI_DECL Logger final :
 		public TP<Logger<Handlers,Decorators,TP> >,             // inherits from the Threading Policy
 		public Decorators,                                      // inherits from all decorators
 		public Handlers,                                        // inherits from all handlers
@@ -145,55 +145,55 @@ namespace Logs
 		//! \name Checkpoint
 		//@{
 		CheckpointBuffer checkpoint() const;
-		template<typename U> CheckpointBuffer checkpoint(const U& u) const;
+		template<class U> CheckpointBuffer checkpoint(const U& u) const;
 		//@}
 
 		//! \name Notice
 		//@{
 		NoticeBuffer notice() const;
-		template<typename U> NoticeBuffer notice(const U& u) const;
+		template<class U> NoticeBuffer notice(const U& u) const;
 		//@}
 
 		//! \name Info
 		//@{
 		InfoBuffer info() const;
-		template<typename U> InfoBuffer info(const U& u) const;
+		template<class U> InfoBuffer info(const U& u) const;
 		//@}
 
 		//! \name Warning
 		//@{
 		WarningBuffer warning() const;
-		template<typename U> WarningBuffer warning(const U& u) const;
+		template<class U> WarningBuffer warning(const U& u) const;
 		//@}
 
 		//! \name Error
 		//@{
 		ErrorBuffer error() const;
-		template<typename U> ErrorBuffer error(const U& u) const;
+		template<class U> ErrorBuffer error(const U& u) const;
 		//@}
 
 		//! \name Progress
 		//@{
 		ProgressBuffer progress() const;
-		template<typename U> ProgressBuffer progress(const U& u) const;
+		template<class U> ProgressBuffer progress(const U& u) const;
 		//@}
 
 		//! \name Fatal
 		//@{
 		FatalBuffer fatal() const;
-		template<typename U> FatalBuffer fatal(const U& u) const;
+		template<class U> FatalBuffer fatal(const U& u) const;
 		//@}
 
 		//! \name Compatibility notice
 		//@{
 		CompatibilityBuffer compatibility() const;
-		template<typename U> CompatibilityBuffer compatibility(const U& u) const;
+		template<class U> CompatibilityBuffer compatibility(const U& u) const;
 		//@}
 
 		//! \name Debug (disabled if NDEBUG defined)
 		//@{
 		DebugBuffer debug() const;
-		template<typename U> DebugBuffer debug(const U& u) const;
+		template<class U> DebugBuffer debug(const U& u) const;
 		//@}
 
 
@@ -201,7 +201,7 @@ namespace Logs
 		template<class C> Private::LogImpl::Buffer<LoggerType,C,C::enabled> custom() const;
 
 		//! Start a message with no verbosity level (always displayed)
-		template<typename U> UnknownBuffer operator << (const U& u) const;
+		template<class U> UnknownBuffer operator << (const U& u) const;
 		//@}
 
 

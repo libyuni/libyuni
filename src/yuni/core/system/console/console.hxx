@@ -20,7 +20,7 @@ namespace Console
 			FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	}
 
-	template<> struct TextColor<black>
+	template<> struct TextColor<black> final
 	{
 		template<class U> static void Set(U&)
 		{
@@ -28,12 +28,12 @@ namespace Console
 		}
 	};
 
-	template<> struct TextColor<none>
+	template<> struct TextColor<none> final
 	{
 		template<class U> static void Set(U&) {}
 	};
 
-	template<> struct TextColor<white>
+	template<> struct TextColor<white> final
 	{
 		template<class U> static void Set(U&)
 		{
@@ -42,7 +42,7 @@ namespace Console
 		}
 	};
 
-	template<> struct TextColor<red>
+	template<> struct TextColor<red> final
 	{
 		template<class U> static void Set(U&)
 		{
@@ -50,7 +50,7 @@ namespace Console
 		}
 	};
 
-	template<> struct TextColor<green>
+	template<> struct TextColor<green> final
 	{
 		template<class U> static void Set(U&)
 		{
@@ -59,7 +59,7 @@ namespace Console
 		}
 	};
 
-	template<> struct TextColor<yellow>
+	template<> struct TextColor<yellow> final
 	{
 		template<class U> static void Set(U&)
 		{
@@ -68,7 +68,7 @@ namespace Console
 		}
 	};
 
-	template<> struct TextColor<blue>
+	template<> struct TextColor<blue> final
 	{
 		template<class U> static void Set(U&)
 		{
@@ -77,7 +77,7 @@ namespace Console
 		}
 	};
 
-	template<> struct TextColor<purple>
+	template<> struct TextColor<purple> final
 	{
 		template<class U> static void Set(U&)
 		{
@@ -86,7 +86,7 @@ namespace Console
 		}
 	};
 
-	template<> struct TextColor<lightblue>
+	template<> struct TextColor<lightblue> final
 	{
 		template<class U> static void Set(U&)
 		{
@@ -95,7 +95,7 @@ namespace Console
 		}
 	};
 
-	template<> struct TextColor<gray>
+	template<> struct TextColor<gray> final
 	{
 		template<class U> static void Set(U&)
 		{
@@ -111,31 +111,31 @@ namespace Console
 	template<> struct TextColor<none> { template<class U> static void Set(U&) {} };
 
 
-	template<> struct TextColor<black>
+	template<> struct TextColor<black> final
 	{ template<class U> static void Set(U& out) { out << "[1;30m"; } };
 
-	template<> struct TextColor<red>
+	template<> struct TextColor<red> final
 	{ template<class U> static void Set(U& out) { out << "[0;31m"; } };
 
-	template<> struct TextColor<green>
+	template<> struct TextColor<green> final
 	{ template<class U> static void Set(U& out) { out << "[0;32m"; } };
 
-	template<> struct TextColor<blue>
+	template<> struct TextColor<blue> final
 	{ template<class U> static void Set(U& out) { out << "[0;34m"; } };
 
-	template<> struct TextColor<yellow>
+	template<> struct TextColor<yellow> final
 	{ template<class U> static void Set(U& out) { out << "[0;33m"; } };
 
-	template<> struct TextColor<purple>
+	template<> struct TextColor<purple> final
 	{ template<class U> static void Set(U& out) { out << "[0;35m"; } };
 
-	template<> struct TextColor<lightblue>
+	template<> struct TextColor<lightblue> final
 	{ template<class U> static void Set(U& out) { out << "[0;36m"; } };
 
-	template<> struct TextColor<gray>
+	template<> struct TextColor<gray> final
 	{ template<class U> static void Set(U& out) { out << "[0;37m"; } };
 
-	template<> struct TextColor<white>
+	template<> struct TextColor<white> final
 	{ template<class U> static void Set(U& out) { out << "[1;37m[1m"; } };
 
 

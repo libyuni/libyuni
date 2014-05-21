@@ -181,7 +181,6 @@ namespace Unit
 		*/
 		template<class Q1, typename T1, class C1, typename P1, typename N1>
 		Abstract(const Abstract<Q1,C1, T1,P1,N1>& rhs);
-
 		//@}
 
 
@@ -433,13 +432,13 @@ namespace Unit
 
 
 	template<class FromQ, typename FromType, class ToQ, typename ToType>
-	struct QuantityConversion
+	struct QuantityConversion final
 	{
 		static ToType Value(const FromType u);
 	};
 
 	template<class Q, typename FromType, typename ToType>
-	struct QuantityConversion<Q, FromType, Q, ToType>
+	struct QuantityConversion<Q, FromType, Q, ToType> final
 	{
 		static ToType Value(const FromType u) {return u;}
 	};

@@ -9,7 +9,7 @@ namespace Result
 
 
 	template<typename T>
-	struct Sum
+	struct Sum final
 	{
 	public:
 		//! Type of the result

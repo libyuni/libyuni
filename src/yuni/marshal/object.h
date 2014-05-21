@@ -49,7 +49,6 @@ namespace Marshal
 			firstComplexDatatype = otArray,
 		};
 
-
 		//! Array of object
 		typedef std::vector<Object>  InternalArray;
 		//! Object mapping

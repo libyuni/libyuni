@@ -42,7 +42,8 @@ namespace Random
 	** \tparam T The type of random numbers
 	*/
 	template<class D, int LoValue = 0, int HiValue = 1, typename T = float>
-	class Range : public ADistribution<T, Range<D, LoValue, HiValue, T> >
+	class YUNI_DECL Range final
+		: public ADistribution<T, Range<D, LoValue, HiValue, T> >
 	{
 	public:
 		//! Type for a single random number

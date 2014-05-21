@@ -20,7 +20,7 @@ namespace CString
 
 
 	template<class CStringT, class C>
-	class Assign
+	class Assign final
 	{
 	public:
 		static void Perform(CStringT& s, const C& rhs)
@@ -35,7 +35,7 @@ namespace CString
 
 	// T*
 	template<class CStringT, class T>
-	class Assign<CStringT, T*>
+	class Assign<CStringT, T*> final
 	{
 	public:
 		static void Perform(CStringT& s, const T* rhs)
@@ -47,7 +47,7 @@ namespace CString
 
 	// char*
 	template<class CStringT>
-	class Assign<CStringT, void*>
+	class Assign<CStringT, void*> final
 	{
 	public:
 		static void Perform(CStringT& s, const void* rhs)
@@ -88,7 +88,7 @@ namespace CString
 
 	// char*
 	template<class CStringT>
-	class Assign<CStringT, char*>
+	class Assign<CStringT, char*> final
 	{
 	public:
 		static void Perform(CStringT& s, const char* rhs)
@@ -106,7 +106,7 @@ namespace CString
 
 	// C[N]
 	template<class CStringT, int N>
-	class Assign<CStringT, char[N]>
+	class Assign<CStringT, char[N]> final
 	{
 	public:
 		typedef char C;
@@ -126,7 +126,7 @@ namespace CString
 
 	// C
 	template<class CStringT>
-	class Assign<CStringT, char>
+	class Assign<CStringT, char> final
 	{
 	public:
 		static void Perform(CStringT& s, const char rhs)
@@ -138,7 +138,7 @@ namespace CString
 
 	// nullptr
 	template<class CStringT>
-	class Assign<CStringT, YuniNullPtr>
+	class Assign<CStringT, YuniNullPtr> final
 	{
 	public:
 		static void Perform(CStringT& s, const YuniNullPtr&)
@@ -151,7 +151,7 @@ namespace CString
 
 	// bool
 	template<class CStringT>
-	class Assign<CStringT, bool>
+	class Assign<CStringT, bool> final
 	{
 	public:
 		static void Perform(CStringT& s, const bool rhs)

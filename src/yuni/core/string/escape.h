@@ -12,7 +12,7 @@ namespace Yuni
 	** \brief Escapes a string
 	*/
 	template<class StringT>
-	void AppendEscapedString(StringT& out, const AnyString& string, char quote = '"');
+	YUNI_DECL void AppendEscapedString(StringT& out, const AnyString& string, char quote = '"');
 
 
 

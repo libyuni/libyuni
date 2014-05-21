@@ -70,7 +70,7 @@ namespace REST
 
 
 
-	class Server::ServerData
+	class Server::ServerData final
 	{
 	public:
 		/*!

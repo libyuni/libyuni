@@ -22,7 +22,7 @@ namespace Yuni
 	** \brief A vertex is a point in space which is the start of two edges of a triangle in a mesh.
 	** \ingroup Gfx
 	*/
-	class Vertex
+	class YUNI_DECL Vertex final
 	{
 	public:
 		//! \name Constructors and destructors

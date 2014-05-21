@@ -15,16 +15,15 @@ namespace Yuni
 namespace Math
 {
 
-
 	/*!
 	** \brief The natural logarithm function
 	*/
-	template<typename T> inline T Log(T x);
+	template<class T> YUNI_DECL T Log(T x);
 
 	/*!
 	** \brief The base-2 logarithm function
 	*/
-	template<typename T> inline T Log2(T x);
+	template<class T> YUNI_DECL T Log2(T x);
 
 
 	/*!
@@ -42,7 +41,11 @@ namespace Math
 	** \param x Any value > -1.0
 	** \return log(1+x). when x < 1e-4, the Taylor series approximation will be used
 	*/
-	template<typename T> inline T LogOnePlusX(T x);
+	template<class T> YUNI_DECL T LogOnePlusX(T x);
+
+
+
+
 
 
 } // namespace Math

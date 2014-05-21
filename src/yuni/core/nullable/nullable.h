@@ -125,27 +125,16 @@ namespace Yuni
 		//@{
 		//! Default constructor
 		Nullable();
-		/*!
-		** \brief Copy constructor
-		*/
+		//! Copy constructor
 		Nullable(const Nullable& rhs);
-		/*!
-		** \brief Move constructor
-		*/
+		//! Move constructor
 		Nullable(Static::MoveConstructor<Nullable> rhs);
-		/*!
-		** \brief Copy constructor
-		*/
+		//! Copy constructor
 		template<class Alloc1> Nullable(const Nullable<T,Alloc1>& rhs);
-		/*!
-		** \brief Constructor with a default value
-		*/
+		//! Constructor with a default value
 		template<typename U> Nullable(const U& rhs);
-		/*!
-		** \brief Constructor with a default value
-		*/
+		//! Constructor with a default value
 		Nullable(const_pointer v);
-
 		//! Destructor
 		~Nullable();
 		//@}

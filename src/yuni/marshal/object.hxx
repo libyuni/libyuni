@@ -7,15 +7,15 @@ namespace Yuni
 namespace Marshal
 {
 
-	inline Object::Object() :
-		pType(otNil)
+	inline Object::Object()
+		: pType(otNil)
 	{
 	}
 
 
-	inline Object::Object(Type type, InternalDatatype value) :
-		pType(type),
-		pValue(value)
+	inline Object::Object(Type type, InternalDatatype value)
+		: pType(type)
+		, pValue(value)
 	{
 	}
 

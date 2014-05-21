@@ -17,7 +17,7 @@ namespace Flow
 
 
 	template<class EventLoopT>
-	class Timer
+	class YUNI_DECL Timer
 	{
 	public:
 		//! Type of the event loop

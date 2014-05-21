@@ -14,7 +14,7 @@ namespace Extension
 
 
 	template<>
-	class IntoCString<char*>
+	class IntoCString<char*> final
 	{
 	public:
 		enum { valid = 1, converted = 0, zeroTerminated = 1, };
@@ -28,7 +28,7 @@ namespace Extension
 
 
 	template<int N>
-	class IntoCString<char[N]>
+	class IntoCString<char[N]> final
 	{
 	public:
 		enum { valid = 1, converted = 0, zeroTerminated = 1, };
@@ -42,7 +42,7 @@ namespace Extension
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	class IntoCString<Yuni::CString<ChunkSizeT, ExpandableT> >
+	class IntoCString<Yuni::CString<ChunkSizeT, ExpandableT> > final
 	{
 	public:
 		typedef Yuni::CString<ChunkSizeT, ExpandableT> CStringType;
@@ -58,7 +58,7 @@ namespace Extension
 	template<uint ChunkSizeT, bool ExpandableT,
 		template <class> class OwspP, template <class> class ChckP, class ConvP,
 		template <class> class StorP, template <class> class ConsP>
-	class IntoCString<Yuni::SmartPtr<Yuni::CString<ChunkSizeT, ExpandableT>, OwspP,ChckP,ConvP,StorP,ConsP> >
+	class IntoCString<Yuni::SmartPtr<Yuni::CString<ChunkSizeT, ExpandableT>, OwspP, ChckP, ConvP, StorP, ConsP> > final
 	{
 	public:
 		typedef Yuni::CString<ChunkSizeT, ExpandableT> CStringType;
@@ -68,14 +68,14 @@ namespace Extension
 	public:
 		static const char* Perform(const CStringTypePtr& container)
 		{
-			return (!container) ? NULL : container->c_str();
+			return (!container) ? nullptr : container->c_str();
 		}
 	};
 
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	class IntoCString<Yuni::CString<ChunkSizeT, ExpandableT>* >
+	class IntoCString<Yuni::CString<ChunkSizeT, ExpandableT>* > final
 	{
 	public:
 		typedef typename Yuni::CString<ChunkSizeT, ExpandableT> CStringType;
@@ -84,14 +84,14 @@ namespace Extension
 	public:
 		static const char* Perform(const CStringType* const container)
 		{
-			return container ? container->data() : NULL;
+			return container ? container->data() : nullptr;
 		}
 	};
 
 
 
 	template<class T, class Alloc>
-	class IntoCString<std::basic_string<char,T,Alloc> >
+	class IntoCString<std::basic_string<char, T, Alloc> > final
 	{
 	public:
 		enum { valid = 1, converted = 0, zeroTerminated = 1, };
@@ -107,7 +107,7 @@ namespace Extension
 	template<class T, class Alloc,
 		template <class> class OwspP, template <class> class ChckP, class ConvP,
 		template <class> class StorP, template <class> class ConsP>
-	class IntoCString<Yuni::SmartPtr<std::basic_string<char, T,Alloc>, OwspP,ChckP,ConvP,StorP,ConsP> >
+	class IntoCString<Yuni::SmartPtr<std::basic_string<char, T, Alloc>, OwspP, ChckP, ConvP, StorP, ConsP> > final
 	{
 	public:
 		typedef std::basic_string<char, T,Alloc> StringType;
@@ -117,14 +117,14 @@ namespace Extension
 	public:
 		static const char* Perform(const StringTypePtr& container)
 		{
-			return (!container) ? NULL : container->c_str();
+			return (!container) ? nullptr : container->c_str();
 		}
 	};
 
 
 
 	template<class T, class Alloc>
-	class IntoCString<std::basic_string<char,T,Alloc>* >
+	class IntoCString<std::basic_string<char, T, Alloc>* > final
 	{
 	public:
 		enum { valid = 1, converted = 0, zeroTerminated = 1, };
@@ -132,13 +132,13 @@ namespace Extension
 	public:
 		static const char* Perform(const std::basic_string<char,T,Alloc>* const container)
 		{
-			return container ? container->c_str() : NULL;
+			return container ? container->c_str() : nullptr;
 		}
 	};
 
 
 	template<>
-	class IntoCString<YuniNullPtr>
+	class IntoCString<YuniNullPtr> final
 	{
 	public:
 		enum { valid = 1, converted = 0, zeroTerminated = 1, };
@@ -146,7 +146,7 @@ namespace Extension
 	public:
 		static const char* Perform(const YuniNullPtr&)
 		{
-			return NULL;
+			return nullptr;
 		}
 	};
 

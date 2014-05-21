@@ -25,9 +25,9 @@ namespace REST
 		//! Destructor
 		virtual ~Server();
 
-		virtual Net::Error  start() override;
+		virtual Net::Error start() override;
 
-		virtual Net::Error  run() override;
+		virtual Net::Error run() override;
 
 		virtual void stop() override;
 

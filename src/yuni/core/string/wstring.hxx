@@ -50,7 +50,7 @@ namespace Private
 	template<bool UNCPrefix, bool AppendSeparatorT>
 	inline bool WString<UNCPrefix, AppendSeparatorT>::empty() const
 	{
-		return !pSize;
+		return (0 == pSize);
 	}
 
 

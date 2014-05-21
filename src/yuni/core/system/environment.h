@@ -18,7 +18,7 @@ namespace Environment
 	** \param name Name of the variable
 	** \return The value of the variable, empty is an error has occured
 	*/
-	String Read(const AnyString& name);
+	YUNI_DECL String Read(const AnyString& name);
 
 
 	/*!
@@ -30,7 +30,7 @@ namespace Environment
 	** \return True if the operation succeeded, false otherwise
 	*/
 	template<class StringT>
-	bool Read(const AnyString& name, StringT& out, bool emptyBefore = true);
+	YUNI_DECL bool Read(const AnyString& name, StringT& out, bool emptyBefore = true);
 
 
 

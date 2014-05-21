@@ -12,7 +12,7 @@ namespace Logs
 
 
 	template<class LeftType = NullDecorator>
-	class Message : public LeftType
+	class YUNI_DECL Message : public LeftType
 	{
 	public:
 		template<class Handler, class VerbosityType, class O>

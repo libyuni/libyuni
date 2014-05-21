@@ -28,7 +28,7 @@ namespace Static
 	** \endcode
 	*/
 	template <bool b, typename IfTrue, typename IfFalse>
-	struct If
+	struct If final
 	{
 		typedef IfTrue ResultType;
 		typedef IfTrue Type;
@@ -47,7 +47,7 @@ namespace Static
 
 
 	template <typename IfTrue, typename IfFalse>
-	struct If<false, IfTrue, IfFalse>
+	struct If<false, IfTrue, IfFalse> final
 	{
 		typedef IfFalse ResultType;
 		typedef IfFalse Type;

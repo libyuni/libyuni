@@ -13,7 +13,7 @@ namespace CString
 
 
 	template<class CStringT, class StringT>
-	class Fill
+	class Fill final
 	{
 	public:
 		static void Perform(char* data, typename CStringT::Size size, const StringT& pattern)
@@ -21,10 +21,10 @@ namespace CString
 			const uint patternSize = Traits::Length<StringT,uint>::Value(pattern);
 			const char* const cstr = Traits::CString<StringT>::Perform(pattern);
 
-			if (patternSize == 0)
+			if (0 == patternSize)
 				return;
 			// If equals to 1, it is merely a single char
-			if (patternSize == 1)
+			if (1 == patternSize)
 			{
 				for (typename CStringT::Size i = 0; i < size; ++i)
 					data[i] = *cstr;
@@ -44,7 +44,7 @@ namespace CString
 
 
 	template<class CStringT>
-	class Fill<CStringT, char>
+	class Fill<CStringT, char> final
 	{
 	public:
 		static void Perform(char* data, typename CStringT::Size size, const char rhs)

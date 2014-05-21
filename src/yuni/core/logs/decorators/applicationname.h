@@ -11,7 +11,7 @@ namespace Logs
 
 
 	template<class LeftType = NullDecorator>
-	class ApplicationName : public LeftType
+	class YUNI_DECL ApplicationName : public LeftType
 	{
 	public:
 		ApplicationName() :

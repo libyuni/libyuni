@@ -11,7 +11,7 @@ namespace Base
 
 
 	template<int Nth = 10>
-	struct N
+	struct N final
 	{
 		//! Digits
 		static const char* Digit() {return "0123456789abcdefghijklmnopqrstuvwxyz";}
@@ -29,7 +29,7 @@ namespace Base
 
 
 
-	struct HexaLowercase
+	struct HexaLowercase final
 	{
 		//! Digits
 		static const char* Digit() {return "0123456789abcdef";}
@@ -41,7 +41,7 @@ namespace Base
 	};
 
 
-	struct HexaUppercase
+	struct HexaUppercase final
 	{
 		//! Digits
 		static const char* Digit() {return "0123456789ABCDEF";}
@@ -59,6 +59,5 @@ namespace Base
 } // namespace Base
 } // namespace Math
 } // namespace Yuni
-
 
 #endif // __YUNI_CORE_MATH_BASE_H__

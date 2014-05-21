@@ -20,7 +20,7 @@ namespace Random
 	**
 	** This random number generator is the one provided by your Operating System.
 	*/
-	class YUNI_DECL Default : public ADistribution<int, Default>
+	class YUNI_DECL Default final : public ADistribution<int, Default>
 	{
 	public:
 		// Name of the distribution

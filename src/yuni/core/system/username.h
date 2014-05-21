@@ -24,7 +24,7 @@ namespace System
 	** \param emptyBefore True to empty the parameter `out` before
 	** \return True if the operation succeeded (a valid username has been found), false otherwise
 	*/
-	template<class StringT> bool Username(StringT& out, bool emptyBefore = true);
+	template<class StringT> YUNI_DECL bool Username(StringT& out, bool emptyBefore = true);
 
 
 

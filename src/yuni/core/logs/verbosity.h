@@ -12,7 +12,7 @@ namespace Verbosity
 {
 
 
-	struct Unknown
+	struct YUNI_DECL Unknown final
 	{
 		static const char* Name() {return "";}
 		template<class U> static void AppendName(U&) {}
@@ -31,7 +31,7 @@ namespace Verbosity
 	}; // class Unknown
 
 
-	struct Quiet
+	struct YUNI_DECL Quiet final
 	{
 		static const char* Name() {return "quiet";}
 		template<class U> static void AppendName(U& u) {u << "[quiet]";}
@@ -51,7 +51,7 @@ namespace Verbosity
 
 
 
-	struct Fatal
+	struct YUNI_DECL Fatal final
 	{
 		static const char* Name() {return "fatal";}
 		template<class U> static void AppendName(U& u) {u << "[fatal]";}
@@ -71,7 +71,7 @@ namespace Verbosity
 
 
 
-	struct Error
+	struct YUNI_DECL Error final
 	{
 		static const char* Name() {return "error";}
 		template<class U> static void AppendName(U& u) {u << "[error]";}
@@ -91,7 +91,7 @@ namespace Verbosity
 
 
 
-	struct Warning
+	struct YUNI_DECL Warning final
 	{
 		static const char* Name() {return "warning";}
 		template<class U> static void AppendName(U& u) {u << "[warns]";}
@@ -111,7 +111,7 @@ namespace Verbosity
 
 
 
-	struct Checkpoint
+	struct YUNI_DECL Checkpoint final
 	{
 		static const char* Name() {return "checkpoint";}
 		template<class U> static void AppendName(U& u) {u << "[check]";}
@@ -132,7 +132,7 @@ namespace Verbosity
 
 
 
-	struct Notice
+	struct YUNI_DECL Notice final
 	{
 		static const char* Name() {return "notice";}
 		template<class U> static void AppendName(U& u) {u << "[notic]";}
@@ -152,7 +152,7 @@ namespace Verbosity
 	}; // class Notice
 
 
-	struct Progress
+	struct YUNI_DECL Progress final
 	{
 		static const char* Name() {return "progress";}
 		template<class U> static void AppendName(U& u) {u << "[progress]";}
@@ -171,7 +171,9 @@ namespace Verbosity
 
 	}; // class Progress
 
-	struct Info
+
+
+	struct YUNI_DECL Info final
 	{
 		static const char* Name() {return "info";}
 		template<class U> static void AppendName(U& u) {u << "[infos]";}
@@ -192,7 +194,7 @@ namespace Verbosity
 
 
 
-	struct Compatibility
+	struct YUNI_DECL Compatibility final
 	{
 		static const char* Name() {return "Compatibility";}
 		template<class U> static void AppendName(U& u) {u << "[compatibility notice]";}
@@ -213,7 +215,7 @@ namespace Verbosity
 
 
 
-	struct Debug
+	struct YUNI_DECL Debug final
 	{
 		static const char* Name() {return "debug";}
 		template<class U> static void AppendName(U& u) {u << "[debug]";}

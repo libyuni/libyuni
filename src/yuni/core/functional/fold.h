@@ -23,7 +23,7 @@ namespace Functional
 	** \endcode
 	*/
 	template<class T, class ContainerT, class FunctorT>
-	T Fold(const ContainerT& container, const T& defval, const FunctorT& callback);
+	YUNI_DECL T Fold(const ContainerT& container, const T& defval, const FunctorT& callback);
 
 
 

@@ -12,7 +12,7 @@ namespace Yuni
 	** \brief 2D-Rectangle
 	*/
 	template<class T>
-	class Rect2D
+	class YUNI_DECL Rect2D final
 	{
 	public:
 		//! The original type T

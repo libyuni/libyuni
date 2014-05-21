@@ -8,12 +8,11 @@
 namespace Yuni
 {
 
-
 	/*!
 	** \brief Represents a quaternion, which is a mathematical object mainly used for camera
 	*/
 	template<typename T = float>
-	class Quaternion
+	class YUNI_DECL Quaternion final
 	{
 	public:
 		/*!
@@ -57,7 +56,7 @@ namespace Yuni
 		template<class U>
 		Quaternion(const Quaternion<U>& other);
 
-#ifdef GLM_VERSION
+		#ifdef GLM_VERSION
 		//! From glm 3x3 matrix
 		Quaternion(const glm::mat3& matrix): Quaternion(glm::quat(matrix))
 		{}
@@ -71,7 +70,7 @@ namespace Yuni
 			w(quat.w),
 			v(quat.x, quat.y, quat.z)
 		{}
-#endif
+		#endif
 		//@}
 
 		//! \name Reset the coordinates
@@ -109,7 +108,7 @@ namespace Yuni
 		template<class U>
 		Quaternion<T>& operator = (const Quaternion<U>& other);
 
-#ifdef GLM_VERSION
+		#ifdef GLM_VERSION
 		//! Assignment from glm 3x3 matrix
 		Quaternion<T>& operator = (const glm::mat3& matrix)
 		{
@@ -131,7 +130,7 @@ namespace Yuni
 			v.z = quat.z;
 			return *this;
 		}
-#endif
+		#endif
 
 		//! Addition
 		template<class U>

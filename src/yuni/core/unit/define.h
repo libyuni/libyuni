@@ -5,7 +5,7 @@
 # define YUNI_UNIT_IMPL(CLASS,NAME,SYMBOL,COEFFTYPE,COEFF) \
 	\
 	template<typename T = double, typename P = T> \
-	class CLASS : public Abstract<Quantity, CLASS<T,P>, T, P, COEFFTYPE> \
+	class CLASS final : public Abstract<Quantity, CLASS<T,P>, T, P, COEFFTYPE> \
 	{ \
 	public: \
 		/*! Base class */ \
