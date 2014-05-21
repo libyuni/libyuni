@@ -24,17 +24,11 @@ namespace DynamicLibrary
 	public:
 		//! \name Constructor & Destructor
 		//@{
-		/*!
-		** \brief Default constructor
-		*/
+		//! Default constructor
 		Symbol();
-		/*!
-		** \brief Constructor with a given handle
-		*/
+		//! Constructor with a given handle
 		Symbol(Handle p);
-		/*!
-		** \brief Copy constructor
-		*/
+		//! Copy constructor
 		Symbol(const Symbol& rhs);
 		//@}
 

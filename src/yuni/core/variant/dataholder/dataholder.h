@@ -417,10 +417,10 @@ namespace Variant
 		virtual bool convertUsing(IDataConverter& cvtr) const
 		{ return cvtr.convertFrom(pValue); }
 
-		virtual IDataHolder* clone() const
+		virtual IDataHolder* clone() const override
 		{ return new Data<T>(pValue); }
 
-		virtual Yuni::VariantInnerType type() const {return (Yuni::VariantInnerType) InternalType<T>::value;}
+		virtual Yuni::VariantInnerType type() const override {return (Yuni::VariantInnerType) InternalType<T>::value;}
 
 		virtual void clear() { pValue = T(); }
 
@@ -518,10 +518,10 @@ namespace Variant
 		virtual bool convertUsing(IDataConverter& cvtr) const
 		{ return cvtr.convertFrom(pValue); }
 
-		virtual IDataHolder* clone() const
+		virtual IDataHolder* clone() const override
 		{ return new Data<T>(pValue); }
 
-		virtual Yuni::VariantInnerType type() const {return Yuni::variantTChar;}
+		virtual Yuni::VariantInnerType type() const override {return Yuni::variantTChar;}
 
 		virtual void clear() { pValue = '\0'; }
 
@@ -617,10 +617,10 @@ namespace Variant
 		virtual bool convertUsing(IDataConverter& cvtr) const
 		{ return cvtr.convertFrom(pValue); }
 
-		virtual IDataHolder* clone() const
+		virtual IDataHolder* clone() const override
 		{ return new Data<T>(pValue); }
 
-		virtual Yuni::VariantInnerType type() const {return Yuni::variantTBool;}
+		virtual Yuni::VariantInnerType type() const override {return Yuni::variantTBool;}
 
 		virtual void clear() { pValue = false; }
 

@@ -37,7 +37,7 @@ namespace Storage
 		typedef T& ReferenceType;
 
 		//! The default value for this type
-		static StoredType DefaultValue() {return NULL;}
+		static StoredType DefaultValue() {return nullptr;}
 
 	public:
 		//! \name Constructors
@@ -68,7 +68,7 @@ namespace Storage
 
 	protected:
 		//! Destroy the inner data
-		void destroy()
+		inline void destroy()
 		{
 			// [from the standard]
 			// If the object being deleted has incomplete class type at the point of deletion
@@ -106,7 +106,7 @@ namespace Storage
 		typedef T& ReferenceType;
 
 		//! The default value for this type
-		static StoredType DefaultValue() {return NULL;}
+		static StoredType DefaultValue() {return nullptr;}
 
 	public:
 		//! \name Constructors
@@ -137,7 +137,7 @@ namespace Storage
 
 	protected:
 		//! Destroy the inner data
-		void destroy()
+		inline void destroy()
 		{
 			// [from the standard]
 			// If the object being deleted has incomplete class type at the point of deletion

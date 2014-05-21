@@ -28,10 +28,10 @@ namespace Variant
 		virtual bool convertUsing(IDataConverter& cvtr) const
 		{ return cvtr.convertFrom(pValue); }
 
-		virtual IDataHolder* clone() const
+		virtual IDataHolder* clone() const override
 		{ return new Data<String>(pValue); }
 
-		virtual Yuni::VariantInnerType type() const {return Yuni::variantTString;}
+		virtual Yuni::VariantInnerType type() const override {return Yuni::variantTString;}
 
 		virtual void clear() { pValue.clear(); }
 

@@ -39,7 +39,7 @@ namespace Utils
 	** 0x00604050: 4041 4243 4445 4647 4849 4a4b 4c4d 4e4f |@ABCDEFGHIJKLMNO|
 	** \endcode
 	*/
-	class Hexdump
+	class YUNI_DECL Hexdump final
 	{
 	public:
 		//! \name Constructor & Destructor

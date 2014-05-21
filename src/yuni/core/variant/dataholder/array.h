@@ -29,9 +29,9 @@ namespace Variant
 		virtual bool convertUsing(IDataConverter& cvtr) const
 		{ return cvtr.convertFrom(pValue); }
 
-		virtual IDataHolder* clone() const { return new ArrayData<T>(*this); }
+		virtual IDataHolder* clone() const override { return new ArrayData<T>(*this); }
 
-		virtual Yuni::VariantInnerType type() const {return Yuni::variantTArray;}
+		virtual Yuni::VariantInnerType type() const override {return Yuni::variantTArray;}
 
 		virtual void clear() { pValue.clear(); }
 

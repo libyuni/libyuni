@@ -31,7 +31,7 @@ namespace Utils
 		for (printed = 0; printed < size; ++printed)
 		{
 			char c = *(buffer + printed);
-			if (c < 0x20 || c > 0x7E) // c is not printable ASCII, replace it by a dot '.'
+			if (c < 0x20 or c > 0x7E) // c is not printable ASCII, replace it by a dot '.'
 				c = '.';
 			line.append(c);
 		}
@@ -57,7 +57,4 @@ namespace Utils
 } // namespace Utils
 } // namespace Core
 } // namespace Yuni
-
-
-
 

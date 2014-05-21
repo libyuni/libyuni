@@ -18,7 +18,7 @@ namespace Yuni
 	**
 	** \ingroup Core
 	*/
-	class YUNI_DECL Version
+	class YUNI_DECL Version final
 	{
 	public:
 		/*!
@@ -145,6 +145,7 @@ namespace Yuni
 		uint revision;
 
 	}; // class Version
+
 
 
 
