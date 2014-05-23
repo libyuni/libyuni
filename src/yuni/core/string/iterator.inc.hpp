@@ -299,7 +299,7 @@ struct Model
 
 
 
-	class ByteIterator final
+	class ByteIterator /*final*/
 	{
 	public:
 		//! Type of the original string
