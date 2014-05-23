@@ -62,10 +62,18 @@ namespace Media
 
 		static void SetDistanceModel(DistanceModel model);
 
+
+		/*!
+		** \brief Create an OpenAL buffer
+		** \param[out] A pointer to the ID of the created buffer
+		** \returns false on error, true otherwise
+		*/
+		static bool CreateBuffer(uint* buffer);
 		/*!
 		** \brief Create OpenAL buffers
 		** \param[in] nbBuffers Number of buffers to create
 		** \param[out] An array of IDs of the created buffers
+		** \returns false on error, true otherwise
 		*/
 		static bool CreateBuffers(int nbBuffers, uint* buffers);
 

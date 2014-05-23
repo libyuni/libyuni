@@ -17,10 +17,10 @@ namespace Media
 			// Make sure we get some data to give to the buffer
 			Private::Media::Frame::Ptr frame = pAStream->nextFrame();
 			if (!frame)
-				return 0;
+				return size;
 			uint count = frame->audioSize();
 			if (!count)
-				return 0;
+				return size;
 			count = Math::Min(count, (uint)maxBufferSize - size);
 			pData.append((const char*)frame->audioData(), count);
 			size += count;
@@ -54,16 +54,17 @@ namespace Media
 		// Audio
 		if (nullptr != pAStream)
 		{
-			pBufferCount = maxBufferCount;
-
-			if (!Private::Media::OpenAL::CreateBuffers(pBufferCount, pIDs))
-				return false;
-
-			for (uint i = 0; i < pBufferCount; ++i)
+			pBufferCount = 0;
+			for (uint i = 0; i < maxBufferCount; ++i)
 			{
 				uint size = fillBuffer();
 				if (!size)
 					return false;
+
+				if (!Private::Media::OpenAL::CreateBuffer(pIDs + i))
+					return false;
+
+				++pBufferCount;
 
 				// Buffer the data with OpenAL
 				if (!Private::Media::OpenAL::SetBufferData(pIDs[i], pAStream->alFormat(),
@@ -72,6 +73,9 @@ namespace Media
 				// Queue the buffers onto the source
 				if (!Private::Media::OpenAL::QueueBufferToSource(pIDs[i], source))
 					return false;
+				// No more data to read
+				if (size < minBufferSize)
+					break;
 			}
 		}
 

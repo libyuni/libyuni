@@ -125,6 +125,14 @@ namespace Media
 	}
 
 
+	bool OpenAL::CreateBuffer(uint* buffer)
+	{
+		::alGetError();
+		::alGenBuffers(1, buffer);
+		return alGetError() == AL_NO_ERROR;
+	}
+
+
 	bool OpenAL::CreateBuffers(int nbBuffers, uint* buffers)
 	{
 		::alGetError();

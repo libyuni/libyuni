@@ -36,7 +36,7 @@ namespace Media
 		enum // anonymous
 		{
 			maxBufferCount = 4,
-			minBufferSize = 60000, // ~4k buffers are apparently the norm
+			minBufferSize = 61000,
 			maxBufferSize = 65536,
 
 			bestQueueSize = 150
