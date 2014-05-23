@@ -94,92 +94,11 @@ namespace Yuni
 	}
 
 
-	bool UUID::null() const
-	{
-		return  (0 == pValue.n32[0]) and (0 == pValue.n32[1]) and (0 == pValue.n32[2])
-			and (0 == pValue.n32[3]);
-	}
-
-
-	void UUID::clear()
-	{
-		pValue.n32[0] = 0;
-		pValue.n32[1] = 0;
-		pValue.n32[2] = 0;
-		pValue.n32[3] = 0;
-	}
-
-
-	UUID::UUID()
-	{
-		pValue.n32[0] = 0;
-		pValue.n32[1] = 0;
-		pValue.n32[2] = 0;
-		pValue.n32[3] = 0;
-	}
-
-
-	UUID::UUID(const UUID& rhs)
-	{
-		pValue.n32[0] = rhs.pValue.n32[0];
-		pValue.n32[1] = rhs.pValue.n32[1];
-		pValue.n32[2] = rhs.pValue.n32[2];
-		pValue.n32[3] = rhs.pValue.n32[3];
-	}
-
-
-	UUID::UUID(Flag flag)
-	{
-		switch (flag)
-		{
-			case fGenerate: generate(); break;
-			case fNull: clear(); break;
-		}
-	}
-
-
-	UUID& UUID::operator = (const UUID& rhs)
-	{
-		pValue.n32[0] = rhs.pValue.n32[0];
-		pValue.n32[1] = rhs.pValue.n32[1];
-		pValue.n32[2] = rhs.pValue.n32[2];
-		pValue.n32[3] = rhs.pValue.n32[3];
-		return *this;
-	}
-
-
-	bool UUID::operator == (const UUID& rhs) const
-	{
-		return  (pValue.n32[0] == rhs.pValue.n32[0])
-			and (pValue.n32[1] == rhs.pValue.n32[1])
-			and (pValue.n32[2] == rhs.pValue.n32[2])
-			and (pValue.n32[3] == rhs.pValue.n32[3]);
-	}
-
-
-	bool UUID::operator != (const UUID& rhs) const
-	{
-		return (pValue.n32[0] != rhs.pValue.n32[0])
-			or (pValue.n32[1] != rhs.pValue.n32[1])
-			or (pValue.n32[2] != rhs.pValue.n32[2])
-			or (pValue.n32[3] != rhs.pValue.n32[3]);
-	}
-
-
-	bool UUID::operator < (const UUID& rhs) const
-	{
-		return  pValue.n32[3] < rhs.pValue.n32[3]
-			and pValue.n32[2] < rhs.pValue.n32[2]
-			and pValue.n32[1] < rhs.pValue.n32[1]
-			and pValue.n32[0] < rhs.pValue.n32[0];
-	}
-
-
 	size_t UUID::hash() const
 	{
 		// TODO This hash may not be suitable for hashing guids,
 		std::size_t r = 0;
-		const char* p = pValue.signedcstring;
+		const uchar* p = pValue.cstring;
 		for (uint i = 0; i != 16; ++i)
 			r = (uint)(p[i]) + (r << 6) + (r << 16) - r;
 

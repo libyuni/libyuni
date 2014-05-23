@@ -3,9 +3,7 @@
 
 # include "../yuni.h"
 # include "fwd.h"
-# include "../core/traits/cstring.h"
-# include "../core/traits/length.h"
-
+# include "../core/string.h"
 
 
 namespace Yuni
@@ -132,18 +130,26 @@ namespace Yuni
 		** The UUID will be reset if the conversion failed.
 		*/
 		template<class StringT> UUID& operator = (const StringT& string);
+
 		//! Null
 		bool operator ! () const;
+
 		//! Comparison
 		bool operator == (const UUID& rhs) const;
 		//! Comparison
 		bool operator != (const UUID& rhs) const;
 		//! Strict weak comparison
 		bool operator < (const UUID& rhs) const;
+		//! Greater strict
+		bool operator > (const UUID& rhs) const;
+		//! Less or equal
+		bool operator <= (const UUID& rhs) const;
+		//! Greater or equal
+		bool operator >= (const UUID& rhs) const;
 		//@}
 
 
-	protected:
+	private:
 		/*!
 		** \brief Write the UUID into string in a C-String
 		**
@@ -152,17 +158,15 @@ namespace Yuni
 		*/
 		void writeToCString(char cstring[42]) const;
 
-		/*!
-		** \brief Initialize the UUID from a c-string
-		*/
+		//! Initialize the UUID from a c-string
 		bool initializeFromCString(const char* cstring);
 
-	public:
+	private:
 		union StorageType
 		{
 			uchar cstring[16];
-			char signedcstring[16];
 			uint32 n32[4];
+			uint64 n64[2];
 		};
 
 	private:

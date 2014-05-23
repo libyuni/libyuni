@@ -1,6 +1,10 @@
 #ifndef __YUNI_UUID_UUID_HXX__
 # define __YUNI_UUID_UUID_HXX__
 
+# include "uuid.h"
+
+
+
 
 namespace Yuni
 {
@@ -13,6 +17,37 @@ namespace Yuni
 	}
 
 
+	inline void UUID::clear()
+	{
+		pValue.n64[0] = 0;
+		pValue.n64[1] = 0;
+	}
+
+
+	inline UUID::UUID()
+	{
+		pValue.n64[0] = 0;
+		pValue.n64[1] = 0;
+	}
+
+
+	inline UUID::UUID(const UUID& rhs)
+	{
+		pValue.n64[0] = rhs.pValue.n64[0];
+		pValue.n64[1] = rhs.pValue.n64[1];
+	}
+
+
+	inline UUID::UUID(Flag flag)
+	{
+		switch (flag)
+		{
+			case fGenerate: generate(); break;
+			case fNull: clear(); break;
+		}
+	}
+
+
 	inline bool UUID::operator ! () const
 	{
 		return null();
@@ -20,12 +55,70 @@ namespace Yuni
 
 
 	template<class StringT>
-	UUID& UUID::operator = (const StringT& string)
+	inline UUID& UUID::operator = (const StringT& string)
 	{
 		if (not assign(string))
 			clear();
 		return *this;
 	}
+
+
+	inline bool UUID::null() const
+	{
+		return  (0 == pValue.n64[0]) and (0 == pValue.n64[1]);
+	}
+
+
+	inline UUID& UUID::operator = (const UUID& rhs)
+	{
+		pValue.n64[0] = rhs.pValue.n64[0];
+		pValue.n64[1] = rhs.pValue.n64[1];
+		return *this;
+	}
+
+
+	inline bool UUID::operator == (const UUID& rhs) const
+	{
+		return  (pValue.n64[0] == rhs.pValue.n64[0])
+			and (pValue.n64[1] == rhs.pValue.n64[1]);
+	}
+
+
+	inline bool UUID::operator != (const UUID& rhs) const
+	{
+		return (not operator == (rhs));
+	}
+
+
+	inline bool UUID::operator < (const UUID& rhs) const
+	{
+		return (pValue.n64[0] == rhs.pValue.n64[0])
+			? (pValue.n64[1] < rhs.pValue.n64[1])
+			: (pValue.n64[0] < rhs.pValue.n64[0]);
+	}
+
+
+	inline bool UUID::operator > (const UUID& rhs) const
+	{
+		return (pValue.n64[0] == rhs.pValue.n64[0])
+			? (pValue.n64[1] > rhs.pValue.n64[1])
+			: (pValue.n64[0] > rhs.pValue.n64[0]);
+	}
+
+
+	inline bool UUID::operator <= (const UUID& rhs) const
+	{
+		return ((*this < rhs) or (*this == rhs));
+	}
+
+
+	inline bool UUID::operator >= (const UUID& rhs) const
+	{
+		return ((*this > rhs) or (*this == rhs));
+	}
+
+
+
 
 
 } // namespace Yuni
