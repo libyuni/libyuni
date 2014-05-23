@@ -5,11 +5,18 @@ include("../cmake/message.cmake")
 YMESSAGE("")
 YMESSAGE("Yuni Framework - Samples")
 YMESSAGE("")
-project(YUNI-SAMPLES CXX)
+project(yuni-samples)
 
 if(POLICY CMP0011)
 	cmake_policy(SET CMP0011 NEW)
 endif(POLICY CMP0011)
+
+include(CheckCSourceCompiles)
+include(CheckCXXSourceCompiles)
+include(CheckIncludeFiles)
+include(CheckIncludeFileCXX)
+include(CheckCCompilerFlag)
+include(CheckCXXCompilerFlag)
 
 
 # To find 'FindYuni.cmake'
