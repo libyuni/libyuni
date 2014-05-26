@@ -50,17 +50,17 @@ namespace Ownership
 			destructiveCopy = false,
 		};
 
-		// Check if T is a compatible class for this kind of ownership
-		// If it does not compile, COMReferenceCounted is probably more suitable
-		YUNI_STATIC_ASSERT(Static::HasTypedef::IntrusiveSmartPtrType<T>::no, IncompatibleSmartPtrType);
-
 	public:
 		//! \name Constructors
 		//@{
 		//! Default constructor
 		ReferenceCounted() :
 			pCount(new uint(1))
-		{}
+		{
+			// Check if T is a compatible class for this kind of ownership
+			// If it does not compile, COMReferenceCounted is probably more suitable
+			YUNI_STATIC_ASSERT((T::hasIntrusiveSmartPtr != 0), IncompatibleSmartPtrType);
+		}
 
 		//! Copy constructor
 		ReferenceCounted(const ReferenceCounted& c) :
@@ -76,9 +76,7 @@ namespace Ownership
 		/*!
 		** \brief Initialization from a raw pointer
 		*/
-		void initFromRawPointer(const T&)
-		{
-		}
+		void initFromRawPointer(const T&) {}
 
 		/*!
 		** \brief Clone this object
@@ -144,8 +142,7 @@ namespace Ownership
 		COMReferenceCounted()
 		{}
 		//! Copy constructor for any king of template parameter
-		template<typename U> COMReferenceCounted(const COMReferenceCounted<U>&)
-		{}
+		template<typename U> COMReferenceCounted(const COMReferenceCounted<U>&) {}
 		//@}
 
 
@@ -245,8 +242,9 @@ namespace Ownership
 		{
 			if (!(--(*pCount)))
 			{
-				delete pCount;
+				AtomicType* ptr = pCount;
 				pCount = nullptr;
+				delete ptr;
 				return true;
 			}
 			return false;
@@ -299,9 +297,7 @@ namespace Ownership
 		/*!
 		** \brief Initialization from a raw pointer
 		*/
-		void initFromRawPointer(const T&)
-		{
-		}
+		void initFromRawPointer(const T&) {}
 
 		/*!
 		** \brief Clone this object

@@ -29,11 +29,9 @@ namespace Yuni
 	{
 	public:
 		//! Simplified type name of the instance for the current child type & threading policy.
-		typedef IIntrusiveSmartPtr<ChildT, VirtualT, TP> IntrusiveRef;
-		//! Typedef used for detecting misuse of smartptr. The real type does not really matter
-		typedef IntrusiveRef IntrusiveSmartPtrType;
+		typedef IIntrusiveSmartPtr<ChildT, VirtualT, TP> IntrusiveSmartPtrType;
 		//! Threading policy type
-		typedef TP<IntrusiveRef> ThreadingPolicy;
+		typedef TP<IntrusiveSmartPtrType> ThreadingPolicy;
 
 		/*!
 		** \brief Class Helper to determine the most suitable smart pointer for a class
@@ -53,7 +51,15 @@ namespace Yuni
 		}; // class SmartPtrType
 
 		//! Most convenient smartptr for this class
-		typedef typename SmartPtrType<IntrusiveRef>::Ptr  Ptr;
+		typedef typename SmartPtrType<IntrusiveSmartPtrType>::Ptr  Ptr;
+
+		enum
+		{
+			//! Dummy flag used by the class `SmartPtr` to make sure that an intrusive
+			// smart pointer is present
+			hasIntrusiveSmartPtr = 1,
+		};
+
 
 	public:
 		//! \name Pointer management

@@ -211,8 +211,11 @@ namespace Core
 		typedef IIterator<Private::Core::Tree::DepthInfixIterator<Node>, false> depth_infix_iterator;
 		typedef IIterator<Private::Core::Tree::DepthInfixIterator<Node>, true> const_depth_infix_iterator;
 
-		//! Typedef used for detecting misuse of smartptr. The real type does not really matter
-		typedef Ptr IntrusiveSmartPtrType;
+		enum
+		{
+			//! This class has intrusive smartptr implementation, even if not inheriting from IIntrusiveSmartPtr
+			hasIntrusiveSmartPtr = 1,
+		};
 
 		// class iterator;
 
