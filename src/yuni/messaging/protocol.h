@@ -11,6 +11,9 @@ namespace Yuni
 namespace Messaging
 {
 
+	/*!
+	** \brief All schemas and methods accessible
+	*/
 	class YUNI_DECL Protocol final
 	{
 	public:

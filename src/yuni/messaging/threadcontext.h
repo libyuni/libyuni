@@ -14,7 +14,7 @@ namespace Messaging
 	/*!
 	** \brief Schema for API methods
 	**
-	** A schema is some kink of namespace, where methods will belong
+	** A schema is some kink of namespace, where methods belong to
 	*/
 	class YUNI_DECL Context final
 	{
