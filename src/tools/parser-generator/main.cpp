@@ -112,9 +112,24 @@ static inline void ParseCommandLine(int argc, char** argv, Settings& settings)
 
 
 
+#include <yuni/uuid/uuid.h>
+#include <map>
 
 int main(int argc, char** argv)
 {
+	std::map<UUID, String> dict;
+	dict["94625ec0-83e7-4f98-a6da-e3da4f725128"] = "1";
+	dict["8205c86c-cacc-4519-a57c-3253ef8090bb"] = "2";
+	auto i = dict.find("94625ec0-83e7-4f98-a6da-e3da4f725128");
+
+	if (i != dict.end())
+	{
+		std::cout << "FOUND : " << i->first << std::endl;
+		std::cout << "FOUND : " << i->second << std::endl;
+	}
+	else
+		std::cout << "NOT FOUND\n";
+	return 0;
 	// All settings
 	Settings settings;
 

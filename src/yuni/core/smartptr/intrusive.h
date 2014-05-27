@@ -53,13 +53,6 @@ namespace Yuni
 		//! Most convenient smartptr for this class
 		typedef typename SmartPtrType<IntrusiveSmartPtrType>::Ptr  Ptr;
 
-		enum
-		{
-			//! Dummy flag used by the class `SmartPtr` to make sure that an intrusive
-			// smart pointer is present
-			hasIntrusiveSmartPtr = 1,
-		};
-
 
 	public:
 		//! \name Pointer management
@@ -69,6 +62,8 @@ namespace Yuni
 		//! Decrement the internal reference counter and returns true if it should
 		// be deleted (should not be called directly)
 		bool release() const;
+		//! Dummy method for checking smartptr compatibility
+		bool hasIntrusiveSmartPtr() const {return true;}
 		//@}
 
 
@@ -127,6 +122,8 @@ namespace Yuni
 
 
 
+
+
 	template<class ChildT, template<class> class TP>
 	class  IIntrusiveSmartPtr<ChildT, false, TP> : public TP<IIntrusiveSmartPtr<ChildT, false, TP> >
 	{
@@ -158,6 +155,7 @@ namespace Yuni
 		//! Most convenient smartptr for this class
 		typedef typename SmartPtrType<IntrusiveRef>::Ptr  Ptr;
 
+
 	public:
 		//! \name Pointer management
 		//@{
@@ -166,6 +164,8 @@ namespace Yuni
 		//! Decrement the internal reference counter and returns true if it should
 		// be deleted (should not be called directly)
 		bool release() const;
+		//! Dummy method for checking smartptr compatibility
+		bool hasIntrusiveSmartPtr() const {return true;}
 		//@}
 
 
@@ -209,6 +209,7 @@ namespace Yuni
 		mutable Atomic::Int<8 * sizeof(void*), TP> pRefCount;
 
 	}; // class IIntrusiveSmartPtr
+
 
 
 

@@ -505,8 +505,8 @@ namespace Core
 		void addRef() const;
 		//! Decrement the internal reference counter
 		bool release() const;
-		//! Get if the object is an unique reference
-		bool unique() const;
+		//! Dummy method for checking smartptr compatibility
+		bool hasIntrusiveSmartPtr() const {return true;}
 		//@}
 
 

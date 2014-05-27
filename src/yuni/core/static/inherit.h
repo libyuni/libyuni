@@ -41,21 +41,22 @@ namespace Static
 		typedef char  FalseType;
 
 		// C obviously inherits from BaseT
-		static TrueType  CheckIfCInheritsFromBaseT(const BaseT*);
+		static TrueType  deduce(const BaseT*);
 		// C does not inherits from BaseT
-		static FalseType CheckIfCInheritsFromBaseT(...);
+		static FalseType deduce(...);
 		// A dummy routine, for returning a type C
-		static C* DummyClassCMaker();
+		static C* Helper();
 
 	public:
 		enum
 		{
 			//! A non-zero value if C inherits from BaseT
-			Yes = sizeof(CheckIfCInheritsFromBaseT(DummyClassCMaker())) == sizeof(TrueType),
+			Yes = sizeof(deduce(Helper())) == sizeof(TrueType),
 			//! A non-zero value if C does not inherit from BaseT
-			No = sizeof(CheckIfCInheritsFromBaseT(DummyClassCMaker())) == sizeof(FalseType),
+			No = sizeof(deduce(Helper())) == sizeof(FalseType),
 		};
 	}; // class InheritsFrom
+
 
 
 

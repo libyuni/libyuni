@@ -12,18 +12,19 @@
 		template<class T> \
 		class TYPEDEF final \
 		{ \
+			typedef typename ::Yuni::Static::Remove::All<T>::Type  Type; \
 			typedef struct {char a[2];}   TrueType; \
 			typedef char  FalseType; \
-			template<class C> static TrueType  CheckIfHasTypedef(typename C::TYPEDEF const *); \
-			template<class>   static FalseType CheckIfHasTypedef(...); \
+			template<class C> static TrueType  deduce(typename C::TYPEDEF const *); \
+			template<class C> static FalseType deduce(...); \
 		\
 		public: \
 			enum \
 			{ \
-				yes = sizeof(CheckIfHasTypedef<typename ::Yuni::Static::Remove::All<T>::Type>(0)) == sizeof(TrueType), \
+				yes = sizeof(deduce<Type>(0)) == sizeof(TrueType), \
 				no = !yes, \
 			}; \
-		}
+		} /* class */
 
 
 

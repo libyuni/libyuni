@@ -191,7 +191,7 @@ namespace Yuni
 
 
 	private:
-		typedef SmartPtr<Yuni::Private::Process::SubProcess>  ThreadPtr;
+		typedef SmartPtr<Yuni::Private::Process::SubProcess, Yuni::Policy::Ownership::COMReferenceCounted>  ThreadPtr;
 
 	private:
 		//! Dispatch the execution of the process to an event loop

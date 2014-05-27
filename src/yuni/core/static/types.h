@@ -139,7 +139,6 @@ namespace Type
 
 
 
-
 	//! \name Overloads
 	//@{
 
