@@ -14,4 +14,9 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../..")
 
 add_executable(yuni-parser-generator   main.cpp)
 
-target_link_libraries(yuni-parser-generator yuni-static-parser yuni-static-core yuni-static-uuid uuid rpcrt4.lib)
+set(ADDITIONAL_LIBS "")
+if (WIN32 OR WIN64)
+	set(ADDITIONAL_LIBS rpcrt4.lib)
+endif (WIN32 OR WIN64)
+
+target_link_libraries(yuni-parser-generator yuni-static-parser yuni-static-core yuni-static-uuid uuid "${ADDITIONAL_LIBS}")
