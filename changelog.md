@@ -41,18 +41,18 @@ Release version 1.0.0
 
 **Changes**
 
-* [core] Smart pointers:
+ * [core] Smart pointers:
 
     - `IIntrusiveSmartPtr<T>` now uses a non recursive mutex.
 	- `Yuni::SmartPtr` won't compile when using the COMReferenceCounted ownership policy
 	  (intrusive smart ptr, the reference counter is inside the object) if the
-	  underlying object does not have a non null constant field `hasIntrusiveSmartPtr`.
-	  The abstract class `IIntrusiveSmartPtr` should be used for implementing intrusive
-	  smart pointer.
+	  underlying object does not have the required methods (`addRef`, `release`, and
+	  `hasIntrusiveSmartPtr`) The abstract class `IIntrusiveSmartPtr` should be used for
+	  implementing intrusive smart pointer.
     - The method `SmartPtr::unique()` has been removed due to thread-safety issues
     - `IIntrusiveSmartPtr::onRelease` is now const.
 
-* [core] Jobs:
+ * [core] Jobs:
 
    - `Yuni::Job::IJob` and `Yuni::Thread::IThread` now use intrusive smartptr
      to reduce memory allocation in high workload environments. Consequently it may not compile
@@ -62,6 +62,10 @@ Release version 1.0.0
    - `<yuni/job/queue.h>` has been removed. Please use `<yuni/job/queue/service.h>` instead
    - `Yuni::Job::QueueService` is no longer a template class and has been
      internally revamped
+
+ * [core] Variants:
+
+   - The variant's types have been renamed (`Yuni::Variant::tString` is now `Yuni::variantTString`)
 
  * [core] Math/Geometry:
    - the methods `Point2D::closeTo()` have been renamed to `Point2D::isCloseTo()`
