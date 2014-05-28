@@ -211,12 +211,6 @@ namespace Core
 		typedef IIterator<Private::Core::Tree::DepthInfixIterator<Node>, false> depth_infix_iterator;
 		typedef IIterator<Private::Core::Tree::DepthInfixIterator<Node>, true> const_depth_infix_iterator;
 
-		enum
-		{
-			//! This class has intrusive smartptr implementation, even if not inheriting from IIntrusiveSmartPtr
-			hasIntrusiveSmartPtr = 1,
-		};
-
 		// class iterator;
 
 		// # include "treeN.iterator.def.h"
@@ -540,7 +534,7 @@ namespace Core
 
 
 	protected:
-		//! Parent
+		//! Parent (weak pointer)
 		Node* pParent;
 
 		//! How many children do we have ?
@@ -577,6 +571,7 @@ namespace Core
 
 	private:
 		typedef typename ThreadingPolicy::template Volatile<int>::Type  ReferenceCounterType;
+		//! The internal reference count (must be protected by mutexlocker on this)
 		mutable ReferenceCounterType pRefCount;
 
 	}; // class TreeN

@@ -11,7 +11,9 @@ namespace Core
 	template<class T, template<class> class TP, template <class> class ChckP,
 		class ConvP>
 	inline TreeN<T,TP,ChckP,ConvP>::TreeN() :
-		pParent(nullptr), pChildrenCount(0)
+		: pParent(nullptr)
+		, pChildrenCount(0)
+		, pRefCount(0)
 	{}
 
 
@@ -526,10 +528,7 @@ namespace Core
 		// We check in a first time if we are not already at the end
 		if (pParent and pPreviousSibling)
 		{
-			// Locking the parent
 			typename ThreadingPolicy::MutexLocker locker(pParent);
-
-			// Ok we have to move
 			detachFromParentWL();
 			pParent->pushFrontWL(this);
 		}
@@ -569,27 +568,31 @@ namespace Core
 
 	template<class T, template<class> class TP, template <class> class ChckP,
 		class ConvP>
-	bool
-	TreeN<T,TP,ChckP,ConvP>::release() const
+	bool TreeN<T,TP,ChckP,ConvP>::release() const
 	{
-		{
-			typename ThreadingPolicy::MutexLocker locker(*this);
-			assert(pRefCount > 0);
-			if (--pRefCount != 0)
-				return false;
-			// Early clean-up
-			// The method 'release' must be const for good code design. But
-			// we have to be properly detached from the parent node.
-			TreeNNode& ref = *(const_cast<TreeNNode*>(this));
-			if (pParent)
-				ref.detachFromParentWL();
-			if (pChildrenCount)
-				ref.clearWL();
-		}
+		typename ThreadingPolicy::MutexLocker locker(*this);
+		assert(pRefCount > 0 and "TreeN: invalid reference count");
+		if (--pRefCount != 0)
+			return false;
+
+		// Early clean-up
+		// The method 'release' must be const for good code design. But
+		// we have to be properly detached from the parent node.
+		TreeNNode& ref = *(const_cast<TreeNNode*>(this));
+		if (pParent)
+			ref.detachFromParentWL();
+		if (pChildrenCount)
+			ref.clearWL();
 		return true;
 	}
 
 
+	template<class T, template<class> class TP, template <class> class ChckP,
+		class ConvP>
+	inline bool hasIntrusiveSmartPtr() const
+	{
+		return true;
+	}
 
 
 
