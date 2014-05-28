@@ -500,7 +500,7 @@ namespace Core
 		//! Decrement the internal reference counter
 		bool release() const;
 		//! Dummy method for checking smartptr compatibility
-		bool hasIntrusiveSmartPtr() const {return true;}
+		bool hasIntrusiveSmartPtr() const;
 		//@}
 
 
