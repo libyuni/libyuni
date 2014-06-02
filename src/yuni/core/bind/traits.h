@@ -1128,12 +1128,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1185,12 +1185,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1242,12 +1242,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1299,12 +1299,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1356,12 +1356,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1413,12 +1413,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1470,12 +1470,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1527,12 +1527,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1584,12 +1584,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1641,12 +1641,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1698,12 +1698,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1755,12 +1755,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1812,12 +1812,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1869,12 +1869,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1926,12 +1926,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -1983,12 +1983,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -2977,12 +2977,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3034,12 +3034,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3091,12 +3091,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3148,12 +3148,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3205,12 +3205,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3262,12 +3262,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3319,12 +3319,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3376,12 +3376,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3433,12 +3433,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3490,12 +3490,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3547,12 +3547,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3604,12 +3604,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3661,12 +3661,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3718,12 +3718,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3775,12 +3775,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override
@@ -3832,12 +3832,12 @@ namespace BindImpl
 
 		virtual const void* object() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual const IEventObserverBase* observerBaseObject() const override
 		{
-			return nullptr;
+			return NULL;
 		}
 
 		virtual bool isDescendantOf(const IEventObserverBase*) const override

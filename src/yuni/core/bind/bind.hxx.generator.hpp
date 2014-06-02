@@ -44,9 +44,12 @@ namespace Yuni
 
 	// Constructor
 	template<<%=tmpl[0]%>>
-	inline Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::Bind(const Yuni::DynamicLibrary::Symbol& symbol)
+	inline Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>
+	Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol)
 	{
-		bind(symbol);
+		BindType result;
+		result.bindFromSymbol(symbol);
+		return result;
 	}
 
 	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -107,7 +110,7 @@ namespace Yuni
 
 	// Bind: Pointer-to-function (from a library symbol)
 	template<<%=tmpl[0]%>>
-	inline void Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::bind(const Yuni::DynamicLibrary::Symbol& symbol)
+	inline void Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol)
 	{
 		if (symbol.valid())
 		{

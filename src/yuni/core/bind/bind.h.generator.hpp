@@ -131,6 +131,13 @@ namespace Yuni
 <%=generator.include("yuni/core/bind/bind.h.generator.commonstypes.hpp", i) %>
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -141,8 +148,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(<%=generator.list(i)%>));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -254,7 +259,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!

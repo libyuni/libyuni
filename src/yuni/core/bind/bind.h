@@ -206,6 +206,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -216,8 +223,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)());
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -329,7 +334,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -566,6 +571,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -576,8 +588,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)());
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -689,7 +699,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -926,6 +936,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -936,8 +953,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)());
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -1049,7 +1064,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -1286,6 +1301,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -1296,8 +1318,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -1409,7 +1429,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -1646,6 +1666,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -1656,8 +1683,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -1769,7 +1794,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -2006,6 +2031,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -2016,8 +2048,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -2129,7 +2159,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -2366,6 +2396,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -2376,8 +2413,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -2489,7 +2524,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -2726,6 +2761,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -2736,8 +2778,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -2849,7 +2889,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -3086,6 +3126,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -3096,8 +3143,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -3209,7 +3254,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -3446,6 +3491,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -3456,8 +3508,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -3569,7 +3619,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -3806,6 +3856,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -3816,8 +3873,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -3929,7 +3984,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -4166,6 +4221,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -4176,8 +4238,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -4289,7 +4349,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -4526,6 +4586,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -4536,8 +4603,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -4649,7 +4714,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -4886,6 +4951,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -4896,8 +4968,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -5009,7 +5079,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -5246,6 +5316,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -5256,8 +5333,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -5369,7 +5444,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -5606,6 +5681,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -5616,8 +5698,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -5729,7 +5809,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -5966,6 +6046,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -5976,8 +6063,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -6089,7 +6174,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -6326,6 +6411,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -6336,8 +6428,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -6449,7 +6539,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -6686,6 +6776,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -6696,8 +6793,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -6809,7 +6904,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -7046,6 +7141,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -7056,8 +7158,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -7169,7 +7269,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -7406,6 +7506,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -7416,8 +7523,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -7529,7 +7634,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -7766,6 +7871,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -7776,8 +7888,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -7889,7 +7999,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -8126,6 +8236,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -8136,8 +8253,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -8249,7 +8364,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -8486,6 +8601,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -8496,8 +8618,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -8609,7 +8729,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -8846,6 +8966,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -8856,8 +8983,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -8969,7 +9094,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -9206,6 +9331,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -9216,8 +9348,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -9329,7 +9459,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -9566,6 +9696,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -9576,8 +9713,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -9689,7 +9824,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -9926,6 +10061,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -9936,8 +10078,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -10049,7 +10189,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -10286,6 +10426,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -10296,8 +10443,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -10409,7 +10554,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -10646,6 +10791,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -10656,8 +10808,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -10769,7 +10919,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -11006,6 +11156,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -11016,8 +11173,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -11129,7 +11284,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -11366,6 +11521,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -11376,8 +11538,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -11489,7 +11649,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -11726,6 +11886,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -11736,8 +11903,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -11849,7 +12014,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -12086,6 +12251,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -12096,8 +12268,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -12209,7 +12379,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -12446,6 +12616,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -12456,8 +12633,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -12569,7 +12744,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -12806,6 +12981,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -12816,8 +12998,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -12929,7 +13109,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -13166,6 +13346,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -13176,8 +13363,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -13289,7 +13474,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -13526,6 +13711,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -13536,8 +13728,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -13649,7 +13839,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -13886,6 +14076,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -13896,8 +14093,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -14009,7 +14204,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -14246,6 +14441,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -14256,8 +14458,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -14369,7 +14569,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -14606,6 +14806,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -14616,8 +14823,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -14729,7 +14934,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -14966,6 +15171,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -14976,8 +15188,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -15089,7 +15299,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -15326,6 +15536,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -15336,8 +15553,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -15449,7 +15664,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -15686,6 +15901,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -15696,8 +15918,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -15809,7 +16029,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -16046,6 +16266,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -16056,8 +16283,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -16169,7 +16394,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -16406,6 +16631,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -16416,8 +16648,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -16529,7 +16759,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -16766,6 +16996,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -16776,8 +17013,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -16889,7 +17124,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -17126,6 +17361,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -17136,8 +17378,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -17249,7 +17489,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -17486,6 +17726,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -17496,8 +17743,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -17609,7 +17854,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -17846,6 +18091,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -17856,8 +18108,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -17969,7 +18219,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
@@ -18206,6 +18456,13 @@ namespace Yuni
 
 
 	public:
+		/*!
+		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		*/
+		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
+
+
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
@@ -18216,8 +18473,6 @@ namespace Yuni
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor from a library symbol
-		Bind(const Yuni::DynamicLibrary::Symbol& symbol);
 		//! Constructor, from a pointer-to-method
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
@@ -18329,7 +18584,7 @@ namespace Yuni
 		**
 		** \param symbol A symbol from a dynamic library
 		*/
-		void bind(const Yuni::DynamicLibrary::Symbol& symbol);
+		void bindFromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
 		/*!
