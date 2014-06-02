@@ -1,6 +1,10 @@
 #ifndef __YUNI_CORE_DYNAMICLIBRARY_FILE_HXX__
 # define __YUNI_CORE_DYNAMICLIBRARY_FILE_HXX__
 
+# include "file.h"
+
+
+
 namespace Yuni
 {
 namespace DynamicLibrary
@@ -24,8 +28,7 @@ namespace DynamicLibrary
 	}
 
 
-	template<class StringT>
-	inline Symbol File::operator [] (const StringT& name) const
+	inline Symbol File::operator [] (const AnyString& name) const
 	{
 		return resolve(name);
 	}

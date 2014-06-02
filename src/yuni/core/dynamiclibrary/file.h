@@ -299,7 +299,7 @@ namespace DynamicLibrary
 		** \brief The operator []
 		** \see resolve()
 		*/
-		template<class StringT> Symbol operator [] (const StringT& name) const;
+		Symbol operator [] (const AnyString& name) const;
 		//@}
 
 
@@ -310,6 +310,8 @@ namespace DynamicLibrary
 		String pFilename;
 
 	}; // class DynamicLibrary
+
+
 
 
 
