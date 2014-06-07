@@ -170,6 +170,12 @@
 		//@}
 
 
+		//! \name Address translation
+		//@{
+		void translateOffset(uint& column, uint& line, uint offset) const;
+		//@}
+
+
 	public:
 		//! Stack
 		Chunk* stack;
@@ -1003,6 +1009,31 @@
 		return false;
 	}
 
+
+	inline void Datasource::translateOffset(uint& column, uint& line, uint offset) const
+	{
+		uint fileindex = 0;
+
+		if (fileindex < (uint) contents.size())
+		{
+			// alias to the content
+			const Clob& content = contents[fileindex];
+
+			for (uint x = 0; x < (uint) content.size(); ++x)
+			{
+				if (content[x] == '\n')
+				{
+					column = 0;
+					++line;
+				}
+				else
+					++column;
+			}
+		}
+
+		if (line != 0 and column == 0)
+			column = 1;
+	}
 
 
 

@@ -169,7 +169,6 @@ namespace PEG
 			h << "	class Node final\n";
 			h << "	{\n";
 			h << "	public:\n";
-			h << "		typedef AnyString Text;\n";
 			h << "		//! Vector of nodes\n";
 			h << "		typedef std::vector<Node*> Vector;\n";
 			h << "\n";
@@ -214,10 +213,8 @@ namespace PEG
 			h << "		uint offset;\n";
 			h << "		//! End offset\n";
 			h << "		uint offsetEnd;\n";
-			h << "		//! Line Index\n";
-			h << "		uint line;\n";
 			h << "		//! Text associated to the node (if any)\n";
-			h << "		Text text;\n";
+			h << "		AnyString text;\n";
 			h << "\n";
 			h << "		//! Children\n";
 			h << "		Node::Vector children;\n";
@@ -236,6 +233,10 @@ namespace PEG
 			h << "		void clear();\n";
 			h << "		bool loadFromFile(const AnyString& filename);\n";
 			h << "		bool load(const AnyString& content);\n";
+			h << "		void translateOffset(uint& column, uint& line, const Node&) const;\n";
+			h << "		void translateOffset(uint& column, uint& line, uint offset) const;\n";
+			h << "		uint translateOffsetToLine(const Node& node) const;\n";
+			h << '\n';
 			h << '\n';
 			h << "	public:\n";
 			h << "		//! Event: load another include file\n";
@@ -304,7 +305,6 @@ namespace PEG
 			hxx << "		: rule(rgUnknown)\n";
 			hxx << "		, offset()\n";
 			hxx << "		, offsetEnd()\n";
-			hxx << "		, line()\n";
 			hxx << "	{}\n";
 			hxx << '\n';
 			hxx << '\n';
@@ -312,7 +312,6 @@ namespace PEG
 			hxx << "		: rule(rhs.rule)\n";
 			hxx << "		, offset(rhs.offset)\n";
 			hxx << "		, offsetEnd(rhs.offsetEnd)\n";
-			hxx << "		, line(rhs.line)\n";
 			hxx << "		, text(rhs.text)\n";
 			hxx << "	{\n";
 			hxx << "		if (not rhs.children.empty())\n";
@@ -675,8 +674,9 @@ namespace PEG
 			cpp << "		pData = nullptr;\n";
 			cpp << "		if (not notifications.empty())\n";
 			cpp << "			Notification::Vector().swap(notifications);\n";
-			cpp << "	}\n\n\n";
-
+			cpp << "	}\n";
+			cpp << "\n";
+			cpp << "\n";
 			cpp << "	bool Parser::loadFromFile(const AnyString& filename)\n";
 			cpp << "	{\n";
 			cpp << "		if (!pData)\n";
@@ -686,8 +686,9 @@ namespace PEG
 			cpp << "		ctx.open(filename);\n";
 			cpp << "		DATASOURCE_PARSE(ctx);\n";
 			cpp << "		return ctx.success;\n";
-			cpp << "	}\n\n\n";
-
+			cpp << "	}\n";
+			cpp << "\n";
+			cpp << "\n";
 			cpp << "	bool Parser::load(const AnyString& content)\n";
 			cpp << "	{\n";
 			cpp << "		if (!pData)\n";
@@ -706,8 +707,9 @@ namespace PEG
 			cpp << "		String tmp;\n";
 			cpp << "		String indent;\n";
 			cpp << "		InternalNodeExportHTML(out, node, indent, tmp);\n";
-			cpp << "	}\n\n\n";
-
+			cpp << "	}\n";
+			cpp << "\n";
+			cpp << "\n";
 			cpp << "	void Node::Export(Clob& out, const Node& node, bool color)\n";
 			cpp << "	{\n";
 			cpp << "		assert(&node and \"invalid reference to node\");\n";
@@ -718,12 +720,48 @@ namespace PEG
 			cpp << "			InternalNodeExportConsole<false>(out, node, false, indent, tmp);\n";
 			cpp << "		else\n";
 			cpp << "			InternalNodeExportConsole<true>(out, node, false, indent, tmp);\n";
-			cpp << "	}\n\n\n";
-
+			cpp << "	}\n";
+			cpp << "\n";
+			cpp << "\n";
 			cpp << "	void Node::Export(Clob& out, const Node& node)\n";
 			cpp << "	{\n";
 			cpp << "		Export(out, node, ::Yuni::System::Console::IsStdoutTTY());\n";
-			cpp << "	}\n\n\n";
+			cpp << "	}\n";
+			cpp << "\n";
+			cpp << "\n";
+			cpp << "	void Parser::translateOffset(uint& column, uint& line, const Node& node) const\n";
+			cpp << "	{\n";
+			cpp << "		column = 0;\n";
+			cpp << "		line = 0;\n";
+			cpp << "		if (YUNI_LIKELY(pData))\n";
+			cpp << "		{\n";
+			cpp << "			Datasource& ctx = *((Datasource*) pData);\n";
+			cpp << "			ctx.translateOffset(column, line, node.offset);\n";
+			cpp << "		}\n";
+			cpp << "	}\n";
+			cpp << "\n";
+			cpp << "\n";
+			cpp << "	void Parser::translateOffset(uint& column, uint& line, uint offset) const\n";
+			cpp << "	{\n";
+			cpp << "		column = 0;\n";
+			cpp << "		line = 0;\n";
+			cpp << "		if (YUNI_LIKELY(pData))\n";
+			cpp << "		{\n";
+			cpp << "			Datasource& ctx = *((Datasource*) pData);\n";
+			cpp << "			ctx.translateOffset(column, line, offset);\n";
+			cpp << "		}\n";
+			cpp << "	}\n";
+			cpp << "\n";
+			cpp << "\n";
+			cpp << "	uint Parser::translateOffsetToLine(const Node& node) const\n";
+			cpp << "	{\n";
+			cpp << "		uint column;\n";
+			cpp << "		uint line;\n";
+			cpp << "		translateOffset(column, line, node);\n";
+			cpp << "		return line;\n";
+			cpp << "	}\n";
+			cpp << "\n";
+			cpp << "\n";
 		}
 
 
