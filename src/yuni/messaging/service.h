@@ -119,7 +119,7 @@ namespace Messaging
 			Net::Error add(const AnyString& address, const Net::Port& port, Transport::ITransport::Ptr transport);
 
 			/*!
-			** \brief Add a new transport for *:<port>
+			** \brief Add a new transport for *:port
 			*/
 			Net::Error add(const Net::Port& port, Transport::ITransport::Ptr transport);
 

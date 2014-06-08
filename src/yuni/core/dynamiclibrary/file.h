@@ -155,8 +155,6 @@ namespace DynamicLibrary
 		** \brief Constructor - Load an dynamic library
 		**
 		** \param filename Filename of the library to load
-		** \param r The relocation mode (no effect on Windows)
-		** \param v The visibility mode (no effect on Windows)
 		*/
 		explicit File(const AnyString& filename);
 
@@ -164,8 +162,8 @@ namespace DynamicLibrary
 		** \brief Constructor - Load an dynamic library
 		**
 		** \param filename Filename of the library to load
-		** \param r The relocation mode (no effect on Windows)
-		** \param v The visibility mode (no effect on Windows)
+		** \param relocation The relocation mode (no effect on Windows)
+		** \param visibility The visibility mode (no effect on Windows)
 		*/
 		File(const AnyString& filename, Relocation relocation /* = relocationLazy */,
 			Visibility visibility = visibilityDefault);

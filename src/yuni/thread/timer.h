@@ -126,7 +126,7 @@ namespace Thread
 		** timer.reload();
 		** \endcode
 		**
-		** \param interval The new time interval (in milliseconds)
+		** \param milliseconds The new time interval (in milliseconds)
 		*/
 		void reload(uint milliseconds);
 
@@ -157,7 +157,7 @@ namespace Thread
 		** \brief Set the time interval (in `ms`)
 		**
 		** Use `reload()` to apply the changes if the timer is already started.
-		** \param t The new time interval (in milliseconds)
+		** \param milliseconds The new time interval (in milliseconds)
 		*/
 		void interval(uint milliseconds);
 

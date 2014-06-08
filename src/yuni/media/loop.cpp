@@ -6,17 +6,19 @@ namespace Yuni
 namespace Media
 {
 
-	Loop::Loop(QueueService* mediaService):
-		pMediaService(mediaService),
-		pClosing(false)
+	Loop::Loop(QueueService* queueservice)
+		: pMediaService(queueservice)
+		, pClosing(false)
 	{
 		timeout(50);
 	}
+
 
 	void Loop::beginClose()
 	{
 		pClosing = true;
 	}
+
 
 	void Loop::endClose()
 	{
@@ -26,11 +28,15 @@ namespace Media
 
 	bool Loop::onLoop()
 	{
-		if (!pMediaService || pClosing)
+		if (not pMediaService or pClosing)
 			return false;
+
 		pMediaService->updateDispatched();
 		return true;
 	}
+
+
+
 
 
 

@@ -35,9 +35,9 @@ namespace Media
 		/*!
 		** \brief Constructor
 		**
-		** \param mediaService Media queue service corresponding to this loop
+		** \param queueservice Media queue service corresponding to this loop
 		*/
-		Loop(QueueService* queueService);
+		Loop(QueueService* queueservice);
 
 		//! Destructor (not virtual, this is static inheritance)
 		~Loop() { stop(); }
@@ -58,6 +58,8 @@ namespace Media
 		bool pClosing;
 
 	}; // class Loop
+
+
 
 
 

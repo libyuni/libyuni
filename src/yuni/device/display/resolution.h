@@ -47,17 +47,17 @@ namespace Display
 		/*!
 		** \brief Constructor
 		**
-		** \param w Width of the monitor/screen
-		** \param h Height of the monitor/screen
-		** \param b Bit per Pixel
+		** \param width  Width of the monitor/screen
+		** \param height Height of the monitor/screen
+		** \param bits   Bit per Pixel
 		*/
 		Resolution(uint width, uint height, uint8 bits = 32);
 
 		/*!
 		** \brief Constructor by copy
-		** \param c The instance to copy
+		** \param rhs The instance to copy
 		*/
-		Resolution(const Resolution& c);
+		Resolution(const Resolution& rhs);
 		//@}
 
 		/*!

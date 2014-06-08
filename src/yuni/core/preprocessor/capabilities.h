@@ -240,7 +240,7 @@
 # endif
 
 /*!
-** \define Noreturn
+** \def Noreturn
 **
 ** \code
 ** void foo() YUNI_NORETURN

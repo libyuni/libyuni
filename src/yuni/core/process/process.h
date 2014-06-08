@@ -151,7 +151,7 @@ namespace Yuni
 		** \brief Wait for the end of the sub-process
 		**
 		** This method can be called from any thread.
-		** \param A variable for storing the execution time (in seconds)
+		** \param duration A variable for storing the execution time (in seconds)
 		** \return The exit status of the process
 		*/
 		int wait(sint64* duration = nullptr);

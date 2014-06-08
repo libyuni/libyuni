@@ -173,7 +173,7 @@ namespace Display
 		/*!
 		** \brief Add a new resolution in the list
 		**
-		** \param[in] r The resolution to add
+		** \param[in] resolution The resolution to add
 		** \internal It is a sorted descendant list. The first value must be the highest available value
 		*/
 		void add(const Resolution::Ptr& resolution);

@@ -12,10 +12,10 @@ namespace Device
 namespace Display
 {
 
-	Resolution::Resolution(const Resolution& c) :
-		pWidth(c.pWidth),
-		pHeight(c.pHeight),
-		pBitsPerPixel(c.pBitsPerPixel)
+	Resolution::Resolution(const Resolution& rhs)
+		: pWidth(rhs.pWidth)
+		, pHeight(rhs.pHeight)
+		, pBitsPerPixel(rhs.pBitsPerPixel)
 	{}
 
 

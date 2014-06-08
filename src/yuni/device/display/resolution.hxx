@@ -9,7 +9,6 @@ namespace Device
 namespace Display
 {
 
-
 	inline uint Resolution::width() const
 	{
 		return pWidth;
@@ -53,6 +52,7 @@ namespace Display
 		return pWidth >= rhs.pWidth and pHeight >= rhs.pHeight
 			and pBitsPerPixel >= rhs.pBitsPerPixel;
 	}
+
 
 
 

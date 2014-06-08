@@ -215,7 +215,7 @@ namespace File
 		/*!
 		** \brief Read a line from the file
 		**
-		** It reads a line into the buffer pointed to by #s until either a terminating
+		** It reads a line into the buffer pointed to by #buffer until either a terminating
 		** newline or EOF, which it replaces with ’\0’.
 		** The maximum number of char read is `buffer.chunkSize`. For code robutness
 		** (to prevent against misuses) this routine will reserve space according to
@@ -231,7 +231,7 @@ namespace File
 		/*!
 		** \brief Read a line from the file (with a custom chunk size)
 		**
-		** It reads a line into the buffer pointed to by #s until either a terminating
+		** It reads a line into the buffer pointed to by #buffer until either a terminating
 		** newline or EOF, which it replaces with ’\0’.
 		** The maximum number of char read is `CustomChunkT`. For code robutness
 		** (to prevent against misuses) this routine will reserve space according to
@@ -328,7 +328,7 @@ namespace File
 		** \brief Write any arbitrary buffer
 		**
 		** \param buffer An arbitrary buffer (const char*, String, CString)
-		** \param size Size of the buffer to write
+		** \param maxsize Maximum Size of the buffer to write
 		** \return The number of bytes that have been written
 		*/
 		template<class U> uint64 write(const U& buffer, uint64 maxsize);
@@ -392,7 +392,7 @@ namespace File
 		** Using `ensureAllocation = true` is the best way for allocating big files.
 		**
 		** \param size The new size of the file
-		** \param allocate True to make sure that the data are really allocated
+		** \param ensureAllocation True to make sure that the data are really allocated
 		** \return True if the file has been resized
 		*/
 		bool truncate(uint64 size, bool ensureAllocation = false);

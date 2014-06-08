@@ -22,6 +22,9 @@ cmake_install.cmake
 # Ninja files
 *.ninja
 
+# Documentation
+docs/doxygen
+
 # Yuni generated files
 src/compiler-flags-debug-cc
 src/compiler-flags-debug-cxx

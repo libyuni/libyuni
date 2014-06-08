@@ -35,7 +35,7 @@ namespace Yuni
 		/*!
 		** \brief Constructor with a given version
 		**
-		** \param h The major version number
+		** \param major The major version number
 		*/
 		explicit Version(uint major);
 
@@ -45,14 +45,14 @@ namespace Yuni
 		** \param major The major version number
 		** \param minor The minor version number
 		*/
-		Version(uint makor, uint minor);
+		Version(uint major, uint minor);
 
 		/*!
 		** \brief Constructor with a given version
 		**
-		** \param h The major version number
-		** \param l The minor version number
-		** \param r The revision number
+		** \param major The major version number
+		** \param minor The minor version number
+		** \param rev   The revision number
 		*/
 		Version(uint major, uint minor, uint rev);
 
@@ -145,6 +145,7 @@ namespace Yuni
 		uint revision;
 
 	}; // class Version
+
 
 
 

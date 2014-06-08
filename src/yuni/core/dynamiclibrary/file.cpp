@@ -31,6 +31,7 @@
 
 
 
+
 namespace Yuni
 {
 namespace DynamicLibrary
@@ -41,62 +42,62 @@ namespace DynamicLibrary
 	const File::Handle File::NullHandle = nullptr;
 
 
-
-	/*!
-	** \brief Try to find a file from a single path, a filename and a prefix
-	**
-	** \param[out] s A temporary string, where to write the absolute filename
-	** \param prefix The prefix to use for the filename
-	** \return True if the filename in `s` exists and should be loaded, False otherwise
-	**/
-	template<class StringT>
-	static inline bool FindLibraryFile(StringT& out, /*const StringT2& path,*/ const AnyString& filename, const char* prefix)
+	namespace // anonymous
 	{
-		# define TEST_THEN_LOAD(EXT) \
-			out.clear(); \
-			/*if (!path.empty()) */ \
-				/*out << path << IO::Separator; */ \
-			out << prefix << filename << EXT; \
-			if (IO::File::Exists(out)) \
-				return true
 
-		# ifdef YUNI_OS_DARWIN
-		TEST_THEN_LOAD(".dylib");
-		TEST_THEN_LOAD(".bundle");
-		# endif
+		/*!
+		** \brief Try to find a file from a single path, a filename and a prefix
+		**
+		** \param[out] s A temporary string, where to write the absolute filename
+		** \param prefix The prefix to use for the filename
+		** \return True if the filename in `s` exists and should be loaded, False otherwise
+		**/
+		template<class StringT>
+		static inline bool FindLibraryFile(StringT& out, /*const StringT2& path,*/ const AnyString& filename, const char* prefix)
+		{
+			# define TEST_THEN_LOAD(EXT) \
+				out.clear(); \
+				/*if (!path.empty()) */ \
+					/*out << path << IO::Separator; */ \
+				out << prefix << filename << EXT; \
+				if (IO::File::Exists(out)) \
+					return true
 
-		# ifdef YUNI_OS_AIX
-		TEST_THEN_LOAD(".a");
-		# endif
-		# ifdef YUNI_OS_HPUX
-		TEST_THEN_LOAD(".sl");
-		# endif
+			# ifdef YUNI_OS_DARWIN
+			TEST_THEN_LOAD(".dylib");
+			TEST_THEN_LOAD(".bundle");
+			# endif
 
-		# ifdef YUNI_OS_WINDOWS
-		TEST_THEN_LOAD(".dll");
-		# else
-		TEST_THEN_LOAD(".so");
-		# endif
+			# ifdef YUNI_OS_AIX
+			TEST_THEN_LOAD(".a");
+			# endif
+			# ifdef YUNI_OS_HPUX
+			TEST_THEN_LOAD(".sl");
+			# endif
 
-		return false;
-		# undef TEST_THEN_LOAD
-	}
+			# ifdef YUNI_OS_WINDOWS
+			TEST_THEN_LOAD(".dll");
+			# else
+			TEST_THEN_LOAD(".so");
+			# endif
 
-
-	/*!
-	** \brief Try to find a file from a list of paths, a filename and a prefix
-	**
-	** \param[out] s A temporary string, where to write the absolute filename
-	** \param prefix The prefix to use for the filename
-	** \return True if the filename in `s` exists and should be loaded, False otherwise
-	**/
-	static inline bool FindLibrary(String& out, const AnyString& filename)
-	{
-		return (FindLibraryFile(out, filename, "lib") or FindLibraryFile(out, filename, ""));
-	}
+			return false;
+			# undef TEST_THEN_LOAD
+		}
 
 
+		/*!
+		** \brief Try to find a file from a list of paths, a filename and a prefix
+		**
+		** \return True if the filename in `s` exists and should be loaded, False otherwise
+		**/
+		static inline bool FindLibrary(String& out, const AnyString& filename)
+		{
+			return (FindLibraryFile(out, filename, "lib") or FindLibraryFile(out, filename, ""));
+		}
 
+
+	} // anonymous namespace
 
 
 
@@ -237,7 +238,7 @@ namespace DynamicLibrary
 	{
 		return NullHandle != pHandle
 			? (Symbol::Handle) (YUNI_DYNLIB_DLSYM(pHandle, name.c_str()))
-			: NULL;
+			: nullptr;
 	}
 
 

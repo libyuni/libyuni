@@ -107,7 +107,7 @@ namespace IO
 	**
 	** \param[out] path       The path from the original one
 	** \param[out] name       The bare filename from the original one
-	** \param path            The original filename
+	** \param filename        The original filename
 	** \param systemDependant Consider only the system-dependant path-separator
 	*/
 	void ExtractFilePathAndName(String& path, String& name, const AnyString& filename, bool systemDependant = true);
@@ -117,7 +117,7 @@ namespace IO
 	**
 	** \param[out] path       The path from the original one
 	** \param[out] name       The bare filename from the original one
-	** \param path            The original filename
+	** \param filename        The original filename
 	** \param systemDependant Consider only the system-dependant path-separator
 	*/
 	void ExtractFilePathAndName(Clob& path, Clob& name, const AnyString& filename, bool systemDependant = true);
@@ -130,7 +130,7 @@ namespace IO
 	** of the system-dependant path-separator (if systemDependant = true).
 	**
 	** \param[out] out        The bare file name without its extension
-	** \param p               The original file name
+	** \param path            The original file name
 	** \param systemDependant Consider only the system-dependant path-separator
 	*/
 	template<class StringT>

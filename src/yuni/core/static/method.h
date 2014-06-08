@@ -6,7 +6,7 @@
 
 
 /*!
-** \macro YUNI_IMPL_STATIC_HAS_METHOD
+** \def YUNI_IMPL_STATIC_HAS_METHOD
 ** \brief Macro for implementing a check for Determining whether a class has a specific typedef or not
 **
 ** \bug The signature is not checked in C++11

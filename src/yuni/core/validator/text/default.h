@@ -97,7 +97,7 @@ namespace Text
 		template<class U> bool validate(const U& s) const;
 		//@}
 
-	
+
 		//! \name Add an exception in the list
 		//@{
 		/*!

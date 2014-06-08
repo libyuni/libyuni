@@ -750,7 +750,7 @@ namespace Yuni
 		**
 		** The size of the string will remain untouched in any cases.
 		**
-		** \param region A CString container
+		** \param s A CString container
 		*/
 		template<class StringT> void overwriteRight(const StringT& s);
 
@@ -761,7 +761,7 @@ namespace Yuni
 		**
 		** \param offset Position of the first character (from the right) of the region
 		**   in the string
-		** \param region A CString container
+		** \param s A CString container
 		*/
 		template<class StringT> void overwriteRight(Size offset, const StringT& s);
 
@@ -777,7 +777,7 @@ namespace Yuni
 		** std::cout << s << std::endl; // '--- Title ---'
 		** \endcode
 		**
-		** \param region A CString container
+		** \param s A CString container
 		*/
 		template<class StringT> void overwriteCenter(const StringT& s);
 
@@ -977,7 +977,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of a sub-string (ignoring the case)
 		**
-		** \param cstr An arbitrary string
+		** \param c Ascii to find
 		** \return The position of the first occurence found, `npos` if not found
 		*/
 		Size irfind(char c) const;
@@ -985,7 +985,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of a sub-string (ignoring the case)
 		**
-		** \param cstr An arbitrary string
+		** \param c Ascii to find 
 		** \return The position of the first occurence found, `npos` if not found
 		*/
 		Size irfind(char c, Size offset) const;
