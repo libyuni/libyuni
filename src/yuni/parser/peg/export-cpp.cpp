@@ -16,7 +16,7 @@ namespace PEG
 	namespace // anonymous
 	{
 
-		class CPPConverter
+		class CPPConverter final
 		{
 		public:
 			CPPConverter(const AnyString& root, const Node::Map& rules);
@@ -86,10 +86,11 @@ namespace PEG
 
 			h << "#ifndef " << headerGuardID << "_H__\n";
 			h << "# define " << headerGuardID << "_H__\n";
-			h << "\n";
+			h << '\n';
 			h << "# include <yuni/yuni.h>\n";
 			h << "# include <yuni/core/string.h>\n";
 			h << "# include <yuni/core/bind.h>\n";
+			h << "# include <yuni/core/smartptr/intrusive.h>\n";
 			h << "# if __cplusplus > 199711L\n";
 			h << "#	define " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
 			h << "#	include <initializer_list>\n";
@@ -115,7 +116,7 @@ namespace PEG
 			}
 
 			h << "		//! enum for the final rule\n";
-			h << "		rgEOF = " << (enumIndex++) << "\n";
+			h << "		rgEOF = " << (enumIndex++) << '\n';
 
 			h << "	};\n";
 
@@ -147,7 +148,7 @@ namespace PEG
 			h << "		typedef Yuni::SmartPtr<Notification> Ptr;\n";
 			h << "		//! Vector of nodes\n";
 			h << "		typedef std::vector<Ptr> Vector;\n";
-			h << "\n";
+			h << '\n';
 			h << "	public:\n";
 			h << "		Notification()\n";
 			h << "			: offset()\n";
@@ -166,17 +167,24 @@ namespace PEG
 			h << '\n';
 			h << "	};\n\n\n\n\n";
 
-			h << "	class Node final\n";
+			h << "	class Node final : public Yuni::IIntrusiveSmartPtr<Node, false, Yuni::Policy::SingleThreaded>\n";
 			h << "	{\n";
 			h << "	public:\n";
+			h << "		//! Ancestor\n";
+			h << "		typedef Yuni::IIntrusiveSmartPtr<Node, false, Yuni::Policy::SingleThreaded> inherited;\n";
+			h << "		//! Threading policy\n";
+			h << "		typedef inherited::ThreadingPolicy ThreadingPolicy;\n";
+			h << "		//! The most suitable smart ptr for the class\n";
+			h << "		typedef inherited::SmartPtrType<Node>::Ptr  Ptr;\n";
 			h << "		//! Vector of nodes\n";
-			h << "		typedef std::vector<Node*> Vector;\n";
-			h << "\n";
+			h << "		typedef std::vector<Node::Ptr> Vector;\n";
+			h << '\n';
+			h << '\n';
 			h << "	public:\n";
 			h << "		static void Export(Yuni::Clob& out, const Node& node);\n";
 			h << "		static void Export(Yuni::Clob& out, const Node& node, bool color);\n";
 			h << "		static void ExportToHTML(Yuni::Clob& out, const Node& node);\n";
-			h << "\n";
+			h << '\n';
 			h << "	public:\n";
 			h << "		//! Default constructor\n";
 			h << "		Node();\n";
@@ -184,7 +192,9 @@ namespace PEG
 			h << "		Node(const Node& rhs);\n";
 			h << "		//! Destructor\n";
 			h << "		~Node();\n";
-			h << "\n";
+			h << '\n';
+			h << "		void clear();\n";
+			h << '\n';
 			h << "		//! Iterate through all child nodes\n";
 			h << "		template<class F> bool each(const F& callback);\n";
 			h << '\n';
@@ -202,8 +212,10 @@ namespace PEG
 			h << "		uint findFirst(enum Rule rule) const;\n";
 			h << '\n';
 			h << "		#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
-			h << "		Node*  xpath(std::initializer_list<enum Rule> path) const;\n";
+			h << "		Node::Ptr  xpath(std::initializer_list<enum Rule> path) const;\n";
 			h << "		#endif\n";
+			h << '\n';
+			h << "		Node& operator = (const Node& rhs);\n";
 			h << '\n';
 			h << '\n';
 			h << "	public:\n";
@@ -215,11 +227,15 @@ namespace PEG
 			h << "		uint offsetEnd;\n";
 			h << "		//! Text associated to the node (if any)\n";
 			h << "		AnyString text;\n";
-			h << "\n";
+			h << '\n';
 			h << "		//! Children\n";
 			h << "		Node::Vector children;\n";
-			h << "	};\n\n\n\n\n";
-
+			h << "	};\n";
+			h << '\n';
+			h << '\n';
+			h << '\n';
+			h << '\n';
+			h << '\n';
 			h << "	class Parser final\n";
 			h << "	{\n";
 			h << "	public:\n";
@@ -245,7 +261,7 @@ namespace PEG
 			h << "		OnError  onError;\n";
 			h << '\n';
 			h << "		//! The root node, if any\n";
-			h << "		Node* root;\n";
+			h << "		Node::Ptr root;\n";
 			h << '\n';
 			h << "		//! Notifications\n";
 			h << "		Notification::Vector notifications;\n";
@@ -285,9 +301,9 @@ namespace PEG
 			hxx << "inline std::ostream& operator << (std::ostream& out, const ";
 			for (uint i = 0; i != namespaces.size(); ++i)
 				hxx << "::" << namespaces[i];
-			hxx << "::Node* node)\n";
+			hxx << "::Node::Ptr node)\n";
 			hxx << "{\n";
-			hxx << "	if (node)\n";
+			hxx << "	if (!(!node))\n";
 			hxx << "		out << *node;\n";
 			hxx << "	else\n";
 			hxx << "		out << \"<invalid ast node>\";\n";
@@ -309,27 +325,26 @@ namespace PEG
 			hxx << '\n';
 			hxx << '\n';
 			hxx << "	inline Node::Node(const Node& rhs)\n";
-			hxx << "		: rule(rhs.rule)\n";
+			hxx << "		: inherited()\n";
+			hxx << "		, rule(rhs.rule)\n";
 			hxx << "		, offset(rhs.offset)\n";
 			hxx << "		, offsetEnd(rhs.offsetEnd)\n";
 			hxx << "		, text(rhs.text)\n";
 			hxx << "	{\n";
 			hxx << "		if (not rhs.children.empty())\n";
 			hxx << "		{\n";
-			hxx << "			children.reserve(rhs.children.size());\n";
+			hxx << "			children.resize(rhs.children.size());\n";
 			hxx << "			for (unsigned int i = 0; i != (unsigned) rhs.children.size(); ++i)\n";
-			hxx << "				children.push_back(new Node(*rhs.children[i]));\n";
+			hxx << "				children[i] = new Node(*rhs.children[i]);\n";
 			hxx << "		}\n";
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
 			hxx << "	inline Node::~Node()\n";
 			hxx << "	{\n";
-			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
-			hxx << "			delete children[i];\n";
 			hxx << "	}\n";
-			hxx << "\n";
-			hxx << "\n";
+			hxx << '\n';
+			hxx << '\n';
 			hxx << "	template<class F> inline bool Node::each(const F& callback)\n";
 			hxx << "	{\n";
 			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
@@ -339,8 +354,8 @@ namespace PEG
 			hxx << "		}\n";
 			hxx << "		return true;\n";
 			hxx << "	}\n";
-			hxx << "\n";
-			hxx << "\n";
+			hxx << '\n';
+			hxx << '\n';
 			hxx << "	template<class F> inline bool Node::each(const F& callback) const\n";
 			hxx << "	{\n";
 			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
@@ -350,8 +365,8 @@ namespace PEG
 			hxx << "		}\n";
 			hxx << "		return true;\n";
 			hxx << "	}\n";
-			hxx << "\n";
-			hxx << "\n";
+			hxx << '\n';
+			hxx << '\n';
 			hxx << "	template<class F> inline bool Node::each(enum Rule rule, const F& callback)\n";
 			hxx << "	{\n";
 			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
@@ -421,7 +436,7 @@ namespace PEG
 			hxx << '\n';
 			hxx << '\n';
 			hxx << "	#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
-			hxx << "	inline Node*  Node::xpath(std::initializer_list<enum Rule> path) const\n";
+			hxx << "	inline Node::Ptr  Node::xpath(std::initializer_list<enum Rule> path) const\n";
 			hxx << "	{\n";
 			hxx << "		if (path.size() > 0)\n";
 			hxx << "		{\n";
@@ -430,7 +445,7 @@ namespace PEG
 			hxx << "			{\n";
 			hxx << "				if (children[i]->rule == *it)\n";
 			hxx << "				{\n";
-			hxx << "					Node* result = children[i];\n";
+			hxx << "					Node::Ptr result = children[i];\n";
 			hxx << "					++it;\n";
 			hxx << "					for (; it != path.end(); ++it)\n";
 			hxx << "					{\n";
@@ -517,7 +532,7 @@ namespace PEG
 							foundHelper = true;
 							cpp << "\n\n";
 						}
-						cpp << helpers[i] << "\n";
+						cpp << helpers[i] << '\n';
 					}
 				}
 			}
@@ -549,7 +564,7 @@ namespace PEG
 		inline void CPPConverter::generateCPP()
 		{
 			const Node::Map::const_iterator end = rules.end();
-			cpp << "\n";
+			cpp << '\n';
 			cpp << "#include \"" << localInclude << "h\"\n";
 			cpp << "#include <cassert>\n";
 			cpp << "#include <yuni/core/string.h>\n";
@@ -574,7 +589,7 @@ namespace PEG
 			cpp << "		static const bool attr[] = {\n";
 			cpp << "			false, // rgUnknown\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
-				cpp << "			" << (i->second.attributes.capture ? "true" : "false") << ", // " << i->second.enumID << "\n";
+				cpp << "			" << (i->second.attributes.capture ? "true" : "false") << ", // " << i->second.enumID << '\n';
 			cpp << "			false, // rgEOF\n";
 			cpp << "		};\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
@@ -586,7 +601,7 @@ namespace PEG
 			cpp << "		static const bool attr[] = {\n";
 			cpp << "			false, // rgUnknown\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
-				cpp << "			" << (i->second.attributes.important ? "true" : "false") << ", // " << i->second.enumID << "\n";
+				cpp << "			" << (i->second.attributes.important ? "true" : "false") << ", // " << i->second.enumID << '\n';
 			cpp << "			false, // rgEOF\n";
 			cpp << "		};\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
@@ -610,7 +625,7 @@ namespace PEG
 				else
 					cpp << "nullptr";
 
-				cpp << ", // " << i->second.enumID << "\n";
+				cpp << ", // " << i->second.enumID << '\n';
 			}
 			cpp << "			nullptr, // rgEOF\n";
 			cpp << "		};\n";
@@ -626,7 +641,7 @@ namespace PEG
 
 			cpp << "\n\n\n";
 
-			cpp << "\n";
+			cpp << '\n';
 			// generate all rules
 			{
 				uint sp = 0;
@@ -655,9 +670,8 @@ namespace PEG
 			cpp << "	}\n";
 			cpp << "\n\n\n\n";
 
-			cpp << "	Parser::Parser() :\n";
-			cpp << "		root(nullptr),\n";
-			cpp << "		pData()\n";
+			cpp << "	Parser::Parser()\n";
+			cpp << "		: pData()\n";
 			cpp << "	{\n";
 			cpp << "		onURILoading.bind(& StandardURILoaderHandler);\n";
 			cpp << "	}\n\n\n";
@@ -675,31 +689,32 @@ namespace PEG
 			cpp << "		if (not notifications.empty())\n";
 			cpp << "			Notification::Vector().swap(notifications);\n";
 			cpp << "	}\n";
-			cpp << "\n";
-			cpp << "\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	bool Parser::loadFromFile(const AnyString& filename)\n";
 			cpp << "	{\n";
 			cpp << "		if (!pData)\n";
 			cpp << "			pData = new Datasource(notifications);\n";
-			cpp << "\n";
+			cpp << '\n';
 			cpp << "		Datasource& ctx = *((Datasource*) pData);\n";
 			cpp << "		ctx.open(filename);\n";
 			cpp << "		DATASOURCE_PARSE(ctx);\n";
 			cpp << "		return ctx.success;\n";
 			cpp << "	}\n";
-			cpp << "\n";
-			cpp << "\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	bool Parser::load(const AnyString& content)\n";
 			cpp << "	{\n";
 			cpp << "		if (!pData)\n";
 			cpp << "			pData = new Datasource(notifications);\n";
-			cpp << "\n";
+			cpp << '\n';
 			cpp << "		Datasource& ctx = *((Datasource*) pData);\n";
 			cpp << "		ctx.openContent(content);\n";
 			cpp << "		DATASOURCE_PARSE(ctx);\n";
 			cpp << "		return ctx.success;\n";
-			cpp << "	}\n\n\n";
-
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	void Node::ExportToHTML(Clob& out, const Node& node)\n";
 			cpp << "	{\n";
 			cpp << "		assert(&node and \"invalid reference to node\");\n";
@@ -708,8 +723,8 @@ namespace PEG
 			cpp << "		String indent;\n";
 			cpp << "		InternalNodeExportHTML(out, node, indent, tmp);\n";
 			cpp << "	}\n";
-			cpp << "\n";
-			cpp << "\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	void Node::Export(Clob& out, const Node& node, bool color)\n";
 			cpp << "	{\n";
 			cpp << "		assert(&node and \"invalid reference to node\");\n";
@@ -721,14 +736,14 @@ namespace PEG
 			cpp << "		else\n";
 			cpp << "			InternalNodeExportConsole<true>(out, node, false, indent, tmp);\n";
 			cpp << "	}\n";
-			cpp << "\n";
-			cpp << "\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	void Node::Export(Clob& out, const Node& node)\n";
 			cpp << "	{\n";
 			cpp << "		Export(out, node, ::Yuni::System::Console::IsStdoutTTY());\n";
 			cpp << "	}\n";
-			cpp << "\n";
-			cpp << "\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	void Parser::translateOffset(uint& column, uint& line, const Node& node) const\n";
 			cpp << "	{\n";
 			cpp << "		column = 0;\n";
@@ -739,8 +754,8 @@ namespace PEG
 			cpp << "			ctx.translateOffset(column, line, node.offset);\n";
 			cpp << "		}\n";
 			cpp << "	}\n";
-			cpp << "\n";
-			cpp << "\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	void Parser::translateOffset(uint& column, uint& line, uint offset) const\n";
 			cpp << "	{\n";
 			cpp << "		column = 0;\n";
@@ -751,8 +766,8 @@ namespace PEG
 			cpp << "			ctx.translateOffset(column, line, offset);\n";
 			cpp << "		}\n";
 			cpp << "	}\n";
-			cpp << "\n";
-			cpp << "\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	uint Parser::translateOffsetToLine(const Node& node) const\n";
 			cpp << "	{\n";
 			cpp << "		uint column;\n";
@@ -760,8 +775,29 @@ namespace PEG
 			cpp << "		translateOffset(column, line, node);\n";
 			cpp << "		return line;\n";
 			cpp << "	}\n";
-			cpp << "\n";
-			cpp << "\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << "	Node& Node::operator = (const Node& rhs)\n";
+			cpp << "	{\n";
+			cpp << "		rule = rhs.rule;\n";
+			cpp << "		offset = rhs.offset;\n";
+			cpp << "		offsetEnd = rhs.offsetEnd;\n";
+			cpp << "		text = rhs.text;\n";
+			cpp << "		children = rhs.children;\n";
+			cpp << "		return *this;\n";
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << "	void Node::clear()\n";
+			cpp << "	{\n";
+			cpp << "		children.clear();\n";
+			cpp << "		text.clear();\n";
+			cpp << "		offset = 0;\n";
+			cpp << "		offsetEnd = 0;\n";
+			cpp << "		rule = rgUnknown;\n";
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
 		}
 
 

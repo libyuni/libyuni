@@ -198,7 +198,7 @@
 		//! Success flag
 		bool success;
 		//! Root node
-		Node* rootnode;
+		Node::Ptr rootnode;
 
 		//! Notifications
 		Notification::Vector& notifications;
@@ -255,7 +255,6 @@
 		stack(),
 		offset(),
 		capacity(GROW_CHUNK),
-		rootnode(nullptr),
 		notifications(notifications)
 	{
 		stack = (Chunk*)::malloc(sizeof(Chunk) * GROW_CHUNK);
@@ -264,7 +263,7 @@
 
 	inline Datasource::~Datasource()
 	{
-		delete rootnode;
+		// rootnode = nullptr
 		::free(stack);
 	}
 
@@ -279,7 +278,6 @@
 		duration  = 0;
 		# endif
 
-		delete rootnode;
 		rootnode = nullptr;
 
 		// avoid too much memory consumption
@@ -851,14 +849,15 @@
 		assert(stack[0].rule == + (int) rgEOF and "invalid stack (should have called isParseComplete())");
 
 		// all AST nodes, mapping the stack elements
-		Node** astNodes = (Node**) ::calloc(offset + 1, sizeof(Node**));
+		Node::Vector astNodes;
+		astNodes.resize(offset + 1);
 
 		// pseudo root node to avoid special cases for retrieving the parent node
-		Node pseudoRootnode;
-		pseudoRootnode.rule = rgUnknown;
-		pseudoRootnode.offset = 0;
-		pseudoRootnode.offsetEnd = 0;
-		astNodes[0] = & pseudoRootnode;
+		astNodes[0] = new Node();
+		astNodes[0]->rule = rgUnknown;
+		astNodes[0]->offset = 0;
+		astNodes[0]->offsetEnd = 0;
+		Node& pseudoRootNode = *astNodes[0];
 
 		// starting from the first real frame
 		for (uint i = 1; i != offset; ++i)
@@ -884,13 +883,17 @@
 				PrintFrame(std::cerr, cursor) << std::endl;
 				assert(cursor.parent < offset and "invalid parent index");
 			}
-			assert(astNodes[cursor.parent] != NULL and "invalid parent");
+			assert(cursor.parent < astNodes.size());
+			assert(!(!astNodes[cursor.parent]) and "invalid parent");
 			# endif
 
 			// The grammar rule for the current node
 			enum Rule rule = (enum Rule) cursor.rule;
 
-			Node* newnode = new Node();
+			assert(cursor.parent < astNodes.size());
+			assert((uint64) i < astNodes.size());
+
+			Node::Ptr newnode = new Node();
 			astNodes[i] = newnode;
 			astNodes[cursor.parent]->children.push_back(newnode);
 
@@ -919,16 +922,9 @@
 			}
 		}
 
-		if (pseudoRootnode.children.size() == 1)
-		{
-			rootnode = pseudoRootnode.children[0];
-			pseudoRootnode.children.clear();
-		}
-		else
-			rootnode = nullptr;
-
-		// release
-		::free(astNodes);
+		rootnode = (pseudoRootNode.children.size() == 1)
+			? pseudoRootNode.children[0]
+			: nullptr;
 	}
 
 
@@ -1018,8 +1014,10 @@
 		{
 			// alias to the content
 			const Clob& content = contents[fileindex];
+			// maximum size
+			uint maxSize = std::max((uint) content.size(), offset);
 
-			for (uint x = 0; x < (uint) content.size(); ++x)
+			for (uint x = 0; x != maxSize; ++x)
 			{
 				if (content[x] == '\n')
 				{
