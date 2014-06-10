@@ -21,7 +21,7 @@ namespace UI
 		// The type of Depth Testing to do
 		::glDepthFunc(GL_LEQUAL);
 		// Enable back-face culling
-		::glEnable(GL_CULL_FACE);
+		//::glEnable(GL_CULL_FACE);
 
 		// Display OpenGL version
 #ifndef NDEBUG
@@ -102,22 +102,22 @@ namespace UI
 		::glVertex2f(1.0f, -1.0f);
 		::glEnd();
 
-		/*
+
 		// Texture coordinates are useless when 2D shaders are activated
 		// but they are used when no post-processing effect is present
-		const float texCoord[] =
-			{
-				0.0f, 0.0f,
-				0.0f, 1.0f,
-				1.0f, 1.0f,
-				0.0f, 0.0f,
-				1.0f, 1.0f,
-				1.0f, 0.0f
-			};
-		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
-		::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
+		// const float texCoord[] =
+		// 	{
+		// 		0.0f, 1.0f,
+		// 		0.0f, 0.0f,
+		// 		1.0f, 0.0f,
+		// 		0.0f, 1.0f,
+		// 		1.0f, 0.0f,
+		// 		1.0f, 1.0f
+		// 	};
+		// ::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
+		// ::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
 		// Set vertex positions
-		const float vertices[] =
+		/*const float vertices[] =
 			{
 				-1.0f, 1.0f,
 				-1.0f, -1.0f,
@@ -130,8 +130,10 @@ namespace UI
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
 		// Draw
 		::glDrawArrays(GL_TRIANGLES, 0, 6);
-		*/
 
+		::glDisableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
+		::glDisableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
+		*/
 		::glMatrixMode(GL_PROJECTION);
 		::glPopMatrix();
 		::glMatrixMode(GL_MODELVIEW);
