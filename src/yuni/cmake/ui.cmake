@@ -61,11 +61,6 @@ list(APPEND SRC_UI
 	ui/input/mouse.h
 	ui/input/winmouse.h
 
-	# 3D scene-specific
-	ui/scene/camera.cpp
-	ui/scene/camera.h
-	ui/scene/camera.hxx
-
 	# Image loading
 	ui/stb_image.cpp
 	ui/stb_image.h

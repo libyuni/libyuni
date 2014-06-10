@@ -26,11 +26,17 @@ namespace Control
 		Callback onClick;
 
 	public:
-		Button()
+		Button():
+			pBeingClicked(false),
+			pOffsetX(0),
+			pOffsetY(0),
+			pFillColor(0.0f, 0.0f, 0.0f, 1.0f),
+			pDisplay(dmNone)
 		{}
 
 		Button(float x, float y, float width, float height):
 			IControl(x, y, width, height),
+			pBeingClicked(false),
 			pOffsetX(0),
 			pOffsetY(0),
 			pFillColor(0.0f, 0.0f, 0.0f, 1.0f),
@@ -39,6 +45,7 @@ namespace Control
 
 		Button(const Point2D<float>& position, const Point2D<float>& size):
 			IControl(position, size),
+			pBeingClicked(false),
 			pOffsetX(0),
 			pOffsetY(0),
 			pFillColor(0.0f, 0.0f, 0.0f, 1.0f),
@@ -58,13 +65,13 @@ namespace Control
 		virtual void draw(DrawingSurface::Ptr& surface, bool root) const override;
 
 		//! Image shown on the button
-		void image(const Gfx3D::Texture::Ptr& image) { pImage = image; }
+		void image(const Gfx3D::Texture::Ptr& image) { pImage = image; invalidate(); }
 
 		//! Image displayed while clicking (same as standard image if `null`)
-		void imageClicking(const Gfx3D::Texture::Ptr& image) { pImageClicking = image; }
+		void imageClicking(const Gfx3D::Texture::Ptr& image) { pImageClicking = image; invalidate(); }
 
 		//! Image displayed while hovering (same as standard image if `null`)
-		void imageHovering(const Gfx3D::Texture::Ptr& image) { pImageHovering = image; }
+		void imageHovering(const Gfx3D::Texture::Ptr& image) { pImageHovering = image; invalidate(); }
 
 		//! On mouse button down
 		virtual void mouseDown(Input::IMouse::Button btn, float, float) override
@@ -73,7 +80,7 @@ namespace Control
 				return;
 			pBeingClicked = true;
 			if (!(!pImageClicking))
-				pModified = true;
+				invalidate();
 		}
 
 		//! On mouse button up
@@ -84,13 +91,13 @@ namespace Control
 			if (pBeingClicked)
 				onClick(this);
 			pBeingClicked = false;
-			pModified = true;
+			invalidate();
 		}
 
 		//! Get the fill color
 		const Color::RGBA<float>& fillColor() const { return pFillColor; }
 		//! Set the fill color
-		void fillColor(const Color::RGBA<float>& color) { pFillColor = color; }
+		void fillColor(const Color::RGBA<float>& color) { pFillColor = color; invalidate(); }
 
 		//! Current display mode
 		DisplayMode display() const { return pDisplay; }

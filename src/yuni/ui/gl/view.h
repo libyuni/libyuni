@@ -6,7 +6,6 @@
 # include "../../core/math.h"
 # include "../../core/smartptr.h"
 # include "../../uuid/uuid.h"
-# include "../scene/camera.h"
 # include "../control/control.h"
 # include "../eventpropagation.h"
 # include "drawingsurface.h"
@@ -87,23 +86,12 @@ namespace UI
 			pHeight = Math::Max(height, 1.0f);
 		}
 
-		//! Get the visibility of the view : the view must have a camera to be visible !
-		bool visible() const { return pVisible && !(!pCamera); }
+		//! Get the visibility of the view
+		bool visible() const { return pVisible; }
 		//! Set the visibility of the view
 		void show() { pVisible = true; }
 		void hide() { pVisible = false; }
 		void show(bool isVisible) { pVisible = isVisible; }
-
-		//! Get the current camera
-		const Gfx3D::Camera::Ptr& camera() const { return pCamera; }
-		Gfx3D::Camera::Ptr& camera() { return pCamera; }
-		//! Set the current camera
-		void camera(const Gfx3D::Camera::Ptr& newCamera) { pCamera = newCamera; }
-
-		//! Get the current scene
-		// const Gfx3D::Scene::Ptr& scene() const { return pScene; }
-		//! Set the current scene
-		// void scene(const Gfx3D::Scene::Ptr& scene) { pScene = scene; }
 
 		//! Overlay management
 		void addOverlay(const TextOverlay::Ptr& text) { pTexts.push_back(text); }
@@ -184,12 +172,6 @@ namespace UI
 		** \note This is a hiding feature and has nothing to do with whether the view is hidden by other views on top of it
 		*/
 		bool pVisible;
-
-		//! Camera for this view, if null, the view is forcefully hidden
-		Gfx3D::Camera::Ptr pCamera;
-
-		//! 3D Scene
-		// Gfx3D::Scene::Ptr pScene;
 
 		//! UI Text overlays
 		TextOverlay::Vector pTexts;

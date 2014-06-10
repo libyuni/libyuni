@@ -77,51 +77,6 @@ namespace UI
 		// Reset The Current Viewport
 		::glViewport((int)pX, (int)pY, (uint)pWidth, (uint)pHeight);
 
-		/*
-		if (!(!pCamera))
-		{
-			// Select the Projection Matrix
-			::glMatrixMode(GL_PROJECTION);
-			// Reset the Projection Matrix
-			::glLoadIdentity();
-
-			// Calculate the Aspect Ratio of the window
-			::gluPerspective(pCamera->fov(), (GLfloat)pWidth / (GLfloat)pHeight, 0.01f, 10000000.0f);
-
-			// Reset the current model-view matrix
-			::glMatrixMode(GL_MODELVIEW);
-			::glLoadIdentity();
-
-			// Apply the camera rotation
-			const Yuni::Vector3D<>& camRot = pCamera->rotation();
-			::glRotatef(360.0f - camRot.x, 1.0f, 0.0f, 0.0f);
-			::glRotatef(360.0f - camRot.y, 0.0f, 1.0f, 0.0f);
-			::glRotatef(360.0f - camRot.z, 0.0f, 0.0f, 1.0f);
-
-
-			Draw the skybox
-			if (!(!pScene))
-			{
-				const Yuni::Point3D<>& camPos = pCamera->position();
-				const Yuni::Vector3D<>& camView = pCamera->direction();
-				const Yuni::Vector3D<>& camUp = pCamera->up();
-				// Look at
-				::gluLookAt(camPos.x, camPos.y, camPos.z,
-					camView.x + camPos.x, camView.y + camPos.y, camView.z + camPos.z,
-					camUp.z, camUp.y, camUp.z);
-
-				::glTranslatef(camPos.x, camPos.y, camPos.z);
-
-				pScene->drawSky();
-
-				// Apply the camera translation
-				::glTranslatef(-camPos.x, -camPos.y, -camPos.z);
-
-				pScene->draw();
-			}
-		}
-		*/
-
 		draw2D();
 
 		::glPopAttrib();
@@ -298,32 +253,18 @@ namespace UI
 		if (!(!pControl))
 			// Dispatch the event
 			propagate = pControl->doMouseMove((float)x, (float)y, pEnteredControls);
-		if (epContinue != propagate)
-			return propagate;
-		// If the event was not managed by UI in this view, try 3D picking
-		EventPropagation prop2 = epContinue; // TODO : Event handling on 3D object picking
-		return Math::Max(propagate, prop2);
+		return propagate;
 	}
 
 
 	EventPropagation View::doMouseDown(Input::IMouse::Button btn, int x, int y)
 	{
+		EventPropagation propagate = epContinue;
 		// If there are UI controls in this view
 		if (!(!pControl))
-		{
 			// Dispatch the event
-			EventPropagation propagate = pControl->doMouseDown(btn, (float)x, (float)y);
-			if (epContinue != propagate)
-				return propagate;
-		}
-		// If the event was not managed by UI in this view, try 3D picking
-		// if (!(!pScene))
-		// {
-		// 	const IDrawable::Ptr& object = pScene->pick(x, y);
-		// 	// TODO
-		// 	return !object ? epContinue : epStop;
-		// }
-		return epContinue;
+			propagate = pControl->doMouseDown(btn, (float)x, (float)y);
+		return propagate;
 	}
 
 
@@ -334,11 +275,7 @@ namespace UI
 		if (!(!pControl))
 			// Dispatch the event
 			propagate = pControl->doMouseUp(btn, (float)x, (float)y);
-		if (epContinue != propagate)
-			return propagate;
-		// If the event was not managed by UI in this view, try 3D picking
-		EventPropagation prop2 = epContinue; // TODO : Event handling on 3D object picking
-		return Math::Max(propagate, prop2);
+		return propagate;
 	}
 
 
@@ -349,11 +286,7 @@ namespace UI
 		if (!(!pControl))
 			// Dispatch the event
 			propagate = pControl->doMouseDblClick(btn, (float)x, (float)y);
-		if (epContinue != propagate)
-			return propagate;
-		// If the event was not managed by UI in this view, try 3D picking
-		EventPropagation prop2 = epContinue; // TODO : Event handling on 3D object picking
-		return Math::Max(propagate, prop2);
+		return propagate;
 	}
 
 
@@ -364,11 +297,7 @@ namespace UI
 		if (!(!pControl))
 			// Dispatch the event
 			propagate = pControl->doMouseScroll(delta, (float)x, (float)y);
-		if (epContinue != propagate)
-			return propagate;
-		// If the event was not managed by UI in this view, try 3D picking
-		EventPropagation prop2 = epContinue; // TODO : Event handling on 3D object picking
-		return Math::Max(propagate, prop2);
+		return propagate;
 	}
 
 
@@ -379,11 +308,7 @@ namespace UI
 		if (!(!pControl))
 			// Dispatch the event
 			propagate = pControl->doMouseHover((float)x, (float)y);
-		if (epContinue != propagate)
-			return propagate;
-		// If the event was not managed by UI in this view, try 3D picking
-		EventPropagation prop2 = epContinue; // TODO : Event handling on 3D object picking
-		return Math::Max(propagate, prop2);
+		return propagate;
 	}
 
 
