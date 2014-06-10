@@ -19,7 +19,7 @@ namespace Media
 		pIndex(index),
 		pALFormat(0),
 		pSize(0),
-		pCrtPts(AV_NOPTS_VALUE),
+		pCrtPts((double)AV_NOPTS_VALUE),
 		pCrtFrameIndex(0),
 		pFrame(nullptr),
 		pParent(parent)
