@@ -68,7 +68,7 @@ private:
 namespace Yuni
 {
 
-	typedef YUNI_DECL  YuniNullPtr  NullPtr;
+	typedef /*YUNI_DECL*/  YuniNullPtr  NullPtr;
 
 } /* namespace Yuni */
 

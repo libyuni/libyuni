@@ -14,35 +14,35 @@ namespace Yuni
 {
 
 	//! Type for a default behavior / policy
-	struct YUNI_DECL Default {};
+	struct /*YUNI_DECL*/ Default {};
 
 	//! Absence Option
-	struct YUNI_DECL None {};
+	struct /*YUNI_DECL*/ None {};
 
 
 	// Forward declaration for the base class String
 	template<uint ChunkSizeT = 128, bool ExpandableT = true>
-	class YUNI_DECL CString;
+	class /*YUNI_DECL*/ CString;
 
 
 	//! Standard string implementation
-	typedef YUNI_DECL CString<> String;
+	typedef /*YUNI_DECL*/ CString<> String;
 
 	//! Character Large Object
-	typedef YUNI_DECL CString<4096>  Clob;
+	typedef /*YUNI_DECL*/ CString<4096>  Clob;
 
 	//! Convenient alias for short string 16 bytes
-	typedef YUNI_DECL  CString<16,false>  ShortString16;
+	typedef /*YUNI_DECL*/  CString<16,false>  ShortString16;
 	//! Convenient alias for short string 32 bytes
-	typedef YUNI_DECL  CString<32,false>  ShortString32;
+	typedef /*YUNI_DECL*/  CString<32,false>  ShortString32;
 	//! Convenient alias for short string 64 bytes
-	typedef YUNI_DECL  CString<64,false>  ShortString64;
+	typedef /*YUNI_DECL*/  CString<64,false>  ShortString64;
 	//! Convenient alias for short string 128 bytes
-	typedef YUNI_DECL  CString<128,false>  ShortString128;
+	typedef /*YUNI_DECL*/  CString<128,false>  ShortString128;
 	//! Convenient alias for short string 256 bytes
-	typedef YUNI_DECL  CString<256,false>  ShortString256;
+	typedef /*YUNI_DECL*/  CString<256,false>  ShortString256;
 	//! Convenient alias for short string 512 bytes
-	typedef YUNI_DECL  CString<512,false>  ShortString512;
+	typedef /*YUNI_DECL*/  CString<512,false>  ShortString512;
 
 
 } // namespace Yuni
