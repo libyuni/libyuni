@@ -78,6 +78,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/platform.cmake ${CMAKE_CURRENT_
 if (MSVC)
 	set(yuni_additional_os_specific
 		core/system/gettimeofday.cpp
+		core/system/username.cpp
 		core/system/windows/msinttypes/inttypes.h
 		core/system/windows/msinttypes/stdint.h
 		core/system/windows.hdr.h)
@@ -112,10 +113,10 @@ add_library(yuni-static-core STATIC
 		core/bit/bit.hxx
 		core/bit.h
 		core/boundingbox.h
-		core/charset/charset.cpp
-		core/charset/charset.h
-		core/charset/charset.hxx
-		core/charset.h
+		#core/charset/charset.cpp
+		#core/charset/charset.h
+		#core/charset/charset.hxx
+		#core/charset.h
 		core/color/fwd.h
 		core/color/rgb.h
 		core/color/rgb.hxx
@@ -324,7 +325,6 @@ add_library(yuni-static-core STATIC
 		core/system/stdint.h
 		core/system/suspend.cpp
 		core/system/suspend.h
-		core/system/username.cpp
 		core/system/username.h
 		core/system/username.hxx
 		core/system/vs-banned.h

@@ -7,8 +7,7 @@ namespace Charset
 {
 
 	template <typename SrcStringT, typename DtsStringT>
-	bool Converter::convert(SrcStringT& source, DtsStringT& destination,
-		bool isLastBuffer)
+	bool Converter::convert(SrcStringT& source, DtsStringT& destination, bool isLastBuffer)
 	{
 		// Since the source and destination length may not be the same,
 		// and the algorithm to predict the destination size depends on
