@@ -308,7 +308,8 @@ namespace UI
 		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
 
 		line(startX, startY, endX, endY, lineWidth,
-			 color.red, color.green, color.blue, color.alpha, 0, 0, 0, 0, true);
+			 color.red, color.green, color.blue, color.alpha,
+			 color.red, color.green, color.blue, color.alpha, true);
 	}
 
 	void DrawingSurface::drawLine(const Color::RGBA<float>& color, const Color::RGBA<float>& bgColor,
@@ -338,17 +339,16 @@ namespace UI
 			frontColor.red, frontColor.green, frontColor.blue, frontColor.alpha,
 			backColor.red, backColor.green, backColor.blue, backColor.alpha, true);
 		// Bottom line
-		line(x, y + height - lineWidth,
-		 	x + width, y + height - lineWidth, lineWidth,
+		line(x, y + height, x + width, y + height, lineWidth,
 			frontColor.red, frontColor.green, frontColor.blue, frontColor.alpha,
 			backColor.red, backColor.green, backColor.blue, backColor.alpha, true);
 		// Left line
-		line(x, y, x, y + height, lineWidth,
+		line(x, y + lineWidth / 2, x, y + height - lineWidth, lineWidth,
 			frontColor.red, frontColor.green, frontColor.blue, frontColor.alpha,
 			backColor.red, backColor.green, backColor.blue, backColor.alpha, true);
 		// Right line
-		line(x + width - lineWidth, y,
-			x + width - lineWidth, y + height, lineWidth,
+		line(x + width, y + lineWidth / 2,
+			x + width, y + height - lineWidth, lineWidth,
 			frontColor.red, frontColor.green, frontColor.blue, frontColor.alpha,
 			backColor.red, backColor.green, backColor.blue, backColor.alpha, true);
 
@@ -359,22 +359,25 @@ namespace UI
 	void DrawingSurface::drawFilledRectangle(const Color::RGBA<float>& frontColor,
 		const Color::RGBA<float>& backColor, float x, float y, float width, float height, float lineWidth)
 	{
-		// Draw the back as a quad with the proper color
-		pImpl->baseShader->bindUniform("Color", backColor);
-		const float vertices[] =
-			{
-				x, y + height,
-				x, y,
-				x + width, y,
-				x, y + height,
-				x + width, y,
-				x + width, y + height
-			};
-		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
-		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, false, 0, vertices);
-		// Draw
-		::glDrawArrays(GL_TRIANGLES, 0, 6);
-		::glDisableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
+		if (backColor.alpha > 0)
+		{
+			// Draw the back as a quad with the proper color
+			pImpl->baseShader->bindUniform("Color", backColor);
+			const float vertices[] =
+				{
+					x, y + height,
+					x, y,
+					x + width, y,
+					x, y + height,
+					x + width, y,
+					x + width, y + height
+				};
+			::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
+			::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, false, 0, vertices);
+			// Draw
+			::glDrawArrays(GL_TRIANGLES, 0, 6);
+			::glDisableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
+		}
 
 		if (frontColor != backColor && lineWidth > 0)
 			drawRectangle(frontColor, backColor, x, y, width, height, lineWidth);
