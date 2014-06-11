@@ -33,6 +33,8 @@ Release version 1.0.0
 
  * [core/functional] added `Functional::Fold()` routine
 
+ * [core] added new class Yuni::Tribool, a 3-state boolean
+
  * [dbi] The DBI/sqlite adapter is now ready for production
 
  * [io] `Yuni::IO::LoadFromFile` now accepts std::string as a destination
