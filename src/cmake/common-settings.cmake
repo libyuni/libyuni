@@ -11,6 +11,8 @@ endif()
 include(CheckIncludeFile)
 include(CheckCXXCompilerFlag)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS true)
+
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "release" OR "${CMAKE_BUILD_TYPE}" STREQUAL "RELEASE")
 	set(YUNI_)
