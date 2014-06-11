@@ -50,7 +50,7 @@ namespace UI
 
 		public:
 			//! Constructor
-			explicit Glyph(::FT_GlyphSlot slot, uint glyphIndex):
+			explicit Glyph(::FT_GlyphSlot slot, uint glyphIndex, bool antiAliased = true):
 				pIndex(glyphIndex),
 				pGlyph(nullptr)
 			{
@@ -60,7 +60,8 @@ namespace UI
 				pYBearing = (uint)(slot->metrics.horiBearingY >> 6);
 				if (pGlyph->format != FT_GLYPH_FORMAT_BITMAP)
 				{
-					::FT_Glyph_To_Bitmap(&pGlyph, FT_RENDER_MODE_NORMAL, nullptr, 1);
+					auto renderMode = antiAliased ? FT_RENDER_MODE_NORMAL : FT_RENDER_MODE_MONO;
+					::FT_Glyph_To_Bitmap(&pGlyph, renderMode, nullptr, 1);
 				}
 			}
 
@@ -166,7 +167,7 @@ namespace UI
 		}
 
 		//! Get a glyph
-		Glyph::Ptr getGlyph(unsigned long charCode) const
+		Glyph::Ptr getGlyph(unsigned long charCode, bool antiAliased = true) const
 		{
 			if (not pValid)
 				return nullptr;
@@ -183,7 +184,7 @@ namespace UI
 				return nullptr;
 			::FT_GlyphSlot slot = pFace->glyph;
 			// Store the glyph in cache
-			Glyph::Ptr glyph = new Glyph(slot, glyphIndex);
+			Glyph::Ptr glyph = new Glyph(slot, glyphIndex, antiAliased);
 			pCache[charCode] = glyph;
 			return glyph;
 		}
@@ -246,7 +247,7 @@ namespace UI
 	}
 
 
-	void FTFont::draw(const AnyString& text, Gfx3D::Texture::Ptr& texture, bool useKerning) const
+	void FTFont::draw(const AnyString& text, Gfx3D::Texture::Ptr& texture, bool antiAliased, bool useKerning) const
 	{
 		if (not valid())
 			return;
@@ -265,7 +266,7 @@ namespace UI
 		for (auto i = text.utf8begin(); i != end; ++i)
 		{
 			prev = glyph;
-			glyph = pImpl->getGlyph((unsigned long)i->value());
+			glyph = pImpl->getGlyph((unsigned long)i->value(), antiAliased);
 			if (!glyph)
 				continue;
 			if (useKerning and !(!prev))
@@ -287,7 +288,7 @@ namespace UI
 		for (auto i = text.utf8begin(); i != end; ++i)
 		{
 			prev = glyph;
-			glyph = pImpl->getGlyph((unsigned long)i->value());
+			glyph = pImpl->getGlyph((unsigned long)i->value(), antiAliased);
 
 			if (!glyph)
 			{

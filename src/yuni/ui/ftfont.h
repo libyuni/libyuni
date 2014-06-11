@@ -36,7 +36,7 @@ namespace UI
 		** \note Expect the texture to be resized and cleared
 		*/
 		virtual void draw(const AnyString& text, Gfx3D::Texture::Ptr& texture,
-			bool useKerning = true) const override;
+			bool antiAliased = true, bool useKerning = true) const override;
 
 		//! Initialize the font
 		bool initialize();

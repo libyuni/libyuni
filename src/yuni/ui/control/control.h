@@ -176,7 +176,7 @@ namespace UI
 			pModified = true;
 		}
 		//! Is the control or any of its children modified ?
-		virtual bool modified() const;
+		bool modified() const;
 
 		//! Get control opacity
 		float opacity() const { return pOpacity; }

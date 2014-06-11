@@ -38,7 +38,7 @@ namespace UI
 		{}
 
 		//! Draw the given text to the given texture using this font
-		virtual void draw(const AnyString&, Gfx3D::Texture::Ptr&, bool useKerning = true) const = 0;
+		virtual void draw(const AnyString&, Gfx3D::Texture::Ptr&, bool antiAliased = true, bool useKerning = true) const = 0;
 
 		//! Is the font properly loaded and valid ?
 		virtual bool valid() const { return true; }
