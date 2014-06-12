@@ -68,6 +68,12 @@ list(APPEND SRC_UI
 	# Image loading
 	ui/stb_image.cpp
 	ui/stb_image.h
+
+	# Animation
+	ui/animation/apply.h
+	ui/animation/easing.h
+	ui/animation/transition.h
+	ui/animation/transition.hxx
 )
 
 list(APPEND SRC_UI_GL
