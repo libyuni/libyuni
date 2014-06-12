@@ -21,17 +21,16 @@ namespace Control
 		if (root)
 			pos(0, 0);
 		surface->beginRectangleClipping(pos.x, pos.y, pSize.x, pSize.y);
-		// Try drawing images first
+		// Manual full-background drawing (FIXME : this is not optimal)
+		surface->drawFilledRectangle(theme.borderColor, theme.buttonColor, pos.x, pos.y,
+			pSize.x, pSize.y, theme.borderWidth);
+		// Try drawing images on top
 		if (pBeingClicked && !(!pImageClicking))
-			surface->drawImage(pImageClicking, pos.x, pos.y, pSize.x, pSize.y, pFillColor, pDisplay,
-				pOffsetX, pOffsetY, pOpacity);
+			surface->drawImage(pImageClicking, pos.x, pos.y, pSize.x, pSize.y, theme.buttonColor,
+				pDisplay, pOffsetX, pOffsetY, pOpacity);
 		else if (!(!pImage))
-			surface->drawImage(pImage, pos.x, pos.y, pSize.x, pSize.y, pFillColor, pDisplay,
+			surface->drawImage(pImage, pos.x, pos.y, pSize.x, pSize.y, theme.buttonColor, pDisplay,
 				pOffsetX, pOffsetY, pOpacity);
-		else
-			// Fallback on manual drawing
-			surface->drawFilledRectangle(theme.borderColor, theme.buttonColor, pos.x, pos.y,
-				pSize.x, pSize.y, theme.borderWidth);
 		// Draw the text if any
 		if (!pText.empty())
 			surface->drawTextInRect(pText, theme.font, theme.textColor, pos.x, pos.y,

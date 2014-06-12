@@ -55,6 +55,8 @@ namespace Gfx3D
 	// This shader displays them with the proper color.
 	extern const char* const fsText;
 
+	extern const char* const fsTextOnSolidColor;
+
 	// Color picking
 	extern const char* const fsPicking;
 

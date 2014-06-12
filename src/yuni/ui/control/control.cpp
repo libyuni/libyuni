@@ -130,18 +130,14 @@ namespace UI
 			EventPropagation prop = child->onMouseMove(child, x, y);
 			if (epStop == prop)
 				return epStop;
-			else if (prop > finalProp)
+			if (prop > finalProp)
 				finalProp = prop;
 		}
 		// Allow the control to react to the event before the callback
 		mouseMove(x, y);
 		// Event callback on the root control
 		EventPropagation prop = onMouseMove(this, x, y);
-		if (epStop == prop)
-			return epStop;
-		else if (prop > finalProp)
-			finalProp = prop;
-		return finalProp;
+		return Math::Max(prop, finalProp);
 	}
 
 	EventPropagation IControl::doMouseDown(Input::IMouse::Button btn, float x, float y)
@@ -160,16 +156,12 @@ namespace UI
 			EventPropagation prop = child->onMouseDown(child, btn, x, y);
 			if (epStop == prop)
 				return epStop;
-			else if (prop > finalProp)
+			if (prop > finalProp)
 				finalProp = prop;
 		}
 		mouseDown(btn, x, y);
 		EventPropagation prop = onMouseDown(this, btn, x, y);
-		if (epStop == prop)
-			return epStop;
-		else if (prop > finalProp)
-			finalProp = prop;
-		return finalProp;
+		return Math::Max(prop, finalProp);
 	}
 
 	EventPropagation IControl::doMouseUp(Input::IMouse::Button btn, float x, float y)
@@ -188,16 +180,12 @@ namespace UI
 			EventPropagation prop = child->onMouseUp(child, btn, x, y);
 			if (epStop == prop)
 				return epStop;
-			else if (prop > finalProp)
+			if (prop > finalProp)
 				finalProp = prop;
 		}
 		mouseUp(btn, x, y);
 		EventPropagation prop = onMouseUp(this, btn, x, y);
-		if (epStop == prop)
-			return epStop;
-		else if (prop > finalProp)
-			finalProp = prop;
-		return finalProp;
+		return Math::Max(prop, finalProp);
 	}
 
 	EventPropagation IControl::doMouseDblClick(Input::IMouse::Button btn, float x, float y)
@@ -215,15 +203,12 @@ namespace UI
 			EventPropagation prop = child->onMouseDblClick(child, btn, x, y);
 			if (epStop == prop)
 				return epStop;
-			else if (prop > finalProp)
-				finalProp = prop;
-			prop = onMouseDblClick(this, btn, x, y);
-			if (epStop == prop)
-				return epStop;
-			else if (prop > finalProp)
+			if (prop > finalProp)
 				finalProp = prop;
 		}
-		return finalProp;
+		mouseDblClick(btn, x, y);
+		EventPropagation prop = onMouseDblClick(this, btn, x, y);
+		return Math::Max(prop, finalProp);
 	}
 
 	EventPropagation IControl::doMouseScroll(float delta, float x, float y)
@@ -241,15 +226,11 @@ namespace UI
 			EventPropagation prop = child->onMouseScroll(child, delta);
 			if (epStop == prop)
 				return epStop;
-			else if (prop > finalProp)
-				finalProp = prop;
-			prop = onMouseScroll(this, delta);
-			if (epStop == prop)
-				return epStop;
-			else if (prop > finalProp)
+			if (prop > finalProp)
 				finalProp = prop;
 		}
-		return finalProp;
+		EventPropagation prop = onMouseScroll(this, delta);
+		return Math::Max(prop, finalProp);
 	}
 
 
@@ -285,15 +266,11 @@ namespace UI
 			EventPropagation prop = child->onMouseHover(child, x, y);
 			if (epStop == prop)
 				return epStop;
-			else if (prop > finalProp)
-				finalProp = prop;
-			prop = onMouseHover(this, x, y);
-			if (epStop == prop)
-				return epStop;
-			else if (prop > finalProp)
+			if (prop > finalProp)
 				finalProp = prop;
 		}
-		return finalProp;
+		EventPropagation prop = onMouseHover(this, x, y);
+		return Math::Max(prop, finalProp);
 	}
 
 

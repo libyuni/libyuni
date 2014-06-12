@@ -113,7 +113,7 @@ namespace UI
 		assert(textShader && "Shader loading or compilation for line drawing failed !");
 		textShader->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
 		textShader->bindAttribute("attrColor", Gfx3D::Vertex<>::vaColor);
-		if (!lineShader->load())
+		if (!textShader->load())
 		{
 			std::cerr << "Shader program link for text drawing failed !" << std::endl
 					  << textShader->errorMessage() << std::endl;
@@ -284,15 +284,15 @@ namespace UI
 		overlay.clear() << text;
 		overlay.font(font);
 		overlay.color(color);
+		// pImpl->textShader->activate();
+		// pImpl->textShader->bindUniform("BackColor", Color::RGBA<float>(1, 0, 0, 1));
 		// Update to get the correct necessary size
 		overlay.update();
 
 		if (Math::Zero(overlay.width()) || Math::Zero(overlay.height()))
 			return;
-		float middleX = width / 2.0f;
-		float middleY = height / 2.0f;
 		// Moving does not require to call update() again
-		overlay.move(x + middleX - overlay.width() / 2, y + middleY - overlay.height() / 2);
+		overlay.move(x + (width - overlay.width()) / 2.0f, y + (height - overlay.height()) / 2.0f);
 
 		// Draw
 		overlay.draw(pImpl->textShader);

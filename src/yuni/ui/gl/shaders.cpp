@@ -286,6 +286,30 @@ void main(void)
 		)";
 
 
+	// Freetype with normal render mode generates alpha-only bitmaps, stored as GL_R textures
+	// This shader displays them with the proper color.
+	const char* const fsTextOnSolidColor =
+		R"(
+#version 130
+
+in vec2 texCoord;
+out vec4 gl_FragColor;
+uniform sampler2D Texture0;
+uniform sampler2D Texture1;
+uniform vec4 TextColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+uniform vec4 BackColor = vec4(1.0f, 1.0f, 1.0f, 0.0f);
+
+// Freetype with normal render mode generates alpha-only bitmaps, stored as GL_R textures
+// This shader displays them with the proper color.
+void main(void)
+{
+	vec4 alpha = texture(Texture0, texCoord);
+
+	gl_FragColor = mix(BackColor, TextColor, alpha.r);
+}
+		)";
+
+
 	// Color picking
 	const char* const fsPicking =
 		R"(
