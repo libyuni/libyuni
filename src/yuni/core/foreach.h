@@ -7,6 +7,7 @@
 
 /*!
 ** \brief foreach..else statement
+** \ingroup Core
 **
 ** \code
 ** std::vector<int> list;

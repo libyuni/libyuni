@@ -12,6 +12,7 @@ namespace Yuni
 
 	/*!
 	** \brief Event
+	** \ingroup Events
 	*/
 	template<class P = void ()>
 	class YUNI_DECL Event final :

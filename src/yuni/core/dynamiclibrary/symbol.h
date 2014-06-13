@@ -14,6 +14,7 @@ namespace DynamicLibrary
 
 	/*!
 	** \brief Exported Symbol from a dynamic library
+	** \ingroup DynamicLibs
 	*/
 	class YUNI_DECL Symbol final
 	{

@@ -15,6 +15,7 @@ namespace GetOpt
 
 	/*!
 	** \brief A command line options parser
+	** \ingroup Core
 	*/
 	class YUNI_DECL Parser final
 	{

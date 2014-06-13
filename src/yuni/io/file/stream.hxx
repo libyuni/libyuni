@@ -12,7 +12,7 @@ namespace File
 {
 
 	inline Stream::Stream() :
-		pFd(NULL)
+		pFd(nullptr)
 	{
 		// Do nothing
 	}

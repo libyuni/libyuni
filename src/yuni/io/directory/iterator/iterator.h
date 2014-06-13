@@ -240,7 +240,7 @@ namespace Directory
 		**
 		** This method may be called from any thread in detached mode (the calling
 		** thread otherwise, but always by the same thread).
-		** \param filename The given root path
+		** \param root The given root path
 		** \return False to cancel the operation
 		*/
 		virtual bool onStart(const String& root);

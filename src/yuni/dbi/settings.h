@@ -22,6 +22,9 @@ namespace DBI
 	};
 
 
+	/*!
+	** \ingroup DBI
+	*/
 	class Settings
 	{
 	public:

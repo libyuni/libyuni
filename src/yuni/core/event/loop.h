@@ -21,11 +21,17 @@ namespace Yuni
 {
 namespace Core
 {
+/*!
+**
+** \brief Event loops
+** \ingroup Core
+*/
 namespace EventLoop
 {
 
 	/*!
 	** \brief A Synchronous Event Demultiplexer (Reactor pattern)
+	** \ingroup Core
 	**
 	** This class handles requests (from any thread or process) from a single
 	** thread. It is designed to run code that can not be thread-safe, like

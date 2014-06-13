@@ -48,35 +48,37 @@ namespace File
 
 
 	# ifdef YUNI_OS_WINDOWS
-
-	static Stream::HandleType OpenFileOnWindows(const AnyString& filename, int mode)
+	namespace // anonymous
 	{
-		Private::WString<> wfilenm(filename);
-		if (wfilenm.empty())
-			return NULL;
-		FILE* f;
-		# ifdef YUNI_OS_MSVC
-		if (0 != _wfopen_s(&f, wfilenm.c_str(), OpenMode::ToWCString(mode)))
-			return NULL;
-		# else
-		f = _wfopen(wfilenm.c_str(), OpenMode::ToWCString(mode));
-		# endif
-		return f;
-	}
 
+		static Stream::HandleType OpenFileOnWindows(const AnyString& filename, int mode)
+		{
+			Private::WString<> wfilenm(filename);
+			if (wfilenm.empty())
+				return NULL;
+
+			FILE* f;
+			# ifdef YUNI_OS_MSVC
+			{
+				if (0 != _wfopen_s(&f, wfilenm.c_str(), OpenMode::ToWCString(mode)))
+					return NULL;
+			}
+			# else
+			{
+				f = _wfopen(wfilenm.c_str(), OpenMode::ToWCString(mode));
+			}
+			# endif
+			return f;
+		}
+
+	} // anonymous namespace
 	# endif
 
 
 
-	Stream::Stream(const Stream&) :
-		pFd(nullptr)
-	{
-		// Do nothing
-	}
-
 
 	Stream::Stream(const AnyString& filename, int mode) :
-		pFd(nullptr)
+		pFd(NULL)
 	{
 		open(filename, mode);
 	}

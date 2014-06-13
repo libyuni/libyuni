@@ -109,7 +109,7 @@ namespace Text
 
 	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
 	template<typename U>
-	inline ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator += (const U& rhs)
+	inline ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator += (const AnyString& rhs)
 	{
 		pExceptionList.push_back(rhs);
 		return *this;
@@ -148,8 +148,7 @@ namespace Text
 
 
 	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
-	template<typename U>
-	inline ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator << (const U& rhs)
+	inline ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator << (const AnyString& rhs)
 	{
 		pExceptionList.push_back(rhs);
 		return *this;

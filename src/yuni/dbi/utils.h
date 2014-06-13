@@ -12,6 +12,7 @@ namespace DBI
 
 	/*!
 	** \brief Check whether a string is an identifier or not
+	** \ingroup DBI
 	*/
 	bool IsValidIdentifier(AnyString text);
 

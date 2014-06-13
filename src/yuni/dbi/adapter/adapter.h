@@ -11,6 +11,10 @@ namespace DBI
 namespace Adapter
 {
 
+	/*!
+	** \brief Abstract adapter
+	** \ingroup DBIAdapter
+	*/
 	class IAdapter
 	{
 	public:
@@ -29,6 +33,8 @@ namespace Adapter
 		//@}
 
 	}; // class IAdapter
+
+
 
 
 

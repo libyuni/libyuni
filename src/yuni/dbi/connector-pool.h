@@ -11,12 +11,17 @@
 
 namespace Yuni
 {
+/*!
+** \brief Database Independent Abstraction Layer
+** \ingroup DBI
+*/
 namespace DBI
 {
 
 
 	/*!
 	** \brief Database interface
+	** \ingroup DBI
 	**
 	** All methods of this class are thread-safe. This means that manipulating a
 	** connector pool from several threads is safe (thus starting new transactions)

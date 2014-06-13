@@ -4,7 +4,10 @@
 
 // yn_dbi_error and Yuni::DBI::Error must match
 
-
+/*!
+** \brief C error for DBI operations
+** \ingroup DBI
+*/
 extern "C" enum yn_dbierr
 {
 	//! No error
@@ -37,6 +40,10 @@ namespace Yuni
 namespace DBI
 {
 
+	/*!
+	** \brief C++ error for DBI operations
+	** \ingroup DBI
+	*/
 	enum Error
 	{
 		//! No error

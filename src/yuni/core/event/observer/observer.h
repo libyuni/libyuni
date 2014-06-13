@@ -60,7 +60,7 @@ namespace Event
 	** 		ThermalSensor() :pLastValue(0.) {}
 	** 		~ThermalSensor() {}
 	**
-	** 		Event::E1<void, float, TP> eventOnChanged;
+	** 		Event<void (float)> eventOnChanged;
 	**
 	** 		void update(const float newT)
 	** 		{

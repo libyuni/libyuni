@@ -22,6 +22,7 @@ namespace Yuni
 
 	/*!
 	** \brief A delegate implementation
+	** \ingroup Events
 	**
 	** How to bind a mere function :
 	** \code
@@ -133,6 +134,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -142,19 +145,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(<%=generator.list(i)%>));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(<%=generator.list(i)%>));
 		# endif
 		//! Destructor

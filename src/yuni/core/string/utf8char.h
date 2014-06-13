@@ -30,7 +30,7 @@ namespace UTF8
 		/*!
 		** \brief Get the length in bytes of the UTF8 character
 		**
-		** This information is provided by the lead character (= the first char given by @p)
+		** This information is provided by the lead character (= the first char given by \p p)
 		** \param p Address of a potential utf8 char
 		** \return The size in bytes of the UTF8 char at the address \p p  (1,2,3, or 4, 0 if invalid).
 		*/
@@ -38,17 +38,24 @@ namespace UTF8
 
 		/*!
 		** \brief Extract the first uchar from a raw buffer
+		** \param p A valid raw buffer
 		*/
 		static uchar Mask8Bits(const void* p);
+		/*!
+		** \brief Extract the first uchar from a raw buffer
+		** \param p Any char
+		*/
 		static uchar Mask8Bits(const char p);
 
 		/*!
 		** \brief Is the UTF-8 a simple ascii char ?
+		** \param c An unsigned char
 		*/
 		static bool IsASCII(uchar c);
 
 		/*!
 		** \brief Check if the two first bits are set
+		** \param c An unsigned char
 		*/
 		static bool IsTrail(uchar c);
 

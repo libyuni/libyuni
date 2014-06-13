@@ -13,6 +13,9 @@ namespace Yuni
 namespace DBI
 {
 
+	/*!
+	** \ingroup DBI
+	*/
 	class Cursor final : private Yuni::NonCopyable<Cursor>
 	{
 	public:

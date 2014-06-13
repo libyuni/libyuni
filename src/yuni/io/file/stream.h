@@ -5,6 +5,7 @@
 # include "../../core/static/assert.h"
 # include "../../core/string.h"
 # include "../../core/static/remove.h"
+# include "../../core/noncopyable.h"
 # include "openmode.h"
 # include <stdio.h>
 
@@ -45,14 +46,14 @@ namespace File
 	** // opening out file
 	** if (file.open("myfile.txt"))
 	** {
-	** 		// A buffer. The given capacity will be the maximum length for a single line
-	** 		Clob buffer;
-	** 		while (file.readline(buffer))
-	** 		{
-	** 			// do something with the buffer
-	** 			// here we will merely dump it to the std::cout
-	** 			std::cout << buffer << std::endl;
-	** 		}
+	**		// A buffer. The given capacity will be the maximum length for a single line
+	**		Clob buffer;
+	**		while (file.readline(buffer))
+	**		{
+	**			// do something with the buffer
+	**			// here we will merely dump it to the std::cout
+	**			std::cout << buffer << std::endl;
+	**		}
 	** }
 	** // the file will be implicitely closed here
 	** \endcode
@@ -65,8 +66,8 @@ namespace File
 	** IO::File::Stream file;
 	** if (file.open("out.txt", IO::OpenMode::write | IO::OpenMode::truncate))
 	** {
-	** 		file << "Without implicit convertion: Hello world !\n";
-	** 		file << "With implicit convertion   : " << 42 << '\n';
+	**		file << "Without implicit convertion: Hello world !\n";
+	**		file << "With implicit convertion   : " << 42 << '\n';
 	** }
 	** \endcode
 	**
@@ -74,7 +75,7 @@ namespace File
 	**   routines 'fopen', 'fclose'... The implementation is a bit different on Windows
 	**   because 'fopen' only handles ansi filenames.
 	*/
-	class Stream final
+	class Stream final : private NonCopyable<Stream>
 	{
 	public:
 		//! The native handle type
@@ -87,10 +88,6 @@ namespace File
 		** \brief Default Constructor
 		*/
 		Stream();
-		/*!
-		** \brief Copy constructor (not allowed, it will fail at compile time)
-		*/
-		Stream(const Stream& rhs);
 		/*!
 		** \brief Open a file
 		*/
@@ -215,7 +212,7 @@ namespace File
 		/*!
 		** \brief Read a line from the file
 		**
-		** It reads a line into the buffer pointed to by #buffer until either a terminating
+		** It reads a line into the buffer pointed to by \p buffer until either a terminating
 		** newline or EOF, which it replaces with ’\0’.
 		** The maximum number of char read is `buffer.chunkSize`. For code robutness
 		** (to prevent against misuses) this routine will reserve space according to
@@ -231,7 +228,7 @@ namespace File
 		/*!
 		** \brief Read a line from the file (with a custom chunk size)
 		**
-		** It reads a line into the buffer pointed to by #buffer until either a terminating
+		** It reads a line into the buffer pointed to by \p buffer until either a terminating
 		** newline or EOF, which it replaces with ’\0’.
 		** The maximum number of char read is `CustomChunkT`. For code robutness
 		** (to prevent against misuses) this routine will reserve space according to

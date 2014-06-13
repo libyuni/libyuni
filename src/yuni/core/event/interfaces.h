@@ -38,10 +38,6 @@ namespace Yuni
 
 
 
-	/*!
-	** \brief
-	** \ingroup Events
-	*/
 	class YUNI_DECL IEvent
 	{
 	public:
@@ -112,6 +108,9 @@ namespace Yuni
 
 
 
+	/*!
+	** \brief Base class for implementating an Observer class, able to connect to an event
+	*/
 	template<class Derived, template<class> class TP = Policy::ObjectLevelLockable>
 	class YUNI_DECL IEventObserver :
 		public IEventObserverBase, public TP<IEventObserver<Derived,TP> >

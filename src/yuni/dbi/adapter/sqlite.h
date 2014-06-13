@@ -11,6 +11,10 @@ namespace DBI
 namespace Adapter
 {
 
+	/*!
+	** \brief SQLite Adapter (sqlite v3)
+	** \ingroup DBIAdapter
+	*/
 	class SQLite final : public IAdapter
 	{
 	public:
@@ -20,6 +24,7 @@ namespace Adapter
 		virtual void retrieveEntries(::yn_dbi_adapter& entries) override;
 
 	}; // class SQLite
+
 
 
 

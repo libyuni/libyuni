@@ -3,6 +3,9 @@
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(<%=generator.list(i)%>);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -28,8 +31,6 @@
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -47,6 +48,7 @@
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final

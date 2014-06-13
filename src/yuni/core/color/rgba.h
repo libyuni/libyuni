@@ -12,6 +12,7 @@ namespace Color
 
 	/*!
 	** \brief 32Bits RGB Color Model (additive color model + transparency)
+	** \ingroup Color
 	*/
 	template<class T = uint8>
 	class YUNI_DECL RGBA final

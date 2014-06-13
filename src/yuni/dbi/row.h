@@ -9,6 +9,9 @@ namespace Yuni
 namespace DBI
 {
 
+	/*!
+	** \ingroup DBI
+	*/
 	class Row final
 	{
 	public:

@@ -137,13 +137,14 @@ namespace Thread
 		** and ask to reload them if the timer is started.
 		** This method is a convenient and faster replacement for the following code:
 		** (assuming we want one second for the time interval and three cycles)
+		**
 		** \code
 		** timer.interval(1000); // 1 second
 		** timer.cycleCount(3);
 		** timer.reload();
 		** \endcode
 		**
-		** \param interval The new time interval (in milliseconds)
+		** \param milliseconds The new time interval (in milliseconds)
 		** \param cycles The number of cycles [0 .. n[
 		*/
 		void reload(uint milliseconds, uint cycles);

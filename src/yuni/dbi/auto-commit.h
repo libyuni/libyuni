@@ -8,7 +8,10 @@ namespace Yuni
 namespace DBI
 {
 
-
+	/*!
+	** \brief Class helper for automatically commit a transaction at the end of the scope
+	** \ingroup DBI
+	*/
 	class AutoCommit final
 	{
 	public:

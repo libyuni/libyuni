@@ -60,7 +60,7 @@ namespace Text
 	** \see typedef DenyByDefauly
 	*/
 	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
-	class ExceptionList : public IValidatorTmpl<ExceptionList<DefaultPolicy> >
+	class ExceptionList final : public IValidatorTmpl<ExceptionList<DefaultPolicy> >
 	{
 	public:
 		//! \name Constructors
@@ -103,26 +103,35 @@ namespace Text
 		/*!
 		** \brief Add an exception
 		**
-		** \param e The exception (arbitrary string)
+		** \param text The exception (arbitrary string)
 		*/
-		template<class U> void exception(const U& e);
+		template<class U> void exception(const U& text);
 
-		//! Operator += on an arbitrary string
-		template<typename U> ExceptionList& operator += (const U& rhs);
+		/*!
+		** \brief Append an arbitrary string
+		** \param text A arbitrary string
+		*/
+		ExceptionList& operator += (const AnyString& text);
+
 		template<Yuni::Validator::DefaultPolicy OtherDefaultPolicy>
 		ExceptionList& operator += (const ExceptionList<OtherDefaultPolicy>& rhs);
+
 		//! Operator += on a std::vector
 		ExceptionList& operator += (const String::Vector& rhs);
+
 		//! Operator += on a std::list
 		ExceptionList& operator += (const String::List& rhs);
 
 		//! Operator << on an arbitrary string
-		template<typename U> ExceptionList& operator << (const U& rhs);
+		ExceptionList& operator << (const AnyString& rhs);
+
 		//! Operator << on another exception list
 		template<Yuni::Validator::DefaultPolicy OtherDefaultPolicy>
 		ExceptionList& operator << (const ExceptionList<OtherDefaultPolicy>& rhs);
+
 		//! Operator << on a std::vector
 		ExceptionList& operator << (const String::Vector& rhs);
+
 		//! Operator << on a std::list
 		ExceptionList& operator << (const String::List& rhs);
 		//@}

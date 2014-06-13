@@ -53,6 +53,7 @@ namespace Yuni
 
 	/*!
 	** \brief Character string
+	** \ingroup Core
 	**
 	** The class manipulates and stores sequences of characters.
 	**
@@ -415,7 +416,7 @@ namespace Yuni
 		/*!
 		** \brief Copy a raw C-String
 		**
-		** \param cstr A C-String
+		** \param str A C-String
 		** \param size Size of the given string
 		*/
 		template<class StringT>
@@ -424,7 +425,7 @@ namespace Yuni
 		/*!
 		** \brief Copy a raw C-String
 		**
-		** \param cstr A C-String
+		** \param str A C-String
 		** \param size Size of the given string
 		** \param offset Offset of the first character to copy
 		*/
@@ -653,7 +654,7 @@ namespace Yuni
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
 		*/
-		template<class StringT> bool insert(Size offset, const StringT& s);
+		template<class StringT> bool insert(Size offset, const StringT& u);
 
 		/*!
 		** \brief Insert an arbitrary C-String at a given position in the string
@@ -661,7 +662,7 @@ namespace Yuni
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered
-		** \param s Any CString container
+		** \param u Any CString container
 		** \param size The size to use for the given container
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
@@ -708,7 +709,7 @@ namespace Yuni
 		/*!
 		** \brief Insert an arbitrary C-String at the beginning the string
 		**
-		** \param s Any CString container
+		** \param u Any CString container
 		** \param size The size to use for the given container
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
@@ -924,6 +925,7 @@ namespace Yuni
 		** \brief Find the offset of a raw sub-string with a given length (in bytes) (ignoring the case)
 		**
 		** \param cstr An arbitrary string
+		** \param offset Start offset
 		** \param len Size of the given cstr
 		** \return The position of the first occurence found, `npos` if not found
 		*/
@@ -1002,7 +1004,8 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of any supported CString (ignoring the case)
 		**
-		** \param cstr Any supported CString
+		** \param s Any supported CString
+		** \param offset  Start Offset
 		** \return The position of the first occurence found, `npos` if not found
 		*/
 		template<class StringT> Size irfind(const StringT& s, Size offset = npos) const;

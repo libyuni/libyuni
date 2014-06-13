@@ -13,6 +13,7 @@ namespace Atomic
 
 	/*!
 	** \brief An atomic boolean type
+	** \ingroup Atomic
 	*/
 	typedef Atomic::Int<1>  Bool;
 

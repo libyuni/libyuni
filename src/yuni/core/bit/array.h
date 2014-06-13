@@ -14,6 +14,7 @@ namespace Bit
 
 	/*!
 	** \brief Array of bits
+	** \ingroup Bit
 	**
 	** This class provides routines for handling an array of bits and is especially
 	** efficient for a medium or large amount of bits.

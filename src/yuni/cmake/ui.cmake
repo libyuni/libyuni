@@ -109,6 +109,8 @@ list(APPEND SRC_UI_GL
 	ui/gl/vertexpolicies.h
 	ui/gl/view.cpp
 	ui/gl/view.h
+	ui/gl/linerenderer.h
+	ui/gl/linerenderer.cpp
 )
 
 if (YUNI_HAS_OPENGL)

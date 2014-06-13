@@ -23,12 +23,15 @@ namespace Yuni
 
 /*!
 ** \brief Tools for manipulating Dynamic libraries (Executable Object files)
+** \ingroup DynamicLibs
 */
 namespace DynamicLibrary
 {
 
+
 	/*!
 	** \brief An Executable Object file
+	** \ingroup DynamicLibs
 	**
 	** Here is an example of a typical use of a dynamic library. Assuming we have
 	** the following shared library :

@@ -10,11 +10,16 @@
 
 namespace Yuni
 {
+/*!
+** \brief Atomic types
+** \ingroup Atomic
+*/
 namespace Atomic
 {
 
 	/*!
 	** \brief An atomic scalar type
+	** \ingroup Atomic
 	**
 	** An atomic scalar value is a value that may be updated atomically (means
 	** without the use of a mutex).

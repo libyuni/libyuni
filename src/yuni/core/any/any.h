@@ -12,8 +12,8 @@ namespace Yuni
 {
 
 	/*!
-	** \brief An Any is a container for a value of any type.
-	** \ingroup Core
+	** \brief Container for values of any type.
+	** \ingroup Any
 	**
 	** This is a relatively classic, yet (i hope) fast implementation of
 	** an Any type.

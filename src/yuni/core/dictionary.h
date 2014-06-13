@@ -17,6 +17,10 @@
 namespace Yuni
 {
 
+	/*!
+	** \brief Class helper for defining ordered/unordered map
+	** \ingroup Core
+	*/
 	template<class KeyT, class ValueT>
 	class Dictionary final
 	{
@@ -42,6 +46,10 @@ namespace Yuni
 
 
 
+	/*!
+	** \brief Class helper for defining ordered/unordered set
+	** \ingroup Core
+	*/
 	template<class KeyT>
 	class Set final
 	{
@@ -65,8 +73,14 @@ namespace Yuni
 
 
 
-	//! Convenient typedef for a key/value store
+	/*!
+	** \brief Convenient typedef for a key/value store
+	** \ingroup Core
+	*/
 	typedef Dictionary<String, String>::Hash  KeyValueStore;
+
+
+
 
 
 } // namespace Yuni

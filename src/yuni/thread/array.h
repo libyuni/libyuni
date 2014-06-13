@@ -178,9 +178,8 @@ namespace Thread
 		/*!
 		** \brief Wait for all threads to finish
 		**
-		** \warning The current implementation is naive and wait for each thread
-		**   N milliseconds
-		** \param timeout A timeout in milliseconds
+		** \warning The current implementation is naive and wait for each thread N milliseconds
+		** \param milliseconds A timeout in milliseconds
 		*/
 		void wait(uint milliseconds);
 
@@ -189,9 +188,6 @@ namespace Thread
 		** \brief Get the number of threads
 		*/
 		uint size() const;
-
-		//! \see size()
-		uint count() const;
 
 		//! Get if the array is empty
 		bool empty() const;

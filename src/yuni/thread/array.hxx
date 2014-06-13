@@ -457,13 +457,6 @@ namespace Thread
 
 
 	template<class T>
-	inline uint Array<T>::count() const
-	{
-		return size();
-	}
-
-
-	template<class T>
 	inline bool Array<T>::empty() const
 	{
 		typename ThreadingPolicy::MutexLocker locker(*this);

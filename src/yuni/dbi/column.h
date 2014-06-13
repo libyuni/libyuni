@@ -8,6 +8,9 @@ namespace Yuni
 namespace DBI
 {
 
+	/*!
+	** \ingroup DBI
+	*/
 	class Column final
 	{
 	public:

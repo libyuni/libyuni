@@ -23,6 +23,7 @@ namespace Yuni
 
 	/*!
 	** \brief A delegate implementation
+	** \ingroup Events
 	**
 	** How to bind a mere function :
 	** \code
@@ -129,6 +130,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)();
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -154,8 +158,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -173,6 +175,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -208,6 +211,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -217,19 +222,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)());
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)());
 		# endif
 		//! Destructor
@@ -494,6 +514,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)();
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -519,8 +542,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -538,6 +559,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -573,6 +595,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -582,19 +606,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)());
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)());
 		# endif
 		//! Destructor
@@ -859,6 +898,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)();
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -884,8 +926,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -903,6 +943,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -938,6 +979,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -947,19 +990,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)());
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)());
 		# endif
 		//! Destructor
@@ -1224,6 +1282,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -1249,8 +1310,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -1268,6 +1327,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -1303,6 +1363,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -1312,19 +1374,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0));
 		# endif
 		//! Destructor
@@ -1589,6 +1666,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -1614,8 +1694,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -1633,6 +1711,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -1668,6 +1747,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -1677,19 +1758,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0));
 		# endif
 		//! Destructor
@@ -1954,6 +2050,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -1979,8 +2078,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -1998,6 +2095,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -2033,6 +2131,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -2042,19 +2142,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0));
 		# endif
 		//! Destructor
@@ -2319,6 +2434,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -2344,8 +2462,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -2363,6 +2479,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -2398,6 +2515,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -2407,19 +2526,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1));
 		# endif
 		//! Destructor
@@ -2684,6 +2818,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -2709,8 +2846,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -2728,6 +2863,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -2763,6 +2899,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -2772,19 +2910,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1));
 		# endif
 		//! Destructor
@@ -3049,6 +3202,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -3074,8 +3230,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -3093,6 +3247,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -3128,6 +3283,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -3137,19 +3294,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1));
 		# endif
 		//! Destructor
@@ -3414,6 +3586,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -3439,8 +3614,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -3458,6 +3631,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -3493,6 +3667,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -3502,19 +3678,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2));
 		# endif
 		//! Destructor
@@ -3779,6 +3970,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -3804,8 +3998,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -3823,6 +4015,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -3858,6 +4051,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -3867,19 +4062,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2));
 		# endif
 		//! Destructor
@@ -4144,6 +4354,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -4169,8 +4382,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -4188,6 +4399,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -4223,6 +4435,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -4232,19 +4446,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2));
 		# endif
 		//! Destructor
@@ -4509,6 +4738,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -4534,8 +4766,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -4553,6 +4783,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -4588,6 +4819,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -4597,19 +4830,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3));
 		# endif
 		//! Destructor
@@ -4874,6 +5122,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -4899,8 +5150,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -4918,6 +5167,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -4953,6 +5203,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -4962,19 +5214,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3));
 		# endif
 		//! Destructor
@@ -5239,6 +5506,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -5264,8 +5534,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -5283,6 +5551,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -5318,6 +5587,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -5327,19 +5598,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3));
 		# endif
 		//! Destructor
@@ -5604,6 +5890,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -5629,8 +5918,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -5648,6 +5935,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -5683,6 +5971,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -5692,19 +5982,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4));
 		# endif
 		//! Destructor
@@ -5969,6 +6274,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -5994,8 +6302,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -6013,6 +6319,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -6048,6 +6355,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -6057,19 +6366,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4));
 		# endif
 		//! Destructor
@@ -6334,6 +6658,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -6359,8 +6686,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -6378,6 +6703,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -6413,6 +6739,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -6422,19 +6750,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4));
 		# endif
 		//! Destructor
@@ -6699,6 +7042,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -6724,8 +7070,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -6743,6 +7087,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -6778,6 +7123,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -6787,19 +7134,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
 		# endif
 		//! Destructor
@@ -7064,6 +7426,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -7089,8 +7454,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -7108,6 +7471,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -7143,6 +7507,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -7152,19 +7518,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
 		# endif
 		//! Destructor
@@ -7429,6 +7810,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -7454,8 +7838,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -7473,6 +7855,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -7508,6 +7891,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -7517,19 +7902,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
 		# endif
 		//! Destructor
@@ -7794,6 +8194,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -7819,8 +8222,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -7838,6 +8239,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -7873,6 +8275,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -7882,19 +8286,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
 		# endif
 		//! Destructor
@@ -8159,6 +8578,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -8184,8 +8606,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -8203,6 +8623,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -8238,6 +8659,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -8247,19 +8670,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
 		# endif
 		//! Destructor
@@ -8524,6 +8962,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -8549,8 +8990,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -8568,6 +9007,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -8603,6 +9043,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -8612,19 +9054,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
 		# endif
 		//! Destructor
@@ -8889,6 +9346,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -8914,8 +9374,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -8933,6 +9391,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -8968,6 +9427,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -8977,19 +9438,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
 		# endif
 		//! Destructor
@@ -9254,6 +9730,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -9279,8 +9758,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -9298,6 +9775,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -9333,6 +9811,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -9342,19 +9822,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
 		# endif
 		//! Destructor
@@ -9619,6 +10114,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -9644,8 +10142,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -9663,6 +10159,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -9698,6 +10195,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -9707,19 +10206,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
 		# endif
 		//! Destructor
@@ -9984,6 +10498,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -10009,8 +10526,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -10028,6 +10543,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -10063,6 +10579,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -10072,19 +10590,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		# endif
 		//! Destructor
@@ -10349,6 +10882,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -10374,8 +10910,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -10393,6 +10927,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -10428,6 +10963,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -10437,19 +10974,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		# endif
 		//! Destructor
@@ -10714,6 +11266,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -10739,8 +11294,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -10758,6 +11311,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -10793,6 +11347,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -10802,19 +11358,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		# endif
 		//! Destructor
@@ -11079,6 +11650,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -11104,8 +11678,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -11123,6 +11695,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -11158,6 +11731,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -11167,19 +11742,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		# endif
 		//! Destructor
@@ -11444,6 +12034,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -11469,8 +12062,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -11488,6 +12079,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -11523,6 +12115,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -11532,19 +12126,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		# endif
 		//! Destructor
@@ -11809,6 +12418,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -11834,8 +12446,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -11853,6 +12463,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -11888,6 +12499,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -11897,19 +12510,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		# endif
 		//! Destructor
@@ -12174,6 +12802,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -12199,8 +12830,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -12218,6 +12847,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -12253,6 +12883,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -12262,19 +12894,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		# endif
 		//! Destructor
@@ -12539,6 +13186,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -12564,8 +13214,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -12583,6 +13231,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -12618,6 +13267,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -12627,19 +13278,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		# endif
 		//! Destructor
@@ -12904,6 +13570,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -12929,8 +13598,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -12948,6 +13615,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -12983,6 +13651,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -12992,19 +13662,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		# endif
 		//! Destructor
@@ -13269,6 +13954,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -13294,8 +13982,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -13313,6 +13999,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -13348,6 +14035,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -13357,19 +14046,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		# endif
 		//! Destructor
@@ -13634,6 +14338,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -13659,8 +14366,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -13678,6 +14383,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -13713,6 +14419,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -13722,19 +14430,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		# endif
 		//! Destructor
@@ -13999,6 +14722,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -14024,8 +14750,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -14043,6 +14767,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -14078,6 +14803,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -14087,19 +14814,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		# endif
 		//! Destructor
@@ -14364,6 +15106,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -14389,8 +15134,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -14408,6 +15151,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -14443,6 +15187,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -14452,19 +15198,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		# endif
 		//! Destructor
@@ -14729,6 +15490,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -14754,8 +15518,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -14773,6 +15535,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -14808,6 +15571,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -14817,19 +15582,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		# endif
 		//! Destructor
@@ -15094,6 +15874,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -15119,8 +15902,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -15138,6 +15919,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -15173,6 +15955,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -15182,19 +15966,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		# endif
 		//! Destructor
@@ -15459,6 +16258,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -15484,8 +16286,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -15503,6 +16303,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -15538,6 +16339,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -15547,19 +16350,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		# endif
 		//! Destructor
@@ -15824,6 +16642,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -15849,8 +16670,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -15868,6 +16687,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -15903,6 +16723,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -15912,19 +16734,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		# endif
 		//! Destructor
@@ -16189,6 +17026,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -16214,8 +17054,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -16233,6 +17071,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -16268,6 +17107,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -16277,19 +17118,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		# endif
 		//! Destructor
@@ -16554,6 +17410,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -16579,8 +17438,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -16598,6 +17455,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -16633,6 +17491,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -16642,19 +17502,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		# endif
 		//! Destructor
@@ -16919,6 +17794,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -16944,8 +17822,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -16963,6 +17839,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -16998,6 +17875,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -17007,19 +17886,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		# endif
 		//! Destructor
@@ -17284,6 +18178,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -17309,8 +18206,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -17328,6 +18223,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -17363,6 +18259,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -17372,19 +18270,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		# endif
 		//! Destructor
@@ -17649,6 +18562,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -17674,8 +18590,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -17693,6 +18607,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -17728,6 +18643,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -17737,19 +18654,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		# endif
 		//! Destructor
@@ -18014,6 +18946,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -18039,8 +18974,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -18058,6 +18991,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -18093,6 +19027,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -18102,19 +19038,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		# endif
 		//! Destructor
@@ -18379,6 +19330,9 @@ namespace Yuni
 
 		//! Pointer-to-function
 		typedef R (*FunctionType)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15);
+		//! The type of the return value
+		typedef R ReturnType;
+
 		/*!
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
@@ -18404,8 +19358,6 @@ namespace Yuni
 			hasReturnValue = Static::Type::StrictlyEqual<R,void>::No,
 		};
 
-		//! The type of the return value
-		typedef R ReturnType;
 		/*!
 		** \brief Type of each argument by their index
 		**
@@ -18423,6 +19375,7 @@ namespace Yuni
 
 		/*!
 		** \brief Types when an additional user data is present
+		** \tparam U Type for the additional user data
 		*/
 		template<class U>
 		struct WithUserData final
@@ -18458,6 +19411,8 @@ namespace Yuni
 	public:
 		/*!
 		** \brief Instanciate a Yuni::Bind from an exported symbol from a dynamic library
+		** \param symbol A symbol from a shared library
+		** \return A new bind
 		*/
 		static BindType FromSymbol(const Yuni::DynamicLibrary::Symbol& symbol);
 
@@ -18467,19 +19422,34 @@ namespace Yuni
 		//@{
 		//! Default Constructor
 		Bind();
+
 		//! Copy constructor
 		Bind(const Bind& rhs);
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		Bind(Bind&& rhs);
 		# endif
-		//! Constructor, from a pointer-to-method
+
+		/*!
+		** \brief Constructor, from a pointer-to-method
+		**
+		** \param c A pointer to an object (can be null)
+		** \param member A pointer-to-member
+		*/
 		template<class C> Bind(C* c, R (C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
+
 		# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-		//! Constructor from a functor, most likely a lambda
+		/*!
+		** \brief Constructor from a functor, most likely a lambda
+		** \param functor A functor
+		*/
 		template<class C> Bind(C&& functor);
 		# else
-		//! Constructor from a pointer-to-function
+
+		/*!
+		** \brief Constructor from a pointer-to-function
+		** \param pointer A pointer-to-function
+		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		# endif
 		//! Destructor
