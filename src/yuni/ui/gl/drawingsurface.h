@@ -51,13 +51,22 @@ namespace UI
 		//! Resize the surface
 		void resize(float width, float height);
 
-		//! Draw text on the surface
+		//! Draw text from a given coordinate
 		void drawText(const String& text, const FTFont::Ptr& font, const Color::RGBA<float>& color,
 			float x, float y);
 
-		//! Draw text on the surface, centered in a rectangle
+		//! Draw text from a given coordinate with a given background color
+		void drawTextOnColor(const String& text, const FTFont::Ptr& font,
+			const Color::RGBA<float>& color, const Color::RGBA<float>& backColor, float x, float y);
+
+		//! Draw text centered in a rectangle
 		void drawTextInRect(const String& text, const FTFont::Ptr& font,
 			const Color::RGBA<float>& color, float x, float y, float width, float height);
+
+		//! Draw text centered in a rectangle with a given background color
+		void drawTextOnColorInRect(const String& text, const FTFont::Ptr& font,
+			const Color::RGBA<float>& color, const Color::RGBA<float>& backColor,
+			float x, float y, float width, float height);
 
 		//! Draw an anti-aliased line on the surface
 		void drawLine(const Color::RGBA<float>& color, float startX, float startY,

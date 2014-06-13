@@ -33,8 +33,8 @@ namespace Control
 				pOffsetX, pOffsetY, pOpacity);
 		// Draw the text if any
 		if (!pText.empty())
-			surface->drawTextInRect(pText, theme.font, theme.textColor, pos.x, pos.y,
-				pSize.x, pSize.y);
+			surface->drawTextOnColorInRect(pText, theme.font, theme.textColor, theme.buttonColor,
+				pos.x, pos.y, pSize.x, pSize.y);
 		surface->endClipping();
 		pModified = false;
 	}

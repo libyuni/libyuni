@@ -52,6 +52,7 @@ namespace UI
 
 		//! Draw the text using the given shader
 		void draw(const Gfx3D::ShaderProgram::Ptr& shader) const;
+		void draw(const Gfx3D::ShaderProgram::Ptr& shader, const Color::RGB<float>& backColor) const;		void draw(const Gfx3D::ShaderProgram::Ptr& shader, const Color::RGBA<float>& backColor) const;
 
 		//! Clear the text
 		String& clear();

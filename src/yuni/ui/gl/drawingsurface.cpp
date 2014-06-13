@@ -73,44 +73,30 @@ namespace UI
 	{
 		fb.initialize(Gfx3D::FrameBuffer::fbDraw);
 		auto& shaderManager = Gfx3D::ShaderManager::Instance();
+
 		baseShader = shaderManager.getFromMemory(Gfx3D::vsTransform, Gfx3D::fsColorUniform);
-		if (!baseShader)
+		assert(baseShader && "Shader loading or compilation for UI drawing failed ! ");
+		baseShader->bindAttribute("attrVertex", Yuni::Gfx3D::Vertex<>::vaPosition);
+		if (!baseShader->load())
 		{
-			std::cerr << "Shader loading or compilation for UI drawing failed ! " << std::endl;
+			std::cerr << "Shader program link for UI drawing failed !" << std::endl
+					  << baseShader->errorMessage() << std::endl;
 			baseShader = nullptr;
-		}
-		else
-		{
-			baseShader->bindAttribute("attrVertex", Yuni::Gfx3D::Vertex<>::vaPosition);
-			if (!baseShader->load())
-			{
-				std::cerr << "Shader program link for UI drawing failed !" << std::endl
-						  << baseShader->errorMessage() << std::endl;
-				baseShader = nullptr;
-			}
 		}
 
 		lineShader = shaderManager.getFromMemory(Gfx3D::vsColorAttr, Gfx3D::fsColorAttr);
-		if (!lineShader)
+		assert(lineShader && "Shader loading or compilation for line drawing failed !");
+		lineShader->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
+		lineShader->bindAttribute("attrColor", Gfx3D::Vertex<>::vaColor);
+		if (!lineShader->load())
 		{
-			std::cerr << "Shader loading or compilation for line drawing failed !" << std::endl;
+			std::cerr << "Shader program link for line drawing failed !" << std::endl
+					  << lineShader->errorMessage() << std::endl;
 			lineShader = nullptr;
-			return;
-		}
-		else
-		{
-			lineShader->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
-			lineShader->bindAttribute("attrColor", Gfx3D::Vertex<>::vaColor);
-			if (!lineShader->load())
-			{
-				std::cerr << "Shader program link for line drawing failed !" << std::endl
-						  << lineShader->errorMessage() << std::endl;
-				lineShader = nullptr;
-			}
 		}
 
 		textShader = shaderManager.getFromMemory(Gfx3D::vsTexCoord, Gfx3D::fsText);
-		assert(textShader && "Shader loading or compilation for line drawing failed !");
+		assert(textShader && "Shader loading or compilation for text drawing failed !");
 		textShader->bindAttribute("attrVertex", Gfx3D::Vertex<>::vaPosition);
 		textShader->bindAttribute("attrColor", Gfx3D::Vertex<>::vaColor);
 		if (!textShader->load())
@@ -119,6 +105,9 @@ namespace UI
 					  << textShader->errorMessage() << std::endl;
 			textShader = nullptr;
 		}
+		textShader->activate();
+		textShader->bindUniform("Texture0", Yuni::Gfx3D::Vertex<>::vaTexture0);
+		textShader->deactivate();
 
 		pictureShader = shaderManager.getFromMemory(Gfx3D::vsImageRect, Gfx3D::fsImageRect);
 		assert(pictureShader && "Failed to load necessary shaders for picture overlay !");
@@ -208,7 +197,7 @@ namespace UI
 		::glPopAttrib();
 		pImpl->baseShader->deactivate();
 		pImpl->fb.deactivate();
-		::glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 1/*pImpl->previousFB*/);
+		::glBindFramebuffer(GL_DRAW_FRAMEBUFFER, pImpl->previousFB);
 	}
 
 
@@ -271,6 +260,30 @@ namespace UI
 		pImpl->baseShader->activate();
 	}
 
+	void DrawingSurface::drawTextOnColor(const String& text, const FTFont::Ptr& font,
+		const Color::RGBA<float>& color, const Color::RGBA<float>& backColor, float x, float y)
+	{
+		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
+
+		if (text.empty())
+			return;
+
+		auto& overlay = pImpl->text;
+		overlay.clear() << text;
+		overlay.font(font);
+		overlay.color(color);
+		overlay.move(x, y);
+
+		// Update
+		overlay.update();
+		if (Math::Zero(overlay.width()) || Math::Zero(overlay.height()))
+			return;
+		// Draw
+		overlay.draw(pImpl->textShader, backColor);
+		// Restore base shader
+		pImpl->baseShader->activate();
+	}
+
 
 	void DrawingSurface::drawTextInRect(const String& text, const FTFont::Ptr& font,
 		const Color::RGBA<float>& color, float x, float y, float width, float height)
@@ -284,8 +297,6 @@ namespace UI
 		overlay.clear() << text;
 		overlay.font(font);
 		overlay.color(color);
-		// pImpl->textShader->activate();
-		// pImpl->textShader->bindUniform("BackColor", Color::RGBA<float>(1, 0, 0, 1));
 		// Update to get the correct necessary size
 		overlay.update();
 
@@ -296,6 +307,35 @@ namespace UI
 
 		// Draw
 		overlay.draw(pImpl->textShader);
+
+		// Restore base shader
+		pImpl->baseShader->activate();
+	}
+
+
+	void DrawingSurface::drawTextOnColorInRect(const String& text, const FTFont::Ptr& font,
+		const Color::RGBA<float>& color, const Color::RGBA<float>& backColor,
+		float x, float y, float width, float height)
+	{
+		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
+
+		if (text.empty() || Math::Zero(width) || Math::Zero(height))
+			return;
+
+		auto& overlay = pImpl->text;
+		overlay.clear() << text;
+		overlay.font(font);
+		overlay.color(color);
+		// Update to get the correct necessary size
+		overlay.update();
+
+		if (Math::Zero(overlay.width()) || Math::Zero(overlay.height()))
+			return;
+		// Moving does not require to call update() again
+		overlay.move(x + (width - overlay.width()) / 2.0f, y + (height - overlay.height()) / 2.0f);
+
+		// Draw
+		overlay.draw(pImpl->textShader, backColor);
 
 		// Restore base shader
 		pImpl->baseShader->activate();
