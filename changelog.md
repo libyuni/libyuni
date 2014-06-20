@@ -35,6 +35,8 @@ Release version 1.0.0
 
  * [core] added new class Yuni::Tribool, a 3-state boolean
 
+ * [core] added typedefs `float32`, `float64`
+
  * [dbi] The DBI/sqlite adapter is now ready for production
 
  * [io] `Yuni::IO::LoadFromFile` now accepts std::string as a destination

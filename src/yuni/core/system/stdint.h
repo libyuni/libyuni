@@ -76,6 +76,13 @@ namespace Yuni
 	typedef Yuni::sint64 ssize_t;
 	# endif
 
+
+	/*! Decimal floating-point (32 bits) */
+	typedef float   float32;
+	/*! Decimal floating-point (32 bits) */
+	typedef double  float64;
+
+
 } /* namespace Yuni */
 
 
@@ -115,6 +122,10 @@ typedef unsigned char  yuint8;
 /*! 8-bit unsigned int, guaranteed to be 1 byte in size */
 typedef char           yint8;
 
+/*! Decimal floating-point (32 bits) */
+typedef float          yfloat32;
+/*! Decimal floating-point (32 bits) */
+typedef double         yfloat64;
 
 
 
@@ -123,7 +134,7 @@ typedef char           yint8;
 
 # ifndef YUNI_HAS_UINT
 /*! Convenient typedef around unsigned int */
-typedef unsigned int uint;
+typedef unsigned int  uint;
 # endif
 
 
