@@ -50,7 +50,12 @@ namespace Yuni
 
 		}; // class SmartPtrType
 
-		//! Most convenient smartptr for this class
+		/*!
+		** \brief Most convenient smartptr for this class
+		**
+		** Derived classes must use the class Helper \p SmartPtrType for retrieving
+		** a more appropriate smart ptr
+		*/
 		typedef typename SmartPtrType<IntrusiveSmartPtrType>::Ptr  Ptr;
 
 
@@ -152,7 +157,12 @@ namespace Yuni
 
 		}; // class SmartPtrType
 
-		//! Most convenient smartptr for this class
+		/*!
+		** \brief Most convenient smartptr for this class
+		**
+		** Derived classes must use the class Helper \p SmartPtrType for retrieving
+		** a more appropriate smart ptr
+		*/
 		typedef typename SmartPtrType<IntrusiveRef>::Ptr  Ptr;
 
 
