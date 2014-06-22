@@ -9,7 +9,7 @@ namespace Yuni
 namespace IO
 {
 
-	
+
 	/*!
 	** \brief Flow control used in the IO module
 	*/
