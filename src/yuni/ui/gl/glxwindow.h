@@ -20,7 +20,7 @@ namespace UI
 	{
 	public:
 		//! Constructor
-		GLXWindow(const AnyString& title, unsigned int width, unsigned int height, unsigned int bitDepth, bool fullScreen) :
+		GLXWindow(const AnyString& title, uint width, uint height, uint bitDepth, bool fullScreen) :
 			GLWindow(title, width, height, bitDepth, fullScreen)
 		{}
 

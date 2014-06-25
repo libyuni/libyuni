@@ -1,5 +1,6 @@
 
-#include "linerenderer.cpp"
+#include "linerenderer.h"
+#include <yuni/private/graphics/opengl/glew/glew.h>
 
 // Drawing nearly perfect 2D line segments in OpenGL
 // You can use this code however you want.
@@ -317,7 +318,7 @@ namespace UI
 
 
 
-	void hair_line(double x1, double y1, double x2, double y2, bool alphablend = 0)
+	void hair_line(double x1, double y1, double x2, double y2, bool alphablend)
 	{
 		double t = 0.05;
 		double R = 0.768;

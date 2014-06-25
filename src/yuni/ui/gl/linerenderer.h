@@ -73,7 +73,7 @@ namespace UI
 		float w,                                          // width/thickness of the line in pixel
 		float Cr, float Cg, float Cb, float Ca,	          // RGBA color components
 		float Br, float Bg, float Bb, float Ba,	          // color of background, Br=alpha of color when alphablend=true
-		bool alphablend);                                 // use alpha blend or not
+		bool alphablend = false);                         // use alpha blend or not
 
 
 
@@ -86,7 +86,7 @@ namespace UI
 	** when alphablend is false, it assumes drawing on a white surface
 	** when alphablend is true, it draws with alpha
 	*/
-	void hair_line(double x1, double y1, double x2, double y2, bool alphablend = 0);
+	void hair_line(double x1, double y1, double x2, double y2, bool alphablend = false);
 
 
 	/*!
