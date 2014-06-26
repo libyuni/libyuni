@@ -70,6 +70,8 @@ namespace Gfx3D
 		//! Release several OpenGL textures at once
 		static void ReleaseGLTextures(uint nbTextures, uint* textures);
 
+	public:
+		static uint PixelStoreAlignment;
 
 	public:
 		//! Destructor

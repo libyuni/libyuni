@@ -18,66 +18,95 @@ namespace Yuni
 namespace Gfx3D
 {
 
+	uint Texture::PixelStoreAlignment = 4;
 
-	static GLenum DepthToGLEnum(uint depth)
+
+	namespace // anonymous
 	{
-		switch (depth)
+
+		static GLenum DepthToGLEnum(uint depth)
 		{
-			case 3:
-			case 6:
-				return GL_RGB;
-			case 4:
-			case 8:
-				return GL_RGBA;
-			case 1:
-				return GL_RED;
-			case 2:
-				return GL_RG;
+			switch (depth)
+			{
+				case 3:
+				case 6:
+					return GL_RGB;
+				case 4:
+				case 8:
+					return GL_RGBA;
+				case 1:
+					return GL_RED;
+				case 2:
+					return GL_RG;
+			}
+			return GL_RGBA;
 		}
-		return GL_RGB;
-	}
 
 
-	static GLint DepthToGLEnumInternal(uint depth)
-	{
-		switch (depth)
+		static GLint DepthToGLEnumInternal(uint depth)
 		{
-			case 3:
-			case 6:
-				return GL_RGB8;
-			case 4:
-			case 8:
-				return GL_RGBA8;
-			case 1:
-				return GL_R8;
-			case 2:
-				return GL_RG8;
+			switch (depth)
+			{
+				case 3:
+				case 6:
+					return GL_RGB8;
+				case 4:
+				case 8:
+					return GL_RGBA8;
+				case 1:
+					return GL_R8;
+				case 2:
+					return GL_RG8;
+			}
+			return GL_RGBA8;
 		}
-		return GL_RGB8;
-	}
 
 
-	static GLenum DataTypeToGLEnum(Texture::DataType type)
-	{
-		switch (type)
+		static GLenum DataTypeToGLEnum(Texture::DataType type)
 		{
-			case Texture::UInt8:
-				return GL_UNSIGNED_BYTE;
-			case Texture::Int8:
-				return GL_BYTE;
-			case Texture::UInt16:
-				return GL_UNSIGNED_SHORT;
-			case Texture::Int16:
-				return GL_SHORT;
-			case Texture::UInt32:
-				return GL_UNSIGNED_INT;
-			case Texture::Int32:
-				return GL_INT;
-			case Texture::Float:
-				return GL_FLOAT;
+			switch (type)
+			{
+				case Texture::UInt8:
+					return GL_UNSIGNED_BYTE;
+				case Texture::Int8:
+					return GL_BYTE;
+				case Texture::UInt16:
+					return GL_UNSIGNED_SHORT;
+				case Texture::Int16:
+					return GL_SHORT;
+				case Texture::UInt32:
+					return GL_UNSIGNED_INT;
+				case Texture::Int32:
+					return GL_INT;
+				case Texture::Float:
+					return GL_FLOAT;
+			}
+			return GL_UNSIGNED_BYTE;
 		}
-		return GL_UNSIGNED_BYTE;
-	}
+
+
+		static void SetPixelStore(uint depth)
+		{
+			switch (depth)
+			{
+				case 4:
+				case 8:
+					if (4 != Texture::PixelStoreAlignment)
+						::glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+					break;
+				case 2:
+					if (2 != Texture::PixelStoreAlignment)
+						::glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
+					break;
+				default:
+					if (1 != Texture::PixelStoreAlignment)
+						::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+					break;
+			}
+		}
+
+
+	} // namespace anonymous
 
 
 
@@ -182,6 +211,7 @@ namespace Gfx3D
 			GLenum format = DepthToGLEnum(colorDepth);
 			GLint formatInt = DepthToGLEnumInternal(colorDepth);
 			GLenum type = DataTypeToGLEnum(UInt8);
+			SetPixelStore(colorDepth);
 			::glTexImage2D(CubeMapEnums[i], 0, formatInt, width, height, 0, format, type, data);
 			::stbi_image_free(data);
 		}
@@ -223,9 +253,6 @@ namespace Gfx3D
 		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-		// Color fusion mode : only used when no shader is activated
-		::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
 		// This Enable right here is necessary in cases where no shader is activated
 		// !!! However, it is freakishly buggy ! If you do it on every texture load,
 		// !!! it will break the video player (it displays levels of red...)
@@ -241,6 +268,7 @@ namespace Gfx3D
 		GLenum format = DepthToGLEnum(colorDepth);
 		GLenum formatInt = DepthToGLEnumInternal(colorDepth);
 		GLenum dataType = DataTypeToGLEnum(type);
+		SetPixelStore(colorDepth);
 		::glTexImage2D(GL_TEXTURE_2D, 0, formatInt, width, height, 0, format, dataType, data);
 
 		// Build our texture mipmaps
@@ -291,9 +319,10 @@ namespace Gfx3D
 		}
 
 		// Set the texture in OpenGL
-		GLenum format = (GLenum)DepthToGLEnum(colorDepth);
+		GLenum format = DepthToGLEnum(colorDepth);
 		GLenum formatInt = DepthToGLEnumInternal(colorDepth);
 		GLenum dataType = DataTypeToGLEnum(type);
+		SetPixelStore(colorDepth);
 		::glTexImage2D(GL_TEXTURE_2D, 0, formatInt, width, height, 0, format, dataType, data);
 
 		// Build our texture mipmaps
@@ -320,6 +349,7 @@ namespace Gfx3D
 		// GLenum format = DepthToGLEnum(colorDepth);
 		GLenum formatInt = DepthToGLEnumInternal(colorDepth);
 		// GLenum dataType = DataTypeToGLEnum(type);
+		SetPixelStore(colorDepth);
 		::glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, formatInt, width, height, false);
 
 		return new Texture(id, width, height, colorDepth, type);
@@ -364,9 +394,10 @@ namespace Gfx3D
 		pHeight = height;
 		// Bind texture
 		::glBindTexture(GL_TEXTURE_2D, pID);
-		GLenum format = DepthToGLEnum(pDepth);
-		GLint formatInt = DepthToGLEnumInternal(pDepth);
+		GLenum format = DepthToGLEnum(pColorDepth);
+		GLenum formatInt = DepthToGLEnumInternal(pColorDepth);
 		GLenum type = DataTypeToGLEnum(pType);
+		SetPixelStore(pColorDepth);
 		// Sadly, glTexSubImage2D does not do the trick, we need glTexImage2D
 		::glTexImage2D(GL_TEXTURE_2D, 0, formatInt, width, height, 0, format, type, nullptr);
 		if (!GLTestError("glTexImage2D Texture resize"))
@@ -376,7 +407,6 @@ namespace Gfx3D
 
 	void Texture::update(const unsigned char* data)
 	{
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		::glBindTexture(GL_TEXTURE_2D, pID);
 		GLenum format = DepthToGLEnum(pColorDepth);
 		GLenum type = DataTypeToGLEnum(pType);
@@ -389,7 +419,6 @@ namespace Gfx3D
 	void Texture::update(uint offsetX, uint offsetY, uint width, uint height, uint colorDepth,
 		const unsigned char* data)
 	{
-		::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		if (width <= 0 || height <= 0)
 			// No update to do
 			return;
@@ -407,20 +436,20 @@ namespace Gfx3D
 	void Texture::clear()
 	{
 		std::vector<uint8> data(pWidth * pHeight * 4, 0);
-		update(0, 0, pWidth, pHeight, pDepth, &data[0]);
+		update(0, 0, pWidth, pHeight, pColorDepth, &data[0]);
 	}
 
 
 	void Texture::clear(uint offsetX, uint offsetY, uint width, uint height)
 	{
 		std::vector<uint8> data(width * height * 4, 0);
-		update(offsetX, offsetY, width, height, pDepth, &data[0]);
+		update(offsetX, offsetY, width, height, pColorDepth, &data[0]);
 	}
 
 	void Texture::clearToWhite()
 	{
 		std::vector<uint8> data(pWidth * pHeight * 4, 255);
-		update(0, 0, pWidth, pHeight, pDepth, &data[0]);
+		update(0, 0, pWidth, pHeight, pColorDepth, &data[0]);
 	}
 
 
