@@ -55,6 +55,8 @@ list(APPEND SRC_UI
 	ui/control/picture.h
 	ui/control/text.cpp
 	ui/control/text.h
+	ui/control/texteditor.cpp
+	ui/control/texteditor.h
 	ui/control/window.cpp
 	ui/control/window.h
 

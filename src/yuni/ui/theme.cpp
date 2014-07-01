@@ -11,6 +11,7 @@ namespace UI
 
 	Theme::Theme():
 		font(new FTFont("data/fonts/OpenSans-Light.ttf", 12)),
+		monoFont(new FTFont("data/fonts/DejaVuSansMono.ttf", 10)),
 		textColor(1.0f, 1.0f, 1.0f, 1.0f), // Opaque White
  		windowColor(0.2274f, 0.3804f, 0.5412f, 0.8f), // (58, 97, 138) 80% alpha
 		buttonColor(0.2863f, 0.5451f, 0.651f), // (73, 139, 166)
@@ -29,6 +30,7 @@ namespace UI
 
 	Theme::Theme(const Theme& other):
 		font(other.font),
+		monoFont(other.monoFont),
 		textColor(other.textColor),
  		windowColor(other.windowColor),
 		buttonColor(other.buttonColor),

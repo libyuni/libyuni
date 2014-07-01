@@ -39,6 +39,7 @@ namespace UI
 
 		//! Font
 		FTFont::Ptr font;
+		FTFont::Ptr monoFont;
 
 		//! Color for text
 		Color::RGBA<float> textColor;
@@ -68,6 +69,7 @@ namespace UI
 		static Theme::Ptr sCurrent;
 		static Theme::Ptr sDefault;
 		static FTFont::Ptr sDefaultFont;
+		static FTFont::Ptr sDefaultMonoFont;
 
 	}; // class Theme
 

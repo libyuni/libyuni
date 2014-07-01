@@ -39,6 +39,8 @@ namespace UI
 		shader->bindUniform("Texture0", Yuni::Gfx3D::Vertex<>::vaTexture0);
 		// Put the optional material surface on texture 1
 		pMaterial->activate(shader, 1);
+		//::glActiveTexture(GL_TEXTURE1);
+		//::glBindTexture(GL_TEXTURE_2D, 8);
 		// Temporary !!!
 		shader->bindUniform("BackColor", Color::RGBA<float>(0.2863f, 0.5451f, 0.651f));
 		shader->bindUniform("HasBGColor", 0.0f);
