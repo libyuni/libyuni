@@ -168,7 +168,7 @@ namespace UI
 		void addChild(IControl* child) { pChildren.push_back(child); }
 
 		//! Remove all child controls
-		void clearChildren() { pChildren.clear(); }
+		void clearChildren() { pChildren.clear(); invalidate(); }
 
 		//! Invalidate the control (force redraw)
 		void invalidate()

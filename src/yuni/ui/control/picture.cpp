@@ -1,5 +1,4 @@
 # include "picture.h"
-# include "../theme.h"
 
 namespace Yuni
 {
@@ -14,16 +13,14 @@ namespace Control
 		if (!pVisible)
 			return;
 
-		auto themeptr = Theme::Current();
-		auto& theme = *themeptr;
 		Point2D<float> pos(pPosition);
 		// If the picture is the root control, use absolute coordinates
 		if (root)
 			pos(0, 0);
 		surface->beginRectangleClipping(pos.x, pos.y, pSize.x, pSize.y);
 		// Manual full-background drawing (FIXME : this is not optimal)
-		surface->drawFilledRectangle(theme.borderColor, pFillColor, pos.x, pos.y,
-			pSize.x, pSize.y, theme.borderWidth);
+		surface->drawFilledRectangle(pFillColor, pFillColor, pos.x, pos.y,
+			pSize.x, pSize.y, 0);
 		// Then try drawing the image
 		if (!(!pImage))
 			surface->drawImage(pImage, pos.x, pos.y, pSize.x, pSize.y, pFillColor, pDisplay,

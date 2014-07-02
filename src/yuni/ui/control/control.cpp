@@ -67,9 +67,7 @@ namespace UI
 		if (visible == pVisible)
 			return;
 		pVisible = visible;
-		// Propagate visibility to children
-		for (auto& child : pChildren)
-			child->show(visible);
+		invalidate();
 	}
 
 

@@ -12,8 +12,8 @@ namespace UI
 	Theme::Theme():
 		font(new FTFont("data/fonts/OpenSans-Light.ttf", 12)),
 		monoFont(new FTFont("data/fonts/DejaVuSansMono.ttf", 10)),
-		textColor(1.0f, 1.0f, 1.0f, 1.0f), // Opaque White
- 		windowColor(0.2274f, 0.3804f, 0.5412f, 0.8f), // (58, 97, 138) 80% alpha
+		textColor(0.0f, 0.0f, 0.0f), // Opaque Black
+ 		windowColor(0.9882f, 0.9882f, 0.9882f), // (0xfcfcfc)
 		buttonColor(0.2863f, 0.5451f, 0.651f), // (73, 139, 166)
 		buttonColorDisabled(0.2863f, 0.5451f, 0.651f), // (103, 120, 139)
 		menuColor(0.2863f, 0.5451f, 0.651f), // (73, 139, 166)
