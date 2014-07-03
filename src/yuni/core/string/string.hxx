@@ -3476,7 +3476,8 @@ namespace Yuni
 	template<uint ChunkSizeT, bool ExpandableT>
 	template<class PredicateT>
 	bool
-	CString<ChunkSizeT,ExpandableT>::words(const AnyString& separators, const PredicateT& predicate) const
+	CString<ChunkSizeT,ExpandableT>::words(const AnyString& separators, const PredicateT& predicate,
+		bool keepEmptyElements) const
 	{
 		if (0 == AncestorType::size)
 			return true;
@@ -3501,9 +3502,11 @@ namespace Yuni
 					if (not predicate(word))
 						return false;
 				}
-				else
+				else if (keepEmptyElements)
 				{
-					// empty
+					word.assign(AncestorType::data + offset, 0);
+					if (not predicate(word))
+						return false;
 				}
 			}
 			else

@@ -1882,7 +1882,8 @@ namespace Yuni
 		** \endcode
 		*/
 		template<class PredicateT>
-		bool words(const AnyString& separators, const PredicateT& predicate) const;
+		bool words(const AnyString& separators, const PredicateT& predicate,
+			bool keepEmptyElements = false) const;
 
 		/*!
 		** \brief Split a string into several segments

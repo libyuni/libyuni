@@ -81,6 +81,8 @@ Release version 1.0.0
 
  * [core] Point2D and Point3D : Added operator * and *=.
 
+ * [core] String : added an optional boolean to `words()` to keep empty lines
+
  * [dbi] Updated sqlite to v3.8.3
 
  * [gl] Updated glew to v1.10
