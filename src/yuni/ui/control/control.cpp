@@ -198,6 +198,7 @@ namespace UI
 		{
 			IControl* child = stack.back();
 			stack.pop_back();
+			child->mouseDblClick(btn, x, y);
 			EventPropagation prop = child->onMouseDblClick(child, btn, x, y);
 			if (epStop == prop)
 				return epStop;
@@ -221,12 +222,14 @@ namespace UI
 		{
 			IControl* child = stack.back();
 			stack.pop_back();
+			child->mouseScroll(delta, x, y);
 			EventPropagation prop = child->onMouseScroll(child, delta);
 			if (epStop == prop)
 				return epStop;
 			if (prop > finalProp)
 				finalProp = prop;
 		}
+		mouseScroll(delta, x, y);
 		EventPropagation prop = onMouseScroll(this, delta);
 		return Math::Max(prop, finalProp);
 	}

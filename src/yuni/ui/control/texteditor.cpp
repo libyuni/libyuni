@@ -32,7 +32,7 @@ namespace Control
 		// Loop on lines of text
 		pText.words("\n", [&] (AnyString& line)
 		{
-			if (lineNb < pTopLineNb)
+			if (lineNb++ < pTopLineNb)
 				return true;
 			if (!line.empty())
 			{
@@ -48,7 +48,7 @@ namespace Control
 			y += pixelLineHeight;
 			// Stop if we are outside the rectangle (for optim)
 			return y < pSize.y;
-		});
+		}, true);
 
 		surface->endClipping();
 		pModified = false;
@@ -57,10 +57,11 @@ namespace Control
 
 	void TextEditor::mouseScroll(float delta, float, float)
 	{
-		float newLineNb = (float)pTopLineNb + delta;
-		float maxLineNb = (float)pText.countChar('\n');
+		float newLineNb = (float)pTopLineNb - delta;
+		float maxLineNb = (float)(pText.countChar('\n') + 1);
 		float displayedLineCount = pSize.y / pLineHeight(pConversion);
 		pTopLineNb = (uint)Math::Max(0.0f, Math::Min(maxLineNb - displayedLineCount + 1, newLineNb));
+		invalidate();
 	}
 
 
