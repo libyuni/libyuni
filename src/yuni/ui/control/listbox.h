@@ -1,5 +1,5 @@
-#ifndef __YUNI_UI_CONTROL_TEXTEDITOR_H__
-# define __YUNI_UI_CONTROL_TEXTEDITOR_H__
+#ifndef __YUNI_UI_CONTROL_LISTBOX_H__
+# define __YUNI_UI_CONTROL_LISTBOX_H__
 
 # include "../../yuni.h"
 # include "../../core/color/rgb.h"
@@ -18,14 +18,34 @@ namespace Control
 {
 
 
-	//! A text is an multi-line area for text edition
-	class TextEditor: public IControl
+	//! A list box is a multi-line area with line-by-line selection
+	template<class ContentT>
+	class ListBox: public IControl
 	{
 	public:
-		TextEditor(float x, float y, float maxWidth, float maxHeight):
+
+		class ListBoxElement
+		{
+		public:
+			ListBoxElement(const AnyString& newLabel, ContentT newContent):
+				label(newLabel),
+				content(newContent)
+			{}
+
+		public:
+			String label;
+			ContentT content;
+
+		}; // class ListBoxElement
+
+
+		typedef std::vector<ListBoxElement>  ElementVector;
+
+	public:
+		ListBox(float x, float y, float maxWidth, float maxHeight):
 			IControl(x, y, maxWidth, maxHeight),
-			pText(),
-			pCursorPos(0u, 0u),
+			pIndex(0u),
+			pClickedIndex(-1),
 			pFont(Theme::Current()->monoFont),
 			// White by default
 			pColor(Theme::Current()->textColor),
@@ -40,10 +60,10 @@ namespace Control
 			pConversion.unitPerPercentParent = pFont->size() * 96.0f / 72.0f / 100.0f;
 		}
 
-		TextEditor(const Point2D<float>& position, const Point2D<float>& maxSize):
+		ListBox(const Point2D<float>& position, const Point2D<float>& maxSize):
 			IControl(position, maxSize),
-			pText(),
-			pCursorPos(0u, 0u),
+			pIndex(0u),
+			pClickedIndex(-1),
 			pFont(Theme::Current()->monoFont),
 			pColor(Theme::Current()->textColor),
 			pBackColor(Theme::Current()->windowColor),
@@ -58,17 +78,26 @@ namespace Control
 		}
 
 		//! Virtual destructor
-		virtual ~TextEditor() {}
+		virtual ~ListBox() {}
 
 		//! Draw the panel
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;
 
-		//! Clear the text
-		String& clear() { invalidate(); pTopLineNb = 0u; return pText.clear(); }
+		//! Clear the list
+		void clear() { invalidate(); pIndex = 0u; pTopLineNb = 0u; pElements.clear(); }
 
-		//! Get the text
-		String& text() { invalidate(); pTopLineNb = 0u; return pText; }
-		const String& text() const { return pText; }
+		//! Get the label for the currently selected element
+		const String& selectedLabel() const { return pElements[pIndex].label; }
+
+		//! Get the currently selected element
+		ContentT& selected() { return pElements[pIndex].value; }
+		const ContentT& selected() const { return pElements[pIndex].value; }
+
+		template<class T>
+		void appendElement(const AnyString& label, T& value)
+		{
+			pElements.push_back(ListBoxElement(label, (ContentT)value));
+		}
 
 		//! Modify the font used
 		void font(const UI::FTFont::Ptr& font)
@@ -76,7 +105,7 @@ namespace Control
 			if (pFont != font)
 			{
 				pFont = font;
-				pConversion.unitPerPercentParent = pFont->size() / 100.0f;
+				pConversion.unitPerPercentParent = pFont->size() * 96.0f / 72.0f / 100.0f;
 				invalidate();
 			}
 		}
@@ -108,15 +137,22 @@ namespace Control
 		//! Set line height in pixels
 		void lineHeightPixels(float newValue) { pLineHeight.reset(newValue, Dimension::uPixel); }
 
+		//! Mouse button down override
+		virtual void mouseDown(Input::IMouse::Button btn, float x, float y) override;
+		//! Mouse button down override
+		virtual void mouseUp(Input::IMouse::Button btn, float x, float y) override;
+		//! Mouse wheel scroll override
 		virtual void mouseScroll(float delta, float x, float y) override;
 
 	private:
-		//! Text to display
-		String pText;
+		//! Elements to display
+		ElementVector pElements;
 
-		//! Position of the edition cursor, in lines and columns
-		Point2D<uint> pCursorPos;
+		//! Currently selected index
+		uint pIndex;
 
+		//! When the user starts clicking in the list, store the index
+		int pClickedIndex;
 
 
 		//! Font to use
@@ -146,7 +182,7 @@ namespace Control
 		//! Conversion data for font and text units
 		ConversionData pConversion;
 
-	}; // class TextEditor
+	}; // class ListBox
 
 
 
@@ -154,4 +190,6 @@ namespace Control
 } // namespace UI
 } // namespace Yuni
 
-#endif // __YUNI_UI_CONTROL_TEXTEDITOR_H__
+#endif // __YUNI_UI_CONTROL_LISTBOX_H__
+
+#include "listbox.hxx"

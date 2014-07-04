@@ -49,10 +49,15 @@ list(APPEND SRC_UI
 	ui/control/control.h
 	ui/control/checkbox.cpp
 	ui/control/checkbox.h
+	ui/control/listbox.cpp
+	ui/control/listbox.h
+	ui/control/listbox.hxx
 	ui/control/panel.cpp
 	ui/control/panel.h
 	ui/control/picture.cpp
 	ui/control/picture.h
+	ui/control/splitter.cpp
+	ui/control/splitter.h
 	ui/control/text.cpp
 	ui/control/text.h
 	ui/control/texteditor.cpp

@@ -48,7 +48,7 @@ namespace Directory
 		/*!
 		** \brief Get the current directory
 		**
-		** Performance Tip: Perfer Get(String&) which avoid several string copy
+		** Performance Tip: Prefer Get(String&) which avoids several string copies
 		** \return The current directory
 		*/
 		String Get();

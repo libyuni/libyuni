@@ -164,8 +164,8 @@ namespace UI
 		IControl* getControlAt(const Point2D<float>& point) { return getControlAt(point.x, point.y); }
 
 		//! Add child controls
-		void addChild(const IControl::Ptr& child) { pChildren.push_back(child); }
-		void addChild(IControl* child) { pChildren.push_back(child); }
+		void addChild(const IControl::Ptr& child) { pChildren.push_back(child); invalidate(); }
+		void addChild(IControl* child) { pChildren.push_back(child); invalidate(); }
 
 		//! Remove all child controls
 		void clearChildren() { pChildren.clear(); invalidate(); }
