@@ -9,17 +9,15 @@ namespace Control
 {
 
 
-	void Button::draw(DrawingSurface::Ptr& surface, bool root) const
+	void Button::draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const
 	{
 		if (!pVisible)
 			return;
 
 		auto themeptr = Theme::Current();
 		auto& theme = *themeptr;
-		Point2D<float> pos(pPosition);
-		// If the button is the root control, use absolute coordinates
-		if (root)
-			pos(0, 0);
+		Point2D<float> pos(pPosition.x + xOffset, pPosition.y + yOffset);
+
 		surface->beginRectangleClipping(pos.x, pos.y, pSize.x, pSize.y);
 		// Manual full-background drawing (FIXME : this is not optimal)
 		surface->drawFilledRectangle(theme.borderColor, theme.buttonColor, pos.x, pos.y,

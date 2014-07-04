@@ -9,18 +9,15 @@ namespace Control
 {
 
 
-	void CheckBox::draw(DrawingSurface::Ptr& surface, bool root) const
+	void CheckBox::draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const
 	{
 		if (!pVisible)
 			return;
 
 		auto themeptr = Theme::Current();
 		auto& theme = *themeptr;
-		Point2D<float> pos(pPosition);
+		Point2D<float> pos(pPosition.x + xOffset, pPosition.y + yOffset);
 
-		// If the button is the root control, use absolute coordinates
-		if (root)
-			pos(0, 0);
 		surface->beginRectangleClipping(pos.x, pos.y, theme.checkBoxSize, theme.checkBoxSize);
 
 		// Draw the check box

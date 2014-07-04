@@ -157,7 +157,7 @@ namespace UI
 		void show(bool visible);
 
 		//! Draw the control
-		virtual void draw(DrawingSurface::Ptr& surface, bool root = true) const = 0;
+		virtual void draw(DrawingSurface::Ptr& surface, float xOffset = 0.0f, float yOffset = 0.0f) const = 0;
 
 		//! Recursively search for the deepest child control containing the given point
 		IControl* getControlAt(float x, float y);
@@ -204,7 +204,7 @@ namespace UI
 		void drawChildren(DrawingSurface::Ptr& surface) const
 		{
 			for (auto& child : pChildren)
-				child->draw(surface, false);
+				child->draw(surface, pPosition.x, pPosition.y);
 		}
 
 		//! Launch a mouse move event

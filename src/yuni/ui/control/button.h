@@ -62,7 +62,7 @@ namespace Control
 		void click() { onClick(this); }
 
 		//! Draw the button on the surface
-		virtual void draw(DrawingSurface::Ptr& surface, bool root) const override;
+		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;
 
 		//! Image shown on the button
 		void image(const Gfx3D::Texture::Ptr& image) { pImage = image; invalidate(); }

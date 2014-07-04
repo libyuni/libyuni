@@ -9,17 +9,14 @@ namespace Control
 {
 
 
-	void Panel::draw(DrawingSurface::Ptr& surface, bool root) const
+	void Panel::draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const
 	{
 		if (!pVisible)
 			return;
 
 		auto themeptr = Theme::Current();
 		auto& theme = *themeptr;
-		Point2D<float> pos(pPosition);
-		// If the panel is the root control, use absolute coordinates
-		if (root)
-			pos(0.0f, 0.0f);
+		Point2D<float> pos(pPosition.x + xOffset, pPosition.y + yOffset);
 		surface->beginRectangleClipping(pos.x, pos.y, pSize.x, pSize.y);
 		if (theme.panelColor.alpha > 0)
 		{

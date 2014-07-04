@@ -8,15 +8,13 @@ namespace Control
 {
 
 
-	void Picture::draw(DrawingSurface::Ptr& surface, bool root) const
+	void Picture::draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const
 	{
 		if (!pVisible)
 			return;
 
-		Point2D<float> pos(pPosition);
-		// If the picture is the root control, use absolute coordinates
-		if (root)
-			pos(0, 0);
+		Point2D<float> pos(pPosition.x + xOffset, pPosition.y + yOffset);
+
 		surface->beginRectangleClipping(pos.x, pos.y, pSize.x, pSize.y);
 		// Manual full-background drawing (FIXME : this is not optimal)
 		surface->drawFilledRectangle(pFillColor, pFillColor, pos.x, pos.y,

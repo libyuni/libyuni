@@ -61,7 +61,7 @@ namespace Control
 		virtual ~TextEditor() {}
 
 		//! Draw the panel
-		virtual void draw(DrawingSurface::Ptr& surface, bool root) const override;
+		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;
 
 		//! Clear the text
 		String& clear() { invalidate(); pTopLineNb = 0u; return pText.clear(); }

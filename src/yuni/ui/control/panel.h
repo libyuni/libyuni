@@ -28,7 +28,7 @@ namespace Control
 		virtual ~Panel() {}
 
 		//! Draw the panel
-		virtual void draw(DrawingSurface::Ptr& surface, bool root) const override;
+		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;
 
 	}; // class Panel
 

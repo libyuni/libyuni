@@ -8,15 +8,12 @@ namespace Control
 {
 
 
-	void TextEditor::draw(DrawingSurface::Ptr& surface, bool root) const
+	void TextEditor::draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const
 	{
 		if (!pVisible)
 			return;
 
-		Point2D<float> pos(pPosition);
-		// If the text is the root control, use absolute coordinates
-		if (root)
-			pos(0.0f, 0.0f);
+		Point2D<float> pos(pPosition.x + xOffset, pPosition.y + yOffset);
 
 		// Draw background
 		surface->drawFilledRectangle(pBackColor, pBackColor, pos.x, pos.y, pSize.x, pSize.y, 0.0f);
@@ -57,11 +54,13 @@ namespace Control
 
 	void TextEditor::mouseScroll(float delta, float, float)
 	{
+		uint oldTopLine = pTopLineNb;
 		float newLineNb = (float)pTopLineNb - delta;
 		float maxLineNb = (float)(pText.countChar('\n') + 1);
 		float displayedLineCount = pSize.y / pLineHeight(pConversion);
 		pTopLineNb = (uint)Math::Max(0.0f, Math::Min(maxLineNb - displayedLineCount + 1, newLineNb));
-		invalidate();
+		if (oldTopLine != pTopLineNb)
+			invalidate();
 	}
 
 
