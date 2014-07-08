@@ -30,19 +30,18 @@ namespace Control
 		// Loop on elements
 		for (const auto& element : pElements)
 		{
-			if (lineNb < pTopLineNb)
+			if (lineNb++ < pTopLineNb)
 				continue;
 			// Ignore empty labels
 			if (!element.label.empty())
 			{
-				if (pIndex == lineNb)
+				if (pIndex == lineNb - 1)
 					// Currently selected -> invert colors
 					surface->drawTextOnColor(element.label, pFont, pBackColor, pColor, x, y);
 				else
 					surface->drawTextOnColor(element.label, pFont, pColor, pBackColor, x, y);
 			}
 			y += pixelLineHeight;
-			lineNb++;
 			// Stop if we are outside the rectangle (for optim)
 			if (y >= pSize.y)
 				break;
@@ -72,7 +71,7 @@ namespace Control
 		if (btn == Input::IMouse::ButtonLeft)
 		{
 			// Store selected index, wait mouseUp to confirm selection
-			pClickedIndex = pTopLineNb + Math::Floor((y - pPosition.y) / pLineHeight);
+			pClickedIndex = pTopLineNb + Math::Floor((y - pPosition.y) / pLineHeight(pConversion));
 		}
 	}
 
@@ -83,10 +82,11 @@ namespace Control
 		if (btn == Input::IMouse::ButtonLeft && pClickedIndex > -1)
 		{
 			// Store selected index, wait mouseUp to confirm selection
-			uint newIndex = pTopLineNb + Math::Floor((y - pPosition.y) / pLineHeight);
+			uint newIndex = pTopLineNb + Math::Floor((y - pPosition.y) / pLineHeight(pConversion));
 			if (newIndex == pClickedIndex)
 			{
 				pIndex = newIndex;
+				onSelectionChange(this, pIndex);
 				invalidate();
 			}
 			pClickedIndex = -1;

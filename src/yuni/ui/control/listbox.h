@@ -23,7 +23,7 @@ namespace Control
 	class ListBox: public IControl
 	{
 	public:
-
+		//! An element in the list
 		class ListBoxElement
 		{
 		public:
@@ -40,6 +40,11 @@ namespace Control
 
 
 		typedef std::vector<ListBoxElement>  ElementVector;
+
+	public:
+		//! Selection change callback
+		Yuni::Bind<EventPropagation (IControl* sender, uint newIndex)>  onSelectionChange;
+
 
 	public:
 		ListBox(float x, float y, float maxWidth, float maxHeight):
@@ -78,7 +83,7 @@ namespace Control
 		}
 
 		//! Virtual destructor
-		virtual ~ListBox() {}
+		virtual ~ListBox() { }
 
 		//! Draw the panel
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;
@@ -90,8 +95,19 @@ namespace Control
 		const String& selectedLabel() const { return pElements[pIndex].label; }
 
 		//! Get the currently selected element
-		ContentT& selected() { return pElements[pIndex].value; }
-		const ContentT& selected() const { return pElements[pIndex].value; }
+		ContentT& selected() { return pElements[pIndex].content; }
+		const ContentT& selected() const { return pElements[pIndex].content; }
+
+		//! Select an index in the list
+		void select(uint newIndex, bool triggerEvent = false)
+		{
+			if (pIndex == newIndex || newIndex >= pElements.size())
+				return;
+			pIndex = newIndex;
+			if (triggerEvent)
+				onSelectionChange(pIndex);
+			invalidate();
+		}
 
 		template<class T>
 		void appendElement(const AnyString& label, T& value)

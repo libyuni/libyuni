@@ -2,6 +2,7 @@
 # define __YUNI_UI_CONTROL_H__
 
 # include "../../yuni.h"
+# include "../../core/event.h"
 # include "../../core/smartptr.h"
 # include "../../core/smartptr/intrusive.h"
 # include "../../core/point2D.h"
@@ -26,7 +27,7 @@ namespace UI
 
 
 	//! A UI control is a part of 2D overlay that reacts to certain events
-	class IControl : public IIntrusiveSmartPtr<IControl>
+	class IControl : public IIntrusiveSmartPtr<IControl>, public IEventObserver<IControl>
 	{
 	public:
 		typedef IIntrusiveSmartPtr<IControl> Ancestor;
@@ -96,7 +97,7 @@ namespace UI
 		{}
 
 		//! Virtual destructor
-		virtual ~IControl() {}
+		virtual ~IControl() { destroyBoundEvents(); }
 
 		//! Get X position
 		float x() const { return pPosition.x; }
