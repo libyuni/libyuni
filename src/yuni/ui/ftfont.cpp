@@ -56,8 +56,8 @@ namespace UI
 			{
 				::FT_Get_Glyph(slot, &pGlyph);
 				pHAdvance = (int)(slot->metrics.horiAdvance >> 6);
-				pXBearing = (uint)(slot->metrics.horiBearingX >> 6);
-				pYBearing = (uint)(slot->metrics.horiBearingY >> 6);
+				pXBearing = (int)(slot->metrics.horiBearingX >> 6);
+				pYBearing = (int)(slot->metrics.horiBearingY >> 6);
 				if (pGlyph->format != FT_GLYPH_FORMAT_BITMAP)
 				{
 					auto renderMode = antiAliased ? FT_RENDER_MODE_NORMAL : FT_RENDER_MODE_MONO;
@@ -84,13 +84,13 @@ namespace UI
 			}
 
 			//! Left offset of the glyph (in pixels)
-			uint xBearing() const
+			int xBearing() const
 			{
 				return pXBearing;
 			}
 
-			//! How much the glyph goes above the baseline (in pixels)
-			uint yBearing() const
+			//! How much the glyph deviates from the baseline (in pixels)
+			int yBearing() const
 			{
 				return pYBearing;
 			}
@@ -124,10 +124,10 @@ namespace UI
 			int pHAdvance;
 
 			//! Horizontal bearing
-			uint pXBearing;
+			int pXBearing;
 
 			//! Vertical bearing
-			uint pYBearing;
+			int pYBearing;
 
 		}; // class Glyph
 
@@ -254,7 +254,7 @@ namespace UI
 
 		uint width = 0u;
 		uint height = 0u;
-		uint highestYBearing = 0u;
+		int highestYBearing = 0u;
 		int lowestUnderBaseline = 0;
 		int xDelta = 0;
 		int yDelta = 0;
@@ -273,10 +273,10 @@ namespace UI
 				pImpl->getKerning(prev->index(), glyph->index(), xDelta, yDelta);
 			width += glyph->advance() + xDelta;
 			highestYBearing = Math::Max(highestYBearing, glyph->yBearing());
-			lowestUnderBaseline = Math::Max(lowestUnderBaseline, (int)(glyph->height() - glyph->yBearing()));
+			lowestUnderBaseline = Math::Max(lowestUnderBaseline, (int)glyph->height() - glyph->yBearing());
 		}
 
-		height = highestYBearing + lowestUnderBaseline + 1;
+		height = Math::Max(0u, highestYBearing + lowestUnderBaseline + 1);
 		// Always resize the texture, fail if one dimension is zero
 		if (!width || !height)
 			return;
