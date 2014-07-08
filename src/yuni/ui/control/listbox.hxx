@@ -42,6 +42,7 @@ namespace Control
 					surface->drawTextOnColor(element.label, pFont, pColor, pBackColor, x, y);
 			}
 			y += pixelLineHeight;
+			lineNb++;
 			// Stop if we are outside the rectangle (for optim)
 			if (y >= pSize.y)
 				break;
