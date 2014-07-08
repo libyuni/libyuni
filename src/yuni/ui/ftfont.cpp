@@ -266,7 +266,17 @@ namespace UI
 		for (auto i = text.utf8begin(); i != end; ++i)
 		{
 			prev = glyph;
+			if ('\t' == (char)i->value())
+			{
+				// Tab : Do 4 spaces
+				glyph = pImpl->getGlyph((unsigned long)' ', false);
+				width += 4 * glyph->advance();
+				prev = nullptr;
+				continue;
+			}
+
 			glyph = pImpl->getGlyph((unsigned long)i->value(), antiAliased);
+
 			if (!glyph)
 				continue;
 			if (useKerning and !(!prev))
@@ -288,6 +298,14 @@ namespace UI
 		for (auto i = text.utf8begin(); i != end; ++i)
 		{
 			prev = glyph;
+			if ('\t' == (char)i->value())
+			{
+				glyph = pImpl->getGlyph((unsigned long)' ', false);
+				xPen += 4 * glyph->advance();
+				prev = nullptr;
+				continue;
+			}
+
 			glyph = pImpl->getGlyph((unsigned long)i->value(), antiAliased);
 
 			if (!glyph)
