@@ -54,7 +54,7 @@ namespace Yuni
 	}
 
 
-	Tribool& Tribool::operator = (const Tribool& rhs)
+	inline Tribool& Tribool::operator = (const Tribool& rhs)
 	{
 		pValue = rhs.pValue;
 		return *this;
