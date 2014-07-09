@@ -30,7 +30,7 @@ namespace Media
 		class Library;
 
 		/*!
-		** \brief This is the the access to all the emitters for this queue service
+		** \brief This is the entry point to all the emitters for this queue service
 		**
 		** All the emitters are managed here.
 		** It can be accessed through: queueService.emitter

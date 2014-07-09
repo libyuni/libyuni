@@ -146,7 +146,7 @@ namespace Media
 		float elapsedTime() const;
 
 		//! Get the identifier for the emitter
-		unsigned int id() const;
+		uint id() const;
 		//@}
 
 
