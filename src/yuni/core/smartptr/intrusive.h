@@ -24,7 +24,7 @@ namespace Yuni
 	** \tparam ChildT Child class type
 	** \tparam TP  Threading policy. Set by default for a single thread
 	*/
-	template<class ChildT, bool VirtualT = true, template<class> class TP = Yuni::Policy::ObjectLevelLockableNotRecursive>
+	template<class ChildT, bool VirtualT = true, template<class> class TP = Yuni::Policy::ObjectLevelLockable>
 	class YUNI_DECL IIntrusiveSmartPtr : public TP<IIntrusiveSmartPtr<ChildT, VirtualT, TP> >
 	{
 	public:
