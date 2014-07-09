@@ -271,6 +271,7 @@ add_library(yuni-static-core STATIC
 		core/smartptr/policies/storage.h
 		core/smartptr/smartptr.h
 		core/smartptr/smartptr.hxx
+		core/smartptr/stl.hxx
 		core/smartptr.h
 		core/static/assert.h
 		core/static/dynamiccast.h
