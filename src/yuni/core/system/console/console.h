@@ -38,6 +38,8 @@ namespace Console
 		white,
 		//! Lightblue (or cyan on Windows)
 		lightblue,
+		//! Bold
+		bold,
 	};
 
 
