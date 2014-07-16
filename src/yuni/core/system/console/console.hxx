@@ -104,6 +104,13 @@ namespace Console
 		}
 	};
 
+	template<> struct TextColor<bold> final
+	{
+		template<class U> static void Set(U&)
+		{
+		}
+	};
+
 
 	# else
 
@@ -138,6 +145,9 @@ namespace Console
 	template<> struct TextColor<white> final
 	{ template<class U> static void Set(U& out) { out << "[1;37m[1m"; } };
 
+	template<> struct TextColor<bold> final
+	{ template<class U> static void Set(U& out) { out << "[1m"; } };
+
 
 	template<class U> inline void ResetTextColor(U& out)
 	{
@@ -162,6 +172,7 @@ namespace Console
 			case lightblue: TextColor<lightblue>::Set(out); break;
 			case gray:      TextColor<gray>::Set(out); break;
 			case white:     TextColor<white>::Set(out); break;
+			case bold:      TextColor<bold>::Set(out); break;
 			case none:      break;
 		}
 	}
