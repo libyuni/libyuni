@@ -1,0 +1,6 @@
+
+Please copy yuni-grammar.vim to ~/.vim/syntax
+and add the following into your ~/.vimrc :
+
+	autocmd BufRead,BufNewFile,BufEnter *.ygr set filetype=yuni-grammar nowrap cindent smartindent noexpandtab incsearch
+
