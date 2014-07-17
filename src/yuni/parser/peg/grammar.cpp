@@ -123,11 +123,11 @@ namespace // anonymous
 	{
 		switch (type)
 		{
-			case rtRule:         out << "rule";break;
-			case rtGroup:        out << "group";break;
-			case rtModifier:     out << "modifier";break;
-			case rtString:       out << "string";break;
-			case rtListOfChars:  out << "set";break;
+			case rtRule:         out << "rule"; break;
+			case rtGroup:        out << "group"; break;
+			case rtModifier:     out << "modifier"; break;
+			case rtString:       out << "string"; break;
+			case rtListOfChars:  out << "set"; break;
 		}
 	}
 
@@ -572,39 +572,53 @@ namespace // anonymous
 
 			if (not AnyString::IsSpace(line[0]))
 			{
-				// new rule
-				line.trimRight();
-
-				VectorPairYAndLine inlinePragmas;
-				if (not prepareRuleIdentifierName(line, lineIndex, inlinePragmas))
-					return false;
-
-				currentRuleName = line;
-				if (rules.count(currentRuleName) != 0)
+				if (not line.startsWith("//"))
 				{
-					errmsg.clear() << source << ": l" << lineIndex << ": rule '" << currentRuleName << "' already exists";
-					return error(errmsg);
-				}
+					// starting a new rule
+					line.trimRight();
 
-				rules[currentRuleName].reset();
-				for (uint i = 0; i != (uint)inlinePragmas.size(); ++i)
-					rules[currentRuleName].pragmas.push_back(inlinePragmas[i]);
+					VectorPairYAndLine inlinePragmas;
+					if (not prepareRuleIdentifierName(line, lineIndex, inlinePragmas))
+						return false;
+
+					currentRuleName = line;
+					if (rules.count(currentRuleName) != 0)
+					{
+						errmsg.clear() << source << ": l" << lineIndex << ": rule '" << currentRuleName << "' already exists";
+						return error(errmsg);
+					}
+
+					rules[currentRuleName].reset();
+					for (uint i = 0; i != (uint) inlinePragmas.size(); ++i)
+						rules[currentRuleName].pragmas.push_back(inlinePragmas[i]);
+				}
+				else
+				{
+					// one-line comments
+				}
 			}
 			else
 			{
 				// continue the previous rule
 				line.trim();
 
-				if (not line.startsWith("@pragma "))
+				if (not line.startsWith("//"))
 				{
-					rules[currentRuleName].subrules.push_back(std::make_pair(lineIndex, line));
-					// adding an extra space to make sure to not concatenate lines together
-					rules[currentRuleName].subrules.back().second += ' ';
+					if (not line.startsWith("@pragma "))
+					{
+						rules[currentRuleName].subrules.push_back(std::make_pair(lineIndex, line));
+						// adding an extra space to make sure to not concatenate lines together
+						rules[currentRuleName].subrules.back().second += ' ';
+					}
+					else
+					{
+						AnyString pragma(line, 8);
+						rules[currentRuleName].pragmas.push_back(std::make_pair(lineIndex, pragma));
+					}
 				}
 				else
 				{
-					AnyString pragma(line, 8);
-					rules[currentRuleName].pragmas.push_back(std::make_pair(lineIndex, pragma));
+					// one-line comments
 				}
 			}
 		}
