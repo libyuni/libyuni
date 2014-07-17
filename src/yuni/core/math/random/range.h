@@ -25,14 +25,14 @@ namespace Random
 	**
 	** int main()
 	** {
-	** 		// A table for pre-cached random numbers
-	** 		Math::Random::Range<Math::Random::Default, 0, 1, float>  randomRange;
-	** 		// Initializing the distribution
-	** 		randomRange.reset();
+	**		// A table for pre-cached random numbers
+	**		Math::Random::Range<Math::Random::Default, 0, 1, float>  randomRange;
+	**		// Initializing the distribution
+	**		randomRange.reset();
 	**
-	** 		std::cout << "A random number : " << randomRange() << std::endl;
-	** 		std::cout << "Another one     : " << randomRange() << std::endl;
-	** 		return 0;
+	**		std::cout << "A random number : " << randomRange() << std::endl;
+	**		std::cout << "Another one     : " << randomRange() << std::endl;
+	**		return 0;
 	** }
 	** \endcode
 	**
@@ -42,7 +42,7 @@ namespace Random
 	** \tparam T The type of random numbers
 	*/
 	template<class D, int LoValue = 0, int HiValue = 1, typename T = float>
-	class YUNI_DECL Range final
+	class YUNI_DECL Range /*final*/
 		: public ADistribution<T, Range<D, LoValue, HiValue, T> >
 	{
 	public:
