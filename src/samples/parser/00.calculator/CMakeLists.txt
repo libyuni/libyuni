@@ -5,7 +5,8 @@ if(Yuni_FOUND)
 	link_libraries("${Yuni_LIBS}")
 
 	message(STATUS "Sample: Parser / Calculator")
-	add_executable(parser_00_generator  generator.cpp)
-	add_executable(parser_00_calculator main.cpp calculator-grammar.cpp calculator-grammar.h calculator-grammar.hxx calculator-grammar.nodes.h)
+	add_executable(parser_00_calculator
+		main.cpp
+		calculator.cpp calculator.h calculator.hxx)
 endif(Yuni_FOUND)
 
