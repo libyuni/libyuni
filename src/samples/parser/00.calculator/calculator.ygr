@@ -1,18 +1,21 @@
 
-wp:
+wp: notext, hidden
 	[ \t\n\r]*
 
 number:
 	[+-]? [0123456789]+ ('.' [0123456789]+ )? ([eE] [+-]? [0123456789]+)?
 
-expr-sum:
+expr-sum: notext
 	expr-product ([+-] expr-product)*
 
-expr-product:
+expr-product: notext
 	expr-atom ([*/%] expr-atom)*
 
-expr-atom:
-	('(' expr ')') | (number)
+expr-group: notext
+	'(' expr ')'
+
+expr-atom: notext
+	expr-group | number
 
 expr:
 	expr-sum

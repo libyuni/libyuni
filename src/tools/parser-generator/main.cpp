@@ -97,7 +97,9 @@ static inline void ParseCommandLine(int argc, char** argv, Settings& settings)
 	format.trim();
 	format.toLower();
 	if (format == "cpp")
+	{
 		settings.format = Settings::sfCPP;
+	}
 	else
 	{
 		logs.error() << "invalid output format";
