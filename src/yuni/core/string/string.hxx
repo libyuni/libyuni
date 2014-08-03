@@ -1259,14 +1259,10 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline bool
-	CString<ChunkSizeT,ExpandableT>::startsWith(const StringT& s) const
+	CString<ChunkSizeT,ExpandableT>::startsWith(const AnyString& string) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
-		return startsWith(Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::Value(s));
+		return startsWith(string.c_str(), string.size());
 	}
 
 
@@ -1296,14 +1292,10 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline bool
-	CString<ChunkSizeT,ExpandableT>::istartsWith(const StringT& s) const
+	CString<ChunkSizeT,ExpandableT>::istartsWith(const AnyString& string) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
-		return startsWith(Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::Value(s));
+		return istartsWith(string.c_str(), string.size());
 	}
 
 

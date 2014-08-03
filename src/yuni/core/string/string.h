@@ -1216,7 +1216,7 @@ namespace Yuni
 		/*!
 		** \brief Get if a given string can be found at the beginning
 		*/
-		template<class StringT> bool startsWith(const StringT& s) const;
+		 bool startsWith(const AnyString& string) const;
 
 		/*!
 		** \brief Get if a given char can be found at the beginning
@@ -1231,7 +1231,7 @@ namespace Yuni
 		/*!
 		** \brief Get if a given string can be found at the beginning (case insensitive)
 		*/
-		template<class StringT> bool istartsWith(const StringT& s) const;
+		bool istartsWith(const AnyString& string) const;
 
 		/*!
 		** \brief Get if a given char can be found at the beginning (case insensitive)
