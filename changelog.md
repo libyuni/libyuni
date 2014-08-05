@@ -109,6 +109,8 @@ Release version 1.0.0
 
  * [core] #462: string: fixes implicit cast to bool when assigning an int from the constructor
 
+ * [core] `Yuni::String`: istartsWith was not case-insensitive
+
  * [io] Fixed directory and file iterators when given a path containing mixed slashes and backslashes.
 
 

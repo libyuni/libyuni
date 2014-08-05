@@ -130,6 +130,10 @@ namespace PEG
 
 			h << "	//! Convert a rule id into its text representation\n";
 			h << "	AnyString RuleToString(enum Rule);\n";
+			h << '\n';
+			h << '\n';
+			h << "	//! Get if the rule should be ignored when duplucating an AST (starting from 'tk-' and some special rules)\n";
+			h << "	bool ShouldIgnoreRuleForDuplication(enum Rule);\n";
 			h << "\n\n\n";
 
 			h << "	enum Error\n";
@@ -188,6 +192,8 @@ namespace PEG
 			h << "	public:\n";
 			h << "		//! Default constructor\n";
 			h << "		Node();\n";
+			h << "		//! Default constructor with a pre-defined rule\n";
+			h << "		Node(enum Rule);\n";
 			h << "		//! Copy constructor\n";
 			h << "		Node(const Node& rhs);\n";
 			h << "		//! Destructor\n";
@@ -284,6 +290,7 @@ namespace PEG
 		{
 			hxx << "#ifndef " << headerGuardID << "_HXX__\n";
 			hxx << "# define " << headerGuardID << "_HXX__\n";
+			hxx << '\n';
 			hxx << "\n\n\n";
 
 			hxx << "inline std::ostream& operator << (std::ostream& out, const ";
@@ -325,6 +332,13 @@ namespace PEG
 
 			hxx << "	inline Node::Node()\n";
 			hxx << "		: rule(rgUnknown)\n";
+			hxx << "		, offset()\n";
+			hxx << "		, offsetEnd()\n";
+			hxx << "	{}\n";
+			hxx << '\n';
+			hxx << '\n';
+			hxx << "	inline Node::Node(enum Rule rule)\n";
+			hxx << "		: rule(rule)\n";
 			hxx << "		, offset()\n";
 			hxx << "		, offsetEnd()\n";
 			hxx << "	{}\n";
@@ -693,6 +707,22 @@ namespace PEG
 			cpp << "\n\n\n";
 			cpp << "} // anonymous namespace\n\n\n\n\n\n";
 
+			cpp << "	bool ShouldIgnoreRuleForDuplication(enum Rule rule)\n";
+			cpp << "	{\n";
+			cpp << "		static const bool hints[] = {\n";
+			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
+			{
+				if (i->first.startsWith("tk-"))
+					cpp << "			true, // " << i->first << '\n';
+				else
+					cpp << "			false, // " << i->first << '\n';
+			}
+			cpp << "		};";
+			cpp << "		return hints[(uint) rule];\n";
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	AnyString RuleToString(enum Rule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		switch (ruleid)\n";
