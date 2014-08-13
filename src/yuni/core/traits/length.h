@@ -70,11 +70,11 @@ namespace Traits
 		**   the const qualifier, especially when U = const char* const. Your compiler
 		**   may complain about the following error :
 		**   "invalid conversion from ‘const char* const’ to ‘char*’"
-		** \param rhs A arbitrary container
+		** \param value A arbitrary variable
 		** \return The length of the container
 		*/
 		template<class T>
-		static SizeT Value(const T& t) { return ExtensionType::Value(t); }
+		static SizeT Value(const T& value) { return ExtensionType::Value(value); }
 
 	}; // class Length<U>
 

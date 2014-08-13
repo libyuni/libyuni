@@ -63,11 +63,11 @@ namespace Traits
 		**   the const qualifier, especially when U = const char* const. Your compiler
 		**   may complain about the following error :
 		**   "invalid conversion from ‘const char* const’ to ‘char*’"
-		** \param container A arbitrary container
+		** \param value A arbitrary variable
 		** \return The equivalent of a `const char*` pointer (can be NULL)
 		*/
 		template<class T>
-		static const char* Perform(const T& t) { return ExtensionType::Perform(t); }
+		static const char* Perform(const T& value) { return ExtensionType::Perform(value); }
 
 	}; // class CString<U>
 

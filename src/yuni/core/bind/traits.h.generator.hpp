@@ -236,7 +236,7 @@ namespace BindImpl
 
 <% (0..generator.argumentCount-1).each do |i| %>
 	/*!
-	** \brief
+	** \brief Binding with a function (with <%i%> arguments)
 	*/
 	template<class R<%=generator.templateParameterList(i) %>>
 	class BoundWithFunction<R (<%=generator.list(i)%>)> final :
@@ -299,7 +299,7 @@ namespace BindImpl
 # ifdef YUNI_HAS_CPP_BIND_LAMBDA
 <% (0..generator.argumentCount-1).each do |i| %>
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with <%i%> arguments)
 	*/
 	template<class C, class R<%=generator.templateParameterList(i) %>>
 	class BoundWithFunctor<C, R (<%=generator.list(i)%>)> final :

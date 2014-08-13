@@ -1107,7 +1107,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R>
 	class BoundWithFunction<R ()> final :
@@ -1164,7 +1164,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R ()>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0>
 	class BoundWithFunction<R (A0)> final :
@@ -1221,7 +1221,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1>
 	class BoundWithFunction<R (A0, A1)> final :
@@ -1278,7 +1278,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2>
 	class BoundWithFunction<R (A0, A1, A2)> final :
@@ -1335,7 +1335,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3>
 	class BoundWithFunction<R (A0, A1, A2, A3)> final :
@@ -1392,7 +1392,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2, A3)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4)> final :
@@ -1449,7 +1449,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5)> final :
@@ -1506,7 +1506,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6)> final :
@@ -1563,7 +1563,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7)> final :
@@ -1620,7 +1620,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)> final :
@@ -1677,7 +1677,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)> final :
@@ -1734,7 +1734,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)> final :
@@ -1791,7 +1791,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)> final :
@@ -1848,7 +1848,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)> final :
@@ -1905,7 +1905,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)> final :
@@ -1962,7 +1962,7 @@ namespace BindImpl
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
 
 	/*!
-	** \brief
+	** \brief Binding with a function (with  arguments)
 	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)> final :
@@ -2025,7 +2025,7 @@ namespace BindImpl
 # ifdef YUNI_HAS_CPP_BIND_LAMBDA
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R>
 	class BoundWithFunctor<C, R ()> final :
@@ -2083,7 +2083,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0>
 	class BoundWithFunctor<C, R (A0)> final :
@@ -2141,7 +2141,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1>
 	class BoundWithFunctor<C, R (A0, A1)> final :
@@ -2199,7 +2199,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2>
 	class BoundWithFunctor<C, R (A0, A1, A2)> final :
@@ -2257,7 +2257,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3)> final :
@@ -2315,7 +2315,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4)> final :
@@ -2373,7 +2373,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)> final :
@@ -2431,7 +2431,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)> final :
@@ -2489,7 +2489,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)> final :
@@ -2547,7 +2547,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)> final :
@@ -2605,7 +2605,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)> final :
@@ -2663,7 +2663,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)> final :
@@ -2721,7 +2721,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)> final :
@@ -2779,7 +2779,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)> final :
@@ -2837,7 +2837,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)> final :
@@ -2895,7 +2895,7 @@ namespace BindImpl
 
 
 	/*!
-	** \brief
+	** \brief Binding with a functor object (with  arguments)
 	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)> final :

@@ -584,7 +584,7 @@ namespace Yuni
 		/*!
 		** \brief Append to the end of the string a new value
 		**
-		** \param rhs  Any supported value
+		** \param s  Any supported value
 		** \param size Size of the container
 		*/
 		template<class StringT> void append(const StringT& s, Size size);
@@ -700,7 +700,7 @@ namespace Yuni
 		/*!
 		** \brief Insert an arbitrary C-String at the beginning of the string
 		**
-		** \param u Any CString container
+		** \param s Any CString container
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
 		*/
@@ -823,7 +823,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of a sub-string
 		**
-		** \param cstr An arbitrary string
+		** \param c ASCII character
 		** \return True if sub-string is found, false otherwise
 		*/
 		bool contains(char c) const;
@@ -831,7 +831,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of a sub-string (ignoring the case)
 		**
-		** \param cstr An arbitrary string
+		** \param c ASCII character
 		** \return True if sub-string is found, false otherwise
 		*/
 		bool icontains(char c) const;
@@ -857,7 +857,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of any supported CString
 		**
-		** \param cstr Any supported CString
+		** \param s Any supported CString
 		** \return True if sub-string is found, false otherwise
 		*/
 		template<class StringT> bool contains(const StringT& s) const;
@@ -865,7 +865,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of any supported CString (ignoring the case)
 		**
-		** \param cstr Any supported CString
+		** \param s Any supported CString
 		** \return True if sub-string is found, false otherwise
 		*/
 		template<class StringT> bool icontains(const StringT& s) const;
@@ -874,7 +874,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of a sub-string
 		**
-		** \param cstr An arbitrary string
+		** \param c ASCII character
 		** \return The position of the first occurence found, `npos` if not found
 		*/
 		Size find(char c) const;
@@ -882,7 +882,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of a sub-string
 		**
-		** \param cstr An arbitrary string
+		** \param c ASCII character
 		** \return The position of the first occurence found, `npos` if not found
 		*/
 		Size find(char c, Size offset) const;
@@ -899,7 +899,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of any supported CString
 		**
-		** \param cstr Any supported CString
+		** \param s Any supported CString
 		** \return The position of the first occurence found, `npos` if not found
 		*/
 		template<class StringT> Size find(const StringT& s, Size offset = 0) const;
@@ -916,7 +916,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of a sub-string (ignoring the case)
 		**
-		** \param cstr An arbitrary string
+		** \param c ASCII character
 		** \return The position of the first occurence found, `npos` if not found
 		*/
 		Size ifind(char c, Size offset) const;
@@ -934,7 +934,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of any supported CString (ignoring the case)
 		**
-		** \param cstr Any supported CString
+		** \param s Any supported CString
 		** \return The position of the first occurence found, `npos` if not found
 		*/
 		template<class StringT> Size ifind(const StringT& s, Size offset = 0) const;
@@ -969,7 +969,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of any supported CString
 		**
-		** \param cstr Any supported CString
+		** \param s Any supported CString
 		** \param offset The position in the string where to start from
 		** \return The position of the first occurence found, `npos` if not found
 		*/
@@ -987,7 +987,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of a sub-string (ignoring the case)
 		**
-		** \param c Ascii to find 
+		** \param c Ascii to find
 		** \return The position of the first occurence found, `npos` if not found
 		*/
 		Size irfind(char c, Size offset) const;
@@ -1054,7 +1054,6 @@ namespace Yuni
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered
-		** \param cstr Any supported String
 		** \return The position of the first occurence found, `npos` if not found
 		*/
 		template<class StringT> uint indexOf(Size offset, const StringT& s) const;
@@ -1109,7 +1108,6 @@ namespace Yuni
 		/*!
 		** \brief Searches the string for the first character that is not `c`
 		**
-		** \param seq An arbitrary string
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
@@ -1121,7 +1119,6 @@ namespace Yuni
 		/*!
 		** \brief Searches the string for the first character that is not `c` (case insensitive)
 		**
-		** \param seq An arbitrary string
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.

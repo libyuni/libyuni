@@ -432,9 +432,11 @@ namespace GetOptImpl
 		** \param len Length of the string (can be zero)
 		** \return True if the operation succeded, false otherwise
 		*/
-		virtual bool addValue(const char*, String::size_type) override
+		virtual bool addValue(const char* c_str, String::size_type len) override
 		{
 			// Does nothing - This is not an option
+			(void) c_str;
+			(void) len;
 			return false;
 		}
 
