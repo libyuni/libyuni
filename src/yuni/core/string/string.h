@@ -700,21 +700,21 @@ namespace Yuni
 		/*!
 		** \brief Insert an arbitrary C-String at the beginning of the string
 		**
-		** \param s Any CString container
+		** \param string Any CString container
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
 		*/
-		template<class StringT> bool prepend(const StringT& s);
+		bool prepend(const AnyString& string);
 
 		/*!
 		** \brief Insert an arbitrary C-String at the beginning the string
 		**
-		** \param u Any CString container
+		** \param string Any CString container
 		** \param size The size to use for the given container
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
 		*/
-		template<class StringT> bool prepend(const StringT& u, Size size);
+		template<class StringT> bool prepend(const StringT& string, Size size);
 
 		/*!
 		** \brief Overwrite a region of the string

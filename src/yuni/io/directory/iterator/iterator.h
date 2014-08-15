@@ -285,7 +285,6 @@ namespace Directory
 		** \param filename The full filename (ex: /path/to/my/file.txt)
 		** \param parent The parent folder (ex: /path/to/my)
 		** \param name The name of the folder found only (ex: file.txt)
-		** \return itSkip to not go deeper in this folder
 		*/
 		virtual void onEndFolder(const String& filename, const String& parent, const String& name);
 
