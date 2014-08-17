@@ -204,7 +204,7 @@
 #	define YUNI_ALWAYS_INLINE  __forceinline
 # endif
 # if !defined(YUNI_ALWAYS_INLINE)
-#	define YUNI_ALWAYS_INLINE
+#	define YUNI_ALWAYS_INLINE  inline
 # endif
 
 
