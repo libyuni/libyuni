@@ -90,6 +90,7 @@ namespace PEG
 			h << "# include <yuni/yuni.h>\n";
 			h << "# include <yuni/core/string.h>\n";
 			h << "# include <yuni/core/bind.h>\n";
+			h << "# include <yuni/core/dictionary.h>\n";
 			h << "# include <yuni/core/smartptr/intrusive.h>\n";
 			h << "# if __cplusplus > 199711L\n";
 			h << "#	define " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
@@ -191,6 +192,8 @@ namespace PEG
 			h << "		typedef inherited::SmartPtrType<Node>::Ptr  Ptr;\n";
 			h << "		//! Vector of nodes\n";
 			h << "		typedef std::vector<Node::Ptr> Vector;\n";
+			h << "		//! Set of symbols\n";
+			h << "		typedef Yuni::Set<Ptr>::Unordered Set;\n";
 			h << '\n';
 			h << "		//! Callback definition for releasing metadata\n";
 			h << "		typedef void (* MetadataReleaseCallback)(void*);\n";
@@ -827,6 +830,7 @@ namespace PEG
 			cpp << '\n';
 			cpp << "	void Parser::translateOffset(uint& column, uint& line, const Node& node) const\n";
 			cpp << "	{\n";
+			cpp << "		assert(&node and \"invalid pointer to node\");\n";
 			cpp << "		column = 0;\n";
 			cpp << "		line = 0;\n";
 			cpp << "		if (YUNI_LIKELY(pData))\n";
@@ -851,6 +855,7 @@ namespace PEG
 			cpp << '\n';
 			cpp << "	uint Parser::translateOffsetToLine(const Node& node) const\n";
 			cpp << "	{\n";
+			cpp << "		assert(&node and \"invalid pointer to node\");\n";
 			cpp << "		uint column;\n";
 			cpp << "		uint line;\n";
 			cpp << "		translateOffset(column, line, node);\n";
