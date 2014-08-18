@@ -188,7 +188,11 @@ namespace // anonymous
 			AnyString::Vector list;
 			options.split(list, ", ");
 			for (uint i = 0; i != (uint) list.size(); ++i)
+			{
+				if (list[i].startsWith("//"))
+					break;
 				inlinePragmas.push_back(std::make_pair(lineIndex, list[i]));
+			}
 		}
 
 		line.resize(offset);
@@ -749,6 +753,20 @@ namespace // anonymous
 									if (not newsubrules.back().empty())
 										newsubrules.push_back(nullptr);
 									break;
+								}
+								case '/': // comments ?
+								{
+									String::const_utf8iterator slash = ci;
+									++slash;
+									if (slash != cend)
+									{
+										char nextValue = *slash;
+										if (nextValue == '/')
+										{
+											ci = cend; // stop parsing
+											break;
+										}
+									}
 								}
 								default:
 								{
