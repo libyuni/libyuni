@@ -46,6 +46,14 @@ namespace Yuni
 	class YUNI_DECL Variant final
 	{
 	public:
+		/*!
+		** \brief The most suitable smart ptr for this class
+		**
+		** This typedef is provided by the Yuni's conventions and should be useless
+		** most of the time since reference counting is already used internally
+		*/
+		typedef SmartPtr<Variant> Ptr;
+
 		template<class T>
 		struct New
 		{
