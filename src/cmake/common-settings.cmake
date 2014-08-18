@@ -204,7 +204,7 @@ if (NOT MSVC)
 	compile_flag("-Wmissing-noreturn"         W_MISSING_NORETURN   RELEASE DEBUG RELWITHDEBINFO)
 	compile_flag("-Wcast-align"               W_CAST_ALIGN   RELEASE DEBUG RELWITHDEBINFO)
 	compile_flag("-Wuninitialized"            W_UNINITIALIZED   RELEASE DEBUG RELWITHDEBINFO)
-
+	compile_flag("-Wdocumentation"            W_DOCUMENTATION   RELEASE DEBUG RELWITHDEBINFO)
 endif()
 
 

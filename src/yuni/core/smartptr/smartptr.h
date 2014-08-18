@@ -367,12 +367,16 @@ namespace Yuni
 			class ConvP1,
 			template <class> class StorP1, template <class> class ConsP1>
 		bool operator == (const SmartPtr<T1,OwspP1,ChckP1,ConvP1,StorP1,ConsP1>& rhs) const;
+		//! operator `==`
+		bool operator == (const T* rhs) const;
 
 		//! Operator `!=`
 		template<typename T1, template <class> class OwspP1, template <class> class ChckP1,
 			class ConvP1,
 			template <class> class StorP1, template <class> class ConsP1>
 		bool operator != (const SmartPtr<T1,OwspP1,ChckP1,ConvP1,StorP1,ConsP1>& rhs) const;
+		//! Operator `!=`
+		bool operator != (const T* rhs) const;
 
 		//! Operator `<`
 		template<typename T1, template <class> class OwspP1, template <class> class ChckP1,

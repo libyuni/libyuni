@@ -333,6 +333,17 @@ namespace Yuni
 		class ConvP,
 		template <class> class StorP, template <class> class ConsP>
 	inline bool
+	SmartPtr<T,OwspP,ChckP,ConvP,StorP,ConsP>::operator == (const T* rhs) const
+	{
+		return (storagePointer(*this) == rhs);
+	}
+
+
+	// Operator ==
+	template<typename T, template <class> class OwspP, template <class> class ChckP,
+		class ConvP,
+		template <class> class StorP, template <class> class ConsP>
+	inline bool
 	SmartPtr<T,OwspP,ChckP,ConvP,StorP,ConsP>::operator == (const NullPtr&) const
 	{
 		return (storagePointer(*this) == NULL);
@@ -362,6 +373,17 @@ namespace Yuni
 	SmartPtr<T,OwspP,ChckP,ConvP,StorP,ConsP>::operator != (const SmartPtr<T1,OwspP1,ChckP1,ConvP1,StorP1,ConsP1>& rhs) const
 	{
 		return (storagePointer(*this) != storagePointer(rhs));
+	}
+
+
+	// Operator !=
+	template<typename T, template <class> class OwspP, template <class> class ChckP,
+		class ConvP,
+		template <class> class StorP, template <class> class ConsP>
+	inline bool
+	SmartPtr<T,OwspP,ChckP,ConvP,StorP,ConsP>::operator != (const T* rhs) const
+	{
+		return (storagePointer(*this) != rhs);
 	}
 
 

@@ -48,7 +48,7 @@ namespace DynamicLibrary
 		/*!
 		** \brief Try to find a file from a single path, a filename and a prefix
 		**
-		** \param[out] s A temporary string, where to write the absolute filename
+		** \param[out] out A temporary string, where to write the absolute filename
 		** \param prefix The prefix to use for the filename
 		** \return True if the filename in `s` exists and should be loaded, False otherwise
 		**/

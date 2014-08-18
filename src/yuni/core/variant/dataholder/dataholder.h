@@ -219,9 +219,10 @@ namespace Variant
 	protected:
 		/*!
 		** \brief Runs the conversion using the specified converter.
+		**
 		** The result of the conversion can be retrieved from
 		** the converter itself.
-		** \param[in] A reference on an instancied DataConverter<DestinationType>.
+		** \param[in] cvtr A reference on an instancied DataConverter<DestinationType>.
 		*/
 		virtual bool convertUsing(IDataConverter& cvtr) const = 0;
 

@@ -503,7 +503,6 @@ namespace Yuni
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
 		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-
 		AncestorType::append(Traits::CString<StringT>::Perform(s), size);
 	}
 
@@ -2072,27 +2071,22 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline bool
-	CString<ChunkSizeT,ExpandableT>::prepend(const StringT& s)
+	CString<ChunkSizeT,ExpandableT>::prepend(const AnyString& string)
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
-		return insert(0, s);
+		return insert(0, string);
 	}
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
 	template<class StringT>
 	inline bool
-	CString<ChunkSizeT,ExpandableT>::prepend(const StringT& s, Size size)
+	CString<ChunkSizeT,ExpandableT>::prepend(const StringT& string, Size size)
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
 		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-
-		return insert(0, Traits::CString<StringT>::Perform(s), size);
+		return insert(0, Traits::CString<StringT>::Perform(string), size);
 	}
 
 
@@ -2133,8 +2127,6 @@ namespace Yuni
 	CString<ChunkSizeT,ExpandableT>::overwrite(Size offset, const StringT& s)
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
 
 		// Find the substring
 		if (Traits::Length<StringT,Size>::isFixed)
@@ -2655,10 +2647,13 @@ namespace Yuni
 			Size offset = 0;
 			while (offset < AncestorType::size and AncestorType::data[offset] == c)
 				++offset;
+
 			if (offset)
 			{
 				if (not adapter)
+				{
 					erase(0, offset);
+				}
 				else
 				{
 					AncestorType::data += offset;
@@ -2864,7 +2859,7 @@ namespace Yuni
 		// string
 		// Instead of allocating a new temporary cstr, we will directly use
 		// this cstr as much as possible.
-		//
+
 		// The returned size
 		int i;
 
@@ -3355,32 +3350,36 @@ namespace Yuni
 			return;
 
 		// Section
-		if ('{' == AncestorType::data[left])
+		switch (AncestorType::data[left])
 		{
-			key.append('{');
-			return;
-		}
-		if ('}' == AncestorType::data[left])
-		{
-			key.append('}');
-			return;
-		}
-		if ('[' == AncestorType::data[left])
-		{
-			key.append('[');
-			++left;
-			Size right = find(']', left);
-			if (right != npos and right != left)
+			case '{':
 			{
-				value.append(*this, right - left, left);
-				value.trim();
+				key.append('{');
+				return;
 			}
-			return;
+			case '}':
+			{
+				key.append('}');
+				return;
+			}
+			case '[':
+			{
+				key.append('[');
+				++left;
+				Size right = find(']', left);
+				if (right != npos and right != left)
+				{
+					value.append(*this, right - left, left);
+					value.trim();
+				}
+				return;
+			}
 		}
 
 		// all separators
 		CString<8, false> seplist = "=/;";
 		seplist[0] = separator;
+
 		// If not a section, it should be a key/value
 		// Looking for the symbol `=`
 		Size equal = left;
@@ -3428,37 +3427,41 @@ namespace Yuni
 			switch (c)
 			{
 				case ';':
+				{
 					// Empty value
 					break;
+				}
 				case '"':
 				case '\'':
-					{
-						// Value enclosed in a string
-						++rv;
-						typename AncestorType::Size next;
-						next = FindEndOfSequence<CStringType>(AncestorType::data + rv, c, AncestorType::size - rv);
-						if (next != npos)
-							value.append(AncestorType::data + rv, next);
-							//value.assignFromEscapedCharacters(AncestorType::data, next, rv);
-						else
-							value.append(AncestorType::data + rv, AncestorType::size - rv);
-						break;
-					}
+				{
+					// Value enclosed in a string
+					++rv;
+					typename AncestorType::Size next;
+					next = FindEndOfSequence<CStringType>(AncestorType::data + rv, c, AncestorType::size - rv);
+					if (next != npos)
+						value.append(AncestorType::data + rv, next);
+						//value.assignFromEscapedCharacters(AncestorType::data, next, rv);
+					else
+						value.append(AncestorType::data + rv, AncestorType::size - rv);
+					break;
+				}
 				case '/':
+				{
 					// Empty value if we have a comment otherwise '/' is a valid entry
 					if (rv + 1 >= AncestorType::size or AncestorType::data[rv + 1] == '/')
 						break;
+				}
 				default:
-					{
-						// Standard value
-						Size semicolon = find_first_of(';', rv);
-						if (npos != semicolon)
-							value.append(*this, semicolon - rv, rv);
-						else
-							value.append(*this, AncestorType::size - rv, rv);
-						value.trimRight(" \t\n\r");
-						break;
-					}
+				{
+					// Standard value
+					Size semicolon = find_first_of(';', rv);
+					if (npos != semicolon)
+						value.append(*this, semicolon - rv, rv);
+					else
+						value.append(*this, AncestorType::size - rv, rv);
+					value.trimRight(" \t\n\r");
+					break;
+				}
 			}
 		}
 	}
@@ -3521,10 +3524,12 @@ namespace Yuni
 	{
 		size_t hash = 0;
 		for (uint i = 0; i != AncestorType::size; ++i)
-			hash = (uint)AncestorType::data[i] + (hash << 6) + (hash << 16) - hash;
-
+			hash = (uint) AncestorType::data[i] + (hash << 6) + (hash << 16) - hash;
 		return hash;
 	}
+
+
+
 
 
 

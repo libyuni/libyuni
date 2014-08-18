@@ -34,9 +34,6 @@ namespace Yuni
 
 
 		private:
-			/*!
-			** \brief
-			*/
 			bool postFlight();
 
 			/*!
