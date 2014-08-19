@@ -111,6 +111,8 @@ Release version 1.0.0
 
  * [core] `Yuni::String`: istartsWith was not case-insensitive
 
+ * [core] #351, #358: System::Environment::Read now handle Unicode value on Windows
+
  * [io] Fixed directory and file iterators when given a path containing mixed slashes and backslashes.
 
 
