@@ -37,6 +37,8 @@ Release version 1.0.0
 
  * [core] added typedefs `float32`, `float64`
 
+ * [core] Bind: added method `empty()` and `operator !` to determine if an object is binded
+
  * [dbi] The DBI/sqlite adapter is now ready for production
 
  * [io] `Yuni::IO::LoadFromFile` now accepts std::string as a destination
@@ -112,6 +114,8 @@ Release version 1.0.0
  * [core] `Yuni::String`: istartsWith was not case-insensitive
 
  * [core] #351, #358: System::Environment::Read now handle Unicode value on Windows
+
+ * [core] #463: Bind: fixed invalid pointer when unbinding (VS2013)
 
  * [io] Fixed directory and file iterators when given a path containing mixed slashes and backslashes.
 

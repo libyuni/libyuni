@@ -377,6 +377,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -444,6 +447,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -486,9 +491,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R()>
 
@@ -761,6 +763,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -828,6 +833,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -870,9 +877,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R()>
 
@@ -1145,6 +1149,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -1212,6 +1219,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -1254,9 +1263,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R()>
 
@@ -1529,6 +1535,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -1596,6 +1605,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -1638,9 +1649,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0)>
 
@@ -1913,6 +1921,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -1980,6 +1991,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -2022,9 +2035,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0)>
 
@@ -2297,6 +2307,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -2364,6 +2377,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -2406,9 +2421,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0)>
 
@@ -2681,6 +2693,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -2748,6 +2763,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -2790,9 +2807,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1)>
 
@@ -3065,6 +3079,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -3132,6 +3149,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -3174,9 +3193,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1)>
 
@@ -3449,6 +3465,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -3516,6 +3535,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -3558,9 +3579,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1)>
 
@@ -3833,6 +3851,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -3900,6 +3921,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -3942,9 +3965,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2)>
 
@@ -4217,6 +4237,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -4284,6 +4307,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -4326,9 +4351,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2)>
 
@@ -4601,6 +4623,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -4668,6 +4693,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -4710,9 +4737,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2)>
 
@@ -4985,6 +5009,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -5052,6 +5079,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -5094,9 +5123,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3)>
 
@@ -5369,6 +5395,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -5436,6 +5465,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -5478,9 +5509,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3)>
 
@@ -5753,6 +5781,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -5820,6 +5851,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -5862,9 +5895,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3)>
 
@@ -6137,6 +6167,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -6204,6 +6237,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -6246,9 +6281,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4)>
 
@@ -6521,6 +6553,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -6588,6 +6623,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -6630,9 +6667,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4)>
 
@@ -6905,6 +6939,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -6972,6 +7009,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -7014,9 +7053,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4)>
 
@@ -7289,6 +7325,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -7356,6 +7395,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -7398,9 +7439,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5)>
 
@@ -7673,6 +7711,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -7740,6 +7781,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -7782,9 +7825,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5)>
 
@@ -8057,6 +8097,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -8124,6 +8167,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -8166,9 +8211,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5)>
 
@@ -8441,6 +8483,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -8508,6 +8553,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -8550,9 +8597,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6)>
 
@@ -8825,6 +8869,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -8892,6 +8939,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -8934,9 +8983,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6)>
 
@@ -9209,6 +9255,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -9276,6 +9325,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -9318,9 +9369,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6)>
 
@@ -9593,6 +9641,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -9660,6 +9711,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -9702,9 +9755,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7)>
 
@@ -9977,6 +10027,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -10044,6 +10097,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -10086,9 +10141,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7)>
 
@@ -10361,6 +10413,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -10428,6 +10483,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -10470,9 +10527,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7)>
 
@@ -10745,6 +10799,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -10812,6 +10869,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -10854,9 +10913,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8)>
 
@@ -11129,6 +11185,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -11196,6 +11255,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -11238,9 +11299,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8)>
 
@@ -11513,6 +11571,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -11580,6 +11641,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -11622,9 +11685,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8)>
 
@@ -11897,6 +11957,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -11964,6 +12027,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -12006,9 +12071,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
 
@@ -12281,6 +12343,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -12348,6 +12413,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -12390,9 +12457,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
 
@@ -12665,6 +12729,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -12732,6 +12799,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -12774,9 +12843,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
 
@@ -13049,6 +13115,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -13116,6 +13185,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -13158,9 +13229,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
 
@@ -13433,6 +13501,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -13500,6 +13571,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -13542,9 +13615,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
 
@@ -13817,6 +13887,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -13884,6 +13957,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -13926,9 +14001,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
 
@@ -14201,6 +14273,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -14268,6 +14343,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -14310,9 +14387,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
 
@@ -14585,6 +14659,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -14652,6 +14729,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -14694,9 +14773,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
 
@@ -14969,6 +15045,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -15036,6 +15115,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -15078,9 +15159,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
 
@@ -15353,6 +15431,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -15420,6 +15501,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -15462,9 +15545,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
 
@@ -15737,6 +15817,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -15804,6 +15887,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -15846,9 +15931,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
 
@@ -16121,6 +16203,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -16188,6 +16273,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -16230,9 +16317,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
 
@@ -16505,6 +16589,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -16572,6 +16659,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -16614,9 +16703,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
 
@@ -16889,6 +16975,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -16956,6 +17045,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -16998,9 +17089,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
 
@@ -17273,6 +17361,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -17340,6 +17431,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -17382,9 +17475,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
 
@@ -17657,6 +17747,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -17724,6 +17817,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -17766,9 +17861,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>
 
@@ -18041,6 +18133,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -18108,6 +18203,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -18150,9 +18247,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>
 
@@ -18425,6 +18519,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -18492,6 +18589,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -18534,9 +18633,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>
 
@@ -18809,6 +18905,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -18876,6 +18975,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -18918,9 +19019,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>
 
@@ -19193,6 +19291,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -19260,6 +19361,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -19302,9 +19405,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>
 
@@ -19577,6 +19677,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -19644,6 +19747,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -19686,9 +19791,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>
 

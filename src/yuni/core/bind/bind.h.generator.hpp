@@ -300,6 +300,9 @@ namespace Yuni
 
 		//! \see unbind
 		void clear();
+
+		//! Get if the object is binded
+		bool empty() const;
 		//@}
 
 
@@ -367,6 +370,8 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Get if the object is binded
+		bool operator ! () const;
 		/*!
 		** \brief Invoke the delegate
 		** \see invoke()
@@ -409,9 +414,6 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
-
-		// A friend !
-		template<class R1, class B1> friend struct Private::BindImpl::Unbind;
 
 	}; // class Bind<R(<%=generator.list(i,'A')%>)>
 

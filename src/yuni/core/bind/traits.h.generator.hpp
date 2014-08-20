@@ -39,6 +39,13 @@ namespace BindImpl
 	template<class P> class IPointer;
 
 	/*!
+	** \brief Dummy implementation, does nothing, used by unbind
+	**
+	** \tparam P The prototype of the function/member
+	*/
+	template<class P> class None;
+
+	/*!
 	** \brief Binding with a function
 	**
 	** \tparam P The prototype of the member
@@ -175,24 +182,6 @@ namespace BindImpl
 
 
 
-	template<class R, class B>
-	struct Unbind final
-	{
-		static void Execute(B* d)
-		{
-			d->bind(d, &B::emptyCallback);
-		}
-	};
-
-	template<class B>
-	struct Unbind<void,B> final
-	{
-		static void Execute(B* d)
-		{
-			d->bind(d, &B::emptyCallbackReturnsVoid);
-		}
-	};
-
 
 
 
@@ -207,6 +196,9 @@ namespace BindImpl
 		virtual ~IPointer() {}
 		//! Invoke the delegate
 		virtual R invoke(<%=generator.variableList(i)%>) const = 0;
+
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
 
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
@@ -230,14 +222,66 @@ namespace BindImpl
 
 
 
+	// class Void
+
+<% (0..generator.argumentCount-1).each do |i| %>
+	template<class R<%=generator.templateParameterList(i) %>>
+	class None<R (<%=generator.list(i)%>)> final :
+		public IPointer<R (<%=generator.list(i)%>)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(<%=generator.list(i)%>) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(<%=generator.list(i)%>)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (<%=generator.list(i)%>)>
+<% end %>
+
 
 
 	// class BoundWithFunction
 
 <% (0..generator.argumentCount-1).each do |i| %>
-	/*!
-	** \brief Binding with a function (with <%i%> arguments)
-	*/
 	template<class R<%=generator.templateParameterList(i) %>>
 	class BoundWithFunction<R (<%=generator.list(i)%>)> final :
 		public IPointer<R (<%=generator.list(i)%>)>
@@ -248,7 +292,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(<%=generator.list(i)%>)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(<%=generator.variableList(i)%>) const override
 		{
@@ -298,9 +344,6 @@ namespace BindImpl
 
 # ifdef YUNI_HAS_CPP_BIND_LAMBDA
 <% (0..generator.argumentCount-1).each do |i| %>
-	/*!
-	** \brief Binding with a functor object (with <%i%> arguments)
-	*/
 	template<class C, class R<%=generator.templateParameterList(i) %>>
 	class BoundWithFunctor<C, R (<%=generator.list(i)%>)> final :
 		public IPointer<R (<%=generator.list(i)%>)>
@@ -370,9 +413,11 @@ namespace BindImpl
 		public IPointer<R (<%=generator.list(i - 1)%>)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(<%=generator.list(i)%>), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(<%=generator.list(i)%>), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(<%=generator.variableList(i-1)%>) const override
 		{
@@ -443,7 +488,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(<%=generator.list(i)%>)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(<%=generator.variableList(i)%>) const override
@@ -514,7 +561,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(<%=generator.variableList(i-1)%>) const override
 		{
@@ -705,6 +754,8 @@ namespace BindImpl
 
 
 <% end %>
+
+
 
 
 

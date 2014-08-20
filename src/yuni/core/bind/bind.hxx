@@ -18,9 +18,8 @@ namespace Yuni
 	// Constructor
 	template<class R>
 	inline Bind<R (), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R ()>()) // unbind
+	{}
 
 	// Constructor
 	template<class R>
@@ -52,9 +51,8 @@ namespace Yuni
 	template<class R>
 	template<class C>
 	inline Bind<R (), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -309,7 +307,7 @@ namespace Yuni
 	template<class R>
 	inline void Bind<R (), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R ()>(); // unbind
 	}
 
 
@@ -317,7 +315,14 @@ namespace Yuni
 	template<class R>
 	inline void Bind<R (), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R>
+	inline bool Bind<R (), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -337,6 +342,13 @@ namespace Yuni
 	inline R Bind<R (), void>::invoke() const
 	{
 		return pHolder->invoke();
+	}
+
+
+	template<class R>
+	inline bool Bind<R (), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -464,9 +476,8 @@ namespace Yuni
 	// Constructor
 	template<class R>
 	inline Bind<R (*)(), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R ()>()) // unbind
+	{}
 
 	// Constructor
 	template<class R>
@@ -498,9 +509,8 @@ namespace Yuni
 	template<class R>
 	template<class C>
 	inline Bind<R (*)(), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -755,7 +765,7 @@ namespace Yuni
 	template<class R>
 	inline void Bind<R (*)(), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R ()>(); // unbind
 	}
 
 
@@ -763,7 +773,14 @@ namespace Yuni
 	template<class R>
 	inline void Bind<R (*)(), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R>
+	inline bool Bind<R (*)(), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -783,6 +800,13 @@ namespace Yuni
 	inline R Bind<R (*)(), void>::invoke() const
 	{
 		return pHolder->invoke();
+	}
+
+
+	template<class R>
+	inline bool Bind<R (*)(), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -910,9 +934,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R>
 	inline Bind<R (ClassT::*)(), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R ()>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R>
@@ -944,9 +967,8 @@ namespace Yuni
 	template<class ClassT, class R>
 	template<class C>
 	inline Bind<R (ClassT::*)(), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -1201,7 +1223,7 @@ namespace Yuni
 	template<class ClassT, class R>
 	inline void Bind<R (ClassT::*)(), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R ()>(); // unbind
 	}
 
 
@@ -1209,7 +1231,14 @@ namespace Yuni
 	template<class ClassT, class R>
 	inline void Bind<R (ClassT::*)(), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R>
+	inline bool Bind<R (ClassT::*)(), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -1229,6 +1258,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(), ClassT>::invoke() const
 	{
 		return pHolder->invoke();
+	}
+
+
+	template<class ClassT, class R>
+	inline bool Bind<R (ClassT::*)(), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -1356,9 +1392,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0>
 	inline Bind<R (A0), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0>
@@ -1390,9 +1425,8 @@ namespace Yuni
 	template<class R, class A0>
 	template<class C>
 	inline Bind<R (A0), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -1647,7 +1681,7 @@ namespace Yuni
 	template<class R, class A0>
 	inline void Bind<R (A0), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0)>(); // unbind
 	}
 
 
@@ -1655,7 +1689,14 @@ namespace Yuni
 	template<class R, class A0>
 	inline void Bind<R (A0), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0>
+	inline bool Bind<R (A0), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -1675,6 +1716,13 @@ namespace Yuni
 	inline R Bind<R (A0), void>::invoke(A0 a0) const
 	{
 		return pHolder->invoke(a0);
+	}
+
+
+	template<class R, class A0>
+	inline bool Bind<R (A0), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -1802,9 +1850,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0>
 	inline Bind<R (*)(A0), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0>
@@ -1836,9 +1883,8 @@ namespace Yuni
 	template<class R, class A0>
 	template<class C>
 	inline Bind<R (*)(A0), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -2093,7 +2139,7 @@ namespace Yuni
 	template<class R, class A0>
 	inline void Bind<R (*)(A0), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0)>(); // unbind
 	}
 
 
@@ -2101,7 +2147,14 @@ namespace Yuni
 	template<class R, class A0>
 	inline void Bind<R (*)(A0), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0>
+	inline bool Bind<R (*)(A0), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -2121,6 +2174,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0), void>::invoke(A0 a0) const
 	{
 		return pHolder->invoke(a0);
+	}
+
+
+	template<class R, class A0>
+	inline bool Bind<R (*)(A0), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -2248,9 +2308,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0>
 	inline Bind<R (ClassT::*)(A0), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0>
@@ -2282,9 +2341,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -2539,7 +2597,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0>
 	inline void Bind<R (ClassT::*)(A0), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0)>(); // unbind
 	}
 
 
@@ -2547,7 +2605,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0>
 	inline void Bind<R (ClassT::*)(A0), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0>
+	inline bool Bind<R (ClassT::*)(A0), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -2567,6 +2632,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0), ClassT>::invoke(A0 a0) const
 	{
 		return pHolder->invoke(a0);
+	}
+
+
+	template<class ClassT, class R, class A0>
+	inline bool Bind<R (ClassT::*)(A0), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -2694,9 +2766,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1>
 	inline Bind<R (A0, A1), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1>
@@ -2728,9 +2799,8 @@ namespace Yuni
 	template<class R, class A0, class A1>
 	template<class C>
 	inline Bind<R (A0, A1), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -2985,7 +3055,7 @@ namespace Yuni
 	template<class R, class A0, class A1>
 	inline void Bind<R (A0, A1), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1)>(); // unbind
 	}
 
 
@@ -2993,7 +3063,14 @@ namespace Yuni
 	template<class R, class A0, class A1>
 	inline void Bind<R (A0, A1), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1>
+	inline bool Bind<R (A0, A1), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -3014,6 +3091,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1), void>::invoke(A0 a0, A1 a1) const
 	{
 		return pHolder->invoke(a0, a1);
+	}
+
+
+	template<class R, class A0, class A1>
+	inline bool Bind<R (A0, A1), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -3141,9 +3225,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1>
 	inline Bind<R (*)(A0, A1), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1>
@@ -3175,9 +3258,8 @@ namespace Yuni
 	template<class R, class A0, class A1>
 	template<class C>
 	inline Bind<R (*)(A0, A1), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -3432,7 +3514,7 @@ namespace Yuni
 	template<class R, class A0, class A1>
 	inline void Bind<R (*)(A0, A1), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1)>(); // unbind
 	}
 
 
@@ -3440,7 +3522,14 @@ namespace Yuni
 	template<class R, class A0, class A1>
 	inline void Bind<R (*)(A0, A1), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1>
+	inline bool Bind<R (*)(A0, A1), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -3461,6 +3550,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1), void>::invoke(A0 a0, A1 a1) const
 	{
 		return pHolder->invoke(a0, a1);
+	}
+
+
+	template<class R, class A0, class A1>
+	inline bool Bind<R (*)(A0, A1), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -3588,9 +3684,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1>
 	inline Bind<R (ClassT::*)(A0, A1), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1>
@@ -3622,9 +3717,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -3879,7 +3973,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1>
 	inline void Bind<R (ClassT::*)(A0, A1), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1)>(); // unbind
 	}
 
 
@@ -3887,7 +3981,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1>
 	inline void Bind<R (ClassT::*)(A0, A1), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1>
+	inline bool Bind<R (ClassT::*)(A0, A1), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -3908,6 +4009,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1), ClassT>::invoke(A0 a0, A1 a1) const
 	{
 		return pHolder->invoke(a0, a1);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1>
+	inline bool Bind<R (ClassT::*)(A0, A1), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -4035,9 +4143,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2>
 	inline Bind<R (A0, A1, A2), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2>
@@ -4069,9 +4176,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2>
 	template<class C>
 	inline Bind<R (A0, A1, A2), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -4326,7 +4432,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2>
 	inline void Bind<R (A0, A1, A2), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2)>(); // unbind
 	}
 
 
@@ -4334,7 +4440,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2>
 	inline void Bind<R (A0, A1, A2), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2>
+	inline bool Bind<R (A0, A1, A2), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -4355,6 +4468,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2), void>::invoke(A0 a0, A1 a1, A2 a2) const
 	{
 		return pHolder->invoke(a0, a1, a2);
+	}
+
+
+	template<class R, class A0, class A1, class A2>
+	inline bool Bind<R (A0, A1, A2), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -4482,9 +4602,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2>
 	inline Bind<R (*)(A0, A1, A2), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2>
@@ -4516,9 +4635,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -4773,7 +4891,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2>
 	inline void Bind<R (*)(A0, A1, A2), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2)>(); // unbind
 	}
 
 
@@ -4781,7 +4899,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2>
 	inline void Bind<R (*)(A0, A1, A2), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2>
+	inline bool Bind<R (*)(A0, A1, A2), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -4802,6 +4927,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2), void>::invoke(A0 a0, A1 a1, A2 a2) const
 	{
 		return pHolder->invoke(a0, a1, a2);
+	}
+
+
+	template<class R, class A0, class A1, class A2>
+	inline bool Bind<R (*)(A0, A1, A2), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -4929,9 +5061,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2>
 	inline Bind<R (ClassT::*)(A0, A1, A2), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2>
@@ -4963,9 +5094,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -5220,7 +5350,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2>
 	inline void Bind<R (ClassT::*)(A0, A1, A2), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2)>(); // unbind
 	}
 
 
@@ -5228,7 +5358,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2>
 	inline void Bind<R (ClassT::*)(A0, A1, A2), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -5249,6 +5386,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2), ClassT>::invoke(A0 a0, A1 a1, A2 a2) const
 	{
 		return pHolder->invoke(a0, a1, a2);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -5376,9 +5520,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3>
 	inline Bind<R (A0, A1, A2, A3), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3>
@@ -5410,9 +5553,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -5667,7 +5809,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3>
 	inline void Bind<R (A0, A1, A2, A3), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3)>(); // unbind
 	}
 
 
@@ -5675,7 +5817,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3>
 	inline void Bind<R (A0, A1, A2, A3), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3>
+	inline bool Bind<R (A0, A1, A2, A3), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -5697,6 +5846,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3>
+	inline bool Bind<R (A0, A1, A2, A3), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -5824,9 +5980,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3>
 	inline Bind<R (*)(A0, A1, A2, A3), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3>
@@ -5858,9 +6013,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -6115,7 +6269,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3>
 	inline void Bind<R (*)(A0, A1, A2, A3), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3)>(); // unbind
 	}
 
 
@@ -6123,7 +6277,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3>
 	inline void Bind<R (*)(A0, A1, A2, A3), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3>
+	inline bool Bind<R (*)(A0, A1, A2, A3), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -6145,6 +6306,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3>
+	inline bool Bind<R (*)(A0, A1, A2, A3), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -6272,9 +6440,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3>
@@ -6306,9 +6473,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -6563,7 +6729,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3)>(); // unbind
 	}
 
 
@@ -6571,7 +6737,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -6593,6 +6766,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -6720,9 +6900,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	inline Bind<R (A0, A1, A2, A3, A4), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4>
@@ -6754,9 +6933,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -7011,7 +7189,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	inline void Bind<R (A0, A1, A2, A3, A4), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4)>(); // unbind
 	}
 
 
@@ -7019,7 +7197,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	inline void Bind<R (A0, A1, A2, A3, A4), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4>
+	inline bool Bind<R (A0, A1, A2, A3, A4), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -7041,6 +7226,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4>
+	inline bool Bind<R (A0, A1, A2, A3, A4), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -7168,9 +7360,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	inline Bind<R (*)(A0, A1, A2, A3, A4), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4>
@@ -7202,9 +7393,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -7459,7 +7649,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4)>(); // unbind
 	}
 
 
@@ -7467,7 +7657,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -7489,6 +7686,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -7616,9 +7820,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
@@ -7650,9 +7853,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -7907,7 +8109,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4)>(); // unbind
 	}
 
 
@@ -7915,7 +8117,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -7937,6 +8146,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -8064,9 +8280,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline Bind<R (A0, A1, A2, A3, A4, A5), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
@@ -8098,9 +8313,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -8355,7 +8569,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5)>(); // unbind
 	}
 
 
@@ -8363,7 +8577,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -8386,6 +8607,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4, A5), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -8513,9 +8741,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
@@ -8547,9 +8774,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -8804,7 +9030,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5)>(); // unbind
 	}
 
 
@@ -8812,7 +9038,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -8835,6 +9068,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -8962,9 +9202,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
@@ -8996,9 +9235,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -9253,7 +9491,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5)>(); // unbind
 	}
 
 
@@ -9261,7 +9499,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -9284,6 +9529,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -9411,9 +9663,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
@@ -9445,9 +9696,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -9702,7 +9952,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6)>(); // unbind
 	}
 
 
@@ -9710,7 +9960,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -9733,6 +9990,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -9860,9 +10124,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
@@ -9894,9 +10157,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -10151,7 +10413,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6)>(); // unbind
 	}
 
 
@@ -10159,7 +10421,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -10182,6 +10451,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -10309,9 +10585,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
@@ -10343,9 +10618,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -10600,7 +10874,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6)>(); // unbind
 	}
 
 
@@ -10608,7 +10882,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -10631,6 +10912,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -10758,9 +11046,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
@@ -10792,9 +11079,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -11049,7 +11335,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7)>(); // unbind
 	}
 
 
@@ -11057,7 +11343,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -11081,6 +11374,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -11208,9 +11508,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
@@ -11242,9 +11541,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -11499,7 +11797,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7)>(); // unbind
 	}
 
 
@@ -11507,7 +11805,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -11531,6 +11836,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -11658,9 +11970,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
@@ -11692,9 +12003,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -11949,7 +12259,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7)>(); // unbind
 	}
 
 
@@ -11957,7 +12267,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -11981,6 +12298,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -12108,9 +12432,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
@@ -12142,9 +12465,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -12399,7 +12721,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(); // unbind
 	}
 
 
@@ -12407,7 +12729,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -12431,6 +12760,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -12558,9 +12894,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
@@ -12592,9 +12927,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -12849,7 +13183,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(); // unbind
 	}
 
 
@@ -12857,7 +13191,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -12881,6 +13222,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -13008,9 +13356,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
@@ -13042,9 +13389,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -13299,7 +13645,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(); // unbind
 	}
 
 
@@ -13307,7 +13653,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -13331,6 +13684,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -13458,9 +13818,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
@@ -13492,9 +13851,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -13749,7 +14107,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(); // unbind
 	}
 
 
@@ -13757,7 +14115,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -13782,6 +14147,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -13909,9 +14281,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
@@ -13943,9 +14314,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -14200,7 +14570,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(); // unbind
 	}
 
 
@@ -14208,7 +14578,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -14233,6 +14610,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -14360,9 +14744,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
@@ -14394,9 +14777,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -14651,7 +15033,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(); // unbind
 	}
 
 
@@ -14659,7 +15041,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -14684,6 +15073,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -14811,9 +15207,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
@@ -14845,9 +15240,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -15102,7 +15496,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(); // unbind
 	}
 
 
@@ -15110,7 +15504,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -15135,6 +15536,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -15262,9 +15670,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
@@ -15296,9 +15703,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -15553,7 +15959,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(); // unbind
 	}
 
 
@@ -15561,7 +15967,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -15586,6 +15999,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -15713,9 +16133,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
@@ -15747,9 +16166,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -16004,7 +16422,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(); // unbind
 	}
 
 
@@ -16012,7 +16430,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -16037,6 +16462,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -16164,9 +16596,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
@@ -16198,9 +16629,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -16455,7 +16885,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(); // unbind
 	}
 
 
@@ -16463,7 +16893,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -16489,6 +16926,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -16616,9 +17060,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
@@ -16650,9 +17093,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -16907,7 +17349,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(); // unbind
 	}
 
 
@@ -16915,7 +17357,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -16941,6 +17390,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -17068,9 +17524,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
@@ -17102,9 +17557,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -17359,7 +17813,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(); // unbind
 	}
 
 
@@ -17367,7 +17821,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -17393,6 +17854,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -17520,9 +17988,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
@@ -17554,9 +18021,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -17811,7 +18277,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(); // unbind
 	}
 
 
@@ -17819,7 +18285,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -17845,6 +18318,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -17972,9 +18452,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
@@ -18006,9 +18485,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -18263,7 +18741,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(); // unbind
 	}
 
 
@@ -18271,7 +18749,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -18297,6 +18782,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -18424,9 +18916,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
@@ -18458,9 +18949,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -18715,7 +19205,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(); // unbind
 	}
 
 
@@ -18723,7 +19213,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -18749,6 +19246,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -18876,9 +19380,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
@@ -18910,9 +19413,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -19167,7 +19669,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(); // unbind
 	}
 
 
@@ -19175,7 +19677,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -19202,6 +19711,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -19329,9 +19845,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
@@ -19363,9 +19878,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -19620,7 +20134,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(); // unbind
 	}
 
 
@@ -19628,7 +20142,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -19655,6 +20176,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -19782,9 +20310,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
@@ -19816,9 +20343,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -20073,7 +20599,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(); // unbind
 	}
 
 
@@ -20081,7 +20607,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -20108,6 +20641,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -20235,9 +20775,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
@@ -20269,9 +20808,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -20526,7 +21064,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(); // unbind
 	}
 
 
@@ -20534,7 +21072,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -20561,6 +21106,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -20688,9 +21240,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
@@ -20722,9 +21273,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -20979,7 +21529,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(); // unbind
 	}
 
 
@@ -20987,7 +21537,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -21014,6 +21571,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -21141,9 +21705,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
@@ -21175,9 +21738,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -21432,7 +21994,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(); // unbind
 	}
 
 
@@ -21440,7 +22002,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -21467,6 +22036,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -21594,9 +22170,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
@@ -21628,9 +22203,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -21885,7 +22459,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(); // unbind
 	}
 
 
@@ -21893,7 +22467,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -21921,6 +22502,13 @@ namespace Yuni
 	inline R Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+	inline bool Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -22048,9 +22636,8 @@ namespace Yuni
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>()) // unbind
+	{}
 
 	// Constructor
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
@@ -22082,9 +22669,8 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -22339,7 +22925,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(); // unbind
 	}
 
 
@@ -22347,7 +22933,14 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -22375,6 +22968,13 @@ namespace Yuni
 	inline R Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15);
+	}
+
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+	inline bool Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::operator ! () const
+	{
+		return empty();
 	}
 
 
@@ -22502,9 +23102,8 @@ namespace Yuni
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>()) // unbind
+	{}
 
 	// Constructor
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
@@ -22536,9 +23135,8 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -22793,7 +23391,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(); // unbind
 	}
 
 
@@ -22801,7 +23399,14 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -22829,6 +23434,13 @@ namespace Yuni
 	inline R Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const
 	{
 		return pHolder->invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15);
+	}
+
+
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+	inline bool Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::operator ! () const
+	{
+		return empty();
 	}
 
 

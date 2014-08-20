@@ -40,6 +40,13 @@ namespace BindImpl
 	template<class P> class IPointer;
 
 	/*!
+	** \brief Dummy implementation, does nothing, used by unbind
+	**
+	** \tparam P The prototype of the function/member
+	*/
+	template<class P> class None;
+
+	/*!
 	** \brief Binding with a function
 	**
 	** \tparam P The prototype of the member
@@ -626,24 +633,6 @@ namespace BindImpl
 
 
 
-	template<class R, class B>
-	struct Unbind final
-	{
-		static void Execute(B* d)
-		{
-			d->bind(d, &B::emptyCallback);
-		}
-	};
-
-	template<class B>
-	struct Unbind<void,B> final
-	{
-		static void Execute(B* d)
-		{
-			d->bind(d, &B::emptyCallbackReturnsVoid);
-		}
-	};
-
 
 
 
@@ -658,6 +647,9 @@ namespace BindImpl
 		virtual ~IPointer() {}
 		//! Invoke the delegate
 		virtual R invoke() const = 0;
+
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
 
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
@@ -687,6 +679,9 @@ namespace BindImpl
 		//! Invoke the delegate
 		virtual R invoke(A0 a0) const = 0;
 
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
+
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
 
@@ -714,6 +709,9 @@ namespace BindImpl
 		virtual ~IPointer() {}
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1) const = 0;
+
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
 
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
@@ -743,6 +741,9 @@ namespace BindImpl
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2) const = 0;
 
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
+
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
 
@@ -770,6 +771,9 @@ namespace BindImpl
 		virtual ~IPointer() {}
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3) const = 0;
+
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
 
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
@@ -799,6 +803,9 @@ namespace BindImpl
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const = 0;
 
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
+
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
 
@@ -826,6 +833,9 @@ namespace BindImpl
 		virtual ~IPointer() {}
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const = 0;
+
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
 
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
@@ -855,6 +865,9 @@ namespace BindImpl
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const = 0;
 
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
+
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
 
@@ -882,6 +895,9 @@ namespace BindImpl
 		virtual ~IPointer() {}
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const = 0;
+
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
 
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
@@ -911,6 +927,9 @@ namespace BindImpl
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const = 0;
 
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
+
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
 
@@ -938,6 +957,9 @@ namespace BindImpl
 		virtual ~IPointer() {}
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const = 0;
+
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
 
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
@@ -967,6 +989,9 @@ namespace BindImpl
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const = 0;
 
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
+
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
 
@@ -994,6 +1019,9 @@ namespace BindImpl
 		virtual ~IPointer() {}
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const = 0;
+
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
 
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
@@ -1023,6 +1051,9 @@ namespace BindImpl
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const = 0;
 
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
+
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
 
@@ -1050,6 +1081,9 @@ namespace BindImpl
 		virtual ~IPointer() {}
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const = 0;
+
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
 
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
@@ -1079,6 +1113,9 @@ namespace BindImpl
 		//! Invoke the delegate
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const = 0;
 
+		//! Get if the object is binded
+		virtual bool empty() const { return false; }
+
 		//! Get the pointer to object
 		virtual const void* object() const = 0;
 
@@ -1101,14 +1138,831 @@ namespace BindImpl
 
 
 
+	// class Void
+
+
+	template<class R>
+	class None<R ()> final :
+		public IPointer<R ()>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke() const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)()) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R ()>
+
+	template<class R, class A0>
+	class None<R (A0)> final :
+		public IPointer<R (A0)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0)>
+
+	template<class R, class A0, class A1>
+	class None<R (A0, A1)> final :
+		public IPointer<R (A0, A1)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1)>
+
+	template<class R, class A0, class A1, class A2>
+	class None<R (A0, A1, A2)> final :
+		public IPointer<R (A0, A1, A2)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2)>
+
+	template<class R, class A0, class A1, class A2, class A3>
+	class None<R (A0, A1, A2, A3)> final :
+		public IPointer<R (A0, A1, A2, A3)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3)>
+
+	template<class R, class A0, class A1, class A2, class A3, class A4>
+	class None<R (A0, A1, A2, A3, A4)> final :
+		public IPointer<R (A0, A1, A2, A3, A4)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3, A4) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3, A4)>
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
+	class None<R (A0, A1, A2, A3, A4, A5)> final :
+		public IPointer<R (A0, A1, A2, A3, A4, A5)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3, A4, A5) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3, A4, A5)>
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+	class None<R (A0, A1, A2, A3, A4, A5, A6)> final :
+		public IPointer<R (A0, A1, A2, A3, A4, A5, A6)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3, A4, A5, A6) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3, A4, A5, A6)>
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	class None<R (A0, A1, A2, A3, A4, A5, A6, A7)> final :
+		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3, A4, A5, A6, A7) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3, A4, A5, A6, A7)>
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)> final :
+		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3, A4, A5, A6, A7, A8) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)> final :
+		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)> final :
+		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)> final :
+		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)> final :
+		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)> final :
+		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
+
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)> final :
+		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>
+	{
+	public:
+		//! Destructor
+		virtual ~None() {}
+
+
+		virtual R invoke(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const override
+		{
+			return R();
+		}
+
+		virtual bool empty() const override
+		{
+			return true;
+		}
+
+		virtual const void* object() const override
+		{
+			return NULL;
+		}
+
+		virtual const IEventObserverBase* observerBaseObject() const override
+		{
+			return NULL;
+		}
+
+		virtual bool isDescendantOf(const IEventObserverBase*) const override
+		{
+			return false;
+		}
+
+		virtual bool isDescendantOfIEventObserverBase() const override
+		{
+			return false;
+		}
+
+		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) const override
+		{
+			return (NULL == pointer);
+		}
+
+		virtual bool compareWithPointerToObject(const void*) const override
+		{
+			return false;
+		}
+
+	}; // class None<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>
+
+
 
 
 	// class BoundWithFunction
 
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R>
 	class BoundWithFunction<R ()> final :
 		public IPointer<R ()>
@@ -1119,7 +1973,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)()) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke() const override
 		{
@@ -1163,9 +2019,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R ()>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0>
 	class BoundWithFunction<R (A0)> final :
 		public IPointer<R (A0)>
@@ -1176,7 +2029,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0) const override
 		{
@@ -1220,9 +2075,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1>
 	class BoundWithFunction<R (A0, A1)> final :
 		public IPointer<R (A0, A1)>
@@ -1233,7 +2085,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1) const override
 		{
@@ -1277,9 +2131,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2>
 	class BoundWithFunction<R (A0, A1, A2)> final :
 		public IPointer<R (A0, A1, A2)>
@@ -1290,7 +2141,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2) const override
 		{
@@ -1334,9 +2187,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3>
 	class BoundWithFunction<R (A0, A1, A2, A3)> final :
 		public IPointer<R (A0, A1, A2, A3)>
@@ -1347,7 +2197,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3) const override
 		{
@@ -1391,9 +2243,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2, A3)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4)> final :
 		public IPointer<R (A0, A1, A2, A3, A4)>
@@ -1404,7 +2253,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const override
 		{
@@ -1448,9 +2299,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5)>
@@ -1461,7 +2309,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const override
 		{
@@ -1505,9 +2355,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6)>
@@ -1518,7 +2365,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const override
 		{
@@ -1562,9 +2411,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7)>
@@ -1575,7 +2421,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const override
 		{
@@ -1619,9 +2467,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>
@@ -1632,7 +2477,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const override
 		{
@@ -1676,9 +2523,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
@@ -1689,7 +2533,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const override
 		{
@@ -1733,9 +2579,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
@@ -1746,7 +2589,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const override
 		{
@@ -1790,9 +2635,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
@@ -1803,7 +2645,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const override
 		{
@@ -1847,9 +2691,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
@@ -1860,7 +2701,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const override
 		{
@@ -1904,9 +2747,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
@@ -1917,7 +2757,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const override
 		{
@@ -1961,9 +2803,6 @@ namespace BindImpl
 
 	}; // class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
 
-	/*!
-	** \brief Binding with a function (with  arguments)
-	*/
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	class BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>
@@ -1974,7 +2813,9 @@ namespace BindImpl
 
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) :
 			pPointer(pointer)
-		{}
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const override
 		{
@@ -2024,9 +2865,6 @@ namespace BindImpl
 
 # ifdef YUNI_HAS_CPP_BIND_LAMBDA
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R>
 	class BoundWithFunctor<C, R ()> final :
 		public IPointer<R ()>
@@ -2082,9 +2920,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R ()>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0>
 	class BoundWithFunctor<C, R (A0)> final :
 		public IPointer<R (A0)>
@@ -2140,9 +2975,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1>
 	class BoundWithFunctor<C, R (A0, A1)> final :
 		public IPointer<R (A0, A1)>
@@ -2198,9 +3030,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2>
 	class BoundWithFunctor<C, R (A0, A1, A2)> final :
 		public IPointer<R (A0, A1, A2)>
@@ -2256,9 +3085,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3)> final :
 		public IPointer<R (A0, A1, A2, A3)>
@@ -2314,9 +3140,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2, A3)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4)> final :
 		public IPointer<R (A0, A1, A2, A3, A4)>
@@ -2372,9 +3195,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5)>
@@ -2430,9 +3250,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6)>
@@ -2488,9 +3305,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7)>
@@ -2546,9 +3360,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>
@@ -2604,9 +3415,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
@@ -2662,9 +3470,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
@@ -2720,9 +3525,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
@@ -2778,9 +3580,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
@@ -2836,9 +3635,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
@@ -2894,9 +3690,6 @@ namespace BindImpl
 	}; // class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
 
 
-	/*!
-	** \brief Binding with a functor object (with  arguments)
-	*/
 	template<class C, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	class BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)> final :
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>
@@ -2966,9 +3759,11 @@ namespace BindImpl
 		public IPointer<R ()>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke() const override
 		{
@@ -3023,9 +3818,11 @@ namespace BindImpl
 		public IPointer<R (A0)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0) const override
 		{
@@ -3080,9 +3877,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1) const override
 		{
@@ -3137,9 +3936,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2) const override
 		{
@@ -3194,9 +3995,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3) const override
 		{
@@ -3251,9 +4054,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3, A4)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const override
 		{
@@ -3308,9 +4113,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3, A4, A5)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const override
 		{
@@ -3365,9 +4172,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const override
 		{
@@ -3422,9 +4231,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const override
 		{
@@ -3479,9 +4290,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const override
 		{
@@ -3536,9 +4349,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const override
 		{
@@ -3593,9 +4408,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const override
 		{
@@ -3650,9 +4467,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const override
 		{
@@ -3707,9 +4526,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const override
 		{
@@ -3764,9 +4585,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const override
 		{
@@ -3821,9 +4644,11 @@ namespace BindImpl
 		public IPointer<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>
 	{
 	public:
-		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), U userdata) :
-			pPointer(pointer), pUserdata(userdata)
-		{}
+		BoundWithFunctionAndUserData(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), U userdata)
+			: pPointer(pointer), pUserdata(userdata)
+		{
+			assert(pointer != NULL and "binded pointer-to-function can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const override
 		{
@@ -3894,7 +4719,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)()) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke() const override
@@ -3954,7 +4781,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0) const override
@@ -4014,7 +4843,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1) const override
@@ -4074,7 +4905,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2) const override
@@ -4134,7 +4967,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3) const override
@@ -4194,7 +5029,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3, A4)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const override
@@ -4254,7 +5091,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3, A4, A5)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const override
@@ -4314,7 +5153,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3, A4, A5, A6)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const override
@@ -4374,7 +5215,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3, A4, A5, A6, A7)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const override
@@ -4434,7 +5277,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const override
@@ -4494,7 +5339,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const override
@@ -4554,7 +5401,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const override
@@ -4614,7 +5463,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const override
@@ -4674,7 +5525,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const override
@@ -4734,7 +5587,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const override
@@ -4794,7 +5649,9 @@ namespace BindImpl
 		BoundWithMember(C* c, R(C::*member)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) :
 			pThis(c),
 			pMember(member)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 		//@}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const override
@@ -4865,7 +5722,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke() const override
 		{
@@ -4928,7 +5787,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0) const override
 		{
@@ -4991,7 +5852,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1) const override
 		{
@@ -5054,7 +5917,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2) const override
 		{
@@ -5117,7 +5982,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3) const override
 		{
@@ -5180,7 +6047,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const override
 		{
@@ -5243,7 +6112,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const override
 		{
@@ -5306,7 +6177,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const override
 		{
@@ -5369,7 +6242,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const override
 		{
@@ -5432,7 +6307,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const override
 		{
@@ -5495,7 +6372,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const override
 		{
@@ -5558,7 +6437,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const override
 		{
@@ -5621,7 +6502,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const override
 		{
@@ -5684,7 +6567,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const override
 		{
@@ -5747,7 +6632,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const override
 		{
@@ -5810,7 +6697,9 @@ namespace BindImpl
 			pThis(c),
 			pMember(member),
 			pUserdata(userdata)
-		{}
+		{
+			assert(c != NULL and "binded object can not be null");
+		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const override
 		{
@@ -7903,6 +8792,8 @@ namespace BindImpl
 		UserDataTypeByCopy pUserdata;
 
 	}; // class BoundWithSmartPtrMemberAndUserData<U, C, R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>
+
+
 
 
 

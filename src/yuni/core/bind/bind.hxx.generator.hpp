@@ -23,9 +23,8 @@ namespace Yuni
 	// Constructor
 	template<<%=tmpl[0]%>>
 	inline Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::Bind()
-	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
-	}
+		: pHolder(new Private::BindImpl::None<R (<%=generator.list(i)%>)>()) // unbind
+	{}
 
 	// Constructor
 	template<<%=tmpl[0]%>>
@@ -57,9 +56,8 @@ namespace Yuni
 	template<<%=tmpl[0]%>>
 	template<class C>
 	inline Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::Bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (<%=generator.list(i)%>)>(std::forward<C>(functor));
-	}
+		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (<%=generator.list(i)%>)>(std::forward<C>(functor)))
+	{}
 
 	# else
 
@@ -314,7 +312,7 @@ namespace Yuni
 	template<<%=tmpl[0]%>>
 	inline void Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::unbind()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		pHolder = new Private::BindImpl::None<R (<%=generator.list(i)%>)>(); // unbind
 	}
 
 
@@ -322,7 +320,14 @@ namespace Yuni
 	template<<%=tmpl[0]%>>
 	inline void Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::clear()
 	{
-		Private::BindImpl::Unbind<R, BindType>::Execute(this);
+		unbind();
+	}
+
+
+	template<<%=tmpl[0]%>>
+	inline bool Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::empty() const
+	{
+		return pHolder->empty();
 	}
 
 
@@ -354,6 +359,13 @@ namespace Yuni
 	inline R Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::invoke(<%=generator.variableList(i)%>) const
 	{
 		return pHolder->invoke(<%=generator.list(i,'a')%>);
+	}
+
+
+	template<<%=tmpl[0]%>>
+	inline bool Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::operator ! () const
+	{
+		return empty();
 	}
 
 
