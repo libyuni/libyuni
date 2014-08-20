@@ -276,7 +276,7 @@ namespace PEG
 	}
 
 
-	bool Node::checkRules(AnyString& error, const Node::Map& rules) const
+	bool Node::checkRules(AnyString& error, const Node::Map& rules, std::map<AnyString, bool>& unusedList) const
 	{
 		if (rule.type == asRule)
 		{
@@ -287,12 +287,14 @@ namespace PEG
 					error = rule.text;
 					return false;
 				}
+				else
+					unusedList[rule.text] = true; // mark the rule as used
 			}
 		}
 
 		for (uint i = 0; i != children.size(); ++i)
 		{
-			if (not children[i].checkRules(error, rules))
+			if (not children[i].checkRules(error, rules, unusedList))
 				return false;
 		}
 		return true;

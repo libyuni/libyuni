@@ -36,7 +36,7 @@ namespace PEG
 		Node();
 
 		void clear();
-		bool checkRules(AnyString& error, const Node::Map& rules) const;
+		bool checkRules(AnyString& error, const Node::Map& rules, std::map<AnyString, bool>&) const;
 
 		void exportStd(std::ostream& out, uint depth = 1) const;
 		void exportDOTSubgraph(Clob& out, const Map& rules, const String& rulename) const;
