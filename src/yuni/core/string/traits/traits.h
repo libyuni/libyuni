@@ -256,7 +256,7 @@ namespace CStringImpl
 		Data(const Data& rhs) :
 			size(rhs.size)
 		{
-			YUNI_MEMCPY(data, (uint) capacity, rhs.data, sizeof(C) * (size + (uint) zeroTerminated));
+			YUNI_MEMCPY(data, sizeof(C) * ((uint) capacity + (uint) zeroTerminated), rhs.data, sizeof(C) * (size + (uint) zeroTerminated));
 		}
 
 		# ifdef YUNI_HAS_CPP_MOVE
@@ -264,7 +264,7 @@ namespace CStringImpl
 			size(rhs.size)
 		{
 			// it is impossible to perform a real move in this case
-			YUNI_MEMCPY(data, (uint) capacity, rhs.data, sizeof(C) * (size + (uint) zeroTerminated));
+			YUNI_MEMCPY(data, sizeof(C) * ((uint) capacity + (uint) zeroTerminated), rhs.data, sizeof(C) * (size + (uint) zeroTerminated));
 			rhs.size = 0;
 			if ((uint) zeroTerminated)
 				rhs.data[0] = C();
