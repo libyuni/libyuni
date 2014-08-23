@@ -320,6 +320,7 @@ namespace // anonymous
 			const Node& node = i->second;
 			if (not node.checkRules(errRulename, grammarRules, unusedList))
 			{
+				assert(false);
 				errmsg.clear() << "rule '" << i->first<< "': unknown rule reference '" << errRulename << "'";
 				error(errmsg);
 				ok = false;
@@ -409,7 +410,9 @@ namespace // anonymous
 
 	inline bool RuleParser::prepareNodeFromSubrules(const String& rulename, Node& node, SubRulePart::Vector& rules)
 	{
-		assert(not rules.empty() and "empty list - must be checked before calling this routine");
+		if (rules.empty())
+			return true;
+
 		std::stack<Node*> stack;
 		stack.push(&node);
 		uint firstLine = rules[0].line;
@@ -972,7 +975,7 @@ namespace // anonymous
 				if (newsubrules.back().empty())
 					newsubrules.pop_back();
 
-				if (not newsubrules.empty())
+				// preparing rules and pragmas
 				{
 					Node& node = grammarRules[currentRuleName];
 					node.clear();
@@ -982,8 +985,6 @@ namespace // anonymous
 					if (not prepareNodeFromSubrules(currentRuleName, node, newsubrules))
 						result = false; // continue on errors
 				}
-				else
-					warns(errmsg.clear() << source << ": ignoring the empty rule '" << currentRuleName << "'");
 			}
 			else
 				result = false;

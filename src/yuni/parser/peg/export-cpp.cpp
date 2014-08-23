@@ -671,7 +671,7 @@ namespace PEG
 			cpp << "namespace // anonymous\n{\n";
 			cpp << "\n\n";
 
-			cpp << "	static inline bool  RuleAttributeCapture(enum Rule ruleid)\n";
+			cpp << "	static bool  RuleAttributeCapture(enum Rule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		static const bool attr[] = {\n";
 			cpp << "			false, // rgUnknown\n";
@@ -683,7 +683,7 @@ namespace PEG
 			cpp << "		return attr[(uint) ruleid];\n";
 			cpp << "	}\n\n\n\n";
 
-			cpp << "	static inline bool  RuleAttributeImportant(enum Rule ruleid)\n";
+			cpp << "	static bool  RuleAttributeImportant(enum Rule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		static const bool attr[] = {\n";
 			cpp << "			false, // rgUnknown\n";
@@ -695,7 +695,7 @@ namespace PEG
 			cpp << "		return attr[(uint) ruleid];\n";
 			cpp << "	}\n\n\n\n";
 
-			cpp << "	static inline AnyString  RuleAttributeSimpleTextCapture(enum Rule ruleid)\n";
+			cpp << "	static AnyString  RuleAttributeSimpleTextCapture(enum Rule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		static const char* const attr[] = {\n";
 			cpp << "			nullptr, // rgUnknown\n";

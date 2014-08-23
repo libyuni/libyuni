@@ -284,6 +284,8 @@ namespace PEG
 			{
 				if (rules.count(rule.text) == 0)
 				{
+					if (rule.text.empty() and children.empty()) // deals with empty rules
+						return true;
 					error = rule.text;
 					return false;
 				}
@@ -422,7 +424,10 @@ namespace PEG
 					stmt << neg << "yy" << r->second.enumID << "(ctx)";
 				else
 				{
-					assert(false and "missing rule !");
+					if (not rule.text.empty())
+					{
+						assert(false and "missing rule !");
+					}
 					return;
 				}
 				break;
