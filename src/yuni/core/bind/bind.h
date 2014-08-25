@@ -9,6 +9,7 @@
 # include "../smartptr.h"
 # include "traits.h"
 # include "../dynamiclibrary/symbol.h"
+# include "fwd.h"
 
 
 /*!
@@ -245,15 +246,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)());
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -491,6 +489,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R()>
 
@@ -631,15 +631,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)());
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -877,6 +874,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R()>
 
@@ -1017,15 +1016,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)());
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -1264,6 +1260,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R()>
 
 
@@ -1403,15 +1401,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -1649,6 +1644,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0)>
 
@@ -1789,15 +1786,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -2035,6 +2029,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0)>
 
@@ -2175,15 +2171,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -2422,6 +2415,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0)>
 
 
@@ -2561,15 +2556,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -2807,6 +2799,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1)>
 
@@ -2947,15 +2941,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -3193,6 +3184,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1)>
 
@@ -3333,15 +3326,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -3580,6 +3570,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1)>
 
 
@@ -3719,15 +3711,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -3965,6 +3954,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2)>
 
@@ -4105,15 +4096,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -4351,6 +4339,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2)>
 
@@ -4491,15 +4481,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -4738,6 +4725,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2)>
 
 
@@ -4877,15 +4866,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -5123,6 +5109,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3)>
 
@@ -5263,15 +5251,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -5509,6 +5494,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3)>
 
@@ -5649,15 +5636,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -5896,6 +5880,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3)>
 
 
@@ -6035,15 +6021,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -6281,6 +6264,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4)>
 
@@ -6421,15 +6406,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -6667,6 +6649,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4)>
 
@@ -6807,15 +6791,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -7054,6 +7035,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4)>
 
 
@@ -7193,15 +7176,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -7439,6 +7419,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5)>
 
@@ -7579,15 +7561,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -7825,6 +7804,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5)>
 
@@ -7965,15 +7946,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -8212,6 +8190,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5)>
 
 
@@ -8351,15 +8331,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -8597,6 +8574,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6)>
 
@@ -8737,15 +8716,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -8983,6 +8959,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6)>
 
@@ -9123,15 +9101,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -9370,6 +9345,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6)>
 
 
@@ -9509,15 +9486,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -9755,6 +9729,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7)>
 
@@ -9895,15 +9871,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -10141,6 +10114,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7)>
 
@@ -10281,15 +10256,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -10528,6 +10500,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7)>
 
 
@@ -10667,15 +10641,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -10913,6 +10884,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8)>
 
@@ -11053,15 +11026,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -11299,6 +11269,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8)>
 
@@ -11439,15 +11411,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -11686,6 +11655,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8)>
 
 
@@ -11825,15 +11796,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -12071,6 +12039,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
 
@@ -12211,15 +12181,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -12457,6 +12424,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
 
@@ -12597,15 +12566,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -12844,6 +12810,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>
 
 
@@ -12983,15 +12951,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -13229,6 +13194,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
 
@@ -13369,15 +13336,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -13615,6 +13579,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
 
@@ -13755,15 +13721,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -14002,6 +13965,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>
 
 
@@ -14141,15 +14106,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -14387,6 +14349,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
 
@@ -14527,15 +14491,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -14773,6 +14734,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
 
@@ -14913,15 +14876,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -15160,6 +15120,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>
 
 
@@ -15299,15 +15261,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -15545,6 +15504,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
 
@@ -15685,15 +15646,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -15931,6 +15889,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
 
@@ -16071,15 +16031,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -16318,6 +16275,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>
 
 
@@ -16457,15 +16416,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -16703,6 +16659,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
 
@@ -16843,15 +16801,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -17089,6 +17044,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
 
@@ -17229,15 +17186,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -17476,6 +17430,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>
 
 
@@ -17615,15 +17571,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -17861,6 +17814,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>
 
@@ -18001,15 +17956,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -18247,6 +18199,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>
 
@@ -18387,15 +18341,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -18634,6 +18585,8 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>
 
 
@@ -18773,15 +18726,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -19019,6 +18969,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>
 
@@ -19159,15 +19111,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -19405,6 +19354,8 @@ namespace Yuni
 		** expensive copies
 		*/
 		SmartPtr<IHolder> pHolder;
+
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
 
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>
 
@@ -19545,15 +19496,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -19792,7 +19740,10 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>
+
 
 
 

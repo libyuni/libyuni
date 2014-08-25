@@ -8,6 +8,8 @@ generator = Generator.new()
 <%=generator.thisHeaderHasBeenGenerated("bind.hxx.generator.hpp")%>
 
 
+
+
 namespace Yuni
 {
 
@@ -37,6 +39,7 @@ namespace Yuni
 	template<<%=tmpl[0]%>>
 	inline Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -56,8 +59,17 @@ namespace Yuni
 	template<<%=tmpl[0]%>>
 	template<class C>
 	inline Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (<%=generator.list(i)%>)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (<%=generator.list(i)%>)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -70,7 +82,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<<%=tmpl[0]%>>
 	template<class C>
@@ -81,11 +92,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<<%=tmpl[0]%>>
-	inline Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<<%=tmpl[0]%>>
@@ -93,17 +99,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (<%=generator.list(i)%>)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<<%=tmpl[0]%>>
-	template<class C>
-	inline void Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (<%=generator.list(i)%>)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -129,6 +124,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (<%=generator.list(i, "A", "", ", ")%>U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<<%=tmpl[0]%>>
+	template<class C>
+	inline void Bind<<%=tmpl[1]%>, <%=tmpl[2]%>>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (<%=generator.list(i)%>)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member

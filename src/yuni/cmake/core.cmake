@@ -105,6 +105,7 @@ add_library(yuni-static-core STATIC
 		core/bind/bind.h
 		core/bind/bind.hxx
 		core/bind/traits.h
+		core/bind/fwd.h
 		core/bind.h
 		core/bit/array.cpp
 		core/bit/array.h

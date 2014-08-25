@@ -9,6 +9,8 @@
 */
 
 
+
+
 namespace Yuni
 {
 
@@ -32,6 +34,7 @@ namespace Yuni
 	template<class R>
 	inline Bind<R (), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -51,8 +54,17 @@ namespace Yuni
 	template<class R>
 	template<class C>
 	inline Bind<R (), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -65,7 +77,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R>
 	template<class C>
@@ -76,11 +87,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R>
-	inline Bind<R (), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R>
@@ -88,17 +94,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R ()>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R>
-	template<class C>
-	inline void Bind<R (), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -124,6 +119,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R>
+	template<class C>
+	inline void Bind<R (), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -490,6 +503,7 @@ namespace Yuni
 	template<class R>
 	inline Bind<R (*)(), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -509,8 +523,17 @@ namespace Yuni
 	template<class R>
 	template<class C>
 	inline Bind<R (*)(), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -523,7 +546,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R>
 	template<class C>
@@ -534,11 +556,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R>
-	inline Bind<R (*)(), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R>
@@ -546,17 +563,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R ()>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R>
-	template<class C>
-	inline void Bind<R (*)(), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -582,6 +588,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R>
+	template<class C>
+	inline void Bind<R (*)(), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -948,6 +972,7 @@ namespace Yuni
 	template<class ClassT, class R>
 	inline Bind<R (ClassT::*)(), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -967,8 +992,17 @@ namespace Yuni
 	template<class ClassT, class R>
 	template<class C>
 	inline Bind<R (ClassT::*)(), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -981,7 +1015,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R>
 	template<class C>
@@ -992,11 +1025,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R>
-	inline Bind<R (ClassT::*)(), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R>
@@ -1004,17 +1032,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R ()>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R>
-	template<class C>
-	inline void Bind<R (ClassT::*)(), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -1040,6 +1057,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R>
+	template<class C>
+	inline void Bind<R (ClassT::*)(), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R ()>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -1406,6 +1441,7 @@ namespace Yuni
 	template<class R, class A0>
 	inline Bind<R (A0), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -1425,8 +1461,17 @@ namespace Yuni
 	template<class R, class A0>
 	template<class C>
 	inline Bind<R (A0), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -1439,7 +1484,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0>
 	template<class C>
@@ -1450,11 +1494,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0>
-	inline Bind<R (A0), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0>
@@ -1462,17 +1501,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0>
-	template<class C>
-	inline void Bind<R (A0), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -1498,6 +1526,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0>
+	template<class C>
+	inline void Bind<R (A0), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -1864,6 +1910,7 @@ namespace Yuni
 	template<class R, class A0>
 	inline Bind<R (*)(A0), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -1883,8 +1930,17 @@ namespace Yuni
 	template<class R, class A0>
 	template<class C>
 	inline Bind<R (*)(A0), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -1897,7 +1953,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0>
 	template<class C>
@@ -1908,11 +1963,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0>
-	inline Bind<R (*)(A0), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0>
@@ -1920,17 +1970,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0>
-	template<class C>
-	inline void Bind<R (*)(A0), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -1956,6 +1995,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0>
+	template<class C>
+	inline void Bind<R (*)(A0), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -2322,6 +2379,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0>
 	inline Bind<R (ClassT::*)(A0), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -2341,8 +2399,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -2355,7 +2422,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0>
 	template<class C>
@@ -2366,11 +2432,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0>
-	inline Bind<R (ClassT::*)(A0), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0>
@@ -2378,17 +2439,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -2414,6 +2464,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -2780,6 +2848,7 @@ namespace Yuni
 	template<class R, class A0, class A1>
 	inline Bind<R (A0, A1), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -2799,8 +2868,17 @@ namespace Yuni
 	template<class R, class A0, class A1>
 	template<class C>
 	inline Bind<R (A0, A1), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -2813,7 +2891,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1>
 	template<class C>
@@ -2824,11 +2901,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1>
-	inline Bind<R (A0, A1), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1>
@@ -2836,17 +2908,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1>
-	template<class C>
-	inline void Bind<R (A0, A1), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -2872,6 +2933,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1>
+	template<class C>
+	inline void Bind<R (A0, A1), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -3239,6 +3318,7 @@ namespace Yuni
 	template<class R, class A0, class A1>
 	inline Bind<R (*)(A0, A1), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -3258,8 +3338,17 @@ namespace Yuni
 	template<class R, class A0, class A1>
 	template<class C>
 	inline Bind<R (*)(A0, A1), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -3272,7 +3361,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1>
 	template<class C>
@@ -3283,11 +3371,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1>
-	inline Bind<R (*)(A0, A1), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1>
@@ -3295,17 +3378,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1>
-	template<class C>
-	inline void Bind<R (*)(A0, A1), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -3331,6 +3403,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1>
+	template<class C>
+	inline void Bind<R (*)(A0, A1), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -3698,6 +3788,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1>
 	inline Bind<R (ClassT::*)(A0, A1), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -3717,8 +3808,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -3731,7 +3831,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1>
 	template<class C>
@@ -3742,11 +3841,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1>
-	inline Bind<R (ClassT::*)(A0, A1), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1>
@@ -3754,17 +3848,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -3790,6 +3873,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -4157,6 +4258,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2>
 	inline Bind<R (A0, A1, A2), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -4176,8 +4278,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2>
 	template<class C>
 	inline Bind<R (A0, A1, A2), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -4190,7 +4301,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2>
 	template<class C>
@@ -4201,11 +4311,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2>
-	inline Bind<R (A0, A1, A2), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2>
@@ -4213,17 +4318,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2>
-	template<class C>
-	inline void Bind<R (A0, A1, A2), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -4249,6 +4343,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2>
+	template<class C>
+	inline void Bind<R (A0, A1, A2), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -4616,6 +4728,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2>
 	inline Bind<R (*)(A0, A1, A2), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -4635,8 +4748,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -4649,7 +4771,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2>
 	template<class C>
@@ -4660,11 +4781,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2>
-	inline Bind<R (*)(A0, A1, A2), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2>
@@ -4672,17 +4788,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -4708,6 +4813,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -5075,6 +5198,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2>
 	inline Bind<R (ClassT::*)(A0, A1, A2), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -5094,8 +5218,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -5108,7 +5241,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2>
 	template<class C>
@@ -5119,11 +5251,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2>
-	inline Bind<R (ClassT::*)(A0, A1, A2), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2>
@@ -5131,17 +5258,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -5167,6 +5283,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -5534,6 +5668,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3>
 	inline Bind<R (A0, A1, A2, A3), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -5553,8 +5688,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -5567,7 +5711,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3>
 	template<class C>
@@ -5578,11 +5721,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3>
-	inline Bind<R (A0, A1, A2, A3), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3>
@@ -5590,17 +5728,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -5626,6 +5753,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -5994,6 +6139,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3>
 	inline Bind<R (*)(A0, A1, A2, A3), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -6013,8 +6159,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -6027,7 +6182,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3>
 	template<class C>
@@ -6038,11 +6192,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3>
-	inline Bind<R (*)(A0, A1, A2, A3), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3>
@@ -6050,17 +6199,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -6086,6 +6224,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -6454,6 +6610,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -6473,8 +6630,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -6487,7 +6653,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3>
 	template<class C>
@@ -6498,11 +6663,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3>
@@ -6510,17 +6670,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -6546,6 +6695,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -6914,6 +7081,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	inline Bind<R (A0, A1, A2, A3, A4), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -6933,8 +7101,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -6947,7 +7124,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	template<class C>
@@ -6958,11 +7134,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4>
-	inline Bind<R (A0, A1, A2, A3, A4), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4>
@@ -6970,17 +7141,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -7006,6 +7166,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -7374,6 +7552,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	inline Bind<R (*)(A0, A1, A2, A3, A4), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -7393,8 +7572,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -7407,7 +7595,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4>
 	template<class C>
@@ -7418,11 +7605,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4>
-	inline Bind<R (*)(A0, A1, A2, A3, A4), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4>
@@ -7430,17 +7612,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -7466,6 +7637,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -7834,6 +8023,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -7853,8 +8043,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -7867,7 +8066,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
 	template<class C>
@@ -7878,11 +8076,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
@@ -7890,17 +8083,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -7926,6 +8108,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -8294,6 +8494,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline Bind<R (A0, A1, A2, A3, A4, A5), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -8313,8 +8514,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -8327,7 +8537,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	template<class C>
@@ -8338,11 +8547,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
-	inline Bind<R (A0, A1, A2, A3, A4, A5), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
@@ -8350,17 +8554,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4, A5), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -8386,6 +8579,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4, A5), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -8755,6 +8966,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -8774,8 +8986,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -8788,7 +9009,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	template<class C>
@@ -8799,11 +9019,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
-	inline Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
@@ -8811,17 +9026,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -8847,6 +9051,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -9216,6 +9438,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -9235,8 +9458,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -9249,7 +9481,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
 	template<class C>
@@ -9260,11 +9491,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
@@ -9272,17 +9498,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -9308,6 +9523,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -9677,6 +9910,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -9696,8 +9930,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -9710,7 +9953,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	template<class C>
@@ -9721,11 +9963,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
-	inline Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
@@ -9733,17 +9970,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -9769,6 +9995,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -10138,6 +10382,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -10157,8 +10402,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -10171,7 +10425,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	template<class C>
@@ -10182,11 +10435,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
-	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
@@ -10194,17 +10442,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -10230,6 +10467,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -10599,6 +10854,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -10618,8 +10874,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -10632,7 +10897,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
 	template<class C>
@@ -10643,11 +10907,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
@@ -10655,17 +10914,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -10691,6 +10939,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -11060,6 +11326,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -11079,8 +11346,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -11093,7 +11369,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	template<class C>
@@ -11104,11 +11379,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
@@ -11116,17 +11386,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -11152,6 +11411,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -11522,6 +11799,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -11541,8 +11819,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -11555,7 +11842,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	template<class C>
@@ -11566,11 +11852,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
@@ -11578,17 +11859,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -11614,6 +11884,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -11984,6 +12272,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -12003,8 +12292,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -12017,7 +12315,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 	template<class C>
@@ -12028,11 +12325,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
@@ -12040,17 +12332,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -12076,6 +12357,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -12446,6 +12745,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -12465,8 +12765,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -12479,7 +12788,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	template<class C>
@@ -12490,11 +12798,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
@@ -12502,17 +12805,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -12538,6 +12830,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -12908,6 +13218,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -12927,8 +13238,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -12941,7 +13261,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	template<class C>
@@ -12952,11 +13271,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
@@ -12964,17 +13278,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -13000,6 +13303,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -13370,6 +13691,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -13389,8 +13711,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -13403,7 +13734,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 	template<class C>
@@ -13414,11 +13744,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
@@ -13426,17 +13751,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -13462,6 +13776,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -13832,6 +14164,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -13851,8 +14184,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -13865,7 +14207,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	template<class C>
@@ -13876,11 +14217,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
@@ -13888,17 +14224,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -13924,6 +14249,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -14295,6 +14638,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -14314,8 +14658,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -14328,7 +14681,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	template<class C>
@@ -14339,11 +14691,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
@@ -14351,17 +14698,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -14387,6 +14723,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -14758,6 +15112,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -14777,8 +15132,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -14791,7 +15155,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 	template<class C>
@@ -14802,11 +15165,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
@@ -14814,17 +15172,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -14850,6 +15197,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -15221,6 +15586,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -15240,8 +15606,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -15254,7 +15629,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	template<class C>
@@ -15265,11 +15639,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
-	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
@@ -15277,17 +15646,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -15313,6 +15671,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -15684,6 +16060,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -15703,8 +16080,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -15717,7 +16103,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	template<class C>
@@ -15728,11 +16113,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
-	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
@@ -15740,17 +16120,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -15776,6 +16145,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -16147,6 +16534,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -16166,8 +16554,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -16180,7 +16577,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 	template<class C>
@@ -16191,11 +16587,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
@@ -16203,17 +16594,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -16239,6 +16619,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -16610,6 +17008,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -16629,8 +17028,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -16643,7 +17051,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	template<class C>
@@ -16654,11 +17061,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
-	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
@@ -16666,17 +17068,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -16702,6 +17093,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -17074,6 +17483,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -17093,8 +17503,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -17107,7 +17526,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	template<class C>
@@ -17118,11 +17536,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
-	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
@@ -17130,17 +17543,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -17166,6 +17568,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -17538,6 +17958,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -17557,8 +17978,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -17571,7 +18001,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 	template<class C>
@@ -17582,11 +18011,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
@@ -17594,17 +18018,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -17630,6 +18043,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -18002,6 +18433,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -18021,8 +18453,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -18035,7 +18476,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	template<class C>
@@ -18046,11 +18486,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
-	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
@@ -18058,17 +18493,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -18094,6 +18518,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -18466,6 +18908,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -18485,8 +18928,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -18499,7 +18951,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	template<class C>
@@ -18510,11 +18961,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
-	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
@@ -18522,17 +18968,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -18558,6 +18993,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -18930,6 +19383,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -18949,8 +19403,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -18963,7 +19426,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 	template<class C>
@@ -18974,11 +19436,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
@@ -18986,17 +19443,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -19022,6 +19468,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -19394,6 +19858,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -19413,8 +19878,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -19427,7 +19901,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	template<class C>
@@ -19438,11 +19911,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
-	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
@@ -19450,17 +19918,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -19486,6 +19943,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -19859,6 +20334,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -19878,8 +20354,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -19892,7 +20377,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	template<class C>
@@ -19903,11 +20387,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
-	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
@@ -19915,17 +20394,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -19951,6 +20419,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -20324,6 +20810,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -20343,8 +20830,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -20357,7 +20853,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 	template<class C>
@@ -20368,11 +20863,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
@@ -20380,17 +20870,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -20416,6 +20895,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -20789,6 +21286,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -20808,8 +21306,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -20822,7 +21329,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	template<class C>
@@ -20833,11 +21339,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
-	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
@@ -20845,17 +21346,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -20881,6 +21371,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -21254,6 +21762,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -21273,8 +21782,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -21287,7 +21805,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	template<class C>
@@ -21298,11 +21815,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
-	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
@@ -21310,17 +21822,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -21346,6 +21847,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -21719,6 +22238,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -21738,8 +22258,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -21752,7 +22281,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 	template<class C>
@@ -21763,11 +22291,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
@@ -21775,17 +22298,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -21811,6 +22323,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -22184,6 +22714,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -22203,8 +22734,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	template<class C>
 	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -22217,7 +22757,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	template<class C>
@@ -22228,11 +22767,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
-	inline Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
@@ -22240,17 +22774,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
-	template<class C>
-	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -22276,6 +22799,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+	template<class C>
+	inline void Bind<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -22650,6 +23191,7 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -22669,8 +23211,17 @@ namespace Yuni
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	template<class C>
 	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -22683,7 +23234,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	template<class C>
@@ -22694,11 +23244,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
-	inline Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
@@ -22706,17 +23251,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
-	template<class C>
-	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -22742,6 +23276,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+	template<class C>
+	inline void Bind<R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), void>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member
@@ -23116,6 +23668,7 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::Bind(Bind&& rhs)
 	{
+		// \important VS may call the other constructor `C&&`...
 		pHolder.swap(rhs.pHolder);
 	}
 	# endif
@@ -23135,8 +23688,17 @@ namespace Yuni
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	template<class C>
 	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::Bind(C&& functor)
-		: pHolder(new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor)))
-	{}
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
+	}
 
 	# else
 
@@ -23149,7 +23711,6 @@ namespace Yuni
 
 	# endif
 
-
 	// Constructor: pointer-to-member
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
 	template<class C>
@@ -23160,11 +23721,6 @@ namespace Yuni
 
 
 
-	// Destructor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
-	inline Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::~Bind()
-	{}
-
 
 	// Bind: Pointer-to-function
 	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
@@ -23172,17 +23728,6 @@ namespace Yuni
 	{
 		pHolder = new Private::BindImpl::BoundWithFunction<R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(pointer);
 	}
-
-
-	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
-	// Bind: functor
-	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
-	template<class C>
-	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::bind(C&& functor)
-	{
-		pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
-	}
-	# endif
 
 
 	// Bind: Pointer-to-function (from a library symbol)
@@ -23208,6 +23753,24 @@ namespace Yuni
 			<typename WithUserData<U>::ParameterType, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, U)>(pointer, userdata);
 	}
 
+
+	# ifdef YUNI_HAS_CPP_BIND_LAMBDA
+	// Bind: functor
+	template<class ClassT, class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+	template<class C>
+	inline void Bind<R (ClassT::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15), ClassT>::bind(C&& functor)
+	{
+		// When moving a bind (instead of copying it), it seems that Visual Studio might call
+		// this constructor instead of `Bind&&` (works as expected with gcc and clang)
+		if (Static::Type::Equal<C, BindType>::Yes) // moving Bind&& -> Bind&&
+		{
+			// instanciating the swap method only when the type requires it
+			Yuni::Private::BindImpl::MoveConstructor<Static::Type::Equal<C, BindType>::Yes>::SwapBind(pHolder, functor);
+		}
+		else
+			pHolder = new Private::BindImpl::BoundWithFunctor<C, R (A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)>(std::forward<C>(functor));
+	}
+	# endif
 
 
 	// Bind: pointer-to-member

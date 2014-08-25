@@ -9,6 +9,7 @@
 # include "../smartptr.h"
 # include "traits.h"
 # include "../dynamiclibrary/symbol.h"
+# include "fwd.h"
 
 <%
 require File.dirname(__FILE__) + '/../../../tools/generators/commons.rb'
@@ -168,15 +169,12 @@ namespace Yuni
 		*/
 		template<class C> Bind(C&& functor);
 		# else
-
 		/*!
 		** \brief Constructor from a pointer-to-function
 		** \param pointer A pointer-to-function
 		*/
 		Bind(R (*pointer)(<%=generator.list(i)%>));
 		# endif
-		//! Destructor
-		~Bind();
 		//@}
 
 
@@ -415,12 +413,15 @@ namespace Yuni
 		*/
 		SmartPtr<IHolder> pHolder;
 
+		template<bool> friend struct Yuni::Private::BindImpl::MoveConstructor;
+
 	}; // class Bind<R(<%=generator.list(i,'A')%>)>
 
 
 
 
 <% end end %>
+
 
 
 
