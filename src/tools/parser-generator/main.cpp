@@ -46,6 +46,7 @@ public:
 
 
 
+static bool hasError = false;
 
 
 static void ParseWarning(const AnyString& message)
@@ -57,6 +58,7 @@ static void ParseWarning(const AnyString& message)
 static void ParseError(const AnyString& message)
 {
 	logs.error() << message;
+	hasError = true;
 }
 
 
@@ -130,7 +132,6 @@ int main(int argc, char** argv)
 	grammar.onWarning.connect(& ParseWarning);
 	grammar.onError.connect(& ParseError);
 
-	bool hasError = false;
 	String output;
 
 	for (uint i = 0; i != (uint) settings.filenames.size(); ++i)
@@ -139,7 +140,7 @@ int main(int argc, char** argv)
 
 		if (not IO::File::Exists(url))
 		{
-			logs.error() << "io error: \"" << url << "\" not found";
+			logs.error() << "error: \"" << url << "\" file not found";
 			hasError = true;
 			continue;
 		}
