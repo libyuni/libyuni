@@ -320,7 +320,6 @@ namespace // anonymous
 			const Node& node = i->second;
 			if (not node.checkRules(errRulename, grammarRules, unusedList))
 			{
-				assert(false);
 				errmsg.clear() << "rule '" << i->first<< "': unknown rule reference '" << errRulename << "'";
 				error(errmsg);
 				ok = false;
