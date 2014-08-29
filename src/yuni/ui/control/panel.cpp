@@ -8,6 +8,19 @@ namespace UI
 namespace Control
 {
 
+	Panel::Panel(float x, float y, float width, float height):
+		IControl(x, y, width, height)
+	{
+		pColor = Theme::Current()->panelColor;
+	}
+
+
+	Panel::Panel(const Point2D<float>& position, const Point2D<float>& size):
+		IControl(position, size)
+	{
+		pColor = Theme::Current()->panelColor;
+	}
+
 
 	void Panel::draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const
 	{
@@ -18,9 +31,9 @@ namespace Control
 		auto& theme = *themeptr;
 		Point2D<float> pos(pPosition.x + xOffset, pPosition.y + yOffset);
 		surface->beginRectangleClipping(pos.x, pos.y, pSize.x, pSize.y);
-		if (theme.panelColor.alpha > 0)
+		if (pColor.alpha > 0)
 		{
-			surface->drawFilledRectangle(theme.panelColor, theme.panelColor,
+			surface->drawFilledRectangle(pColor, pColor,
 				pos.x, pos.y, pSize.x, pSize.y, theme.borderWidth);
 		}
 		// Draw the children

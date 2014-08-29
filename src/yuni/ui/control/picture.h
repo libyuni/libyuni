@@ -17,6 +17,13 @@ namespace Control
 	class Picture: public IControl
 	{
 	public:
+		Picture():
+			pOffsetX(0.0f),
+			pOffsetY(0.0f),
+			pFillColor(0.0f, 0.0f, 0.0f, 0.0f),
+			pDisplay(dmStretch)
+		{}
+
 		Picture(float x, float y, float width, float height):
 			IControl(x, y, width, height),
 			pOffsetX(0.0f),

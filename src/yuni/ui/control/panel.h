@@ -2,6 +2,7 @@
 # define __YUNI_UI_CONTROL_PANEL_H__
 
 # include "../../yuni.h"
+# include "../../core/color/rgba.h"
 # include "control.h"
 
 namespace Yuni
@@ -16,19 +17,21 @@ namespace Control
 	class Panel: public IControl
 	{
 	public:
-		Panel(float x, float y, float width, float height):
-			IControl(x, y, width, height)
-		{}
+		Panel(float x, float y, float width, float height);
 
-		Panel(const Point2D<float>& position, const Point2D<float>& size):
-			IControl(position, size)
-		{}
+		Panel(const Point2D<float>& position, const Point2D<float>& size);
 
 		//! Virtual destructor
 		virtual ~Panel() {}
 
 		//! Draw the panel
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;
+
+		void color(const Color::RGBA<float>& newColor) { pColor = newColor; }
+		const Color::RGBA<float>& color() const { return pColor; }
+
+	protected:
+		Color::RGBA<float> pColor;
 
 	}; // class Panel
 
