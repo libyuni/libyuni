@@ -715,16 +715,25 @@
 		}
 		else
 		{
-			if (RuleAttributeImportant(node.rule))
+			if (YUNI_UNLIKELY(RuleAttributeError(node.rule)))
 			{
-				::Yuni::System::Console::SetTextColor(out, purple);
+				::Yuni::System::Console::SetTextColor(out, red);
 				out << RuleToString(node.rule);
 				::Yuni::System::Console::ResetTextColor(out);
 			}
 			else
 			{
-				::Yuni::System::Console::ResetTextColor(out);
-				out << RuleToString(node.rule);
+				if (YUNI_UNLIKELY(RuleAttributeImportant(node.rule)))
+				{
+					::Yuni::System::Console::SetTextColor(out, purple);
+					out << RuleToString(node.rule);
+					::Yuni::System::Console::ResetTextColor(out);
+				}
+				else
+				{
+					::Yuni::System::Console::ResetTextColor(out);
+					out << RuleToString(node.rule);
+				}
 			}
 		}
 
