@@ -1,0 +1,180 @@
+
+
+// ERRORS
+//
+error:
+	[^ \t\r\n]*
+
+error-eol:
+	[^\r\n]* [\r\n]*
+
+error-semicolon:
+	[^;\r\n]* [;\r\n]*
+
+error-parenthese:
+	[^)\r\n]*
+
+error-bracket:
+	[^\[\]\r\n]*
+
+
+
+// COMMENTS
+//
+tk-comment-line-content:
+	[^\n\r]*
+tk-comment-start-inline:
+	'//'
+tk-comment-start-block:
+	'/*'
+tk-comment-end-block:
+	'*/'
+
+tk-comment-subbk: notext, hidden
+	(tk-comment-block tk-comment-subbk) | tk-comment-end-block^ | ([^] [^*/]* tk-comment-subbk)
+tk-comment-block-content:
+	tk-comment-subbk
+
+tk-comment-block: notext
+	tk-comment-start-block tk-comment-block-content tk-comment-end-block
+tk-comment-line: notext
+	tk-comment-start-inline tk-comment-line-content
+
+
+
+tk-brace-open: notext
+	'{'
+
+tk-brace-close: notext
+	'}'
+
+tk-bracket-open: notext
+	'['
+
+tk-bracket-close: notext
+	']'
+
+tk-comma: notext
+	','
+
+tk-colon: notext
+	':'
+
+tk-dot: notext
+	'.'
+
+tk-double-quote: notext
+	'"'
+
+
+
+
+
+// SPACES
+//
+wp: hidden
+	[ \t\n\r]* ((tk-comment-line | tk-comment-block) [ \t\n\r]*)*
+
+sp: notext, hidden
+	([ \t\r\n] | punc^) wp
+
+punc: hidden
+	[!"#$%&'()*+,\\-./:;<=>?@[\]^_`{|}~]
+
+
+
+
+// STRINGS
+//
+char-extended: hidden, notext
+	[abcdefghijklmnopqrstuvwxyz\\"%$] | (([xuU]) hex+) | integer
+
+single-char: hidden, notext
+	| ('\\' char-extended)
+	| [^"\n]
+
+string-literal:
+	single-char*
+
+string: notext
+	tk-double-quote (string-literal tk-double-quote) | error-eol
+
+
+
+
+
+// NUMBERS
+//
+digit: notext, hidden
+	[0123456789]
+
+integer:
+	digit+
+
+hex: hidden notext
+	[0123456789ABCDEFabcdef]
+
+number-qualifier-type:
+	[iuf]
+
+number-qualifier: notext
+	number-qualifier-type integer?
+
+number-sign:
+	[+-]
+
+number-exponent: notext
+	number-sign? integer
+
+number-value:
+	integer (tk-dot integer)? ([eE] number-exponent)?
+
+number-hexa:
+	'0x' hex+
+
+number: notext
+	(number-sign wp)? (number-hexa | number-value) number-qualifier?
+
+number-def: hidden
+	number sp
+
+
+
+
+true: notext
+	'true'
+
+false: notext
+	'false'
+
+null: notext
+	'null'
+
+key: notext
+	string
+
+value: notext
+	| string
+	| object
+	| array
+	| number-def
+	| true
+	| false
+	| null
+
+
+object-entry: notext
+	key wp tk-colon wp value
+
+object: notext
+	tk-brace-open
+	wp object-entry (wp tk-comma wp object-entry)*
+	wp tk-brace-close
+
+array: notext
+	tk-bracket-open wp value (wp tk-comma wp value)* wp tk-bracket-close
+
+
+start: notext
+	(wp value)* wp
+

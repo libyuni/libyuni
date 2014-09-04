@@ -2,6 +2,18 @@ Yuni's ChangeLOG
 ================
 
 
+Release version 1.1.0
+---------------------
+
+
+**New**
+
+ * [sample] [parser] added json parser
+
+
+
+
+
 Release version 1.0.0
 ---------------------
 

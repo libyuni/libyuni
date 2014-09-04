@@ -64,7 +64,7 @@ src/samples/jobs/00.basics/jobs_00_basic_usage*
 src/samples/marshal/00.json-export/marshal_00_json-export*
 src/samples/messaging/00.simple.rest.server/messaging_00_simple-rest-server*
 src/samples/parser/00.calculator/parser_00_calculator*
-src/samples/parser/00.calculator/parser_00_generator*
+src/samples/parser/01.json/parser_01_json*
 
 # DevPacks
 devpacks/*

@@ -1,0 +1,7 @@
+{
+	"foo": "hello world",
+	"array": [10, false, true, null, [{"subvalue": -42.5}]],
+	"object": {
+		"sample": ["yuni"]
+	}
+}
