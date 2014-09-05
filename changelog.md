@@ -101,6 +101,7 @@ Release version 1.0.0
 
  * [gl] Updated glew to v1.10
 
+ * [core] Fold : Renamed from Yuni::Functional::Fold to Yuni::fold
 
 
 **Fixes**

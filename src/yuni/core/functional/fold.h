@@ -4,19 +4,14 @@
 
 namespace Yuni
 {
-/*!
-** \brief Functional
-** \ingroup Functional
-*/
-namespace Functional
-{
+
 
 	/*!
 	** \brief Folding implementation
 	** \ingroup Functional
 	**
 	** \code
-	** bool gotSomething = Functional::Fold(data, false, [] (bool& result, const A& current) -> bool
+	** bool gotSomething = fold(data, false, [] (bool& result, const A& current) -> bool
 	** {
 	**	if (current.isModified())
 	**	{
@@ -28,13 +23,11 @@ namespace Functional
 	** \endcode
 	*/
 	template<class T, class ContainerT, class FunctorT>
-	YUNI_DECL T Fold(const ContainerT& container, const T& defval, const FunctorT& callback);
+	YUNI_DECL T fold(const ContainerT& container, const T& defval, const FunctorT& callback);
 
 
 
 
-
-} // namespace Functional
 } // namespace Yuni
 
 # include "fold.hxx"

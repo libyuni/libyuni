@@ -4,11 +4,9 @@
 
 namespace Yuni
 {
-namespace Functional
-{
 
 	template<class T, class ContainerT, class FunctorT>
-	T Fold(const ContainerT& container, const T& defval, const FunctorT& callback)
+	T fold(const ContainerT& container, const T& defval, const FunctorT& callback)
 	{
 		const typename ContainerT::const_iterator end = container.end();
 		typename ContainerT::const_iterator i   = container.begin();
@@ -26,7 +24,6 @@ namespace Functional
 
 
 
-} // namespace Functional
 } // namespace Yuni
 
 #endif // __YUNI_CORE_FUNCTIONAL_FOLD_HXX__
