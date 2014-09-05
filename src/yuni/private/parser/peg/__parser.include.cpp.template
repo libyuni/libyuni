@@ -1,11 +1,10 @@
-
 	//! Add traces to the stdcout
 	# define HAS_TRACES 0
 
 	# define HAS_STATISTICS 0
 
 	//! Size (in bytes), when increasing the stack capacity
-	# define GROW_CHUNK  512 // 512 * sizeof(Chunk) -> 8KiB
+	# define GROW_CHUNK  1024 // 1024 * sizeof(Chunk) -> 16KiB
 
 	//! Arbitrary value for consistency checks
 	# define ARBITRARY_HARD_LIMIT  (1024 * 1024 * 500)
@@ -95,12 +94,12 @@
 
 	struct Chunk
 	{
+		//! Rule ID - a negative value means that the rule has not been commited yet
+		int rule;
 		//! Iterator on the source
 		uint offset;
 		//! Index of the current source url (see `urls`)
 		uint urlindex;
-		//! Rule ID - a negative value means that the rule has not been commited yet
-		int rule;
 		//! End offset - means nothing if rule == 0
 		uint offsetEnd;
 		//! Parent rule
@@ -489,6 +488,7 @@
 			maxOffset = offset;
 		# endif
 
+		// the item at `ruleOffset` may have changed - re-acquiring a new ref on it
 		Chunk& ruleCursor = stack[ruleOffset];
 		Chunk& cursor     = stack[offset];
 		cursor.offset     = ruleCursor.offsetEnd;
@@ -715,16 +715,25 @@
 		}
 		else
 		{
-			if (RuleAttributeImportant(node.rule))
+			if (YUNI_UNLIKELY(RuleAttributeError(node.rule)))
 			{
-				::Yuni::System::Console::SetTextColor(out, purple);
+				::Yuni::System::Console::SetTextColor(out, red);
 				out << RuleToString(node.rule);
 				::Yuni::System::Console::ResetTextColor(out);
 			}
 			else
 			{
-				::Yuni::System::Console::ResetTextColor(out);
-				out << RuleToString(node.rule);
+				if (YUNI_UNLIKELY(RuleAttributeImportant(node.rule)))
+				{
+					::Yuni::System::Console::SetTextColor(out, purple);
+					out << RuleToString(node.rule);
+					::Yuni::System::Console::ResetTextColor(out);
+				}
+				else
+				{
+					::Yuni::System::Console::ResetTextColor(out);
+					out << RuleToString(node.rule);
+				}
 			}
 		}
 

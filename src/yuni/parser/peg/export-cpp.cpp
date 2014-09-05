@@ -139,6 +139,10 @@ namespace PEG
 			h << "	AnyString RuleToString(enum Rule);\n";
 			h << '\n';
 			h << '\n';
+			h << "	//! Get if a rule is an error\n";
+			h << "	bool  RuleIsError(enum Rule ruleid);\n";
+			h << '\n';
+			h << '\n';
 			h << "	//! Get if the rule should be ignored when duplucating an AST (starting from 'tk-' and some special rules)\n";
 			h << "	bool ShouldIgnoreRuleForDuplication(enum Rule);\n";
 			h << "\n\n\n";
@@ -630,6 +634,7 @@ namespace PEG
 
 			cpp << "bool yy" << node.enumID << "(Datasource& ctx)\n";
 			cpp << "	{\n";
+			cpp << "		(void) ctx;\n";
 			cpp << "		TRACE(\"entering " << node.enumID;
 			if (node.attributes.inlined)
 				cpp << " [inline]";
@@ -681,9 +686,28 @@ namespace PEG
 			cpp << "		};\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
 			cpp << "		return attr[(uint) ruleid];\n";
-			cpp << "	}\n\n\n\n";
-
-			cpp << "	static bool  RuleAttributeImportant(enum Rule ruleid)\n";
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << '\n';
+			cpp << "	static inline bool  RuleAttributeError(enum Rule ruleid)\n";
+			cpp << "	{\n";
+			cpp << "		static const bool attr[] = {\n";
+			cpp << "			false, // rgUnknown\n";
+			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
+			{
+				bool error = i->first == "error" or i->first.startsWith("error-");
+				cpp << "			" << (error ? "true" : "false") << ", // " << i->second.enumID << '\n';
+			}
+			cpp << "			false, // rgEOF\n";
+			cpp << "		};\n";
+			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
+			cpp << "		return attr[(uint) ruleid];\n";
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << '\n';
+			cpp << "	static inline bool  RuleAttributeImportant(enum Rule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		static const bool attr[] = {\n";
 			cpp << "			false, // rgUnknown\n";
@@ -765,6 +789,13 @@ namespace PEG
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
+			cpp << "	bool  RuleIsError(enum Rule ruleid)\n";
+			cpp << "	{\n";
+			cpp << "		return RuleAttributeError(ruleid);\n";
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	AnyString RuleToString(enum Rule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		switch (ruleid)\n";
@@ -781,19 +812,23 @@ namespace PEG
 			cpp << "		}\n";
 			cpp << "		return \"<error>\";\n";
 			cpp << "	}\n";
-			cpp << "\n\n\n\n";
-
+			cpp << '\n';
+			cpp << '\n';
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	Parser::Parser()\n";
 			cpp << "		: pData()\n";
 			cpp << "	{\n";
 			cpp << "		onURILoading.bind(& StandardURILoaderHandler);\n";
-			cpp << "	}\n\n\n";
-
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	Parser::~Parser()\n";
 			cpp << "	{\n";
 			cpp << "		delete (Datasource*) pData;\n";
-			cpp << "	}\n\n\n";
-
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	void Parser::clear()\n";
 			cpp << "	{\n";
 			cpp << "		root = nullptr;\n";

@@ -309,7 +309,7 @@ namespace // anonymous
 			if (rulename == "start")
 				hasStart = true;
 
-			if (rulename == "eof" or rulename == "unknown" or rulename == "eol" or rulename == "error")
+			if (rulename == "eof" or rulename == "unknown" or rulename == "eol")
 			{
 				errmsg.clear() << "rule '" << i->first<< "': this name is reserved";
 				error(errmsg);
@@ -711,7 +711,7 @@ namespace // anonymous
 							switch (c)
 							{
 								case '\'':
-								case '"':
+								// case '"':
 								{
 									state = stInString;
 									hasBackslash = false;
@@ -801,7 +801,7 @@ namespace // anonymous
 							// in string
 							switch (c)
 							{
-								case '"':
+								//case '"':
 								case '\'':
 								{
 									if (c == stringQuote)
