@@ -293,7 +293,7 @@ namespace UI
 		mutable Gfx3D::FrameBuffer pFB;
 
 		//! Postprocessing effects
-		mutable Gfx3D::PostEffect::Vector pPostEffects;
+		mutable PostEffect::Vector pPostEffects;
 
 		//! Is the window in full screen ?
 		bool pFullScreen;

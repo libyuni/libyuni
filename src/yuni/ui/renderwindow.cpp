@@ -199,25 +199,25 @@ namespace UI
 		static bool init = false;
 		if (!init)
 		{
-			// pPostEffects.push_back(new Gfx3D::PostEffect("Glow",
+			// pPostEffects.push_back(new UI::PostEffect("Glow",
 			//   	"data/shaders/post/2d.vert", "data/shaders/post/glow.frag",
 			//   	pWidth, pHeight));
-			// pPostEffects.push_back(new Gfx3D::PostEffect("Horizontal Gaussian Blur",
+			// pPostEffects.push_back(new UI::PostEffect("Horizontal Gaussian Blur",
 			// 	"data/shaders/post/2d.vert", "data/shaders/post/gaussianblurhorizontal.frag",
 			// 	pWidth, pHeight));
-			// pPostEffects.push_back(new Gfx3D::PostEffect("Vertical Gaussian Blur",
+			// pPostEffects.push_back(new UI::PostEffect("Vertical Gaussian Blur",
 			// 	"data/shaders/post/2d.vert", "data/shaders/post/gaussianblurvertical.frag",
 			// 	pWidth, pHeight));
-			// pPostEffects.push_back(new Gfx3D::PostEffect("Radial Blur",
+			// pPostEffects.push_back(new UI::PostEffect("Radial Blur",
 			// 	"data/shaders/post/rot90left.vert", "data/shaders/post/radialblur.frag",
 			// 	pWidth, pHeight));
-			// pPostEffects.push_back(new Gfx3D::PostEffect("Mirror and Invert colors",
+			// pPostEffects.push_back(new UI::PostEffect("Mirror and Invert colors",
 			//  	"data/shaders/post/fliphorizontal.vert", "data/shaders/post/invertcolors.frag",
 			//  	pWidth, pHeight));
-			// pPostEffects.push_back(new Gfx3D::PostEffect("Grayscale",
+			// pPostEffects.push_back(new UI::PostEffect("Grayscale",
 			//  	"data/shaders/post/2d.vert", "data/shaders/post/crosshatch.frag",
 			//  	pWidth, pHeight));
-			// pPostEffects.push_back(new Gfx3D::PostEffect("Wave",
+			// pPostEffects.push_back(new UI::PostEffect("Wave",
 			//  	"data/shaders/post/2d.vert", "data/shaders/post/wave.frag",
 			//  	pWidth, pHeight));
 			init = true;

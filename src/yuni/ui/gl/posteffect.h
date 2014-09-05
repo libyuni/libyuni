@@ -1,15 +1,16 @@
-#ifndef __YUNI_GFX3D_POSTEFFECT_H__
-# define __YUNI_GFX3D_POSTEFFECT_H__
+#ifndef __YUNI_UI_POSTEFFECT_H__
+# define __YUNI_UI_POSTEFFECT_H__
 
-# include <yuni/yuni.h>
-# include <yuni/core/smartptr.h>
-# include <vector>
+# include "../../yuni.h"
+# include "../../core/smartptr.h"
 # include "shadermanager.h"
+# include <vector>
 
 namespace Yuni
 {
-namespace Gfx3D
+namespace UI
 {
+
 
 	/*!
 	** \brief A post effect is a process that modifies a 2D image using shaders
@@ -21,12 +22,11 @@ namespace Gfx3D
 		typedef std::vector<Ptr>  Vector;
 
 	public:
-		PostEffect(const AnyString& name, const AnyString& vertexShader, const AnyString& fragmentShader, uint width, uint height):
+		PostEffect(const AnyString& name, const AnyString& vertexShader, const AnyString& fragmentShader, float width, float height):
 			pName(name),
-			pSize(width, height)
+			pSize(width > 0.0f ? width : 0.0f, height > 0.0f ? height : 0.0f)
 		{
-			pShaders = ShaderManager::Instance().getFromFiles(vertexShader, fragmentShader);
-			//pShaders.bindAttribute("attrVertex", Yuni::Gfx3D::Vertex<>::vaPosition);
+			pShaders = Gfx3D::ShaderManager::Instance().getFromFiles(vertexShader, fragmentShader);
 			pShaders->load();
 		}
 
@@ -53,12 +53,13 @@ namespace Gfx3D
 
 		Point2D<float> pSize;
 
-		ShaderProgram::Ptr pShaders;
+		Gfx3D::ShaderProgram::Ptr pShaders;
 
 	}; // class PostEffect
 
 
-} // namespace Gfx3D
+
+} // namespace UI
 } // namespace Yuni
 
-#endif // __YUNI_GFX3D_POSTEFFECT_H__
+#endif // __YUNI_UI_POSTEFFECT_H__
