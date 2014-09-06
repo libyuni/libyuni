@@ -1,3 +1,3 @@
 
-see chagelog in `docs/changelog/`
+see changelog in `docs/changelog/`
 
