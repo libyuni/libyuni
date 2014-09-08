@@ -91,6 +91,13 @@ namespace EventImpl
 
 
 
+	struct FoldTypeVoid {};
+	template<class T> struct FoldType { typedef T value_type; };
+	template<> struct FoldType<void> { typedef FoldTypeVoid value_type; };
+
+
+
+
 <% (0..generator.argumentCount).each do |i| %>
 	template<class BindT>
 	class WithNArguments<<%=i%>, BindT> : public Policy::ObjectLevelLockable<WithNArguments<<%=i%>,BindT> >
@@ -104,6 +111,7 @@ namespace EventImpl
 		typedef typename BindType::ReturnType R;<% (0..i-1).each do |j| %>
 		//! Type of the argument <%=j%>
 		typedef typename BindType::template Argument<<%=j%>>::Type A<%=j%>;<% end %>
+
 
 	public:
 		//! \name Constructors
@@ -137,6 +145,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator<%=generator.variableList(i, "A", "a", ", ")%>) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(<%=generator.list(i,'a')%>));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(<%=generator.variableList(i)%>) const
 		{
@@ -151,8 +175,9 @@ namespace EventImpl
 			return predicate.result();
 		}
 
+
 		template<template<class> class PredicateT>
-		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate<%=generator.variableList(i,"A","a", ", ")%>) const
+		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate<%=generator.variableList(i, "A", "a", ", ")%>) const
 		{
 			if (not pEmpty)
 			{

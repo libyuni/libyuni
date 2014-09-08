@@ -92,6 +92,13 @@ namespace EventImpl
 
 
 
+	struct FoldTypeVoid {};
+	template<class T> struct FoldType { typedef T value_type; };
+	template<> struct FoldType<void> { typedef FoldTypeVoid value_type; };
+
+
+
+
 
 	template<class BindT>
 	class WithNArguments<0, BindT> : public Policy::ObjectLevelLockable<WithNArguments<0,BindT> >
@@ -103,6 +110,7 @@ namespace EventImpl
 		typedef BindT BindType;
 		//! The Return type
 		typedef typename BindType::ReturnType R;
+
 
 	public:
 		//! \name Constructors
@@ -136,6 +144,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke());
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke() const
 		{
@@ -149,6 +173,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate) const
@@ -215,6 +240,7 @@ namespace EventImpl
 		//! Type of the argument 0
 		typedef typename BindType::template Argument<0>::Type A0;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -247,6 +273,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0) const
 		{
@@ -260,6 +302,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0) const
@@ -328,6 +371,7 @@ namespace EventImpl
 		//! Type of the argument 1
 		typedef typename BindType::template Argument<1>::Type A1;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -360,6 +404,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1) const
 		{
@@ -373,6 +433,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1) const
@@ -443,6 +504,7 @@ namespace EventImpl
 		//! Type of the argument 2
 		typedef typename BindType::template Argument<2>::Type A2;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -475,6 +537,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2) const
 		{
@@ -488,6 +566,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2) const
@@ -560,6 +639,7 @@ namespace EventImpl
 		//! Type of the argument 3
 		typedef typename BindType::template Argument<3>::Type A3;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -592,6 +672,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3) const
 		{
@@ -605,6 +701,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3) const
@@ -679,6 +776,7 @@ namespace EventImpl
 		//! Type of the argument 4
 		typedef typename BindType::template Argument<4>::Type A4;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -711,6 +809,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const
 		{
@@ -724,6 +838,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const
@@ -800,6 +915,7 @@ namespace EventImpl
 		//! Type of the argument 5
 		typedef typename BindType::template Argument<5>::Type A5;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -832,6 +948,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4, a5));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const
 		{
@@ -845,6 +977,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const
@@ -923,6 +1056,7 @@ namespace EventImpl
 		//! Type of the argument 6
 		typedef typename BindType::template Argument<6>::Type A6;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -955,6 +1089,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4, a5, a6));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const
 		{
@@ -968,6 +1118,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const
@@ -1048,6 +1199,7 @@ namespace EventImpl
 		//! Type of the argument 7
 		typedef typename BindType::template Argument<7>::Type A7;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -1080,6 +1232,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4, a5, a6, a7));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const
 		{
@@ -1093,6 +1261,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const
@@ -1175,6 +1344,7 @@ namespace EventImpl
 		//! Type of the argument 8
 		typedef typename BindType::template Argument<8>::Type A8;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -1207,6 +1377,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const
 		{
@@ -1220,6 +1406,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const
@@ -1304,6 +1491,7 @@ namespace EventImpl
 		//! Type of the argument 9
 		typedef typename BindType::template Argument<9>::Type A9;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -1336,6 +1524,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const
 		{
@@ -1349,6 +1553,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const
@@ -1435,6 +1640,7 @@ namespace EventImpl
 		//! Type of the argument 10
 		typedef typename BindType::template Argument<10>::Type A10;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -1467,6 +1673,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const
 		{
@@ -1480,6 +1702,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const
@@ -1568,6 +1791,7 @@ namespace EventImpl
 		//! Type of the argument 11
 		typedef typename BindType::template Argument<11>::Type A11;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -1600,6 +1824,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const
 		{
@@ -1613,6 +1853,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const
@@ -1703,6 +1944,7 @@ namespace EventImpl
 		//! Type of the argument 12
 		typedef typename BindType::template Argument<12>::Type A12;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -1735,6 +1977,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const
 		{
@@ -1748,6 +2006,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const
@@ -1840,6 +2099,7 @@ namespace EventImpl
 		//! Type of the argument 13
 		typedef typename BindType::template Argument<13>::Type A13;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -1872,6 +2132,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const
 		{
@@ -1885,6 +2161,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const
@@ -1979,6 +2256,7 @@ namespace EventImpl
 		//! Type of the argument 14
 		typedef typename BindType::template Argument<14>::Type A14;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -2011,6 +2289,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const
 		{
@@ -2024,6 +2318,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const
@@ -2120,6 +2415,7 @@ namespace EventImpl
 		//! Type of the argument 15
 		typedef typename BindType::template Argument<15>::Type A15;
 
+
 	public:
 		//! \name Constructors
 		//@{
@@ -2152,6 +2448,22 @@ namespace EventImpl
 			}
 		}
 
+		template<class CallbackT>
+		R fold(typename FoldType<R>::value_type initval, const CallbackT& accumulator, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const
+		{
+			if (not pEmpty)
+			{
+				typename FoldType<R>::value_type value = initval;
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				const typename BindList::const_iterator end = pBindList.end();
+				for (typename BindList::const_iterator i = pBindList.begin(); i != end; ++i)
+					accumulator(value, (*i).invoke(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15));
+				return value;
+			}
+			return initval;
+		}
+
+
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const
 		{
@@ -2165,6 +2477,7 @@ namespace EventImpl
 			}
 			return predicate.result();
 		}
+
 
 		template<template<class> class PredicateT>
 		typename PredicateT<R>::ResultType invoke(PredicateT<R>& predicate, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14, A15 a15) const

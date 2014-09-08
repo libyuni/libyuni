@@ -5,13 +5,14 @@
 namespace Yuni
 {
 
+
 	template<class T, class ContainerT, class FunctorT>
-	T fold(const ContainerT& container, const T& defval, const FunctorT& callback)
+	T fold(const ContainerT& container, const T& initval, const FunctorT& callback)
 	{
 		const typename ContainerT::const_iterator end = container.end();
 		typename ContainerT::const_iterator i   = container.begin();
 
-		T result = defval;
+		T result = initval;
 		for (; i != end; ++i)
 		{
 			if (not callback(result, *i))
@@ -20,7 +21,6 @@ namespace Yuni
 
 		return result;
 	}
-
 
 
 

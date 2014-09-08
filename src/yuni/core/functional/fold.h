@@ -23,7 +23,7 @@ namespace Yuni
 	** \endcode
 	*/
 	template<class T, class ContainerT, class FunctorT>
-	YUNI_DECL T fold(const ContainerT& container, const T& defval, const FunctorT& callback);
+	YUNI_DECL T fold(const ContainerT& container, const T& initval, const FunctorT& callback);
 
 
 
