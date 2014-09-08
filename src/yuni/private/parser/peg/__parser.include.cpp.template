@@ -1024,8 +1024,10 @@
 			// alias to the content
 			const Clob& content = contents[fileindex];
 			// maximum size
-			uint maxSize = std::max((uint) content.size(), offset);
+			uint maxSize = std::min((uint) content.size(), offset);
 
+			column = 0;
+			line = 1;
 			for (uint x = 0; x != maxSize; ++x)
 			{
 				if (content[x] == '\n')
@@ -1036,10 +1038,15 @@
 				else
 					++column;
 			}
-		}
 
-		if (line != 0 and column == 0)
-			column = 1;
+			if (column == 0)
+				column = 1;
+		}
+		else
+		{
+			line = 0;
+			column = 0;
+		}
 	}
 
 
