@@ -5,6 +5,23 @@
 namespace Yuni
 {
 
+	template<class T, class ContainerT>
+	class FoldingData;
+
+
+	/*!
+	** \brief Folding implementation
+	** \ingroup Functional
+	**
+	** \code
+	** uint maxValue = fold(data).max();
+	** \endcode
+	*/
+	template<class T, class ContainerT>
+	YUNI_DECL FoldingData<T, ContainerT> fold(const ContainerT& container);
+
+
+
 
 	/*!
 	** \brief Folding implementation
