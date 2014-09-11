@@ -42,7 +42,7 @@ namespace Variant
 		//! Threading policy
 		typedef Ancestor::ThreadingPolicy  ThreadingPolicy;
 		//! The most suitable smart pointer to this object
-		typedef Ancestor::Ptr::Promote<IDataHolder>::Ptr  Ptr;
+		typedef Ancestor::SmartPtrType<IDataHolder>::Ptr  Ptr;
 		//! Vector
 		typedef std::vector<Ptr>  Vector;
 
