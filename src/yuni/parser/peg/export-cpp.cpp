@@ -263,6 +263,9 @@ namespace PEG
 			h << '\n';
 			h << "		Node& operator = (const Node& rhs);\n";
 			h << '\n';
+			h << "		void toText(YString& out) const;\n";
+			h << '\n';
+			h << '\n';
 			h << '\n';
 			h << "	public:\n";
 			h << "		//! The rule ID\n";
@@ -776,6 +779,7 @@ namespace PEG
 			cpp << "	bool ShouldIgnoreRuleForDuplication(enum Rule rule)\n";
 			cpp << "	{\n";
 			cpp << "		static const bool hints[] = {\n";
+			cpp << "			false, // rgUnknown\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
 			{
 				if (i->first.startsWith("tk-"))
@@ -999,6 +1003,20 @@ namespace PEG
 			cpp << "		#endif\n";
 			cpp << '\n';
 			cpp << "		return *this;\n";
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << "	void Node::toText(YString& out) const\n";
+			cpp << "	{\n";
+			cpp << "		if (not text.empty())\n";
+			cpp << "		{\n";
+			cpp << "			if (not out.empty())\n";
+			cpp << "				out += ' ';\n";
+			cpp << "			out += text;\n";
+			cpp << "			out.trimRight();\n";
+			cpp << "		}\n";
+			cpp << "		for (uint i = 0; i != (uint) children.size(); ++i)\n";
+			cpp << "			children[i]->toText(out);\n";
 			cpp << "	}\n";
 			cpp << '\n';
 			cpp << '\n';
