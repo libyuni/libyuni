@@ -22,9 +22,8 @@ namespace Yuni
 	** });
 	** \endcode
 	*/
-	template<class T, class ContainerT, class FunctorT>
-	YUNI_DECL T fold(const ContainerT& container, const T& initval, const FunctorT& callback);
-
+	template<class ResultT, class ContainerT, class AccumulatorT>
+	YUNI_DECL ResultT fold(const ContainerT& container, const ResultT& initval, const AccumulatorT& callback);
 
 
 

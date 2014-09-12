@@ -9,7 +9,7 @@ namespace Functional
 
 
 	//! A view is a virtual representation of a collection
-	template<class ContainerT>
+	template<class CollectionT>
 	class View;
 
 
@@ -25,8 +25,8 @@ namespace Functional
 	** uint maxValue = fold(data).max();
 	** \endcode
 	*/
-	template<class ContainerT>
-	YUNI_DECL Functional::View<ContainerT> makeView(const ContainerT& container);
+	template<class CollectionT>
+	YUNI_DECL Functional::View<CollectionT> makeView(const CollectionT& collection);
 
 
 

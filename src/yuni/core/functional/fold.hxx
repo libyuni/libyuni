@@ -1,26 +1,27 @@
 #ifndef __YUNI_CORE_FUNCTIONAL_FOLD_HXX__
 # define __YUNI_CORE_FUNCTIONAL_FOLD_HXX__
 
+# include "loop.h"
+
 
 namespace Yuni
 {
 
 
-	template<class T, class ContainerT, class FunctorT>
-	T fold(const ContainerT& container, const T& initval, const FunctorT& callback)
+
+	template<class ResultT, class CollectionT, class AccumulatorT>
+	ResultT fold(const CollectionT& collection, const ResultT& initval, const AccumulatorT& callback)
 	{
-		const typename ContainerT::const_iterator end = container.end();
-		typename ContainerT::const_iterator i   = container.begin();
-
-		T result = initval;
-		for (; i != end; ++i)
+		ResultT result = initval;
+		Functional::Loop<CollectionT> loop(collection);
+		do
 		{
-			if (not callback(result, *i))
-				return result;
-		}
-
+			if (not callback(result, loop.current()))
+				break;
+		} while (loop.next());
 		return result;
 	}
+
 
 
 
