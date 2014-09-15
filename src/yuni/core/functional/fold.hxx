@@ -14,6 +14,8 @@ namespace Yuni
 	{
 		ResultT result = initval;
 		Functional::Loop<CollectionT> loop(collection);
+		if (loop.empty())
+			return result;
 		do
 		{
 			if (not callback(result, loop.current()))
