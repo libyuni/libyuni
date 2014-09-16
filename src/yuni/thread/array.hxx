@@ -256,6 +256,7 @@ namespace Thread
 		// We may earn a lot of time like this.
 		for (typename ThreadList::iterator i = copy.begin(); i != end; ++i)
 			(*i)->gracefulStop();
+
 		// Now we can kill them if they don't cooperate...
 		for (typename ThreadList::iterator i = copy.begin(); i != end; ++i)
 			(*i)->stop(timeout);

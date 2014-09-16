@@ -10,6 +10,43 @@ namespace Private
 namespace QueueService
 {
 
+
+	WaitingRoom::~WaitingRoom()
+	{
+		// locking all mutex to prevent some race conditions
+		// (with clear() for example)
+		for (uint i = 0; i != (uint) priorityCount; ++i)
+			pMutexes[i].lock();
+		for (uint i = 0; i != (uint) priorityCount; ++i)
+			pMutexes[i].unlock();
+	}
+
+
+	void WaitingRoom::clear()
+	{
+		if (YUNI_LIKELY(pJobCount != 0))
+		{
+			// we should lock all lists before anything
+			for (uint i = 0; i != (uint) priorityCount; ++i)
+			{
+				pMutexes[i].lock();
+				hasJob[i] = false;
+			}
+
+			// reset the total number of job _before_ unlocking
+			pJobCount = 0; // may notify listeners that there is nothing to do
+
+			// clear
+			for (uint i = 0; i != (uint) priorityCount; ++i)
+				pJobs[i].clear();
+
+			// unlock all
+			for (uint i = 0; i != (uint) priorityCount; ++i)
+				pMutexes[i].unlock();
+		}
+	}
+
+
 	void WaitingRoom::add(const Yuni::Job::IJob::Ptr& job)
 	{
 		// Locking the priority queue

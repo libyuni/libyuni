@@ -11,7 +11,7 @@ namespace QueueService
 
 	inline bool WaitingRoom::empty() const
 	{
-		return (!pJobCount);
+		return (0 == pJobCount);
 	}
 
 

@@ -4,6 +4,7 @@
 # include "../job.h"
 # include "../../core/slist/slist.h"
 # include "../../core/atomic/bool.h"
+# include <deque>
 
 
 
@@ -29,6 +30,12 @@ namespace QueueService
 		};
 
 	public:
+		//! \name Constructor & Destructor
+		//@{
+		//! Destructor
+		~WaitingRoom();
+		//@}
+
 		//! \name Container manipulation
 		//@{
 		/*!
@@ -65,6 +72,9 @@ namespace QueueService
 
 		//! Get the number of jobs waiting to be executed
 		uint size() const;
+
+		//! Remove all job waiting
+		void clear();
 		//@}
 
 
@@ -76,7 +86,7 @@ namespace QueueService
 		//! Number of job waiting to be executed
 		Atomic::Int<32>  pJobCount;
 		//! List of waiting jobs by priority
-		LinkedList<Yuni::Job::IJob::Ptr>  pJobs[priorityCount];
+		std::deque<Yuni::Job::IJob::Ptr>  pJobs[priorityCount];
 		//! Mutexes, by priority to reduce congestion
 		Mutex pMutexes[priorityCount];
 

@@ -107,8 +107,21 @@ namespace Job
 		** All unfinished jobs will be kept and re-executed at the next start.
 		** It is of their responsibility to properly resume if they have to.
 		** All working threads will be destroyed at the very end of this method.
+		**
+		** \important This method must not be called from a job or it will result
+		** in deadlock
 		*/
 		bool stop(uint timeout = defaultTimeout);
+
+		/*!
+		** \brief Ask to Stop the execution of the thread as soon as possible
+		**
+		** After a call to this method, the method suspend() will return true,
+		** which indicates that the job should stop as soon as possible.
+		**
+		** \note This method can be safely called from a job
+		*/
+		void gracefulStop();
 
 		/*!
 		** \brief Stop then start the service
@@ -185,6 +198,13 @@ namespace Job
 		** currently running.
 		*/
 		uint waitingJobsCount() const;
+
+		/*!
+		** \brief Remove all jobs waiting for being executed
+		**
+		** All jobs currently running won't be stopped
+		*/
+		void clear();
 		//@}
 
 

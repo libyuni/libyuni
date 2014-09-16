@@ -223,6 +223,14 @@ namespace Job
 	}
 
 
+	void QueueService::gracefulStop()
+	{
+		MutexLocker locker(*this);
+		if (pThreads and pStarted)
+			((ThreadArray*) pThreads)->gracefulStop();
+	}
+
+
 	void QueueService::wait()
 	{
 		if (pStarted)
@@ -292,6 +300,12 @@ namespace Job
 			pWaitingRoom.add(job, priority);
 			((ThreadArray*) pThreads)->wakeUp();
 		}
+	}
+
+
+	void QueueService::clear()
+	{
+		pWaitingRoom.clear();
 	}
 
 
