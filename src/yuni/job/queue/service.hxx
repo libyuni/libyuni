@@ -56,6 +56,13 @@ namespace Job
 	}
 
 
+	inline bool QueueService::started() const
+	{
+		return pStarted;
+	}
+
+
+
 
 
 } // namespace Job
