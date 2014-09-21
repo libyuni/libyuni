@@ -33,6 +33,9 @@ endif()
 # Core
 set(YUNI_MODULE_CORE                      true) # Must be True
 
+# benchmarks
+set(YUNI_BENCHMARKS                       false)
+
 # VFS
 #set(YUNI_MODULE_VFS                       false)
 #	set(YUNI_MODULE_VFS_FILE              true)
@@ -117,7 +120,8 @@ set(YUNI_MODULE_LIST
 		uuid
 	docs
 	parser
-	)
+	benchmarks
+)
 
 
 
@@ -166,6 +170,7 @@ if (MODULES)
 			set(YUNI_MODULE_DBI true)
 			set(YUNI_MODULE_PARSER true)
 			set(YUNI_TESTS true)
+			set(YUNI_BENCHMARKS true)
 			set(KeywordIsKnown true)
 		endif()
 
@@ -191,6 +196,17 @@ if (MODULES)
 		#	set(YUNI_MODULE_VFS_LOCAL false)
 		#	set(KeywordIsKnown true)
 		#endif()
+
+		# benchmarks
+		if ("${it}" STREQUAL "benchmarks")
+			set(YUNI_BENCHMARKS true)
+			set(KeywordIsKnown true)
+		endif()
+		# -benchmarks
+		if ("${it}" STREQUAL "-benchmarks")
+			set(YUNI_BENCHMARKS false)
+			set(KeywordIsKnown true)
+		endif()
 
 		# vm
 		if ("${it}" STREQUAL "vm")
@@ -457,6 +473,7 @@ if (MODULES)
 		YMESSAGE("    -/+marshal     : The Marshal module (for Object serialization, default: disabled)")
 		YMESSAGE("    -/+algorithms  : Standard algorithms")
 		YMESSAGE("    -/+parser      : Parser Generator")
+		YMESSAGE("    -/+benchmarks  : Benchmarks")
 		YMESSAGE("")
 		message(FATAL_ERROR "Errors on module names")
 	endif()
@@ -577,5 +594,9 @@ endif()
 
 if (YUNI_MODULE_PARSER)
 	list(APPEND YUNI_MODULE_AVAILABLE parser)
+endif()
+
+if (YUNI_BENCHMARKS)
+	list(APPEND YUNI_MODULE_AVAILABLE benchmarks)
 endif()
 

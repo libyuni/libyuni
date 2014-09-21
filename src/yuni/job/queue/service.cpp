@@ -40,7 +40,8 @@ namespace Job
 
 
 	QueueService::QueueService()
-		: pThreads(((void*) new ThreadArray()))
+		: pStatus(sStopped)
+		, pThreads(nullptr)
 	{
 		uint count = OptimalCPUCount();
 		pMinimumThreadCount = count;
@@ -49,45 +50,21 @@ namespace Job
 
 
 	QueueService::QueueService(bool autostart)
-		: pThreads(((void*) new ThreadArray()))
+		: pStatus(sStopped)
+		, pThreads(nullptr)
 	{
 		uint count = OptimalCPUCount();
 		pMinimumThreadCount = count;
 		pMaximumThreadCount = count;
 
-		if (YUNI_LIKELY(autostart))
+		if (autostart)
 			start();
 	}
 
 
 	QueueService::~QueueService()
 	{
-		if (pStarted)
-		{
-			// wait for the execution of all jobs
-			if (not idle() or not pWaitingRoom.empty())
-				pSignalAllThreadHaveStopped.wait();
-
-			// retrieve the thread pool
-			ThreadArray* threads = nullptr; // the thread pool
-			{
-				MutexLocker locker(*this);
-				threads = (ThreadArray*) pThreads;
-				pThreads = nullptr;
-			}
-
-			// Destroying the thread pool
-			if (threads)
-			{
-				threads->stop(defaultTimeout);
-				delete threads;
-			}
-		}
-		else
-		{
-			// the queueservice might be stopped, but the thread pool might have been created
-			delete ((ThreadArray*) pThreads);
-		}
+		stop();
 	}
 
 
@@ -95,7 +72,7 @@ namespace Job
 	{
 		if (count > maxNumberOfThreads) // hard-coded value
 			return false;
-		if (0 == count)
+		if (0 == count) // default value
 			count = OptimalCPUCount();
 
 		MutexLocker locker(*this);
@@ -172,8 +149,14 @@ namespace Job
 	bool QueueService::start()
 	{
 		MutexLocker locker(*this);
-		if (YUNI_LIKELY(not pStarted))
+		if (YUNI_LIKELY(pStatus == sStopped))
 		{
+			pSignalAllThreadHaveStopped.reset();
+			pSignalShouldStop.reset();
+
+			delete (ThreadArray*) pThreads;
+			pThreads = new ThreadArray();
+
 			// alias to the thread pool
 			ThreadArray& array = *((ThreadArray*) pThreads);
 
@@ -187,77 +170,167 @@ namespace Job
 			array.start();
 
 			// Ok now we have started
-			pStarted = true;
+			pStatus = sRunning;
 		}
 		return true;
 	}
 
 
-	bool QueueService::stop(uint timeout)
+	void QueueService::stop(uint timeout)
 	{
-		if (pStarted)
+		ThreadArray* threads; // the thread pool
+
+		// getting the thread pool
 		{
-			ThreadArray* threads; // the thread pool
+			MutexLocker locker(*this);
+			if (pStatus != sRunning)
+				return;
 
-			// The method stop must avoid as much as possible to lock the inner mutex
-			{
-				MutexLocker locker(*this);
-				if (not pStarted)
-					return true;
-
-				threads = (ThreadArray*) pThreads;
-				pThreads = nullptr;
-
-				// The service is now really stopped
-				pStarted = false;
-			}
-
-			// Destroying the thread pool
-			if (YUNI_LIKELY(threads))
-			{
-				threads->stop(timeout);
-				delete threads;
-			}
+			threads = (ThreadArray*) pThreads;
+			pThreads = nullptr;
+			pStatus = sStopping;
 		}
-		return true;
+
+		// Destroying the thread pool
+		if (YUNI_LIKELY(threads))
+		{
+			// stopping all threads (**before** deleting them)
+			threads->stop(timeout);
+			delete threads;
+		}
+
+		MutexLocker locker(*this);
+		// marking the queue service as stopped, just in case
+		// (thread workers should already marked us as 'stopped')
+		pStatus = sStopped;
+
+		// signalling that the queueservice is stopped. This signal
+		// will come after pSignalAllThreadHaveStopped in this case
+		pSignalShouldStop.notify();
+	}
+
+
+	void QueueService::onAllThreadsHaveStopped()
+	{
+		MutexLocker locker(*this);
+		if (pStatus == sStopping)
+			pStatus = sStopped;
+		pSignalAllThreadHaveStopped.notify();
 	}
 
 
 	void QueueService::gracefulStop()
 	{
 		MutexLocker locker(*this);
-		if (pThreads and pStarted)
-			((ThreadArray*) pThreads)->gracefulStop();
-	}
-
-
-	void QueueService::wait()
-	{
-		if (pStarted)
+		if (pThreads and pStatus == sRunning)
 		{
-			while (not idle() or not pWaitingRoom.empty())
-				pSignalAllThreadHaveStopped.waitAndReset();
+			// about to stop
+			pStatus = sStopping;
+			// ask to stop to all threads
+			((ThreadArray*) pThreads)->gracefulStop();
+			// notifying that the queueservice is stopped (or will stop soon)
+			pSignalShouldStop.notify();
 		}
 	}
 
 
-	bool QueueService::wait(uint timeout, uint /*pollInterval*/)
+	inline bool QueueService::waitForAllThreads(uint timeout)
 	{
-		if (pStarted)
+		// waiting for all threads to stop
+		do
 		{
-			// note: the timeout may not be respected here
-			do
+			if (0 == timeout)
 			{
-				if (idle() and pWaitingRoom.empty())
-					return true;
-
-				if (not pSignalAllThreadHaveStopped.wait(timeout))
-					return false; // timeout reached
-
-				// we have been notified
-				pSignalAllThreadHaveStopped.reset();
+				pSignalAllThreadHaveStopped.wait();
 			}
-			while (true);
+			else
+			{
+				if (not pSignalAllThreadHaveStopped.wait(timeout))
+					return false;
+			}
+
+			if (0 != pWorkerCountInActiveDuty)
+			{
+				MutexLocker locker(*this);
+				if (pStatus == sRunning and pWorkerCountInActiveDuty != 0)
+				{
+					pSignalAllThreadHaveStopped.reset();
+					continue;
+				}
+			}
+			break;
+		}
+		while (true);
+		return true;
+	}
+
+
+	void QueueService::wait(QServiceEvent event)
+	{
+		assert((event == qseIdle or event == qseStop) and "invalid event");
+
+		// checking if not started
+		{
+			MutexLocker locker(*this);
+			if (pStatus == sStopped)
+				return;
+		}
+
+		switch (event)
+		{
+			case qseStop:
+			{
+				// waiting for being terminated
+				pSignalShouldStop.wait();
+
+				// break : do not break - waiting for all threads being stopped
+			}
+			case qseIdle:
+			{
+				waitForAllThreads(0);
+				break;
+			}
+			default:
+			{
+				assert(false and "invalid value for event");
+			}
+		}
+	}
+
+
+	bool QueueService::wait(QServiceEvent event, uint timeout)
+	{
+		assert((event == qseIdle or event == qseStop) and "invalid event");
+		assert(timeout > 0 and "invalid timeout");
+
+		// checking if not started
+		{
+			MutexLocker locker(*this);
+			if (pStatus == sStopped)
+				return true;
+		}
+
+		switch (event)
+		{
+			case qseStop:
+			{
+				// waiting for being terminated
+				if (not pSignalShouldStop.wait(timeout))
+					return false;
+
+				waitForAllThreads(0);
+				break;
+			}
+			case qseIdle:
+			{
+				if (not waitForAllThreads(timeout))
+					return false;
+				break;
+			}
+			default:
+			{
+				assert(false and "invalid value for event");
+			}
 		}
 		return true;
 	}
@@ -311,7 +384,8 @@ namespace Job
 
 	uint QueueService::threadCount() const
 	{
-		return ((const ThreadArray*) pThreads)->size();
+		MutexLocker locker(*this);
+		return pThreads ? ((const ThreadArray*) pThreads)->size() : 0;
 	}
 
 
@@ -369,7 +443,9 @@ namespace Job
 	void QueueService::activitySnapshot(QueueService::ThreadInfo::Vector& out)
 	{
 		QueueActivityPredicate predicate(&out);
-		((ThreadArray*) pThreads)->foreachThread(predicate);
+		MutexLocker locker(*this);
+		if (pThreads)
+			((ThreadArray*) pThreads)->foreachThread(predicate);
 	}
 
 

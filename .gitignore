@@ -38,6 +38,9 @@ src/yuni/yuni.version
 # DevPacks
 devpacks/*
 
+# benchmarks
+src/benchmarks/jobs/queueservice/yn-bench-job-queueservice*
+
 # Samples
 src/samples/core/colors/00.rgb/color_00_rgb*
 src/samples/core/colors/01.rgba/color_01_rgba*

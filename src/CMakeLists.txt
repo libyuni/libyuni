@@ -60,10 +60,10 @@ endif()
 # CMake policies
 #
 # Preprocessor definition values are now escaped automatically
-if(POLICY CMP0005)
+if (POLICY CMP0005)
 	CMake_Policy(SET CMP0005 NEW)
 endif()
-if(POLICY CMP0011)
+if (POLICY CMP0011)
 	CMake_Policy(SET CMP0011 NEW)
 endif()
 
@@ -116,9 +116,9 @@ YMESSAGE("     Build into: ${CMAKE_CURRENT_BINARY_DIR}")
 
 
 # Custom settings
-if("${PROFILE}" STREQUAL "")
+if ("${PROFILE}" STREQUAL "")
 
-	if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake")
+	if (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake")
 		configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ProfileBuild.template.cmake
 			${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake)
 		YMESSAGE("")
@@ -131,7 +131,7 @@ if("${PROFILE}" STREQUAL "")
 
 else()
 
-	if(NOT EXISTS "${PROFILE}")
+	if (NOT EXISTS "${PROFILE}")
 		YERROR("Could not find the specified profile file: (`${PROFILE}`)")
 	endif()
 
@@ -166,9 +166,9 @@ add_subdirectory(tools)
 #
 # Compiling yuni-config if required
 #
-if(YUNI_AUTO_COMPILE_YUNI_CONFIG)
+if (YUNI_AUTO_COMPILE_YUNI_CONFIG)
 	YMESSAGE("[yuni-config] Bootstraping")
-	if(YUNI_TESTS)
+	if (YUNI_TESTS)
 		YMESSAGE("The bootstrapping is required to compile the testsuite")
 	endif()
 	# --
@@ -194,11 +194,15 @@ if(YUNI_AUTO_COMPILE_YUNI_CONFIG)
 endif()
 
 
+if (YUNI_BENCHMARKS)
+	add_subdirectory(benchmarks)
+endif()
 
-if(YUNI_ERROR_HAS_OCCURED)
+
+if (YUNI_ERROR_HAS_OCCURED)
 	message(STATUS "")
 	message(STATUS "")
-	if(UNIX)
+	if (UNIX)
 		message(SEND_ERROR "[1;31mAn error has occured. Aborting. [0m")
 	else()
 		message(SEND_ERROR "An error has occured. Aborting.")

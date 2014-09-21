@@ -6,6 +6,7 @@
 # include "waitingroom.h"
 # include "../../core/atomic/bool.h"
 # include "../../thread/signal.h"
+# include "q-event.h"
 
 
 namespace Yuni
@@ -88,18 +89,31 @@ namespace Job
 		bool start();
 
 		/*!
-		** \brief Wait until all jobs are finished
+		** \brief Wait for an event
+		**
+		** Example: wait for all jobs to be finished
+		** \code
+		** queueservice.wait(qsIdle);
+		** \endcode
+		**
+		** Example: wait for queue service being stopped
+		** \code
+		** queueservice.wait(qsStopped);
+		** \endcode
+		**
+		** \param event A queue service event
 		*/
-		void wait();
+		void wait(QServiceEvent event);
 
 		/*!
-		** \brief Wait until all jobs are finished
+		** \brief Wait for all jobs are finished
 		**
-		** \param timeout Timeout
-		** \param pollInterval Interval in milliseconds between each poll when waiting
+		** \param event A queue service event
+		** \param timeout Timeout (in milliseconds)
 		** \return True if all jobs are finished, false if the timeout has been reached
 		*/
-		bool wait(uint timeout, uint pollInterval = 150);
+		bool wait(QServiceEvent event, uint timeout);
+
 
 		/*!
 		** \brief Stop the service
@@ -110,8 +124,11 @@ namespace Job
 		**
 		** \important This method must not be called from a job or it will result
 		** in deadlock
+		**
+		** \param timeout Timeout (in milliseconds)
 		*/
-		bool stop(uint timeout = defaultTimeout);
+		void stop(uint timeout = defaultTimeout);
+
 
 		/*!
 		** \brief Ask to Stop the execution of the thread as soon as possible
@@ -244,8 +261,19 @@ namespace Job
 
 
 	private:
-		//! Flag to know if the service is started
-		Atomic::Bool pStarted;
+		void onAllThreadsHaveStopped();
+		bool waitForAllThreads(uint timeout);
+
+	private:
+		//! Flag to know if the service is started (must be protected by this)
+		enum State
+		{
+			sStopped,
+			sRunning,
+			sStopping,
+		}
+		pStatus;
+
 		//! The list of all remaining jobs
 		Yuni::Private::QueueService::WaitingRoom pWaitingRoom;
 
@@ -259,8 +287,11 @@ namespace Job
 		volatile void* pThreads;
 		//! Number of workers in active duty
 		Atomic::Int<32> pWorkerCountInActiveDuty;
+
 		//! Signal, for being notified when all threads have stopped to work
 		Yuni::Thread::Signal pSignalAllThreadHaveStopped;
+		//!
+		Yuni::Thread::Signal pSignalShouldStop;
 
 		// Nakama !
 		friend class Yuni::Private::QueueService::QueueThread;

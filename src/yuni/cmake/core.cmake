@@ -456,6 +456,7 @@ add_library(yuni-static-core STATIC
 		job/queue/service.cpp
 		job/queue/service.h
 		job/queue/service.hxx
+		job/queue/q-event.h
 		job/queue/waitingroom.cpp
 		job/queue/waitingroom.h
 		job/queue/waitingroom.hxx

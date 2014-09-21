@@ -12,7 +12,8 @@ namespace Job
 
 	inline bool QueueService::restart(uint timeout)
 	{
-		return stop(timeout) and start();
+		stop(timeout);
+		return start();
 	}
 
 
@@ -58,7 +59,8 @@ namespace Job
 
 	inline bool QueueService::started() const
 	{
-		return pStarted;
+		MutexLocker locker(*this);
+		return (pStatus != sStopped);
 	}
 
 

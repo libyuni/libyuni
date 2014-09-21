@@ -58,7 +58,7 @@ namespace QueueService
 	{
 		// Notify the scheduler that this thread goes to sleep
 		if (0 == --pQueueService.pWorkerCountInActiveDuty)
-			pQueueService.pSignalAllThreadHaveStopped.notify();
+			pQueueService.onAllThreadsHaveStopped();
 	}
 
 
