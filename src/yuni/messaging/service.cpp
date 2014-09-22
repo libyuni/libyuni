@@ -282,8 +282,8 @@ namespace Messaging
 			}
 
 			// waiting for heavy tasks, after all workers have stopped
+			heavyTasks.queue.gracefulStop();
 			heavyTasks.queue.wait(qseStop);
-			heavyTasks.queue.stop();
 
 			// Great ! The server is working !
 			events.stopped();
