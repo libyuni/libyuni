@@ -282,7 +282,7 @@ namespace Messaging
 			}
 
 			// waiting for heavy tasks, after all workers have stopped
-			heavyTasks.queue.wait();
+			heavyTasks.queue.wait(qseStop);
 			heavyTasks.queue.stop();
 
 			// Great ! The server is working !
