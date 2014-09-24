@@ -125,7 +125,7 @@ namespace UI
 			// Allow the control to react to the event before the callback
 			child->mouseMove(x, y);
 			// Event callback
-			EventPropagation prop = child->onMouseMove(child, x, y);
+			EventPropagation prop = eventFold(child->onMouseMove, child, x, y);
 			if (epStop == prop)
 				return epStop;
 			if (prop > finalProp)
@@ -134,7 +134,7 @@ namespace UI
 		// Allow the control to react to the event before the callback
 		mouseMove(x, y);
 		// Event callback on the root control
-		EventPropagation prop = onMouseMove(this, x, y);
+		EventPropagation prop = eventFold(onMouseMove, this, x, y);
 		return Math::Max(prop, finalProp);
 	}
 
@@ -151,14 +151,14 @@ namespace UI
 			IControl* child = stack.back();
 			stack.pop_back();
 			child->mouseDown(btn, x, y);
-			EventPropagation prop = child->onMouseDown(child, btn, x, y);
+			EventPropagation prop = eventFold(child->onMouseDown, child, btn, x, y);
 			if (epStop == prop)
 				return epStop;
 			if (prop > finalProp)
 				finalProp = prop;
 		}
 		mouseDown(btn, x, y);
-		EventPropagation prop = onMouseDown(this, btn, x, y);
+		EventPropagation prop = eventFold(onMouseDown, this, btn, x, y);
 		return Math::Max(prop, finalProp);
 	}
 
@@ -175,14 +175,14 @@ namespace UI
 			IControl* child = stack.back();
 			stack.pop_back();
 			child->mouseUp(btn, x, y);
-			EventPropagation prop = child->onMouseUp(child, btn, x, y);
+			EventPropagation prop = eventFold(child->onMouseUp, child, btn, x, y);
 			if (epStop == prop)
 				return epStop;
 			if (prop > finalProp)
 				finalProp = prop;
 		}
 		mouseUp(btn, x, y);
-		EventPropagation prop = onMouseUp(this, btn, x, y);
+		EventPropagation prop = eventFold(onMouseUp, this, btn, x, y);
 		return Math::Max(prop, finalProp);
 	}
 
@@ -199,14 +199,14 @@ namespace UI
 			IControl* child = stack.back();
 			stack.pop_back();
 			child->mouseDblClick(btn, x, y);
-			EventPropagation prop = child->onMouseDblClick(child, btn, x, y);
+			EventPropagation prop = eventFold(child->onMouseDblClick, child, btn, x, y);
 			if (epStop == prop)
 				return epStop;
 			if (prop > finalProp)
 				finalProp = prop;
 		}
 		mouseDblClick(btn, x, y);
-		EventPropagation prop = onMouseDblClick(this, btn, x, y);
+		EventPropagation prop = eventFold(onMouseDblClick, this, btn, x, y);
 		return Math::Max(prop, finalProp);
 	}
 
@@ -223,32 +223,32 @@ namespace UI
 			IControl* child = stack.back();
 			stack.pop_back();
 			child->mouseScroll(delta, x, y);
-			EventPropagation prop = child->onMouseScroll(child, delta);
+			EventPropagation prop = eventFold(child->onMouseScroll, child, delta);
 			if (epStop == prop)
 				return epStop;
 			if (prop > finalProp)
 				finalProp = prop;
 		}
 		mouseScroll(delta, x, y);
-		EventPropagation prop = onMouseScroll(this, delta);
+		EventPropagation prop = eventFold(onMouseScroll, this, delta);
 		return Math::Max(prop, finalProp);
 	}
 
 
 	EventPropagation IControl::doMouseEnter(float x, float y)
 	{
-		EventPropagation prop = onMouseEnter(this, x, y);
+		EventPropagation prop = eventFold(onMouseEnter, this, x, y);
 		if (epStop == prop)
 			return epStop;
-		return onMouseEnter(this, x, y);
+		return eventFold(onMouseEnter, this, x, y);
 	}
 
 	EventPropagation IControl::doMouseLeave(float x, float y)
 	{
-		EventPropagation prop = onMouseLeave(this, x, y);
+		EventPropagation prop = eventFold(onMouseLeave, this, x, y);
 		if (epStop == prop)
 			return epStop;
-		return onMouseLeave(this, x, y);
+		return eventFold(onMouseLeave, this, x, y);
 	}
 
 
@@ -264,13 +264,13 @@ namespace UI
 		{
 			IControl* child = stack.back();
 			stack.pop_back();
-			EventPropagation prop = child->onMouseHover(child, x, y);
+			EventPropagation prop = eventFold(child->onMouseHover, child, x, y);
 			if (epStop == prop)
 				return epStop;
 			if (prop > finalProp)
 				finalProp = prop;
 		}
-		EventPropagation prop = onMouseHover(this, x, y);
+		EventPropagation prop = eventFold(onMouseHover, this, x, y);
 		return Math::Max(prop, finalProp);
 	}
 
@@ -278,14 +278,14 @@ namespace UI
 	EventPropagation IControl::doKeyDown(Input::Key key)
 	{
 		// TODO : the managing control should be the top-most one
-		return onKeyDown(this, key);
+		return eventFold(onKeyDown, this, key);
 	}
 
 
 	EventPropagation IControl::doKeyUp(Input::Key key)
 	{
 		// TODO : the managing control should be the top-most one
-		return onKeyUp(this, key);
+		return eventFold(onKeyUp, this, key);
 	}
 
 

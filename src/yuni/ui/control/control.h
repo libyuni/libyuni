@@ -7,6 +7,7 @@
 # include "../../core/smartptr/intrusive.h"
 # include "../../core/point2D.h"
 # include "../../core/dictionary.h"
+# include "../../core/functional/binaryfunctions.h"
 # include <vector>
 # include "../gl/drawingsurface.h"
 # include "../input/key.h"
@@ -42,25 +43,25 @@ namespace UI
 
 	public:
 		//! Mouse move callback
-		Yuni::Bind<EventPropagation (IControl* sender, float x, float y)>  onMouseMove;
+		Yuni::Event<EventPropagation (IControl* sender, float x, float y)>  onMouseMove;
 		//! Mouse down callback
-		Yuni::Bind<EventPropagation (IControl* sender, Input::IMouse::Button btn, float x, float y)>  onMouseDown;
+		Yuni::Event<EventPropagation (IControl* sender, Input::IMouse::Button btn, float x, float y)>  onMouseDown;
 		//! Mouse up callback
-		Yuni::Bind<EventPropagation (IControl* sender, Input::IMouse::Button btn, float x, float y)>  onMouseUp;
+		Yuni::Event<EventPropagation (IControl* sender, Input::IMouse::Button btn, float x, float y)>  onMouseUp;
 		//! Mouse double-click callback
-		Yuni::Bind<EventPropagation (IControl* sender, Input::IMouse::Button btn, float x, float y)>  onMouseDblClick;
+		Yuni::Event<EventPropagation (IControl* sender, Input::IMouse::Button btn, float x, float y)>  onMouseDblClick;
 		//! Mouse scroll callback
-		Yuni::Bind<EventPropagation (IControl* sender, float delta)>  onMouseScroll;
+		Yuni::Event<EventPropagation (IControl* sender, float delta)>  onMouseScroll;
 		//! Mouse enter callback
-		Yuni::Bind<EventPropagation (IControl* sender, float x, float y)>  onMouseEnter;
+		Yuni::Event<EventPropagation (IControl* sender, float x, float y)>  onMouseEnter;
 		//! Mouse leave callback
-		Yuni::Bind<EventPropagation (IControl* sender, float x, float y)>  onMouseLeave;
+		Yuni::Event<EventPropagation (IControl* sender, float x, float y)>  onMouseLeave;
 		//! Mouse hover callback
-		Yuni::Bind<EventPropagation (IControl* sender, float x, float y)>  onMouseHover;
+		Yuni::Event<EventPropagation (IControl* sender, float x, float y)>  onMouseHover;
 		//! Key down callback
-		Yuni::Bind<EventPropagation (IControl* sender, Input::Key)>  onKeyDown;
+		Yuni::Event<EventPropagation (IControl* sender, Input::Key)>  onKeyDown;
 		//! Key up callback
-		Yuni::Bind<EventPropagation (IControl* sender, Input::Key)>  onKeyUp;
+		Yuni::Event<EventPropagation (IControl* sender, Input::Key)>  onKeyUp;
 
 	public:
 		//! Empty constructor
@@ -142,6 +143,7 @@ namespace UI
 			pSize(size);
 			invalidate();
 		}
+		void zoom(float factor) { pSize(pSize.x * factor, pSize.y * factor); invalidate(); }
 
 		//! Cursor used when hovering the control
 		// const Cursor& cursor() const;
@@ -249,6 +251,13 @@ namespace UI
 		virtual void keyDown(Input::Key) {}
 		//! Control reaction to key down
 		virtual void keyUp(Input::Key) {}
+
+	private:
+		template<class... Args>
+		static EventPropagation eventFold(const Event<EventPropagation (Args...)>& event, Args... args)
+		{
+			return event.fold(epContinue, Functional::Max<EventPropagation>(), args...);
+		}
 
 	protected:
 		Point2D<float> pPosition;
