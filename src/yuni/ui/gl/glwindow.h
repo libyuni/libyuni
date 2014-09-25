@@ -40,6 +40,7 @@ namespace UI
 		*/
 		virtual void kill() override
 		{
+			::glFlush();
 			RenderWindow::kill();
 		}
 
