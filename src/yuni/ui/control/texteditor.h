@@ -108,7 +108,7 @@ namespace Control
 		//! Set line height in pixels
 		void lineHeightPixels(float newValue) { pLineHeight.reset(newValue, Dimension::uPixel); }
 
-		virtual void mouseScroll(float delta, float x, float y) override;
+		virtual EventPropagation mouseScroll(float delta, float x, float y) override;
 
 	private:
 		//! Text to display

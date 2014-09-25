@@ -232,25 +232,25 @@ namespace UI
 		EventPropagation doKeyUp(Input::Key key);
 
 		//! Control reaction to mouse move
-		virtual void mouseMove(float, float) {}
+		virtual EventPropagation mouseMove(float, float) { return epContinue; }
 		//! Control reaction to mouse down
-		virtual void mouseDown(Input::IMouse::Button, float, float) {}
+		virtual EventPropagation mouseDown(Input::IMouse::Button, float, float) { return epContinue; }
 		//! Control reaction to mouse up
-		virtual void mouseUp(Input::IMouse::Button, float, float) {}
+		virtual EventPropagation mouseUp(Input::IMouse::Button, float, float) { return epContinue; }
 		//! Control reaction to mouse double-click
-		virtual void mouseDblClick(Input::IMouse::Button, float, float) {}
+		virtual EventPropagation mouseDblClick(Input::IMouse::Button, float, float) { return epContinue; }
 		//! Control reaction to mouse scroll
-		virtual void mouseScroll(float, float, float) {}
+		virtual EventPropagation mouseScroll(float, float, float) { return epContinue; }
 		//! Control reaction to mouse enter
-		virtual void mouseEnter(float, float) {}
+		virtual EventPropagation mouseEnter(float, float) { return epContinue; }
 		//! Control reaction to mouse enter
-		virtual void mouseLeave(float, float) {}
+		virtual EventPropagation mouseLeave(float, float) { return epContinue; }
 		//! Control reaction to mouse hover
-		virtual void mouseHover(float, float) {}
+		virtual EventPropagation mouseHover(float, float) { return epContinue; }
 		//! Control reaction to key up
-		virtual void keyDown(Input::Key) {}
+		virtual EventPropagation keyDown(Input::Key) { return epContinue; }
 		//! Control reaction to key down
-		virtual void keyUp(Input::Key) {}
+		virtual EventPropagation keyUp(Input::Key) { return epContinue; }
 
 	private:
 		template<class... Args>

@@ -929,7 +929,7 @@ namespace UI
 
 	bool WGLWindow::loop()
 	{
-		if (!pHWnd || !pHRC)
+		if (killed() || !pHWnd || !pHRC)
 			return false;
 
 		MSG msg;

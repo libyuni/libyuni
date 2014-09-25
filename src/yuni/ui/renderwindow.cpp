@@ -18,7 +18,7 @@ namespace UI
 		pResWidth(width),
 		pResHeight(height),
 		pBitDepth(bitDepth),
-		pFB(width, height),
+		pFB(*new Gfx3D::FrameBuffer(width, height)),
 		pPostEffects(),
 		pFullScreen(fullScreen),
 		pMultiSampling(MultiSampling::msNone),
@@ -41,6 +41,10 @@ namespace UI
 
 	void RenderWindow::kill()
 	{
+		if (killed())
+			return;
+		pFB.deactivate();
+		delete &pFB;
 		onRefresh.unbind();
 		onResize.unbind();
 		// Call the clean-up callback
@@ -268,7 +272,9 @@ namespace UI
 		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseMove(x, y);
-			if (epFinishView <= propagate)
+			if (epStop == propagate)
+				return;
+			if (epFinishView == propagate)
 				break;
 		}
 		pMouse->doMove(x, y);
@@ -283,7 +289,9 @@ namespace UI
 		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseDown(btn, pMouse->pos().x, pMouse->pos().y);
-			if (epFinishView <= propagate)
+			if (epStop == propagate)
+				return;
+			if (epFinishView == propagate)
 				break;
 		}
 		pMouse->doDown(btn);
@@ -298,7 +306,9 @@ namespace UI
 		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseUp(btn, pMouse->pos().x, pMouse->pos().y);
-			if (epFinishView <= propagate)
+			if (epStop == propagate)
+				return;
+			if (epFinishView == propagate)
 				break;
 		}
 		pMouse->doUp(btn);
@@ -312,7 +322,9 @@ namespace UI
 		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseDblClick(btn, pMouse->pos().x, pMouse->pos().y);
-			if (epFinishView <= propagate)
+			if (epStop == propagate)
+				return;
+			if (epFinishView == propagate)
 				break;
 		}
 		pMouse->doDblClick(btn);
@@ -327,7 +339,9 @@ namespace UI
 		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseScroll(delta, pMouse->pos().x, pMouse->pos().y);
-			if (epFinishView <= propagate)
+			if (epStop == propagate)
+				return;
+			if (epFinishView == propagate)
 				break;
 		}
 		pMouse->doScroll(delta);
@@ -342,7 +356,9 @@ namespace UI
 		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doMouseHover(x, y);
-			if (epFinishView <= propagate)
+			if (epStop == propagate)
+				return;
+			if (epFinishView == propagate)
 				break;
 		}
 
@@ -356,7 +372,9 @@ namespace UI
 		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doKeyDown(key);
-			if (epFinishView <= propagate)
+			if (epStop == propagate)
+				return;
+			if (epFinishView == propagate)
 				break;
 		}
 		pKeyboard.doDown(key);
@@ -369,7 +387,9 @@ namespace UI
 		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
 			propagate = view->doKeyUp(key);
-			if (epFinishView <= propagate)
+			if (epStop == propagate)
+				return;
+			if (epFinishView == propagate)
 				break;
 		}
 		pKeyboard.doUp(key);

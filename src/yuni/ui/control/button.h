@@ -74,24 +74,28 @@ namespace Control
 		void imageHovering(const Gfx3D::Texture::Ptr& image) { pImageHovering = image; invalidate(); }
 
 		//! On mouse button down
-		virtual void mouseDown(Input::IMouse::Button btn, float, float) override
+		virtual EventPropagation mouseDown(Input::IMouse::Button btn, float, float) override
 		{
 			if (btn != Input::IMouse::ButtonLeft)
-				return;
+				return epStop;
+
 			pBeingClicked = true;
 			if (!(!pImageClicking))
 				invalidate();
+			return epStop;
 		}
 
 		//! On mouse button up
-		virtual void mouseUp(Input::IMouse::Button btn, float, float) override
+		virtual EventPropagation mouseUp(Input::IMouse::Button btn, float, float) override
 		{
 			if (btn != Input::IMouse::ButtonLeft)
-				return;
+				return epStop;
+
 			if (pBeingClicked)
 				onClick(this);
 			pBeingClicked = false;
 			invalidate();
+			return epStop;
 		}
 
 		//! Get the fill color

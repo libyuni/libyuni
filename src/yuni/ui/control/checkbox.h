@@ -57,13 +57,14 @@ namespace Control
 
 	private:
 		//! Control reaction to mouse down
-		virtual void mouseDown(Input::IMouse::Button btn, float, float) override
+		virtual EventPropagation mouseDown(Input::IMouse::Button btn, float, float) override
 		{
 			if (Input::IMouse::ButtonLeft == btn)
 				pBeingClicked = true;
+			return epStop;
 		}
 		//! Control reaction to mouse up
-		virtual void mouseUp(Input::IMouse::Button btn, float, float) override
+		virtual EventPropagation mouseUp(Input::IMouse::Button btn, float, float) override
 		{
 			if (Input::IMouse::ButtonLeft == btn && pBeingClicked)
 			{
@@ -72,6 +73,7 @@ namespace Control
 				onCheckChanged(this, pChecked);
 			}
 			pBeingClicked = false;
+			return epStop;
 		}
 
 	private:

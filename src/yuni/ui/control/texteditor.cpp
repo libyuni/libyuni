@@ -52,7 +52,7 @@ namespace Control
 	}
 
 
-	void TextEditor::mouseScroll(float delta, float, float)
+	EventPropagation TextEditor::mouseScroll(float delta, float, float)
 	{
 		uint oldTopLine = pTopLineNb;
 		float newLineNb = (float)pTopLineNb - delta;
@@ -61,6 +61,7 @@ namespace Control
 		pTopLineNb = (uint)Math::Max(0.0f, Math::Min(maxLineNb - displayedLineCount + 1, newLineNb));
 		if (oldTopLine != pTopLineNb)
 			invalidate();
+		return epStop;
 	}
 
 

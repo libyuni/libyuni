@@ -53,7 +53,7 @@ namespace Control
 
 
 	template<class Content>
-	void ListBox<Content>::mouseScroll(float delta, float, float)
+	EventPropagation ListBox<Content>::mouseScroll(float delta, float, float)
 	{
 		uint oldTopLine = pTopLineNb;
 		float newLineNb = (float)pTopLineNb - delta;
@@ -62,22 +62,24 @@ namespace Control
 		pTopLineNb = (uint)Math::Max(0.0f, Math::Min(maxLineNb - displayedLineCount, newLineNb));
 		if (oldTopLine != pTopLineNb)
 			invalidate();
+		return epStop;
 	}
 
 
 	template<class Content>
-	void ListBox<Content>::mouseDown(Input::IMouse::Button btn, float, float y)
+	EventPropagation ListBox<Content>::mouseDown(Input::IMouse::Button btn, float, float y)
 	{
 		if (btn == Input::IMouse::ButtonLeft)
 		{
 			// Store selected index, wait mouseUp to confirm selection
 			pClickedIndex = pTopLineNb + Math::Floor((y - pPosition.y) / pLineHeight(pConversion));
 		}
+		return epStop;
 	}
 
 
 	template<class Content>
-	void ListBox<Content>::mouseUp(Input::IMouse::Button btn, float, float y)
+	EventPropagation ListBox<Content>::mouseUp(Input::IMouse::Button btn, float, float y)
 	{
 		if (btn == Input::IMouse::ButtonLeft && pClickedIndex > -1)
 		{
@@ -91,6 +93,7 @@ namespace Control
 			}
 			pClickedIndex = -1;
 		}
+		return epStop;
 	}
 
 

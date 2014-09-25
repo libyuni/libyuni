@@ -252,6 +252,9 @@ namespace UI
 		void drawAllViews() const;
 		//@}
 
+		//! Has the window already been killed ?
+		bool killed() const { return pViewList.empty(); }
+
 
 	protected:
 		//! \name Events
@@ -290,7 +293,7 @@ namespace UI
 		uint pBitDepth;
 
 		//! Frame buffer for render-to-texture
-		mutable Gfx3D::FrameBuffer pFB;
+		Gfx3D::FrameBuffer& pFB;
 
 		//! Postprocessing effects
 		mutable PostEffect::Vector pPostEffects;

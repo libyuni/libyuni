@@ -154,11 +154,11 @@ namespace Control
 		void lineHeightPixels(float newValue) { pLineHeight.reset(newValue, Dimension::uPixel); }
 
 		//! Mouse button down override
-		virtual void mouseDown(Input::IMouse::Button btn, float x, float y) override;
+		virtual EventPropagation mouseDown(Input::IMouse::Button btn, float x, float y) override;
 		//! Mouse button down override
-		virtual void mouseUp(Input::IMouse::Button btn, float x, float y) override;
+		virtual EventPropagation mouseUp(Input::IMouse::Button btn, float x, float y) override;
 		//! Mouse wheel scroll override
-		virtual void mouseScroll(float delta, float x, float y) override;
+		virtual EventPropagation mouseScroll(float delta, float x, float y) override;
 
 	private:
 		//! Elements to display
