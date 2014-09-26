@@ -1,6 +1,9 @@
 #ifndef __YUNI_CORE_FUNCTIONAL_VIEW_H__
 # define __YUNI_CORE_FUNCTIONAL_VIEW_H__
 
+# include "../../yuni.h"
+# include "viewpolicies.h"
+
 
 namespace Yuni
 {
@@ -22,7 +25,7 @@ namespace Functional
 	** \ingroup Functional
 	**
 	** \code
-	** uint maxValue = fold(data).max();
+	** uint maxValue = makeView(list).max();
 	** \endcode
 	*/
 	template<class CollectionT>

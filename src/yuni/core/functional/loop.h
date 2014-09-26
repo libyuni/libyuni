@@ -28,22 +28,11 @@ namespace Functional
 		Loop(const View<CollectionT>& collection):
 			pCollection(collection)
 		{}
-		/*
-		Loop(const View<CollectionT>& collection, const PredicateT& predicate):
-			pCollection(collection),
-			pFilter(predicate)
-		{}
-		*/
 
 		bool empty() const { return pCollection.empty(); }
 
 		bool next()
 		{
-			// bool ok;
-			// do
-			// {
-			// 	ok = pCollection.next();
-			// } while (ok && !pFilter(current()));
 			return pCollection.next();
 		}
 
@@ -54,7 +43,6 @@ namespace Functional
 
 	private:
 		const View<CollectionT>& pCollection;
-		//const PredicateT& pFilter;
 
 	}; // class Loop
 

@@ -1,7 +1,7 @@
 #ifndef __YUNI_CORE_FUNCTIONAL_FOLD_HXX__
 # define __YUNI_CORE_FUNCTIONAL_FOLD_HXX__
 
-# include "loop.h"
+# include "view.h"
 
 
 namespace Yuni
@@ -13,7 +13,7 @@ namespace Yuni
 	ResultT fold(const CollectionT& collection, const ResultT& initval, const AccumulatorT& callback)
 	{
 		ResultT result = initval;
-		Functional::Loop<CollectionT> loop(collection);
+		Functional::View<CollectionT> loop(collection);
 		if (loop.empty())
 			return result;
 		do

@@ -1,7 +1,6 @@
 #ifndef __YUNI_CORE_FUNCTIONAL_VIEW_HXX__
 # define __YUNI_CORE_FUNCTIONAL_VIEW_HXX__
 
-# include "loop.h"
 # include "fold.h"
 # include "binaryfunctions.h"
 
@@ -13,64 +12,89 @@ namespace Functional
 
 
 
-	template<class CollectionT>
-	class View final
+	template<
+		class ParentT,
+		class FilteringT = FilteringPolicy::AcceptAll<typename ParentT::EltType>,
+		class MappingT = MappingPolicy::Identity<typename ParentT::EltType>
+	>
+	class BaseView final :
+		public FilteringT,
+		public MappingT
 	{
 	public:
-		typedef typename Loop<CollectionT>::EltType EltType;
-		typedef CollectionT CollType;
+		typedef typename ParentT::EltType EltType;
 
 	public:
 		//! Main Constructor
-		View(const CollectionT& collection):
-			pLoop(collection)
+		BaseView():
+			FilteringT(None()),
+			MappingT(None())
 		{}
-
+		/*
 		template<class IteratorT>
-		View(const IteratorT& begin,
+		BaseView(const IteratorT& begin,
 			 const IteratorT& end):
-			pLoop(begin, end)
+			FilteringT(None()),
+			MappingT(None())
 		{}
 
-		View(uint startIdx, uint endIdx, const CollectionT& collection):
+		BaseView(uint startIdx, uint endIdx, const CollectionT& collection):
 			pLoop(startIdx, endIdx, collection)
 		{}
+		*/
 
-		//! Copy constructor
+		//! Copy constructor for filtering
 		template<class PredicateT>
-		View(const View<CollectionT>& other, const PredicateT& predicate):
-			pLoop(other.pLoop)
+		BaseView(const PredicateT& filter):
+			FilteringT(filter),
+			MappingT(None())
 		{}
 
+		bool empty() const { return static_cast<ParentT*>(this)->empty(); }
 
-		bool empty() const { return pLoop.empty(); }
+		bool next() const { return static_cast<ParentT*>(this)->next(); }
 
-		bool next() const { return pLoop.next(); }
-
-		const EltType& current() const { return pLoop.current(); }
+		const EltType& current() const { return static_cast<ParentT*>(this)->current(); }
 
 
 		//! Loop on all elements
 		template<class T, class CallbackT>
 		void each(const CallbackT& callback) const
 		{
-			if (pLoop.empty())
+			if (empty())
 				return;
 			do
 			{
-				if (not callback(pLoop.current()))
+				// Filtering
+				if (not accept(current()))
+					continue;
+				if (not callback(current()))
 					break;
-			} while (pLoop.next());
+			} while next();
 		}
 
 
 		//! View filtering
 		template<class PredicateT>
-		View<View<CollectionT> > filter(const PredicateT& predicate) const
+		View<ThisType, FilteringPolicy::Function<EltType, PredicateT> >
+		filter(const PredicateT& predicate) const
 		{
-			return View<View<CollectionT> >(*this, predicate);
+			return View<ThisType, FilteringPolicy::Function<EltType, PredicateT> >(*this, predicate);
 		}
 
+		/*
+		template<class DestT, class FuncT>
+		View<
+			ThisType,
+			FilteringPolicy::AcceptAll<EltType, None>,
+			MappingPolicy::Function<EltType, DestT, FuncT>
+		>
+		map(const FuncT& mapping) const
+		{
+			return View<ThisType, FilteringPolicy::AcceptAll<EltType, None>,
+				MappingPolicy<EltType, DestT, FuncT> >(*this, mapping);
+		}
+		*/
 
 		//! User-defined folding
 		template<class ResultT, class AccumulatorT>
@@ -78,13 +102,13 @@ namespace Functional
 		{
 			ResultT result = initval;
 
-			if (pLoop.empty())
+			if (empty())
 				return result;
 			do
 			{
-				if (not accumulate(result, pLoop.current()))
+				if (not accumulate(result, current()))
 					break;
-			} while (pLoop.next());
+			} while next();
 			return result;
 		}
 
@@ -149,10 +173,184 @@ namespace Functional
 			ResultT min = min(max);
 			return max - min;
 		}
+	};
+
+
+
+	template<class CollectionT>
+	class View final: public BaseView<View<CollectionT> >
+	{
+	};
+
+
+	template<class CollectionT>
+	class View<View<CollectionT> > final: public BaseView<View<CollectionT> >
+	{
+	public:
+		typedef typename View<CollectionT>::EltType EltType;
+		typedef CollectionT CollType;
+
+	public:
+		View(const View<CollectionT>& collection):
+			pCollection(collection)
+		{}
+
+		bool empty() const { return pCollection.empty(); }
+
+		bool next()
+		{
+			return pCollection.next();
+		}
+
+		const typename View<CollectionT>::EltType& current() const
+		{
+			return pCollection.current();
+		}
 
 	private:
-		mutable Loop<CollectionT> pLoop;
-	};
+		const View<CollectionT>& pCollection;
+
+	}; // class View
+
+
+
+	//! Generic loop for basic STL collections.
+	template<class T, class Other, template <class, class> class CollectionT>
+	class View<CollectionT<T, Other> > final: public BaseView<View<CollectionT<T, Other> >
+	{
+	public:
+		typedef CollectionT<T, Other>  CollType;
+		typedef T  EltType;
+
+	public:
+		View(const CollType& collection):
+			it(collection.begin()),
+			end(collection.end())
+		{}
+
+		View(const typename CollType::const_iterator& itBegin,
+			 const typename CollType::const_iterator& itEnd):
+			it(itBegin),
+			end(itEnd)
+		{}
+
+		bool empty() const { return it == end; }
+
+		bool next()
+		{
+			++it;
+			return it != end;
+		}
+
+		const T& current() const { return *it; }
+
+	private:
+		typename CollType::const_iterator it;
+		const typename CollType::const_iterator end;
+
+	}; // class View
+
+
+
+	//! Generic loop for T* null-terminated !
+	template<class T>
+	class View<T*> final: public BaseView<View<T*> >
+	{
+	public:
+		typedef T*  CollType;
+		typedef T  EltType;
+
+	public:
+		View(const T* const& collection):
+			ptr(collection)
+		{}
+
+		bool empty() const { return 0 == *ptr; }
+
+		bool next()
+		{
+			++ptr;
+			return 0 != *ptr;
+		}
+
+		const T& current() const { return *ptr; }
+
+	private:
+		const T* ptr;
+
+	}; // class View
+
+
+
+	//! Generic loop for const T* null-terminated !
+	template<class T>
+	class View<const T*> final: public BaseView<View<const T*> >
+	{
+	public:
+		typedef const T*  CollType;
+		typedef T  EltType;
+
+	public:
+		View(const T* const& collection):
+			ptr(collection)
+		{}
+
+		bool empty() const { return 0 == *ptr; }
+
+		bool next()
+		{
+			++ptr;
+			return 0 != *ptr;
+		}
+
+		const T& current() const { return *ptr; }
+
+	private:
+		const T* const& ptr;
+
+	}; // class View
+
+
+
+	//! Generic loop for T[N]
+	template<class T, int N>
+	class View<T[N]> final: public BaseView<View<T[N]> >
+	{
+	public:
+		typedef T  CollType[N];
+		typedef T  EltType;
+
+	public:
+		View(const T collection[N]):
+			i(0u),
+			end((uint)-1),
+			data(collection)
+		{}
+
+		View(uint startIdx, uint endIdx):
+			i(startIdx)
+		{
+		}
+
+		bool empty() const { return i >= Math::Min(N, end); }
+
+		bool next()
+		{
+			++i;
+			return i < Math::Min(N, end);
+		}
+
+		const T& current() const { return data[i]; }
+
+	private:
+		uint i;
+		uint end;
+		const T* data;
+
+	}; // class View
+
+
+
 
 
 } // namespace Functional
@@ -161,10 +359,10 @@ namespace Functional
 
 
 	//! Create a view on a collection
-	template<class CollectionT>
-	Functional::View<CollectionT> makeView(const CollectionT& collection)
+	template<class CollectionT, class FilteringT, class MappingT>
+	Functional::View<CollectionT, FilteringT, MappingT> makeView(const CollectionT& collection)
 	{
-		return Functional::View<CollectionT>(collection);
+		return Functional::View<CollectionT, FilteringT, MappingT>(collection);
 	}
 
 
