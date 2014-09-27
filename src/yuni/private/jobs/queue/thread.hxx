@@ -1,6 +1,8 @@
 #ifndef __YUNI_PRIVATE_JOBS_QUEUE_THREAD_HXX__
 # define __YUNI_PRIVATE_JOBS_QUEUE_THREAD_HXX__
 
+# include "thread.h"
+
 
 namespace Yuni
 {
@@ -25,6 +27,12 @@ namespace QueueService
 	inline Yuni::Job::IJob::Ptr QueueThread::currentJob() const
 	{
 		return pJob;
+	}
+
+
+	inline void WaitingRoom::add(const Yuni::Job::IJob::Ptr& job)
+	{
+		add(job, Yuni::Job::priorityDefault);
 	}
 
 

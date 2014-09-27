@@ -41,7 +41,7 @@ namespace Job
 
 	QueueService::QueueService()
 		: pStatus(sStopped)
-		, pThreads(nullptr)
+		, pThreads(NULL)
 	{
 		uint count = OptimalCPUCount();
 		pMinimumThreadCount = count;
@@ -51,7 +51,7 @@ namespace Job
 
 	QueueService::QueueService(bool autostart)
 		: pStatus(sStopped)
-		, pThreads(nullptr)
+		, pThreads(NULL)
 	{
 		uint count = OptimalCPUCount();
 		pMinimumThreadCount = count;
@@ -187,7 +187,7 @@ namespace Job
 				return;
 
 			threads = (ThreadArray*) pThreads;
-			pThreads = nullptr;
+			pThreads = NULL;
 			pStatus = sStopping;
 		}
 
@@ -210,12 +210,31 @@ namespace Job
 	}
 
 
-	void QueueService::onAllThreadsHaveStopped()
+	void QueueService::registerWorker(void* threadself)
 	{
+		assert(threadself != nullptr);
 		MutexLocker locker(*this);
-		if (pStatus == sStopping)
-			pStatus = sStopped;
-		pSignalAllThreadHaveStopped.notify();
+		if (pWorkerSet.count(threadself) == 0)
+			pWorkerSet.insert(threadself);
+	}
+
+
+	void QueueService::unregisterWorker(void* threadself)
+	{
+		assert(threadself != nullptr);
+		MutexLocker locker(*this);
+
+		Yuni::Set<void*>::Unordered::iterator it = pWorkerSet.find(threadself);
+		if (pWorkerSet.end() != it)
+		{
+			pWorkerSet.erase(it);
+			if (pWorkerSet.empty())
+			{
+				if (pStatus == sStopping)
+					pStatus = sStopped;
+				pSignalAllThreadHaveStopped.notify();
+			}
+		}
 	}
 
 
@@ -249,14 +268,11 @@ namespace Job
 					return false;
 			}
 
-			if (0 != pWorkerCountInActiveDuty)
+			MutexLocker locker(*this);
+			if (not pWorkerSet.empty() and pStatus == sRunning)
 			{
-				MutexLocker locker(*this);
-				if (pStatus == sRunning and pWorkerCountInActiveDuty != 0)
-				{
-					pSignalAllThreadHaveStopped.reset();
-					continue;
-				}
+				pSignalAllThreadHaveStopped.reset();
+				continue;
 			}
 			break;
 		}
@@ -336,43 +352,27 @@ namespace Job
 	}
 
 
-	void QueueService::add(IJob* job)
+	inline void QueueService::wakeupWorkers()
 	{
-		if (YUNI_LIKELY(job))
-		{
-			pWaitingRoom.add(job);
+		MutexLocker locker(*this);
+		if (pWorkerSet.size() < pMaximumThreadCount and pThreads)
 			((ThreadArray*) pThreads)->wakeUp();
-		}
 	}
 
 
 	void QueueService::add(const IJob::Ptr& job)
 	{
-		if (YUNI_LIKELY(!(!job)))
-		{
-			pWaitingRoom.add(job);
-			((ThreadArray*) pThreads)->wakeUp();
-		}
+		assert(!(!job) and "invalid job");
+		pWaitingRoom.add(job);
+		wakeupWorkers();
 	}
 
 
 	void QueueService::add(const IJob::Ptr& job, Priority priority)
 	{
-		if (YUNI_LIKELY(!(!job)))
-		{
-			pWaitingRoom.add(job, priority);
-			((ThreadArray*) pThreads)->wakeUp();
-		}
-	}
-
-
-	void QueueService::add(IJob* job, Priority priority)
-	{
-		if (YUNI_LIKELY(!(!job)))
-		{
-			pWaitingRoom.add(job, priority);
-			((ThreadArray*) pThreads)->wakeUp();
-		}
+		assert(!(!job) and "invalid job");
+		pWaitingRoom.add(job, priority);
+		wakeupWorkers();
 	}
 
 

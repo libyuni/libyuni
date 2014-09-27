@@ -7,6 +7,8 @@
 # include "../../core/atomic/bool.h"
 # include "../../thread/signal.h"
 # include "q-event.h"
+# include "../../core/dictionary.h"
+
 
 
 namespace Yuni
@@ -161,18 +163,9 @@ namespace Job
 		/*!
 		** \brief Add a job into the queue
 		**
-		** \warning The job may already be into the queue. However it must ensure
-		** its thread-safety in this case.
-		**
-		** \param job The job to add
-		*/
-		void add(IJob* job);
-
-		/*!
-		** \brief Add a job into the queue
-		**
-		** \warning The job may already be into the queue. However it must ensure
-		** its thread-safety in this case.
+		** \warning The job may already be into the queue (thus the same job might be
+		** executed several times at once). However it must obviously ensure its own
+		** thread-safety in this case.
 		**
 		** \param job The job to add
 		*/
@@ -181,24 +174,14 @@ namespace Job
 		/*!
 		** \brief Add a job into the queue
 		**
-		** \warning The job may already be into the queue. However it must ensure
-		** its thread-safety in this case.
+		** \warning The job may already be into the queue (thus the same job might be
+		** executed several times at once). However it must obviously ensure its own
+		** thread-safety in this case.
 		**
 		** \param job The job to add
 		** \param priority Its priority execution
 		*/
 		void add(const IJob::Ptr& job, Priority priority);
-
-		/*!
-		** \brief Add a job into the queue
-		**
-		** \warning The job may already be into the queue. However it must ensure
-		** its thread-safety in this case.
-		**
-		** \param job The job to add
-		** \param priority Its priority execution
-		*/
-		void add(IJob* job, Priority priority);
 
 		/*!
 		** \brief Retrieve information about the activity of the queue manager
@@ -261,11 +244,17 @@ namespace Job
 
 
 	private:
-		void onAllThreadsHaveStopped();
+		//! Register a new thread in active duty
+		void registerWorker(void* threadself);
+		//! Unregister a thread no longer in active duty
+		void unregisterWorker(void* threadself);
+		//! Wait for all threads to finish
 		bool waitForAllThreads(uint timeout);
+		//! Wake up thread - some work here !
+		void wakeupWorkers();
 
 	private:
-		//! Flag to know if the service is started (must be protected by this)
+		//! Flag to know if the service is started [must be protected by the internal mutex]
 		enum State
 		{
 			sStopped,
@@ -279,19 +268,24 @@ namespace Job
 
 		// Scheduler
 
-		//! The minimum number of threads (must be protected by the internal mutex)
+		//! The minimum number of threads [must be protected by the internal mutex]
 		volatile uint pMinimumThreadCount;
-		//! The maximum number of threads (must be protected by the internal mutex)
+		//! The maximum number of threads [must be protected by the internal mutex]
 		volatile uint pMaximumThreadCount;
 		//! Array of threads
 		volatile void* pThreads;
-		//! Number of workers in active duty
-		Atomic::Int<32> pWorkerCountInActiveDuty;
 
 		//! Signal, for being notified when all threads have stopped to work
 		Yuni::Thread::Signal pSignalAllThreadHaveStopped;
 		//!
 		Yuni::Thread::Signal pSignalShouldStop;
+
+		//! Set of workers in active duty
+		// The workers may need to unregister several times and it is not safe
+		// to let the worker handle the state (it might be killed or something nasty
+		// may happen - race conditions)
+		// This set is useless (and should not be used in this current form)
+		Yuni::Set<void*>::Unordered  pWorkerSet;
 
 		// Nakama !
 		friend class Yuni::Private::QueueService::QueueThread;

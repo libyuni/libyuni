@@ -10,65 +10,21 @@ namespace Private
 namespace QueueService
 {
 
-	namespace // anonymous
-	{
-
-		static inline
-		bool FetchNextJob(Yuni::Job::IJob::Ptr& out, Yuni::Private::QueueService::WaitingRoom& waitingRoom)
-		{
-			using namespace ::Yuni::Job;
-
-			while (not waitingRoom.empty())
-			{
-				if (waitingRoom.hasJob[priorityHigh])
-				{
-					if (waitingRoom.pop(out, priorityHigh))
-						return true;
-					continue;
-				}
-
-				// medium priority
-				if (waitingRoom.hasJob[priorityDefault])
-				{
-					if (waitingRoom.pop(out, priorityDefault))
-						return true;
-					continue;
-				}
-
-				// low
-				if (waitingRoom.hasJob[priorityLow])
-				{
-					if (waitingRoom.pop(out, priorityLow))
-						return true;
-					continue;
-				}
-			}
-			return false;
-		}
-
-
-	} // anonymous namespace
-
-
-
-
-
 
 	inline void QueueThread::notifyEndOfWork()
 	{
 		// Notify the scheduler that this thread goes to sleep
-		if (0 == --pQueueService.pWorkerCountInActiveDuty)
-			pQueueService.onAllThreadsHaveStopped();
+		pQueueService.unregisterWorker(this);
 	}
 
 
 	bool QueueThread::onExecute()
 	{
 		// Notify the scheduler that this thread has begun its work
-		++pQueueService.pWorkerCountInActiveDuty;
+		pQueueService.registerWorker(this);
 
 		// Asking for the next job
-		while (FetchNextJob(pJob, pQueueService.pWaitingRoom))
+		while (pQueueService.pWaitingRoom.pop(pJob))
 		{
 			// Execute the job, via a wrapper for symbol visibility issues
 			Yuni::Private::QueueService::JobAccessor<Yuni::Job::IJob>::Execute(*pJob, this);

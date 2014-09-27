@@ -66,9 +66,18 @@ namespace QueueService
 		** \param[out] out Job to execute, if any. It will remain untouched if
 		**   no job can be found.
 		** \param priority The priority queue where to look for
-		** \return True if a job is actually available
+		** \return True if a job is actually available, false otherwise
 		*/
 		bool pop(Yuni::Job::IJob::Ptr& out, const Yuni::Job::Priority priority);
+
+		/*!
+		** \brief Get the next job to execute
+		**
+		** \param[out] out Job to execute, if any. It will remain untouched if
+		**   no job can be found.
+		** \return True if a job is actually available, false otherwise
+		*/
+		bool pop(Yuni::Job::IJob::Ptr& out);
 
 		//! Get the number of jobs waiting to be executed
 		uint size() const;
@@ -77,10 +86,6 @@ namespace QueueService
 		void clear();
 		//@}
 
-
-	public:
-		//! Flags to indicate if there are some remaining jobs by priority
-		Atomic::Bool hasJob[priorityCount];
 
 	private:
 		//! Number of job waiting to be executed
