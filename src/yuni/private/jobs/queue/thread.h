@@ -13,6 +13,7 @@ namespace Private
 namespace QueueService
 {
 
+
 	/*!
 	** \brief A single thread for a queue service
 	*/

@@ -24,44 +24,20 @@ namespace QueueService
 
 	void WaitingRoom::clear()
 	{
-		if (YUNI_LIKELY(pJobCount != 0))
-		{
-			// we should lock all lists before anything
-			for (uint i = 0; i != (uint) priorityCount; ++i)
-			{
-				pMutexes[i].lock();
-				hasJob[i] = false;
-			}
+		// we should lock all lists before anything
+		for (uint i = 0; i != (uint) priorityCount; ++i)
+			pMutexes[i].lock();
 
-			// reset the total number of job _before_ unlocking
-			pJobCount = 0; // may notify listeners that there is nothing to do
+		// reset the total number of job _before_ unlocking
+		pJobCount = 0; // may notify listeners that there is nothing to do
 
-			// clear
-			for (uint i = 0; i != (uint) priorityCount; ++i)
-				pJobs[i].clear();
+		// clear
+		for (uint i = 0; i != (uint) priorityCount; ++i)
+			pJobs[i].clear();
 
-			// unlock all
-			for (uint i = 0; i != (uint) priorityCount; ++i)
+		// unlock all
+		for (uint i = 0; i != (uint) priorityCount; ++i)
 				pMutexes[i].unlock();
-		}
-	}
-
-
-	void WaitingRoom::add(const Yuni::Job::IJob::Ptr& job)
-	{
-		// Locking the priority queue
-		// We should avoid ThreadingPolicy::MutexLocker since it may not be
-		// the good threading policy for these mutexes
-		Yuni::MutexLocker locker(pMutexes[priorityDefault]);
-
-		// Resetting some internal variables of the job
-		Yuni::Private::QueueService::JobAccessor<Yuni::Job::IJob>::AddedInTheWaitingRoom(*job);
-		// Adding it into the good priority queue
-		pJobs[priorityDefault].push_back(job);
-
-		// Resetting our internal state
-		hasJob[priorityDefault] = true;
-		++pJobCount;
 	}
 
 
@@ -78,7 +54,6 @@ namespace QueueService
 		pJobs[priority].push_back(job);
 
 		// Resetting our internal state
-		hasJob[priority] = true;
 		++pJobCount;
 	}
 
@@ -95,17 +70,20 @@ namespace QueueService
 			out = pJobs[priority].front();
 			// Removing it from the list of waiting jobs
 			pJobs[priority].pop_front();
-			// Resetting atomic variables about the internal status
-			hasJob[priority] = (not pJobs[priority].empty());
 
 			--pJobCount;
 			return true;
 		}
-
 		// It does not remain any job for this priority. Aborting.
-		// Resetting some variable
-		hasJob[priority] = false;
 		return false;
+	}
+
+
+	bool WaitingRoom::pop(Yuni::Job::IJob::Ptr& out)
+	{
+		return (pop(out, Yuni::Job::priorityHigh))
+			or (pop(out, Yuni::Job::priorityDefault))
+			or (pop(out, Yuni::Job::priorityLow));
 	}
 
 

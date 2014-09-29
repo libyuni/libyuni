@@ -258,6 +258,7 @@ namespace Thread
 
 	private:
 		# ifdef YUNI_OS_MSVC
+		// export instanciation of STL class
 		class YUNI_DECL ThreadList; // see http://support.microsoft.com/kb/168958/en-us/
 		# endif
 
@@ -267,6 +268,7 @@ namespace Thread
 		typename ThreadingPolicy::template Volatile<bool>::Type pAutoStart;
 
 	}; // class Array<T>
+
 
 
 

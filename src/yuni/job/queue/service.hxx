@@ -53,7 +53,8 @@ namespace Job
 
 	inline bool QueueService::idle() const
 	{
-		return (0 == pWorkerCountInActiveDuty);
+		MutexLocker locker(*this);
+		return pWorkerSet.empty();
 	}
 
 
