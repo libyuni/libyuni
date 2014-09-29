@@ -50,6 +50,8 @@ namespace MappingPolicy
 	class Identity
 	{
 	public:
+		typedef DstT  ResultType;
+
 		Identity(const FuncT&) {}
 
 		DstT map(const SrcT& src) { return src; }
@@ -60,6 +62,8 @@ namespace MappingPolicy
 	class Function
 	{
 	public:
+		typedef DstT  ResultType;
+
 		Function(const FuncT& func): pMapper(func) {}
 
 		DstT map(const SrcT& src) { return pMapper(src); }

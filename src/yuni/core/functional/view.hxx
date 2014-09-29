@@ -9,53 +9,163 @@ namespace Yuni
 namespace Functional
 {
 
+	template<class T, class CallbackT>
+	struct Filter final
+	{
+	public:
+		Filter(const T& loop, const CallbackT& callback)
+			: pLoop(loop)
+			, pCallback(callback)
+		{}
+		void reset() {}
+		bool empty() const {return pLoop.empty();}
+		bool next() { while(pCallback(current())) {} return false; }
+		ElementType& current() {}
+		const ElementType& current() const {}
+
+		template<class C>
+		Filter<Filter<T>, C> filter(const C& callback)
+		{
+			return Filter<Filter<T>, C>(*this, callback);
+		}
+
+	private:
+		T pLoop;
+		const CallbackT& pCallback;
+	};
+
+
+
+	template<class T>
+	class Loop final
+	{
+	public:
+		typedef uint ElementType;
+		Loop(const T& loop)
+			: pLoop(loop)
+		{}
+		void reset() {}
+		bool empty() const {return true;}
+		bool next() { return false; }
+		ElementType& current() {}
+		const ElementType& current() const {}
+
+	private:
+		const T& pLoop;
+	};
+
+
+	template<class T, bool UserTypeT = true>
+	struct View final
+	{
+	public:
+		typedef typename Static::If<UserTypeT, Loop<T>, T>::Type  LoopType;
+		typedef typename LoopType::ElementType ElementType;
+
+	public:
+		View(const T& loop)
+			: pLoop(loop)
+		{}
+		void reset() { pLoop.reset(); }
+		bool empty() const {return pLoop.empty();}
+		bool next() { return pLoop.next(); }
+		const ElementType& current() const { return pLoop.current(); }
+
+		template<class C>
+		View<Filter<LoopType, C>, false> filter(const C& callback) const
+		{
+			return Filter<LoopType, C>(pLoop, callback);
+		}
+
+	public:
+		LoopType pLoop;
+	};
+
+
+	template<class T> View<T> makeView(const T& container)
+	{
+		return View<T>(container);
+	}
+
+	template<class B, class E> View<LoopIterator<B, E> > makeView(B begin, E end)
+	{
+		return View<LoopIterator<B, E>, false>(begin, end);
+	}
+
+
+
+
+
+	// -----------------------------
+
+	template<class T>
+	struct Element final
+	{
+		typedef uint Type;
+	};
+
+
+
+	// comment on parcourt le container original
+	template<class T>
+	class Loop final
+	{
+	public:
+		typedef typename Element<T>::Type ElementType;
+
+	public:
+		void reset() {}
+		bool empty() const {return true;}
+		bool next() { return false; }
+		ElementType& current() {}
+		const ElementType& current() const {}
+	};
+
+
+	template<class NextT>
+	struct Identity final
+	{
+		typedef NextT Ancestor;
+
+		void reset() { Ancestor::reset(); }
+		bool empty() const {return Ancestor::empty();}
+		bool next()
+		{
+			return Ancestor::next();
+		}
+		const ElementType& current() const {return Ancestor::current();}
+	};
+
+
 
 
 	template<
-		class ParentT,
+		class T, // container
 		class FilteringT = FilteringPolicy::AcceptAll<typename ParentT::EltType>,
 		class MappingT = MappingPolicy::Identity<typename ParentT::EltType>
 	>
-	class BaseView final :
-		public FilteringT,
-		public MappingT
+	class View final
+		: public FilteringT
+		, public MappingT
+		, private NonCopyable<View<T, FilteringT, MappingT> >
 	{
 	public:
-		typedef typename ParentT::EltType  EltType;
-		typedef ParentT  ParentType;
-		typedef BaseView<ParentT, FilteringT, MappingT>  ThisType;
+		typedef typename Element<T>::Type  ElementType;
+		typedef typename Loop<T> LoopType;
+		typedef typename MappingT<T>  MappingType;
+		typedef typename MappingType::ReturnType  ReturnType;
 
 	public:
 		//! Main Constructor
-		BaseView():
-			FilteringT(None()),
-			MappingT(None())
-		{}
-		/*
-		template<class IteratorT>
-		BaseView(const IteratorT& begin,
-			 const IteratorT& end):
-			FilteringT(None()),
-			MappingT(None())
+		View(const T& container)
+			: pLoop(container)
 		{}
 
-		BaseView(uint startIdx, uint endIdx, const CollectionT& collection):
-			pLoop(startIdx, endIdx, collection)
-		{}
-		*/
+		bool empty() const { return pLoop.empty(); }
 
-		//! Copy constructor for filtering
-		template<class PredicateT>
-		BaseView(const PredicateT& filter):
-			FilteringT(filter),
-			MappingT(None())
-		{}
+		bool next() { return pLoop.next(); }
 
-		bool empty() const { return static_cast<ParentT*>(this)->empty(); }
-
-		bool next() const { return static_cast<ParentT*>(this)->next(); }
-
-		const EltType& current() const { return static_cast<ParentT*>(this)->current(); }
+		const EltType& current() const { return pMapping(pLoop.current()); }
 
 
 		//! Loop on all elements
@@ -77,10 +187,10 @@ namespace Functional
 
 		//! View filtering
 		template<class PredicateT>
-		FilterView<ThisType, FilteringPolicy::Function<EltType, PredicateT> >
+		FilterView<Type, FilteringPolicy::Function<EltType, PredicateT> >
 		filter(const PredicateT& predicate) const
 		{
-			return FilterView<ThisType, FilteringPolicy::Function<EltType, PredicateT> >(*this, predicate);
+			return FilterView<Type, FilteringPolicy::Function<EltType, PredicateT> >(*this, predicate);
 		}
 
 		/*
@@ -174,183 +284,10 @@ namespace Functional
 			ResultT min = min(max);
 			return max - min;
 		}
+
+	private:
+		LoopType pLoop;
 	};
-
-
-
-	//! Base template
-	template<class CollectionT>
-	class View final: public BaseView<View<CollectionT> >
-	{};
-
-
-
-	//! Generic loop for nested view
-	template<class CollectionT>
-	class View<View<CollectionT> > final: public BaseView<View<CollectionT> >
-	{
-	public:
-		typedef CollectionT CollType;
-		typedef typename View<CollectionT>::EltType EltType;
-
-	public:
-		View(const View<CollectionT>& collection):
-			pCollection(collection)
-		{}
-
-		bool empty() const { return pCollection.empty(); }
-
-		bool next()
-		{
-			return pCollection.next();
-		}
-
-		const typename View<CollectionT>::EltType& current() const
-		{
-			return pCollection.current();
-		}
-
-	private:
-		const View<CollectionT>& pCollection;
-
-	}; // class View
-
-
-
-	//! Generic loop for basic STL collections.
-	template<class T, class Other, template <class, class> class CollectionT>
-	class View<CollectionT<T, Other> > final: public BaseView<View<CollectionT<T, Other> >
-	{
-	public:
-		typedef CollectionT<T, Other>  CollType;
-		typedef T  EltType;
-
-	public:
-		View(const CollType& collection):
-			it(collection.begin()),
-			end(collection.end())
-		{}
-
-		View(const typename CollType::const_iterator& itBegin,
-			 const typename CollType::const_iterator& itEnd):
-			it(itBegin),
-			end(itEnd)
-		{}
-
-		bool empty() const { return it == end; }
-
-		bool next()
-		{
-			++it;
-			return it != end;
-		}
-
-		const T& current() const { return *it; }
-
-	private:
-		typename CollType::const_iterator it;
-		const typename CollType::const_iterator end;
-
-	}; // class View
-
-
-
-	//! Generic loop for T* null-terminated !
-	template<class T>
-	class View<T*> final: public BaseView<View<T*> >
-	{
-	public:
-		typedef T*  CollType;
-		typedef T  EltType;
-
-	public:
-		View(const T* const& collection):
-			ptr(collection)
-		{}
-
-		bool empty() const { return 0 == *ptr; }
-
-		bool next()
-		{
-			++ptr;
-			return 0 != *ptr;
-		}
-
-		const T& current() const { return *ptr; }
-
-	private:
-		const T* ptr;
-
-	}; // class View
-
-
-
-	//! Generic loop for const T* null-terminated !
-	template<class T>
-	class View<const T*> final: public BaseView<View<const T*> >
-	{
-	public:
-		typedef const T*  CollType;
-		typedef T  EltType;
-
-	public:
-		View(const T* const& collection):
-			ptr(collection)
-		{}
-
-		bool empty() const { return 0 == *ptr; }
-
-		bool next()
-		{
-			++ptr;
-			return 0 != *ptr;
-		}
-
-		const T& current() const { return *ptr; }
-
-	private:
-		const T* const& ptr;
-
-	}; // class View
-
-
-
-	//! Generic loop for T[N]
-	template<class T, int N>
-	class View<T[N]> final: public BaseView<View<T[N]> >
-	{
-	public:
-		typedef T  CollType[N];
-		typedef T  EltType;
-
-	public:
-		View(const T collection[N]):
-			i(0u),
-			end((uint)-1),
-			data(collection)
-		{}
-
-		View(uint startIdx, uint endIdx):
-			i(startIdx)
-		{
-		}
-
-		bool empty() const { return i >= Math::Min(N, end); }
-
-		bool next()
-		{
-			++i;
-			return i < Math::Min(N, end);
-		}
-
-		const T& current() const { return data[i]; }
-
-	private:
-		uint i;
-		uint end;
-		const T* data;
-
-	}; // class View
 
 
 
