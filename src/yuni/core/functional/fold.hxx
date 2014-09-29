@@ -13,15 +13,8 @@ namespace Yuni
 	ResultT fold(const CollectionT& collection, const ResultT& initval, const AccumulatorT& callback)
 	{
 		ResultT result = initval;
-		Functional::View<CollectionT> loop(collection);
-		if (loop.empty())
-			return result;
-		do
-		{
-			if (not callback(result, loop.current()))
-				break;
-		} while (loop.next());
-		return result;
+		Functional::View<CollectionT> view = makeView(collection);
+		return view.fold(initval, callback);
 	}
 
 

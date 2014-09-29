@@ -2,8 +2,6 @@
 # define __YUNI_CORE_FUNCTIONAL_MAPPING_HXX__
 
 # include "../../yuni.h"
-# include "fold.h"
-# include "binaryfunctions.h"
 
 
 namespace Yuni

@@ -1,7 +1,6 @@
 #ifndef __YUNI_CORE_FUNCTIONAL_VIEW_HXX__
 # define __YUNI_CORE_FUNCTIONAL_VIEW_HXX__
 
-# include "fold.h"
 # include "binaryfunctions.h"
 
 
@@ -22,7 +21,9 @@ namespace Functional
 		public MappingT
 	{
 	public:
-		typedef typename ParentT::EltType EltType;
+		typedef typename ParentT::EltType  EltType;
+		typedef ParentT  ParentType;
+		typedef BaseView<ParentT, FilteringT, MappingT>  ThisType;
 
 	public:
 		//! Main Constructor
@@ -70,16 +71,16 @@ namespace Functional
 					continue;
 				if (not callback(current()))
 					break;
-			} while next();
+			} while (next());
 		}
 
 
 		//! View filtering
 		template<class PredicateT>
-		View<ThisType, FilteringPolicy::Function<EltType, PredicateT> >
+		FilterView<ThisType, FilteringPolicy::Function<EltType, PredicateT> >
 		filter(const PredicateT& predicate) const
 		{
-			return View<ThisType, FilteringPolicy::Function<EltType, PredicateT> >(*this, predicate);
+			return FilterView<ThisType, FilteringPolicy::Function<EltType, PredicateT> >(*this, predicate);
 		}
 
 		/*
@@ -108,7 +109,7 @@ namespace Functional
 			{
 				if (not accumulate(result, current()))
 					break;
-			} while next();
+			} while (next());
 			return result;
 		}
 
@@ -177,18 +178,20 @@ namespace Functional
 
 
 
+	//! Base template
 	template<class CollectionT>
 	class View final: public BaseView<View<CollectionT> >
-	{
-	};
+	{};
 
 
+
+	//! Generic loop for nested view
 	template<class CollectionT>
 	class View<View<CollectionT> > final: public BaseView<View<CollectionT> >
 	{
 	public:
-		typedef typename View<CollectionT>::EltType EltType;
 		typedef CollectionT CollType;
+		typedef typename View<CollectionT>::EltType EltType;
 
 	public:
 		View(const View<CollectionT>& collection):
@@ -351,6 +354,19 @@ namespace Functional
 
 
 
+	template<class CollectionT, class FilteringT>
+	class FilterView: public BaseView<FilterView<CollectionT, FilteringT>, FilteringT>
+	{};
+
+
+	template<class CollectionT, class MappingT>
+	class MappingView : public BaseView<
+		MappingView<CollectionT, MappingT>,
+		FilteringPolicy::AcceptAll<typename View<CollectionT>::EltType>,
+		MappingT
+	>
+	{};
+
 
 
 } // namespace Functional
@@ -359,10 +375,10 @@ namespace Functional
 
 
 	//! Create a view on a collection
-	template<class CollectionT, class FilteringT, class MappingT>
-	Functional::View<CollectionT, FilteringT, MappingT> makeView(const CollectionT& collection)
+	template<class CollectionT>
+	Functional::View<CollectionT> makeView(const CollectionT& collection)
 	{
-		return Functional::View<CollectionT, FilteringT, MappingT>(collection);
+		return Functional::View<CollectionT>(collection);
 	}
 
 

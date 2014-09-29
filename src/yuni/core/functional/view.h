@@ -16,6 +16,14 @@ namespace Functional
 	class View;
 
 
+	template<class CollectionT, class FilteringPolicy>
+	class FilterView;
+
+
+	template<class CollectionT, class MappingT>
+	class MappingView;
+
+
 } // namespace Functional
 
 
