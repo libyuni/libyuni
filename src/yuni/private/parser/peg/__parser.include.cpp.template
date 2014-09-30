@@ -699,6 +699,94 @@
 	}
 
 
+	static void InternalNodeExportJSON(Clob& out, const Node& node, bool hasSibling, String& indent, String& tmp,
+		void (*callback)(Yuni::Dictionary<AnyString, YString>::Unordered&, const Nany::Node&))
+	{
+		using namespace ::Yuni::System::Console;
+		assert(&node != NULL);
+
+		typedef Yuni::Dictionary<AnyString, YString>::Unordered  DictType;
+		DictType dict;
+		dict["rule"] = RuleToString(node.rule);
+		dict["prefix"] = indent;
+
+		if (YUNI_UNLIKELY(RuleAttributeError(node.rule)))
+		{
+			dict["rule-type"] = "error";
+		}
+		else
+		{
+			if (YUNI_UNLIKELY(RuleAttributeImportant(node.rule)))
+				dict["rule-type"] = "important";
+			else
+				dict["rule-type"] = nullptr;
+		}
+
+		bool attrCapture = RuleAttributeCapture(node.rule);
+		if (attrCapture)
+		{
+			dict["text"] = node.text;
+			dict["text-capture"] = nullptr;
+		}
+		else
+		{
+			// it can be interresting to print the text itself when the node
+			// is a simple text capture
+			AnyString textCapture = RuleAttributeSimpleTextCapture(node.rule);
+			if (not textCapture.empty())
+			{
+				dict["text"] = nullptr;
+				dict["text-capture"] = textCapture;
+			}
+			else
+			{
+				dict["text"] = nullptr;
+				dict["text-capture"] = nullptr;
+			}
+		}
+
+		if (callback)
+			callback(dict, node);
+
+		// exporting the dict
+		{
+			out << "\t{";
+			bool  first = true;
+			for (DictType::const_iterator i = dict.begin(); i != dict.end(); ++i)
+			{
+				tmp = i->second;
+				tmp.replace("\"", "\\\"");
+				tmp.replace("\n", "\\n");
+
+				if (not first)
+					out << ",\n";
+				else
+					out << '\n';
+				out << "\t\t\"" << i->first << "\": \"" << tmp << "\"";
+				first = false;
+			}
+			out << "\n\t},\n";
+		}
+
+		// sub nodes
+		if (not node.children.empty())
+		{
+			if (hasSibling)
+				indent.append("|   ", 4);
+			else
+				indent.append("    ", 4);
+
+			for (uint i = 0; i != (uint) node.children.size(); ++i)
+			{
+				bool hasSibling = (i != (uint) node.children.size() - 1);
+				InternalNodeExportJSON(out, *(node.children[i]), hasSibling, indent, tmp, callback);
+			}
+
+			indent.chop(4);
+		}
+	}
+
+
 	template<bool ColorT>
 	static void InternalNodeExportConsole(Clob& out, const Node& node, bool hasSibling, String& indent, String& tmp)
 	{
