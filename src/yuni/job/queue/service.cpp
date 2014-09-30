@@ -269,10 +269,14 @@ namespace Job
 			}
 
 			MutexLocker locker(*this);
-			if (not pWorkerSet.empty() and pStatus == sRunning)
+			// if the queue is running, we may have to reset our internal state
+			if (pStatus == sRunning)
 			{
-				pSignalAllThreadHaveStopped.reset();
-				continue;
+				if (not pWorkerSet.empty() or not pWaitingRoom.empty())
+				{
+					pSignalAllThreadHaveStopped.reset();
+					continue;
+				}
 			}
 			break;
 		}
