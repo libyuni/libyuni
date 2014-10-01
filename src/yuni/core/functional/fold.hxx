@@ -12,9 +12,7 @@ namespace Yuni
 	template<class ResultT, class CollectionT, class AccumulatorT>
 	ResultT fold(const CollectionT& collection, const ResultT& initval, const AccumulatorT& callback)
 	{
-		ResultT result = initval;
-		Functional::View<CollectionT> view = makeView(collection);
-		return view.fold(initval, callback);
+		return makeView(collection).fold(initval, callback);
 	}
 
 

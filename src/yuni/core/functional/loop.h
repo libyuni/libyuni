@@ -18,16 +18,17 @@ namespace Functional
 
 
 	template<class CollectionT>
-	class Loop<View<CollectionT> > final
+	class Loop<Loop<CollectionT> > final
 	{
 	public:
-		typedef typename View<CollectionT>::EltType EltType;
-		typedef CollectionT CollType;
+		typedef typename Loop<CollectionT>::ElementType ElementType;
 
 	public:
-		Loop(const View<CollectionT>& collection):
+		Loop(const Loop<CollectionT>& collection):
 			pCollection(collection)
 		{}
+
+		void reset() { pCollection.reset(); }
 
 		bool empty() const { return pCollection.empty(); }
 
@@ -36,7 +37,7 @@ namespace Functional
 			return pCollection.next();
 		}
 
-		const typename View<CollectionT>::EltType& current() const
+		const typename Loop<CollectionT>::ElementType& current() const
 		{
 			return pCollection.current();
 		}
@@ -54,7 +55,7 @@ namespace Functional
 	{
 	public:
 		typedef CollectionT<T, Other>  CollType;
-		typedef T  EltType;
+		typedef T  ElementType;
 
 	public:
 		Loop(const CollType& collection):
@@ -64,9 +65,12 @@ namespace Functional
 
 		Loop(const typename CollType::const_iterator& itBegin,
 			 const typename CollType::const_iterator& itEnd):
+			begin(itBegin),
 			it(itBegin),
 			end(itEnd)
 		{}
+
+		void reset() { it = begin; }
 
 		bool empty() const { return it == end; }
 
@@ -79,6 +83,7 @@ namespace Functional
 		const T& current() const { return *it; }
 
 	private:
+		const typename CollType::const_iterator begin;
 		typename CollType::const_iterator it;
 		const typename CollType::const_iterator end;
 
@@ -91,13 +96,15 @@ namespace Functional
 	class Loop<T*> final
 	{
 	public:
-		typedef T*  CollType;
-		typedef T  EltType;
+		typedef T  ElementType;
 
 	public:
 		Loop(const T* const& collection):
+			start(collection),
 			ptr(collection)
 		{}
+
+		void reset() { ptr = start; }
 
 		bool empty() const { return 0 == *ptr; }
 
@@ -110,6 +117,7 @@ namespace Functional
 		const T& current() const { return *ptr; }
 
 	private:
+		const T* const start;
 		const T* ptr;
 
 	}; // class Loop
@@ -121,13 +129,15 @@ namespace Functional
 	class Loop<const T*> final
 	{
 	public:
-		typedef const T*  CollType;
-		typedef T  EltType;
+		typedef T  ElementType;
 
 	public:
 		Loop(const T* const& collection):
+			start(collection),
 			ptr(collection)
 		{}
+
+		void reset() { ptr = start; }
 
 		bool empty() const { return 0 == *ptr; }
 
@@ -140,6 +150,7 @@ namespace Functional
 		const T& current() const { return *ptr; }
 
 	private:
+		const T* const& start;
 		const T* const& ptr;
 
 	}; // class Loop
@@ -151,20 +162,25 @@ namespace Functional
 	class Loop<T[N]> final
 	{
 	public:
-		typedef T  CollType[N];
-		typedef T  EltType;
+		typedef T  ElementType;
 
 	public:
 		Loop(const T collection[N]):
+			start(0u),
 			i(0u),
 			end((uint)-1),
 			data(collection)
 		{}
 
-		Loop(uint startIdx, uint endIdx):
-			i(startIdx)
+		Loop(uint startIdx, uint endIdx, const T collection[N]):
+			start(startIdx),
+			i(startIdx),
+			end(endIdx),
+			data(collection)
 		{
 		}
+
+		void reset() { i = start; }
 
 		bool empty() const { return i >= Math::Min(N, end); }
 
@@ -177,12 +193,45 @@ namespace Functional
 		const T& current() const { return data[i]; }
 
 	private:
+		uint start;
 		uint i;
 		uint end;
-		const T* data;
+		const T* const data;
 
 	}; // class Loop
 
+
+
+	template<class BeginT, class EndT>
+	class LoopIterator final
+	{
+	public:
+		typedef typename BeginT::value_type  ElementType;
+
+	public:
+		LoopIterator(const BeginT& itBegin, const EndT& itEnd):
+			begin(itBegin),
+			it(itBegin),
+			end(itEnd)
+		{}
+
+		void reset() { it = begin; }
+
+		bool empty() const { return it == end; }
+
+		bool next()
+		{
+			++it;
+			return it != end;
+		}
+
+		const ElementType& current() const { return *it; }
+
+	private:
+		BeginT begin;
+		BeginT it;
+		EndT end;
+	};
 
 
 

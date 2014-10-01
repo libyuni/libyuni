@@ -2,7 +2,6 @@
 # define __YUNI_CORE_FUNCTIONAL_VIEW_H__
 
 # include "../../yuni.h"
-# include "viewpolicies.h"
 
 
 namespace Yuni
@@ -12,16 +11,9 @@ namespace Functional
 
 
 	//! A view is a virtual representation of a collection
-	template<class CollectionT>
-	class View;
+	template<class T, bool UserTypeT = true>
+	struct View;
 
-
-	template<class CollectionT, class FilteringPolicy>
-	class FilterView;
-
-
-	template<class CollectionT, class MappingT>
-	class MappingView;
 
 
 } // namespace Functional
