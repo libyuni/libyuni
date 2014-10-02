@@ -192,6 +192,13 @@ namespace Functional
 
 
 		//! Pre-defined folding : maximum
+		uint count()
+		{
+			return map([](const ElementType&) -> uint { return 1; }).sum();
+		}
+
+
+		//! Pre-defined folding : maximum
 		ElementType max(const ElementType& lowBound = std::numeric_limits<ElementType>::min())
 		{
 			return fold(lowBound, Max<ElementType>());
@@ -228,26 +235,30 @@ namespace Functional
 		}
 
 		//! Pre-defined folding : mean / mathematical average
-		// template<class ResultT>
-		// ResultT average(const ResultT& initVal = 0) const
-		// {
-		// 	return fold(initVal, Add<ResultT>()) / static_cast<ResultT>(pData.size());
-		// }
+		template<class FoldedT = ElementType>
+		FoldedT average()
+		{
+			uint size = 0u;
+			return fold((FoldedT)0, [&size](FoldedT& result, const ElementType& elt) -> bool
+			{
+				Add<FoldedT>()(result, elt);
+				++size;
+				return true;
+			}) / (FoldedT)size;
+		}
 
 		//! Pre-defined folding : both the min and the max in a single pass
 		std::pair<ElementType, ElementType> minMax(
 			const ElementType& lowBound = std::numeric_limits<ElementType>::min(),
 			const ElementType& highBound = std::numeric_limits<ElementType>::max())
 		{
-			std::pair<ElementType, ElementType> result(highBound, lowBound);
-			return fold(result,
+			return fold(std::pair<ElementType, ElementType>(highBound, lowBound),
 				[](std::pair<ElementType, ElementType>& minMax, const ElementType& elt) -> bool
 			{
 				Min<ElementType>()(minMax.first, elt);
 				Max<ElementType>()(minMax.second, elt);
 				return true;
 			});
-			return result;
 		}
 
 		//! Pre-defined folding : value range (maximum - minimum)
