@@ -4,12 +4,24 @@
 # include "binaryfunctions.h"
 # include "loop.h"
 
+# ifdef YUNI_HAS_CPP_LAMBDA
+#	include <utility>
+# endif
+
 
 namespace Yuni
 {
 namespace Functional
 {
 
+# ifdef YUNI_HAS_CPP_LAMBDA
+	//! Forward declaration
+	template<class T, class CallbackT>
+	struct Mapping;
+# endif
+
+
+	//! Filter selects elements from the view that fulfill a certain predicate
 	template<class T, class CallbackT>
 	struct Filter final
 	{
@@ -17,6 +29,10 @@ namespace Functional
 		typedef T  LoopType;
 		typedef typename LoopType::ElementType  ElementType;
 		typedef Filter<T, CallbackT>  Type;
+
+		// If there is a mapping somewhere before, we must not pass by reference
+		enum { hasMapping = LoopType::hasMapping };
+		typedef typename Static::If<hasMapping, ElementType, const ElementType&>::Type  ResultT;
 
 	public:
 		Filter(const LoopType& loop, const CallbackT& callback)
@@ -39,19 +55,50 @@ namespace Functional
 			return notFinished;
 		}
 
-		//ElementType& current() { return pLoop.current(); }
-		const ElementType& current() const { return pLoop.current(); }
-
-		template<class C>
-		Filter<Type, C> filter(const C& callback)
-		{
-			return Filter<Type, C>(*this, callback);
-		}
+		// By copy or reference depending on whether there was a mapping before
+		ResultT current() const { return pLoop.current(); }
 
 	private:
 		LoopType pLoop;
 		const CallbackT& pCallback;
 	};
+
+
+
+# ifdef YUNI_HAS_CPP_LAMBDA
+
+
+	template<class T, class CallbackT>
+	struct Mapping final
+	{
+	public:
+		typedef T  LoopType;
+		typedef decltype(std::declval<CallbackT>()(std::declval<T>().current()))  ElementType;
+		typedef Mapping<T, CallbackT>  Type;
+
+		enum { hasMapping = true };
+
+	public:
+		Mapping(const LoopType& loop, const CallbackT& callback)
+			: pLoop(loop)
+			, pCallback(callback)
+		{}
+
+		void reset() { pLoop.reset(); }
+
+		bool empty() const { return pLoop.empty(); }
+
+		bool next() { return pLoop.next(); }
+
+		// Always by copy
+		ElementType current() const { return pCallback(pLoop.current()); }
+
+	private:
+		LoopType pLoop;
+		const CallbackT& pCallback;
+	};
+
+# endif
 
 
 	/*
@@ -80,6 +127,7 @@ namespace Functional
 	public:
 		typedef typename Static::If<UserTypeT, Loop<T>, T>::Type  LoopType;
 		typedef typename LoopType::ElementType ElementType;
+		typedef typename Static::If<LoopType::hasMapping, ElementType, const ElementType&>::Type  ResultT;
 
 	public:
 		View(const T& loop)
@@ -94,7 +142,8 @@ namespace Functional
 		void reset() { pLoop.reset(); }
 		bool empty() const {return pLoop.empty();}
 		bool next() { return pLoop.next(); }
-		const ElementType& current() const { return pLoop.current(); }
+		//ElementType& current() { return pLoop.current(); }
+		ResultT current() const { return pLoop.current(); }
 
 		//! View filtering
 		template<class C>
@@ -102,6 +151,15 @@ namespace Functional
 		{
 			return Filter<LoopType, C>(pLoop, callback);
 		}
+
+#ifdef YUNI_HAS_CPP_LAMBDA
+		//! View mapping
+		template<class C>
+		View<Mapping<LoopType, C>, false> map(const C& callback) const
+		{
+			return Mapping<LoopType, C>(pLoop, callback);
+		}
+#endif
 
 		//! Loop on all elements
 		template<class CallbackT>
@@ -117,10 +175,10 @@ namespace Functional
 		}
 
 		//! User-defined folding
-		template<class ResultT, class AccumulatorT>
-		ResultT fold(const ResultT& initval, const AccumulatorT& accumulate)
+		template<class FoldedT, class AccumulatorT>
+		FoldedT fold(const FoldedT& initval, const AccumulatorT& accumulate)
 		{
-			ResultT result = initval;
+			FoldedT result = initval;
 
 			if (empty())
 				return result;
@@ -133,47 +191,40 @@ namespace Functional
 		}
 
 
-
 		//! Pre-defined folding : maximum
-		template<class ResultT>
-		ResultT max(const ResultT& initVal = 0)
+		ElementType max(const ElementType& lowBound = std::numeric_limits<ElementType>::min())
 		{
-			return fold(initVal, Max<ResultT>());
+			return fold(lowBound, Max<ElementType>());
 		}
 
 		//! Pre-defined folding : minimum
-		template<class ResultT>
-		ResultT min(const ResultT& initVal) // TODO : std::limits ?
+		ElementType min(const ElementType& highBound = std::numeric_limits<ElementType>::max())
 		{
-			return fold(initVal, Min<ResultT>());
+			return fold(highBound, Min<ElementType>());
 		}
 
 		//! Pre-defined folding : sum
-		template<class ResultT>
-		ResultT sum(const ResultT& initVal = 0)
+		ElementType sum(const ElementType& initVal = 0)
 		{
-			return fold(initVal, Add<ResultT>());
+			return fold(initVal, Add<ElementType>());
 		}
 
 		//! Pre-defined folding : difference
-		template<class ResultT>
-		ResultT diff(const ResultT& initVal)
+		ElementType diff(const ElementType& initVal)
 		{
-			return fold(initVal, Sub<ResultT>());
+			return fold(initVal, Sub<ElementType>());
 		}
 
 		//! Pre-defined folding : product
-		template<class ResultT>
-		ResultT product(const ResultT& initVal = 1)
+		ElementType product(const ElementType& initVal = 1)
 		{
-			return fold(initVal, Mul<ResultT>());
+			return fold(initVal, Mul<ElementType>());
 		}
 
 		//! Pre-defined folding : quotient
-		template<class ResultT>
-		ResultT quotient(const ResultT& initVal)
+		ElementType quotient(const ElementType& initVal)
 		{
-			return fold(initVal, Div<ResultT>());
+			return fold(initVal, Div<ElementType>());
 		}
 
 		//! Pre-defined folding : mean / mathematical average
@@ -183,13 +234,27 @@ namespace Functional
 		// 	return fold(initVal, Add<ResultT>()) / static_cast<ResultT>(pData.size());
 		// }
 
-		//! Pre-defined folding : value range (maximum - minimum)
-		template<class ResultT>
-		ResultT range(const ResultT& lowerBound)
+		//! Pre-defined folding : both the min and the max in a single pass
+		std::pair<ElementType, ElementType> minMax(
+			const ElementType& lowBound = std::numeric_limits<ElementType>::min(),
+			const ElementType& highBound = std::numeric_limits<ElementType>::max())
 		{
-			ResultT max = max(lowerBound);
-			ResultT min = min(max);
-			return max - min;
+			std::pair<ElementType, ElementType> result(highBound, lowBound);
+			return fold(result,
+				[](std::pair<ElementType, ElementType>& minMax, const ElementType& elt) -> bool
+			{
+				Min<ElementType>()(minMax.first, elt);
+				Max<ElementType>()(minMax.second, elt);
+				return true;
+			});
+			return result;
+		}
+
+		//! Pre-defined folding : value range (maximum - minimum)
+		ElementType valueRange()
+		{
+			std::pair<ElementType, ElementType> bounds = minMax();
+			return bounds.second - bounds.first;
 		}
 
 	public:
@@ -200,47 +265,6 @@ namespace Functional
 
 
 } // namespace Functional
-
-
-
-
-
-
-	//! Create a view on a collection
-	template<class CollectionT>
-	Functional::View<CollectionT> makeView(const CollectionT& collection)
-	{
-		return Functional::View<CollectionT>(collection);
-	}
-
-
-
-	//! Create a view on an array slice
-	template<class T, int N>
-	Functional::View<T[N]> makeView(uint start, uint end, const T collection[N])
-	{
-		return Functional::View<T[N]>(collection);
-	}
-
-
-	//! Create a view from const iterators
-	template<class CollectionT>
-	Functional::View<CollectionT> makeView(const typename CollectionT::const_iterator& start,
-		const typename CollectionT::const_iterator& end)
-	{
-		return Functional::View<CollectionT>(start, end);
-	}
-
-
-	//! Create a view from iterators
-	template<class B, class E>
-	Functional::View<Functional::LoopIterator<B, E> > makeView(B begin, E end)
-	{
-		return Functional::View<Functional::LoopIterator<B, E>, true>(begin, end);
-	}
-
-
-
 } // namespace Yuni
 
 

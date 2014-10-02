@@ -13,39 +13,9 @@ namespace Functional
 	template<class CollectionT>
 	class Loop final
 	{
+	public:
+		enum { hasMapping = false };
 	};
-
-
-
-	template<class CollectionT>
-	class Loop<Loop<CollectionT> > final
-	{
-	public:
-		typedef typename Loop<CollectionT>::ElementType ElementType;
-
-	public:
-		Loop(const Loop<CollectionT>& collection):
-			pCollection(collection)
-		{}
-
-		void reset() { pCollection.reset(); }
-
-		bool empty() const { return pCollection.empty(); }
-
-		bool next()
-		{
-			return pCollection.next();
-		}
-
-		const typename Loop<CollectionT>::ElementType& current() const
-		{
-			return pCollection.current();
-		}
-
-	private:
-		const View<CollectionT>& pCollection;
-
-	}; // class Loop
 
 
 
@@ -56,18 +26,12 @@ namespace Functional
 	public:
 		typedef CollectionT<T, Other>  CollType;
 		typedef T  ElementType;
+		enum { hasMapping = false };
 
 	public:
 		Loop(const CollType& collection):
 			it(collection.begin()),
 			end(collection.end())
-		{}
-
-		Loop(const typename CollType::const_iterator& itBegin,
-			 const typename CollType::const_iterator& itEnd):
-			begin(itBegin),
-			it(itBegin),
-			end(itEnd)
 		{}
 
 		void reset() { it = begin; }
@@ -80,6 +44,7 @@ namespace Functional
 			return it != end;
 		}
 
+		//T& current() { return *it; }
 		const T& current() const { return *it; }
 
 	private:
@@ -97,6 +62,7 @@ namespace Functional
 	{
 	public:
 		typedef T  ElementType;
+		enum { hasMapping = false };
 
 	public:
 		Loop(const T* const& collection):
@@ -114,6 +80,7 @@ namespace Functional
 			return 0 != *ptr;
 		}
 
+		//T& current() { return *ptr; }
 		const T& current() const { return *ptr; }
 
 	private:
@@ -130,6 +97,7 @@ namespace Functional
 	{
 	public:
 		typedef T  ElementType;
+		enum { hasMapping = false };
 
 	public:
 		Loop(const T* const& collection):
@@ -147,6 +115,7 @@ namespace Functional
 			return 0 != *ptr;
 		}
 
+		//T& current() { return *ptr; }
 		const T& current() const { return *ptr; }
 
 	private:
@@ -163,6 +132,7 @@ namespace Functional
 	{
 	public:
 		typedef T  ElementType;
+		enum { hasMapping = false };
 
 	public:
 		Loop(const T collection[N]):
@@ -190,6 +160,7 @@ namespace Functional
 			return i < Math::Min(N, end);
 		}
 
+		//T& current() { return data[i]; }
 		const T& current() const { return data[i]; }
 
 	private:
@@ -207,6 +178,7 @@ namespace Functional
 	{
 	public:
 		typedef typename BeginT::value_type  ElementType;
+		enum { hasMapping = false };
 
 	public:
 		LoopIterator(const BeginT& itBegin, const EndT& itEnd):
@@ -225,6 +197,7 @@ namespace Functional
 			return it != end;
 		}
 
+		//ElementType& current() { return *it; }
 		const ElementType& current() const { return *it; }
 
 	private:
