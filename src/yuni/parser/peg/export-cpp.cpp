@@ -261,6 +261,7 @@ namespace PEG
 			h << "		#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
 			h << "		Node::Ptr  xpath(std::initializer_list<enum Rule> path) const;\n";
 			h << "		#endif\n";
+			h << "		Node::Ptr  xpath(enum Rule path) const;\n";
 			h << '\n';
 			h << "		#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
 			h << "		bool xpathExists(std::initializer_list<enum Rule> path) const;\n";
@@ -561,6 +562,17 @@ namespace PEG
 			hxx << "		return nullptr;\n";
 			hxx << "	}\n";
 			hxx << "	#endif\n";
+			hxx << '\n';
+			hxx << '\n';
+			hxx << "	inline Node::Ptr  Node::xpath(enum Rule path) const\n";
+			hxx << "	{\n";
+			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			hxx << "		{\n";
+			hxx << "			if (children[i]->rule == path)\n";
+			hxx << "				return children[i];\n";
+			hxx << "		}\n";
+			hxx << "		return nullptr;\n";
+			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
 			hxx << "	#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
