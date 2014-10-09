@@ -1,6 +1,7 @@
 #ifndef __YUNI_CORE_FUNCTIONAL_VIEW_HXX__
 # define __YUNI_CORE_FUNCTIONAL_VIEW_HXX__
 
+# include "../static/if.h"
 # include "binaryfunctions.h"
 # include "loop.h"
 
