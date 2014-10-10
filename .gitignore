@@ -76,3 +76,5 @@ devpacks/*
 src/yuni/private/parser/peg/__parser.include.cpp.hxx
 src/tools/parser-generator/yuni-parser-generator*
 
+/src/samples/core/functional/00.fold/functional_00_fold.exe
+/src/samples/core/functional/01.views/functional_01_views.exe
