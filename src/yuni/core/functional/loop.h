@@ -30,6 +30,7 @@ namespace Functional
 
 	public:
 		Loop(const CollType& collection):
+			begin(collection.begin()),
 			it(collection.begin()),
 			end(collection.end())
 		{}
