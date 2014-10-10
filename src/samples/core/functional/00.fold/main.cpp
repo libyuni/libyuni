@@ -18,7 +18,7 @@ int main(void)
 	// Pass `fold()` the container, an initialization value, and the aggregator function
 	std::cout << "Sum : " << fold(list, 0u, sum) << std::endl;
 
-#ifdef FEMAP11
+#ifdef YUNI_HAS_CPP_LAMBDA
 
 	// If you have access to C++11 features, you may use the new lambda notation
 	std::cout << "Product : "

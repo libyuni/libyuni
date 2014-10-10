@@ -18,7 +18,7 @@ int main(void)
 	// Fold using the pre-defined `max()` aggregator
 	std::cout << "Max at " << makeView(list).max() << std::endl;
 
-#ifdef FEMAP11
+#ifdef YUNI_HAS_CPP_LAMBDA
 
 	// Make another view on the same container, and iterate on it using `each()`
 	makeView(list).each([](const uint& val) -> bool
@@ -28,7 +28,7 @@ int main(void)
 		});
 
 	// It is possible to eliminate some elements from a view using `filter()`
-	std::cout << "Number of values >= 10 : " << makeView(vect)
+	std::cout << "Number of values >= 10 : " << makeView(list)
 		.filter([](const uint& val)-> bool { return val >= 10; })
 		.count() << std::endl;
 
@@ -45,16 +45,18 @@ int main(void)
 					.filter([](const uint&)-> bool { return true; })
 					.min() << std::endl;
 
+#endif
+
 	// It is necessary to reset a view before iterating on it a second time
 	view.reset();
 
 	// Value range is (Max - Min) calculated in a single iteration
 	std::cout << "Range : " << view.valueRange() << std::endl;
 
-#endif
-
 	// Any type of element is acceptable for the container
 	std::vector<const char*> list2 = { "ab", "ra", "ca", "da", "bra" };
+
+#ifdef YUNI_HAS_CPP_LAMBDA
 
 	// It is possible to `map()` each element to another value, which may be of another type
 	std::cout << "Concatenated size : "
@@ -66,7 +68,8 @@ int main(void)
 			// But this is prettier than `::strlen()`
 			return AnyString(str).size();
 		})
-		.sum();
+		.sum()
+			  << std::endl;
 
 	// WARNING : If you want to use variable-size pointer arrays, they need to be zero-terminated !
 	uint* list3 = new uint[8] { 3, 189, 42, 69, 51, 310, 21, 0 };
@@ -89,7 +92,9 @@ int main(void)
 		.count()
 			  << std::endl;
 
-	delete list3;
+	delete[] list3;
+
+#endif
 
 	return 0;
 }
