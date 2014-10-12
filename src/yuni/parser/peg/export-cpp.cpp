@@ -136,17 +136,18 @@ namespace PEG
 			h << "\n\n\n";
 
 			h << "	//! Convert a rule id into its text representation\n";
-			h << "	AnyString RuleToString(enum Rule);\n";
+			h << "	YUNI_DECL AnyString RuleToString(enum Rule);\n";
 			h << '\n';
 			h << '\n';
 			h << "	//! Get if a rule is an error\n";
-			h << "	bool  RuleIsError(enum Rule ruleid);\n";
+			h << "	YUNI_DECL bool  RuleIsError(enum Rule ruleid);\n";
 			h << '\n';
 			h << '\n';
 			h << "	//! Get if the rule should be ignored when duplucating an AST (starting from 'tk-' and some special rules)\n";
-			h << "	bool ShouldIgnoreRuleForDuplication(enum Rule);\n";
-			h << "\n\n\n";
-
+			h << "	YUNI_DECL bool ShouldIgnoreRuleForDuplication(enum Rule);\n";
+			h << '\n';
+			h << '\n';
+			h << '\n';
 			h << "	enum Error\n";
 			h << "	{\n";
 			h << "		//! No error\n";
@@ -156,7 +157,7 @@ namespace PEG
 			h << "	};\n";
 			h << "\n\n\n\n\n";
 
-			h << "	class Notification final\n";
+			h << "	class YUNI_DECL Notification final\n";
 			h << "	{\n";
 			h << "	public:\n";
 			h << "		//! Most suitable martptr\n";
@@ -185,7 +186,7 @@ namespace PEG
 			h << '\n';
 			h << '\n';
 			h << '\n';
-			h << "	class Node final : public Yuni::IIntrusiveSmartPtr<Node, false, Yuni::Policy::SingleThreaded>\n";
+			h << "	class YUNI_DECL Node final : public Yuni::IIntrusiveSmartPtr<Node, false, Yuni::Policy::SingleThreaded>\n";
 			h << "	{\n";
 			h << "	public:\n";
 			h << "		//! Ancestor\n";
@@ -296,7 +297,7 @@ namespace PEG
 			h << '\n';
 			h << '\n';
 			h << '\n';
-			h << "	class Parser final\n";
+			h << "	class YUNI_DECL Parser final\n";
 			h << "	{\n";
 			h << "	public:\n";
 			h << "		typedef Yuni::Bind<bool (Yuni::Clob& out, const AnyString& uri)>   OnURILoading;\n";
@@ -406,7 +407,7 @@ namespace PEG
 			hxx << "			assert(metadataRelease != nullptr and \"invalid callback for releasing metadata\");\n";
 			hxx << "			metadataRelease(metadata);\n";
 			hxx << "		}\n";
-			hxx << "			#endif\n";
+			hxx << "		#endif\n";
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
