@@ -95,18 +95,41 @@ namespace Control
 		const String& selectedLabel() const { return pElements[pIndex].label; }
 
 		//! Get the currently selected element
-		ContentT& selected() { return pElements[pIndex].content; }
-		const ContentT& selected() const { return pElements[pIndex].content; }
+		ContentT& selected()
+		{
+			assert(pIndex >= 0u && pIndex < pElements.size());
+			return pElements[pIndex].content;
+		}
+		const ContentT& selected() const
+		{
+			assert(pIndex >= 0u && pIndex < pElements.size());
+			return pElements[pIndex].content;
+		}
 
 		//! Select an index in the list
-		void select(uint newIndex, bool triggerEvent = false)
+		bool select(uint newIndex, bool triggerEvent = false)
 		{
-			if (pIndex == newIndex || newIndex >= pElements.size())
-				return;
+			if (pIndex == newIndex)
+				return true;
+			if (newIndex >= pElements.size())
+				return false;
 			pIndex = newIndex;
 			if (triggerEvent)
-				onSelectionChange(pIndex);
+				onSelectionChange(this, pIndex);
 			invalidate();
+			return true;
+		}
+
+		ContentT& operator [] (uint index)
+		{
+			assert(index >= 0u && index < pElements.size());
+			return pElements[index];
+		}
+
+		const ContentT& operator [] (uint index) const
+		{
+			assert(index >= 0u && index < pElements.size());
+			return pElements[index];
 		}
 
 		template<class T>

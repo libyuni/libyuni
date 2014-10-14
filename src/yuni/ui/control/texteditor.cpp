@@ -39,7 +39,7 @@ namespace Control
 				// Ignore empty lines (test a second time to catch single "\r" lines)
 				if (!line.empty())
 				{
-					surface->drawTextOnColor(line, pFont, pColor, pBackColor, x, y);
+					surface->drawText(line, pFont, pColor, x, y);
 				}
 			}
 			y += pixelLineHeight;
@@ -47,8 +47,51 @@ namespace Control
 			return y < pSize.y;
 		}, true);
 
+		// Draw the cursor
+		if (pCursorPos.x >= pTopLineNb && pCursorPos.x < (pSize.y - 2 * pVertMargin) / pLineHeight(pConversion))
+		{
+			float x = ColumnToX(pCursorPos.y);
+			float y = LineToY(pCursorPos.x);
+			surface->drawLine(pColor, x, y, x, y + pLineHeight(pConversion), 1.0f);
+		}
+
 		surface->endClipping();
 		pModified = false;
+	}
+
+
+	EventPropagation TextEditor::mouseDown(Input::IMouse::Button btn, float x, float y)
+	{
+		if (btn == Input::IMouse::ButtonLeft)
+		{
+			pCursorPos(YToLine(y), XToColumn(x));
+			pDragPos(pCursorPos);
+			pDragging = true;
+		}
+		return epStop;
+	}
+
+
+	EventPropagation TextEditor::mouseUp(Input::IMouse::Button btn, float x, float y)
+	{
+		if (btn == Input::IMouse::ButtonLeft)
+		{
+			pDragPos(YToLine(y), XToColumn(x));
+			pDragging = false;
+			invalidate();
+		}
+		return epStop;
+	}
+
+
+	EventPropagation TextEditor::mouseMove(float x, float y)
+	{
+		if (pDragging)
+		{
+			pDragPos(YToLine(y), XToColumn(x));
+			invalidate();
+		}
+		return epContinue;
 	}
 
 
@@ -57,7 +100,7 @@ namespace Control
 		uint oldTopLine = pTopLineNb;
 		float newLineNb = (float)pTopLineNb - delta;
 		float maxLineNb = (float)(pText.countChar('\n') + 1);
-		float displayedLineCount = pSize.y / pLineHeight(pConversion);
+		float displayedLineCount = (pSize.y - 2 * pVertMargin) / pLineHeight(pConversion);
 		pTopLineNb = (uint)Math::Max(0.0f, Math::Min(maxLineNb - displayedLineCount + 1, newLineNb));
 		if (oldTopLine != pTopLineNb)
 			invalidate();

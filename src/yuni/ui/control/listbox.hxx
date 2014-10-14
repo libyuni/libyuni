@@ -39,7 +39,7 @@ namespace Control
 					// Currently selected -> invert colors
 					surface->drawTextOnColor(element.label, pFont, pBackColor, pColor, x, y);
 				else
-					surface->drawTextOnColor(element.label, pFont, pColor, pBackColor, x, y);
+					surface->drawText(element.label, pFont, pColor, x, y);
 			}
 			y += pixelLineHeight;
 			// Stop if we are outside the rectangle (for optim)
@@ -73,6 +73,8 @@ namespace Control
 		{
 			// Store selected index, wait mouseUp to confirm selection
 			pClickedIndex = pTopLineNb + Math::Floor((y - pPosition.y) / pLineHeight(pConversion));
+			if (pClickedIndex < -1 || pClickedIndex >= pElements.size())
+				pClickedIndex = -1;
 		}
 		return epStop;
 	}

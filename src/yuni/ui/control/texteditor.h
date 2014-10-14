@@ -4,6 +4,7 @@
 # include "../../yuni.h"
 # include "../../core/color/rgb.h"
 # include "../../core/color/rgba.h"
+# include "../../core/math.h"
 # include "control.h"
 # include "../displaymode.h"
 # include "../dimension.h"
@@ -26,13 +27,14 @@ namespace Control
 			IControl(x, y, maxWidth, maxHeight),
 			pText(),
 			pCursorPos(0u, 0u),
+			pDragPos(0u, 0u),
 			pFont(Theme::Current()->monoFont),
 			// White by default
 			pColor(Theme::Current()->textColor),
 			pBackColor(Theme::Current()->windowColor),
 			pAntiAliased(true),
 			pTopLineNb(0u),
-			pLineHeight(161.8_pcp),
+			pLineHeight(144_pcp), // 1.44 ratio
 			pHorizMargin(15),
 			pVertMargin(10)
 		{
@@ -44,13 +46,14 @@ namespace Control
 			IControl(position, maxSize),
 			pText(),
 			pCursorPos(0u, 0u),
+			pDragPos(0u, 0u),
 			pFont(Theme::Current()->monoFont),
 			pColor(Theme::Current()->textColor),
 			pBackColor(Theme::Current()->windowColor),
 			pAntiAliased(true),
 			pTopLineNb(0u),
-			pLineHeight(161.8_pcp),
-			pHorizMargin(20),
+			pLineHeight(144_pcp), // 1.44 ratio
+			pHorizMargin(15),
 			pVertMargin(10)
 		{
 			// We use percent parent on the font size (height) for line height calculation
@@ -76,7 +79,7 @@ namespace Control
 			if (pFont != font)
 			{
 				pFont = font;
-				pConversion.unitPerPercentParent = pFont->size() / 100.0f;
+				pConversion.unitPerPercentParent = pFont->size() * 96.0f / 72.0f / 100.0f;
 				invalidate();
 			}
 		}
@@ -108,7 +111,33 @@ namespace Control
 		//! Set line height in pixels
 		void lineHeightPixels(float newValue) { pLineHeight.reset(newValue, Dimension::uPixel); }
 
+		virtual EventPropagation mouseDown(Input::IMouse::Button btn, float x, float y) override;
+		virtual EventPropagation mouseUp(Input::IMouse::Button btn, float x, float y) override;
+		virtual EventPropagation mouseMove(float x, float y) override;
 		virtual EventPropagation mouseScroll(float delta, float x, float y) override;
+
+	private:
+		uint XToColumn(float x) const
+		{
+			// TODO : I need the real advance of the clicked text to find the proper column value
+			return (uint)Math::Round((x - pHorizMargin) / (pFont->size() / 1.25f)); // For now, do a random ratio
+		}
+
+		uint YToLine(float y) const
+		{
+			return uint((y - pVertMargin) / pLineHeight(pConversion)) + pTopLineNb;
+		}
+
+		float ColumnToX(float col) const
+		{
+			// TODO : I need the real advance of the clicked text to find the proper column value
+			return col * (pFont->size() / 1.25f) + pHorizMargin; // For now, do a random ratio
+		}
+
+		uint LineToY(float line) const
+		{
+			return (line - pTopLineNb) * pLineHeight(pConversion) + pVertMargin;
+		}
 
 	private:
 		//! Text to display
@@ -117,6 +146,16 @@ namespace Control
 		//! Position of the edition cursor, in lines and columns
 		Point2D<uint> pCursorPos;
 
+		/*!
+		** \brief Position of the dragging cursor
+		**
+		** This is the same as pCursorPos when not dragging and no text is selected
+		** This is the opposite end of the selection if dragging / some text is selected
+		*/
+		Point2D<uint> pDragPos;
+
+		//! Currently dragging ?
+		bool pDragging;
 
 
 		//! Font to use
