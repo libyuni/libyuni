@@ -237,7 +237,7 @@ namespace UI
 
 
 	void DrawingSurface::drawText(const String& text, const FTFont::Ptr& font,
-		const Color::RGBA<float>& color, float x, float y)
+		const Color::RGBA<float>& color, float x, float y, uint tabWidth)
 	{
 		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
 
@@ -249,6 +249,7 @@ namespace UI
 		overlay.font(font);
 		overlay.color(color);
 		overlay.move(x, y);
+		overlay.tabWidth(tabWidth);
 
 		// Update
 		overlay.update();
@@ -261,7 +262,8 @@ namespace UI
 	}
 
 	void DrawingSurface::drawTextOnColor(const String& text, const FTFont::Ptr& font,
-		const Color::RGBA<float>& color, const Color::RGBA<float>& backColor, float x, float y)
+		const Color::RGBA<float>& color, const Color::RGBA<float>& backColor,
+		float x, float y, uint tabWidth)
 	{
 		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
 
@@ -273,6 +275,7 @@ namespace UI
 		overlay.font(font);
 		overlay.color(color);
 		overlay.move(x, y);
+		overlay.tabWidth(tabWidth);
 
 		// Update
 		overlay.update();
@@ -286,7 +289,8 @@ namespace UI
 
 
 	void DrawingSurface::drawTextInRect(const String& text, const FTFont::Ptr& font,
-		const Color::RGBA<float>& color, float x, float y, float width, float height)
+		const Color::RGBA<float>& color, float x, float y, float width, float height,
+		uint tabWidth)
 	{
 		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
 
@@ -297,6 +301,7 @@ namespace UI
 		overlay.clear() << text;
 		overlay.font(font);
 		overlay.color(color);
+		overlay.tabWidth(tabWidth);
 		// Update to get the correct necessary size
 		overlay.update();
 
@@ -315,7 +320,7 @@ namespace UI
 
 	void DrawingSurface::drawTextOnColorInRect(const String& text, const FTFont::Ptr& font,
 		const Color::RGBA<float>& color, const Color::RGBA<float>& backColor,
-		float x, float y, float width, float height)
+		float x, float y, float width, float height, uint tabWidth)
 	{
 		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
 
@@ -326,6 +331,7 @@ namespace UI
 		overlay.clear() << text;
 		overlay.font(font);
 		overlay.color(color);
+		overlay.tabWidth(tabWidth);
 		// Update to get the correct necessary size
 		overlay.update();
 

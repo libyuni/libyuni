@@ -18,8 +18,7 @@ namespace Control
 		// Draw background
 		surface->drawFilledRectangle(pBackColor, pBackColor, pos.x, pos.y, pSize.x, pSize.y, 0.0f);
 
-		surface->beginRectangleClipping(pos.x + pHorizMargin, pos.y + pVertMargin,
-			pSize.x - 2 * pHorizMargin, pSize.y - 2 * pVertMargin);
+		surface->beginRectangleClipping(pos.x, pos.y, pSize.x, pSize.y);
 
 		// Draw the text
 		float pixelLineHeight = pLineHeight(pConversion);
@@ -39,7 +38,7 @@ namespace Control
 				// Ignore empty lines (test a second time to catch single "\r" lines)
 				if (!line.empty())
 				{
-					surface->drawText(line, pFont, pColor, x, y);
+					surface->drawText(line, pFont, pColor, x, y, pTabWidth);
 				}
 			}
 			y += pixelLineHeight;
@@ -48,11 +47,11 @@ namespace Control
 		}, true);
 
 		// Draw the cursor
-		if (pCursorPos.x >= pTopLineNb && pCursorPos.x < (pSize.y - 2 * pVertMargin) / pLineHeight(pConversion))
+		if (pCursorPos.x >= pTopLineNb && pCursorPos.x < pTopLineNb + (uint)((pSize.y - 2 * pVertMargin) / pLineHeight(pConversion)))
 		{
-			float x = ColumnToX(pCursorPos.y);
-			float y = LineToY(pCursorPos.x);
-			surface->drawLine(pColor, x, y, x, y + pLineHeight(pConversion), 1.0f);
+			float cx = ColumnToX(pCursorPos.y);
+			float cy = LineToY(pCursorPos.x);
+			surface->drawLine(pColor, cx, cy, cx, cy + pLineHeight(pConversion), 1.0f);
 		}
 
 		surface->endClipping();
@@ -64,9 +63,10 @@ namespace Control
 	{
 		if (btn == Input::IMouse::ButtonLeft)
 		{
-			pCursorPos(YToLine(y), XToColumn(x));
+			cursorPos(YToLine(y), XToColumn(x));
 			pDragPos(pCursorPos);
 			pDragging = true;
+			invalidate();
 		}
 		return epStop;
 	}

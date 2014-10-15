@@ -247,7 +247,7 @@ namespace UI
 	}
 
 
-	void FTFont::draw(const AnyString& text, Gfx3D::Texture::Ptr& texture, bool antiAliased, bool useKerning) const
+	void FTFont::draw(const AnyString& text, Gfx3D::Texture::Ptr& texture, bool antiAliased, bool useKerning, uint tabWidth) const
 	{
 		if (not valid())
 			return;
@@ -268,9 +268,9 @@ namespace UI
 			prev = glyph;
 			if ('\t' == (char)i->value())
 			{
-				// Tab : Do 4 spaces
+				// Tab : Write a certain number of spaces
 				glyph = pImpl->getGlyph((unsigned long)' ', false);
-				width += 4 * glyph->advance();
+				width += tabWidth * glyph->advance();
 				prev = nullptr;
 				continue;
 			}
@@ -301,7 +301,7 @@ namespace UI
 			if ('\t' == (char)i->value())
 			{
 				glyph = pImpl->getGlyph((unsigned long)' ', false);
-				xPen += 4 * glyph->advance();
+				xPen += tabWidth * glyph->advance();
 				prev = nullptr;
 				continue;
 			}

@@ -5,11 +5,13 @@
 # include "../../core/color/rgb.h"
 # include "../../core/color/rgba.h"
 # include "../../core/math.h"
+# include "../../core/functional/view.h"
 # include "control.h"
 # include "../displaymode.h"
 # include "../dimension.h"
 # include "../font.h"
 # include "../theme.h"
+# include <deque>
 
 namespace Yuni
 {
@@ -33,6 +35,7 @@ namespace Control
 			pColor(Theme::Current()->textColor),
 			pBackColor(Theme::Current()->windowColor),
 			pAntiAliased(true),
+			pTabWidth(4u),
 			pTopLineNb(0u),
 			pLineHeight(144_pcp), // 1.44 ratio
 			pHorizMargin(15),
@@ -51,6 +54,7 @@ namespace Control
 			pColor(Theme::Current()->textColor),
 			pBackColor(Theme::Current()->windowColor),
 			pAntiAliased(true),
+			pTabWidth(4u),
 			pTopLineNb(0u),
 			pLineHeight(144_pcp), // 1.44 ratio
 			pHorizMargin(15),
@@ -67,10 +71,10 @@ namespace Control
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;
 
 		//! Clear the text
-		String& clear() { invalidate(); pTopLineNb = 0u; return pText.clear(); }
+		String& clear() { invalidate(); pTopLineNb = 0u; pLines.clear(); return pText.clear(); }
 
 		//! Get the text
-		String& text() { invalidate(); pTopLineNb = 0u; return pText; }
+		String& text() { invalidate(); pTopLineNb = 0u; pLines.clear(); return pText; }
 		const String& text() const { return pText; }
 
 		//! Modify the font used
@@ -97,10 +101,24 @@ namespace Control
 		void backColor(const Color::RGB<float>& color) { pBackColor = color; invalidate(); }
 		void backColor(const Color::RGBA<float>& color) { pBackColor = color; invalidate(); }
 
+		Point2D<uint> cursorPos() const { return pCursorPos; }
+		void cursorPos(uint line, uint column)
+		{
+			if (pLines.empty() && !pText.empty())
+				reloadLines();
+			pCursorPos.x = Math::Min(Math::Max(0u, line), (uint)pLines.size());
+			pCursorPos.y = Math::Min(column, lineSize(pLines[pCursorPos.x]));
+			std::cout << "Cursor at (" << pCursorPos.x << "," << pCursorPos.y << ")" << std::endl;
+		}
+		void cursorPos(Point2D<uint> lineColumn) { cursorPos(lineColumn.x, lineColumn.y); invalidate(); }
+
 		//! Is the text anti-aliased ?
 		bool antiAliased() const { return pAntiAliased; }
 		//! Set text anti-aliasing
 		void antiAliased(bool newValue) { pAntiAliased = newValue; invalidate(); }
+
+		uint tabWidth() const { return pTabWidth; }
+		void tabWidth(uint nbChars) { pTabWidth = nbChars; invalidate(); }
 
 		//! Get line height
 		const Dimension& lineHeight() const { return pLineHeight; }
@@ -117,21 +135,47 @@ namespace Control
 		virtual EventPropagation mouseScroll(float delta, float x, float y) override;
 
 	private:
+		void reloadLines()
+		{
+			// Yuni::Bind<bool (const AnyString&)> call;
+			// call.bind(this, &TextEditor::addLine);
+			pText.words("\n", [&](const AnyString& line) -> bool
+				{
+					pLines.push_back(line);
+					return true;
+				}, true);
+		}
+
+
+		uint lineSize(const AnyString& line) const
+		{
+			return makeView(line.utf8begin(), line.utf8end())
+				.map([&](const AnyString::Char& c) -> uint
+					 {
+						 return c == '\t' ? pTabWidth : 1u;
+					 })
+				.sum();
+		}
+
 		uint XToColumn(float x) const
 		{
+			if (x - pHorizMargin <= 0)
+				return 0u;
 			// TODO : I need the real advance of the clicked text to find the proper column value
-			return (uint)Math::Round((x - pHorizMargin) / (pFont->size() / 1.25f)); // For now, do a random ratio
+			return (uint)Math::Round((x - pHorizMargin) / (pFont->size() / 1.25f)); // For now, use a not-quite-random ratio
 		}
 
 		uint YToLine(float y) const
 		{
+			if (y - pVertMargin <= 0)
+				return pTopLineNb;
 			return uint((y - pVertMargin) / pLineHeight(pConversion)) + pTopLineNb;
 		}
 
 		float ColumnToX(uint col) const
 		{
 			// TODO : I need the real advance of the clicked text to find the proper column value
-			return (float)col * ((float)pFont->size() / 1.25f) + (float)pHorizMargin; // For now, do a random ratio
+			return (float)col * ((float)pFont->size() / 1.25f) + (float)pHorizMargin; // For now, use a not-quite-random ratio
 		}
 
 		float LineToY(uint line) const
@@ -142,6 +186,9 @@ namespace Control
 	private:
 		//! Text to display
 		String pText;
+
+		//! Store AnyStrings on each line to facilitate edition
+		std::deque<AnyString> pLines;
 
 		//! Position of the edition cursor, in lines and columns
 		Point2D<uint> pCursorPos;
@@ -169,6 +216,9 @@ namespace Control
 
 		//! Anti-alias the text ?
 		bool pAntiAliased;
+
+		//! Tab width (in number of spaces)
+		uint pTabWidth;
 
 		//! Line number of the top-most displayed line (for scrolling)
 		uint pTopLineNb;

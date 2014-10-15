@@ -89,6 +89,9 @@ namespace UI
 		//! Set text anti-aliasing
 		void antiAliased(bool newValue);
 
+		uint tabWidth() const { return pTabWidth; }
+		void tabWidth(uint nbChars) { pTabWidth = nbChars; }
+
 		//! Move the text to another position
 		void move(float x, float y);
 
@@ -124,6 +127,9 @@ namespace UI
 
 		//! Anti-alias the text ?
 		bool pAntiAliased;
+
+		//! Tab width
+		uint pTabWidth;
 
 		//! Track modification
 		bool pModified;

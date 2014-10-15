@@ -20,7 +20,7 @@ namespace UI
 			if (pText.empty())
 				pTexture->clear();
 			else
-				pFont->draw(pText, pTexture);
+				pFont->draw(pText, pTexture, pAntiAliased, true, pTabWidth);
 		}
 	}
 
