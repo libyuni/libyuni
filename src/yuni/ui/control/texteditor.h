@@ -128,15 +128,15 @@ namespace Control
 			return uint((y - pVertMargin) / pLineHeight(pConversion)) + pTopLineNb;
 		}
 
-		float ColumnToX(float col) const
+		float ColumnToX(uint col) const
 		{
 			// TODO : I need the real advance of the clicked text to find the proper column value
-			return col * (pFont->size() / 1.25f) + pHorizMargin; // For now, do a random ratio
+			return (float)col * ((float)pFont->size() / 1.25f) + (float)pHorizMargin; // For now, do a random ratio
 		}
 
-		uint LineToY(float line) const
+		float LineToY(uint line) const
 		{
-			return (line - pTopLineNb) * pLineHeight(pConversion) + pVertMargin;
+			return (float)(line - pTopLineNb) * pLineHeight(pConversion) + (float)pVertMargin;
 		}
 
 	private:
