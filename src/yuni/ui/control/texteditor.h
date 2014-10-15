@@ -108,7 +108,6 @@ namespace Control
 				reloadLines();
 			pCursorPos.x = Math::Min(Math::Max(0u, line), (uint)pLines.size());
 			pCursorPos.y = Math::Min(column, lineSize(pLines[pCursorPos.x]));
-			std::cout << "Cursor at (" << pCursorPos.x << "," << pCursorPos.y << ")" << std::endl;
 		}
 		void cursorPos(Point2D<uint> lineColumn) { cursorPos(lineColumn.x, lineColumn.y); invalidate(); }
 
@@ -137,8 +136,6 @@ namespace Control
 	private:
 		void reloadLines()
 		{
-			// Yuni::Bind<bool (const AnyString&)> call;
-			// call.bind(this, &TextEditor::addLine);
 			pText.words("\n", [&](const AnyString& line) -> bool
 				{
 					pLines.push_back(line);
