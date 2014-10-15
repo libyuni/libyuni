@@ -36,7 +36,7 @@ namespace Control
 			pBackColor(Theme::Current()->windowColor),
 			pAntiAliased(true),
 			pTabWidth(4u),
-			pTopLineNb(0u),
+			pTopLineNb(1u),
 			pLineHeight(144_pcp), // 1.44 ratio
 			pHorizMargin(15),
 			pVertMargin(10)
@@ -55,7 +55,7 @@ namespace Control
 			pBackColor(Theme::Current()->windowColor),
 			pAntiAliased(true),
 			pTabWidth(4u),
-			pTopLineNb(0u),
+			pTopLineNb(1u),
 			pLineHeight(144_pcp), // 1.44 ratio
 			pHorizMargin(15),
 			pVertMargin(10)
@@ -71,10 +71,10 @@ namespace Control
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;
 
 		//! Clear the text
-		String& clear() { invalidate(); pTopLineNb = 0u; pLines.clear(); return pText.clear(); }
+		String& clear() { invalidate(); pTopLineNb = 1u; pLines.clear(); return pText.clear(); }
 
 		//! Get the text
-		String& text() { invalidate(); pTopLineNb = 0u; pLines.clear(); return pText; }
+		String& text() { invalidate(); pTopLineNb = 1u; pLines.clear(); return pText; }
 		const String& text() const { return pText; }
 
 		//! Modify the font used
@@ -106,8 +106,8 @@ namespace Control
 		{
 			if (pLines.empty() && !pText.empty())
 				reloadLines();
-			pCursorPos.x = Math::Min(Math::Max(0u, line), (uint)pLines.size());
-			pCursorPos.y = Math::Min(column, lineSize(pLines[pCursorPos.x]));
+			pCursorPos.x = Math::Min(Math::Max(1u, line), (uint)pLines.size());
+			pCursorPos.y = Math::Min(column, lineSize(pLines[pCursorPos.x - 1]));
 		}
 		void cursorPos(Point2D<uint> lineColumn) { cursorPos(lineColumn.x, lineColumn.y); invalidate(); }
 
@@ -134,7 +134,7 @@ namespace Control
 		virtual EventPropagation mouseScroll(float delta, float x, float y) override;
 
 	private:
-		void reloadLines()
+		void reloadLines() const
 		{
 			pText.words("\n", [&](const AnyString& line) -> bool
 				{
@@ -185,7 +185,7 @@ namespace Control
 		String pText;
 
 		//! Store AnyStrings on each line to facilitate edition
-		std::deque<AnyString> pLines;
+		mutable std::deque<AnyString> pLines;
 
 		//! Position of the edition cursor, in lines and columns
 		Point2D<uint> pCursorPos;

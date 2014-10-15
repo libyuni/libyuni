@@ -12,6 +12,8 @@ namespace Control
 	{
 		if (!pVisible)
 			return;
+		if (pLines.empty() && !pText.empty())
+			reloadLines();
 
 		Point2D<float> pos(pPosition.x + xOffset, pPosition.y + yOffset);
 
@@ -24,15 +26,15 @@ namespace Control
 		float pixelLineHeight = pLineHeight(pConversion);
 		float x = pos.x + pHorizMargin;
 		float y = pos.y + pVertMargin;
-		uint lineNb = 0u;
+		uint lastVisibleLine = YToLine(pSize.y - pVertMargin);
 		// Loop on lines of text
-		pText.words("\n", [&] (AnyString& line)
+		AnyString line;
+		for (uint lineNb = pTopLineNb; lineNb <= lastVisibleLine; ++lineNb)
 		{
-			if (lineNb++ < pTopLineNb)
-				return true;
+			line.assign(pLines[lineNb - 1]);
 			if (!line.empty())
 			{
-				// Crop the `\r` (CR) if necessary
+				// Crop trailing `\r` (CR) if necessary
 				if ('\r' == line[line.length() - 1])
 					line.truncate(line.length() - 1);
 				// Ignore empty lines (test a second time to catch single "\r" lines)
@@ -42,12 +44,10 @@ namespace Control
 				}
 			}
 			y += pixelLineHeight;
-			// Stop if we are outside the rectangle (for optim)
-			return y < pSize.y;
-		}, true);
+		}
 
 		// Draw the cursor
-		if (pCursorPos.x >= pTopLineNb && pCursorPos.x < pTopLineNb + (uint)((pSize.y - 2 * pVertMargin) / pLineHeight(pConversion)))
+		if (pCursorPos.x >= pTopLineNb && pCursorPos.x <= lastVisibleLine)
 		{
 			float cx = ColumnToX(pCursorPos.y);
 			float cy = LineToY(pCursorPos.x);
@@ -97,11 +97,14 @@ namespace Control
 
 	EventPropagation TextEditor::mouseScroll(float delta, float, float)
 	{
+		if (pLines.empty() && !pText.empty())
+			reloadLines();
+
 		uint oldTopLine = pTopLineNb;
 		float newLineNb = (float)pTopLineNb - delta;
-		float maxLineNb = (float)(pText.countChar('\n') + 1);
-		float displayedLineCount = (pSize.y - 2 * pVertMargin) / pLineHeight(pConversion);
-		pTopLineNb = (uint)Math::Max(0.0f, Math::Min(maxLineNb - displayedLineCount + 1, newLineNb));
+		float maxLineNb = (float)pLines.size();
+		float displayedLineCount = (pSize.y - pVertMargin) / pLineHeight(pConversion);
+		pTopLineNb = (uint)Math::Max(1.0f, Math::Min(maxLineNb - displayedLineCount + 1, newLineNb));
 		if (oldTopLine != pTopLineNb)
 			invalidate();
 		return epStop;
