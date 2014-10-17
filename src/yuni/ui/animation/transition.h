@@ -1,7 +1,7 @@
 #pragma once
 
-#include <yuni/yuni.h>
-#include <yuni/core/noncopyable.h>
+#include "../../yuni.h"
+#include "../../core/noncopyable.h"
 #include "easing.h"
 
 
@@ -18,6 +18,9 @@ namespace Animation
 	class Transition final : private NonCopyable<Transition<T> >
 	{
 	public:
+		//! Smart pointer
+		typedef SmartPtr<Transition<T> >  Ptr;
+
 		//! Prototype for an interpolation / easing function (cf Robert Penner's equations)
 		typedef Easing::Func EasingFunc;
 
