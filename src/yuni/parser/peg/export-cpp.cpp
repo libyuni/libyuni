@@ -92,8 +92,8 @@ namespace PEG
 			h << "# include <yuni/core/bind.h>\n";
 			h << "# include <yuni/core/dictionary.h>\n";
 			h << "# include <yuni/core/smartptr/intrusive.h>\n";
-			h << "# if __cplusplus > 199711L\n";
-			h << "#	define " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
+			h << "# if (__cplusplus > 199711L || (defined(_MSC_VER) && _MSC_VER >= 1800))\n";
+			h << "#	define " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST  1\n";
 			h << "#	include <initializer_list>\n";
 			h << "# endif";
 			h << "\n\n";
@@ -262,7 +262,7 @@ namespace PEG
 			h << "		#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
 			h << "		Node::Ptr  xpath(std::initializer_list<enum Rule> path) const;\n";
 			h << "		#endif\n";
-			h << "		Node::Ptr  xpath(enum Rule path) const;\n";
+			// h << "		Node::Ptr  xpath(enum Rule path) const;\n";
 			h << '\n';
 			h << "		#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
 			h << "		bool xpathExists(std::initializer_list<enum Rule> path) const;\n";
@@ -565,17 +565,17 @@ namespace PEG
 			hxx << "	#endif\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	inline Node::Ptr  Node::xpath(enum Rule path) const\n";
-			hxx << "	{\n";
-			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
-			hxx << "		{\n";
-			hxx << "			if (children[i]->rule == path)\n";
-			hxx << "				return children[i];\n";
-			hxx << "		}\n";
-			hxx << "		return nullptr;\n";
-			hxx << "	}\n";
-			hxx << '\n';
-			hxx << '\n';
+			// hxx << "	inline Node::Ptr  Node::xpath(enum Rule path) const\n";
+			// hxx << "	{\n";
+			// hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			// hxx << "		{\n";
+			// hxx << "			if (children[i]->rule == path)\n";
+			// hxx << "				return children[i];\n";
+			// hxx << "		}\n";
+			// hxx << "		return nullptr;\n";
+			// hxx << "	}\n";
+			// hxx << '\n';
+			// hxx << '\n';
 			hxx << "	#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
 			hxx << "	inline bool  Node::xpathExists(std::initializer_list<enum Rule> path) const\n";
 			hxx << "	{\n";
@@ -695,62 +695,73 @@ namespace PEG
 				cpp << "namespace " << namespaces[i] << "\n{\n";
 
 			cpp << "namespace // anonymous\n{\n";
-			cpp << "\n\n";
-
+			cpp << '\n';
+			cpp << '\n';
+			cpp << "	static const bool _attrAttributeCapture[] =\n";
+			cpp << "	{\n";
+			cpp << "		false, // rgUnknown\n";
+			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
+				cpp << "		" << (i->second.attributes.capture ? "true" : "false") << ", // " << i->second.enumID << '\n';
+			cpp << "		false, // rgEOF\n";
+			cpp << "	};\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	static bool  RuleAttributeCapture(enum Rule ruleid)\n";
 			cpp << "	{\n";
-			cpp << "		static const bool attr[] = {\n";
-			cpp << "			false, // rgUnknown\n";
-			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
-				cpp << "			" << (i->second.attributes.capture ? "true" : "false") << ", // " << i->second.enumID << '\n';
-			cpp << "			false, // rgEOF\n";
-			cpp << "		};\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
-			cpp << "		return attr[(uint) ruleid];\n";
+			cpp << "		return _attrAttributeCapture[(uint) ruleid];\n";
 			cpp << "	}\n";
 			cpp << '\n';
+			cpp << '\n';
+			cpp << '\n';
+			cpp << "	static const bool _attrAttributeError[] =\n";
+			cpp << "	{\n";
+			cpp << "		false, // rgUnknown\n";
+			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
+			{
+				bool error = i->first == "error" or i->first.startsWith("error-");
+				cpp << "		" << (error ? "true" : "false") << ", // " << i->second.enumID << '\n';
+			}
+			cpp << "		false, // rgEOF\n";
+			cpp << "	};\n";
 			cpp << '\n';
 			cpp << '\n';
 			cpp << "	static inline bool  RuleAttributeError(enum Rule ruleid)\n";
 			cpp << "	{\n";
-			cpp << "		static const bool attr[] = {\n";
-			cpp << "			false, // rgUnknown\n";
-			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
-			{
-				bool error = i->first == "error" or i->first.startsWith("error-");
-				cpp << "			" << (error ? "true" : "false") << ", // " << i->second.enumID << '\n';
-			}
-			cpp << "			false, // rgEOF\n";
-			cpp << "		};\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
-			cpp << "		return attr[(uint) ruleid];\n";
+			cpp << "		return _attrAttributeError[(uint) ruleid];\n";
 			cpp << "	}\n";
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
+			cpp << "	static inline const bool _attrAttributeImportant[] = {\n";
+			cpp << "		false, // rgUnknown\n";
+			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
+				cpp << "		" << (i->second.attributes.important ? "true" : "false") << ", // " << i->second.enumID << '\n';
+			cpp << "		false, // rgEOF\n";
+			cpp << "	};\n";
+			cpp << '\n';
+			cpp << '\n';
 			cpp << "	static inline bool  RuleAttributeImportant(enum Rule ruleid)\n";
 			cpp << "	{\n";
-			cpp << "		static const bool attr[] = {\n";
-			cpp << "			false, // rgUnknown\n";
-			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
-				cpp << "			" << (i->second.attributes.important ? "true" : "false") << ", // " << i->second.enumID << '\n';
-			cpp << "			false, // rgEOF\n";
-			cpp << "		};\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
-			cpp << "		return attr[(uint) ruleid];\n";
-			cpp << "	}\n\n\n\n";
-
-			cpp << "	static AnyString  RuleAttributeSimpleTextCapture(enum Rule ruleid)\n";
+			cpp << "		return _attrAttributeImportant[(uint) ruleid];\n";
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << '\n';
+			cpp << '\n';
+			cpp << "	static const char* const _attrAttributeSimpleTextCapture[] =\n";
 			cpp << "	{\n";
-			cpp << "		static const char* const attr[] = {\n";
-			cpp << "			nullptr, // rgUnknown\n";
+			cpp << "		nullptr, // rgUnknown\n";
 			String textCapture;
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
 			{
-				cpp << "			";
+				cpp << "		";
 				if (i->second.children.size() == 1 and i->second.children[0].isSimpleTextCapture())
 				{
 					textCapture = i->second.children[0].rule.text;
+					textCapture.replace("\\", "\\\\");
 					textCapture.replace("\"", "\\\"");
 					cpp << '"' << textCapture << '"';
 				}
@@ -759,10 +770,14 @@ namespace PEG
 
 				cpp << ", // " << i->second.enumID << '\n';
 			}
-			cpp << "			nullptr, // rgEOF\n";
-			cpp << "		};\n";
+			cpp << "		nullptr, // rgEOF\n";
+			cpp << "	};\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << "	static AnyString  RuleAttributeSimpleTextCapture(enum Rule ruleid)\n";
+			cpp << "	{\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
-			cpp << "		return attr[(uint) ruleid];\n";
+			cpp << "		return _attrAttributeSimpleTextCapture[(uint) ruleid];\n";
 			cpp << "	}\n\n\n\n";
 
 			PrepareCPPInclude(cpp);
