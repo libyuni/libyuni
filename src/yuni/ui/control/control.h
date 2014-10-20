@@ -204,10 +204,10 @@ namespace UI
 		void getControlStackAt(float x, float y, std::vector<IControl*>& stack);
 
 		//! Draw the child controls
-		void drawChildren(DrawingSurface::Ptr& surface) const
+		void drawChildren(DrawingSurface::Ptr& surface, const Point2D<float>& pos) const
 		{
 			for (auto& child : pChildren)
-				child->draw(surface, pPosition.x, pPosition.y);
+				child->draw(surface, pos.x, pos.y);
 		}
 
 		//! Launch a mouse move event

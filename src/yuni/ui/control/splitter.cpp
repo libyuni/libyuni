@@ -21,7 +21,7 @@ namespace Control
 
 		surface->beginRectangleClipping(pos.x, pos.y, pSize.x, pSize.y);
 		// Draw the children
-		drawChildren(surface);
+		drawChildren(surface, pos);
 
 		// Draw the splitter line
 		switch (pOrient)

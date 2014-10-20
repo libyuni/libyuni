@@ -37,7 +37,7 @@ namespace Control
 				pos.x, pos.y, pSize.x, pSize.y, theme.borderWidth);
 		}
 		// Draw the children
-		drawChildren(surface);
+		drawChildren(surface, pos);
 		surface->endClipping();
 		pModified = false;
 	}
