@@ -734,7 +734,7 @@ namespace PEG
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static inline const bool _attrAttributeImportant[] = {\n";
+			cpp << "	static const bool _attrAttributeImportant[] = {\n";
 			cpp << "		false, // rgUnknown\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
 				cpp << "		" << (i->second.attributes.important ? "true" : "false") << ", // " << i->second.enumID << '\n';
