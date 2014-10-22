@@ -278,6 +278,12 @@ namespace UI
 				break;
 			}
 
+			case WM_MOUSELEAVE:
+			{
+				window->doMouseLeave();
+				break;
+			}
+
 			case WM_CHAR:
 			{
 				// Do not manage WM_CHAR, do everything using WM_KEYDOWN / WM_KEYUP
@@ -745,6 +751,13 @@ namespace UI
 
 		// Set up our perspective GL screen
 		resize(pWidth, pHeight);
+
+		TRACKMOUSEEVENT tme;
+		tme.cbSize = (DWORD)sizeof(TRACKMOUSEEVENT);
+		tme.dwFlags = TME_LEAVE | TME_HOVER;
+		tme.hwndTrack = pHWnd;
+		tme.dwHoverTime = HOVER_DEFAULT;
+		::TrackMouseEvent(&tme);
 
 		if (pFullScreen)
 		{

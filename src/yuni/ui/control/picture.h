@@ -17,6 +17,10 @@ namespace Control
 	class Picture: public IControl
 	{
 	public:
+		//! Smart pointer
+		typedef Ancestor::SmartPtrType<Picture>::Ptr  Ptr;
+
+	public:
 		Picture():
 			pOffsetX(0.0f),
 			pOffsetY(0.0f),

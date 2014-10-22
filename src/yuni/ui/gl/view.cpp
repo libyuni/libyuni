@@ -312,6 +312,17 @@ namespace UI
 	}
 
 
+	EventPropagation View::doMouseLeave()
+	{
+		EventPropagation propagate = epContinue;
+		// If there are UI controls in this view
+		if (!(!pControl))
+			// Dispatch the event
+			propagate = pControl->doMouseLeave();
+		return propagate;
+	}
+
+
 	EventPropagation View::doKeyDown(Input::Key key)
 	{
 		EventPropagation propagate = epContinue;

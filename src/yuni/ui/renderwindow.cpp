@@ -366,6 +366,24 @@ namespace UI
 	}
 
 
+	void RenderWindow::doMouseLeave()
+	{
+		assert(pMouse and "invalid mouse pointer");
+
+		EventPropagation propagate = epContinue;
+		YUNI_REVERSE_FOREACH(auto view, pViewList)
+		{
+			propagate = view->doMouseLeave();
+			if (epStop == propagate)
+				return;
+			if (epFinishView == propagate)
+				break;
+		}
+
+		pMouse->doLeave();
+	}
+
+
 	void RenderWindow::doKeyDown(Input::Key key)
 	{
 		EventPropagation propagate = epContinue;

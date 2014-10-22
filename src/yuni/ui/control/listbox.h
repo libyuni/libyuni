@@ -23,6 +23,10 @@ namespace Control
 	class ListBox: public IControl
 	{
 	public:
+		//! Smart pointer
+		typedef typename Ancestor::SmartPtrType<ListBox<ContentT> >::Ptr  Ptr;
+
+	public:
 		//! An element in the list
 		class ListBoxElement
 		{

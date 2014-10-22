@@ -45,41 +45,6 @@ namespace Input
 		}; // enum Button
 
 	public:
-		//! Arguments for event callbacks
-		struct EventArgs
-		{
-			EventArgs(int xPos, int yPos, const bool* buttonStates, float delta):
-				pos(xPos, yPos),
-				buttons(buttonStates),
-				propagate(UI::epStop),
-				scrollDelta(delta)
-			{}
-
-			EventArgs(int xPos, int yPos, const bool* buttonStates):
-				pos(xPos, yPos),
-				buttons(buttonStates),
-				propagate(UI::epStop),
-				scrollDelta(0)
-			{}
-
-			//! X position of the cursor
-			Point2D<int> pos;
-
-			//! Mouse button states : true if the button is currently clicked
-			const bool* const buttons;
-
-			//! Should we propagate the event to underlying controls / views ?
-			UI::EventPropagation propagate;
-
-			//! Delta between current and previous position of the scroll wheel
-			float scrollDelta;
-
-		}; // struct EventArgs
-
-	public:
-		//! Prototype for a mouse event callback
-		//typedef Yuni::Bind<void (IControl::Ptr sender, EventArgs& args)>  MouseCallback;
-
 		//! \name Bindings for user-code event listeners
 		//@{
 		Yuni::Bind<void (int x, int y)>  onMove;
@@ -88,6 +53,7 @@ namespace Input
 		Yuni::Bind<void (Button btn, int x, int y)>  onDblClick;
 		Yuni::Bind<void (float delta)>  onScroll;
 		Yuni::Bind<void (int x, int y)>  onHover;
+		Yuni::Bind<void ()>  onLeave;
 		//@}
 
 	public:
@@ -107,6 +73,7 @@ namespace Input
 			onDblClick.unbind();
 			onScroll.unbind();
 			onHover.unbind();
+			onLeave.unbind();
 		}
 
 		//! Is the button clicked ?
@@ -136,6 +103,7 @@ namespace Input
 		//! Up is +, Down is -
 		void doScroll(float scale);
 		void doHover(int x, int y);
+		void doLeave();
 		//@}
 
 	protected:

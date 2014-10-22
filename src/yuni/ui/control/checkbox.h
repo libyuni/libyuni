@@ -17,6 +17,9 @@ namespace Control
 	class CheckBox: public IControl
 	{
 	public:
+		//! Smart pointer
+		typedef Ancestor::SmartPtrType<CheckBox>::Ptr  Ptr;
+
 		//! Checkbox checked callback
 		Yuni::Bind<void (IControl* sender, bool newValue)>  onCheckChanged;
 

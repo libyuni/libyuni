@@ -17,8 +17,14 @@ namespace Control
 	class Panel: public IControl
 	{
 	public:
+		//! Smart pointer
+		typedef Ancestor::SmartPtrType<Panel>::Ptr  Ptr;
+
+	public:
+		//! Constructor
 		Panel(float x, float y, float width, float height);
 
+		//! Constructor
 		Panel(const Point2D<float>& position, const Point2D<float>& size);
 
 		//! Virtual destructor

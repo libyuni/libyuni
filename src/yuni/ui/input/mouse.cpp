@@ -40,6 +40,11 @@ namespace Input
 		onHover(x, y);
 	}
 
+	void IMouse::doLeave()
+	{
+		onLeave();
+	}
+
 
 } // namespace Input
 } // namespace Yuni

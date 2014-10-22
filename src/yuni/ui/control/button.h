@@ -18,6 +18,8 @@ namespace Control
 	class Button: public IControl
 	{
 	public:
+		//! Smart pointer
+		typedef Ancestor::SmartPtrType<Button>::Ptr  Ptr;
 		//! Type of bind for the button callback
 		typedef Yuni::Bind<EventPropagation (IControl*)>  Callback;
 

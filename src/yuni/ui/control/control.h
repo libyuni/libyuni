@@ -52,12 +52,13 @@ namespace UI
 		Yuni::Event<EventPropagation (IControl* sender, Input::IMouse::Button btn, float x, float y)>  onMouseDblClick;
 		//! Mouse scroll callback
 		Yuni::Event<EventPropagation (IControl* sender, float delta)>  onMouseScroll;
-		//! Mouse enter callback
-		Yuni::Event<EventPropagation (IControl* sender, float x, float y)>  onMouseEnter;
-		//! Mouse leave callback
-		Yuni::Event<EventPropagation (IControl* sender, float x, float y)>  onMouseLeave;
 		//! Mouse hover callback
 		Yuni::Event<EventPropagation (IControl* sender, float x, float y)>  onMouseHover;
+		//! Mouse enter callback
+		Yuni::Event<EventPropagation (IControl* sender)>  onMouseEnter;
+		//! Mouse leave callback
+		Yuni::Event<EventPropagation (IControl* sender)>  onMouseLeave;
+
 		//! Key down callback
 		Yuni::Event<EventPropagation (IControl* sender, Input::Key)>  onKeyDown;
 		//! Key up callback
@@ -220,12 +221,12 @@ namespace UI
 		EventPropagation doMouseDblClick(Input::IMouse::Button btn, float x, float y);
 		//! Launch a mouse scroll event
 		EventPropagation doMouseScroll(float delta, float x, float y);
-		//! Launch a mouse enter event
-		EventPropagation doMouseEnter(float x, float y);
-		//! Launch a mouse leave event
-		EventPropagation doMouseLeave(float x, float y);
 		//! Launch a mouse hover event
 		EventPropagation doMouseHover(float x, float y);
+		//! Launch a mouse enter event
+		EventPropagation doMouseEnter();
+		//! Launch a mouse leave event
+		EventPropagation doMouseLeave();
 		//! Launch a key down event
 		EventPropagation doKeyDown(Input::Key key);
 		//! Launch a key up event
@@ -242,9 +243,9 @@ namespace UI
 		//! Control reaction to mouse scroll
 		virtual EventPropagation mouseScroll(float, float, float) { return epContinue; }
 		//! Control reaction to mouse enter
-		virtual EventPropagation mouseEnter(float, float) { return epContinue; }
-		//! Control reaction to mouse enter
-		virtual EventPropagation mouseLeave(float, float) { return epContinue; }
+		virtual EventPropagation mouseEnter() { return epContinue; }
+		//! Control reaction to mouse leave
+		virtual EventPropagation mouseLeave() { return epContinue; }
 		//! Control reaction to mouse hover
 		virtual EventPropagation mouseHover(float, float) { return epContinue; }
 		//! Control reaction to key up

@@ -17,6 +17,10 @@ namespace Control
 	class Window: public IControl
 	{
 	public:
+		//! Smart pointer
+		typedef Ancestor::SmartPtrType<Window>::Ptr  Ptr;
+
+	public:
 		Window(float x, float y, float width, float height):
 			IControl(x, y, width, height)
 		{}

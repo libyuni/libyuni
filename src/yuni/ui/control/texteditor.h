@@ -25,6 +25,10 @@ namespace Control
 	class TextEditor: public IControl
 	{
 	public:
+		//! Smart pointer
+		typedef Ancestor::SmartPtrType<TextEditor>::Ptr  Ptr;
+
+	public:
 		TextEditor(float x, float y, float maxWidth, float maxHeight):
 			IControl(x, y, maxWidth, maxHeight),
 			pText(),

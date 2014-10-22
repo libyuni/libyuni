@@ -266,6 +266,7 @@ namespace UI
 		//! Up is +, Down is -
 		void doMouseScroll(float delta);
 		void doMouseHover(int x, int y);
+		void doMouseLeave();
 
 		void doKeyDown(Input::Key key);
 		void doKeyUp(Input::Key key);

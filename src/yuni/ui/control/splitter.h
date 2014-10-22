@@ -17,6 +17,11 @@ namespace Control
 	class Splitter: public IControl
 	{
 	public:
+		//! Smart pointer
+		typedef Ancestor::SmartPtrType<Splitter>::Ptr  Ptr;
+
+	public:
+		//! Orientation of the split
 		enum SplitOrientation
 		{
 			soVertical,
@@ -24,6 +29,7 @@ namespace Control
 		};
 
 	public:
+		//! Constructor
 		Splitter(float x, float y, float width, float height):
 			IControl(x, y, width, height),
 			pOrient(soVertical),
@@ -33,6 +39,7 @@ namespace Control
 			addChild(new Panel(x + pSplitOffset, y, pSplitOffset, height));
 		}
 
+		//! Constructor
 		Splitter(const Point2D<float>& position, const Point2D<float>& size):
 			Splitter(position.x, position.y, size.x, size.y)
 		{}

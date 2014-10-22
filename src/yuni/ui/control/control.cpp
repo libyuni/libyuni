@@ -100,7 +100,7 @@ namespace UI
 				{
 					// Control has been left
 					toRemoveControls.push_back(control);
-					EventPropagation prop = control->doMouseLeave(x, y);
+					EventPropagation prop = control->doMouseLeave();
 					if (epStop == prop)
 						break;
 				}
@@ -124,7 +124,7 @@ namespace UI
 			{
 				// Control has been entered
 				enteredControls.insert(child);
-				EventPropagation prop = child->doMouseEnter(x, y);
+				EventPropagation prop = child->doMouseEnter();
 				if (prop > enterProp)
 					enterProp = prop;
 			}
@@ -281,21 +281,21 @@ namespace UI
 	}
 
 
-	EventPropagation IControl::doMouseEnter(float x, float y)
+	EventPropagation IControl::doMouseEnter()
 	{
-		EventPropagation prop = mouseEnter(x, y);
+		EventPropagation prop = mouseEnter();
 		if (epStop == prop)
 			return epStop;
-		EventPropagation prop2 = eventFold(onMouseEnter, this, x, y);
+		EventPropagation prop2 = eventFold(onMouseEnter, this);
 		return Math::Max(prop, prop2);
 	}
 
-	EventPropagation IControl::doMouseLeave(float x, float y)
+	EventPropagation IControl::doMouseLeave()
 	{
-		EventPropagation prop = mouseLeave(x, y);
+		EventPropagation prop = mouseLeave();
 		if (epStop == prop)
 			return epStop;
-		EventPropagation prop2 = eventFold(onMouseLeave, this, x, y);
+		EventPropagation prop2 = eventFold(onMouseLeave, this);
 		return Math::Max(prop, prop2);
 	}
 

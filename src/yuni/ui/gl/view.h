@@ -128,6 +128,7 @@ namespace UI
 		EventPropagation doMouseDblClick(Input::IMouse::Button btn, int x, int y);
 		EventPropagation doMouseScroll(float delta, int x, int y);
 		EventPropagation doMouseHover(int x, int y);
+		EventPropagation doMouseLeave();
 
 		EventPropagation doKeyDown(Input::Key key);
 		EventPropagation doKeyUp(Input::Key key);
