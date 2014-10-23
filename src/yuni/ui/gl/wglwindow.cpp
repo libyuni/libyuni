@@ -286,7 +286,15 @@ namespace UI
 
 			case WM_CHAR:
 			{
-				// Do not manage WM_CHAR, do everything using WM_KEYDOWN / WM_KEYUP
+				char uniChar[MB_CUR_MAX + 1];
+				int nbChar = ::wctomb(uniChar, (wchar_t)wParam);
+				if (nbChar < 1)
+					return 0;
+				uniChar[nbChar] = '\0';
+				String str;
+				str.resize((uint)(lParam & 0xFF) * (uint)nbChar);
+				str.fill((char*)uniChar);
+				window->doCharInput(str);
 				return 0;
 			}
 

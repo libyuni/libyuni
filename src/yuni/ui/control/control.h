@@ -63,6 +63,8 @@ namespace UI
 		Yuni::Event<EventPropagation (IControl* sender, Input::Key)>  onKeyDown;
 		//! Key up callback
 		Yuni::Event<EventPropagation (IControl* sender, Input::Key)>  onKeyUp;
+		//! Character input callback
+		Yuni::Event<EventPropagation (IControl* sender, const AnyString& str)>  onCharInput;
 
 	public:
 		//! Empty constructor
@@ -228,9 +230,11 @@ namespace UI
 		//! Launch a mouse leave event
 		EventPropagation doMouseLeave();
 		//! Launch a key down event
-		EventPropagation doKeyDown(Input::Key key);
+		EventPropagation doKeyDown(Input::Key key, float x, float y);
 		//! Launch a key up event
-		EventPropagation doKeyUp(Input::Key key);
+		EventPropagation doKeyUp(Input::Key key, float x, float y);
+		//! Launch a char input event
+		EventPropagation doCharInput(const AnyString& str, float x, float y);
 
 		//! Control reaction to mouse move
 		virtual EventPropagation mouseMove(float, float) { return epContinue; }
@@ -252,6 +256,8 @@ namespace UI
 		virtual EventPropagation keyDown(Input::Key) { return epContinue; }
 		//! Control reaction to key down
 		virtual EventPropagation keyUp(Input::Key) { return epContinue; }
+		//! Control reaction to char input
+		virtual EventPropagation charInput(const AnyString&) { return epContinue; }
 
 	private:
 		template<class... Args>

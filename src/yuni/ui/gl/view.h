@@ -130,8 +130,9 @@ namespace UI
 		EventPropagation doMouseHover(int x, int y);
 		EventPropagation doMouseLeave();
 
-		EventPropagation doKeyDown(Input::Key key);
-		EventPropagation doKeyUp(Input::Key key);
+		EventPropagation doKeyDown(Input::Key key, int x, int y);
+		EventPropagation doKeyUp(Input::Key key, int x, int y);
+		EventPropagation doCharInput(const AnyString& str, int x, int y);
 
 		//! Draw a text overlay
 		void drawOverlay(TextOverlay& text) const;

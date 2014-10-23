@@ -323,26 +323,38 @@ namespace UI
 	}
 
 
-	EventPropagation View::doKeyDown(Input::Key key)
+	EventPropagation View::doKeyDown(Input::Key key, int x, int y)
 	{
 		EventPropagation propagate = epContinue;
 		// If there are UI controls in this view
 		if (!(!pControl))
 			// Dispatch the event
-			propagate = pControl->doKeyDown(key);
+			propagate = pControl->doKeyDown(key, (float)x, (float)y);
 		return propagate;
 	}
 
 
-	EventPropagation View::doKeyUp(Input::Key key)
+	EventPropagation View::doKeyUp(Input::Key key, int x, int y)
 	{
 		EventPropagation propagate = epContinue;
 		// If there are UI controls in this view
 		if (!(!pControl))
 			// Dispatch the event
-			propagate = pControl->doKeyUp(key);
+			propagate = pControl->doKeyUp(key, (float)x, (float)y);
 		return propagate;
 	}
+
+
+	EventPropagation View::doCharInput(const AnyString& str, int x, int y)
+	{
+		EventPropagation propagate = epContinue;
+		// If there are UI controls in this view
+		if (!(!pControl))
+			// Dispatch the event
+			propagate = pControl->doCharInput(str, (float)x, (float)y);
+		return propagate;
+	}
+
 
 
 

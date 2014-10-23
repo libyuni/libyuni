@@ -1790,7 +1790,7 @@ namespace Yuni
 		** \brief Reset the current value with a formatted string
 		**
 		** The format is the standard printf format.
-		** \param format The format, reprensented by a zero-terminated string
+		** \param format The format, represented by a zero-terminated string
 		** \return Always *this
 		*/
 		CString& format(const AnyString& format, ...);

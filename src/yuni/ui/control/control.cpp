@@ -334,18 +334,107 @@ namespace UI
 	}
 
 
-	EventPropagation IControl::doKeyDown(Input::Key key)
+	EventPropagation IControl::doKeyDown(Input::Key key, float x, float y)
 	{
-		// TODO : the managing control should be the top-most one
-		return eventFold(onKeyDown, this, key);
+		if (!pVisible)
+			return epContinue;
+
+		std::vector<IControl*> stack;
+		getControlStackAt(x, y, stack);
+		EventPropagation finalProp = epContinue;
+		while (!stack.empty())
+		{
+			IControl* child = stack.back();
+			stack.pop_back();
+			EventPropagation prop = child->keyDown(key);
+			if (epStop == prop)
+				return epStop;
+			if (prop > finalProp)
+				finalProp = prop;
+
+			prop = eventFold(child->onKeyDown, child, key);
+			if (epStop == prop)
+				return epStop;
+			if (prop > finalProp)
+				finalProp = prop;
+		}
+		EventPropagation prop = keyDown(key);
+		if (epStop == prop)
+			return epStop;
+		if (prop > finalProp)
+			finalProp = prop;
+		prop = eventFold(onKeyDown, this, key);
+		return Math::Max(prop, finalProp);
 	}
 
 
-	EventPropagation IControl::doKeyUp(Input::Key key)
+	EventPropagation IControl::doKeyUp(Input::Key key, float x, float y)
 	{
-		// TODO : the managing control should be the top-most one
-		return eventFold(onKeyUp, this, key);
+		if (!pVisible)
+			return epContinue;
+
+		std::vector<IControl*> stack;
+		getControlStackAt(x, y, stack);
+		EventPropagation finalProp = epContinue;
+		while (!stack.empty())
+		{
+			IControl* child = stack.back();
+			stack.pop_back();
+			EventPropagation prop = child->keyUp(key);
+			if (epStop == prop)
+				return epStop;
+			if (prop > finalProp)
+				finalProp = prop;
+
+			prop = eventFold(child->onKeyUp, child, key);
+			if (epStop == prop)
+				return epStop;
+			if (prop > finalProp)
+				finalProp = prop;
+		}
+		EventPropagation prop = keyUp(key);
+		if (epStop == prop)
+			return epStop;
+		if (prop > finalProp)
+			finalProp = prop;
+		prop = eventFold(onKeyUp, this, key);
+		return Math::Max(prop, finalProp);
 	}
+
+
+	EventPropagation IControl::doCharInput(const AnyString& str, float x, float y)
+	{
+		if (!pVisible)
+			return epContinue;
+
+		std::vector<IControl*> stack;
+		getControlStackAt(x, y, stack);
+		EventPropagation finalProp = epContinue;
+		while (!stack.empty())
+		{
+			IControl* child = stack.back();
+			stack.pop_back();
+			EventPropagation prop = child->charInput(str);
+			if (epStop == prop)
+				return epStop;
+			if (prop > finalProp)
+				finalProp = prop;
+
+			prop = child->onCharInput.fold(epContinue, Functional::Max<EventPropagation>(), child, str);
+			if (epStop == prop)
+				return epStop;
+			if (prop > finalProp)
+				finalProp = prop;
+		}
+		EventPropagation prop = charInput(str);
+		if (epStop == prop)
+			return epStop;
+		if (prop > finalProp)
+			finalProp = prop;
+		prop = onCharInput.fold(epContinue, Functional::Max<EventPropagation>(), this, str);
+		return Math::Max(prop, finalProp);
+	}
+
 
 
 } // namespace UI

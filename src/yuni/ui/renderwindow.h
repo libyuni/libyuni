@@ -270,6 +270,7 @@ namespace UI
 
 		void doKeyDown(Input::Key key);
 		void doKeyUp(Input::Key key);
+		void doCharInput(const AnyString& str);
 		//@}
 
 

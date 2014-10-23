@@ -49,13 +49,116 @@ namespace Control
 		// Draw the cursor
 		if (pCursorPos.x >= pTopLineNb && pCursorPos.x <= lastVisibleLine)
 		{
-			float cx = ColumnToX(pCursorPos.y);
-			float cy = LineToY(pCursorPos.x);
+			float cx = columnToX(pCursorPos.y);
+			float cy = lineToY(pCursorPos.x);
 			surface->drawLine(pColor, cx, cy, cx, cy + pLineHeight(pConversion), 1.0f);
 		}
 
 		surface->endClipping();
 		pModified = false;
+	}
+
+
+	EventPropagation TextEditor::keyDown(Input::Key key)
+	{
+		switch (key)
+		{
+			case Input::Left:
+				if (0 == pCursorPos.y && pCursorPos.x > 1)
+					// When at beginning of line, move up
+					cursorPos(pCursorPos.x - 1, lineSize(pCursorPos.x - 1));
+				else
+					cursorPos(pCursorPos.x, pCursorPos.y - 1);
+				break;
+			case Input::Right:
+				if (lineSize(pCursorPos.x) == pCursorPos.y)
+					// When at end of line, move down and go to beginning of life
+					cursorPos(pCursorPos.x + 1, 0);
+				else
+					cursorPos(pCursorPos.x, pCursorPos.y + 1);
+				break;
+			case Input::Up:
+				cursorPos(pCursorPos.x - 1, pCursorPos.y);
+				break;
+			case Input::Down:
+				cursorPos(pCursorPos.x + 1, pCursorPos.y);
+				break;
+			case Input::Home:
+				cursorPos(pCursorPos.x, 0);
+				break;
+			case Input::End:
+				cursorPos(pCursorPos.x, lineSize(pCursorPos.x));
+				break;
+			case Input::PageUp:
+				scroll(displayedLineCount());
+				break;
+			case Input::PageDown:
+				scroll(-displayedLineCount());
+				break;
+			default:
+				break;
+		}
+		return epStop;
+	}
+
+
+	EventPropagation TextEditor::charInput(const AnyString& str)
+	{
+		switch (str[0])
+		{
+			// Backspace
+			case 0x08:
+				for (uint i = 0; i < str.size(); ++i)
+				{
+					// Cannot use backspace when at beginning of file
+					if (0 == pCursorPos.y && 1 == pCursorPos.x)
+						return epStop;
+					// When at beginning of line but not on first line, move up
+					if (0 == pCursorPos.y && pCursorPos.x > 1)
+						cursorPos(pCursorPos.x - 1, lineSize(pCursorPos.x - 1));
+					else
+						cursorPos(pCursorPos.x, pCursorPos.y - 1);
+					// Erase
+					pText.erase(cursorIndex(), 1);
+				}
+				reloadLines();
+				invalidate();
+				break;
+			// Delete
+			case 0x7F:
+				for (uint i = 0; i < str.size(); ++i)
+				{
+					pText.erase(cursorIndex(), 1);
+				}
+				reloadLines();
+				invalidate();
+				break;
+			// New Line / Line Feed
+			case '\n':
+				// TODO
+				break;
+			// Non-displayable characters are ignore
+			case 0x00:
+			case 0x01:
+			case 0x02:
+			case 0x03:
+			case 0x04:
+			case 0x05:
+			case 0x06:
+				break;
+			// Normal displayable characters
+			default:
+				pText.insert(cursorIndex(), str);
+
+				// TODO : Manage line addition / removal by fixing pLines
+				// For now, reload all lines :
+				reloadLines();
+
+				// Advance the cursor
+				cursorPos(pCursorPos.x, pCursorPos.y + str.size());
+				break;
+		}
+		return epStop;
 	}
 
 
@@ -97,19 +200,23 @@ namespace Control
 
 	EventPropagation TextEditor::mouseScroll(float delta, float, float)
 	{
+		scroll(delta);
+		return epStop;
+	}
+
+
+	void TextEditor::scroll(float nbLines)
+	{
 		if (pLines.empty() && !pText.empty())
 			reloadLines();
 
 		uint oldTopLine = pTopLineNb;
-		float newLineNb = (float)pTopLineNb - delta;
+		float newLineNb = (float)pTopLineNb - nbLines;
 		float maxLineNb = (float)pLines.size();
-		float displayedLineCount = (pSize.y - pVertMargin) / pLineHeight(pConversion);
-		pTopLineNb = (uint)Math::Max(1.0f, Math::Min(maxLineNb - displayedLineCount + 1, newLineNb));
+		pTopLineNb = (uint)Math::Max(1.0f, Math::Min(maxLineNb - displayedLineCount() + 1, newLineNb));
 		if (oldTopLine != pTopLineNb)
 			invalidate();
-		return epStop;
 	}
-
 
 
 } // namespace Control

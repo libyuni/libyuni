@@ -112,6 +112,7 @@ namespace Control
 				reloadLines();
 			pCursorPos.x = Math::Min(Math::Max(1u, line), (uint)pLines.size());
 			pCursorPos.y = Math::Min(column, lineSize(pLines[pCursorPos.x - 1]));
+			invalidate();
 		}
 		void cursorPos(Point2D<uint> lineColumn) { cursorPos(lineColumn.x, lineColumn.y); invalidate(); }
 
@@ -132,19 +133,38 @@ namespace Control
 		//! Set line height in pixels
 		void lineHeightPixels(float newValue) { pLineHeight.reset(newValue, Dimension::uPixel); }
 
+		virtual EventPropagation keyDown(Input::Key key) override;
+		virtual EventPropagation charInput(const AnyString& str) override;
 		virtual EventPropagation mouseDown(Input::IMouse::Button btn, float x, float y) override;
 		virtual EventPropagation mouseUp(Input::IMouse::Button btn, float x, float y) override;
 		virtual EventPropagation mouseMove(float x, float y) override;
 		virtual EventPropagation mouseScroll(float delta, float x, float y) override;
 
 	private:
+		//! Scroll by a number of lines, negative scrolls down, positive scrolls up
+		void scroll(float nbLines);
+
 		void reloadLines() const
 		{
+			pLines.clear();
 			pText.words("\n", [&](const AnyString& line) -> bool
 				{
 					pLines.push_back(line);
 					return true;
 				}, true);
+		}
+
+		float displayedLineCount() const
+		{
+			return (pSize.y - pVertMargin) / pLineHeight(pConversion);
+		}
+
+		uint lineSize(uint lineNb) const
+		{
+			if (pLines.empty() && !pText.empty())
+				reloadLines();
+
+			return lineSize(pLines[lineNb - 1]);
 		}
 
 
@@ -173,15 +193,31 @@ namespace Control
 			return uint((y - pVertMargin) / pLineHeight(pConversion)) + pTopLineNb;
 		}
 
-		float ColumnToX(uint col) const
+		float columnToX(uint col) const
 		{
 			// TODO : I need the real advance of the clicked text to find the proper column value
 			return (float)col * ((float)pFont->size() / 1.25f) + (float)pHorizMargin; // For now, use a not-quite-random ratio
 		}
 
-		float LineToY(uint line) const
+		float lineToY(uint line) const
 		{
 			return (float)(line - pTopLineNb) * pLineHeight(pConversion) + (float)pVertMargin;
+		}
+
+		uint cursorIndex() const
+		{
+			uint index = 0u;
+			uint lineNb = pCursorPos.x - 1;
+			for (auto line : pLines)
+			{
+				if (0 == lineNb--)
+				{
+					index += pCursorPos.y;
+					break;
+				}
+				index += lineSize(line) + 1;
+			}
+			return index;
 		}
 
 	private:

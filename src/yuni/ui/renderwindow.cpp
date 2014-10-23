@@ -389,7 +389,8 @@ namespace UI
 		EventPropagation propagate = epContinue;
 		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
-			propagate = view->doKeyDown(key);
+			// Use the current position of the mouse to determine focus
+			propagate = view->doKeyDown(key, pMouse->pos().x, pMouse->pos().y);
 			if (epStop == propagate)
 				return;
 			if (epFinishView == propagate)
@@ -404,7 +405,8 @@ namespace UI
 		EventPropagation propagate = epContinue;
 		YUNI_REVERSE_FOREACH(auto view, pViewList)
 		{
-			propagate = view->doKeyUp(key);
+			// Use the current position of the mouse to determine focus
+			propagate = view->doKeyUp(key, pMouse->pos().x, pMouse->pos().y);
 			if (epStop == propagate)
 				return;
 			if (epFinishView == propagate)
@@ -413,6 +415,20 @@ namespace UI
 		pKeyboard.doUp(key);
 	}
 
+
+	void RenderWindow::doCharInput(const AnyString& str)
+	{
+		EventPropagation propagate = epContinue;
+		YUNI_REVERSE_FOREACH(auto view, pViewList)
+		{
+			// Use the current position of the mouse to determine focus
+			propagate = view->doCharInput(str,pMouse->pos().x, pMouse->pos().y);
+			if (epStop == propagate)
+				return;
+			if (epFinishView == propagate)
+				break;
+		}
+	}
 
 
 
