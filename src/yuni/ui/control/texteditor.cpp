@@ -1,4 +1,5 @@
 #include "texteditor.h"
+#include <locale>
 
 namespace Yuni
 {
@@ -54,6 +55,9 @@ namespace Control
 			surface->drawLine(pColor, cx, cy, cx, cy + pLineHeight(pConversion), 1.0f);
 		}
 
+		// Draw line and column numbers
+		surface->drawText(String(pCursorPos.x) << ':' << pCursorPos.y, pFont, pColor, pSize.x - 50, pSize.y - 15);
+
 		surface->endClipping();
 		pModified = false;
 	}
@@ -68,11 +72,17 @@ namespace Control
 					// When at beginning of line, move up
 					cursorPos(pCursorPos.x - 1, lineSize(pCursorPos.x - 1));
 				else
-					cursorPos(pCursorPos.x, pCursorPos.y - 1);
+				{
+					uint index = cursorIndex();
+					if (index > 0 && pText[index - 1] == '\t')
+						cursorPos(pCursorPos.x, pCursorPos.y - pTabWidth);
+					else
+						cursorPos(pCursorPos.x, pCursorPos.y - 1);
+				}
 				break;
 			case Input::Right:
 				if (lineSize(pCursorPos.x) == pCursorPos.y)
-					// When at end of line, move down and go to beginning of life
+					// When at end of line, move down and go to beginning of line
 					cursorPos(pCursorPos.x + 1, 0);
 				else
 					cursorPos(pCursorPos.x, pCursorPos.y + 1);
@@ -95,6 +105,15 @@ namespace Control
 			case Input::PageDown:
 				scroll(-displayedLineCount());
 				break;
+			case Input::Delete:
+			{
+				bool endOfLine = (lineSize(pCursorPos.x) == pCursorPos.y);
+				pText.erase(cursorIndex(), 1);
+				if (endOfLine)
+					reloadLines();
+				invalidate();
+				break;
+			}
 			default:
 				break;
 		}
@@ -121,38 +140,34 @@ namespace Control
 					// Erase
 					pText.erase(cursorIndex(), 1);
 				}
-				reloadLines();
-				invalidate();
-				break;
-			// Delete
-			case 0x7F:
-				for (uint i = 0; i < str.size(); ++i)
-				{
-					pText.erase(cursorIndex(), 1);
-				}
-				reloadLines();
-				invalidate();
-				break;
-			// New Line / Line Feed
-			case '\n':
-				// TODO
-				break;
-			// Non-displayable characters are ignore
-			case 0x00:
-			case 0x01:
-			case 0x02:
-			case 0x03:
-			case 0x04:
-			case 0x05:
-			case 0x06:
-				break;
-			// Normal displayable characters
-			default:
-				pText.insert(cursorIndex(), str);
-
 				// TODO : Manage line addition / removal by fixing pLines
 				// For now, reload all lines :
 				reloadLines();
+				invalidate();
+				break;
+			// Tab
+			case '\t':
+				pText.insert(cursorIndex(), str);
+				cursorPos(pCursorPos.x, pCursorPos.y + str.size() * pTabWidth);
+				break;
+			// Carriage Return
+			case '\r':
+			// New Line / Line Feed
+			case '\n':
+				for (uint i = 0; i < str.size(); ++i)
+					pText.insert(cursorIndex(), '\n');
+				// TODO : Manage line addition / removal by fixing pLines
+				// For now, reload all lines :
+				reloadLines();
+				cursorPos(pCursorPos.x + 1, 0);
+				break;
+			// Normal displayable characters
+			default:
+				// Non-displayable characters are ignored
+				std::locale loc;
+				if (!std::isgraph(str[0], loc))
+					break;
+				pText.insert(cursorIndex(), str);
 
 				// Advance the cursor
 				cursorPos(pCursorPos.x, pCursorPos.y + str.size());

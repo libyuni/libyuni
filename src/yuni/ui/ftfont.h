@@ -38,6 +38,12 @@ namespace UI
 		virtual void draw(const AnyString& text, Gfx3D::Texture::Ptr& texture,
 			bool antiAliased = true, bool useKerning = true, uint tabWidth = 4u) const override;
 
+		/*!
+		** \brief Measure a text drawn with this font
+		** \see TextMeasurements
+		*/
+		virtual void measure(const AnyString& text, uint& width, uint& height, int& ascent, int& descent,
+			bool useKerning = true, uint tabWidth = 4u) const override;
 		//! Initialize the font
 		bool initialize();
 

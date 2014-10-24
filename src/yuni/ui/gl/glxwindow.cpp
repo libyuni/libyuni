@@ -165,8 +165,8 @@ namespace UI
 	}
 
 
-	RenderWindow* WindowFactory::CreateGLWindow(const AnyString& title, unsigned int width,
-		unsigned int height, unsigned int bits, bool fullScreen)
+	RenderWindow* WindowFactory::CreateGLWindow(const AnyString& title, uint width,
+		uint height, uint bits, bool fullScreen)
 	{
 		RenderWindow* wnd = new GLXWindow(title, width, height, bits, fullScreen);
 		if (!wnd->initialize())

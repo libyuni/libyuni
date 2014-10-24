@@ -53,7 +53,7 @@ namespace UI
 
 		//! Draw text from a given coordinate
 		void drawText(const String& text, const FTFont::Ptr& font, const Color::RGBA<float>& color,
-			float x, float y, uint tabWidth = 4u);
+			float x, float y, uint tabWidth = 4u, bool drawOnBaseline = false);
 
 		//! Draw text from a given coordinate with a given background color
 		void drawTextOnColor(const String& text, const FTFont::Ptr& font,

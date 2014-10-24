@@ -237,7 +237,7 @@ namespace UI
 
 
 	void DrawingSurface::drawText(const String& text, const FTFont::Ptr& font,
-		const Color::RGBA<float>& color, float x, float y, uint tabWidth)
+		const Color::RGBA<float>& color, float x, float y, uint tabWidth, bool drawOnBaseline)
 	{
 		assert(pImpl->locked && "DrawingSurface error : Cannot draw to an unlocked surface !");
 
@@ -250,6 +250,7 @@ namespace UI
 		overlay.color(color);
 		overlay.move(x, y);
 		overlay.tabWidth(tabWidth);
+		overlay.drawOnBaseline(drawOnBaseline);
 
 		// Update
 		overlay.update();

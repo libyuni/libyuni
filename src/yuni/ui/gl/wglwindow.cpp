@@ -19,6 +19,8 @@ namespace UI
 	namespace // anonymous
 	{
 
+		// Windows virtual key codes
+		// source : http://www.kbdedit.com/manual/low_level_vk_list.html
 		const Input::Key KeyConversions[] =
 		{
 			Input::Key::Invalid,	// 00 	Windows key codes start at 01
@@ -165,14 +167,43 @@ namespace UI
 			Input::Key::Invalid,
 			Input::Key::Invalid,
 			Input::Key::Invalid,
-			Input::Key::NumLock, 	// 90 	NUM LOCK key
-			Input::Key::ScrollLock, // 91 	SCROLL LOCK key
-			Input::Key::ShiftL, 	// A0 	Left SHIFT
-			Input::Key::ShiftR, 	// A1 	Right SHIFT
-			Input::Key::ControlL, 	// A2 	Left CTRL
-			Input::Key::ControlR, 	// A3 	Right CTRL
-			Input::Key::AltL,		// A4 	Left ALT
-			Input::Key::AltR,		// A5 	Right ALT
+			Input::Key::NumLock, 	// 90	NUM LOCK key
+			Input::Key::ScrollLock, // 91	SCROLL LOCK key
+			Input::Key::ShiftL, 	// A0	Left SHIFT
+			Input::Key::ShiftR, 	// A1	Right SHIFT
+			Input::Key::ControlL, 	// A2	Left CTRL
+			Input::Key::ControlR, 	// A3	Right CTRL
+			Input::Key::AltL,		// A4	Left ALT
+			Input::Key::AltR,		// A5	Right ALT
+			Input::Key::Invalid,	// A6	Browser Back
+			Input::Key::Invalid,	// A7	Browser Forward
+			Input::Key::Invalid,	// A8	Browser Refresh
+			Input::Key::Invalid,	// A9	Browser Stop
+			Input::Key::Invalid,	// AA	Browser Search
+			Input::Key::Invalid,	// AB	Browser Favorites
+			Input::Key::Invalid,	// AC	Browser Home
+			Input::Key::Invalid,	// AD	Volume Mute
+			Input::Key::Invalid,	// AE	Volume Down
+			Input::Key::Invalid,	// AF	Volume Up
+			Input::Key::Invalid,	// B0	Media Next Track
+			Input::Key::Invalid,	// B1	Media Previous Track
+			Input::Key::Invalid,	// B2	Media Stop
+			Input::Key::Invalid,	// B3	Media Play / Pause
+			Input::Key::Invalid,	// B4	Mail
+			Input::Key::Invalid,	// B5	Media Select
+			Input::Key::Invalid,	// B6	App 1
+			Input::Key::Invalid,	// B7	App 2
+			Input::Key::Invalid,	// B8-B9	Unknown
+			Input::Key::Invalid,
+			Input::Key::Semicolon,	// BA	: ;
+			Input::Key::Equal,		// BB	+ =
+			Input::Key::Comma,		// BC	< ,
+			Input::Key::Minus,		// BD	_ -
+			Input::Key::Dot,		// BE	> .
+			Input::Key::Slash,		// BF	? /
+			Input::Key::Backquote,	// C0	~ `
+			Input::Key::Invalid,	// C1	Abnt C1
+			Input::Key::Invalid,	// C2	Abnt C2
 		};
 
 	} // namespace anonymous
@@ -180,7 +211,7 @@ namespace UI
 
 	inline Yuni::Input::Key WGLWindow::ConvertInputKey(WPARAM keyCode)
 	{
-		if (keyCode > 0xA5)
+		if (keyCode > 0xAF)
 			return Input::Key::Invalid;
 		return KeyConversions[keyCode];
 	}

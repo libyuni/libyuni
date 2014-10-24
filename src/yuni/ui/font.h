@@ -12,6 +12,7 @@ namespace Yuni
 namespace UI
 {
 
+
 	/*!
 	** \brief Factory for fonts
 	*/
@@ -37,8 +38,18 @@ namespace UI
 		virtual ~Font()
 		{}
 
-		//! Draw the given text to the given texture using this font
+		/*!
+		** \brief Draw the given text using this font to the given texture
+		** \note Expect the texture to be resized and cleared
+		*/
 		virtual void draw(const AnyString&, Gfx3D::Texture::Ptr&, bool antiAliased = true, bool useKerning = true, uint tabWidth = 4u) const = 0;
+
+		/*!
+		** \brief Measure a text drawn with this font
+		** \see TextMeasurements
+		*/
+		virtual void measure(const AnyString&, uint& width, uint& height, int& ascent, int& descent,
+			bool useKerning = true, uint tabWidth = 4u) const = 0;
 
 		//! Is the font properly loaded and valid ?
 		virtual bool valid() const { return true; }
@@ -65,7 +76,7 @@ namespace UI
 		bool strikeout() const { return pStrikeout; }
 
 	protected:
-		//! This might end up only be useful for the GL implementation
+		//! ID. !! This might end up only be useful for the GL implementation
 		uint pID;
 
 		//! Name of the font

@@ -159,6 +159,7 @@ namespace Control
 			return (pSize.y - pVertMargin) / pLineHeight(pConversion);
 		}
 
+		//! Number of chars displayed on this line, tabs converted to spaces
 		uint lineSize(uint lineNb) const
 		{
 			if (pLines.empty() && !pText.empty())
@@ -168,6 +169,7 @@ namespace Control
 		}
 
 
+		//! Number of chars displayed on this line, tabs converted to spaces
 		uint lineSize(const AnyString& line) const
 		{
 			return makeView(line.utf8begin(), line.utf8end())
@@ -178,6 +180,7 @@ namespace Control
 				.sum();
 		}
 
+		//! Convert an X coordinate in pixels to the corresponding text column
 		uint XToColumn(float x) const
 		{
 			if (x - pHorizMargin <= 0)
@@ -186,6 +189,7 @@ namespace Control
 			return (uint)Math::Round((x - pHorizMargin) / (pFont->size() / 1.25f)); // For now, use a not-quite-random ratio
 		}
 
+		//! Convert a Y coordinate in pixels to the corresponding text line
 		uint YToLine(float y) const
 		{
 			if (y - pVertMargin <= 0)
@@ -193,17 +197,20 @@ namespace Control
 			return uint((y - pVertMargin) / pLineHeight(pConversion)) + pTopLineNb;
 		}
 
+		//! Convert a column number on screen to the corresponding X coordinate in pixels
 		float columnToX(uint col) const
 		{
 			// TODO : I need the real advance of the clicked text to find the proper column value
 			return (float)col * ((float)pFont->size() / 1.25f) + (float)pHorizMargin; // For now, use a not-quite-random ratio
 		}
 
+		//! Convert a line number on screen to the corresponding Y coordinate in pixels
 		float lineToY(uint line) const
 		{
 			return (float)(line - pTopLineNb) * pLineHeight(pConversion) + (float)pVertMargin;
 		}
 
+		//! Get the index in the text that corresponds to the current cursor position
 		uint cursorIndex() const
 		{
 			uint index = 0u;
@@ -215,7 +222,7 @@ namespace Control
 					index += pCursorPos.y;
 					break;
 				}
-				index += lineSize(line) + 1;
+				index += line.size() + 1;
 			}
 			return index;
 		}

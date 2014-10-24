@@ -254,47 +254,23 @@ namespace UI
 
 		uint width = 0u;
 		uint height = 0u;
-		int highestYBearing = 0u;
-		int lowestUnderBaseline = 0;
-		int xDelta = 0;
-		int yDelta = 0;
-		Glyph::Ptr glyph;
-		Glyph::Ptr prev;
+		int ascent = 0;
+		int descent = 0;
+		measure(text, width, height, ascent, descent, useKerning, tabWidth);
 
-		// Loop on characters once to calculate image dimensions
-		auto end = text.utf8end();
-		for (auto i = text.utf8begin(); i != end; ++i)
-		{
-			prev = glyph;
-			if ('\t' == (char)i->value())
-			{
-				// Tab : Write a certain number of spaces
-				glyph = pImpl->getGlyph((unsigned long)' ', false);
-				width += tabWidth * glyph->advance();
-				prev = nullptr;
-				continue;
-			}
-
-			glyph = pImpl->getGlyph((unsigned long)i->value(), antiAliased);
-
-			if (!glyph)
-				continue;
-			if (useKerning and !(!prev))
-				pImpl->getKerning(prev->index(), glyph->index(), xDelta, yDelta);
-			width += glyph->advance() + xDelta;
-			highestYBearing = Math::Max(highestYBearing, glyph->yBearing());
-			lowestUnderBaseline = Math::Max(lowestUnderBaseline, (int)glyph->height() - glyph->yBearing());
-		}
-
-		height = Math::Max(0u, highestYBearing + lowestUnderBaseline + 1);
 		// Always resize the texture, fail if one dimension is zero
 		if (!width || !height)
 			return;
 		texture->resize(width, height);
 		texture->clear();
 
+		Glyph::Ptr glyph;
+		Glyph::Ptr prev;
+		int xDelta = 0;
+		int yDelta = 0;
 		uint xPen = 0;
 		// Loop on characters
+		auto end = text.utf8end();
 		for (auto i = text.utf8begin(); i != end; ++i)
 		{
 			prev = glyph;
@@ -313,18 +289,59 @@ namespace UI
 				//std::cout << "Unknown character '" << *i << "' !" << std::endl;
 				continue;
 			}
+
 			if (useKerning and !(!prev))
 				pImpl->getKerning(prev->index(), glyph->index(), xDelta, yDelta);
 			// glyph->bitmap is null for spaces e.g.
 			if (glyph->bitmap())
 			{
 				// Draw to our target surface
-				texture->update(xPen, highestYBearing - glyph->yBearing(),
+				texture->update(xPen, ascent - glyph->yBearing(),
 					glyph->width(), glyph->height(), 1, glyph->bitmap());
 			}
 			// Increment pen position
 			xPen += glyph->advance() + xDelta;
 		}
+	}
+
+
+	void FTFont::measure(const AnyString& text, uint& width, uint& height, int& ascent, int& descent,
+		bool useKerning, uint tabWidth) const
+	{
+		width = 0u;
+		ascent = 0;
+		descent = 0;
+
+		Glyph::Ptr glyph;
+		Glyph::Ptr prev;
+		int xDelta = 0;
+		int yDelta = 0;
+		// Loop on characters to calculate image dimensions
+		auto end = text.utf8end();
+		for (auto i = text.utf8begin(); i != end; ++i)
+		{
+			prev = glyph;
+			if ('\t' == (char)i->value())
+			{
+				// Tab : Write a certain number of spaces
+				glyph = pImpl->getGlyph((unsigned long)' ', false);
+				width += tabWidth * glyph->advance();
+				prev = nullptr;
+				continue;
+			}
+
+			glyph = pImpl->getGlyph((unsigned long)i->value(), false);
+
+			if (!glyph)
+				continue;
+			if (useKerning and !(!prev))
+				pImpl->getKerning(prev->index(), glyph->index(), xDelta, yDelta);
+			width += glyph->advance() + xDelta;
+			ascent = Math::Max(ascent, glyph->yBearing());
+			descent = Math::Max(descent, (int)glyph->height() - glyph->yBearing());
+		}
+
+		height = Math::Max(0u, ascent + descent + 1);
 	}
 
 

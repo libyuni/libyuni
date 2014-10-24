@@ -89,8 +89,13 @@ namespace UI
 		//! Set text anti-aliasing
 		void antiAliased(bool newValue);
 
+		//! Number of space characters written for one tab character
 		uint tabWidth() const { return pTabWidth; }
 		void tabWidth(uint nbChars) { pTabWidth = nbChars; }
+
+		//! Use the Y coordinate as the text baseline rather than the top of the text ?
+		bool drawOnBaseline() const { return pDrawOnBaseline; }
+		void drawOnBaseline(bool onBaseline) { pDrawOnBaseline = onBaseline; }
 
 		//! Move the text to another position
 		void move(float x, float y);
@@ -116,6 +121,9 @@ namespace UI
 		//! Y coordinate for the bottom of the text (in pixels, 0 -> ScreenHeight = top -> bottom)
 		float pY;
 
+		//! Text ascent (Y bearing = distance from the top of the text to the baseline)
+		int pAscent;
+
 		//! Font to use
 		FTFont::Ptr pFont;
 
@@ -133,6 +141,9 @@ namespace UI
 
 		//! Track modification
 		bool pModified;
+
+		//! Use the Y coordinate as the text baseline rather than the top of the text
+		bool pDrawOnBaseline;
 	};
 
 

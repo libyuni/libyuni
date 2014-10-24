@@ -20,7 +20,15 @@ namespace UI
 			if (pText.empty())
 				pTexture->clear();
 			else
+			{
+				uint width = 0u;
+				uint height = 0u;
+				int descent = 0;
+				// We are only interested in the ascent here
+				pFont->measure(pText, width, height, pAscent, descent, true, pTabWidth);
+				// Draw
 				pFont->draw(pText, pTexture, pAntiAliased, true, pTabWidth);
+			}
 		}
 	}
 
@@ -58,16 +66,22 @@ namespace UI
 			};
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
 
+		float yPos = pY;
+		// If necessary, offset by the Ascent to reach the text baseline
+		if (pDrawOnBaseline)
+		{
+			yPos += (float)pAscent;
+		}
 		// Set vertex positions
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 		const float vertices[] =
 			{
-				pX, pY,
-				pX, pY + height(),
-				pX + width(), pY,
-				pX + width(), pY,
-				pX, pY + height(),
-				pX + width(), pY + height()
+				pX, yPos,
+				pX, yPos + height(),
+				pX + width(), yPos,
+				pX + width(), yPos,
+				pX, yPos + height(),
+				pX + width(), yPos + height()
 			};
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
 

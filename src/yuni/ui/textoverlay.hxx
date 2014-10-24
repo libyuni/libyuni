@@ -16,6 +16,7 @@ namespace UI
 		pTexture(nullptr),
 		pX(0),
 		pY(0),
+		pAscent(0),
 		pFont(Theme::Current()->font),
 		// White by default
 		pColor(1.0f, 1.0f, 1.0f, 1.0f),
@@ -33,6 +34,7 @@ namespace UI
 		pTexture(nullptr),
 		pX(0),
 		pY(0),
+		pAscent(0),
 		pFont(font),
 		// White by default
 		pColor(1.0f, 1.0f, 1.0f, 1.0f),
@@ -50,6 +52,7 @@ namespace UI
 		pTexture(nullptr),
 		pX(x),
 		pY(y),
+		pAscent(0),
 		pFont(Theme::Current()->font),
 		pColor(color),
 		pMaterial(new Gfx3D::MaterialSurfaceColored("TextColor", color)),
