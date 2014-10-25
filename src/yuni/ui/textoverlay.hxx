@@ -23,7 +23,8 @@ namespace UI
 		pMaterial(new Gfx3D::MaterialSurfaceColored("TextColor", 1.0f, 1.0f, 1.0f)),
 		pAntiAliased(true),
 		pTabWidth(4u),
-		pModified(true)
+		pModified(true),
+		pDrawOnBaseline(false)
 	{
 	}
 
@@ -41,7 +42,8 @@ namespace UI
 		pMaterial(new Gfx3D::MaterialSurfaceColored("TextColor", 1.0f, 1.0f, 1.0f)),
 		pAntiAliased(true),
 		pTabWidth(4u),
-		pModified(true)
+		pModified(true),
+		pDrawOnBaseline(false)
 	{
 	}
 
@@ -58,7 +60,8 @@ namespace UI
 		pMaterial(new Gfx3D::MaterialSurfaceColored("TextColor", color)),
 		pAntiAliased(true),
 		pTabWidth(4u),
-		pModified(true)
+		pModified(true),
+		pDrawOnBaseline(false)
 	{
 	}
 

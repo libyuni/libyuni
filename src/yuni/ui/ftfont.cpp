@@ -330,7 +330,7 @@ namespace UI
 				continue;
 			}
 
-			glyph = pImpl->getGlyph((unsigned long)i->value(), false);
+			glyph = pImpl->getGlyph((unsigned long)i->value(), true);
 
 			if (!glyph)
 				continue;
