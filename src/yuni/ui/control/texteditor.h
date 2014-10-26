@@ -74,12 +74,9 @@ namespace Control
 		//! Draw the panel
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;
 
-		//! Clear the text
-		String& clear() { invalidate(); pTopLineNb = 1u; pLines.clear(); return pText.clear(); }
-
 		//! Get the text
-		String& text() { invalidate(); pTopLineNb = 1u; pLines.clear(); return pText; }
 		const String& text() const { return pText; }
+		void text(const AnyString& newText) { invalidate(); pTopLineNb = 1u; pCursorPos(); pDragPos(); pLines.clear(); pText = newText; }
 
 		//! Modify the font used
 		void font(const UI::FTFont::Ptr& font)
@@ -148,10 +145,10 @@ namespace Control
 		{
 			pLines.clear();
 			pText.words("\n", [&](const AnyString& line) -> bool
-				{
-					pLines.push_back(line);
-					return true;
-				}, true);
+			{
+				pLines.push_back(line);
+				return true;
+			}, true);
 		}
 
 		float displayedLineCount() const
@@ -174,9 +171,9 @@ namespace Control
 		{
 			return makeView(line.utf8begin(), line.utf8end())
 				.map([&](const AnyString::Char& c) -> uint
-					 {
-						 return c == '\t' ? pTabWidth : 1u;
-					 })
+				{
+					return c == '\t' ? pTabWidth : 1u;
+				})
 				.sum();
 		}
 
@@ -211,25 +208,66 @@ namespace Control
 		}
 
 		//! Get the index in the text that corresponds to the current cursor position
-		uint cursorIndex() const
+		uint cursorToByte(const Point2D<uint>& cursor) const
 		{
 			uint index = 0u;
-			uint lineNb = pCursorPos.x - 1;
-			for (auto line : pLines)
+			uint lineNb = cursor.y;
+
+			pText.words("\n", [&](const AnyString& line) -> bool
 			{
-				if (0 == lineNb--)
+				if (lineNb > 0)
 				{
-					index += pCursorPos.y;
-					break;
+					--lineNb;
+					index += line.size() + 1 /*\n*/;
+					return true;
 				}
-				index += line.size() + 1;
-			}
+				else
+				{
+					if (cursor.x > 0)
+					{
+						auto it = line.utf8begin();
+						it += cursor.x;
+						index += it.rawOffset();
+					}
+					return false;
+				}
+			}, true);
 			return index;
 		}
 
+
+		void byteToCursor(Point2D<uint>& cursor, uint byte) const
+		{
+			if (byte > 0)
+			{
+				AnyString part(pText, 0, Math::Min(byte, pText.size()));
+				assert(part.utf8valid() and "invalid UTF8 string part");
+
+				cursor.y = part.countChar('\n');
+				if (cursor.y > 0)
+				{
+					auto pos = part.rfind('\n');
+					if (pos < part.size())
+					{
+						++pos;
+						AnyString lastline(part, pos);
+						assert(lastline.utf8valid() and "invalid UTF8 sub string");
+						cursor.x = part.utf8size();
+					}
+					else
+						cursor.x = 0;
+				}
+				else
+					cursor.x = part.utf8size();
+			}
+			else
+				cursor.reset();
+		}
+
+
 	private:
 		//! Text to display
-		String pText;
+		Clob pText;
 
 		//! Store AnyStrings on each line to facilitate edition
 		mutable std::deque<AnyString> pLines;

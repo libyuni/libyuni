@@ -41,7 +41,8 @@ namespace Control
 				// Ignore empty lines (test a second time to catch single "\r" lines)
 				if (!line.empty())
 				{
-					surface->drawText(line, pFont, pColor, x, y, pTabWidth);
+					// y is the baseline position, not the top
+					surface->drawText(line, pFont, pColor, x, y - pixelLineHeight / 2, pTabWidth, true);
 				}
 			}
 			y += pixelLineHeight;
