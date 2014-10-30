@@ -6,6 +6,7 @@
 # include "../../core/color/rgba.h"
 # include "../../core/math.h"
 # include "../../core/functional/view.h"
+# include "../../io/file.h"
 # include "control.h"
 # include "../displaymode.h"
 # include "../dimension.h"
@@ -33,6 +34,7 @@ namespace Control
 			IControl(x, y, maxWidth, maxHeight),
 			pText(),
 			pCursorPos(0u, 0u),
+			pScrollPos(0u, 0u),
 			pDragPos(0u, 0u),
 			pFont(Theme::Current()->monoFont),
 			// White by default
@@ -40,7 +42,6 @@ namespace Control
 			pBackColor(Theme::Current()->windowColor),
 			pAntiAliased(true),
 			pTabWidth(4u),
-			pTopLineNb(1u),
 			pLineHeight(144_pcp), // 1.44 ratio
 			pHorizMargin(15),
 			pVertMargin(10)
@@ -53,13 +54,13 @@ namespace Control
 			IControl(position, maxSize),
 			pText(),
 			pCursorPos(0u, 0u),
+			pScrollPos(0u, 0u),
 			pDragPos(0u, 0u),
 			pFont(Theme::Current()->monoFont),
 			pColor(Theme::Current()->textColor),
 			pBackColor(Theme::Current()->windowColor),
 			pAntiAliased(true),
 			pTabWidth(4u),
-			pTopLineNb(1u),
 			pLineHeight(144_pcp), // 1.44 ratio
 			pHorizMargin(15),
 			pVertMargin(10)
@@ -74,9 +75,36 @@ namespace Control
 		//! Draw the panel
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;
 
+		void clear()
+		{
+			invalidate();
+			pCursorPos.reset();
+			pScrollPos.reset();
+			pDragPos.reset();
+			pText.clear();
+		}
+
+		//! Load content from a file
+		bool loadFromFile(const AnyString& filePath)
+		{
+			if (IO::errNone != IO::File::LoadFromFile(pText.clear(), filePath))
+			{
+				pText << "Error loading file !";
+				return false;
+			}
+			return true;
+		}
+
 		//! Get the text
-		const String& text() const { return pText; }
-		void text(const AnyString& newText) { invalidate(); pTopLineNb = 1u; pCursorPos(); pDragPos(); pLines.clear(); pText = newText; }
+		const Clob& text() const { return pText; }
+		void text(const AnyString& newText)
+		{
+			invalidate();
+			pCursorPos.reset();
+			pScrollPos.reset();
+			pDragPos.reset();
+			pText = newText;
+		}
 
 		//! Modify the font used
 		void font(const UI::FTFont::Ptr& font)
@@ -102,16 +130,19 @@ namespace Control
 		void backColor(const Color::RGB<float>& color) { pBackColor = color; invalidate(); }
 		void backColor(const Color::RGBA<float>& color) { pBackColor = color; invalidate(); }
 
-		Point2D<uint> cursorPos() const { return pCursorPos; }
-		void cursorPos(uint line, uint column)
+		const Point2D<uint>& cursorPos() const { return pCursorPos; }
+		void cursorPos(uint column, uint line)
 		{
-			if (pLines.empty() && !pText.empty())
-				reloadLines();
-			pCursorPos.x = Math::Min(Math::Max(1u, line), (uint)pLines.size());
-			pCursorPos.y = Math::Min(column, lineSize(pLines[pCursorPos.x - 1]));
+			pCursorPos.x = Math::Min(column, columnCount(currentLine(column, line)));
+			pCursorPos.y = Math::Min(line, lineCount() - 1);
 			invalidate();
 		}
-		void cursorPos(Point2D<uint> lineColumn) { cursorPos(lineColumn.x, lineColumn.y); invalidate(); }
+		void cursorPos(Point2D<uint> cursor)
+		{
+			pCursorPos.x = Math::Min(cursor.x, columnCount(currentLine(cursor)));
+			pCursorPos.y = Math::Min(cursor.y, lineCount() - 1);
+			invalidate();
+		}
 
 		//! Is the text anti-aliased ?
 		bool antiAliased() const { return pAntiAliased; }
@@ -138,43 +169,87 @@ namespace Control
 		virtual EventPropagation mouseScroll(float delta, float x, float y) override;
 
 	private:
+		//! Cursor manipulation
+		void cursorMoveLeft(uint offset = 1u);
+		void cursorMoveRight(uint offset = 1u);
+		void cursorMoveUp(uint offset = 1u);
+		void cursorMoveDown(uint offset = 1u);
+		void cursorBeginningOfLine();
+		void cursorEndOfLine();
+		void cursorBeginningOfText();
+		void cursorEndOfText();
+
 		//! Scroll by a number of lines, negative scrolls down, positive scrolls up
 		void scroll(float nbLines);
 
-		void reloadLines() const
-		{
-			pLines.clear();
-			pText.words("\n", [&](const AnyString& line) -> bool
-			{
-				pLines.push_back(line);
-				return true;
-			}, true);
-		}
-
+		//! Number of lines of text displayed on screen
 		float displayedLineCount() const
 		{
 			return (pSize.y - pVertMargin) / pLineHeight(pConversion);
 		}
 
-		//! Number of chars displayed on this line, tabs converted to spaces
-		uint lineSize(uint lineNb) const
-		{
-			if (pLines.empty() && !pText.empty())
-				reloadLines();
+		//! Total number of lines in the text
+		uint lineCount() const { return pText.countChar('\n') + 1; }
 
-			return lineSize(pLines[lineNb - 1]);
+		//! Number of UTF-8 chars displayed on this line, tabs converted to spaces
+		uint columnCount(uint lineNb) const
+		{
+			return columnCount(currentLine(0, lineNb));
 		}
 
-
-		//! Number of chars displayed on this line, tabs converted to spaces
-		uint lineSize(const AnyString& line) const
+		//! Number of UTF-8 chars displayed on this line, tabs converted to spaces
+		uint columnCount(const AnyString& line) const
 		{
-			return makeView(line.utf8begin(), line.utf8end())
+			return columnCount(line.utf8begin(), line.utf8end());
+		}
+
+		//! Number of UTF-8 chars displayed on this line, tabs converted to spaces
+		template<class BeginT, class EndT>
+		uint columnCount(const BeginT& begin, const EndT& end) const
+		{
+			return makeView(begin, end)
 				.map([&](const AnyString::Char& c) -> uint
 				{
 					return c == '\t' ? pTabWidth : 1u;
 				})
 				.sum();
+		}
+
+		//! Text line currently containing the cursor
+		AnyString currentLine(const Point2D<uint>& cursor) const
+		{
+			return currentLine(cursor.x, cursor.y);
+		}
+
+		//! Text line currently containing the cursor
+		AnyString currentLine(uint /*columnNb*/, uint lineNb) const
+		{
+			AnyString finalLine;
+			pText.words("\n", [&](const AnyString& line) -> bool
+			{
+				if (lineNb > 0)
+				{
+					--lineNb;
+					return true;
+				}
+				else
+				{
+					finalLine = line;
+					return false;
+				}
+			}, true);
+			return finalLine;
+		}
+
+		//! Text line currently containing the index
+		AnyString currentLine(uint byteIndex) const
+		{
+			auto start = pText.rfind('\n', byteIndex - 1) + 1;
+			if (start >= pText.size())
+				start = 0;
+			AnyString part(pText, start);
+			auto end = part.find('\n');
+			return AnyString(part, 0, end >= part.size() ? part.size() - 1 : end);
 		}
 
 		//! Convert an X coordinate in pixels to the corresponding text column
@@ -190,8 +265,8 @@ namespace Control
 		uint YToLine(float y) const
 		{
 			if (y - pVertMargin <= 0)
-				return pTopLineNb;
-			return uint((y - pVertMargin) / pLineHeight(pConversion)) + pTopLineNb;
+				return pScrollPos.y;
+			return uint((y - pVertMargin) / pLineHeight(pConversion)) + pScrollPos.y;
 		}
 
 		//! Convert a column number on screen to the corresponding X coordinate in pixels
@@ -204,14 +279,18 @@ namespace Control
 		//! Convert a line number on screen to the corresponding Y coordinate in pixels
 		float lineToY(uint line) const
 		{
-			return (float)(line - pTopLineNb) * pLineHeight(pConversion) + (float)pVertMargin;
+			return (float)(line - pScrollPos.y) * pLineHeight(pConversion) + (float)pVertMargin;
 		}
 
-		//! Get the index in the text that corresponds to the current cursor position
+		//! Get the index in the text that corresponds to a given cursor position
 		uint cursorToByte(const Point2D<uint>& cursor) const
 		{
+			return cursorToByte(cursor.x, cursor.y);
+		}
+
+		uint cursorToByte(uint columnNb, uint lineNb) const
+		{
 			uint index = 0u;
-			uint lineNb = cursor.y;
 
 			pText.words("\n", [&](const AnyString& line) -> bool
 			{
@@ -223,16 +302,21 @@ namespace Control
 				}
 				else
 				{
-					if (cursor.x > 0)
+					if (columnNb > 0)
 					{
-						auto it = line.utf8begin();
-						it += cursor.x;
-						index += it.rawOffset();
+						const AnyString part(pText, index);
+						auto end = part.utf8end();
+						for (auto it = part.utf8begin(); it != end && columnNb-- > 0; ++it)
+						{
+							if ((*it) == (uint)'\t')
+								columnNb -= (pTabWidth - 1);
+							++index;
+						}
 					}
 					return false;
 				}
 			}, true);
-			return index;
+			return Math::Min(pText.size(), index);
 		}
 
 
@@ -252,13 +336,13 @@ namespace Control
 						++pos;
 						AnyString lastline(part, pos);
 						assert(lastline.utf8valid() and "invalid UTF8 sub string");
-						cursor.x = part.utf8size();
+						cursor.x = columnCount(lastline);
 					}
 					else
 						cursor.x = 0;
 				}
 				else
-					cursor.x = part.utf8size();
+					cursor.x = columnCount(part);
 			}
 			else
 				cursor.reset();
@@ -269,14 +353,14 @@ namespace Control
 		//! Text to display
 		Clob pText;
 
-		//! Store AnyStrings on each line to facilitate edition
-		mutable std::deque<AnyString> pLines;
-
-		//! Position of the edition cursor, in lines and columns
+		//! Position of the edition cursor (column,line)
 		Point2D<uint> pCursorPos;
 
+		//! Right-most displayed column, and top-most displayed line (for scrolling)
+		Point2D<uint> pScrollPos;
+
 		/*!
-		** \brief Position of the dragging cursor
+		** \brief Position of the dragging cursor (column,line)
 		**
 		** This is the same as pCursorPos when not dragging and no text is selected
 		** This is the opposite end of the selection if dragging / some text is selected
@@ -301,9 +385,6 @@ namespace Control
 
 		//! Tab width (in number of spaces)
 		uint pTabWidth;
-
-		//! Line number of the top-most displayed line (for scrolling)
-		uint pTopLineNb;
 
 		//! Height of a line in % of the font pixel size
 		Dimension pLineHeight;

@@ -13,8 +13,6 @@ namespace Control
 	{
 		if (!pVisible)
 			return;
-		if (pLines.empty() && !pText.empty())
-			reloadLines();
 
 		Point2D<float> pos(pPosition.x + xOffset, pPosition.y + yOffset);
 
@@ -27,12 +25,15 @@ namespace Control
 		float pixelLineHeight = pLineHeight(pConversion);
 		float x = pos.x + pHorizMargin;
 		float y = pos.y + pVertMargin;
-		uint lastVisibleLine = YToLine(pSize.y - pVertMargin);
+		const uint lastVisibleLine = YToLine(pSize.y - pVertMargin);
 		// Loop on lines of text
-		AnyString line;
-		for (uint lineNb = pTopLineNb; lineNb <= lastVisibleLine; ++lineNb)
+		uint lineNb = pScrollPos.y;
+		AnyString text(pText, cursorToByte(pScrollPos));
+		text.words("\n", [&](AnyString& line) -> bool
 		{
-			line.assign(pLines[lineNb - 1]);
+			if (lineNb++ > lastVisibleLine)
+				return false;
+			// TODO : x offset ?
 			if (!line.empty())
 			{
 				// Crop trailing `\r` (CR) if necessary
@@ -46,21 +47,113 @@ namespace Control
 				}
 			}
 			y += pixelLineHeight;
-		}
+			return true;
+		}, true);
 
 		// Draw the cursor
-		if (pCursorPos.x >= pTopLineNb && pCursorPos.x <= lastVisibleLine)
+		if (pCursorPos.y >= pScrollPos.y && pCursorPos.y <= lastVisibleLine)
 		{
-			float cx = columnToX(pCursorPos.y);
-			float cy = lineToY(pCursorPos.x);
-			surface->drawLine(pColor, cx, cy, cx, cy + pLineHeight(pConversion), 1.0f);
+			float cx = columnToX(pCursorPos.x);
+			float cy = lineToY(pCursorPos.y);
+			surface->drawLine(pColor, cx, cy, cx, cy + pixelLineHeight, 1.0f);
 		}
 
 		// Draw line and column numbers
-		surface->drawText(String(pCursorPos.x) << ':' << pCursorPos.y, pFont, pColor, pSize.x - 50, pSize.y - 15);
+		surface->drawText(String(pCursorPos.y + 1) << ':' << pCursorPos.x, pFont, pColor, pSize.x - 50, pSize.y - 15);
 
 		surface->endClipping();
 		pModified = false;
+	}
+
+
+	void TextEditor::cursorMoveLeft(uint offset)
+	{
+		uint index = Math::Max(offset, cursorToByte(pCursorPos)) - offset;
+		byteToCursor(pCursorPos, index);
+		invalidate();
+	}
+
+	void TextEditor::cursorMoveRight(uint offset)
+	{
+		uint index = cursorToByte(pCursorPos) + offset;
+		byteToCursor(pCursorPos, index);
+		invalidate();
+	}
+
+	void TextEditor::cursorMoveUp(uint offset)
+	{
+		uint end = cursorToByte(pCursorPos);
+		if (0 == end)
+			return;
+
+		AnyString part(pText, 0, end);
+
+		for (uint i = end - 1; i > 0 && offset > 0; --i)
+		{
+			if ('\n' == part[i])
+			{
+				end = i;
+				--offset;
+			}
+		}
+		uint start = part.rfind('\n');
+		if (start >= part.size())
+			start = 0;
+		else
+			++start;
+		byteToCursor(pCursorPos, Math::Min(start + pCursorPos.x, end));
+		invalidate();
+	}
+
+	void TextEditor::cursorMoveDown(uint offset)
+	{
+		uint start = cursorToByte(pCursorPos);
+		AnyString part(pText, start);
+
+		uint lineStart = 0u;
+		for (uint i = 0; i < part.size() && offset > 0; ++i)
+		{
+			if ('\n' == part[i])
+			{
+				lineStart = i + 1;
+				--offset;
+			}
+		}
+		uint absLineStart = start + lineStart;
+		byteToCursor(pCursorPos, Math::Min(absLineStart + pCursorPos.x, currentLine(absLineStart).size()));
+		invalidate();
+	}
+
+
+	void TextEditor::cursorBeginningOfLine()
+	{
+		pCursorPos.x = 0;
+		invalidate();
+	}
+
+
+	void TextEditor::cursorEndOfLine()
+	{
+		uint index = cursorToByte(pCursorPos);
+		AnyString part(pText, index);
+		uint end = part.find('\n');
+		AnyString cut(part, 0, end);
+		pCursorPos.x += columnCount(cut);
+		invalidate();
+	}
+
+
+	void TextEditor::cursorBeginningOfText()
+	{
+		pCursorPos.reset();
+		invalidate();
+	}
+
+
+	void TextEditor::cursorEndOfText()
+	{
+		byteToCursor(pCursorPos, pText.size());
+		invalidate();
 	}
 
 
@@ -69,36 +162,22 @@ namespace Control
 		switch (key)
 		{
 			case Input::Left:
-				if (0 == pCursorPos.y && pCursorPos.x > 1)
-					// When at beginning of line, move up
-					cursorPos(pCursorPos.x - 1, lineSize(pCursorPos.x - 1));
-				else
-				{
-					uint index = cursorIndex();
-					if (index > 0 && pText[index - 1] == '\t')
-						cursorPos(pCursorPos.x, pCursorPos.y - pTabWidth);
-					else
-						cursorPos(pCursorPos.x, pCursorPos.y - 1);
-				}
+				cursorMoveLeft();
 				break;
 			case Input::Right:
-				if (lineSize(pCursorPos.x) == pCursorPos.y)
-					// When at end of line, move down and go to beginning of line
-					cursorPos(pCursorPos.x + 1, 0);
-				else
-					cursorPos(pCursorPos.x, pCursorPos.y + 1);
+				cursorMoveRight();
 				break;
 			case Input::Up:
-				cursorPos(pCursorPos.x - 1, pCursorPos.y);
+				cursorMoveUp();
 				break;
 			case Input::Down:
-				cursorPos(pCursorPos.x + 1, pCursorPos.y);
+				cursorMoveDown();
 				break;
 			case Input::Home:
-				cursorPos(pCursorPos.x, 0);
+				cursorBeginningOfLine();
 				break;
 			case Input::End:
-				cursorPos(pCursorPos.x, lineSize(pCursorPos.x));
+				cursorEndOfLine();
 				break;
 			case Input::PageUp:
 				scroll(displayedLineCount());
@@ -108,10 +187,7 @@ namespace Control
 				break;
 			case Input::Delete:
 			{
-				bool endOfLine = (lineSize(pCursorPos.x) == pCursorPos.y);
-				pText.erase(cursorIndex(), 1);
-				if (endOfLine)
-					reloadLines();
+				pText.erase(cursorToByte(pCursorPos), 1);
 				invalidate();
 				break;
 			}
@@ -135,20 +211,17 @@ namespace Control
 						return epStop;
 					// When at beginning of line but not on first line, move up
 					if (0 == pCursorPos.y && pCursorPos.x > 1)
-						cursorPos(pCursorPos.x - 1, lineSize(pCursorPos.x - 1));
+						cursorPos(pCursorPos.x - 1, columnCount(pCursorPos.x - 1));
 					else
 						cursorPos(pCursorPos.x, pCursorPos.y - 1);
 					// Erase
-					pText.erase(cursorIndex(), 1);
+					pText.erase(cursorToByte(pCursorPos), 1);
 				}
-				// TODO : Manage line addition / removal by fixing pLines
-				// For now, reload all lines :
-				reloadLines();
 				invalidate();
 				break;
 			// Tab
 			case '\t':
-				pText.insert(cursorIndex(), str);
+				pText.insert(cursorToByte(pCursorPos), str);
 				cursorPos(pCursorPos.x, pCursorPos.y + str.size() * pTabWidth);
 				break;
 			// Carriage Return
@@ -156,11 +229,9 @@ namespace Control
 			// New Line / Line Feed
 			case '\n':
 				for (uint i = 0; i < str.size(); ++i)
-					pText.insert(cursorIndex(), '\n');
-				// TODO : Manage line addition / removal by fixing pLines
-				// For now, reload all lines :
-				reloadLines();
-				cursorPos(pCursorPos.x + 1, 0);
+					pText.insert(cursorToByte(pCursorPos), '\n');
+				++pCursorPos.y;
+				invalidate();
 				break;
 			// Normal displayable characters
 			default:
@@ -168,10 +239,11 @@ namespace Control
 				std::locale loc;
 				if (!std::isgraph(str[0], loc))
 					break;
-				pText.insert(cursorIndex(), str);
+				pText.insert(cursorToByte(pCursorPos), str);
 
 				// Advance the cursor
-				cursorPos(pCursorPos.x, pCursorPos.y + str.size());
+				pCursorPos.x += str.utf8size();
+				invalidate();
 				break;
 		}
 		return epStop;
@@ -182,7 +254,7 @@ namespace Control
 	{
 		if (btn == Input::IMouse::ButtonLeft)
 		{
-			cursorPos(YToLine(y), XToColumn(x));
+			cursorPos(XToColumn(x), YToLine(y));
 			pDragPos(pCursorPos);
 			pDragging = true;
 			invalidate();
@@ -195,7 +267,7 @@ namespace Control
 	{
 		if (btn == Input::IMouse::ButtonLeft)
 		{
-			pDragPos(YToLine(y), XToColumn(x));
+			pDragPos(XToColumn(x), YToLine(y));
 			pDragging = false;
 			invalidate();
 		}
@@ -207,7 +279,7 @@ namespace Control
 	{
 		if (pDragging)
 		{
-			pDragPos(YToLine(y), XToColumn(x));
+			pDragPos(XToColumn(x), YToLine(y));
 			invalidate();
 		}
 		return epContinue;
@@ -223,14 +295,11 @@ namespace Control
 
 	void TextEditor::scroll(float nbLines)
 	{
-		if (pLines.empty() && !pText.empty())
-			reloadLines();
-
-		uint oldTopLine = pTopLineNb;
-		float newLineNb = (float)pTopLineNb - nbLines;
-		float maxLineNb = (float)pLines.size();
-		pTopLineNb = (uint)Math::Max(1.0f, Math::Min(maxLineNb - displayedLineCount() + 1, newLineNb));
-		if (oldTopLine != pTopLineNb)
+		uint oldTopLine = pScrollPos.y;
+		float newLineNb = ((float)pScrollPos.y > nbLines) ? (float)pScrollPos.y - nbLines : 0.0f;
+		float maxLineNb = (float)lineCount();
+		pScrollPos.y = (uint)Math::Min(maxLineNb - displayedLineCount(), newLineNb);
+		if (oldTopLine != pScrollPos.y)
 			invalidate();
 	}
 
