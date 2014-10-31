@@ -341,7 +341,7 @@ namespace UI
 			descent = Math::Max(descent, (int)glyph->height() - glyph->yBearing());
 		}
 
-		height = Math::Max(0u, ascent + descent + 1);
+		height = Math::Max(0, ascent + descent + 1);
 	}
 
 
