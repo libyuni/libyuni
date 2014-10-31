@@ -73,7 +73,7 @@ namespace Control
 		{
 			// Store selected index, wait mouseUp to confirm selection
 			pClickedIndex = pTopLineNb + Math::Floor((y - pPosition.y) / pLineHeight(pConversion));
-			if (pClickedIndex < -1 || pClickedIndex >= pElements.size())
+			if (pClickedIndex < 0 || (uint)pClickedIndex >= pElements.size())
 				pClickedIndex = -1;
 		}
 		return epStop;
@@ -87,7 +87,7 @@ namespace Control
 		{
 			// Store selected index, wait mouseUp to confirm selection
 			uint newIndex = pTopLineNb + Math::Floor((y - pPosition.y) / pLineHeight(pConversion));
-			if (newIndex == pClickedIndex)
+			if (newIndex == (uint)pClickedIndex)
 			{
 				pIndex = newIndex;
 				onSelectionChange(this, pIndex);

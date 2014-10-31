@@ -33,7 +33,7 @@ namespace Control
 		{
 			if (lineNb++ > lastVisibleLine)
 				return false;
-			// TODO : x offset ?
+			// TODO : x scroll offset ?
 			if (!line.empty())
 			{
 				// Crop trailing `\r` (CR) if necessary
@@ -235,10 +235,14 @@ namespace Control
 				break;
 			// Normal displayable characters
 			default:
-				// Non-displayable characters are ignored
-				std::locale loc;
-				if (!std::isgraph(str[0], loc))
-					break;
+				// Normal ASCII
+				if ((uint8)str[0] < 0x80)
+				{
+					// Non-displayable characters are ignored
+					std::locale loc;
+					if (!std::isgraph(str[0], loc))
+						break;
+				}
 				pText.insert(cursorToByte(pCursorPos), str);
 
 				// Advance the cursor

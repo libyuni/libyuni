@@ -317,8 +317,11 @@ namespace UI
 
 			case WM_CHAR:
 			{
-				char uniChar[MB_CUR_MAX + 1];
-				int nbChar = ::wctomb(uniChar, (wchar_t)wParam);
+				int nbChar = ::WideCharToMultiByte(CP_UTF8, 0, (wchar_t*)&wParam, 1, nullptr, 0, nullptr, nullptr);
+				if (nbChar < 1)
+					return 0;
+				char uniChar[nbChar + 1];
+				nbChar = ::WideCharToMultiByte(CP_UTF8, 0, (wchar_t*)&wParam, 1, uniChar, nbChar, nullptr, nullptr);
 				if (nbChar < 1)
 					return 0;
 				uniChar[nbChar] = '\0';
