@@ -49,7 +49,9 @@ namespace UI
 
 	void GLWindow::resize(uint width, uint height)
 	{
-		// Prevent A Divide By Zero
+		// Prevent divide by zero, or texture resize to 0
+		if (0 == width)
+			width = 1;
 		if (0 == height)
 			height = 1;
 
