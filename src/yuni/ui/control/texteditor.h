@@ -289,66 +289,11 @@ namespace Control
 			return cursorToByte(cursor.x, cursor.y);
 		}
 
-		uint cursorToByte(uint columnNb, uint lineNb) const
-		{
-			uint index = 0u;
+		//! Get the index in the text that corresponds to a given cursor position
+		uint cursorToByte(uint columnNb, uint lineNb) const;
 
-			pText.words("\n", [&](const AnyString& line) -> bool
-			{
-				if (lineNb > 0)
-				{
-					--lineNb;
-					index += line.size() + 1 /*\n*/;
-					return true;
-				}
-				else
-				{
-					if (columnNb > 0)
-					{
-						const AnyString part(pText, index);
-						auto end = part.utf8end();
-						for (auto it = part.utf8begin(); it != end && columnNb-- > 0; ++it)
-						{
-							if ((*it) == (uint)'\t')
-								columnNb -= (pTabWidth - 1);
-							++index;
-						}
-					}
-					return false;
-				}
-			}, true);
-			return Math::Min(pText.size(), index);
-		}
-
-
-		void byteToCursor(Point2D<uint>& cursor, uint byte) const
-		{
-			if (byte > 0)
-			{
-				AnyString part(pText, 0, Math::Min(byte, pText.size()));
-				assert(part.utf8valid() and "invalid UTF8 string part");
-
-				cursor.y = part.countChar('\n');
-				if (cursor.y > 0)
-				{
-					auto pos = part.rfind('\n');
-					if (pos < part.size())
-					{
-						++pos;
-						AnyString lastline(part, pos);
-						assert(lastline.utf8valid() and "invalid UTF8 sub string");
-						cursor.x = columnCount(lastline);
-					}
-					else
-						cursor.x = 0;
-				}
-				else
-					cursor.x = columnCount(part);
-			}
-			else
-				cursor.reset();
-		}
-
+		//! Get the visual cursor position that corresponds to a given byte index
+		void byteToCursor(Point2D<uint>& cursor, uint byte) const;
 
 	private:
 		//! Text to display

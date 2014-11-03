@@ -68,15 +68,23 @@ namespace Control
 
 	void TextEditor::cursorMoveLeft(uint offset)
 	{
-		uint index = Math::Max(offset, cursorToByte(pCursorPos)) - offset;
-		byteToCursor(pCursorPos, index);
+		uint index = cursorToByte(pCursorPos);
+		if (0 == index)
+			return;
+		AnyString part(pText, 0, index + 1);
+		auto it = part.utf8begin();
+		it += index - offset;
+		byteToCursor(pCursorPos, index + it.offset());
 		invalidate();
 	}
 
 	void TextEditor::cursorMoveRight(uint offset)
 	{
-		uint index = cursorToByte(pCursorPos) + offset;
-		byteToCursor(pCursorPos, index);
+		uint index = cursorToByte(pCursorPos);
+		AnyString part(pText, index);
+		auto it = part.utf8begin();
+		it += offset;
+		byteToCursor(pCursorPos, index + it.offset());
 		invalidate();
 	}
 
@@ -87,7 +95,6 @@ namespace Control
 			return;
 
 		AnyString part(pText, 0, end);
-
 		for (uint i = end - 1; i > 0 && offset > 0; --i)
 		{
 			if ('\n' == part[i])
@@ -185,6 +192,7 @@ namespace Control
 			case Input::PageDown:
 				scroll(-displayedLineCount());
 				break;
+			// Delete
 			case Input::Delete:
 			{
 				pText.erase(cursorToByte(pCursorPos), 1);
@@ -219,10 +227,17 @@ namespace Control
 				}
 				invalidate();
 				break;
+			// Space
+			case ' ':
+				pText.insert(cursorToByte(pCursorPos), str);
+				pCursorPos.x += str.size();
+				invalidate();
+				break;
 			// Tab
 			case '\t':
 				pText.insert(cursorToByte(pCursorPos), str);
 				cursorPos(pCursorPos.x, pCursorPos.y + str.size() * pTabWidth);
+				invalidate();
 				break;
 			// Carriage Return
 			case '\r':
@@ -230,7 +245,7 @@ namespace Control
 			case '\n':
 				for (uint i = 0; i < str.size(); ++i)
 					pText.insert(cursorToByte(pCursorPos), '\n');
-				++pCursorPos.y;
+				pCursorPos.y += str.size();
 				invalidate();
 				break;
 			// Normal displayable characters
@@ -306,6 +321,68 @@ namespace Control
 		if (oldTopLine != pScrollPos.y)
 			invalidate();
 	}
+
+
+	uint TextEditor::cursorToByte(uint columnNb, uint lineNb) const
+	{
+		uint index = 0u;
+
+		pText.words("\n", [&](const AnyString& line) -> bool
+		{
+			if (lineNb > 0)
+			{
+				--lineNb;
+				index += line.size() + 1 /*\n*/;
+				return true;
+			}
+			else
+			{
+				if (columnNb > 0)
+				{
+					const AnyString part(pText, index);
+					auto end = part.utf8end();
+					for (auto it = part.utf8begin(); it != end && columnNb-- > 0; ++it)
+					{
+						if ((*it) == (uint)'\t')
+							columnNb -= (pTabWidth - 1);
+						index += it->size();
+					}
+				}
+				return false;
+			}
+		}, true);
+		return Math::Min(pText.size(), index);
+	}
+
+
+	void TextEditor::byteToCursor(Point2D<uint>& cursor, uint byte) const
+	{
+		if (byte > 0)
+		{
+			AnyString part(pText, 0, Math::Min(byte, pText.size()));
+			assert(part.utf8valid() and "invalid UTF8 string part");
+
+			cursor.y = part.countChar('\n');
+			if (cursor.y > 0)
+			{
+				auto pos = part.rfind('\n');
+				if (pos < part.size())
+				{
+					++pos;
+					AnyString lastline(part, pos);
+					assert(lastline.utf8valid() and "invalid UTF8 sub string");
+					cursor.x = columnCount(lastline);
+				}
+				else
+					cursor.x = 0;
+			}
+			else
+				cursor.x = columnCount(part);
+		}
+		else
+			cursor.reset();
+	}
+
 
 
 } // namespace Control
