@@ -72,16 +72,19 @@ namespace UI
 		{
 			yPos += (float)pAscent;
 		}
+		// Ensure dimensions are pixel-aligned
+		float xPos = (float)(int)pX;
+		yPos = (float)(int)yPos;
 		// Set vertex positions
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 		const float vertices[] =
 			{
-				pX, yPos,
-				pX, yPos + height(),
-				pX + width(), yPos,
-				pX + width(), yPos,
-				pX, yPos + height(),
-				pX + width(), yPos + height()
+				xPos, yPos,
+				xPos, yPos + height(),
+				xPos + width(), yPos,
+				xPos + width(), yPos,
+				xPos, yPos + height(),
+				xPos + width(), yPos + height()
 			};
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
 
@@ -135,16 +138,19 @@ namespace UI
 			};
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
 
+		// Ensure dimensions are pixel-aligned
+		float xPos = (float)(int)pX;
+		float yPos = (float)(int)pY;
 		// Set vertex positions
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
 		const float vertices[] =
 			{
-				pX, pY,
-				pX, pY + height(),
-				pX + width(), pY,
-				pX + width(), pY,
-				pX, pY + height(),
-				pX + width(), pY + height()
+				xPos, yPos,
+				xPos, yPos + height(),
+				xPos + width(), yPos,
+				xPos + width(), yPos,
+				xPos, yPos + height(),
+				xPos + width(), yPos + height()
 			};
 		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
 
