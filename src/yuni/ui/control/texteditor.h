@@ -87,7 +87,8 @@ namespace Control
 		//! Load content from a file
 		bool loadFromFile(const AnyString& filePath)
 		{
-			if (IO::errNone != IO::File::LoadFromFile(pText.clear(), filePath))
+			clear();
+			if (IO::errNone != IO::File::LoadFromFile(pText, filePath))
 			{
 				pText << "Error loading file !";
 				return false;
