@@ -164,6 +164,33 @@ namespace Control
 	}
 
 
+	uint TextEditor::XToColumn(float x) const
+	{
+		if (x - pHorizMargin <= 0)
+			return 0u;
+		// TODO : I need the real advance of the clicked text to find the proper column value
+		return (uint)Math::Round((x - pHorizMargin) / (pFont->size() / 1.25f)); // For now, use a not-quite-random ratio
+	}
+
+	uint TextEditor::YToLine(float y) const
+	{
+		if (y - pVertMargin <= 0)
+			return pScrollPos.y;
+		return uint((y - pVertMargin) / pLineHeight(pConversion)) + pScrollPos.y;
+	}
+
+	float TextEditor::columnToX(uint col) const
+	{
+		// TODO : I need the real advance of the clicked text to find the proper column value
+		return (float)col * ((float)pFont->size() / 1.25f) + (float)pHorizMargin; // For now, use a not-quite-random ratio
+	}
+
+	float TextEditor::lineToY(uint line) const
+	{
+		return (float)(line - pScrollPos.y) * pLineHeight(pConversion) + (float)pVertMargin;
+	}
+
+
 	EventPropagation TextEditor::keyDown(Input::Key key)
 	{
 		switch (key)

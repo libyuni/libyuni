@@ -254,34 +254,17 @@ namespace Control
 		}
 
 		//! Convert an X coordinate in pixels to the corresponding text column
-		uint XToColumn(float x) const
-		{
-			if (x - pHorizMargin <= 0)
-				return 0u;
-			// TODO : I need the real advance of the clicked text to find the proper column value
-			return (uint)Math::Round((x - pHorizMargin) / (pFont->size() / 1.25f)); // For now, use a not-quite-random ratio
-		}
+		uint XToColumn(float x) const;
 
 		//! Convert a Y coordinate in pixels to the corresponding text line
-		uint YToLine(float y) const
-		{
-			if (y - pVertMargin <= 0)
-				return pScrollPos.y;
-			return uint((y - pVertMargin) / pLineHeight(pConversion)) + pScrollPos.y;
-		}
+		uint YToLine(float y) const;
 
 		//! Convert a column number on screen to the corresponding X coordinate in pixels
-		float columnToX(uint col) const
-		{
-			// TODO : I need the real advance of the clicked text to find the proper column value
-			return (float)col * ((float)pFont->size() / 1.25f) + (float)pHorizMargin; // For now, use a not-quite-random ratio
-		}
+		float columnToX(uint col) const;
 
 		//! Convert a line number on screen to the corresponding Y coordinate in pixels
-		float lineToY(uint line) const
-		{
-			return (float)(line - pScrollPos.y) * pLineHeight(pConversion) + (float)pVertMargin;
-		}
+		float lineToY(uint line) const;
+
 
 		//! Get the index in the text that corresponds to a given cursor position
 		uint cursorToByte(const Point2D<uint>& cursor) const
