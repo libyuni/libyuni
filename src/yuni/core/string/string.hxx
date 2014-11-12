@@ -2541,7 +2541,7 @@ namespace Yuni
 	inline const char*
 	CString<ChunkSizeT,ExpandableT>::c_str() const
 	{
-		return (NULL != AncestorType::data) ? AncestorType::data : "";
+		return (not AncestorType::null() ? AncestorType::data : "");
 	}
 
 
@@ -2556,7 +2556,7 @@ namespace Yuni
 	inline bool
 	CString<ChunkSizeT,ExpandableT>::null() const
 	{
-		return (NULL == AncestorType::data);
+		return AncestorType::null();
 	}
 
 
@@ -2816,8 +2816,10 @@ namespace Yuni
 
 	template<uint ChunkSizeT, bool ExpandableT>
 	CString<ChunkSizeT,ExpandableT>&
-	CString<ChunkSizeT,ExpandableT>::format(const AnyString& format, ...)
+	CString<ChunkSizeT,ExpandableT>::format(const char* format, ...)
 	{
+		// warning: 'va_start' has undefined behavior with reference types.
+		// Thus AnyString can not be used
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
 
 		// Empty the cstr
@@ -2825,7 +2827,7 @@ namespace Yuni
 		// Dealing with the variadic arguments
 		va_list parg;
 		va_start(parg, format);
-		vappendFormat(format.c_str(), parg);
+		vappendFormat(format, parg);
 		va_end(parg);
 		return *this;
 	}
@@ -2833,14 +2835,16 @@ namespace Yuni
 
 	template<uint ChunkSizeT, bool ExpandableT>
 	CString<ChunkSizeT,ExpandableT>&
-	CString<ChunkSizeT,ExpandableT>::appendFormat(const AnyString& format, ...)
+	CString<ChunkSizeT,ExpandableT>::appendFormat(const char* format, ...)
 	{
+		// warning: 'va_start' has undefined behavior with reference types.
+		// Thus AnyString can not be used
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
 
 		// Dealing with the variadic arguments
 		va_list parg;
 		va_start(parg, format);
-		vappendFormat(format.c_str(), parg);
+		vappendFormat(format, parg);
 		va_end(parg);
 		return *this;
 	}
