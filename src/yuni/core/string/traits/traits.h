@@ -132,6 +132,7 @@ namespace CStringImpl
 
 		void clear();
 
+		bool null() const { return (data == NULL); }
 
 		Size assignWithoutChecking(const C* const block, const Size blockSize)
 		{
@@ -277,6 +278,8 @@ namespace CStringImpl
 			if ((uint) zeroTerminated)
 				data[0] = C();
 		}
+
+		static bool null() { return false; }
 
 		Size assignWithoutChecking(const C* const block, Size blockSize);
 

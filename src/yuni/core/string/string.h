@@ -1793,7 +1793,7 @@ namespace Yuni
 		** \param format The format, represented by a zero-terminated string
 		** \return Always *this
 		*/
-		CString& format(const AnyString& format, ...);
+		CString& format(const char* format, ...);
 
 		/*!
 		** \brief Append formatted string
@@ -1802,7 +1802,7 @@ namespace Yuni
 		** \param format The format, represented by a zero-terminated string
 		** \return Always *this
 		*/
-		CString& appendFormat(const AnyString& format, ...);
+		CString& appendFormat(const char* format, ...);
 
 		/*!
 		** \brief Append a formatted string to the end of the current string
