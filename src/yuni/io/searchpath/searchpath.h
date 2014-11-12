@@ -1,4 +1,4 @@
-#ifndef __YUNI_IO_SEARCHPATH__SEARCH_PATH_H__
+#ifndef __YUNI_IO_SEARCHPATH_SEARCH_PATH_H__
 # define __YUNI_IO_SEARCHPATH_SEARCH_PATH_H__
 
 # include "../../yuni.h"
