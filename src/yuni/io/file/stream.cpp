@@ -238,7 +238,7 @@ namespace File
 			{
 				bufferSize = 1024 * 1024
 			};
-			size -= end;
+			size -= (uint64) end;
 
 			if (size)
 			{
