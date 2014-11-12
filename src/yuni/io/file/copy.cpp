@@ -52,7 +52,7 @@ namespace File
 
 		while ((numRead = ::read(fdIN, buffer, size)) > 0)
 		{
-			if (numRead != ::write(fdOUT, buffer, numRead))
+			if (numRead != ::write(fdOUT, buffer, (size_t) numRead))
 			{
 				delete[] buffer;
 				return Yuni::IO::errWriteFailed;
