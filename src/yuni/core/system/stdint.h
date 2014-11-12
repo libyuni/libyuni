@@ -39,7 +39,7 @@ namespace Yuni
 {
 
 	/* \todo Fix support for int128 on Visual Studio 10 */
-	# if defined(YUNI_HAS_INT128_T) && defined(__DISABLED_SUPPORT_FOR_INT128)
+	# if defined(YUNI_HAS_INT128_T) && !defined(__DISABLED_SUPPORT_FOR_INT128)
 	/* 128-bit unsigned int */
 	typedef unsigned __int128  uint128;
 	typedef __int128           sint128;
@@ -99,7 +99,7 @@ namespace Yuni
 /* C types */
 
 /* \todo Fix support for int128 on Visual Studio 10 */
-# if defined(YUNI_HAS_INT128_T) && defined(__DISABLED_SUPPORT_FOR_INT128)
+# if defined(YUNI_HAS_INT128_T) && !defined(__DISABLED_SUPPORT_FOR_INT128)
 /*! 128-bit unsigned int */
 typedef unsigned __int128  yuint128;
 typedef __int128           yint128;
@@ -137,6 +137,12 @@ typedef double         yfloat64;
 typedef unsigned int  uint;
 # endif
 
+
+#ifdef YUNI_OS_CLANG
+/* Try to fix issues with clang which does not yet support __float128, and produces
+** compilation error in the STL */
+typedef struct { double x, y; }  __float128;
+#endif
 
 
 #endif /* __YUNI_SYSTEM_STANDARD_INTERFACE_INT_DATA_H__ */
