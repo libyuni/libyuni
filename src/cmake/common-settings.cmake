@@ -81,7 +81,7 @@ if(NOT MSVC)
 	check_cxx_compiler_flag("-std=c++14"     YUNI_HAS_CPP14_SUPPORT)
 	check_cxx_compiler_flag("-std=c++11"     YUNI_HAS_CPP11_SUPPORT)
 	check_cxx_compiler_flag("-std=c++0x"     YUNI_HAS_GCC_CPP0X_SUPPORT)
-	check_cxx_compiler_flag("-stdlib=libstdc++" YUNI_HAS_LIB_CPP11_SUPPORT) # clang, Apple gcc...
+	check_cxx_compiler_flag("-stdlib=libc++" YUNI_HAS_LIB_CPP11_SUPPORT) # clang, Apple gcc...
 
 	if (YUNI_HAS_CPP14_SUPPORT)
 		set(YUNI_COMMON_CXX_OPTIONS  "${YUNI_COMMON_CXX_OPTIONS} -std=c++14")
@@ -95,7 +95,7 @@ if(NOT MSVC)
 		endif()
 	endif()
 	if (YUNI_HAS_LIB_CPP11_SUPPORT)
-		set(YUNI_COMMON_CXX_OPTIONS  "${YUNI_COMMON_CXX_OPTIONS} -stdlib=libstdc++")
+		set(YUNI_COMMON_CXX_OPTIONS  "${YUNI_COMMON_CXX_OPTIONS} -stdlib=libc++")
 	endif()
 
 endif()
