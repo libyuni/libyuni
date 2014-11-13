@@ -163,14 +163,20 @@ operator != (const std::basic_string<char,TraitsT,AllocT>& lhs, const Yuni::CStr
 
 
 
+
+
+
 # ifdef YUNI_HAS_STL_HASH
 
 namespace std
 {
 	template<uint SizeT, bool ExpT>
-	struct YUNI_DECL hash<Yuni::CString<SizeT, ExpT> > final
+	struct YUNI_DECL hash<Yuni::CString<SizeT, ExpT> >
 	{
-		inline size_t operator() (const Yuni::CString<SizeT, ExpT>& string) const
+		typedef Yuni::CString<SizeT, ExpT> argument_type;
+		typedef std::size_t result_type;
+
+		result_type operator() (const argument_type& string) const
 		{
 			return string.hash();
 		}
@@ -179,5 +185,7 @@ namespace std
 } // namespace std
 
 # endif // YUNI_HAS_STL_HASH
+
+
 
 #endif // __YUNI_CORE_STRING_OPERATORS_HXX__
