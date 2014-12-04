@@ -153,12 +153,12 @@ namespace Functional
 
 		void reset() { i = start; }
 
-		bool empty() const { return i >= Math::Min(N, end); }
+		bool empty() const { return i >= Math::Min((uint)N, end); }
 
 		bool next()
 		{
 			++i;
-			return i < Math::Min(N, end);
+			return i < Math::Min((uint)N, end);
 		}
 
 		//T& current() { return data[i]; }
