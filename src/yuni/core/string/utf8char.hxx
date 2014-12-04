@@ -49,15 +49,21 @@ namespace UTF8
 	}
 
 
+	inline bool Char::operator == (uint value) const
+	{
+		return pValue == value;
+	}
+
+
 	inline bool Char::operator == (const Char& ch) const
 	{
 		return pValue == ch.pValue;
 	}
 
 
-	inline bool Char::operator == (uint value) const
+	inline bool Char::operator == (const AnyString& str) const
 	{
-		return pValue == value;
+		return str == *this;
 	}
 
 
@@ -70,6 +76,12 @@ namespace UTF8
 	inline bool Char::operator != (const Char& ch) const
 	{
 		return pValue != ch.pValue;
+	}
+
+
+	inline bool Char::operator != (const AnyString& str) const
+	{
+		return str != *this;
 	}
 
 
@@ -238,7 +250,6 @@ namespace UTF8
 
 } // namespace UTF8
 } // namespace Yuni
-
 
 
 

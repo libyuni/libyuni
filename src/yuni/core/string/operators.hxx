@@ -158,6 +158,18 @@ operator != (const std::basic_string<char,TraitsT,AllocT>& lhs, const Yuni::CStr
 }
 
 
+inline bool
+operator == (const AnyString& mbs, Yuni::UTF8::Char c)
+{
+	return c.size() == mbs.size() && c == mbs.utf8begin().value();
+}
+
+inline bool
+operator != (const AnyString& mbs, Yuni::UTF8::Char c)
+{
+	return c.size() != mbs.size() || c == mbs.utf8begin().value();
+}
+
 //@}
 
 

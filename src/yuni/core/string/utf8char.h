@@ -101,9 +101,11 @@ namespace UTF8
 
 		bool operator == (uint value) const;
 		bool operator == (const Char& ch) const;
+		bool operator == (const AnyString& str) const;
 
 		bool operator != (uint value) const;
 		bool operator != (const Char& ch) const;
+		bool operator != (const AnyString& str) const;
 
 		bool operator < (uint value) const;
 		bool operator < (const Char& ch) const;
@@ -138,6 +140,12 @@ namespace UTF8
 
 } // namespace UTF8
 } // namespace Yuni
+
+
+bool operator == (const AnyString& multiByteStr, Yuni::UTF8::Char c);
+
+bool operator != (const AnyString& multiByteStr, Yuni::UTF8::Char c);
+
 
 # include "utf8char.hxx"
 

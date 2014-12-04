@@ -1213,7 +1213,7 @@ namespace Yuni
 		/*!
 		** \brief Get if a given string can be found at the beginning
 		*/
-		 bool startsWith(const AnyString& string) const;
+		bool startsWith(const AnyString& string) const;
 
 		/*!
 		** \brief Get if a given char can be found at the beginning
