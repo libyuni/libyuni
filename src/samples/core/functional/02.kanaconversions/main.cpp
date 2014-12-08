@@ -11,9 +11,7 @@ using namespace Yuni;
 // Romanize Japanese kana from UTF8-Char
 static void romanizeAndAppend(const UTF8::Char& kana, String& romanization)
 {
-	if (kana == " ")
-		romanization << ' ';
-	else if (kana == "あ" || kana == "ア")
+	if (kana == "あ" || kana == "ア")
 		romanization << "a";
 	else if (kana == "い" || kana == "イ")
 		romanization << "i";
@@ -45,6 +43,8 @@ static void romanizeAndAppend(const UTF8::Char& kana, String& romanization)
 		romanization << "ko";
 	else if (kana == "ご" || kana == "ゴ")
 		romanization << "go";
+	else
+		romanization << kana;
 }
 
 
@@ -56,9 +56,11 @@ int main()
 
 	String romanized;
 	makeView(str.utf8begin(), str.utf8end()).each([&](const UTF8::Char& c) -> bool
-		{
- 			romanizeAndAppend(c, romanized);
-			return true;
-		});
+	{
+		romanizeAndAppend(c, romanized);
+		return true;
+	});
 	std::cout << romanized << std::endl;
+
+	return 0;
 }
