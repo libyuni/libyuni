@@ -175,12 +175,13 @@ endif()
 
 if (NOT MSVC)
 	# Optimisation
-	compile_flag("-O3"                   O3  RELEASE)
-	compile_flag("-fomit-frame-pointer"  FOMIT_FRAME_POINTER  RELEASE RELWITHDEBINFO)
-	compile_flag("-fstrict-aliasing"     STRICT_ALIASING      RELEASE RELWITHDEBINFO)
-	compile_flag("-msse"                 MSSE                 RELEASE RELWITHDEBINFO)
-	compile_flag("-msse2"                MSSE2                RELEASE RELWITHDEBINFO)
-	compile_flag("-fvisibility=hidden"   VISIBILITY_HIDDEN    RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-O3"                       O3  RELEASE)
+	compile_flag("-fomit-frame-pointer"      FOMIT_FRAME_POINTER  RELEASE RELWITHDEBINFO)
+	compile_flag("-fstrict-aliasing"         STRICT_ALIASING      RELEASE RELWITHDEBINFO)
+	compile_flag("-msse"                     MSSE                 RELEASE RELWITHDEBINFO)
+	compile_flag("-msse2"                    MSSE2                RELEASE RELWITHDEBINFO)
+	compile_flag("-fvisibility=hidden"       VISIBILITY_HIDDEN    RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-fdiagnostics-color=auto"  DIAG_COLORS          RELEASE DEBUG RELWITHDEBINFO)
 	#compile_flag("-mfpmath=sse"          FPMATH_MSSE          RELEASE RELWITHDEBINFO)
 
 	# link
