@@ -35,7 +35,7 @@ namespace Process
 			, durationPrecision(dpSeconds)
 			, timeout()
 			, exitstatus(-1)
-			, redirectToConsole(true)
+			, redirectToConsole(false)
 		{}
 
 		~ProcessSharedInfo() {}

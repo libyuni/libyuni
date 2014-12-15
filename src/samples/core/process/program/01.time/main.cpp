@@ -27,6 +27,8 @@ int main(int argc, char* argv[])
 
 	// use milliseconds instead of seconds
 	process.durationPrecision(Process::Program::dpMilliseconds);
+	// redirect the output to the console
+	process.redirectToConsole(true);
 
 	// execute the command
 	sint64 duration = 0;

@@ -60,7 +60,7 @@ namespace Process
 	** }
 	** \endcode
 	**
-	** By default, the output of the underlying process is automatically redirected to
+	** By default, the output of the underlying process is not redirected to the
 	** current console, even if a stream handler is provided. `redirectToConsole()` can be
 	** use to modify this behavior.
 	**
@@ -187,7 +187,7 @@ namespace Process
 
 		//! \name Stream - capturing output
 		//@{
-		//! Get if stdcout/stderr are redirected to the console (default: true)
+		//! Get if stdcout/stderr are redirected to the console (default: false)
 		bool redirectToConsole() const;
 		//! Set if stdcout/stderr are redirected to the console, even if a stream handler is provided
 		void redirectToConsole(bool flag);
