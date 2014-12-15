@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 	process.durationPrecision(Process::Program::dpMilliseconds);
 
 	// execute the command
-	sint64 duration;
+	sint64 duration = 0;
 	int exitStatus = process.execute() ? process.wait(&duration) : EXIT_FAILURE;
 
 
