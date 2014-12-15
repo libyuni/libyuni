@@ -245,10 +245,12 @@ add_library(yuni-static-core STATIC
 		core/preprocessor/unixes.h
 		core/preprocessor/vaargs.h
 		core/preprocessor/windows.h
-		core/process/fwd.h
-		core/process/process.cpp
-		core/process/process.h
-		core/process/process.hxx
+		core/process/program/program.cpp
+		core/process/program/program.h
+		core/process/program/program.hxx
+		core/process/program/process-info.h
+		core/process/program/windows.inc.hpp
+		core/process/program/unix.inc.hpp
 		core/process/rename.cpp
 		core/process/rename.h
 		core/process.h

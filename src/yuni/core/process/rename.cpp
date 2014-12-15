@@ -17,6 +17,9 @@
 
 namespace Yuni
 {
+namespace Process
+{
+
 
 	# ifdef YUNI_OS_LINUX
 
@@ -84,7 +87,12 @@ namespace Yuni
 
 
 
-	char** RenameProcess(int argc, char** argv, const AnyString& newprocessname)
+
+
+
+
+
+	char** Rename(int argc, char** argv, const AnyString& newprocessname)
 	{
 		// Global locking for multithreading
 		static Yuni::Mutex globalMutex;
@@ -104,7 +112,10 @@ namespace Yuni
 
 	# else
 
-	char** RenameProcess(int /*argc*/, char** argv, const AnyString& /*newprocessname*/)
+
+
+
+	char** Rename(int /*argc*/, char** argv, const AnyString& /*newprocessname*/)
 	{
 		// does nothing
 		return argv;
@@ -112,6 +123,11 @@ namespace Yuni
 
 	# endif
 
-} // namespace Yuni
 
+
+
+
+
+} // namespace Process
+} // namespace Yuni
 
