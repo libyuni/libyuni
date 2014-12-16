@@ -4,6 +4,10 @@
 #ifndef YUNI_OS_WINDOWS
 #include <sys/poll.h>
 #include <sys/time.h>
+#ifdef YUNI_OS_LINUX
+# include <sys/prctl.h>
+#endif
+
 
 
 
