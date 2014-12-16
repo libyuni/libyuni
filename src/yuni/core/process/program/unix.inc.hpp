@@ -48,6 +48,15 @@ namespace Process
 
 
 
+	inline void Program::ThreadMonitor::cleanupAfterChildTermination()
+	{
+		// close all remaining fd
+		closeFD(channels.infd[0]);
+		closeFD(channels.errd[0]);
+		closeFD(channels.outfd[1]);
+	}
+
+
 	bool Program::ThreadMonitor::spawnProcess()
 	{
 		//! argv0 for the subprocess
@@ -190,7 +199,8 @@ namespace Process
 		// is a buffer required ?
 		const bool requiresBuffer = (hasStream or pRedirectToConsole);
 
-		enum { bufferSize = 4096 * 2 }; // arbitrary - for handling more efficiently large output
+		// a 4K buffer seems the most efficient size
+		enum { bufferSize = 4096 };
 		// buffer for reading std::cout and std::cerr
 		char* const buffer = (requiresBuffer) ? (char*)::malloc(sizeof(char) * bufferSize) : nullptr;
 		if (YUNI_UNLIKELY(!buffer and requiresBuffer)) // allocation failed
@@ -203,39 +213,34 @@ namespace Process
 		// information for 'poll'
 		struct pollfd pfds[2];
 
+
+		// loop for reading on the inputs, then for checking the process id
 		do
 		{
-			pfds[0].fd = channels.infd[0]; // std::cout
-			pfds[0].events = POLLIN | POLLNVAL | POLLHUP;
-			pfds[1].fd = channels.errd[0]; // std::cerr
-			pfds[1].events = POLLIN | POLLNVAL | POLLHUP;
-
-			// waiting for some changes on the file descriptors
-			int rp = ::poll(pfds, (nfds_t) 2, /*no timeout*/ -1);
-			bool noInput = (rp < 0);
-
-			if (not noInput)
+			// try to read something from the inputs until both are invalid
+			// to avoid unwanted behaviors from system buffers, especially on linux.
+			// (Otherwise the full output may not be retrieved - especially the final part)
+			do
 			{
-				if (0 != pfds[0].revents)
-				{
-					// std::cout - an empty buffer is also an error
-					ssize_t stdcoutsize = ::read(channels.infd[0], buffer, bufferSize - 1);
-					if (stdcoutsize > 0)
-					{
-						if (pRedirectToConsole)
-							std::cout.write(buffer, (std::streamsize) stdcoutsize);
-						if (hasStream)
-						{
-							// just in case - if the calling code uses ::strlen on the buffer
-							buffer[stdcoutsize] = '\0';
-							stream->onRead(AnyString(buffer, (uint) stdcoutsize));
-						}
-					}
-					else
-						noInput = true;
-				}
+				// reset poll structure
+				pfds[0].fd = channels.infd[0]; // std::cout
+				pfds[0].events = POLLIN | POLLNVAL | POLLHUP;
+				pfds[1].fd = channels.errd[0]; // std::cerr
+				pfds[1].events = POLLIN | POLLNVAL | POLLHUP;
 
-				if (0 != pfds[1].revents)
+				// waiting for some changes on the file descriptors
+				int rp = ::poll(pfds, (nfds_t) 2, /*no timeout*/ -1);
+				if (rp < 0)
+					break;
+
+				// flag to remember if something has been read from std::cerr
+				//
+				// \internal Checking first std::cerr then std::cout which will try to continue
+				// whatever the previous state was since the standard input is more likely to
+				// provide some content.
+				bool hasInputOnStdcerr = false;
+
+				if (0 != pfds[1].revents) // stdcerr
 				{
 					// std::cerr - an empty buffer is also an error
 					ssize_t stdcerrsize = ::read(channels.errd[0], buffer, bufferSize - 1);
@@ -250,18 +255,42 @@ namespace Process
 							stream->onErrorRead(AnyString(buffer, (uint) stdcerrsize));
 						}
 
-						// since something has been successfully read on std::cerr, deactive the error flag
-						// to try to read again
-						noInput = false;
+						hasInputOnStdcerr = true;
 					}
-					else
-						noInput = true;
 				}
+
+				if (0 != pfds[0].revents) // stdcout
+				{
+					// std::cout - an empty buffer is also an error
+					ssize_t stdcoutsize = ::read(channels.infd[0], buffer, bufferSize - 1);
+					if (stdcoutsize > 0)
+					{
+						if (pRedirectToConsole)
+						{
+							std::cout.write(buffer, (std::streamsize) stdcoutsize);
+							std::cout << std::flush;
+						}
+						if (hasStream)
+						{
+							// just in case - if the calling code uses ::strlen on the buffer
+							buffer[stdcoutsize] = '\0';
+							stream->onRead(AnyString(buffer, (uint) stdcoutsize));
+						}
+
+						// something has been read from std::cout - trying again anyway
+						continue;
+					}
+				}
+
+				// nothing on std::cout and actually nothing on std::cerr: aborting
+				if (not hasInputOnStdcerr)
+					break;
 			}
+			while (true);
+
 
 			// failed to read something from std::cout and std::cerr
-			// the process might be already dead
-			if (noInput)
+			// the process is likely already dead
 			{
 				int status;
 				int wpid = ::waitpid(pid, &status, WNOHANG | WUNTRACED | WCONTINUED);
@@ -304,18 +333,10 @@ namespace Process
 	}
 
 
-	inline void Program::ThreadMonitor::cleanupAfterChildTermination()
-	{
-		// close all remaining fd
-		closeFD(channels.infd[0]);
-		closeFD(channels.errd[0]);
-		closeFD(channels.outfd[1]);
-	}
-
-
 	void Program::ThreadMonitor::onKill()
 	{
-		// the thread has been killed - killing the sub process if any
+		// the thread has been killed (this should really never happen)
+		// killing the sub process if any
 		bool killed = false;
 
 		// try to kill the attached child process if any
