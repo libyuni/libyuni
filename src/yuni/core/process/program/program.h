@@ -16,7 +16,7 @@ namespace Process
 
 
 	/*!
-	** \brief Execute a command into a given loop and wait for the execution
+	** \brief Execute a command and wait for it
 	**
 	** \param commandline An arbitrary command line (example: "ls -l")
 	** \param timeout Maximum execution time allowed for the command (in seconds - 0 means infinite)
@@ -26,7 +26,7 @@ namespace Process
 
 
 	/*!
-	** \brief Execute a command into a given loop and wait for the execution
+	** \brief Execute a command into a given loop and wait for it
 	**
 	** \param mainloop A mainloop from where the program should be launched
 	** \param commandline An arbitrary command line (example: "ls -l")
@@ -63,6 +63,8 @@ namespace Process
 	** By default, the output of the underlying process is not redirected to the
 	** current console, even if a stream handler is provided. `redirectToConsole()` can be
 	** use to modify this behavior.
+	**
+	** This class (and all its public methods) is thread-safe.
 	**
 	** \internal The 'Stream' object may be shared and reused
 	** \internal `std::cout` and `std::cerr` should be used instead of `write` when redirecting
@@ -151,6 +153,7 @@ namespace Process
 		template<class MainLoopT> bool execute(MainLoopT& mainloop, uint timeout = 0u);
 		//@}
 
+
 		//! \name Process control
 		//@{
 		/*!
@@ -181,8 +184,26 @@ namespace Process
 		void kill();
 
 
-		//! Get if the process is currently running
+		/*!
+		** \brief Get if the process is currently running
+		**
+		** The returned value is only a hint, since the status of the sub-process
+		** may change anytime.
+		** \see Program::wait()
+		*/
 		bool running() const;
+
+
+		/*!
+		** \brief Send a signal to the sub-process (UNIX only)
+		**
+		** \note This routine has no effect on systems where signals are not supported
+		** \see man 3 signal
+		** \see Program::terminate()
+		** \param sig The signal to send (SIGINT, SIGTERM, ...)
+		*/
+		void signal(int sig);
+		//@}
 
 
 		//! \name Stream - capturing output
@@ -190,6 +211,7 @@ namespace Process
 		//! Get if stdcout/stderr are redirected to the console (default: false)
 		bool redirectToConsole() const;
 		//! Set if stdcout/stderr are redirected to the console, even if a stream handler is provided
+		// (only if the process is not running)
 		void redirectToConsole(bool flag);
 
 		//! Set the stream handler used for capturing events
@@ -198,11 +220,12 @@ namespace Process
 		Stream::Ptr stream() const;
 		//@}
 
+
 		//! \name Precision used for calculating the duration of the execution of the process
 		//@{
 		//! Get the precision currently in use
 		DurationPrecision  durationPrecision() const;
-		//! Set the precision used for calculating a duration
+		//! Set the precision used for calculating a duration (only if the process is not running)
 		void durationPrecision(DurationPrecision precision);
 		//@}
 
@@ -225,6 +248,7 @@ namespace Process
 		Stream::Ptr pStream;
 
 	}; // class Program
+
 
 
 

@@ -232,22 +232,36 @@ namespace Process
 	}
 
 
-	void Program::terminate()
+	void Program::signal(int sig)
 	{
 		#ifndef YUNI_OS_MSVC
 		ProcessSharedInfo::Ptr envptr = pEnv;
 		if (!(!envptr))
-			envptr->sendSignal<true>(SIGTERM);
+			envptr->sendSignal<true>(sig);
+		#else
+		// Signals are not supported on Windows. Silently ignoring it.
+		(void) signal; // no warning
 		#endif
 	}
+
+
+	void Program::terminate()
+	{
+		#ifndef YUNI_OS_MSVC
+		this->signal(SIGTERM);
+		#else
+		#warning not implemented
+		#endif
+	}
+
 
 
 	void Program::kill()
 	{
 		#ifndef YUNI_OS_MSVC
-		ProcessSharedInfo::Ptr envptr = pEnv;
-		if (!(!envptr))
-			envptr->sendSignal<true>(SIGKILL);
+		this->signal(SIGKILL);
+		#else
+		#warning not implemented
 		#endif
 	}
 
