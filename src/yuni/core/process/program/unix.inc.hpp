@@ -43,13 +43,24 @@ namespace Process
 			return true;
 		}
 
+
 	} // anonymous namespace
+
+
 
 
 
 
 	inline void Program::ThreadMonitor::cleanupAfterChildTermination()
 	{
+		// stop the thread dedicated to handle the timeout
+		if (procinfo.timeoutThread)
+		{
+			procinfo.timeoutThread->stop();
+			delete procinfo.timeoutThread;
+			procinfo.timeoutThread = nullptr;
+		}
+
 		// close all remaining fd
 		closeFD(channels.infd[0]);
 		closeFD(channels.errd[0]);
@@ -76,10 +87,7 @@ namespace Process
 					args[count + 1] = nullptr;
 				}
 				else
-				{
-					procinfo.mutex.unlock();
 					return false;
-				}
 			}
 			else
 				args = nullptr;
@@ -111,6 +119,7 @@ namespace Process
 			}
 			return false;
 		}
+
 
 		// Getting the start time of execution
 		pStartTime = currentTime();
@@ -186,6 +195,9 @@ namespace Process
 			// The mutex has already been locked and should be unlocked to let the main
 			procinfo.processInput = channels.outfd[1];
 			procinfo.processID = pid;
+
+			// timeout for the sub process
+			procinfo.createThreadForTimeoutWL();
 		}
 
 		return true;
