@@ -217,7 +217,7 @@ namespace Thread
 		** a call to `suspend(0)` is recommended.
 		** \code
 		**    if (suspend())
-		**       return;
+		**       return false;
 		** \endcode
 		**
 		** \return True to pause the thread and wait a `wake up` signal, False to effectively stop it.
