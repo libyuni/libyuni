@@ -60,6 +60,9 @@ src/samples/core/math/randomnumbers/02.table/math_rn_02_table*
 src/samples/core/math/randomnumbers/03.tableplusrange/math_rn_03_table_plus_range*
 src/samples/core/singleton/00.simple/singleton_00_simple*
 src/samples/core/singleton/01.phoenix/singleton_01_phoenix*
+src/samples/core/process/program/01.time/process_00_time
+src/samples/core/functional/00.fold/functional_00_fold*
+src/samples/core/functional/01.views/functional_01_views*
 src/samples/io/00.iterator/io_00_iterator*
 src/samples/io/01.threadediterator/io_01_threadediterator*
 src/samples/io/02.root-directory-from-argv0/io_02_root-directory-from-argv0*
@@ -68,6 +71,14 @@ src/samples/marshal/00.json-export/marshal_00_json-export*
 src/samples/messaging/00.simple.rest.server/messaging_00_simple-rest-server*
 src/samples/parser/00.calculator/parser_00_calculator*
 src/samples/parser/01.json/parser_01_json*
+src/samples/audio/00.loadandplay/audio_00_loadandplay*
+src/samples/audio/01.movingemitter/audio_01_movingemitter*
+src/samples/devices/00.monitors/devices_00_monitors*
+src/samples/threads/00.spawn/threads_00_spawn*
+src/samples/threads/01.every/threads_01_every*
+src/samples/threads/02.thread/threads_02_thread*
+src/samples/threads/03.condition/threads_03_condition*
+
 
 # DevPacks
 devpacks/*
@@ -76,13 +87,4 @@ devpacks/*
 src/yuni/private/parser/peg/__parser.include.cpp.hxx
 src/tools/parser-generator/yuni-parser-generator*
 
-/src/samples/core/functional/00.fold/functional_00_fold.exe
-/src/samples/core/functional/01.views/functional_01_views.exe
-/src/samples/audio/00.loadandplay/audio_00_loadandplay.exe
-/src/samples/audio/01.movingemitter/audio_01_movingemitter.exe
-/src/samples/devices/00.monitors/devices_00_monitors.exe
-/src/samples/parser/00.calculator/parser_00_generator.exe
-/src/samples/threads/00.spawn/threads_00_spawn.exe
-/src/samples/threads/01.every/threads_01_every.exe
-/src/samples/threads/02.thread/threads_02_thread.exe
-/src/samples/threads/03.condition/threads_03_condition.exe
+
