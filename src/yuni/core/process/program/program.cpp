@@ -149,11 +149,8 @@ namespace Process
 		pKilled     = false;
 		pEndTime    = 0;
 
-		if (pid > 0)
-		{
-			waitForSubProcess();
-			cleanupAfterChildTermination();
-		}
+		waitForSubProcess();
+		cleanupAfterChildTermination();
 
 		theProcessHasStopped(pKilled, pExitStatus);
 		return false; // stop the thread
