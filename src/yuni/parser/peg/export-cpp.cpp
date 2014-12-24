@@ -108,7 +108,7 @@ namespace PEG
 			for (uint i = 0; i != namespaces.size(); ++i)
 				h << "namespace " << namespaces[i] << "\n{\n";
 			h << '\n';
-			h << "	enum Rule\n";
+			h << "	enum ASTRule\n";
 			h << "	{\n";
 			h << "		//! Unknown rule\n";
 			h << "		rgUnknown = 0,\n";
@@ -136,15 +136,15 @@ namespace PEG
 			h << "\n\n\n";
 
 			h << "	//! Convert a rule id into its text representation\n";
-			h << "	YUNI_DECL AnyString RuleToString(enum Rule);\n";
+			h << "	YUNI_DECL AnyString ASTRuleToString(enum ASTRule);\n";
 			h << '\n';
 			h << '\n';
 			h << "	//! Get if a rule is an error\n";
-			h << "	YUNI_DECL bool  RuleIsError(enum Rule ruleid);\n";
+			h << "	YUNI_DECL bool  ASTRuleIsError(enum ASTRule ruleid);\n";
 			h << '\n';
 			h << '\n';
 			h << "	//! Get if the rule should be ignored when duplucating an AST (starting from 'tk-' and some special rules)\n";
-			h << "	YUNI_DECL bool ShouldIgnoreRuleForDuplication(enum Rule);\n";
+			h << "	YUNI_DECL bool ShouldIgnoreASTRuleForDuplication(enum ASTRule);\n";
 			h << '\n';
 			h << '\n';
 			h << '\n';
@@ -231,7 +231,7 @@ namespace PEG
 			h << "		//! Default constructor\n";
 			h << "		Node();\n";
 			h << "		//! Default constructor with a pre-defined rule\n";
-			h << "		Node(enum Rule);\n";
+			h << "		Node(enum ASTRule);\n";
 			h << "		//! Copy constructor\n";
 			h << "		Node(const Node& rhs);\n";
 			h << "		//! Destructor\n";
@@ -247,25 +247,25 @@ namespace PEG
 			h << "		//! Iterate through all child nodes (const)\n";
 			h << "		template<class F> bool each(const F& callback) const;\n";
 			h << '\n';
-			h << "		template<class F> bool each(enum Rule rule, const F& callback);\n";
+			h << "		template<class F> bool each(enum ASTRule rule, const F& callback);\n";
 			h << '\n';
-			h << "		template<class F> bool each(enum Rule rule, const F& callback) const;\n";
+			h << "		template<class F> bool each(enum ASTRule rule, const F& callback) const;\n";
 			h << '\n';
-			h << "		template<class StringT> bool extractFirstChildText(StringT& out, enum Rule rule) const;\n";
+			h << "		template<class StringT> bool extractFirstChildText(StringT& out, enum ASTRule rule) const;\n";
 			h << '\n';
-			h << "		template<class StringT> bool extractChildText(StringT& out, enum Rule rule, const AnyString& separator = nullptr) const;\n";
+			h << "		template<class StringT> bool extractChildText(StringT& out, enum ASTRule rule, const AnyString& separator = nullptr) const;\n";
 			h << '\n';
-			h << "		uint findFirst(enum Rule rule) const;\n";
+			h << "		uint findFirst(enum ASTRule rule) const;\n";
 			h << '\n';
-			h << "		bool exists(enum Rule rule) const;\n";
+			h << "		bool exists(enum ASTRule rule) const;\n";
 			h << '\n';
 			h << "		#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
-			h << "		Node::Ptr  xpath(std::initializer_list<enum Rule> path) const;\n";
+			h << "		Node::Ptr  xpath(std::initializer_list<enum ASTRule> path) const;\n";
 			h << "		#endif\n";
-			// h << "		Node::Ptr  xpath(enum Rule path) const;\n";
+			// h << "		Node::Ptr  xpath(enum ASTRule path) const;\n";
 			h << '\n';
 			h << "		#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
-			h << "		bool xpathExists(std::initializer_list<enum Rule> path) const;\n";
+			h << "		bool xpathExists(std::initializer_list<enum ASTRule> path) const;\n";
 			h << "		#endif\n";
 			h << '\n';
 			h << "		Node& operator = (const Node& rhs);\n";
@@ -280,7 +280,7 @@ namespace PEG
 			h << '\n';
 			h << "	public:\n";
 			h << "		//! The rule ID\n";
-			h << "		enum Rule rule;\n";
+			h << "		enum ASTRule rule;\n";
 			h << "		//! Start offset\n";
 			h << "		uint offset;\n";
 			h << "		//! End offset\n";
@@ -393,7 +393,7 @@ namespace PEG
 			hxx << "	{}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	inline Node::Node(enum Rule rule)\n";
+			hxx << "	inline Node::Node(enum ASTRule rule)\n";
 			hxx << "		: rule(rule)\n";
 			hxx << "		, offset()\n";
 			hxx << "		, offsetEnd()\n";
@@ -437,7 +437,7 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	template<class F> inline bool Node::each(enum Rule rule, const F& callback)\n";
+			hxx << "	template<class F> inline bool Node::each(enum ASTRule rule, const F& callback)\n";
 			hxx << "	{\n";
 			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
 			hxx << "		{\n";
@@ -449,7 +449,7 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	template<class F> inline bool Node::each(enum Rule rule, const F& callback) const\n";
+			hxx << "	template<class F> inline bool Node::each(enum ASTRule rule, const F& callback) const\n";
 			hxx << "	{\n";
 			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
 			hxx << "		{\n";
@@ -461,7 +461,7 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	template<class StringT> inline bool Node::extractFirstChildText(StringT& out, enum Rule rule) const\n";
+			hxx << "	template<class StringT> inline bool Node::extractFirstChildText(StringT& out, enum ASTRule rule) const\n";
 			hxx << "	{\n";
 			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
 			hxx << "		{\n";
@@ -476,7 +476,7 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	template<class StringT> inline bool Node::extractChildText(StringT& out, enum Rule rule, const AnyString& separator) const\n";
+			hxx << "	template<class StringT> inline bool Node::extractChildText(StringT& out, enum ASTRule rule, const AnyString& separator) const\n";
 			hxx << "	{\n";
 			hxx << "		bool somethingFound = false;\n";
 			hxx << '\n';
@@ -510,7 +510,7 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	inline uint Node::findFirst(enum Rule rule) const\n";
+			hxx << "	inline uint Node::findFirst(enum ASTRule rule) const\n";
 			hxx << "	{\n";
 			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
 			hxx << "		{\n";
@@ -521,7 +521,7 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	inline bool Node::exists(enum Rule rule) const\n";
+			hxx << "	inline bool Node::exists(enum ASTRule rule) const\n";
 			hxx << "	{\n";
 			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
 			hxx << "		{\n";
@@ -547,7 +547,7 @@ namespace PEG
 			hxx << '\n';
 			hxx << '\n';
 			hxx << "	#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
-			hxx << "	inline Node::Ptr  Node::xpath(std::initializer_list<enum Rule> path) const\n";
+			hxx << "	inline Node::Ptr  Node::xpath(std::initializer_list<enum ASTRule> path) const\n";
 			hxx << "	{\n";
 			hxx << "		if (path.size() > 0)\n";
 			hxx << "		{\n";
@@ -583,7 +583,7 @@ namespace PEG
 			hxx << "	#endif\n";
 			hxx << '\n';
 			hxx << '\n';
-			// hxx << "	inline Node::Ptr  Node::xpath(enum Rule path) const\n";
+			// hxx << "	inline Node::Ptr  Node::xpath(enum ASTRule path) const\n";
 			// hxx << "	{\n";
 			// hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
 			// hxx << "		{\n";
@@ -595,7 +595,7 @@ namespace PEG
 			// hxx << '\n';
 			// hxx << '\n';
 			hxx << "	#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
-			hxx << "	inline bool  Node::xpathExists(std::initializer_list<enum Rule> path) const\n";
+			hxx << "	inline bool  Node::xpathExists(std::initializer_list<enum ASTRule> path) const\n";
 			hxx << "	{\n";
 			hxx << "		return !(!xpathExists(std::move(path)));\n";
 			hxx << "	}\n";
@@ -667,7 +667,7 @@ namespace PEG
 				}
 			}
 
-			cpp << "	//! Rule " << name << '\n';
+			cpp << "	//! ASTRule " << name << '\n';
 			cpp << "	";
 			cpp << ((node.enumID != "rgStart") ? "static inline " : "static ");
 
@@ -724,7 +724,7 @@ namespace PEG
 			cpp << "	};\n";
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static bool  RuleAttributeCapture(enum Rule ruleid)\n";
+			cpp << "	static bool  RuleAttributeCapture(enum ASTRule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
 			cpp << "		return _attrAttributeCapture[(uint) ruleid];\n";
@@ -744,7 +744,7 @@ namespace PEG
 			cpp << "	};\n";
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static inline bool  RuleAttributeError(enum Rule ruleid)\n";
+			cpp << "	static inline bool  RuleAttributeError(enum ASTRule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
 			cpp << "		return _attrAttributeError[(uint) ruleid];\n";
@@ -760,7 +760,7 @@ namespace PEG
 			cpp << "	};\n";
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static inline bool  RuleAttributeImportant(enum Rule ruleid)\n";
+			cpp << "	static inline bool  RuleAttributeImportant(enum ASTRule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
 			cpp << "		return _attrAttributeImportant[(uint) ruleid];\n";
@@ -792,7 +792,7 @@ namespace PEG
 			cpp << "	};\n";
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static AnyString  RuleAttributeSimpleTextCapture(enum Rule ruleid)\n";
+			cpp << "	static AnyString  RuleAttributeSimpleTextCapture(enum ASTRule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
 			cpp << "		return _attrAttributeSimpleTextCapture[(uint) ruleid];\n";
@@ -827,7 +827,7 @@ namespace PEG
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	bool ShouldIgnoreRuleForDuplication(enum Rule rule)\n";
+			cpp << "	bool ShouldIgnoreASTRuleForDuplication(enum ASTRule rule)\n";
 			cpp << "	{\n";
 			cpp << "		static const bool hints[] = {\n";
 			cpp << "			false, // rgUnknown\n";
@@ -844,14 +844,14 @@ namespace PEG
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	bool  RuleIsError(enum Rule ruleid)\n";
+			cpp << "	bool  ASTRuleIsError(enum ASTRule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		return RuleAttributeError(ruleid);\n";
 			cpp << "	}\n";
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	AnyString RuleToString(enum Rule ruleid)\n";
+			cpp << "	AnyString ASTRuleToString(enum ASTRule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		switch (ruleid)\n";
 			cpp << "		{\n";

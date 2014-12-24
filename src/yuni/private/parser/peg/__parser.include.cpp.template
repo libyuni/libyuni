@@ -94,7 +94,7 @@
 
 	struct Chunk
 	{
-		//! Rule ID - a negative value means that the rule has not been commited yet
+		//! ASTRule ID - a negative value means that the rule has not been commited yet
 		int rule;
 		//! Iterator on the source
 		uint offset;
@@ -135,9 +135,9 @@
 		//@{
 		void pushInclude(uint urlindex);
 		uint push();
-		uint enterRule(enum Rule rule);
+		uint enterRule(enum ASTRule rule);
 		void restart(uint from);
-		void commit(uint ruleOffset, enum Rule rule);
+		void commit(uint ruleOffset, enum ASTRule rule);
 		//@}
 
 		//! \name Filename manipulation
@@ -366,7 +366,7 @@
 	}
 
 
-	inline uint Datasource::enterRule(enum Rule rule)
+	inline uint Datasource::enterRule(enum ASTRule rule)
 	{
 		assert(capacity + GROW_CHUNK < ARBITRARY_HARD_LIMIT); // arbitrary
 		assert(offset < ARBITRARY_HARD_LIMIT); // arbitrary
@@ -420,7 +420,7 @@
 	}
 
 
-	inline void Datasource::commit(uint ruleOffset, enum Rule rule)
+	inline void Datasource::commit(uint ruleOffset, enum ASTRule rule)
 	{
 		assert(stack[ruleOffset].rule == - (int) rule and "inconsistency ruleid in the stack");
 		assert(offset >= ruleOffset and "invalid stack entre/commit");
@@ -472,7 +472,7 @@
 			# if HAS_TRACES != 0
 			uint csize = ruleCursor.offsetEnd - ruleCursor.offset;
 			AnyString content(contents[ruleCursor.urlindex], ruleCursor.offset, csize);
-			TRACE_LOCAL("    COMMIT " << RuleToString(rule) << ", offset " << newEndOffset << ": " << content);
+			TRACE_LOCAL("    COMMIT " << ASTRuleToString(rule) << ", offset " << newEndOffset << ": " << content);
 			# endif
 		}
 
@@ -668,7 +668,7 @@
 	{
 		assert(&node != NULL);
 		out << indent << "<div class=\"node\">";
-		out << "<span class=\"rule\">" << RuleToString(node.rule) << "</span>";
+		out << "<span class=\"rule\">" << ASTRuleToString(node.rule) << "</span>";
 
 		bool attrCapture = RuleAttributeCapture(node.rule);
 		if (attrCapture)
@@ -707,7 +707,7 @@
 
 		typedef Yuni::Dictionary<AnyString, YString>::Unordered  DictType;
 		DictType dict;
-		dict["rule"] = RuleToString(node.rule);
+		dict["rule"] = ASTRuleToString(node.rule);
 		dict["prefix"] = indent;
 
 		if (YUNI_UNLIKELY(RuleAttributeError(node.rule)))
@@ -799,14 +799,14 @@
 
 		if (not ColorT)
 		{
-			out << RuleToString(node.rule);
+			out << ASTRuleToString(node.rule);
 		}
 		else
 		{
 			if (YUNI_UNLIKELY(RuleAttributeError(node.rule)))
 			{
 				::Yuni::System::Console::SetTextColor(out, red);
-				out << RuleToString(node.rule);
+				out << ASTRuleToString(node.rule);
 				::Yuni::System::Console::ResetTextColor(out);
 			}
 			else
@@ -814,13 +814,13 @@
 				if (YUNI_UNLIKELY(RuleAttributeImportant(node.rule)))
 				{
 					::Yuni::System::Console::SetTextColor(out, purple);
-					out << RuleToString(node.rule);
+					out << ASTRuleToString(node.rule);
 					::Yuni::System::Console::ResetTextColor(out);
 				}
 				else
 				{
 					::Yuni::System::Console::ResetTextColor(out);
-					out << RuleToString(node.rule);
+					out << ASTRuleToString(node.rule);
 				}
 			}
 		}
@@ -985,7 +985,7 @@
 			# endif
 
 			// The grammar rule for the current node
-			enum Rule rule = (enum Rule) cursor.rule;
+			enum ASTRule rule = (enum ASTRule) cursor.rule;
 
 			assert(cursor.parent < astNodes.size());
 			assert((uint64) i < astNodes.size());
