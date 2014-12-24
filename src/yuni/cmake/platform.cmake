@@ -138,6 +138,12 @@
 /* C++ msvc force inline */
 #cmakedefine YUNI_HAS_MSVC_FORCE_INLINE
 
+/* C++ gcc attribute 'pure' */
+#cmakedefine YUNI_HAS_GCC_ATTR_PURE
+
+/* C++ gcc attribute 'const' */
+#cmakedefine YUNI_HAS_GCC_ATTR_CONST
+
 /* C++11 keyword override */
 #cmakedefine YUNI_HAS_CPP_KEYWORD_OVERRIDE
 

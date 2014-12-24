@@ -80,6 +80,24 @@ else()
 endif()
 
 
+# gcc __attribute__((pure))
+check_cxx_source_compiles("
+	__attribute__((pure)) static int max(int x, int y) { return x > y ? x : y;}
+	int main(void)
+	{
+		return max(42, 0);
+	} "  YUNI_HAS_GCC_ATTR_PURE)
+
+# gcc __attribute__((const))
+check_cxx_source_compiles("
+	__attribute__((const)) static int max(int x, int y) { return x > y ? x : y;}
+	int main(void)
+	{
+		return max(42, 0);
+	} "  YUNI_HAS_GCC_ATTR_CONST)
+
+
+
 
 check_cxx_source_compiles("
 	class IBase
