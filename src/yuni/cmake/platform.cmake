@@ -87,6 +87,9 @@
 /* C++0x support by gcc (-std=c++0x) */
 #cmakedefine YUNI_HAS_GCC_CPP0X_SUPPORT
 
+/* GCC __builtin_expect */
+#cmakedefine YUNI_HAS_GCC_BUILTIN_EXPECT
+
 /* long types - different from int */
 #cmakedefine YUNI_HAS_LONG
 

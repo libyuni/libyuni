@@ -478,7 +478,7 @@
 **     does something else
 ** \endcode
 */
-# ifdef YUNI_OS_GCC
+# if defined(YUNI_OS_GCC) || defined(YUNI_HAS_GCC_BUILTIN_EXPECT)
 #	define YUNI_LIKELY(x)     __builtin_expect(!!(x), 1)
 #	define YUNI_UNLIKELY(x)   __builtin_expect(!!(x), 0)
 # else
