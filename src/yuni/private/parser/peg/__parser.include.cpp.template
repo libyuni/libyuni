@@ -788,7 +788,7 @@
 
 
 	template<bool ColorT>
-	static void InternalNodeExportConsole(Clob& out, const Node& node, bool hasSibling, String& indent, String& tmp)
+	static void InternalNodeExportConsole(Clob& out, const Node& node, bool hasSibling, String& indent, String& tmp, Node::ExportCallback callback)
 	{
 		using namespace ::Yuni::System::Console;
 		assert(&node != NULL);
@@ -859,9 +859,47 @@
 			if (ColorT)
 				::Yuni::System::Console::SetTextColor(out, blue);
 			out << " (+" << node.children.size() << ')';
+			if (ColorT)
+				::Yuni::System::Console::ResetTextColor(out);
 		}
 
-		out << '\n';
+		if (!callback)
+			out << '\n';
+		else
+		{
+			if (ColorT)
+				::Yuni::System::Console::SetTextColor(out, lightblue);
+			out << " [" << (void*) &node << "]\n";
+			if (ColorT)
+				::Yuni::System::Console::ResetTextColor(out);
+		}
+
+		if (callback) // callback for additional information ?
+		{
+			tmp.clear();
+			callback(node, tmp);
+			if (not tmp.empty())
+			{
+				AnyString prefix = ":: ";
+				String newIndent;
+				newIndent += '\n';
+				newIndent += indent;
+				newIndent.append(prefix);
+
+				tmp.trimRight('\n');
+				tmp.replace("\n", newIndent);
+
+				if (ColorT)
+					::Yuni::System::Console::SetTextColor(out, blue);
+				out << indent;
+				if (ColorT)
+					::Yuni::System::Console::SetTextColor(out, yellow);
+				out << prefix;
+				if (ColorT)
+					::Yuni::System::Console::ResetTextColor(out);
+				out << tmp << '\n';
+			}
+		}
 
 		// sub nodes
 		if (not node.children.empty())
@@ -874,7 +912,7 @@
 			for (uint i = 0; i != (uint) node.children.size(); ++i)
 			{
 				bool hasSibling = (i != (uint) node.children.size() - 1);
-				InternalNodeExportConsole<ColorT>(out, *(node.children[i]), hasSibling, indent, tmp);
+				InternalNodeExportConsole<ColorT>(out, *(node.children[i]), hasSibling, indent, tmp, callback);
 			}
 
 			indent.chop(4);
