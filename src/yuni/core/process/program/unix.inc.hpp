@@ -43,13 +43,24 @@ namespace Process
 			return true;
 		}
 
+
 	} // anonymous namespace
+
+
 
 
 
 
 	inline void Program::ThreadMonitor::cleanupAfterChildTermination()
 	{
+		// stop the thread dedicated to handle the timeout
+		if (procinfo.timeoutThread)
+		{
+			procinfo.timeoutThread->stop();
+			delete procinfo.timeoutThread;
+			procinfo.timeoutThread = nullptr;
+		}
+
 		// close all remaining fd
 		closeFD(channels.infd[0]);
 		closeFD(channels.errd[0]);
@@ -76,10 +87,7 @@ namespace Process
 					args[count + 1] = nullptr;
 				}
 				else
-				{
-					procinfo.mutex.unlock();
 					return false;
-				}
 			}
 			else
 				args = nullptr;
@@ -111,6 +119,7 @@ namespace Process
 			}
 			return false;
 		}
+
 
 		// Getting the start time of execution
 		pStartTime = currentTime();
@@ -186,6 +195,9 @@ namespace Process
 			// The mutex has already been locked and should be unlocked to let the main
 			procinfo.processInput = channels.outfd[1];
 			procinfo.processID = pid;
+
+			// timeout for the sub process
+			procinfo.createThreadForTimeoutWL();
 		}
 
 		return true;
@@ -197,13 +209,13 @@ namespace Process
 		// alias flag to determine whether there is a custom stream handler or not
 		const bool hasStream = !(!stream);
 		// is a buffer required ?
-		const bool requiresBuffer = (hasStream or pRedirectToConsole);
+		const bool captureOutput = (hasStream or pRedirectToConsole);
 
 		// a 4K buffer seems the most efficient size
 		enum { bufferSize = 4096 };
 		// buffer for reading std::cout and std::cerr
-		char* const buffer = (requiresBuffer) ? (char*)::malloc(sizeof(char) * bufferSize) : nullptr;
-		if (YUNI_UNLIKELY(!buffer and requiresBuffer)) // allocation failed
+		char* const buffer = (captureOutput) ? (char*)::malloc(sizeof(char) * bufferSize) : nullptr;
+		if (YUNI_UNLIKELY(!buffer and captureOutput)) // allocation failed
 		{
 			pExitStatus = -127; // notify - fatal error
 			pEndTime = currentTime();
@@ -220,7 +232,7 @@ namespace Process
 			// try to read something from the inputs until both are invalid
 			// to avoid unwanted behaviors from system buffers, especially on linux.
 			// (Otherwise the full output may not be retrieved - especially the final part)
-			do
+			while (captureOutput)
 			{
 				// reset poll structure
 				pfds[0].fd = channels.infd[0]; // std::cout
@@ -286,14 +298,13 @@ namespace Process
 				if (not hasInputOnStdcerr)
 					break;
 			}
-			while (true);
 
 
 			// failed to read something from std::cout and std::cerr
 			// the process is likely already dead
 			{
 				int status;
-				int wpid = ::waitpid(pid, &status, WNOHANG | WUNTRACED | WCONTINUED);
+				int wpid = ::waitpid(pid, &status, /*WNOHANG |*/ WUNTRACED | WCONTINUED);
 				if (wpid > 0)
 				{
 					// the child process has stopped

@@ -10,7 +10,7 @@ namespace Parser
 namespace PEG
 {
 
-	static inline AnyString RuleTypeToString(Node::Type rule)
+	/* static inline AnyString RuleTypeToString(Node::Type rule)
 	{
 		switch (rule)
 		{
@@ -21,7 +21,7 @@ namespace PEG
 			case Node::asOR:     return "or";
 		}
 		return "";
-	}
+	}*/
 
 
 	template<class StreamT>

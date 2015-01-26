@@ -100,7 +100,8 @@ if(NOT MSVC)
 			endif()
 		endif()
 	endif()
-	if (YUNI_HAS_LIB_CPP11_SUPPORT)
+	if (YUNI_HAS_LIB_CPP11_SUPPORT AND (NOT CLANG OR APPLE))
+		# clang seems to not like the option -stdlib, but required on MacOS...
 		set(YUNI_COMMON_CXX_OPTIONS  "${YUNI_COMMON_CXX_OPTIONS} -stdlib=libc++")
 	endif()
 

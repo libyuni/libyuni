@@ -18,7 +18,6 @@ namespace Process
 	{
 		#warning not implemented on windows
 		assert(false and "not implemented on Windows");
-		env.mutex.unlock();
 		pStartTime = currentTime();
 		return false;
 	}

@@ -2,6 +2,13 @@
 # define __YUNI_CORE_PROCESS_PROGRAM_PROCESSINFO_H__
 
 # include "program.h"
+# include "../../noncopyable.h"
+# include "../../../thread/thread.h"
+# ifdef YUNI_OS_UNIX
+# include <sys/types.h>
+# include <signal.h>
+# endif
+
 
 
 
@@ -10,16 +17,13 @@ namespace Yuni
 namespace Process
 {
 
-
-
-
 	/*!
 	** \brief Helper class for storing shared information on the program which is currently
 	** launched by Process::Program
 	**
 	** \note This class may be shared by several threads
 	*/
-	class Program::ProcessSharedInfo final
+	class Program::ProcessSharedInfo final : public Yuni::NonCopyable<Program::ProcessSharedInfo>
 	{
 	public:
 		//! Smart pointer
@@ -27,18 +31,13 @@ namespace Process
 		typedef SmartPtr<ProcessSharedInfo> Ptr;
 
 	public:
-		ProcessSharedInfo()
-			: running(false)
-			, processID(-1)
-			, processInput(-1)
-			, duration(0)
-			, durationPrecision(dpSeconds)
-			, timeout()
-			, exitstatus(-1)
-			, redirectToConsole(false)
-		{}
-
-		~ProcessSharedInfo() {}
+		//! \name Constructor & Destructor
+		//@{
+		//! Default constructor
+		ProcessSharedInfo();
+		//! Destructor
+		~ProcessSharedInfo();
+		//@}
 
 
 		/*!
@@ -46,6 +45,10 @@ namespace Process
 		*/
 		template<bool WithLock> bool sendSignal(int value);
 
+		/*!
+		** \brief Create a thread dedicated to handle the execution timeout
+		*/
+		void createThreadForTimeoutWL();
 
 
 	public:
@@ -75,50 +78,12 @@ namespace Process
 		//! Mutex
 		mutable Mutex mutex;
 
+		//! Optional thread for timeout
+		Yuni::Thread::IThread* timeoutThread;
+
 	}; // class Program::ProcessSharedInfo
 
 
-
-
-
-
-	template<bool WithLock>
-	inline bool Program::ProcessSharedInfo::sendSignal(int sigvalue)
-	{
-		if (WithLock)
-			mutex.lock();
-		if (0 == running)
-		{
-			if (WithLock)
-				mutex.unlock();
-			return false;
-		}
-
-		# ifndef YUNI_OS_WINDOWS
-		{
-			const pid_t pid = static_cast<pid_t>(processID);
-			if (WithLock)
-				mutex.unlock();
-			if (pid > 0)
-				return (0 == ::kill(pid, sigvalue));
-		}
-		# else
-		{
-			# warning missing implementation on windows
-			switch (sigvalue)
-			{
-				case SIGKILL:
-					break;
-			}
-			(void) sigvalue;
-
-			if (WithLock)
-				mutex.unlock();
-		}
-		# endif
-
-		return false;
-	}
 
 
 
@@ -128,5 +93,7 @@ namespace Process
 
 } // namespace Process
 } // namespace Yuni
+
+# include "process-info.hxx"
 
 #endif // __YUNI_CORE_PROCESS_PROGRAM_PROCESSINFO_H__

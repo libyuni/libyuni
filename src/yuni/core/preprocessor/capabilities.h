@@ -188,6 +188,7 @@
 
 
 /*!
+** \macro YUNI_ALWAYS_INLINE
 ** \brief Force inline
 **
 ** \code
@@ -206,6 +207,62 @@
 # if !defined(YUNI_ALWAYS_INLINE)
 #	define YUNI_ALWAYS_INLINE  inline
 # endif
+
+
+/*!
+** \macro YUNI_ATTR_PURE
+** \brief Declare a "pure" function
+**
+** A "pure" function is one that has no effects, and whose return value reflects
+** only the function's parameters or nonvolatile global variables. Any parameter
+** or global variable access must be read-only. Loop optimization and subexpression
+** elimination can be applied to such functions.
+**
+** \code
+** static void max(int x, int y) YUNI_ATTR_PURE
+** {
+**	return x > y ? x : y;
+** }
+** \endcode
+*/
+# if !defined(YUNI_ATTR_PURE) && defined(YUNI_HAS_GCC_ATTR_PURE)
+#	define YUNI_ATTR_PURE  __attribute__((pure))
+# endif
+# if !defined(YUNI_ATTR_PURE)
+#	define YUNI_ATTR_PURE
+# endif
+
+
+/*!
+** \macro YUNI_ATTR_CONST
+** \brief Declare a "const" function
+**
+** A "constant" function is a stricter variant of a pure function. Such functions
+** cannot access global variables, and cannot take pointers as parameters.
+** Thus, the constant function's return value reflects nothing but the
+** passed-by-value parameters. Additional optimizations, on top of those possible
+** with pure functions, are possible for such functions
+**
+** \code
+** static void max(int x, int y) YUNI_ATTR_CONST
+** {
+**	return x > y ? x : y;
+** }
+** \endcode
+*/
+# if !defined(YUNI_ATTR_CONST) && defined(YUNI_HAS_GCC_ATTR_CONST)
+#	define YUNI_ATTR_CONST  __attribute__((const))
+# endif
+# if !defined(YUNI_ATTR_CONST)
+#	define YUNI_ATTR_CONST
+# endif
+
+
+
+
+
+
+
 
 
 # ifndef YUNI_HAS_CPP_KEYWORD_OVERRIDE
@@ -421,7 +478,7 @@
 **     does something else
 ** \endcode
 */
-# ifdef YUNI_OS_GCC
+# if defined(YUNI_OS_GCC) || defined(YUNI_HAS_GCC_BUILTIN_EXPECT)
 #	define YUNI_LIKELY(x)     __builtin_expect(!!(x), 1)
 #	define YUNI_UNLIKELY(x)   __builtin_expect(!!(x), 0)
 # else
