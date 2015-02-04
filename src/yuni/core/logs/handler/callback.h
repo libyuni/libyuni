@@ -1,8 +1,6 @@
-#ifndef __YUNI_CORE_LOGS_HANDLERS_CALLBACK_H__
-# define __YUNI_CORE_LOGS_HANDLERS_CALLBACK_H__
-
-# include "../null.h"
-# include "../../event/event.h"
+#pragma once
+#include "../null.h"
+#include "../../event/event.h"
 
 
 namespace Yuni
@@ -55,4 +53,3 @@ namespace Logs
 } // namespace Logs
 } // namespace Yuni
 
-#endif // __YUNI_CORE_LOGS_HANDLERS_CALLBACK_H__

@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_NULLABLE_NULLABLE_HXX__
-# define __YUNI_CORE_NULLABLE_NULLABLE_HXX__
+#pragma once
+
 
 
 namespace Yuni
@@ -8,8 +8,6 @@ namespace Yuni
 	template<class T, class Alloc>
 	inline Nullable<T,Alloc>::~Nullable()
 	{}
-
-
 
 
 	template<class T, class Alloc>
@@ -379,4 +377,3 @@ namespace Yuni
 
 } // namespace Yuni
 
-#endif // __YUNI_CORE_NULLABLE_NULLABLE_HXX__

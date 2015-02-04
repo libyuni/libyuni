@@ -1,5 +1,4 @@
-#ifndef __YUNI_CORE_SMARTPTR_STL_HXX__
-# define __YUNI_CORE_SMARTPTR_STL_HXX__
+#pragma once
 
 
 
@@ -51,4 +50,3 @@ namespace std
 
 } // namespace std
 
-#endif // __YUNI_CORE_SMARTPTR_STL_HXX__

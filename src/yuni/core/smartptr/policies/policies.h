@@ -1,7 +1,6 @@
-#ifndef __YUNI_CORE_SMARTPTR_POLICIES_POLICIES_H__
-# define __YUNI_CORE_SMARTPTR_POLICIES_POLICIES_H__
+#pragma once
+#include "../../../yuni.h"
 
-# include "../../../yuni.h"
 
 
 namespace Yuni
@@ -18,12 +17,11 @@ namespace Policy
 } // namespace Yuni
 
 
-# include "checking.h"
-# include "conversions.h"
-# include "storage.h"
-# include "constness.h"
-# include "ownership.h"
-# include "../../../thread/policy.h"
+#include "checking.h"
+#include "conversions.h"
+#include "storage.h"
+#include "constness.h"
+#include "ownership.h"
+#include "../../../thread/policy.h"
 
 
-#endif // __YUNI_CORE_SMARTPTR_POLICIES_POLICIES_H__

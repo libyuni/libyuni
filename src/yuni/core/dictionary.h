@@ -1,16 +1,14 @@
-#ifndef __YUNI_CORE_DICTIONARY_H__
-# define __YUNI_CORE_DICTIONARY_H__
-
-# include "../yuni.h"
-# include "string.h"
-# include <map>
-# include <set>
-# ifdef YUNI_HAS_STL_UNORDERED_MAP
-#	include <unordered_map>
-# endif
-# ifdef YUNI_HAS_STL_UNORDERED_SET
-#	include <unordered_set>
-# endif
+#pragma once
+#include "../yuni.h"
+#include "string.h"
+#include <map>
+#include <set>
+#ifdef YUNI_HAS_STL_UNORDERED_MAP
+# include <unordered_map>
+#endif
+#ifdef YUNI_HAS_STL_UNORDERED_SET
+# include <unordered_set>
+#endif
 
 
 
@@ -85,4 +83,3 @@ namespace Yuni
 
 } // namespace Yuni
 
-#endif // __YUNI_CORE_DICTIONARY_H__

@@ -1,14 +1,11 @@
-#ifndef __YUNI_CORE_FWD_H__
-# define __YUNI_CORE_FWD_H__
+#pragma once
+#include <iosfwd> // STL
 
-# include <iosfwd> // STL
-# ifndef YUNI_OS_MSVC
-//#	include <bits/stringfwd.h>
-# endif
+#ifdef None
+# undef None // From X11/X.h
+#endif
 
-# ifdef None
-#	undef None // From X11/X.h
-# endif
+
 
 namespace Yuni
 {
@@ -77,4 +74,3 @@ typedef Yuni::String  YString;
 typedef ::Yuni::CString<0, true>  AnyString;
 
 
-#endif // __YUNI_CORE_FWD_H__

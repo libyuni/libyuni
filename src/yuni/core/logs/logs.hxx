@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_LOGS_LOGS_HXX__
-# define __YUNI_CORE_LOGS_LOGS_HXX__
+#pragma once
+
 
 
 namespace Yuni
@@ -214,4 +214,3 @@ namespace Logs
 } // namespace Logs
 } // namespace Yuni
 
-#endif // __YUNI_CORE_LOGS_LOGS_HXX__

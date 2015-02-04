@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_SMARTPTR_POLICIES_CONSTNESS_H__
-# define __YUNI_CORE_SMARTPTR_POLICIES_CONSTNESS_H__
+#pragma once
+
 
 
 namespace Yuni
@@ -40,9 +40,7 @@ namespace Constness
 
 
 
-
 } // namespace Constness
 } // namespace Policy
 } // namespace Yuni
 
-#endif // __YUNI_CORE_SMARTPTR_POLICIES_CONSTNESS_H__

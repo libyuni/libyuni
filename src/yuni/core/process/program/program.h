@@ -1,11 +1,9 @@
-#ifndef __YUNI_CORE_PROCESS_PROGRAM_PROGRAM_H__
-# define __YUNI_CORE_PROCESS_PROGRAM_PROGRAM_H__
-
-# include "../../../yuni.h"
-# include "../../../core/string.h"
-# include "../../atomic/int.h"
-# include "../../bind.h"
-# include "stream.h"
+#pragma once
+#include "../../../yuni.h"
+#include "../../../core/string.h"
+#include "../../atomic/int.h"
+#include "../../bind.h"
+#include "stream.h"
 
 
 
@@ -260,4 +258,3 @@ namespace Process
 
 # include "program.hxx"
 
-#endif // __YUNI_CORE_PROCESS_PROGRAM_PROGRAM_H__

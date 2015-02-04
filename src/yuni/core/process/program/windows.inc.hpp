@@ -1,4 +1,4 @@
-
+#pragma once
 // file included by program.cpp
 
 #ifdef YUNI_OS_WINDOWS
@@ -56,4 +56,4 @@ namespace Process
 } // namespace Process
 } // namespace Yuni
 
-#endif
+#endif // YUNI_OS_WINDOWS

@@ -1,7 +1,6 @@
-#ifndef __YUNI_CORE_DECORATORS_LOGS_TIME_H__
-# define __YUNI_CORE_DECORATORS_LOGS_TIME_H__
+#pragma once
+#include "../null.h"
 
-# include "../null.h"
 
 
 namespace Yuni
@@ -60,4 +59,3 @@ namespace Logs
 } // namespace Logs
 } // namespace Yuni
 
-#endif // __YUNI_CORE_DECORATORS_LOGS_TIME_H__

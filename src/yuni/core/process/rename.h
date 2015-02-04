@@ -1,8 +1,6 @@
-#ifndef __YUNI_CORE_PROCESS_RENAME_H__
-# define __YUNI_CORE_PROCESS_RENAME_H__
-
-# include "../../yuni.h"
-# include "../string.h"
+#pragma once
+#include "../../yuni.h"
+#include "../string.h"
 
 
 namespace Yuni
@@ -25,4 +23,3 @@ namespace Process
 } // namespace Process
 } // namespace Yuni
 
-#endif // __YUNI_CORE_PROCESS_RENAME_H__

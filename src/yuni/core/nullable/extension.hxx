@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_NULLABLE_EXTENSION_HXX__
-# define __YUNI_CORE_NULLABLE_EXTENSION_HXX__
+#pragma once
+
 
 
 namespace Yuni
@@ -63,4 +63,3 @@ inline std::ostream& operator << (std::ostream& out, const Yuni::Nullable<T,Allo
 }
 
 
-#endif // __YUNI_CORE_NULLABLE_EXTENSION_HXX__

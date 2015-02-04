@@ -1,7 +1,5 @@
-#ifndef __YUNI_CORE_FOREACH_H__
-# define __YUNI_CORE_FOREACH_H__
-
-# include "preprocessor/std.h"
+#pragma once
+#include "preprocessor/std.h"
 
 
 
@@ -49,4 +47,3 @@
 				/* else statement [optional] */
 
 
-#endif // __YUNI_CORE_FOREACH_H__

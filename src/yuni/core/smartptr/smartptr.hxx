@@ -1,7 +1,5 @@
-#ifndef __YUNI_CORE_SMARTPTR_SMARTPTR_HXX__
-# define __YUNI_CORE_SMARTPTR_SMARTPTR_HXX__
-
-# include "smartptr.h"
+#pragma once
+#include "smartptr.h"
 
 
 
@@ -464,4 +462,3 @@ namespace Yuni
 
 } // namespace Yuni
 
-#endif // __YUNI_CORE_SMARTPTR_SMARTPTR_HXX__

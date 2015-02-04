@@ -1,7 +1,5 @@
-#ifndef __YUNI_CORE_PROCESS_PROGRAM_PROGRAM_HXX__
-# define __YUNI_CORE_PROCESS_PROGRAM_PROGRAM_HXX__
-
-# include "program.h"
+#pragma once
+#include "program.h"
 
 
 
@@ -55,4 +53,3 @@ namespace Process
 } // namespace Process
 } // namespace Yuni
 
-#endif // __YUNI_CORE_PROCESS_PROGRAM_PROGRAM_HXX__

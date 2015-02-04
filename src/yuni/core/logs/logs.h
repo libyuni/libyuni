@@ -1,28 +1,26 @@
-#ifndef __YUNI_CORE_LOGS_LOGS_H__
-# define __YUNI_CORE_LOGS_LOGS_H__
-
-# include "../../yuni.h"
-# include "../../thread/policy.h"
-# include "null.h"
-# include "verbosity.h"
+#pragma once
+#include "../../yuni.h"
+#include "../../thread/policy.h"
+#include "null.h"
+#include "verbosity.h"
 
 // Default Handler
-# include "handler/stdcout.h"
-# include "handler/file.h"
+#include "handler/stdcout.h"
+#include "handler/file.h"
 // Default decorators
-# include "decorators/verbositylevel.h"
-# include "decorators/time.h"
-# include "decorators/message.h"
-# include "../noncopyable.h"
-# include "buffer.h"
+#include "decorators/verbositylevel.h"
+#include "decorators/time.h"
+#include "decorators/message.h"
+#include "../noncopyable.h"
+#include "buffer.h"
 
 
 // The default verbosity level according the target mode (debug/release)
-# ifdef NDEBUG
-#	define YUNI_LOGS_DEFAULT_VERBOSITY  Verbosity::Compatibility::level
-# else
-#	define YUNI_LOGS_DEFAULT_VERBOSITY  Verbosity::Debug::level
-# endif
+#ifdef NDEBUG
+# define YUNI_LOGS_DEFAULT_VERBOSITY  Verbosity::Compatibility::level
+#else
+# define YUNI_LOGS_DEFAULT_VERBOSITY  Verbosity::Debug::level
+#endif
 
 
 /*!
@@ -32,7 +30,7 @@
 ** logs.error() << YN_LOGENV << "my message";
 ** \endcode
 */
-# define YN_LOGENV  __FILE__ << ':' << __LINE__ << ": "
+#define YN_LOGENV  __FILE__ << ':' << __LINE__ << ": "
 
 
 
@@ -245,6 +243,5 @@ namespace Logs
 } // namespace Logs
 } // namespace Yuni
 
-# include "logs.hxx"
+#include "logs.hxx"
 
-#endif // __YUNI_CORE_LOGS_LOGS_H__

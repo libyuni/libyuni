@@ -1,12 +1,11 @@
-#ifndef __YUNI_CORE_NULLABLE_NULLABLE_H__
-# define __YUNI_CORE_NULLABLE_NULLABLE_H__
+#pragma once
+#include "../../yuni.h"
+#include "../static/types.h"
+#include "../static/remove.h"
+#include "../static/moveconstructor.h"
+#include "holder.h"
+#include "../string.h"
 
-# include "../../yuni.h"
-# include "../static/types.h"
-# include "../static/remove.h"
-# include "../static/moveconstructor.h"
-# include "holder.h"
-# include "../string.h"
 
 
 namespace Yuni
@@ -372,7 +371,6 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "nullable.hxx"
-# include "extension.hxx"
+#include "nullable.hxx"
+#include "extension.hxx"
 
-#endif // __YUNI_CORE_NULLABLE_NULLABLE_H__
