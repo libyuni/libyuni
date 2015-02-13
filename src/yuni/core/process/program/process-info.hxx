@@ -1,7 +1,5 @@
-#ifndef __YUNI_CORE_PROCESS_PROGRAM_PROCESSINFO_HXX__
-# define __YUNI_CORE_PROCESS_PROGRAM_PROCESSINFO_HXX__
-
-# include "process-info.h"
+#pragma once
+#include "process-info.h"
 
 
 
@@ -9,7 +7,6 @@ namespace Yuni
 {
 namespace Process
 {
-
 
 
 	inline Program::ProcessSharedInfo::ProcessSharedInfo()
@@ -35,7 +32,6 @@ namespace Process
 			delete timeoutThread;
 		}
 	}
-
 
 
 	template<bool WithLock>
@@ -150,4 +146,3 @@ namespace Process
 } // namespace Process
 } // namespace Yuni
 
-#endif // __YUNI_CORE_PROCESS_PROGRAM_PROCESSINFO_HXX__

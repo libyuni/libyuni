@@ -1,8 +1,7 @@
-#ifndef __YUNI_CORE_LOGS_NULL_H__
-# define __YUNI_CORE_LOGS_NULL_H__
+#pragma once
+#include "../../yuni.h"
+#include "../string.h"
 
-# include "../../yuni.h"
-# include "../string.h"
 
 
 namespace Yuni
@@ -48,4 +47,3 @@ namespace Logs
 } // namespace Logs
 } // namespace Yuni
 
-#endif // __YUNI_CORE_LOGS_NULL_H__

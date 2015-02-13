@@ -1,5 +1,4 @@
-#ifndef __YUNI_CORE_SMARTPTR_POLICIES_CHECKING_H__
-# define __YUNI_CORE_SMARTPTR_POLICIES_CHECKING_H__
+#pragma once
 
 
 
@@ -70,4 +69,3 @@ namespace Checking
 } // namespace Policy
 } // namespace Yuni
 
-#endif // __YUNI_CORE_SMARTPTR_POLICIES_CHECKING_H__

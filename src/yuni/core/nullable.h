@@ -1,6 +1,3 @@
-#ifndef __YUNI_CORE_NULLABLE_H__
-# define __YUNI_CORE_NULLABLE_H__
+#pragma once
+#include "nullable/nullable.h"
 
-# include "nullable/nullable.h"
-
-#endif // __YUNI_CORE_NULLABLE_H__

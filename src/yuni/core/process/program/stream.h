@@ -1,8 +1,6 @@
-#ifndef __YUNI_CORE_PROCESS_PROGRAM_STREAM_H__
-# define __YUNI_CORE_PROCESS_PROGRAM_STREAM_H__
-
-# include "../../../yuni.h"
-# include "../../smartptr.h"
+#pragma once
+#include "../../../yuni.h"
+#include "../../smartptr.h"
 
 
 
@@ -76,4 +74,3 @@ namespace Process
 } // namespace Process
 } // namespace Yuni
 
-#endif // __YUNI_CORE_PROCESS_PROGRAM_STREAM_H__

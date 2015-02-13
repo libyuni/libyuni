@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_SMARTPTR_POLICIES_OWNERSHIP_H__
-# define __YUNI_CORE_SMARTPTR_POLICIES_OWNERSHIP_H__
+#pragma once
+
 
 /*!
 ** \file
@@ -14,13 +14,12 @@
 ** Policy::Ownership::NoCopy<T>
 */
 
-
-# include <cassert>
-# include "../../../thread/policy.h"
-# include "../../static/assert.h"
-# include "../../static/method.h"
-# include "../../atomic/int.h"
-# include "../../static/method.h"
+#include <cassert>
+#include "../../../thread/policy.h"
+#include "../../static/assert.h"
+#include "../../static/method.h"
+#include "../../atomic/int.h"
+#include "../../static/method.h"
 
 
 
@@ -402,4 +401,3 @@ namespace Ownership
 } // namespace Policy
 } // namespace Yuni
 
-#endif // __YUNI_CORE_SMARTPTR_POLICIES_OWNERSHIP_H__

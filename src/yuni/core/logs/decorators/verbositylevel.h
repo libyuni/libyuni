@@ -1,8 +1,7 @@
-#ifndef __YUNI_CORE_LOGS_DECORATORS_VERBOSITY_LEVEL_H__
-# define __YUNI_CORE_LOGS_DECORATORS_VERBOSITY_LEVEL_H__
+#pragma once
+#include "../null.h"
+#include "../../system/console.h"
 
-# include "../null.h"
-# include "../../system/console.h"
 
 
 namespace Yuni
@@ -42,4 +41,3 @@ namespace Logs
 } // namespace Logs
 } // namespace Yuni
 
-#endif // __YUNI_CORE_LOGS_DECORATORS_VERBOSITY_LEVEL_H__

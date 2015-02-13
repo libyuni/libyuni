@@ -1,6 +1,3 @@
-#ifndef __YUNI_CORE_PROCESS_H__
-# define __YUNI_CORE_PROCESS_H__
+#pragma once
+#include "process/process.h"
 
-# include "process/process.h"
-
-#endif // __YUNI_CORE_PROCESS_H__

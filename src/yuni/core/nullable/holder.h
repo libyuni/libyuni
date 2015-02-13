@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_NULLABLE_HOLDER_H__
-# define __YUNI_CORE_NULLABLE_HOLDER_H__
+#pragma once
+
 
 
 namespace Yuni
@@ -162,4 +162,3 @@ namespace NullableImpl
 } // namespace Private
 } // namespace Yuni
 
-#endif // __YUNI_CORE_NULLABLE_HOLDER_H__

@@ -1,9 +1,8 @@
-#ifndef __YUNI_CORE_LOGS_HANDLERS_FILE_H__
-# define __YUNI_CORE_LOGS_HANDLERS_FILE_H__
+#pragma once
+#include "../null.h"
+#include "../../../io/file.h"
+#include <cassert>
 
-# include "../null.h"
-# include "../../../io/file.h"
-# include <cassert>
 
 
 namespace Yuni
@@ -84,6 +83,5 @@ namespace Logs
 } // namespace Logs
 } // namespace Yuni
 
-# include "file.hxx"
+#include "file.hxx"
 
-#endif // __YUNI_CORE_LOGS_HANDLERS_FILE_H__

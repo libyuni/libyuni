@@ -1,18 +1,16 @@
-#ifndef __YUNI_CORE_SMARTPTR_SMARTPTR_H__
-# define __YUNI_CORE_SMARTPTR_SMARTPTR_H__
+#pragma once
+#include "../../yuni.h"
+#include <list>
+#include <vector>
+#include <functional> // needed for the specialization of std::less
+#include "policies/policies.h"
+#include "../static/if.h"
+#include "../static/moveconstructor.h"
 
-# include "../../yuni.h"
-# include <list>
-# include <vector>
-# include <functional> // needed for the specialization of std::less
-# include "policies/policies.h"
-# include "../static/if.h"
-# include "../static/moveconstructor.h"
 
 
 namespace Yuni
 {
-
 
 	/*!
 	** \brief Smart Pointer
@@ -452,7 +450,6 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "smartptr.hxx"
-# include "stl.hxx"
+#include "smartptr.hxx"
+#include "stl.hxx"
 
-#endif // __YUNI_CORE_SMARTPTR_SMARTPTR_H__

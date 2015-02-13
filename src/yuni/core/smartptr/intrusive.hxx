@@ -1,7 +1,5 @@
-#ifndef YUNI_CORE_SMARTPTR_INTRUSIVE_HXX__
-# define YUNI_CORE_SMARTPTR_INTRUSIVE_HXX__
-
-# include <cassert>
+#pragma once
+#include <cassert>
 
 
 namespace Yuni
@@ -135,4 +133,3 @@ namespace Yuni
 
 } // namespace Yuni
 
-#endif //  YUNI_CORE_SMARTPTR_INTRUSIVE_HXX__

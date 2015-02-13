@@ -1,14 +1,12 @@
-#ifndef __YUNI_CORE_LOGS_DECORATORS_APPLICATION_NAME_H__
-# define __YUNI_CORE_LOGS_DECORATORS_APPLICATION_NAME_H__
+#pragma once
+#include "../null.h"
 
-# include "../null.h"
 
 
 namespace Yuni
 {
 namespace Logs
 {
-
 
 	template<class LeftType = NullDecorator>
 	class YUNI_DECL ApplicationName : public LeftType
@@ -58,4 +56,3 @@ namespace Logs
 } // namespace Logs
 } // namespace Yuni
 
-#endif // __YUNI_CORE_LOGS_DECORATORS_APPLICATION_NAME_H__

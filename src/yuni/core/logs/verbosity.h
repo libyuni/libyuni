@@ -1,7 +1,6 @@
-#ifndef __YUNI_CORE_LOGS_VERBOSITY_H__
-# define __YUNI_CORE_LOGS_VERBOSITY_H__
+#pragma once
+#include "../system/console.h"
 
-# include "../system/console.h"
 
 
 namespace Yuni
@@ -246,4 +245,3 @@ namespace Verbosity
 } // namespace Logs
 } // namespace Yuni
 
-#endif // __YUNI_CORE_LOGS_VERBOSITY_H__

@@ -1,15 +1,13 @@
-#ifndef __YUNI_CORE_LOGS_DECORATORS_MESSAGE_H__
-# define __YUNI_CORE_LOGS_DECORATORS_MESSAGE_H__
+#pragma once
+#include "../null.h"
+#include "../../system/console.h"
 
-# include "../null.h"
-# include "../../system/console.h"
 
 
 namespace Yuni
 {
 namespace Logs
 {
-
 
 	template<class LeftType = NullDecorator>
 	class YUNI_DECL Message : public LeftType
@@ -45,4 +43,3 @@ namespace Logs
 } // namespace Logs
 } // namespace Yuni
 
-#endif // __YUNI_CORE_LOGS_DECORATORS_MESSAGE_H__

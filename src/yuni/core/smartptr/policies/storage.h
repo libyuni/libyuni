@@ -1,6 +1,4 @@
-#ifndef __YUNI_CORE_SMARTPTR_POLICIES_STORAGE_H__
-# define __YUNI_CORE_SMARTPTR_POLICIES_STORAGE_H__
-
+#pragma once
 /*!
 ** \file
 ** \brief Storage policies
@@ -161,4 +159,3 @@ namespace Storage
 } // namespace Policy
 } // namespace Yuni
 
-#endif // __YUNI_CORE_SMARTPTR_POLICIES_STORAGE_H__

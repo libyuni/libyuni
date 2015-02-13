@@ -1,13 +1,11 @@
-#ifndef __YUNI_CORE_PROCESS_PROGRAM_PROCESSINFO_H__
-# define __YUNI_CORE_PROCESS_PROGRAM_PROCESSINFO_H__
-
-# include "program.h"
-# include "../../noncopyable.h"
-# include "../../../thread/thread.h"
-# ifdef YUNI_OS_UNIX
+#pragma once
+#include "program.h"
+#include "../../noncopyable.h"
+#include "../../../thread/thread.h"
+#ifdef YUNI_OS_UNIX
 # include <sys/types.h>
 # include <signal.h>
-# endif
+#endif
 
 
 
@@ -96,4 +94,3 @@ namespace Process
 
 # include "process-info.hxx"
 
-#endif // __YUNI_CORE_PROCESS_PROGRAM_PROCESSINFO_H__

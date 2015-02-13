@@ -1,5 +1,5 @@
-#ifndef __YUNIC_CORE_SMARTPTR_POLICIES_CONVERSIONS_H__
-# define __YUNIC_CORE_SMARTPTR_POLICIES_CONVERSIONS_H__
+#pragma once
+
 
 
 
@@ -51,4 +51,3 @@ namespace Conversion
 } // namespace Policy
 } // namespace Yuni
 
-#endif // __YUNIC_CORE_SMARTPTR_POLICIES_CONVERSIONS_H__
