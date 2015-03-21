@@ -1,9 +1,8 @@
-#ifndef __YUNI_THREAD_SIGNAL_H__
-# define __YUNI_THREAD_SIGNAL_H__
+#pragma once
+#include "../yuni.h"
+#include "../core/smartptr.h"
+#include "pthread.h"
 
-# include "../yuni.h"
-# include "../core/smartptr.h"
-# include "pthread.h"
 
 
 namespace Yuni
@@ -105,4 +104,3 @@ namespace Thread
 
 # include "signal.hxx"
 
-#endif // __YUNI_THREAD_SIGNAL_H__

@@ -1,13 +1,11 @@
-#ifndef __YUNI_THREADS_MUTEX_H__
-# define __YUNI_THREADS_MUTEX_H__
-
-# include "../yuni.h"
-# ifndef YUNI_NO_THREAD_SAFE
-#	include "pthread.h"
-#	ifdef YUNI_OS_WINDOWS
-#		include "../core/system/windows.hdr.h"
-# 	endif
+#pragma once
+#include "../yuni.h"
+#ifndef YUNI_NO_THREAD_SAFE
+# include "pthread.h"
+# ifdef YUNI_OS_WINDOWS
+#	include "../core/system/windows.hdr.h"
 # endif
+#endif
 
 
 
@@ -187,4 +185,3 @@ namespace Yuni
 
 # include "mutex.hxx"
 
-#endif // __YUNI_THREADS_MUTEX_H__

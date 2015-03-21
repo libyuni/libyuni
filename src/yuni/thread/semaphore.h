@@ -1,12 +1,10 @@
-#ifndef __YUNI_THREADS_SEMAPHORE_H__
-# define __YUNI_THREADS_SEMAPHORE_H__
-
-# include "../yuni.h"
-# ifndef YUNI_NO_THREAD_SAFE
-#	if !defined(YUNI_OS_WINDOWS) && !defined(YUNI_OS_MAC)
-#		include <semaphore.h> // unix / sem_t
-#	endif
+#pragma once
+#include "../yuni.h"
+#ifndef YUNI_NO_THREAD_SAFE
+# if !defined(YUNI_OS_WINDOWS) && !defined(YUNI_OS_MAC)
+#	include <semaphore.h> // unix / sem_t
 # endif
+#endif
 
 
 
@@ -110,4 +108,3 @@ namespace Yuni
 
 # include "semaphore.hxx"
 
-#endif // __YUNI_THREADS_SEMAPHORE_H__

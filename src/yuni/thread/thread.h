@@ -1,14 +1,12 @@
-#ifndef __YUNI_THREAD_THREAD_H__
-# define __YUNI_THREAD_THREAD_H__
-
-# include "../yuni.h"
-# include "mutex.h"
-# include "signal.h"
-# include "../core/string.h"
-# include <vector>
-# include "fwd.h"
-# include "../core/noncopyable.h"
-# include "../core/smartptr/intrusive.h"
+#pragma once
+#include "../yuni.h"
+#include "mutex.h"
+#include "signal.h"
+#include "../core/string.h"
+#include <vector>
+#include "fwd.h"
+#include "../core/noncopyable.h"
+#include "../core/smartptr/intrusive.h"
 
 
 
@@ -314,4 +312,3 @@ namespace Thread
 
 # include "thread.hxx"
 
-#endif // __YUNI_THREAD_THREAD_H__

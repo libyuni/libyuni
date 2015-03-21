@@ -196,15 +196,15 @@ namespace Yuni
 
 
 
-	Semaphore::Semaphore(uint readers) :
-		pMaxReaders(readers)
+	Semaphore::Semaphore(uint readers)
+		: pMaxReaders(readers)
 	{
 		initialize(readers);
 	}
 
 
-	Semaphore::Semaphore(const Semaphore& rhs) :
-		pMaxReaders(rhs.pMaxReaders)
+	Semaphore::Semaphore(const Semaphore& rhs)
+		: pMaxReaders(rhs.pMaxReaders)
 	{
 		initialize(pMaxReaders);
 	}

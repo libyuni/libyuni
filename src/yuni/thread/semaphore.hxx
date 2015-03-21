@@ -1,5 +1,5 @@
-#ifndef __YUNI_THREADS_SEMAPHORE_HXX__
-# define __YUNI_THREADS_SEMAPHORE_HXX__
+#pragma once
+
 
 
 namespace Yuni
@@ -28,6 +28,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_THREADS_SEMAPHORE_HXX__
-

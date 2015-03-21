@@ -1,8 +1,7 @@
-#ifndef __YUNI_THREADS_RW_MUTEX_H__
-# define __YUNI_THREADS_RW_MUTEX_H__
+#pragma once
+#include "mutex.h"
+#include "semaphore.h"
 
-# include "mutex.h"
-# include "semaphore.h"
 
 
 
@@ -163,4 +162,3 @@ namespace Yuni
 
 # include "rwmutex.hxx"
 
-#endif // __YUNI_THREADS_RW_MUTEX_H__

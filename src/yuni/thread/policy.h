@@ -1,5 +1,4 @@
-#ifndef __YUNI_POLICIES_THREADS_H__
-# define __YUNI_POLICIES_THREADS_H__
+#pragma once
 
 /*!
 ** \file
@@ -299,4 +298,3 @@ namespace Policy
 } // namespace Policy
 } // namespace Yuni
 
-#endif // __YUNI_POLICIES_THREADS_H__

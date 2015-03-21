@@ -1,5 +1,6 @@
-#ifndef __YUNI_THREAD_ARRAY_HXX__
-# define __YUNI_THREAD_ARRAY_HXX__
+#pragma once
+#include "array.h"
+
 
 
 namespace Yuni
@@ -519,4 +520,3 @@ namespace Thread
 } // namespace Thread
 } // namespace Yuni
 
-#endif // __YUNI_THREAD_ARRAY_HXX__
