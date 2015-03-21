@@ -2,7 +2,7 @@
 * banned.h - list of Microsoft Security Development Lifecycle (SDL) banned APIs
 *
 * Purpose:
-*       This include file contains a list of banned APIs which should not be used in new code and 
+*       This include file contains a list of banned APIs which should not be used in new code and
 *       removed from legacy code over time.
 *
 * History
@@ -19,7 +19,7 @@
 * 04-Jun-2010 - mikehow - Small "#if" bug fix
 * 16-Jun-2011 - mikehow	- Added the two _CRT_SECURE_xxxxx macros
 * 07-Jul-2011 - mikehow - Bugfix when using recommended banned functions and StrSafe. Locally surpressed C4005 warnings
-*						   
+*
 *
 ***/
 
@@ -104,6 +104,6 @@
 
 #	endif // _MSC_VER_
 
-#endif  // _INC_BANNED 
+#endif  // _INC_BANNED
 
 

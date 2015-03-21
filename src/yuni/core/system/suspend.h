@@ -1,7 +1,6 @@
-#ifndef __YUNI_CORE_SYSTEM_WINDOWS_SUSPEND_H__
-# define __YUNI_CORE_SYSTEM_WINDOWS_SUSPEND_H__
+#pragma once
+#include "../../yuni.h"
 
-# include "../../yuni.h"
 
 
 namespace Yuni
@@ -38,4 +37,3 @@ namespace Yuni
 
 } // namespace Yuni
 
-#endif // __YUNI_CORE_SYSTEM_WINDOWS_SUSPEND_H__

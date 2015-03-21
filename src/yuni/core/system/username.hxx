@@ -1,11 +1,10 @@
-#ifndef __YUNI_CORE_SYSTEM_USERNAME_HXX__
-# define __YUNI_CORE_SYSTEM_USERNAME_HXX__
+#pragma once
+#include <stdlib.h>
+#include "../traits/cstring.h"
+#ifndef YUNI_OS_WINDOWS
+# include "environment.h"
+#endif
 
-# include <stdlib.h>
-# include "../traits/cstring.h"
-# ifndef YUNI_OS_WINDOWS
-#	include "environment.h"
-# endif
 
 
 namespace Yuni
@@ -84,4 +83,3 @@ namespace System
 } // namespace System
 } // namespace Yuni
 
-#endif // __YUNI_CORE_SYSTEM_USERNAME_HXX__

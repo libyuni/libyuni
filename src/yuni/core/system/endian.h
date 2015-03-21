@@ -1,7 +1,5 @@
-#ifndef __YUNI_SYSTEM_ENDIAN_H__
-# define __YUNI_SYSTEM_ENDIAN_H__
-
-# include <algorithm> // std::swap
+#pragma once
+#include <algorithm> // std::swap
 
 
 
@@ -121,4 +119,3 @@ namespace Endianness
 } // namespace System
 } // namespace Yuni
 
-#endif // __YUNI_SYSTEM_ENDIAN_H__

@@ -1,10 +1,8 @@
-#ifndef __YUNI_SYSTEM_X11_HEADERS_H__
-# define __YUNI_SYSTEM_X11_HEADERS_H__
-
-# include "../../yuni.h"
-# include <cstring>
-# include <GL/glx.h>
-# include <X11/extensions/Xrender.h>
+#pragma once
+#include "../../yuni.h"
+#include <cstring>
+#include <GL/glx.h>
+#include <X11/extensions/Xrender.h>
 
 // The define None from the X11 headers overlaps with Yuni::None...
 # ifdef None
@@ -49,5 +47,3 @@ namespace // anonymous
 
 } // namespace anonymous
 
-
-#endif // __YUNI_SYSTEM_X11_HEADERS_H__

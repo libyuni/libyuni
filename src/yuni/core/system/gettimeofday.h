@@ -1,15 +1,14 @@
-#ifndef __YUNI_SYSTEM_WINDOWS_GETTIMEOFDAY_H__
-# define __YUNI_SYSTEM_WINDOWS_GETTIMEOFDAY_H__
-
-# include "../../yuni.h"
-# include "windows.hdr.h"
+#pragma once
+#include "../../yuni.h"
+#include "windows.hdr.h"
 
 
-# define YUNI_HAS_GETTIMEOFDAY
 
-# ifndef YUNI_OS_MSVC
-#	include <sys/time.h>
-# else // YUNI_OS_MSVC
+#define YUNI_HAS_GETTIMEOFDAY
+
+#ifndef YUNI_OS_MSVC
+# include <sys/time.h>
+#else // YUNI_OS_MSVC
 
 #	ifdef YUNI_OS_WINDOWS
 #		include <time.h>
@@ -24,7 +23,7 @@
 #		undef YUNI_HAS_GETTIMEOFDAY
 #	endif
 
-# endif // YUNI_OS_MSVC
+#endif // YUNI_OS_MSVC
 
 
 
@@ -61,6 +60,3 @@ namespace Yuni
 
 } // namespace Yuni
 
-
-
-#endif // __YUNI_SYSTEM_WINDOWS_GETTIMEOFDAY_H__

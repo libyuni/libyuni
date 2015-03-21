@@ -1,5 +1,4 @@
-#ifndef __YUNI_SYSTEM_STANDARD_INTERFACE_INT_DATA_H__
-# define __YUNI_SYSTEM_STANDARD_INTERFACE_INT_DATA_H__
+#pragma once
 
 /* !!! "C compatibility" header !!! */
 
@@ -145,4 +144,3 @@ typedef struct { double x, y; }  __float128;
 #endif
 
 
-#endif /* __YUNI_SYSTEM_STANDARD_INTERFACE_INT_DATA_H__ */
