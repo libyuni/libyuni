@@ -6,33 +6,36 @@
 ** \brief Standard types used by the Yuni Library
 */
 
-# ifdef YUNI_HAS_STDINT_H
+#ifdef YUNI_HAS_STDINT_H
 #	include <stdint.h>
-# else
+#else
 #	ifdef YUNI_OS_MSVC
 #		include "windows/msinttypes/stdint.h"
 #		include "windows/msinttypes/inttypes.h"
-# 	else
+#	else
 #		error "stdint.h is missing for this platform"
 #	endif
-# endif
+#endif
 
-# ifdef YUNI_OS_MSVC
-#	define YUNI_MSVC_SECURE_VSPRINTF
-# endif
+#ifdef YUNI_OS_MSVC
+# define YUNI_MSVC_SECURE_VSPRINTF
+#endif
 
-# ifdef YUNI_HAS_SYS_TYPES_H
-#   include <sys/types.h>
-# endif
-
-
+#ifdef YUNI_HAS_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 
 
-# ifdef __cplusplus /* Only with a C++ Compiler */
 
-# ifndef YUNI_OS_CLANG
-#	include <cstddef>
-# endif
+
+#ifdef __cplusplus /* Only with a C++ Compiler */
+
+#ifndef YUNI_OS_CLANG
+# include <cstddef>
+#endif
+
+
+
 
 namespace Yuni
 {
@@ -142,5 +145,4 @@ typedef unsigned int  uint;
 ** compilation error in the STL */
 typedef struct { double x, y; }  __float128;
 #endif
-
 
