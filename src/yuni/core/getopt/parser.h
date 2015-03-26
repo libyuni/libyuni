@@ -1,11 +1,10 @@
-#ifndef __YUNI_CORE_GETOPT_PARSER_H__
-# define __YUNI_CORE_GETOPT_PARSER_H__
+#pragma once
+#include "../../yuni.h"
+#include <map>
+#include "option.h"
+#include <string.h>
+#include "../validator/text/default.h"
 
-# include "../../yuni.h"
-# include <map>
-# include "option.h"
-# include <string.h>
-# include "../validator/text/default.h"
 
 
 namespace Yuni
@@ -235,4 +234,3 @@ namespace GetOpt
 
 # include "parser.hxx"
 
-#endif // __YUNI_CORE_GETOPT_PARSER_H__
