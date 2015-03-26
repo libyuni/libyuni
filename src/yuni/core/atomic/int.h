@@ -1,10 +1,9 @@
-#ifndef __YUNI_CORE_ATOMIC_INT_H__
-# define __YUNI_CORE_ATOMIC_INT_H__
+#pragma once
+#include "../../yuni.h"
+#include "../../thread/policy.h"
+#include "../system/windows.hdr.h"
+#include "traits.h"
 
-# include "../../yuni.h"
-# include "../../thread/policy.h"
-# include "../system/windows.hdr.h"
-# include "traits.h"
 
 
 
@@ -132,12 +131,12 @@ namespace Atomic
 		//! Post decrement operator
 		ScalarType operator -- (int);
 
-		Int& operator = (const ScalarType v);
+		Int& operator = (const ScalarType& v);
 
 		//! Increment
-		Int& operator += (const ScalarType v);
+		Int& operator += (const ScalarType& v);
 		//! Decrement
-		Int& operator -= (const ScalarType v);
+		Int& operator -= (const ScalarType& v);
 
 		//! Cast operator
 		operator ScalarType () const;
@@ -173,4 +172,3 @@ namespace Atomic
 # include "int.hxx"
 # include "string.hxx"
 
-#endif // __YUNI_CORE_ATOMIC_INT_H__
