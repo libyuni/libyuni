@@ -161,7 +161,7 @@ struct Model
 		Size rawOffset() const {return pOffset;}
 
 
-		bool findFirstNonSpace(const Size end)
+		bool findFirstNonSpace(Size end)
 		{
 			do
 			{
@@ -178,7 +178,7 @@ struct Model
 			return true;
 		}
 
-		bool find(const char c, const Size endOffset)
+		bool find(const char c, Size endOffset)
 		{
 			do
 			{
@@ -342,7 +342,7 @@ struct Model
 		Size rawOffset() const {return pOffset;}
 
 
-		bool findFirstNonSpace(const Size end)
+		bool findFirstNonSpace(Size end)
 		{
 			do
 			{
@@ -359,7 +359,7 @@ struct Model
 			return true;
 		}
 
-		bool find(const char c, const Size endOffset)
+		bool find(const char c, Size endOffset)
 		{
 			do
 			{
