@@ -1987,9 +1987,9 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class ModelT, bool ConstT, class StringT>
+	template<class ModelT, bool ConstT>
 	inline void
-	CString<ChunkSizeT,ExpandableT>::insert(const IIterator<ModelT,ConstT>& it, const StringT& string)
+	CString<ChunkSizeT,ExpandableT>::insert(const IIterator<ModelT,ConstT>& it, const AnyString& string)
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
 		insert(it.offset(), string);
@@ -1997,42 +1997,23 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline bool
-	CString<ChunkSizeT,ExpandableT>::insert(Size offset, const StringT& s)
+	CString<ChunkSizeT,ExpandableT>::insert(Size offset, const AnyString& string)
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
-		if (Traits::Length<StringT,Size>::isFixed)
-		{
-			// We can make some optimisations when the length is known at compile compile time
-			// This part of the code should not bring better performances but it should
-			// prevent against bad uses of the API, like using a char* for looking for a single char.
-
-			// The value to find is actually empty, false will be the unique answer
-			if (0 == Traits::Length<StringT,Size>::fixedLength)
-				return false;
-			// The string is actually a single POD item
-			if (1 == Traits::Length<StringT,Size>::fixedLength)
-				return insert(offset, Traits::CString<StringT>::Perform(s), 1);
-			// Researching for the substring with a known length
-			return insert(offset, Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::fixedLength);
-		}
-
-		return insert(offset, Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::Value(s));
+		return insert(offset, string.c_str(), string.size());
 	}
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
 	template<class StringT>
 	inline bool
-	CString<ChunkSizeT,ExpandableT>::insert(Size offset, const StringT& s, Size size)
+	CString<ChunkSizeT,ExpandableT>::insert(Size offset, const StringT& string, Size size)
 	{
+		// do not use AnyString here (libyuni should not try to compute the length
+		// of the input string, since it may not be zero-terminated)
 		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-
-		return insert(offset, Traits::CString<StringT>::Perform(s), size);
+		return insert(offset, Traits::CString<StringT>::Perform(string), size);
 	}
 
 
@@ -2085,6 +2066,8 @@ namespace Yuni
 	CString<ChunkSizeT,ExpandableT>::prepend(const StringT& string, Size size)
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
+		// do not use AnyString here (libyuni should not try to compute the length
+		// of the input string, since it may not be zero-terminated)
 		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
 		return insert(0, Traits::CString<StringT>::Perform(string), size);
 	}
@@ -2122,60 +2105,20 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline void
-	CString<ChunkSizeT,ExpandableT>::overwrite(Size offset, const StringT& s)
+	CString<ChunkSizeT,ExpandableT>::overwrite(Size offset, const AnyString& string)
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
-
-		// Find the substring
-		if (Traits::Length<StringT,Size>::isFixed)
-		{
-			// We can make some optimisations when the length is known at compile compile time
-			// This part of the code should not bring better performances but it should
-			// prevent against bad uses of the API, like using a char* for looking for a single char.
-
-			// The value to find is actually empty, nothing to do
-			if (0 == Traits::Length<StringT,Size>::fixedLength)
-				return;
-			// The string is actually a single POD item
-			if (1 == Traits::Length<StringT,Size>::fixedLength)
-				return overwrite(offset, Traits::CString<StringT>::Perform(s), 1);
-			// Researching for the substring with a known length
-			return overwrite(offset, Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::fixedLength);
-		}
-
-		return overwrite(offset, Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::Value(s));
+		return overwrite(offset, string.c_str(), string.size());
 	}
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline void
-	CString<ChunkSizeT,ExpandableT>::overwrite(const StringT& s)
+	CString<ChunkSizeT,ExpandableT>::overwrite(const AnyString& string)
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
-		// Find the substring
-		if (Traits::Length<StringT,Size>::isFixed)
-		{
-			// We can make some optimisations when the length is known at compile compile time
-			// This part of the code should not bring better performances but it should
-			// prevent against bad uses of the API, like using a char* for looking for a single char.
-
-			// The value to find is actually empty, nothing to do
-			if (0 == Traits::Length<StringT,Size>::fixedLength)
-				return;
-			// The string is actually a single POD item
-			if (1 == Traits::Length<StringT,Size>::fixedLength)
-				return overwrite(0, Traits::CString<StringT>::Perform(s), 1);
-			// Researching for the substring with a known length
-			return overwrite(0, Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::fixedLength);
-		}
-
-		return overwrite(0, Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::Value(s));
+		return overwrite(0, string.c_str(), string.size());
 	}
 
 

@@ -469,8 +469,7 @@ namespace Yuni
 		** \param separator The string separator to use between each item
 		*/
 		template<class ModelT, bool ConstT, class ModelT2, bool ConstT2, class StringT>
-		void assign(const IIterator<ModelT,ConstT>& begin, const IIterator<ModelT2,ConstT2>& end,
-			const StringT& separator);
+		void assign(const IIterator<ModelT,ConstT>& begin, const IIterator<ModelT2,ConstT2>& end, const StringT& separator);
 
 		/*!
 		** \brief Assign to thestring all items within
@@ -654,7 +653,7 @@ namespace Yuni
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
 		*/
-		template<class StringT> bool insert(Size offset, const StringT& u);
+		bool insert(Size offset, const AnyString& string);
 
 		/*!
 		** \brief Insert an arbitrary C-String at a given position in the string
@@ -667,7 +666,7 @@ namespace Yuni
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
 		*/
-		template<class StringT> bool insert(Size offset, const StringT& u, Size size);
+		template<class StringT> bool insert(Size offset, const StringT& string, Size size);
 
 		/*!
 		** \brief Insert any arbitrary string at a given offset provided by an iterator
@@ -675,8 +674,8 @@ namespace Yuni
 		** If the offset is greater than the size of the string, the value
 		** will be merely appended to the string.
 		*/
-		template<class ModelT, bool ConstT, class StringT>
-		void insert(const IIterator<ModelT,ConstT>& it, const StringT& string);
+		template<class ModelT, bool ConstT>
+		void insert(const IIterator<ModelT,ConstT>& it, const AnyString& string);
 
 		/*!
 		** \brief Insert a raw C-String at the beginning of in the string
@@ -724,7 +723,7 @@ namespace Yuni
 		** \param offset Position of the first character of the region in the string
 		** \param s A CString
 		*/
-		template<class StringT> void overwrite(Size offset, const StringT& s);
+		void overwrite(Size offset, const AnyString& string);
 
 		/*!
 		** \brief Overwrite a region of the string
@@ -733,7 +732,7 @@ namespace Yuni
 		**
 		** \param s A CString
 		*/
-		template<class StringT> void overwrite(const StringT& s);
+		void overwrite(const AnyString& string);
 
 		/*!
 		** \brief Overwrite a region of the string
