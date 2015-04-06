@@ -252,19 +252,16 @@ namespace Yuni
 	public:
 		//! \name Constructors & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		CString();
 
-		/*!
-		** \brief Copy constructor
-		*/
+		//! Copy constructor
 		CString(const CString& rhs);
 
-		/*!
-		** \brief Constructor from a mere CString
-		*/
+		//! Constructor with a null-terminated string
+		CString(const char* const text);
+
+		//! Constructor from a mere CString
 		CString(const char* const block, Size blockSize);
 
 		/*!
@@ -274,9 +271,7 @@ namespace Yuni
 		CString(const CString<SizeT,ExpT>& string);
 
 		# ifdef YUNI_HAS_CPP_MOVE
-		/*!
-		** \brief Move constructor
-		*/
+		//! Move constructor
 		CString(CString&& rhs);
 		# endif
 
@@ -299,9 +294,7 @@ namespace Yuni
 		template<uint SizeT, bool ExpT>
 		CString(const CString<SizeT,ExpT>& s, Size offset, Size n /*= npos*/);
 
-		/*!
-		** \brief Constructor from a std::string
-		*/
+		//! Constructor from a std::string
 		template<class TraitsT, class AllocT>
 		CString(const std::basic_string<char,TraitsT,AllocT>& string);
 
@@ -342,9 +335,6 @@ namespace Yuni
 		*/
 		template<class ModelT, bool ConstT, class ModelT2, bool ConstT2, class StringT>
 		CString(const IIterator<ModelT,ConstT>& begin, const IIterator<ModelT2,ConstT2>& end, const StringT& separator);
-
-		//! Constructor with a null-terminated string
-		CString(const char* text);
 
 		//! Construct a string formed by a repetition of the character c, n times
 		CString(size_t n, char c);
@@ -859,7 +849,7 @@ namespace Yuni
 		** \param s Any supported CString
 		** \return True if sub-string is found, false otherwise
 		*/
-		template<class StringT> bool contains(const StringT& s) const;
+		bool contains(const AnyString& string) const;
 
 		/*!
 		** \brief Find the offset of any supported CString (ignoring the case)
@@ -867,7 +857,7 @@ namespace Yuni
 		** \param s Any supported CString
 		** \return True if sub-string is found, false otherwise
 		*/
-		template<class StringT> bool icontains(const StringT& s) const;
+		bool icontains(const AnyString& string) const;
 
 
 		/*!
@@ -1289,7 +1279,7 @@ namespace Yuni
 		** \code
 		** Yuni::String s("/some/path/");
 		** if ('\\' == s.last() or '/' == s.last())
-		** 	s.removeLast();
+		**	s.removeLast();
 		** std::cout << s << std::endl;  // -> /some/path
 		** \endcode
 		*/

@@ -70,6 +70,13 @@ namespace Yuni
 
 
 
+
+
+
+
+
+
+
 	template<uint ChunkSizeT, bool ExpandableT>
 	inline CString<ChunkSizeT,ExpandableT>::CString()
 	{}
@@ -122,7 +129,7 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	inline CString<ChunkSizeT,ExpandableT>::CString(const char* text)
+	inline CString<ChunkSizeT,ExpandableT>::CString(const char* const text)
 	{
 		assign(text);
 	}
@@ -399,7 +406,7 @@ namespace Yuni
 	void CString<ChunkSizeT,ExpandableT>::assign(const U& u)
 	{
 		TraitsSelectorAssign<
-			(Traits::CString<U>::valid and Traits::Length<U>::valid),             // Standard CString ?
+			(Traits::CString<U>::valid and Traits::Length<U>::valid),  // Standard CString ?
 			(0 != CString<ChunkSizeT,ExpandableT>::adapter) // Adapter ?
 			>::
 			template Perform<U, CStringType>(u, *this);
@@ -1136,32 +1143,10 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
-	bool
-	CString<ChunkSizeT,ExpandableT>::contains(const StringT& s) const
+	inline bool
+	CString<ChunkSizeT,ExpandableT>::contains(const AnyString& string) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
-		// Find the substring
-		if (Traits::Length<StringT,Size>::isFixed)
-		{
-			// We can make some optimisations when the length is known at compile compile time
-			// This part of the code should not bring better performances but it should
-			// prevent against bad uses of the API, like using a char* for looking for a single char.
-
-			// The value to find is actually empty, npos will be the unique answer
-			if (0 == Traits::Length<StringT,Size>::fixedLength)
-				return false;
-			// The string is actually a single POD item
-			if (1 == Traits::Length<StringT,Size>::fixedLength)
-				return contains(Traits::CString<StringT>::Perform(s), 1);
-
-			// Researching for the substring with a known length
-			return contains(Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::fixedLength);
-		}
-		// A mere CString, with a known length at runtime only
-		return contains(Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::Value(s));
+		return contains(string.c_str(), string.size());
 	}
 
 
@@ -1200,32 +1185,10 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
-	bool
-	CString<ChunkSizeT,ExpandableT>::icontains(const StringT& s) const
+	inline bool
+	CString<ChunkSizeT,ExpandableT>::icontains(const AnyString& string) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
-		// Find the substring
-		if (Traits::Length<StringT,Size>::isFixed)
-		{
-			// We can make some optimisations when the length is known at compile compile time
-			// This part of the code should not bring better performances but it should
-			// prevent against bad uses of the API, like using a char* for looking for a single char.
-
-			// The value to find is actually empty, npos will be the unique answer
-			if (0 == Traits::Length<StringT,Size>::fixedLength)
-				return false;
-			// The string is actually a single POD item
-			if (1 == Traits::Length<StringT,Size>::fixedLength)
-				return icontains(Traits::CString<StringT>::Perform(s), 1);
-
-			// Researching for the substring with a known length
-			return icontains(Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::fixedLength);
-		}
-		// A mere CString, with a known length at runtime only
-		return icontains(Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::Value(s));
+		return icontains(string.c_str(), string.size());
 	}
 
 
