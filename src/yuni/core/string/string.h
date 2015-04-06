@@ -1082,27 +1082,27 @@ namespace Yuni
 		/*!
 		** \brief Searches the string for any of the characters that are part of `seq`
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size find_first_of(const StringT& seq, Size offset = 0) const;
+		Size find_first_of(const AnyString& sequence, Size offset = 0) const;
 
 		/*!
 		** \brief Searches the string for any of the characters that are part of `seq`
 		**   (ignoring the case)
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size ifind_first_of(const StringT& seq, Size offset = 0) const;
+		Size ifind_first_of(const AnyString& sequence, Size offset = 0) const;
 
 		/*!
 		** \brief Searches the string for the first character that is not `c`
@@ -1129,26 +1129,26 @@ namespace Yuni
 		/*!
 		** \brief Searches the string for any of the characters that are not part of `seq`
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size find_first_not_of(const StringT& seq, Size offset = 0) const;
+		Size find_first_not_of(const AnyString& sequence, Size offset = 0) const;
 
 		/*!
 		** \brief Searches the string for any of the characters that are not part of `seq` (case insensitive)
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size ifind_first_not_of(const StringT& seq, Size offset = 0) const;
+		Size ifind_first_not_of(const AnyString& sequence, Size offset = 0) const;
 
 
 
@@ -1182,27 +1182,27 @@ namespace Yuni
 		/*!
 		** \brief Searches the string from the end for any of the characters that are part of `seq`
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size find_last_of(const StringT& seq, Size offset = npos) const;
+		Size find_last_of(const AnyString& sequence, Size offset = npos) const;
 
 		/*!
 		** \brief Searches the string from the end for any of the characters that are part of `seq`
 		**   (ignoring the case)
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size ifind_last_of(const StringT& seq, Size offset = npos) const;
+		Size ifind_last_of(const AnyString& sequence, Size offset = npos) const;
 
 		/*!
 		** \brief Get if a given string can be found at the beginning
@@ -1243,7 +1243,7 @@ namespace Yuni
 		** \brief Get if a given string can be found at the end
 		** \param s Any string
 		*/
-		template<class StringT> bool endsWith(const StringT& s) const;
+		bool endsWith(const AnyString& string) const;
 
 		/*!
 		** \brief Get if a given string can be found at the end
@@ -1260,7 +1260,7 @@ namespace Yuni
 		** \brief Get if a given string can be found at the end (case insensitive)
 		** \param s Any string
 		*/
-		template<class StringT> bool iendsWith(const StringT& s) const;
+		bool iendsWith(const AnyString& string) const;
 
 		/*!
 		** \brief Get if a given string can be found at the end (case insensitive)
@@ -1842,7 +1842,7 @@ namespace Yuni
 		**   as soon as possible
 		** \todo To be removed as soon as possible
 		*/
-		template<class StringT> bool glob(const StringT& pattern) const;
+		bool glob(const AnyString& pattern) const;
 
 		/*!
 		** \brief Convert all backslashes into slashes

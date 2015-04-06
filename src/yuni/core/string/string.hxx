@@ -782,7 +782,7 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	bool
+	inline bool
 	CString<ChunkSizeT,ExpandableT>::hasChar(unsigned char c) const
 	{
 		return hasChar(static_cast<char>(c));
@@ -894,8 +894,7 @@ namespace Yuni
 
 	template<uint ChunkSizeT, bool ExpandableT>
 	typename CString<ChunkSizeT,ExpandableT>::Size
-	CString<ChunkSizeT,ExpandableT>::ifind(const char* const cstr,
-		Size offset, Size len) const
+	CString<ChunkSizeT,ExpandableT>::ifind(const char* const cstr, Size offset, Size len) const
 	{
 		if (cstr and len and len <= AncestorType::size)
 		{
@@ -1053,8 +1052,7 @@ namespace Yuni
 
 	template<uint ChunkSizeT, bool ExpandableT>
 	typename CString<ChunkSizeT,ExpandableT>::Size
-	CString<ChunkSizeT,ExpandableT>::irfind(const char* const cstr,
-		Size offset, Size len) const
+	CString<ChunkSizeT,ExpandableT>::irfind(const char* const cstr, Size offset, Size len) const
 	{
 		if (len and len <= AncestorType::size and offset >= len)
 		{
@@ -1318,14 +1316,10 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline bool
-	CString<ChunkSizeT,ExpandableT>::endsWith(const StringT& s) const
+	CString<ChunkSizeT,ExpandableT>::endsWith(const AnyString& string) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
-		return endsWith(Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::Value(s));
+		return endsWith(string.c_str(), string.size());
 	}
 
 
@@ -1356,14 +1350,10 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline bool
-	CString<ChunkSizeT,ExpandableT>::iendsWith(const StringT& s) const
+	CString<ChunkSizeT,ExpandableT>::iendsWith(const AnyString& string) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
-		return endsWith(Traits::CString<StringT>::Perform(s), Traits::Length<StringT,Size>::Value(s));
+		return endsWith(string.c_str(), string.size());
 	}
 
 
@@ -1423,16 +1413,12 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	bool
-	CString<ChunkSizeT,ExpandableT>::glob(const StringT& pattern) const
+	CString<ChunkSizeT,ExpandableT>::glob(const AnyString& pattern) const
 	{
 		// TODO This method should be completly removed
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
 		return Yuni::Private::CStringImpl::Glob(AncestorType::data, AncestorType::size,
-			Traits::CString<StringT>::Perform(pattern), Traits::Length<StringT,Size>::Value(pattern));
+			pattern.c_str(), pattern.size());
 	}
 
 
@@ -1513,16 +1499,12 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
-	CString<ChunkSizeT,ExpandableT>::find_first_of(const StringT& seq, Size offset) const
+	CString<ChunkSizeT,ExpandableT>::find_first_of(const AnyString& sequence, Size offset) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
 		// The given sequence
-		const char* const s = Traits::CString<StringT>::Perform(seq);
-		Size len = Traits::Length<StringT,Size>::Value(seq);
+		const char* const s = sequence.c_str();
+		Size len = sequence.size();
 		Size j;
 
 		for (Size i = offset; i < AncestorType::size; ++i)
@@ -1574,16 +1556,12 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
-	CString<ChunkSizeT,ExpandableT>::find_first_not_of(const StringT& seq, Size offset) const
+	CString<ChunkSizeT,ExpandableT>::find_first_not_of(const AnyString& sequence, Size offset) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
 		// The given sequence
-		const char* const s = Traits::CString<StringT>::Perform(seq);
-		Size len = Traits::Length<StringT,Size>::Value(seq);
+		const char* const s = sequence.c_str();
+		Size len = sequence.size();
 		Size j;
 
 		for (Size i = offset; i < AncestorType::size; ++i)
@@ -1608,16 +1586,12 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
-	CString<ChunkSizeT,ExpandableT>::ifind_first_of(const StringT& seq, Size offset) const
+	CString<ChunkSizeT,ExpandableT>::ifind_first_of(const AnyString& sequence, Size offset) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
 		// The given sequence
-		const char* const s = Traits::CString<StringT>::Perform(seq);
-		Size len = Traits::Length<StringT,Size>::Value(seq);
+		const char* const s = sequence.c_str();
+		Size len = sequence.size();
 		Size j;
 
 		for (Size i = offset; i < AncestorType::size; ++i)
@@ -1635,16 +1609,12 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
-	CString<ChunkSizeT,ExpandableT>::ifind_first_not_of(const StringT& seq, Size offset) const
+	CString<ChunkSizeT,ExpandableT>::ifind_first_not_of(const AnyString& sequence, Size offset) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
 		// The given sequence
-		const char* const s = Traits::CString<StringT>::Perform(seq);
-		Size len = Traits::Length<StringT,Size>::Value(seq);
+		const char* const s = sequence.c_str();
+		Size len = sequence.size();
 		Size j;
 
 		for (Size i = offset; i < AncestorType::size; ++i)
@@ -1711,16 +1681,12 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
-	CString<ChunkSizeT,ExpandableT>::find_last_of(const StringT& seq, Size offset) const
+	CString<ChunkSizeT,ExpandableT>::find_last_of(const AnyString& sequence, Size offset) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
 		// The given sequence
-		const char* const s = Traits::CString<StringT>::Perform(seq);
-		Size len = Traits::Length<StringT,Size>::Value(seq);
+		const char* const s = sequence.c_str();
+		Size len = sequence.size();
 		Size j;
 
 		Size i = ((offset >= AncestorType::size) ? AncestorType::size : 1+offset);
@@ -1739,16 +1705,12 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	template<class StringT>
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
-	CString<ChunkSizeT,ExpandableT>::ifind_last_of(const StringT& seq, Size offset) const
+	CString<ChunkSizeT,ExpandableT>::ifind_last_of(const AnyString& sequence, Size offset) const
 	{
-		YUNI_STATIC_ASSERT(Traits::CString<StringT>::valid, CString_InvalidTypeForBuffer);
-		YUNI_STATIC_ASSERT(Traits::Length<StringT>::valid,  CString_InvalidTypeForBufferSize);
-
 		// The given sequence
-		const char* const s = Traits::CString<StringT>::Perform(seq);
-		Size len = Traits::Length<StringT,Size>::Value(seq);
+		const char* const s = sequence.c_str();
+		Size len = sequence.size();
 		Size j;
 
 		Size i = ((offset >= AncestorType::size) ? AncestorType::size : 1+offset);
@@ -2235,9 +2197,8 @@ namespace Yuni
 	{
 		// this routine is not exactly as fast as strlen, but it should make no
 		// measurable difference
-		uint i = 0;
 		Size r = 0;
-		for (; i != AncestorType::size; ++i)
+		for (uint i = 0; i != AncestorType::size; ++i)
 		{
 			if ((AncestorType::data[i] & 0xc0) != 0x80)
 				++r;
