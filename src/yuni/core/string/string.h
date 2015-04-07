@@ -639,7 +639,7 @@ namespace Yuni
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered
-		** \param u Any CString container
+		** \param string Any string
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
 		*/
@@ -651,7 +651,7 @@ namespace Yuni
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered
-		** \param u Any CString container
+		** \param string Any string
 		** \param size The size to use for the given container
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
@@ -711,7 +711,7 @@ namespace Yuni
 		** The size of the string will remain untouched in any cases.
 		**
 		** \param offset Position of the first character of the region in the string
-		** \param s A CString
+		** \param string A CString
 		*/
 		void overwrite(Size offset, const AnyString& string);
 
@@ -720,7 +720,7 @@ namespace Yuni
 		**
 		** The size of the string will remain untouched in any cases.
 		**
-		** \param s A CString
+		** \param string A CString
 		*/
 		void overwrite(const AnyString& string);
 
@@ -846,7 +846,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of any supported CString
 		**
-		** \param s Any supported CString
+		** \param string Any supported CString
 		** \return True if sub-string is found, false otherwise
 		*/
 		bool contains(const AnyString& string) const;
@@ -854,7 +854,7 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of any supported CString (ignoring the case)
 		**
-		** \param s Any supported CString
+		** \param string Any supported CString
 		** \return True if sub-string is found, false otherwise
 		*/
 		bool icontains(const AnyString& string) const;
@@ -1231,7 +1231,7 @@ namespace Yuni
 
 		/*!
 		** \brief Get if a given string can be found at the end
-		** \param s Any string
+		** \param string Any string
 		*/
 		bool endsWith(const AnyString& string) const;
 
@@ -1248,7 +1248,7 @@ namespace Yuni
 
 		/*!
 		** \brief Get if a given string can be found at the end (case insensitive)
-		** \param s Any string
+		** \param string Any string
 		*/
 		bool iendsWith(const AnyString& string) const;
 
