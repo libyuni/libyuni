@@ -2,14 +2,16 @@
 #include "cpu.h"
 
 #if defined(YUNI_OS_DARWIN) || defined(YUNI_OS_FREEBSD) || defined(YUNI_OS_NETBSD) || defined(YUNI_OS_OPENBSD)
-#	include <sys/param.h>
-#	include <sys/sysctl.h>
+# include <sys/param.h>
+# include <sys/sysctl.h>
 #endif
 #if defined(YUNI_OS_LINUX) || defined(YUNI_OS_CYGWIN)
-#	include <fstream>
-#	include "../string.h"
+# include <fstream>
+# include "../string.h"
 #endif
 #include "windows.hdr.h"
+
+
 
 
 namespace Yuni
@@ -20,8 +22,8 @@ namespace CPU
 {
 
 
-#if defined(YUNI_OS_DARWIN) || defined(YUNI_OS_FREEBSD) || defined(YUNI_OS_NETBSD) || defined(YUNI_OS_OPENBSD)
-# define YUNI_CPU_COUNT_HAS_IMPLEMENTATION
+	#if defined(YUNI_OS_DARWIN) || defined(YUNI_OS_FREEBSD) || defined(YUNI_OS_NETBSD) || defined(YUNI_OS_OPENBSD)
+	# define YUNI_CPU_COUNT_HAS_IMPLEMENTATION
 	uint Count()
 	{
 		int count;
@@ -31,22 +33,22 @@ namespace CPU
 			return 1;
 		return (count <= 0) ? 1 : (uint) count;
 	}
-#endif
+	#endif
 
 
-#ifdef YUNI_OS_WINDOWS
-# define YUNI_CPU_COUNT_HAS_IMPLEMENTATION
+	#ifdef YUNI_OS_WINDOWS
+	# define YUNI_CPU_COUNT_HAS_IMPLEMENTATION
 	uint Count()
 	{
 		SYSTEM_INFO si;
 		GetSystemInfo(&si);
 		return si.dwNumberOfProcessors;
 	}
-#endif
+	#endif
 
 
-#if defined(YUNI_OS_LINUX) || defined(YUNI_OS_CYGWIN)
-# define YUNI_CPU_COUNT_HAS_IMPLEMENTATION
+	#if defined(YUNI_OS_LINUX) || defined(YUNI_OS_CYGWIN)
+	# define YUNI_CPU_COUNT_HAS_IMPLEMENTATION
 	uint Count()
 	{
 		// It seems there's no better way to get this info on Linux systems.
@@ -67,20 +69,20 @@ namespace CPU
 
 		return (0 == count ? 1 : count);
 	}
-#endif
+	#endif
 
 
 
 
-#ifndef YUNI_CPU_COUNT_HAS_IMPLEMENTATION
-#  warning "The method Yuni::System::CPU::Count() has not been implemented for the current platform"
-
+	#ifndef YUNI_CPU_COUNT_HAS_IMPLEMENTATION
+	#  warning "The method Yuni::System::CPU::Count() has not been implemented for the current platform"
 	uint Count()
 	{
 		return 1; // Default value
 	}
+	#endif
 
-#endif
+
 
 
 
