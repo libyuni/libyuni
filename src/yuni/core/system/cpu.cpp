@@ -36,7 +36,7 @@ namespace CPU
 	#endif
 
 
-	#ifdef YUNI_OS_WINDOWS
+	#if defined(YUNI_OS_WINDOWS) || defined(YUNI_OS_CYGWIN)
 	# define YUNI_CPU_COUNT_HAS_IMPLEMENTATION
 	uint Count()
 	{
@@ -47,7 +47,7 @@ namespace CPU
 	#endif
 
 
-	#if defined(YUNI_OS_LINUX) || defined(YUNI_OS_CYGWIN)
+	#if defined(YUNI_OS_LINUX)
 	# define YUNI_CPU_COUNT_HAS_IMPLEMENTATION
 	uint Count()
 	{
