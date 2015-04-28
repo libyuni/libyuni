@@ -1,12 +1,7 @@
 
 #include "cpu.h"
-
-#if defined(YUNI_OS_DARWIN) || defined(YUNI_OS_FREEBSD) || defined(YUNI_OS_NETBSD) || defined(YUNI_OS_OPENBSD)
-# include <sys/param.h>
-# include <sys/sysctl.h>
-#endif
-#if defined(YUNI_OS_LINUX) || defined(YUNI_OS_CYGWIN)
-# include <unistd.h>
+#if defined(YUNI_OS_LINUX) || defined(YUNI_OS_DARWIN) || defined(YUNI_OS_FREEBSD) || defined(YUNI_OS_NETBSD) || defined(YUNI_OS_OPENBSD)
+#include <unistd.h>
 #endif
 #include "windows.hdr.h"
 
