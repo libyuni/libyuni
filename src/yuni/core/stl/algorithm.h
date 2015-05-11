@@ -1,13 +1,9 @@
-#ifndef __YUNI_CORE_STL_ALGORITHM_H__
-# define __YUNI_CORE_STL_ALGORITHM_H__
-
-# include <algorithm>
-# include "../static/remove.h"
+#pragma once
+#include <algorithm>
+#include "../static/remove.h"
 
 
 namespace Yuni
-{
-namespace Core
 {
 namespace STL
 {
@@ -39,7 +35,7 @@ namespace STL
 	** \code
 	** typedef std::vector<int> List;
 	** List list;
-	** Yuni::Core::STL::DeleteAndClear<int, List>(list);
+	** Yuni::STL::DeleteAndClear<int, List>(list);
 	** \endcode
 	*/
 	template <typename T, typename U>
@@ -57,8 +53,5 @@ namespace STL
 
 
 } // namespace STL
-} // namespace Core
 } // namespace Yuni
 
-
-#endif // __YUNI_CORE_STL_ALGORITHM_H__
