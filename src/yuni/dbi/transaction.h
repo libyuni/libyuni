@@ -1,11 +1,10 @@
-#ifndef __YUNI_DBI_TRANSACTION_H__
-# define __YUNI_DBI_TRANSACTION_H__
+#pragma once
+#include <yuni/yuni.h>
+#include <yuni/core/noncopyable.h>
+#include "fwd.h"
+#include "cursor.h"
+#include "error.h"
 
-# include <yuni/yuni.h>
-# include <yuni/core/noncopyable.h>
-# include "fwd.h"
-# include "cursor.h"
-# include "error.h"
 
 
 namespace Yuni
@@ -174,4 +173,3 @@ namespace DBI
 # include "auto-commit.h"
 # include "transaction.hxx"
 
-#endif // __YUNI_DBI_TRANSACTION_H__
