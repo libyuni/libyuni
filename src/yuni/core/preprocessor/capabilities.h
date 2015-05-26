@@ -514,6 +514,29 @@ namespace System
 } /* namespace Yuni */
 
 
+namespace Yuni
+{
+
+	#ifdef YUNI_HAS_CONSTEXPR
+		#ifndef NDEBUG
+		constexpr static const bool debugmode = true;
+		#else
+		constexpr static const bool debugmode = false;
+		#endif
+	#else
+	enum
+	{
+		#ifndef NDEBUG
+		debugmode = 1,
+		#else
+		debugmode = 0,
+		#endif
+	};
+	#endif
+
+} /* namespace Yuni */
+
+
 //# ifndef YUNI_HAS_CONSTEXPR
 // There are some issues with Visual Studio 11
 // The feature is disabled, waiting for a valid fix
