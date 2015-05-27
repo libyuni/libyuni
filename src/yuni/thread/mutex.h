@@ -52,6 +52,12 @@ namespace Yuni
 		** of other classes which would implement a copy constructor
 		*/
 		Mutex(const Mutex&);
+
+		# ifdef YUNI_HAS_CPP_MOVE
+		// an OS's native mutex must have invariant address and thus can not be moved
+		Mutex(Mutex&&) = delete;
+		#endif
+
 		/*!
 		** \brief Destructor
 		*/
@@ -95,6 +101,10 @@ namespace Yuni
 		//@{
 		//! Operator = (do nothing)
 		Mutex& operator = (const Mutex&);
+		# ifdef YUNI_HAS_CPP_MOVE
+		// an OS's native mutex must have invariant address and thus can not be moved
+		Mutex& operator = (Mutex&&) = delete;
+		#endif
 		//@}
 
 
