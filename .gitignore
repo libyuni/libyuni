@@ -10,6 +10,7 @@ Win32
 *.suo
 *.sdf
 *.opensdf
+ipch
 
 # CMake stuff
 CMakeFiles
