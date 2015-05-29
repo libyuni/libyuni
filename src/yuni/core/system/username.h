@@ -1,7 +1,6 @@
-#ifndef __YUNI_CORE_SYSTEM_USERNAME_H__
-# define __YUNI_CORE_SYSTEM_USERNAME_H__
+#pragma once
+#include "../../yuni.h"
 
-# include "../../yuni.h"
 
 
 namespace Yuni
@@ -33,4 +32,3 @@ namespace System
 
 # include "username.hxx"
 
-#endif // __YUNI_CORE_SYSTEM_USERNAME_H__

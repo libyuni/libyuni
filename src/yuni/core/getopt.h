@@ -1,6 +1,3 @@
-#ifndef __YUNI_CORE_GETOPT_H__
-# define __YUNI_CORE_GETOPT_H__
+#pragma once
+#include "getopt/parser.h"
 
-# include "getopt/parser.h"
-
-#endif // __YUNI_CORE_GETOPT_H__

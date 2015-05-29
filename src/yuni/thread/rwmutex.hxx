@@ -1,5 +1,6 @@
-#ifndef __YUNI_THREADS_RW_MUTEX_HXX__
-# define __YUNI_THREADS_RW_MUTEX_HXX__
+#pragma once
+#include "rwmutex.h"
+
 
 
 namespace Yuni
@@ -82,4 +83,3 @@ namespace Yuni
 
 } // namespace Yuni
 
-#endif // __YUNI_THREADS_RW_MUTEX_HXX__

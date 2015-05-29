@@ -1,8 +1,6 @@
-#ifndef __YUNI_CORE_GETOPT_OPTION_H__
-# define __YUNI_CORE_GETOPT_OPTION_H__
-
-# include "../string.h"
-# include <cassert>
+#pragma once
+#include "../string.h"
+#include <cassert>
 
 
 
@@ -466,4 +464,3 @@ namespace GetOptImpl
 } // namespace Private
 } // namespace Yuni
 
-#endif // __YUNI_CORE_GETOPT_OPTION_H__

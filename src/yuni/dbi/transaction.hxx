@@ -1,5 +1,6 @@
-#ifndef __YUNI_DBI_TRANSACTION_HiXX__
-# define __YUNI_DBI_TRANSACTION_HXX__
+#pragma once
+#include "transaction.h"
+
 
 
 namespace Yuni
@@ -108,4 +109,3 @@ namespace DBI
 } // namespace DBI
 } // namespace Yuni
 
-#endif // __YUNI_DBI_TRANSACTION_HXX__

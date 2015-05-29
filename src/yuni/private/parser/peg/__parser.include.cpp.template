@@ -863,16 +863,17 @@
 				::Yuni::System::Console::ResetTextColor(out);
 		}
 
-		if (!callback)
-			out << '\n';
-		else
-		{
-			if (ColorT)
-				::Yuni::System::Console::SetTextColor(out, lightblue);
-			out << " [" << (void*) &node << "]\n";
-			if (ColorT)
-				::Yuni::System::Console::ResetTextColor(out);
-		}
+		out << '\n';
+		//if (!callback)
+		//	out << '\n';
+		//else
+		//{
+			//if (ColorT)
+			//	::Yuni::System::Console::SetTextColor(out, lightblue);
+			//out << " [" << (void*) &node << "]\n";
+			//if (ColorT)
+			//	::Yuni::System::Console::ResetTextColor(out);
+		//}
 
 		if (callback) // callback for additional information ?
 		{

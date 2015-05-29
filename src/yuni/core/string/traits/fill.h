@@ -19,10 +19,10 @@ namespace CString
 		static void Perform(char* data, typename CStringT::Size size, const StringT& pattern)
 		{
 			const uint patternSize = Traits::Length<StringT,uint>::Value(pattern);
-			const char* const cstr = Traits::CString<StringT>::Perform(pattern);
-
 			if (0 == patternSize)
 				return;
+
+			const char* const cstr = Traits::CString<StringT>::Perform(pattern);
 			// If equals to 1, it is merely a single char
 			if (1 == patternSize)
 			{

@@ -1,9 +1,7 @@
-#ifndef __YUNI_THREAD_TIMER_H__
-# define __YUNI_THREAD_TIMER_H__
-
-# include "../yuni.h"
-# include "../core/atomic/bool.h"
-# include "thread.h"
+#pragma once
+#include "../yuni.h"
+#include "../core/atomic/bool.h"
+#include "thread.h"
 
 
 
@@ -249,4 +247,3 @@ namespace Thread
 
 # include "timer.hxx"
 
-#endif // __YUNI_THREAD_TIMER_H__

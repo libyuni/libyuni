@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_GETOPT_PARSER_HXX__
-# define __YUNI_CORE_GETOPT_PARSER_HXX__
+#pragma once
+
 
 
 namespace Yuni
@@ -129,4 +129,3 @@ namespace GetOpt
 } // namespace GetOpt
 } // namespace Yuni
 
-#endif // __YUNI_CORE_GETOPT_PARSER_H__

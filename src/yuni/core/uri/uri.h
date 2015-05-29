@@ -1,12 +1,10 @@
-#ifndef __YUNI_CORE_URI_URI_H__
-# define __YUNI_CORE_URI_URI_H__
-
-# include "../../yuni.h"
-# include <limits.h>
-# include <ostream>
-# include "../../net/protocol.h"
-# include "uri.private.h"
-# include "../string.h"
+#pragma once
+#include "../../yuni.h"
+#include <limits.h>
+#include <ostream>
+#include "../../net/protocol.h"
+#include "uri.private.h"
+#include "../string.h"
 
 
 
@@ -283,4 +281,3 @@ namespace Yuni
 
 # include "uri.hxx"
 
-#endif // __YUNI_CORE_URI_URI_H__

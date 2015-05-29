@@ -1,6 +1,3 @@
-#ifndef __YUNI_CORE_SUSPEND_H__
-# define __YUNI_CORE_SUSPEND_H__
+#pragma once
+#include "system/suspend.h"
 
-# include "system/suspend.h"
-
-#endif // __YUNI_CORE_SUSPEND_H__

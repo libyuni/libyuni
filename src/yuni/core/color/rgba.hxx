@@ -1,5 +1,6 @@
-#ifndef __YUNI_CORE_COLOR_RGBA_HXX__
-# define __YUNI_CORE_COLOR_RGBA_HXX__
+#pragma once
+#include "rgba.h"
+
 
 
 namespace Yuni
@@ -9,9 +10,8 @@ namespace Extension
 namespace Color
 {
 
-
 	template<class RGBType, class T>
-	struct RGBA
+	struct RGBA final
 	{
 		typedef typename  RGBType::Type Type;
 		typedef typename  RGBType::template Calculation<T>::Type CalculationType;
@@ -85,7 +85,7 @@ namespace Color
 
 
 	template<class U, class V>
-	struct RGBA<Yuni::Color::RGBA<U>, Yuni::Color::RGBA<V> >
+	struct RGBA<Yuni::Color::RGBA<U>, Yuni::Color::RGBA<V> > final
 	{
 		typedef typename Yuni::Color::RGBA<U>::template Calculation<V>::Type CalculationType;
 
@@ -191,7 +191,7 @@ namespace Color
 
 
 	template<class U, class V>
-	struct RGBA<Yuni::Color::RGBA<U>, Yuni::Color::RGB<V> >
+	struct RGBA<Yuni::Color::RGBA<U>, Yuni::Color::RGB<V> > final
 	{
 		typedef typename Yuni::Color::RGBA<U>::template Calculation<V>::Type CalculationType;
 
@@ -298,13 +298,13 @@ namespace Color
 
 	template<class T>
 	inline RGBA<T>::RGBA()
-		:red(lowerBound), green(lowerBound), blue(lowerBound), alpha(upperBound) // Opaque black
+		: red(lowerBound), green(lowerBound), blue(lowerBound), alpha(upperBound) // Opaque black
 	{}
 
 
 	template<class T>
 	inline RGBA<T>::RGBA(const RGBA<T>& rhs)
-		:red(rhs.red), green(rhs.green), blue(rhs.blue), alpha(rhs.alpha)
+		: red(rhs.red), green(rhs.green), blue(rhs.blue), alpha(rhs.alpha)
 	{}
 
 
@@ -319,20 +319,20 @@ namespace Color
 	template<class T>
 	template<class R, class G, class B, class A>
 	inline RGBA<T>::RGBA(R r, G g, B b, A a)
-		:red( Math::MinMaxEx<T>(r, static_cast<R>(lowerBound), static_cast<R>(upperBound))),
-		green(Math::MinMaxEx<T>(g, static_cast<G>(lowerBound), static_cast<G>(upperBound))),
-		blue( Math::MinMaxEx<T>(b, static_cast<B>(lowerBound), static_cast<B>(upperBound))),
-		alpha(Math::MinMaxEx<T>(a, static_cast<A>(lowerBound), static_cast<A>(upperBound)))
+		: red( Math::MinMaxEx<T>(r, static_cast<R>(lowerBound), static_cast<R>(upperBound))),
+		, green(Math::MinMaxEx<T>(g, static_cast<G>(lowerBound), static_cast<G>(upperBound)))
+		, blue( Math::MinMaxEx<T>(b, static_cast<B>(lowerBound), static_cast<B>(upperBound)))
+		, alpha(Math::MinMaxEx<T>(a, static_cast<A>(lowerBound), static_cast<A>(upperBound)))
 	{}
 
 
 	template<class T>
 	template<class R, class G, class B>
 	inline RGBA<T>::RGBA(R r, G g, B b)
-		:red( Math::MinMaxEx<T>(r, static_cast<R>(lowerBound), static_cast<R>(upperBound))),
-		green(Math::MinMaxEx<T>(g, static_cast<G>(lowerBound), static_cast<G>(upperBound))),
-		blue( Math::MinMaxEx<T>(b, static_cast<B>(lowerBound), static_cast<B>(upperBound))),
-		alpha(static_cast<T>(Yuni::Private::Color::DefaultValues<T>::upperBound))
+		: red( Math::MinMaxEx<T>(r, static_cast<R>(lowerBound), static_cast<R>(upperBound)))
+		, green(Math::MinMaxEx<T>(g, static_cast<G>(lowerBound), static_cast<G>(upperBound)))
+		, blue( Math::MinMaxEx<T>(b, static_cast<B>(lowerBound), static_cast<B>(upperBound)))
+		, alpha(static_cast<T>(Yuni::Private::Color::DefaultValues<T>::upperBound))
 	{}
 
 
@@ -492,7 +492,7 @@ namespace CString
 {
 
 	template<class CStringT, class T>
-	class Append<CStringT, Yuni::Color::RGBA<T> >
+	class Append<CStringT, Yuni::Color::RGBA<T> > final
 	{
 	public:
 		static void Perform(CStringT& s, const Yuni::Color::RGBA<T>& rhs)
@@ -503,7 +503,7 @@ namespace CString
 
 
 	template<class T>
-	class Into<Yuni::Color::RGBA<T> >
+	class Into<Yuni::Color::RGBA<T> > final
 	{
 	public:
 		typedef Yuni::Color::RGBA<T> TargetType;
@@ -777,5 +777,3 @@ YUNI_COLOR_RGBA_OPERATOR_RGBA_TYPE(long double)
 # undef YUNI_COLOR_RGBA_OPERATOR_TYPE_RGBA
 # undef YUNI_COLOR_RGBA_OPERATOR_RGBA_TYPE
 
-
-#endif // __YUNI_CORE_COLOR_RGBA_HXX__

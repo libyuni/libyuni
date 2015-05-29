@@ -1,9 +1,8 @@
-#ifndef __YUNI_IO_FILE_HXX__
-# define __YUNI_IO_FILE_HXX__
+#pragma once
+#include "../../core/traits/cstring.h"
+#include "../../core/traits/length.h"
+#include "../../core/static/remove.h"
 
-# include "../../core/traits/cstring.h"
-# include "../../core/traits/length.h"
-# include "../../core/static/remove.h"
 
 
 
@@ -94,4 +93,3 @@ namespace File
 } // namespace IO
 } // namespace Yuni
 
-#endif // __YUNI_IO_FILE_H__

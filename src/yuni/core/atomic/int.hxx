@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_ATOMIC_INT_HXX__
-# define __YUNI_CORE_ATOMIC_INT_HXX__
+#pragma once
+#include "int.h"
 
 
 namespace Yuni
@@ -130,7 +130,7 @@ namespace Atomic
 
 
 	template<int Size, template<class> class TP>
-	inline Int<Size,TP>& Int<Size,TP>::operator = (const ScalarType v)
+	inline Int<Size,TP>& Int<Size,TP>::operator = (const ScalarType& v)
 	{
 		if (threadSafe)
 			Private::AtomicImpl::Operator<size,TP>::Set(*this, v);
@@ -141,7 +141,7 @@ namespace Atomic
 
 
 	template<int Size, template<class> class TP>
-	inline Int<Size,TP>& Int<Size,TP>::operator += (const ScalarType v)
+	inline Int<Size,TP>& Int<Size,TP>::operator += (const ScalarType& v)
 	{
 		if (threadSafe)
 			Private::AtomicImpl::Operator<size,TP>::Increment(*this, v);
@@ -152,7 +152,7 @@ namespace Atomic
 
 
 	template<int Size, template<class> class TP>
-	inline Int<Size,TP>& Int<Size,TP>::operator -= (const ScalarType v)
+	inline Int<Size,TP>& Int<Size,TP>::operator -= (const ScalarType& v)
 	{
 		if (threadSafe)
 			Private::AtomicImpl::Operator<size,TP>::Decrement(*this, v);
@@ -175,7 +175,7 @@ namespace Atomic
 
 
 
+
 } // namespace Atomic
 } // namespace Yuni
 
-#endif // __YUNI_CORE_ATOMIC_INT_HXX__

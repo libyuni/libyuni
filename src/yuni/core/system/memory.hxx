@@ -1,5 +1,6 @@
-#ifndef __YUNI_CORE_SYSTEM_MEMORY_HXX__
-# define __YUNI_CORE_SYSTEM_MEMORY_HXX__
+#pragma once
+#include "memory.h"
+
 
 
 namespace Yuni
@@ -26,4 +27,3 @@ namespace Memory
 } // namespace System
 } // namespace Yuni
 
-#endif // __YUNI_CORE_SYSTEM_MEMORY_HXX__

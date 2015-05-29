@@ -1,6 +1,4 @@
-#ifndef __YUNI_CORE_SYSTEM_NULLPTR_H__
-# define __YUNI_CORE_SYSTEM_NULLPTR_H__
-
+#pragma once
 # ifdef __cplusplus /* Only with a C++ Compiler */
 
 /* nullptr_t does not exist in GCC 4.5 */
@@ -92,5 +90,3 @@ inline bool operator != (const T* rhs, const Yuni::NullPtr&)
 
 # endif /* C++ Compiler */
 
-
-#endif /* __YUNI_CORE_SYSTEM_NULLPTR_H__ */

@@ -1,8 +1,7 @@
-#ifndef __YUNI_CORE_SYSTEM_CONSOLE_CONSOLE_H__
-# define __YUNI_CORE_SYSTEM_CONSOLE_CONSOLE_H__
+#pragma once
+#include "../../../yuni.h"
+#include <iostream>
 
-# include "../../../yuni.h"
-# include <iostream>
 
 
 namespace Yuni
@@ -90,4 +89,3 @@ namespace Console
 
 # include "console.hxx"
 
-#endif // __YUNI_CORE_SYSTEM_CONSOLE_CONSOLE_H__

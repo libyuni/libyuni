@@ -1,7 +1,5 @@
-#ifndef __YUNI_SYSTEM_WINDOWS_HEADERS_H__
-# define __YUNI_SYSTEM_WINDOWS_HEADERS_H__
-
-# include "../../yuni.h"
+#pragma once
+#include "../../yuni.h"
 
 /* This header must remain compatible with C compilers */
 
@@ -38,5 +36,3 @@
 #   undef max
 # endif
 
-
-#endif /* __YUNI_SYSTEM_WINDOWS_HEADERS_H__ */

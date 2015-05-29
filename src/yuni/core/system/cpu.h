@@ -1,7 +1,6 @@
-#ifndef __YUNI_CORE_SYSTEM_CPU_H__
-# define __YUNI_CORE_SYSTEM_CPU_H__
+#pragma once
+#include "../../yuni.h"
 
-# include "../../yuni.h"
 
 
 namespace Yuni
@@ -24,4 +23,3 @@ namespace CPU
 } // namespace System
 } // namespace Yuni
 
-#endif // __YUNI_CORE_SYSTEM_CPU_H__

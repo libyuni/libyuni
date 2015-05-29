@@ -1,5 +1,7 @@
-#ifndef __YUNI_CORE_URI_URI_HXX__
-# define __YUNI_CORE_URI_URI_HXX__
+#pragma once
+#include "uri.h"
+
+
 
 namespace Yuni
 {
@@ -164,4 +166,3 @@ inline std::ostream& operator << (std::ostream& out, const Yuni::Uri& u)
 //@}
 
 
-#endif // __YUNI_CORE_URI_URI_H__

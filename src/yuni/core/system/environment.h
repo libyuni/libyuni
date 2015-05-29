@@ -1,8 +1,7 @@
-#ifndef __YUNI_CORE_SYSTEM_ENVIRONMENT_H__
-# define __YUNI_CORE_SYSTEM_ENVIRONMENT_H__
+#pragma once
+#include "../../yuni.h"
+#include "../string.h"
 
-# include "../../yuni.h"
-# include "../string.h"
 
 
 namespace Yuni
@@ -45,10 +44,7 @@ namespace Environment
 
 
 
-
-
 } // namespace Environment
 } // namespace System
 } // namespace Yuni
 
-#endif // __YUNI_CORE_SYSTEM_ENVIRONMENT_H__

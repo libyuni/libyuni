@@ -252,19 +252,16 @@ namespace Yuni
 	public:
 		//! \name Constructors & Destructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
+		//! Default Constructor
 		CString();
 
-		/*!
-		** \brief Copy constructor
-		*/
+		//! Copy constructor
 		CString(const CString& rhs);
 
-		/*!
-		** \brief Constructor from a mere CString
-		*/
+		//! Constructor with a null-terminated string
+		CString(const char* const text);
+
+		//! Constructor from a mere CString
 		CString(const char* const block, Size blockSize);
 
 		/*!
@@ -274,9 +271,7 @@ namespace Yuni
 		CString(const CString<SizeT,ExpT>& string);
 
 		# ifdef YUNI_HAS_CPP_MOVE
-		/*!
-		** \brief Move constructor
-		*/
+		//! Move constructor
 		CString(CString&& rhs);
 		# endif
 
@@ -299,9 +294,7 @@ namespace Yuni
 		template<uint SizeT, bool ExpT>
 		CString(const CString<SizeT,ExpT>& s, Size offset, Size n /*= npos*/);
 
-		/*!
-		** \brief Constructor from a std::string
-		*/
+		//! Constructor from a std::string
 		template<class TraitsT, class AllocT>
 		CString(const std::basic_string<char,TraitsT,AllocT>& string);
 
@@ -342,9 +335,6 @@ namespace Yuni
 		*/
 		template<class ModelT, bool ConstT, class ModelT2, bool ConstT2, class StringT>
 		CString(const IIterator<ModelT,ConstT>& begin, const IIterator<ModelT2,ConstT2>& end, const StringT& separator);
-
-		//! Constructor with a null-terminated string
-		CString(const char* text);
 
 		//! Construct a string formed by a repetition of the character c, n times
 		CString(size_t n, char c);
@@ -469,8 +459,7 @@ namespace Yuni
 		** \param separator The string separator to use between each item
 		*/
 		template<class ModelT, bool ConstT, class ModelT2, bool ConstT2, class StringT>
-		void assign(const IIterator<ModelT,ConstT>& begin, const IIterator<ModelT2,ConstT2>& end,
-			const StringT& separator);
+		void assign(const IIterator<ModelT,ConstT>& begin, const IIterator<ModelT2,ConstT2>& end, const StringT& separator);
 
 		/*!
 		** \brief Assign to thestring all items within
@@ -650,11 +639,11 @@ namespace Yuni
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered
-		** \param u Any CString container
+		** \param string Any string
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
 		*/
-		template<class StringT> bool insert(Size offset, const StringT& u);
+		bool insert(Size offset, const AnyString& string);
 
 		/*!
 		** \brief Insert an arbitrary C-String at a given position in the string
@@ -662,12 +651,12 @@ namespace Yuni
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered
-		** \param u Any CString container
+		** \param string Any string
 		** \param size The size to use for the given container
 		** \return True if the string has been inserted, false otherwise
 		**   (size == 0 or offset out of bounds)
 		*/
-		template<class StringT> bool insert(Size offset, const StringT& u, Size size);
+		template<class StringT> bool insert(Size offset, const StringT& string, Size size);
 
 		/*!
 		** \brief Insert any arbitrary string at a given offset provided by an iterator
@@ -675,8 +664,8 @@ namespace Yuni
 		** If the offset is greater than the size of the string, the value
 		** will be merely appended to the string.
 		*/
-		template<class ModelT, bool ConstT, class StringT>
-		void insert(const IIterator<ModelT,ConstT>& it, const StringT& string);
+		template<class ModelT, bool ConstT>
+		void insert(const IIterator<ModelT,ConstT>& it, const AnyString& string);
 
 		/*!
 		** \brief Insert a raw C-String at the beginning of in the string
@@ -722,18 +711,18 @@ namespace Yuni
 		** The size of the string will remain untouched in any cases.
 		**
 		** \param offset Position of the first character of the region in the string
-		** \param s A CString
+		** \param string A CString
 		*/
-		template<class StringT> void overwrite(Size offset, const StringT& s);
+		void overwrite(Size offset, const AnyString& string);
 
 		/*!
 		** \brief Overwrite a region of the string
 		**
 		** The size of the string will remain untouched in any cases.
 		**
-		** \param s A CString
+		** \param string A CString
 		*/
-		template<class StringT> void overwrite(const StringT& s);
+		void overwrite(const AnyString& string);
 
 		/*!
 		** \brief Overwrite a region of the string
@@ -857,18 +846,18 @@ namespace Yuni
 		/*!
 		** \brief Find the offset of any supported CString
 		**
-		** \param s Any supported CString
+		** \param string Any supported CString
 		** \return True if sub-string is found, false otherwise
 		*/
-		template<class StringT> bool contains(const StringT& s) const;
+		bool contains(const AnyString& string) const;
 
 		/*!
 		** \brief Find the offset of any supported CString (ignoring the case)
 		**
-		** \param s Any supported CString
+		** \param string Any supported CString
 		** \return True if sub-string is found, false otherwise
 		*/
-		template<class StringT> bool icontains(const StringT& s) const;
+		bool icontains(const AnyString& string) const;
 
 
 		/*!
@@ -1083,27 +1072,27 @@ namespace Yuni
 		/*!
 		** \brief Searches the string for any of the characters that are part of `seq`
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size find_first_of(const StringT& seq, Size offset = 0) const;
+		Size find_first_of(const AnyString& sequence, Size offset = 0) const;
 
 		/*!
 		** \brief Searches the string for any of the characters that are part of `seq`
 		**   (ignoring the case)
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size ifind_first_of(const StringT& seq, Size offset = 0) const;
+		Size ifind_first_of(const AnyString& sequence, Size offset = 0) const;
 
 		/*!
 		** \brief Searches the string for the first character that is not `c`
@@ -1130,26 +1119,26 @@ namespace Yuni
 		/*!
 		** \brief Searches the string for any of the characters that are not part of `seq`
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size find_first_not_of(const StringT& seq, Size offset = 0) const;
+		Size find_first_not_of(const AnyString& sequence, Size offset = 0) const;
 
 		/*!
 		** \brief Searches the string for any of the characters that are not part of `seq` (case insensitive)
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size ifind_first_not_of(const StringT& seq, Size offset = 0) const;
+		Size ifind_first_not_of(const AnyString& sequence, Size offset = 0) const;
 
 
 
@@ -1183,27 +1172,27 @@ namespace Yuni
 		/*!
 		** \brief Searches the string from the end for any of the characters that are part of `seq`
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size find_last_of(const StringT& seq, Size offset = npos) const;
+		Size find_last_of(const AnyString& sequence, Size offset = npos) const;
 
 		/*!
 		** \brief Searches the string from the end for any of the characters that are part of `seq`
 		**   (ignoring the case)
 		**
-		** \param seq An arbitrary string
+		** \param sequence List of ASCII characters
 		** \param offset Position of the first character in the string to be taken
 		**   into consideration for possible matches. A value of 0 means that the
 		**   entire string is considered.
 		** \return The position of the first occurrence in the string (zero-based)
 		**   npos if not found
 		*/
-		template<class StringT> Size ifind_last_of(const StringT& seq, Size offset = npos) const;
+		Size ifind_last_of(const AnyString& sequence, Size offset = npos) const;
 
 		/*!
 		** \brief Get if a given string can be found at the beginning
@@ -1242,9 +1231,9 @@ namespace Yuni
 
 		/*!
 		** \brief Get if a given string can be found at the end
-		** \param s Any string
+		** \param string Any string
 		*/
-		template<class StringT> bool endsWith(const StringT& s) const;
+		bool endsWith(const AnyString& string) const;
 
 		/*!
 		** \brief Get if a given string can be found at the end
@@ -1259,9 +1248,9 @@ namespace Yuni
 
 		/*!
 		** \brief Get if a given string can be found at the end (case insensitive)
-		** \param s Any string
+		** \param string Any string
 		*/
-		template<class StringT> bool iendsWith(const StringT& s) const;
+		bool iendsWith(const AnyString& string) const;
 
 		/*!
 		** \brief Get if a given string can be found at the end (case insensitive)
@@ -1290,7 +1279,7 @@ namespace Yuni
 		** \code
 		** Yuni::String s("/some/path/");
 		** if ('\\' == s.last() or '/' == s.last())
-		** 	s.removeLast();
+		**	s.removeLast();
 		** std::cout << s << std::endl;  // -> /some/path
 		** \endcode
 		*/
@@ -1843,7 +1832,7 @@ namespace Yuni
 		**   as soon as possible
 		** \todo To be removed as soon as possible
 		*/
-		template<class StringT> bool glob(const StringT& pattern) const;
+		bool glob(const AnyString& pattern) const;
 
 		/*!
 		** \brief Convert all backslashes into slashes

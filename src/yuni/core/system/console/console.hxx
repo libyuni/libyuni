@@ -1,7 +1,7 @@
-#ifndef __YUNI_CORE_SYSTEM_CONSOLE_CONSOLE_HXX__
-# define __YUNI_CORE_SYSTEM_CONSOLE_CONSOLE_HXX__
+#pragma once
+#include "../windows.hdr.h"
+#include "console.h"
 
-# include "../windows.hdr.h"
 
 
 namespace Yuni
@@ -184,4 +184,3 @@ namespace Console
 } // namespace System
 } // namespace Yuni
 
-#endif // __YUNI_CORE_SYSTEM_CONSOLE_CONSOLE_H__

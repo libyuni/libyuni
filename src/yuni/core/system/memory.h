@@ -1,7 +1,6 @@
-#ifndef __YUNI_CORE_SYSTEM_MEMORY_H__
-# define __YUNI_CORE_SYSTEM_MEMORY_H__
+#pragma once
+#include "../../yuni.h"
 
-# include "../../yuni.h"
 
 
 namespace Yuni
@@ -102,4 +101,3 @@ namespace Memory
 
 # include "memory.hxx"
 
-#endif // __YUNI_CORE_SYSTEM_MEMORY_H__

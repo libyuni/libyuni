@@ -1,9 +1,7 @@
-#ifndef __YUNI_IO_FILE_FILE_H__
-# define __YUNI_IO_FILE_FILE_H__
-
-# include "../io.h"
-# include "openmode.h"
-# include <string>
+#pragma once
+#include "../io.h"
+#include "openmode.h"
+#include <string>
 
 
 
@@ -201,7 +199,6 @@ namespace File
 } // namespace IO
 } // namespace Yuni
 
-# include "stream.h"
-# include "file.hxx"
+#include "stream.h"
+#include "file.hxx"
 
-#endif // __YUNI_IO_FILE_FILE_H__

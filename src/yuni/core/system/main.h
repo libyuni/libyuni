@@ -1,7 +1,5 @@
-#ifndef __YUNI_CORE_SYSTEM_MAIN_H__
-# define __YUNI_CORE_SYSTEM_MAIN_H__
-
-# include "../../yuni.h"
+#pragma once
+#include "../../yuni.h"
 
 
 # ifdef YUNI_OS_WINDOWS
@@ -88,5 +86,3 @@
 
 #endif
 
-
-#endif /* __YUNI_CORE_SYSTEM_MAIN_H__ */

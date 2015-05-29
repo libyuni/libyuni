@@ -1,5 +1,6 @@
-#ifndef __YUNI_CORE_COLOR_RGB_HXX__
-# define __YUNI_CORE_COLOR_RGB_HXX__
+#pragma once
+#include "rgb.h"
+
 
 
 namespace Yuni
@@ -9,9 +10,8 @@ namespace Extension
 namespace Color
 {
 
-
 	template<class RGBType, class T>
-	struct RGB
+	struct RGB final
 	{
 		typedef typename  RGBType::Type Type;
 		typedef typename  RGBType::template Calculation<T>::Type CalculationType;
@@ -81,7 +81,7 @@ namespace Color
 
 
 	template<class U, class V>
-	struct RGB<Yuni::Color::RGB<U>, Yuni::Color::RGB<V> >
+	struct RGB<Yuni::Color::RGB<U>, Yuni::Color::RGB<V> > final
 	{
 		typedef typename Yuni::Color::RGB<U>::template Calculation<V>::Type CalculationType;
 
@@ -175,7 +175,7 @@ namespace Color
 
 
 	template<class U, class V>
-	struct RGB<Yuni::Color::RGB<U>, Yuni::Color::RGBA<V> >
+	struct RGB<Yuni::Color::RGB<U>, Yuni::Color::RGBA<V> > final
 	{
 		typedef typename Yuni::Color::RGB<U>::template Calculation<V>::Type CalculationType;
 
@@ -281,13 +281,13 @@ namespace Color
 
 	template<class T>
 	inline RGB<T>::RGB()
-		:red(lowerBound), green(lowerBound), blue(lowerBound)
+		: red(lowerBound), green(lowerBound), blue(lowerBound)
 	{}
 
 
 	template<class T>
 	inline RGB<T>::RGB(const RGB<T>& rhs)
-		:red(rhs.red), green(rhs.green), blue(rhs.blue)
+		: red(rhs.red), green(rhs.green), blue(rhs.blue)
 	{}
 
 
@@ -302,18 +302,18 @@ namespace Color
 	template<class T>
 	template<class R, class G, class B, class A>
 	inline RGB<T>::RGB(R r, G g, B b, A /* a */)
-		:red( Math::MinMaxEx<T>(r, static_cast<R>(lowerBound), static_cast<R>(upperBound))),
-		green(Math::MinMaxEx<T>(g, static_cast<G>(lowerBound), static_cast<G>(upperBound))),
-		blue( Math::MinMaxEx<T>(b, static_cast<B>(lowerBound), static_cast<B>(upperBound)))
+		: red( Math::MinMaxEx<T>(r, static_cast<R>(lowerBound), static_cast<R>(upperBound)))
+		, green(Math::MinMaxEx<T>(g, static_cast<G>(lowerBound), static_cast<G>(upperBound)))
+		, blue( Math::MinMaxEx<T>(b, static_cast<B>(lowerBound), static_cast<B>(upperBound)))
 	{}
 
 
 	template<class T>
 	template<class R, class G, class B>
 	inline RGB<T>::RGB(R r, G g, B b)
-		:red( Math::MinMaxEx<T>(r, static_cast<R>(lowerBound), static_cast<R>(upperBound))),
-		green(Math::MinMaxEx<T>(g, static_cast<G>(lowerBound), static_cast<G>(upperBound))),
-		blue( Math::MinMaxEx<T>(b, static_cast<B>(lowerBound), static_cast<B>(upperBound)))
+		: red( Math::MinMaxEx<T>(r, static_cast<R>(lowerBound), static_cast<R>(upperBound)))
+		, green(Math::MinMaxEx<T>(g, static_cast<G>(lowerBound), static_cast<G>(upperBound)))
+		, blue( Math::MinMaxEx<T>(b, static_cast<B>(lowerBound), static_cast<B>(upperBound)))
 	{}
 
 
@@ -467,7 +467,7 @@ namespace CString
 {
 
 	template<class CStringT, class T>
-	class Append<CStringT, Yuni::Color::RGB<T> >
+	class Append<CStringT, Yuni::Color::RGB<T> > final
 	{
 	public:
 		static void Perform(CStringT& s, const Yuni::Color::RGB<T>& rhs)
@@ -478,7 +478,7 @@ namespace CString
 
 
 	template<class T>
-	class Into<Yuni::Color::RGB<T> >
+	class Into<Yuni::Color::RGB<T> > final
 	{
 	public:
 		typedef Yuni::Color::RGB<T> TargetType;
@@ -592,6 +592,7 @@ namespace CString
 
 		}
 	};
+
 
 
 } // namespace CString
@@ -746,5 +747,3 @@ YUNI_COLOR_RGB_OPERATOR_RGB_TYPE(long double)
 # undef YUNI_COLOR_RGB_OPERATOR_TYPE_RGB
 # undef YUNI_COLOR_RGB_OPERATOR_RGB_TYPE
 
-
-#endif // __YUNI_CORE_COLOR_RGB_HXX__

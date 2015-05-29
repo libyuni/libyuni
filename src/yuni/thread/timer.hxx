@@ -1,5 +1,6 @@
-#ifndef __YUNI_THREAD_TIMER_HXX__
-# define __YUNI_THREAD_TIMER_HXX__
+#pragma once
+#include "timer.h"
+
 
 
 namespace Yuni
@@ -32,4 +33,3 @@ namespace Thread
 } // namespace Thread
 } // namespace Yuni
 
-#endif // __YUNI_THREAD_TIMER_HXX__

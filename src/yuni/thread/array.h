@@ -1,10 +1,9 @@
-#ifndef __YUNI_THREAD_ARRAY_H__
-# define __YUNI_THREAD_ARRAY_H__
+#pragma once
+#include "../yuni.h"
+#include "thread.h"
+#include "../core/static/inherit.h"
+#include <vector>
 
-# include "../yuni.h"
-# include "thread.h"
-# include "../core/static/inherit.h"
-# include <vector>
 
 
 namespace Yuni
@@ -279,4 +278,3 @@ namespace Thread
 
 # include "array.hxx"
 
-#endif // __YUNI_THREAD_ARRAY_H__

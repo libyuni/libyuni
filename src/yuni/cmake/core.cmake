@@ -287,6 +287,7 @@ add_library(yuni-static-core STATIC
 		core/static/typedef.h
 		core/static/types.h
 		core/stl/algorithm.h
+		core/stl/hash-combine.h
 		core/string/escape.h
 		core/string/escape.hxx
 		core/string/iterator.hxx

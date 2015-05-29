@@ -1,5 +1,5 @@
-#ifndef __YUNI_THREAD_THREAD_HXX__
-# define __YUNI_THREAD_THREAD_HXX__
+#pragma once
+#include "thread.h"
 
 
 namespace Yuni
@@ -36,4 +36,3 @@ namespace Thread
 } // namespace Thread
 } // namespace Yuni
 
-#endif // __YUNI_THREAD_THREAD_HXX__

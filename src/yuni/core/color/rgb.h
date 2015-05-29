@@ -1,12 +1,11 @@
-#ifndef __YUNI_CORE_COLOR_RGB_H__
-# define __YUNI_CORE_COLOR_RGB_H__
+#pragma once
+#include "../../yuni.h"
+#include "fwd.h"
 
-# include "../../yuni.h"
-# include "fwd.h"
+#ifdef RGB
+# undef RGB
+#endif // RGB
 
-# ifdef RGB
-#	undef RGB
-# endif // RGB
 
 
 namespace Yuni
@@ -157,4 +156,3 @@ namespace Color
 
 # include "rgb.hxx"
 
-#endif // __YUNI_CORE_COLOR_RGB_H__
