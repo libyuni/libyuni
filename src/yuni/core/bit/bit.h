@@ -1,7 +1,7 @@
-#ifndef __YUNI_CORE_BIT_BIT_H__
-# define __YUNI_CORE_BIT_BIT_H__
+#pragma once
+#include "../../yuni.h"
 
-# include "../../yuni.h"
+
 
 /*!
 ** \brief Get if the Nth bit is set in a raw char* buffer
@@ -41,6 +41,7 @@ namespace Bit
 	** \ingroup Bit
 	*/
 	template<class T> uint Count(T data);
+	yuint32 Count(yuint32 data);
 
 	/*!
 	** \brief Get if the bit at a given index
@@ -67,6 +68,5 @@ namespace Bit
 } // namespace Bit
 } // namespace Yuni
 
-# include "bit.hxx"
+#include "bit.hxx"
 
-#endif // __YUNI_CORE_BIT_BIT_H__
