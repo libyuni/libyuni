@@ -12,6 +12,9 @@ if (NOT MSVC)
 	check_cxx_source_compiles("
 		int main() { int a = 1;  if (__builtin_expect(!!(a == 1), 1)) a = 0;   return a; } " YUNI_HAS_GCC_BUILTIN_EXPECT)
 
+	check_cxx_source_compiles("
+		int main() { __builtin_popcount(0xFFFFFFFF); return 0; } " YUNI_HAS_GCC_BUILTIN_POPCOUNT)
+
 endif()
 
 
@@ -38,7 +41,7 @@ if (UNIX)
 	check_cxx_source_compiles("
 		#include <pthread.h>
 		int main() {
-			int ret = pthread_getthreadid_np();
+			pthread_getthreadid_np();
 			return 0;
 		} " YUNI_HAS_PTHREAD_GETTHREADID_NP)
 endif()
