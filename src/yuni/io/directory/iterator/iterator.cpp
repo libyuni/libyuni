@@ -30,7 +30,8 @@ namespace Iterator
 
 	enum
 	{
-		pollingInterval = 5,
+		pollingInterval = 6,
+		wbufferSize = 4096,
 	};
 
 
@@ -53,7 +54,7 @@ namespace Iterator
 		{
 			# ifndef YUNI_NO_THREAD_SAFE
 			// Checking from time to time if the thread should stop
-			if (thread and ++opts.counter == pollingInterval) // arbitrary value
+			if (thread and (++opts.counter >= (uint) pollingInterval)) // arbitrary value
 			{
 				// reset counter
 				opts.counter = 0;
@@ -136,13 +137,15 @@ namespace Iterator
 	Flow TraverseWindowsFolder(const String& filename, Options& opts, IDetachedThread* thread, bool files)
 	{
 		// Convertir the filename
+		assert(opts.wbuffer != NULL);
 		opts.wbuffer[0] = L'\\';
 		opts.wbuffer[1] = L'\\';
 		opts.wbuffer[2] = L'?';
 		opts.wbuffer[3] = L'\\';
-		int n = MultiByteToWideChar(CP_UTF8, 0, filename.c_str(), filename.size(), opts.wbuffer + 4, 4080);
-		if (!n)
+		int n = MultiByteToWideChar(CP_UTF8, 0, filename.c_str(), filename.size(), opts.wbuffer + 4, (uint) wbufferSize - 16);
+		if (0 == n)
 			return opts.self->onError(filename);
+
 		// Making sure that our string is zero-terminated
 		opts.wbuffer[n + 4] = L'\\';
 		opts.wbuffer[n + 5] = L'*';
@@ -164,9 +167,9 @@ namespace Iterator
 		// iterating trough files and folders
 		do
 		{
-			// Checking from time to time if the thread should stop
 			# ifndef YUNI_NO_THREAD_SAFE
-			if (thread and ++opts.counter == pollingInterval) // arbitrary value
+			// Checking from time to time if the thread should stop
+			if (thread and (++opts.counter >= (uint) pollingInterval)) // arbitrary value
 			{
 				// reset counter
 				opts.counter = 0;
@@ -200,15 +203,16 @@ namespace Iterator
 					switch (opts.self->onBeginFolder(newFilename, filename, newName))
 					{
 						case Yuni::IO::flowContinue:
+						{
+							if (Yuni::IO::flowAbort == TraverseWindowsFolder(newFilename, opts, thread, true))
 							{
-								if (Yuni::IO::flowAbort == TraverseWindowsFolder(newFilename, opts, thread, true))
-								{
-									opts.self->onEndFolder(newFilename, filename, newName);
-									return Yuni::IO::flowAbort;
-								}
 								opts.self->onEndFolder(newFilename, filename, newName);
-								break;
+								return Yuni::IO::flowAbort;
 							}
+							opts.self->onEndFolder(newFilename, filename, newName);
+							break;
+						}
+
 						case Yuni::IO::flowAbort:
 							return Yuni::IO::flowAbort;
 						case Yuni::IO::flowSkip:
@@ -262,10 +266,14 @@ namespace Iterator
 	{
 		if (options.rootFolder.empty())
 			return;
+
+		// some reset
 		# ifdef YUNI_OS_WINDOWS
-		options.wbuffer = new wchar_t[4096];
+		delete[] options.wbuffer; // just in case
+		options.wbuffer = new wchar_t[wbufferSize];
 		# endif
 
+		// for each folder
 		{
 			const String::VectorPtr::const_iterator& end = options.rootFolder.end();
 			for (String::VectorPtr::const_iterator i = options.rootFolder.begin(); i != end; ++i)
@@ -291,9 +299,6 @@ namespace Iterator
 				if ((result == Yuni::IO::flowAbort))
 				# endif
 				{
-					# ifdef YUNI_OS_WINDOWS
-					delete[] options.wbuffer;
-					# endif
 					options.self->onAbort();
 					return;
 				}
@@ -302,10 +307,6 @@ namespace Iterator
 
 		// Final events
 		options.self->onTerminate();
-
-		# ifdef YUNI_OS_WINDOWS
-		delete[] options.wbuffer;
-		# endif
 	}
 
 

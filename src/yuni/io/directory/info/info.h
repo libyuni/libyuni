@@ -1,12 +1,10 @@
-#ifndef __YUNI_IO_DIRECTORY_INFO_INFO_H__
-# define __YUNI_IO_DIRECTORY_INFO_INFO_H__
-
-# include "../../../yuni.h"
-# include "../../../core/string.h"
-# include "../../io.h"
-# include "../../directory.h"
-# include "../../../core/iterator/iterator.h"
-# include "platform.h"
+#pragma once
+#include "../../../yuni.h"
+#include "../../../core/string.h"
+#include "../../io.h"
+#include "../../directory.h"
+#include "../../../core/iterator/iterator.h"
+#include "platform.h"
 
 
 
@@ -18,7 +16,7 @@ namespace Directory
 {
 
 	/*!
-	** \brief Tool for creating, moving, and enumerating through directories and subdirectories
+	** \brief Convenient tool for creating, moving, and enumerating through directories and subdirectories
 	**
 	** Example for iterating through a directory :
 	** \code
@@ -28,18 +26,18 @@ namespace Directory
 	**
 	** using namespace Yuni;
 	**
+	**
 	** int main()
 	** {
-	** 	IO::Directory::Info info("/tmp");
-	** 	for (IO::Directory::Info::iterator i = info.begin(); i != info.end(); ++i)
-	** 	{
-	** 		std::cout << *i << std::endl;
-	** 	}
-	** 	return 0;
+	**	IO::Directory::Info info{"/tmp"};
+	**	for (IO::Directory::Info::iterator i = info.begin(); i != info.end(); ++i)
+	**		std::cout << *i << std::endl;
+	**
+	**	return 0;
 	** }
 	** \endcode
 	*/
-	class Info
+	class Info final
 	{
 	public:
 		//! \name Iterators
@@ -80,25 +78,19 @@ namespace Directory
 		typedef Yuni::IIterator<Model::NullIterator, true>  null_iterator;
 		//@}
 
+
 	public:
 		//! \name Constructors & Destructor
 		//@{
 		/*!
 		** \brief Default constructor
 		*/
-		Info();
-
+		Info() {}
 		/*!
 		** \brief Constructor
 		** \param directory A directory
 		*/
-		template<class StringT>
-		explicit Info(const StringT& directory);
-
-		/*!
-		** \brief Copy constructor
-		*/
-		Info(const Info& rhs);
+		explicit Info(const AnyString& directory);
 		//@}
 
 		/*!
@@ -145,7 +137,7 @@ namespace Directory
 		bool remove() const;
 
 		/*!
-		** \brief Clean the directory (remove all its content)
+		** \brief Clean the directory (remove all its content but keep the top folder)
 		*/
 		bool clean() const;
 
@@ -198,9 +190,9 @@ namespace Directory
 		/*!
 		** \brief Get a reference to the directory string itself
 		**
-		** The directory can directly be modified by the user without any
-		** restriction.
-		** This can be useful to reduce memory allocations.
+		** \note The directory can directly be modified by the user without any
+		**   restriction.
+		**   This can be useful to reduce memory allocations.
 		*/
 		String& directory();
 
@@ -212,7 +204,7 @@ namespace Directory
 		/*!
 		** \brief Assignment, for any types convertible into a string
 		*/
-		template<class U> Info& operator = (const U& rhs);
+		Info& operator = (const AnyString& rhs);
 
 		//! Comparison
 		bool operator == (const Info& rhs) const;
@@ -241,4 +233,3 @@ namespace Directory
 
 # include "info.hxx"
 
-#endif // __YUNI_IO_DIRECTORY_INFO_INFO_H__

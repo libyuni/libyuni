@@ -1,5 +1,6 @@
-#ifndef __YUNI_IO_DIRECTORY_INFO_INFO_HXX__
-# define __YUNI_IO_DIRECTORY_INFO_INFO_HXX__
+#pragma once
+#include "info.h"
+
 
 
 namespace Yuni
@@ -10,18 +11,8 @@ namespace Directory
 {
 
 
-	inline Info::Info()
-	{}
-
-
-	template<class StringT>
-	inline Info::Info(const StringT& directory)
-		:pDirectory(directory)
-	{}
-
-
-	inline Info::Info(const Info& rhs)
-		:pDirectory(rhs.pDirectory)
+	inline Info::Info(const AnyString& directory)
+		: pDirectory(directory)
 	{}
 
 
@@ -150,8 +141,7 @@ namespace Directory
 		return *this;
 	}
 
-	template<class U>
-	inline Info& Info::operator = (const U& rhs)
+	inline Info& Info::operator = (const AnyString& rhs)
 	{
 		pDirectory = rhs;
 		return *this;
@@ -194,4 +184,3 @@ namespace Directory
 } // namespace IO
 } // namespace Yuni
 
-#endif // __YUNI_IO_DIRECTORY_INFO_INFO_HXX__

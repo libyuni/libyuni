@@ -1,11 +1,10 @@
-#ifndef __YUNI_IO_DIRECTORY_ITERATOR_ITERATOR_H__
-# define __YUNI_IO_DIRECTORY_ITERATOR_ITERATOR_H__
-
-# include "../../../yuni.h"
-# include "../../../core/string.h"
-# include "../../io.h"
-# include "../../directory.h"
-# include "detachedthread.h"
+#pragma once
+#include "../../../yuni.h"
+#include "../../../core/string.h"
+#include "../../../core/smartptr/intrusive.h"
+#include "../../io.h"
+#include "../../directory.h"
+#include "detachedthread.h"
 
 
 
@@ -119,14 +118,15 @@ namespace Directory
 	*/
 	template<bool DetachedT = true>
 	class IIterator
-		# ifndef YUNI_NO_THREAD_SAFE
-		:public Policy::ObjectLevelLockable< IIterator<DetachedT> >
-		# else
-		:public Policy::ObjectLevelLockable< IIterator<false> >
-		# endif
-		,public Private::IO::Directory::Iterator::Interface
+		: public Yuni::IIntrusiveSmartPtr<IIterator<DetachedT>, true, Yuni::Policy::ObjectLevelLockable>
+		, public Private::IO::Directory::Iterator::Interface
 	{
 	public:
+		//! The class ancestor
+		typedef typename Yuni::IIntrusiveSmartPtr<IIterator<DetachedT>, true, Yuni::Policy::ObjectLevelLockable>  Ancestor;
+		//! The most suitable smart ptr for the class
+		typedef typename Ancestor::template SmartPtrType<IIterator<DetachedT> >::Ptr  Ptr;
+
 		enum
 		{
 			//! Detached mode
@@ -138,10 +138,14 @@ namespace Directory
 			//! The default timeout for stopping a thread
 			defaultTimeout = Thread::defaultTimeout,
 		};
+
 		//! Itself
-		typedef IIterator<detached> IteratorType;
+		typedef IIterator<DetachedT> IteratorType;
 		//! The threading policy
-		typedef Policy::ObjectLevelLockable<IteratorType> ThreadingPolicy;
+		typedef typename Ancestor::ThreadingPolicy ThreadingPolicy;
+
+		//! Event: file / folder found
+		typedef Bind<Flow (AnyString filename, AnyString parent, AnyString name, uint64 size)> OnNodeEvent;
 
 
 	public:
@@ -165,14 +169,14 @@ namespace Directory
 		//! \name Search paths
 		//@{
 		/*!
+		** \brief Add a new entry in the search paths
+		*/
+		void add(const AnyString& folder);
+
+		/*!
 		** \brief Clear the list of path
 		*/
 		void clear();
-
-		/*!
-		** \brief Add a new entry in the search paths
-		*/
-		template<class StringT> void add(const StringT& folder);
 		//@}
 
 
@@ -192,9 +196,9 @@ namespace Directory
 		** \brief Stop the traversing of the root folder
 		**
 		** \param timeout The timeout in milliseconds before killing the thread (detached mode only)
-		** \return An error status (`errNone` if succeeded)
+		** \return True if the thread has been stopped
 		*/
-		bool stop(const uint32 timeout = defaultTimeout);
+		bool stop(uint timeout = (uint) defaultTimeout);
 
 		/*!
 		** \brief Wait for the end of the operation (infinite amount of time)
@@ -209,7 +213,7 @@ namespace Directory
 		** This routine has no effect if not in detached mode.
 		** \param timeout The timeout in milliseconds
 		*/
-		void wait(const uint32 timeout);
+		void wait(uint timeout);
 
 		/*!
 		** \brief Ask to Stop the traversing as soon as possible
@@ -243,7 +247,7 @@ namespace Directory
 		** \param root The given root path
 		** \return False to cancel the operation
 		*/
-		virtual bool onStart(const String& root);
+		virtual bool onStart(const String& root) override;
 
 		/*!
 		** \brief Event: The operation is complete
@@ -253,7 +257,7 @@ namespace Directory
 		** This method will not be called if the process has been canceled.
 		** \see onAbort()
 		*/
-		virtual void onTerminate();
+		virtual void onTerminate() override;
 
 		/*!
 		** \brief The process has been aborted
@@ -261,7 +265,7 @@ namespace Directory
 		** This method may be called from any thread in detached mode (the calling
 		** thread otherwise, but always by the same thread).
 		*/
-		virtual void onAbort();
+		virtual void onAbort() override;
 
 		/*!
 		** \brief Event: Starting to Traverse a new folder
@@ -274,7 +278,7 @@ namespace Directory
 		** \param name The name of the folder found only (ex: file.txt)
 		** \return itSkip to not go deeper in this folder
 		*/
-		virtual Flow onBeginFolder(const String& filename, const String& parent, const String& name);
+		virtual Flow onBeginFolder(const String& filename, const String& parent, const String& name) override;
 
 		/*!
 		** \brief Event: A folder has been traversed
@@ -286,7 +290,7 @@ namespace Directory
 		** \param parent The parent folder (ex: /path/to/my)
 		** \param name The name of the folder found only (ex: file.txt)
 		*/
-		virtual void onEndFolder(const String& filename, const String& parent, const String& name);
+		virtual void onEndFolder(const String& filename, const String& parent, const String& name) override;
 
 		/*!
 		** \brief Event: A file has been found
@@ -300,8 +304,7 @@ namespace Directory
 		** \param size Size in bytes
 		** \return itAbort to abort the whole process, itSkip to skip the current folder and its sub-folders
 		*/
-		virtual Flow onFile(const String& filename, const String& parent,
-			const String& name, uint64 size);
+		virtual Flow onFile(const String& filename, const String& parent, const String& name, uint64 size) override;
 
 		/*!
 		** \brief Event: It was impossible to open a folder
@@ -312,7 +315,7 @@ namespace Directory
 		** \param filename The full filename (ex: /path/to/my/file.txt)
 		** \return itAbort to abort the whole process, itContinue will be used otherwise.
 		*/
-		virtual Flow onError(const String& filename);
+		virtual Flow onError(const String& filename) override;
 
 		/*!
 		** \brief Event: It was impossible to the status of a file
@@ -323,7 +326,7 @@ namespace Directory
 		** \param filename The full filename (ex: /path/to/my/file.txt)
 		** \return itAbort to abort the whole process, itContinue will be used otherwise.
 		*/
-		virtual Flow onAccessError(const String& filename);
+		virtual Flow onAccessError(const String& filename) override;
 
 
 	private:
@@ -357,10 +360,78 @@ namespace Directory
 
 
 
+
+	/*!
+	** \brief Convenient helper on IIterator for walking through files and folders
+	**
+	** Example for iterating through all files and folders:
+	** \code
+	** auto walker = IO::Directory::CreateWalker("/tmp/some-folder",
+	**	[](AnyString filename, AnyString parent, AnyString name, uint64 size) -> Flow
+	**	{
+	**		std::cout << " . found file " << filename << " (" << size << " bytes)\n";
+	**		return IO::flowContinue;
+	**	},
+	**	[](AnyString pathname, AnyString parent, AnyString name, uint64) -> Flow
+	**	{
+	**		std::cout << " . found folder " << pathname;
+	**		return IO::flowContinue;
+	**	});
+	**
+	** walker->start();
+	** walker->wait();
+	** \endcode
+	**
+	**
+	** Example for iterating through all files and folders and looking for a string:
+	** \code
+	** Job::QueueService queueservice;
+
+	** auto walker = IO::Directory::CreateWalker("/tmp/some-folder",
+	**	[](const String& filename, const String& parent, const String& name, uint64 size) -> Flow
+	**	{
+	**		if (size > 0)
+	**		{
+	**			async(queueservice, []()
+	**			{
+	**				bool match = false;
+	**				IO::File::ReadLineByLine(filename, [](const AnyString& line)
+	**				{
+	**					if (line.icontaines("needle"))
+	**					{
+	**						match = true;
+	**						return false; // stop
+	**					}
+	**					return true;
+	**				});
+	**
+	**				if (match)
+	**					std::cout << " . found in file " << filename << " (" << size << " bytes)\n";
+	**			});
+	**		}
+	**		return IO::flowContinue;
+	**	},
+	**	[](const String& filename, const String& parent, const String& name, uint64) -> Flow
+	**	{
+	**		std::cout << " . found folder " << pathname;
+	**		return IO::flowContinue;
+	**	});
+	**
+	** walker->start();
+	** walker->wait();
+	** queueservice.wait();
+	** \endcode
+	*/
+	//IIterator<true>::Ptr CreateWalker(const AnyString& folder,
+	//	const IIterator<true>::OnNodeEvent& onFile, const IIterator<true>::OnNodeEvent& onFolder);
+
+
+
+
+
 } // namespace Directory
 } // namespace IO
 } // namespace Yuni
 
 # include "iterator.hxx"
 
-#endif // __YUNI_IO_DIRECTORY_H__

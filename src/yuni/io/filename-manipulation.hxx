@@ -1,7 +1,5 @@
-#ifndef __YUNI_IO_FILENAME_MANIPULATION_HXX__
-# define __YUNI_IO_FILENAME_MANIPULATION_HXX__
-
-# include "directory.h"
+#pragma once
+#include "directory.h"
 
 
 
@@ -177,4 +175,3 @@ namespace IO
 } // namespace IO
 } // namespace Yuni
 
-#endif // __YUNI_IO_FILENAME_MANIPULATION_HXX__

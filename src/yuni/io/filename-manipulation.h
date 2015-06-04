@@ -1,7 +1,6 @@
-#ifndef __YUNI_IO_FILENAME_MANIPULATION_H__
-# define __YUNI_IO_FILENAME_MANIPULATION_H__
+#pragma once
+#include "io.h"
 
-# include "io.h"
 
 
 namespace Yuni
@@ -275,4 +274,3 @@ namespace IO
 
 # include "filename-manipulation.hxx"
 
-#endif // __YUNI_IO_FILENAME_MANIPULATION_H__

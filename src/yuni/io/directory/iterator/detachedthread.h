@@ -1,7 +1,6 @@
-#ifndef __YUNI_IO_DIRECTORY_ITERATOR_DETACHED_THREAD_H__
-# define __YUNI_IO_DIRECTORY_ITERATOR_DETACHED_THREAD_H__
+#pragma once
+#include "../../../thread/thread.h"
 
-# include "../../../thread/thread.h"
 
 
 namespace Yuni
@@ -49,8 +48,7 @@ namespace Iterator
 		virtual Flow onBeginFolder(const String& filename, const String& parent, const String& name) = 0;
 		virtual void onEndFolder(const String& filename, const String& parent, const String& name) = 0;
 
-		virtual Flow onFile(const String& filename, const String& parent,
-			const String& name, uint64 size) = 0;
+		virtual Flow onFile(const String& filename, const String& parent, const String& name, uint64 size) = 0;
 
 		virtual Flow onError(const String& filename) = 0;
 
@@ -64,16 +62,16 @@ namespace Iterator
 
 
 
-	class Options
+	class Options final
 	{
 	public:
 		//! Default constructor
-		Options() :
-			self(nullptr),
+		Options()
+			: self(nullptr)
 			# ifdef YUNI_OS_WINDOWS
-			wbuffer(nullptr),
+			, wbuffer(nullptr)
 			# endif
-			counter(0)
+			, counter(0)
 		{}
 
 	public:
@@ -93,7 +91,7 @@ namespace Iterator
 		/*!
 		** \brief Arbitrary counter to reduce the number of calls to suspend()
 		*/
-		int counter;
+		uint counter;
 	};
 
 
@@ -102,7 +100,13 @@ namespace Iterator
 	{
 	public:
 		IDetachedThread() {}
-		virtual ~IDetachedThread() {}
+		virtual ~IDetachedThread()
+		{
+			# ifdef YUNI_OS_WINDOWS
+			delete[] options.wbuffer;
+			options.wbuffer = nullptr;
+			# endif
+		}
 
 		bool suspend()
 		{
@@ -117,6 +121,22 @@ namespace Iterator
 		{
 			Traverse(options, this);
 			return false;
+		}
+
+		virtual void onStop() override
+		{
+			# ifdef YUNI_OS_WINDOWS
+			delete[] options.wbuffer;
+			options.wbuffer = nullptr;
+			# endif
+		}
+
+		virtual void onKill() override
+		{
+			# ifdef YUNI_OS_WINDOWS
+			delete[] options.wbuffer;
+			options.wbuffer = nullptr;
+			# endif
 		}
 
 	}; // class IDetachedThread
@@ -134,4 +154,3 @@ namespace Iterator
 } // namespace Private
 } // namespace Yuni
 
-#endif // __YUNI_IO_DIRECTORY_ITERATOR_DETACHED_THREAD_H__
