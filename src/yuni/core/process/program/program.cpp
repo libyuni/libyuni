@@ -237,7 +237,7 @@ namespace Process
 			envptr->sendSignal<true>(sig);
 		#else
 		// Signals are not supported on Windows. Silently ignoring it.
-		(void) signal; // no warning
+		(void) sig;
 		#endif
 	}
 
@@ -246,8 +246,6 @@ namespace Process
 	{
 		#ifndef YUNI_OS_MSVC
 		this->signal(SIGTERM);
-		#else
-		#warning not implemented
 		#endif
 	}
 
@@ -257,8 +255,6 @@ namespace Process
 	{
 		#ifndef YUNI_OS_MSVC
 		this->signal(SIGKILL);
-		#else
-		#warning not implemented
 		#endif
 	}
 

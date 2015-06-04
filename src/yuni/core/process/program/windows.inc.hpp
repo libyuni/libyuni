@@ -9,6 +9,7 @@
 
 
 
+
 namespace Yuni
 {
 namespace Process
@@ -18,9 +19,10 @@ namespace Process
 	{
 
 
-		static bool HaveLoadedFunctionsForFork(void)
+		static bool HaveLoadedFunctionsForFork()
 		{
-			HANDLE ntdll = ::GetModuleHandle("ntdll");
+			#if 0
+			HANDLE ntdll = ::GetModuleHandleW(L"ntdll");
 			if (ntdll == nullptr)
 				return false;
 
@@ -31,15 +33,15 @@ namespace Process
 				return true;
 			}
 
-			ZwCreateProcess = (ZwCreateProcess_t)::GetProcAddress(ntdll, "ZwCreateProcess");
-			ZwQuerySystemInformation = (ZwQuerySystemInformation_t)::GetProcAddress(ntdll, "ZwQuerySystemInformation");
-			ZwQueryVirtualMemory = (ZwQueryVirtualMemory_t)::GetProcAddress(ntdll, "ZwQueryVirtualMemory");
-			ZwCreateThread = (ZwCreateThread_t)::GetProcAddress(ntdll, "ZwCreateThread");
-			ZwGetContextThread = (ZwGetContextThread_t)::GetProcAddress(ntdll, "ZwGetContextThread");
-			ZwResumeThread = (ZwResumeThread_t)::GetProcAddress(ntdll, "ZwResumeThread");
-			ZwQueryInformationThread = (ZwQueryInformationThread_t)::GetProcAddress(ntdll, "ZwQueryInformationThread");
-			ZwWriteVirtualMemory = (ZwWriteVirtualMemory_t)::GetProcAddress(ntdll, "ZwWriteVirtualMemory");
-			ZwClose = (ZwClose_t)::GetProcAddress(ntdll, "ZwClose");
+			ZwCreateProcess = (ZwCreateProcess_t)::GetProcAddress(ntdll, TEXT("ZwCreateProcess"));
+			ZwQuerySystemInformation = (ZwQuerySystemInformation_t)::GetProcAddress(ntdll, TEXT("ZwQuerySystemInformation"));
+			ZwQueryVirtualMemory = (ZwQueryVirtualMemory_t)::GetProcAddress(ntdll, TEXT("ZwQueryVirtualMemory"));
+			ZwCreateThread = (ZwCreateThread_t)::GetProcAddress(ntdll, TEXT("ZwCreateThread"));
+			ZwGetContextThread = (ZwGetContextThread_t)::GetProcAddress(ntdll, TEXT("ZwGetContextThread"));
+			ZwResumeThread = (ZwResumeThread_t)::GetProcAddress(ntdll, TEXT("ZwResumeThread"));
+			ZwQueryInformationThread = (ZwQueryInformationThread_t)::GetProcAddress(ntdll, TEXT("ZwQueryInformationThread"));
+			ZwWriteVirtualMemory = (ZwWriteVirtualMemory_t)::GetProcAddress(ntdll, TEXT("ZwWriteVirtualMemory"));
+			ZwClose = (ZwClose_t)::GetProcAddress(ntdll, TEXT("ZwClose"));
 
 			if (ZwCreateProcess && ZwQuerySystemInformation && ZwQueryVirtualMemory &&
 				ZwCreateThread && ZwGetContextThread && ZwResumeThread &&
@@ -55,12 +57,14 @@ namespace Process
 			ZwQueryInformationThread = nullptr;
 			ZwWriteVirtualMemory = nullptr;
 			ZwClose = nullptr;
+			#endif
 			return false;
 		}
 
 
 		static int Fork()
 		{
+			#if 0
 			HANDLE hProcess = 0;
 			HANDLE hThread = 0;
 			OBJECT_ATTRIBUTES oa = { sizeof(oa) };
@@ -94,19 +98,19 @@ namespace Process
 
 			// In x64 the Eip and Esp are not present,
 			// their x64 counterparts are Rip and Rsp respectively.
-#if _WIN64
+			#if _WIN64
 			context.Rip = (ULONG)child_entry;
-#else
+			#else
 			context.Eip = (ULONG)child_entry;
-#endif
+			#endif
 
-#if _WIN64
+			#if _WIN64
 			::ZwQueryVirtualMemory(NtCurrentProcess(), (PVOID)context.Rsp,
 								 MemoryBasicInformation, &mbi, sizeof mbi, 0);
-#else
+			#else
 			::ZwQueryVirtualMemory(NtCurrentProcess(), (PVOID)context.Esp,
 								 MemoryBasicInformation, &mbi, sizeof mbi, 0);
-#endif
+			#endif
 
 			stack.FixedStackBase = 0;
 			stack.FixedStackLimit = 0;
@@ -137,6 +141,8 @@ namespace Process
 
 			// exit with child's pid
 			return (int)cid.UniqueProcess;
+			#endif
+			return -1;
 		}
 
 
@@ -147,9 +153,12 @@ namespace Process
 
 	bool Program::ThreadMonitor::spawnProcess()
 	{
+		#ifndef YUNI_OS_MSVC
 		#warning not implemented on windows
+		#endif
 		assert(false and "not implemented on Windows");
 
+		#if 0
 		SECURITY_ATTRIBUTES saAttr;
 
 		// Set the bInheritHandle flag so pipe handles are inherited.
@@ -235,12 +244,16 @@ namespace Process
 		::CloseHandle(procInfo.hThread);
 
 		return true;
+		#endif
+		return false;
 	}
 
 
 	void Program::ThreadMonitor::waitForSubProcess()
 	{
+		#ifndef YUNI_OS_MSVC
 		#warning not implemented on windows
+		#endif
 		pEndTime = currentTime();
 	}
 
@@ -257,7 +270,9 @@ namespace Process
 
 		// try to kill the attached child process if any
 		{
+			#ifndef YUNI_OS_MSVC
 			# warning not implemented
+			#endif
 			// getting the current time as soon as possible
 			pEndTime = currentTime();
 		}
