@@ -26,7 +26,7 @@ namespace Process
 		SECURITY_ATTRIBUTES saAttr;
 
 		// Set the bInheritHandle flag so pipe handles are inherited.
-		saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+		saAttr.nLength = (uint32) sizeof(SECURITY_ATTRIBUTES);
 		saAttr.bInheritHandle = TRUE;
 		saAttr.lpSecurityDescriptor = nullptr;
 
@@ -70,7 +70,7 @@ namespace Process
 		// This structure specifies the STDIN and STDOUT handles for redirection.
 		STARTUPINFO startInfo;
 		::ZeroMemory(&startInfo, sizeof(STARTUPINFO));
-		startInfo.cb = sizeof(STARTUPINFO);
+		startInfo.cb = (uint32) sizeof(STARTUPINFO);
 		startInfo.hStdError = writeOut;
 		startInfo.hStdOutput = writeOut;
 		startInfo.hStdInput = readIn;
@@ -83,7 +83,7 @@ namespace Process
 
 		// Create the child process.
 		// ** FORK **
-		bool success = ::CreateProcess(nullptr,
+		bool success = ::CreateProcessW(nullptr,
 			cmdLine.c_str(),	// command line
 			nullptr,	// process security attributes
 			nullptr,	// primary thread security attributes
@@ -97,27 +97,24 @@ namespace Process
 		// If an error occurs, exit the application.
 		if (!success)
 		{
-			std::cerr << "Fork failed with:" << std::endl;
-			DWORD error = ::GetLastError();
-			if (error)
-			{
-				LPVOID lpMsgBuf;
-				DWORD bufLen = ::FormatMessage(
-					FORMAT_MESSAGE_ALLOCATE_BUFFER
-					| FORMAT_MESSAGE_FROM_SYSTEM
-					| FORMAT_MESSAGE_FROM_HMODULE
-					| FORMAT_MESSAGE_IGNORE_INSERTS,
-					NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-					(LPTSTR) &lpMsgBuf, 0, NULL);
-				if (bufLen)
-				{
-					LPCSTR lpMsgStr = (LPCSTR)lpMsgBuf;
-					std::cerr << "  " << lpMsgStr << std::endl;
-					::HeapFree(::GetProcessHeap(), 0, lpMsgBuf);
-					return false;
-				}
-			}
-			std::cerr << "  Unknown error !" << std::endl;
+			//DWORD error = ::GetLastError();
+			//std::wcerr << L"Fork failed with:\n";
+			//if (error)
+			//{
+			//	LPVOID lpMsgBuf = nullptr;
+			//	DWORD bufLen = ::FormatMessageW(
+			//		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+			//		NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			//		(LPTSTR) &lpMsgBuf, 1024, NULL);
+			//	if (bufLen)
+			//	{
+			//		LPCTSTR lpMsgStr = (LPCTSTR)lpMsgBuf;
+			//		std::wcerr << TEXT("  ") << lpMsgStr << std::endl;
+			//		::HeapFree(::GetProcessHeap(), 0, lpMsgBuf);
+			//		return false;
+			//	}
+			//}
+			//std::wcerr << "  Unknown error !" << std::endl;
 			return false;
 		}
 
@@ -126,7 +123,6 @@ namespace Process
 		// of the child process, for example.
 		::CloseHandle(procInfo.hProcess);
 		::CloseHandle(procInfo.hThread);
-
 		return true;
 	}
 
