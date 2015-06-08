@@ -1,9 +1,8 @@
-#ifndef __YUNI_IO_DIRECTORY_DIRECTORY_H__
-# define __YUNI_IO_DIRECTORY_DIRECTORY_H__
+#pragma once
+#include "../../yuni.h"
+#include "../../core/string.h"
+#include "../../core/bind.h"
 
-# include "../../yuni.h"
-# include "../../core/string.h"
-# include "../../core/bind.h"
 
 
 namespace Yuni
@@ -137,4 +136,3 @@ namespace Directory
 # include "../io.h"
 # include "directory.hxx"
 
-#endif // __YUNI_IO_DIRECTORY_DIRECTORY_H__

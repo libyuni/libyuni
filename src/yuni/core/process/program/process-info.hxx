@@ -56,7 +56,10 @@ namespace Process
 		}
 		# else
 		{
-			# warning missing implementation on windows
+			#ifndef YUNI_OS_MSVC
+			#warning missing implementation on windows
+			#endif
+
 			switch (sigvalue)
 			{
 				case SIGKILL:
@@ -102,7 +105,9 @@ namespace Process
 					#ifdef YUNI_OS_UNIX
 					::kill(pid, SIGKILL);
 					#else
-					#warning not implemented
+					# ifndef YUNI_OS_MSVC
+					#	warning not implemented
+					# endif
 					#endif
 				}
 				return false; // stop the thread, does not suspend it

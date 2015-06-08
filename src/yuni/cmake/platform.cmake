@@ -90,6 +90,9 @@
 /* GCC __builtin_expect */
 #cmakedefine YUNI_HAS_GCC_BUILTIN_EXPECT
 
+/* GCC __builtin_popcount */
+#cmakedefine YUNI_HAS_GCC_BUILTIN_POPCOUNT
+
 /* long types - different from int */
 #cmakedefine YUNI_HAS_LONG
 

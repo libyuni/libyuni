@@ -1,10 +1,9 @@
-#ifndef __YUNI_IO_DIRECTORY_ITERATOR_ITERATOR_HXX__
-# define __YUNI_IO_DIRECTORY_ITERATOR_ITERATOR_HXX__
-
-# include "../../../core/traits/cstring.h"
-# include "../../../core/traits/length.h"
-# include "../../../core/static/remove.h"
-# include "../../io.h"
+#pragma once
+#include "iterator.h"
+#include "../../../core/traits/cstring.h"
+#include "../../../core/traits/length.h"
+#include "../../../core/static/remove.h"
+#include "../../io.h"
 
 
 
@@ -78,39 +77,17 @@ namespace Directory
 
 
 	template<bool DetachedT>
-	template<class StringT>
-	inline void IIterator<DetachedT>::add(const StringT& folder)
+	inline void IIterator<DetachedT>::add(const AnyString& folder)
 	{
-		typename ThreadingPolicy::MutexLocker locker(*this);
-		// Copy
-		String s;
-		// We must have absolute paths
-		if (IO::IsRelative(folder))
+		if (not folder.empty())
 		{
-			IO::Directory::Current::Get(s);
-			if (!s.empty() and s.last() != '/' and s.last() != '\\')
-				s += IO::Separator;
+			// Pushing it into the list
+			String* item = new String();
+			IO::Canonicalize(*item, folder);
+
+			typename ThreadingPolicy::MutexLocker locker(*this);
+			pRootFolder.push_back(item);
 		}
-		s += folder;
-
-		# ifdef YUNI_OS_WINDOWS
-		// The Win32 API does not really like `/`
-		s.replace('/', '\\');
-		# endif
-
-
-		// Pushing it into the list
-		String* item = new String();
-		item->reserve(s.size());
-		IO::Normalize(*item, s);
-
-		// Remove the last slash
-		if (item->last() == '/' or item->last() == '\\')
-		{
-			if (!(*item == "/" or (item->size() == 3 and (*item)[1] == ':')))
-				item->removeLast();
-		}
-		pRootFolder.push_back(item);
 	}
 
 
@@ -126,8 +103,11 @@ namespace Directory
 			// Early detection of an invalid root folder
 			if (pRootFolder.empty())
 				return false;
-			if (!pThread)
+
+			if (nullptr == pThread)
+			{
 				pThread = new DetachedThread();
+			}
 			else
 			{
 				// Do nothing if already started
@@ -137,7 +117,7 @@ namespace Directory
 
 			// Providing a reference to ourselves for events
 			pThread->options.self = this;
-			pThread->options.rootFolder = pRootFolder;
+			pThread->options.rootFolder = pRootFolder; // copy
 
 			// Starting the thread
 			return (Thread::errNone == pThread->start());
@@ -147,15 +127,14 @@ namespace Directory
 		{
 			using namespace Yuni::Private::IO::Directory::Iterator;
 			Options opts;
+			opts.self = this; // Providing a reference to ourselves for events
 			{
 				// Lock
 				typename ThreadingPolicy::MutexLocker locker(*this);
-
 				// Early detection of an invalid root folder
 				if (pRootFolder.empty())
 					return false;
-				// Providing a reference to ourselves for events
-				opts.self = this;
+
 				opts.rootFolder = pRootFolder;
 			}
 
@@ -169,15 +148,23 @@ namespace Directory
 	template<bool DetachedT>
 	bool IIterator<DetachedT>::stop(uint timeout)
 	{
-		(void) timeout; // to avoid compiler warning
 		# ifndef YUNI_NO_THREAD_SAFE
 		if (detached)
 		{
 			typename ThreadingPolicy::MutexLocker locker(*this);
-			return (pThread)
-				? (Yuni::Thread::errNone == pThread->stop(timeout))
-				: false;
+			if (pThread)
+			{
+				bool success = (Yuni::Thread::errNone == pThread->stop(timeout));
+				if (success)
+				{
+					delete pThread; // be resources friendly
+					pThread = nullptr;
+				}
+				return success;
+			}
 		}
+		# else
+		(void) timeout; // to avoid compiler warning
 		# endif
 		return true;
 	}
@@ -192,14 +179,18 @@ namespace Directory
 			// Lock
 			typename ThreadingPolicy::MutexLocker locker(*this);
 			if (pThread)
+			{
 				pThread->wait();
+				delete pThread; // be resources friendly
+				pThread = nullptr;
+			}
 		}
 		# endif
 	}
 
 
 	template<bool DetachedT>
-	inline void IIterator<DetachedT>::wait(uint32 timeout)
+	inline void IIterator<DetachedT>::wait(uint timeout)
 	{
 		# ifndef YUNI_NO_THREAD_SAFE
 		if (detached)
@@ -220,8 +211,7 @@ namespace Directory
 	inline Flow
 	IIterator<DetachedT>::onBeginFolder(const String&, const String&, const String&)
 	{
-		// Do nothing
-		return flowContinue;
+		return flowContinue; // Do nothing
 	}
 
 	template<bool DetachedT>
@@ -235,16 +225,14 @@ namespace Directory
 	inline Flow
 	IIterator<DetachedT>::onFile(const String&, const String&, const String&, uint64)
 	{
-		// Do nothing
-		return flowContinue;
+		return flowContinue; // Do nothing
 	}
 
 	template<bool DetachedT>
 	inline Flow
 	IIterator<DetachedT>::onError(const String&)
 	{
-		// Do nothing
-		return flowContinue;
+		return flowContinue; // Do nothing
 	}
 
 
@@ -280,8 +268,8 @@ namespace Directory
 
 
 
+
 } // namespace Directory
 } // namespace IO
 } // namespace Yuni
 
-#endif // __YUNI_IO_DIRECTORY_ITERATOR_ITERATOR_HXX__

@@ -1,13 +1,14 @@
-#ifndef __YUNI_IO_DIRECTORY_HXX__
-# define __YUNI_IO_DIRECTORY_HXX__
-
-# include "../../core/traits/cstring.h"
-# include "../../core/traits/length.h"
-# include "../../core/static/remove.h"
-# include "../constants.h"
-# ifdef YUNI_HAS_STDLIB_H
+#pragma once
+#include "directory.h"
+#include "../../core/traits/cstring.h"
+#include "../../core/traits/length.h"
+#include "../../core/static/remove.h"
+#include "../constants.h"
+#ifdef YUNI_HAS_STDLIB_H
 #	include <stdlib.h>
-# endif
+#endif
+
+
 
 
 namespace Yuni
@@ -107,4 +108,3 @@ namespace Current
 } // namespace IO
 } // namespace Yuni
 
-#endif // __YUNI_IO_DIRECTORY_H__

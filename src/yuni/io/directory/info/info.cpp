@@ -13,7 +13,7 @@ namespace Directory
 
 	static void NormalizeTinyDirectoryPath(String& path)
 	{
-		CString<1024, false> tmp = path;
+		ShortString512 tmp(path);
 		IO::Normalize(path, tmp);
 	}
 
@@ -24,8 +24,10 @@ namespace Directory
 		// We will use a tiny optimization here
 		// When possible, we will use a static buffer to avoid as much as possible
 		// malloc and free.
-		if (pDirectory.size() < 1024)
+		if (pDirectory.size() < 512)
+		{
 			NormalizeTinyDirectoryPath(pDirectory);
+		}
 		else
 		{
 			String tmp = pDirectory;
