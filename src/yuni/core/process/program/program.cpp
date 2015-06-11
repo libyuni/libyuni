@@ -85,6 +85,9 @@ namespace Process
 		}
 		channels;
 		pid_t pid;
+		#else
+		HANDLE processHandle;
+		HANDLE threadHandle;
 		#endif
 
 		bool pRedirectToConsole;

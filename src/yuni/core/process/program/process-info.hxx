@@ -57,15 +57,21 @@ namespace Process
 		# else
 		{
 			#ifndef YUNI_OS_MSVC
-			#warning missing implementation on windows
+			# warning not implemented
 			#endif
 
-			switch (sigvalue)
+			HWND handle = ::FindWindow(NULL, TEXT("Calc"));
+			if (handle)
 			{
+				std::cout << "Signaling process !" << std::endl;
+				switch (sigvalue)
+				{
 				case SIGKILL:
+				default:
+					::PostMessage(handle, WM_CLOSE, 0, 0);
 					break;
+				}
 			}
-			(void) sigvalue;
 
 			if (WithLock)
 				mutex.unlock();

@@ -10,7 +10,7 @@
 # include "../../system/windows.hdr.h"
 //# include <windows.h>
 # include <WinNT.h>
-# include <setjmp.h>
+//# include <setjmp.h>
 # include "../../string/wstring.h"
 
 
@@ -63,8 +63,8 @@ namespace Process
 		}
 
 		// Set up members of the PROCESS_INFORMATION structure.
-		PROCESS_INFORMATION procInfo;
-		::ZeroMemory(&procInfo, sizeof(PROCESS_INFORMATION));
+		PROCESS_INFORMATION winProcInfo;
+		::ZeroMemory(&winProcInfo, sizeof(PROCESS_INFORMATION));
 
 		// Set up members of the STARTUPINFO structure.
 		// This structure specifies the STDIN and STDOUT handles for redirection.
@@ -85,14 +85,14 @@ namespace Process
 		// ** FORK **
 		bool success = ::CreateProcessW(nullptr,
 			cmdLine.c_str(),	// command line
-			nullptr,	// process security attributes
-			nullptr,	// primary thread security attributes
-			false,		// handles are inherited
-			0,			// creation flags
-			nullptr,	// use parent's environment
-			nullptr,	// use parent's current directory
-			&startInfo, // STARTUPINFO pointer
-			&procInfo); // receives PROCESS_INFORMATION
+			nullptr,			// process security attributes
+			nullptr,			// primary thread security attributes
+			false,				// handles are not inherited
+			0,					// creation flags
+			nullptr,			// use parent's environment
+			nullptr,			// use parent's current directory
+			&startInfo,			// STARTUPINFO pointer
+			&winProcInfo);		// receives PROCESS_INFORMATION
 
 		// If an error occurs, exit the application.
 		if (!success)
@@ -118,21 +118,52 @@ namespace Process
 			return false;
 		}
 
-		// Close handles to the child process and its primary thread.
-		// Some applications might keep these handles to monitor the status
-		// of the child process, for example.
-		::CloseHandle(procInfo.hProcess);
-		::CloseHandle(procInfo.hThread);
+		processHandle = winProcInfo.hProcess;
+		threadHandle = winProcInfo.hThread;
+		procinfo.processID = (int)winProcInfo.dwProcessId;
+		procinfo.processInput = _open_osfhandle(reinterpret_cast<intptr_t>(readIn), 0);
+
+		// Close streams passed to the child process
+		::CloseHandle(writeOut);
 		return true;
 	}
 
 
 	void Program::ThreadMonitor::waitForSubProcess()
 	{
-		#ifndef YUNI_OS_MSVC
-		#warning not implemented on windows
-		#endif
-		pEndTime = currentTime();
+		bool finished = false;
+		do
+		{
+			// TODO Manage I/O for IPC
+
+			switch (::WaitForSingleObject(processHandle, 100))
+			{
+				// Signaled
+				case WAIT_OBJECT_0:
+					DWORD exitCode;
+					if (::GetExitCodeProcess(processHandle, &exitCode))
+					{
+						pExitStatus = (int)exitCode;
+						assert(pExitStatus != STILL_ACTIVE);
+						pEndTime = currentTime();
+						finished = true;
+						// TODO : How to know if the process was signaled or exited ?
+					}
+					break;
+				case WAIT_FAILED: // if WaitFSO failed, give up looping
+					finished = true;
+					break;
+				case WAIT_TIMEOUT:
+					// Keep looping
+					break;
+				default: // WAIT_ABANDONED leads here, it should never occur
+					assert(false and "Unmanaged WaitForSingleObject return code !");
+			}
+		}
+		while (not finished);
+
+		// end of the chrono
+		assert(pEndTime != 0 and "pEndTime is not properly initialized");
 	}
 
 
