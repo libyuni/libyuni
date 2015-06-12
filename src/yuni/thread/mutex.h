@@ -1,5 +1,6 @@
 #pragma once
 #include "../yuni.h"
+#include "../core/noncopyable.h"
 #ifndef YUNI_NO_THREAD_SAFE
 # include "pthread.h"
 # ifdef YUNI_OS_WINDOWS
@@ -161,7 +162,7 @@ namespace Yuni
 	**	  };
 	** \endcode
 	*/
-	class MutexLocker final
+	class MutexLocker final : public NonCopyable<MutexLocker>
 	{
 	public:
 		//! \name Constructor & Destructor
