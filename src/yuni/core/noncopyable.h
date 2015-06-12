@@ -29,15 +29,25 @@ namespace Yuni
 		~NonCopyable() {}
 		//@}
 
+
 	private:
-		//! Private copy constructor
-		NonCopyable (const NonCopyable &) {}
-		//! Private copy operator
-		// The implementation is provided to avoid compilation issues with Visual Studio
-		template<class U>
-		T& operator = (const U&) {return *static_cast<T*>(this);}
+		#if defined(YUNI_HAS_CPP_MOVE)
+		// no copy constructor
+		NonCopyable(const NonCopyable&) = delete;
+		// no copy operator
+		template<class U> NonCopyable& operator = (const U&) = delete;
+		NonCopyable& operator = (const NonCopyable&) = delete;
+		#else
+		// Private copy constructor
+		NonCopyable(const NonCopyable &) {}
+		// Private copy operator
+		template<class U> T& operator = (const U&) {return *static_cast<T*>(this);}
+		NonCopyable& operator = (const NonCopyable&) {return *static_cast<T*>(this);}
+		#endif
 
 	}; // class NonCopyable
+
+
 
 
 
