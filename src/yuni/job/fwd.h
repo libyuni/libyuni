@@ -1,7 +1,7 @@
-#ifndef __YUNI_JOB_FWD_H__
-# define __YUNI_JOB_FWD_H__
+#pragma once
+#include "enum.h"
 
-# include "enum.h"
+
 
 
 namespace Yuni
@@ -29,6 +29,7 @@ namespace QueueService
 	class QueueThread;
 
 
+
 	template<class JobT>
 	class JobAccessor final
 	{
@@ -41,8 +42,8 @@ namespace QueueService
 
 		static void ThreadHasBeenKilled(JobT& job)
 		{
-			job.pThread = NULL;
-			job.pState = Yuni::Job::stateWaiting;
+			job.pThread = nullptr;
+			job.pState  = Yuni::Job::stateWaiting;
 		}
 
 		static void AddedInTheWaitingRoom(JobT& job)
@@ -60,5 +61,3 @@ namespace QueueService
 } // namespace QueueService
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_JOB_FWD_H__

@@ -1,4 +1,3 @@
-
 #include "service.h"
 #include "../../core/system/cpu.h"
 #include "../../thread/array.h"
@@ -64,6 +63,7 @@ namespace Job
 
 	QueueService::~QueueService()
 	{
+		// making sure that the queueservice is stopped before being destroyed
 		stop();
 	}
 
@@ -186,9 +186,9 @@ namespace Job
 			if (pStatus != sRunning)
 				return;
 
-			threads = (ThreadArray*) pThreads;
+			threads  = (ThreadArray*) pThreads;
 			pThreads = NULL;
-			pStatus = sStopping;
+			pStatus  = sStopping;
 		}
 
 		// Destroying the thread pool
@@ -235,6 +235,13 @@ namespace Job
 				pSignalAllThreadHaveStopped.notify();
 			}
 		}
+	}
+
+
+	bool QueueService::restart(uint timeout)
+	{
+		stop(timeout);
+		return start();
 	}
 
 

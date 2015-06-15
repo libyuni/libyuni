@@ -1,5 +1,5 @@
-#ifndef __YUNI_JOB_ENUM_H__
-# define __YUNI_JOB_ENUM_H__
+#pragma once
+
 
 
 namespace Yuni
@@ -41,5 +41,3 @@ namespace Job
 
 } // namespace Job
 } // namespace Yuni
-
-#endif // __YUNI_JOB_ENUM_H__

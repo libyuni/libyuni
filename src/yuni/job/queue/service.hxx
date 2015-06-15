@@ -1,21 +1,13 @@
-#ifndef __YUNI_JOB_QUEUE_SERVICE_HXX__
-# define __YUNI_JOB_QUEUE_SERVICE_HXX__
+#pragma once
+#include "service.h"
+#include "../../thread/timer.h"
 
-# include "../../thread/timer.h"
-# include <iostream>
 
 
 namespace Yuni
 {
 namespace Job
 {
-
-	inline bool QueueService::restart(uint timeout)
-	{
-		stop(timeout);
-		return start();
-	}
-
 
 	inline uint QueueService::waitingJobsCount() const
 	{
@@ -70,5 +62,3 @@ namespace Job
 
 } // namespace Job
 } // namespace Yuni
-
-#endif // __YUNI_JOB_QUEUE_SERVICE_H__

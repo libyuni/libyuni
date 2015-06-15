@@ -1,12 +1,11 @@
-#ifndef __YUNI_JOB_JOB_H__
-# define __YUNI_JOB_JOB_H__
+#pragma once
+#include "../yuni.h"
+#include "fwd.h"
+#include "../thread/thread.h"
+#include "../core/string.h"
+#include "../core/atomic/bool.h"
+#include "../core/smartptr/intrusive.h"
 
-# include "../yuni.h"
-# include "fwd.h"
-# include "../thread/thread.h"
-# include "../core/string.h"
-# include "../core/atomic/bool.h"
-# include "../core/smartptr/intrusive.h"
 
 
 
@@ -200,4 +199,3 @@ namespace Job
 
 # include "job.hxx"
 
-#endif // __YUNI_JOB_JOB_H__

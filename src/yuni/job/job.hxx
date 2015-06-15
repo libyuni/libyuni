@@ -1,5 +1,6 @@
-#ifndef __YUNI_JOB_AJOB_HXX__
-# define __YUNI_JOB_AJOB_HXX__
+#pragma once
+#include "job.h"
+
 
 
 namespace Yuni
@@ -87,5 +88,3 @@ namespace Job
 
 } // namespace Job
 } // namespace Yuni
-
-#endif // __YUNI_JOB_AJOB_HXX__

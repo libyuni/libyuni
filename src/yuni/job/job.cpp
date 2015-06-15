@@ -9,8 +9,8 @@ namespace Yuni
 namespace Job
 {
 
-	IJob::IJob() :
-		pThread(nullptr)
+	IJob::IJob()
+		: pThread(nullptr)
 	{}
 
 

@@ -1,13 +1,11 @@
-#ifndef __YUNI_JOB_QUEUE_SERVICE_H__
-# define __YUNI_JOB_QUEUE_SERVICE_H__
-
-# include "../../yuni.h"
-# include "../job.h"
-# include "waitingroom.h"
-# include "../../core/atomic/bool.h"
-# include "../../thread/signal.h"
-# include "q-event.h"
-# include "../../core/dictionary.h"
+#pragma once
+#include "../../yuni.h"
+#include "../job.h"
+#include "waitingroom.h"
+#include "../../core/atomic/bool.h"
+#include "../../thread/signal.h"
+#include "q-event.h"
+#include "../../core/dictionary.h"
 
 
 
@@ -124,8 +122,9 @@ namespace Job
 		** It is of their responsibility to properly resume if they have to.
 		** All working threads will be destroyed at the very end of this method.
 		**
-		** \important This method must not be called from a job or it will result
-		** in deadlock
+		** \important Since this method waits for the end of all running jobs, it
+		**   must not be called from a job or it will result in deadlock
+		**   (use 'gracefulStop()' instead)
 		**
 		** \param timeout Timeout (in milliseconds)
 		*/
@@ -300,6 +299,5 @@ namespace Job
 } // namespace Job
 } // namespace Yuni
 
-# include "service.hxx"
+#include "service.hxx"
 
-#endif // __YUNI_JOB_QUEUE_SERVICE_H__
