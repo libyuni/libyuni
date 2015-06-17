@@ -88,6 +88,9 @@ namespace Process
 		#else
 		HANDLE processHandle;
 		HANDLE threadHandle;
+		HANDLE outfd;
+		HANDLE infd;
+		HANDLE errfd;
 		#endif
 
 		bool pRedirectToConsole;

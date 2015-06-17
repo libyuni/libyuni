@@ -8,9 +8,7 @@
 // http://stackoverflow.com/questions/985281/what-is-the-closest-thing-windows-has-to-fork/985525#985525
 
 # include "../../system/windows.hdr.h"
-//# include <windows.h>
 # include <WinNT.h>
-//# include <setjmp.h>
 # include "../../string/wstring.h"
 
 
@@ -118,46 +116,70 @@ namespace Process
 			return false;
 		}
 
+		// Close streams passed to the child process
+		::CloseHandle(writeOut);
+
 		processHandle = winProcInfo.hProcess;
 		threadHandle = winProcInfo.hThread;
+		outfd = readOut;
+		infd = writeIn;
+		//errfd = ;
 		procinfo.processID = (int)winProcInfo.dwProcessId;
 		procinfo.processInput = _open_osfhandle(reinterpret_cast<intptr_t>(readIn), 0);
 
-		// Close streams passed to the child process
-		::CloseHandle(writeOut);
+		// timeout for the sub process
+		procinfo.createThreadForTimeoutWL();
+
 		return true;
 	}
 
 
 	void Program::ThreadMonitor::waitForSubProcess()
 	{
+		static const uint NbHandles = 3;
+
 		bool finished = false;
+		HANDLE handleList[NbHandles] = { processHandle, outfd, infd };
+
 		do
 		{
-			// TODO Manage I/O for IPC
-
-			switch (::WaitForSingleObject(processHandle, 100))
+			uint32 waitStatus = ::WaitForMultipleObjectsEx(NbHandles, handleList, false, INFINITE, true);
+			if (waitStatus >= WAIT_OBJECT_0 and waitStatus < WAIT_OBJECT_0 + NbHandles)
 			{
-				// Signaled
-				case WAIT_OBJECT_0:
-					DWORD exitCode;
-					if (::GetExitCodeProcess(processHandle, &exitCode))
-					{
-						pExitStatus = (int)exitCode;
-						assert(pExitStatus != STILL_ACTIVE);
+				HANDLE signalled = handleList[waitStatus - WAIT_OBJECT_0];
+				DWORD exitCode;
+				if (signalled == processHandle && ::GetExitCodeProcess(processHandle, &exitCode))
+				{
+					// It is forbidden to use STILL_ACTIVE as an exit code
+					// However, if it happens in real life, let it happen
+					assert(exitCode != STILL_ACTIVE and "Child process uses STILL_ACTIVE as exit status !");
+					pExitStatus = (int)exitCode;
+					pEndTime = currentTime();
+					finished = true;
+					// TODO : How to know if the process was signalled or exited ?
+					// pKilled = true;
+				}
+			}
+			else
+			{
+				switch (waitStatus)
+				{
+					// I/O event
+					case WAIT_IO_COMPLETION:
+						// TODO Manage I/O for IPC
+						break;
+					case WAIT_FAILED: // if WaitFSO failed, give up looping
 						pEndTime = currentTime();
 						finished = true;
-						// TODO : How to know if the process was signaled or exited ?
-					}
-					break;
-				case WAIT_FAILED: // if WaitFSO failed, give up looping
-					finished = true;
-					break;
-				case WAIT_TIMEOUT:
-					// Keep looping
-					break;
-				default: // WAIT_ABANDONED leads here, it should never occur
-					assert(false and "Unmanaged WaitForSingleObject return code !");
+						break;
+					case WAIT_TIMEOUT: // Normally not possible with INFINITE
+						assert(false and "Program::ThreadMonitor::waitForSubProcess : Timeout on infinite !");
+						// Keep looping
+						break;
+					default: // WAIT_ABANDONED_X is only for mutexes, this should never occur
+						assert(false and "Program::ThreadMonitor::waitForSubProcess : Unmanaged WaitForSingleObject return code !");
+						break;
+				}
 			}
 		}
 		while (not finished);
@@ -169,6 +191,16 @@ namespace Process
 
 	void Program::ThreadMonitor::cleanupAfterChildTermination()
 	{
+		// stop the thread dedicated to handle the timeout
+		if (procinfo.timeoutThread)
+		{
+			procinfo.timeoutThread->stop();
+			delete procinfo.timeoutThread;
+			procinfo.timeoutThread = nullptr;
+		}
+
+		::CloseHandle(processHandle);
+		::CloseHandle(threadHandle);
 	}
 
 
@@ -179,11 +211,26 @@ namespace Process
 
 		// try to kill the attached child process if any
 		{
-			#ifndef YUNI_OS_MSVC
-			# warning not implemented
-			#endif
+			// killing the sub-process, until it is really dead
+			::TerminateProcess(processHandle, (uint)-127);
+			uint32 waitStatus = ::WaitForSingleObject(processHandle, INFINITE);
 			// getting the current time as soon as possible
 			pEndTime = currentTime();
+			switch (waitStatus)
+			{
+				case WAIT_FAILED:
+					// the process was probably already dead
+					break;
+				default:
+					// the process existed and has been killed
+					killed = true;
+					pExitStatus = -127;
+					break;
+			}
+			MutexLocker locker(procinfo.mutex);
+			procinfo.processID = 0;
+
+			cleanupAfterChildTermination();
 		}
 
 		theProcessHasStopped(killed, -127);
