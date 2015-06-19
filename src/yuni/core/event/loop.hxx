@@ -1,5 +1,6 @@
-#ifndef __YUNI_CORE_EVENT_LOOP_HXX__
-# define __YUNI_CORE_EVENT_LOOP_HXX__
+#pragma once
+#include "loop.h"
+
 
 
 namespace Yuni
@@ -432,5 +433,3 @@ namespace EventLoop
 } // namespace EventLoop
 } // namespace Core
 } // namespace Yuni
-
-#endif // __YUNI_CORE_EVENT_LOOP_HXX__

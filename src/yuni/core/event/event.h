@@ -1,10 +1,9 @@
-#ifndef __YUNI_CORE_EVENT_EVENT_H__
-# define __YUNI_CORE_EVENT_EVENT_H__
+#pragma once
+#include "interfaces.h"
+#include "../bind.h"
+#include "../smartptr.h"
+#include "traits.h"
 
-# include "interfaces.h"
-# include "../bind.h"
-# include "../smartptr.h"
-# include "traits.h"
 
 
 namespace Yuni
@@ -191,6 +190,5 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "event.hxx"
+#include "event.hxx"
 
-#endif // __YUNI_CORE_EVENT_EVENT_H__

@@ -1,7 +1,8 @@
-#ifndef __YUNI_CORE_EVENT_OBSERVER_HXX__
-# define __YUNI_CORE_EVENT_OBSERVER_HXX__
+#pragma once
+#include "observer.h"
+#include <cassert>
 
-# include <cassert>
+
 
 
 namespace Yuni
@@ -98,5 +99,3 @@ namespace Event
 
 } // namespace Event
 } // namespace Yuni
-
-#endif // __YUNI_CORE_EVENT_OBSERVER_HXX__

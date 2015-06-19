@@ -1,10 +1,8 @@
-#ifndef __YUNI_CORE_EVENT_INTERFACES_H__
-# define __YUNI_CORE_EVENT_INTERFACES_H__
-
-# include "../../yuni.h"
-# include <map>
-# include <cassert>
-# include "../../thread/policy.h"
+#pragma once
+#include "../../yuni.h"
+#include <map>
+#include <cassert>
+#include "../../thread/policy.h"
 
 
 namespace Yuni
@@ -169,6 +167,5 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "interfaces.hxx"
+#include "interfaces.hxx"
 
-#endif // __YUNI_CORE_EVENT_INTERFACES_H__

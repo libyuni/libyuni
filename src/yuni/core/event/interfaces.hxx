@@ -1,9 +1,9 @@
-#ifndef __YUNI_CORE_EVENT_INTERFACES_HXX__
-# define __YUNI_CORE_EVENT_INTERFACES_HXX__
+#pragma once
+#include "../../yuni.h"
+#include <list>
+#include <cassert>
+#include "interfaces.h"
 
-# include "../../yuni.h"
-# include <list>
-# include <cassert>
 
 
 namespace Yuni
@@ -116,5 +116,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_EVENT_INTERFACES_HXX__

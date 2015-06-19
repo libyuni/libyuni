@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_EVENT_LOOP_FWD_H__
-# define __YUNI_CORE_EVENT_LOOP_FWD_H__
+#pragma once
+
 
 
 namespace Yuni
@@ -20,6 +20,3 @@ namespace EventLoop
 } // namespace Core
 } // namespace Private
 } // namespace Yuni
-
-
-#endif // __YUNI_CORE_EVENT_LOOP_FWD_H__

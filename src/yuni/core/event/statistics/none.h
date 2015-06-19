@@ -1,5 +1,6 @@
-#ifndef __YUNI_CORE_EVENT_STATISTICS_NONE_H__
-# define __YUNI_CORE_EVENT_STATISTICS_NONE_H__
+#pragma once
+
+
 
 
 namespace Yuni
@@ -97,5 +98,3 @@ namespace Statistics
 } // namespace EventLoop
 } // namespace Core
 } // namespace Yuni
-
-#endif // __YUNI_CORE_EVENT_STATISTICS_NONE_H__

@@ -77,8 +77,8 @@ function GenerateArgumentsNameOnly($i)
 
 ob_start();
 ?>
-#ifndef __YUNI_CORE_EVENT_OBSERVER_ITEM_H__
-# define __YUNI_CORE_EVENT_OBSERVER_ITEM_H__
+#pragma once
+
 
 
 namespace Yuni

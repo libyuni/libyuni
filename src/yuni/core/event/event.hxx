@@ -1,5 +1,6 @@
-#ifndef __YUNI_CORE_EVENT_EVENT_HXX__
-# define __YUNI_CORE_EVENT_EVENT_HXX__
+#pragma once
+#include "event.h"
+
 
 
 namespace Yuni
@@ -245,5 +246,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_EVENT_EVENT_HXX__

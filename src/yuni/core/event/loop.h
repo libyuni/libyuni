@@ -1,19 +1,17 @@
-#ifndef __YUNI_CORE_EVENT_LOOP_H__
-# define __YUNI_CORE_EVENT_LOOP_H__
-
-# include "../../yuni.h"
-# include "event.h"
-# include "../atomic/bool.h"
-# include "../slist/slist.h"
-# include "flow/continuous.h"
-# include "flow/timer.h"
-# include "statistics/none.h"
-# include "../system/suspend.h"
-# include "../static/assert.h"
-# include "../static/inherit.h"
-# include <cassert>
-# include "../../thread/thread.h"
-# include "loop.fwd.h"
+#pragma once
+#include "../../yuni.h"
+#include "event.h"
+#include "../atomic/bool.h"
+#include "../slist/slist.h"
+#include "flow/continuous.h"
+#include "flow/timer.h"
+#include "statistics/none.h"
+#include "../system/suspend.h"
+#include "../static/assert.h"
+#include "../static/inherit.h"
+#include <cassert>
+#include "../../thread/thread.h"
+#include "loop.fwd.h"
 
 
 
@@ -225,6 +223,5 @@ namespace EventLoop
 } // namespace Core
 } // namespace Yuni
 
-# include "loop.hxx"
+#include "loop.hxx"
 
-#endif // __YUNI_CORE_EVENT_LOOP_H__

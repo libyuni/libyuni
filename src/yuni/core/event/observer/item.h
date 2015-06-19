@@ -1,5 +1,6 @@
-#ifndef __YUNI_CORE_EVENT_OBSERVER_ITEM_H__
-# define __YUNI_CORE_EVENT_OBSERVER_ITEM_H__
+#pragma once
+
+
 
 
 namespace Yuni
@@ -1309,6 +1310,5 @@ namespace Event
 } // namespace Event
 } // namespace Yuni
 
-# include "item.hxx"
+#include "item.hxx"
 
-#endif // __YUNI_CORE_EVENT_OBSERVER_ITEM_H__
