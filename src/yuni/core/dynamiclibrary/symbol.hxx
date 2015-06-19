@@ -1,5 +1,7 @@
-#ifndef __YUNI_CORE_DYNAMICLIBRARY_SYMBOL_HXX__
-# define __YUNI_CORE_DYNAMICLIBRARY_SYMBOL_HXX__
+#pragma once
+#include "symbol.h"
+
+
 
 
 namespace Yuni
@@ -8,18 +10,18 @@ namespace DynamicLibrary
 {
 
 
-	inline Symbol::Symbol() :
-		pPtr(NULL)
+	inline Symbol::Symbol()
+		: pPtr(NULL)
 	{}
 
 
-	inline Symbol::Symbol(Symbol::Handle p) :
-		pPtr(p)
+	inline Symbol::Symbol(Symbol::Handle p)
+		: pPtr(p)
 	{}
 
 
-	inline Symbol::Symbol(const Symbol& copy) :
-		pPtr(copy.pPtr)
+	inline Symbol::Symbol(const Symbol& copy)
+		: pPtr(copy.pPtr)
 	{}
 
 
@@ -37,14 +39,14 @@ namespace DynamicLibrary
 
 	inline Symbol& Symbol::operator = (const Symbol& rhs)
 	{
-		this->pPtr = rhs.pPtr;
+		pPtr = rhs.pPtr;
 		return *this;
 	}
 
 
 	inline Symbol& Symbol::operator = (Symbol::Handle hndl)
 	{
-		this->pPtr = hndl;
+		pPtr = hndl;
 		return *this;
 	}
 
@@ -60,5 +62,3 @@ namespace DynamicLibrary
 
 } // namespace DynamicLibrary
 } // namespace Yuni
-
-#endif // __YUNI_CORE_DYNAMICLIBRARY_SYMBOL_HXX__

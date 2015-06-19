@@ -1,7 +1,5 @@
-#ifndef __YUNI_CORE_DYNAMICLIBRARY_FILE_HXX__
-# define __YUNI_CORE_DYNAMICLIBRARY_FILE_HXX__
-
-# include "file.h"
+#pragma once
+#include "file.h"
 
 
 
@@ -38,5 +36,3 @@ namespace DynamicLibrary
 
 } // namespace DyanmicLibrary
 } // namespace Yuni
-
-#endif // __YUNI_CORE_DYNAMICLIBRARY_FILE_HXX__

@@ -1,10 +1,11 @@
-#ifndef __YUNI_CORE_DYNAMICLIBRARY_SYMBOL_H__
-# define __YUNI_CORE_DYNAMICLIBRARY_SYMBOL_H__
+#pragma once
 /*!
 ** Header for Yuni::DynamicLibrary::Symbol, a class for representing an exported
 ** symbol by a (shared) library
 */
-# include "../../yuni.h"
+#include "../../yuni.h"
+
+
 
 
 namespace Yuni
@@ -74,6 +75,5 @@ namespace DynamicLibrary
 } // namespace DynamicLibrary
 } // namespace Yuni
 
-# include "symbol.hxx"
+#include "symbol.hxx"
 
-#endif // __YUNI_CORE_DYNAMICLIBRARY_SYMBOL_H__

@@ -1,20 +1,18 @@
-#ifndef __YUNI_CORE_DYNAMICLIBRARY_FILE_H__
-# define __YUNI_CORE_DYNAMICLIBRARY_FILE_H__
-
+#pragma once
 /*!
 ** \brief Header for Yuni::DynamicLibrary::File, a class for manipulating Executable Object Files
 */
-# include "../../yuni.h"
-# include <stdlib.h>
-# include "../string.h"
-# include "symbol.h"
+#include "../../yuni.h"
+#include <stdlib.h>
+#include "../string.h"
+#include "symbol.h"
 
 // Determining the handle type for the current Operating system
-# ifdef YUNI_OS_WINDOWS
+#ifdef YUNI_OS_WINDOWS
 #	define YUNI_DYNAMICLIBRARY_OS_HANDLE  HINSTANCE
-# else
+#else
 #	define YUNI_DYNAMICLIBRARY_OS_HANDLE  void*
-# endif
+#endif
 
 
 
@@ -322,8 +320,7 @@ namespace DynamicLibrary
 } // namespace DynamicLibrary
 } // namespace Yuni
 
-# include "file.hxx"
+#include "file.hxx"
 
-# undef YUNI_DYNAMICLIBRARY_OS_HANDLE
+#undef YUNI_DYNAMICLIBRARY_OS_HANDLE
 
-#endif // __YUNI_CORE_DYNAMICLIBRARY_FILE_H__
