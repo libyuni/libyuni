@@ -29,6 +29,10 @@ namespace Thread
 		Signal();
 		//! Copy constructor
 		Signal(const Signal&);
+		# ifdef YUNI_HAS_CPP_MOVE
+		// Like mutexes, a signal must have invariant address and thus can not be moved
+		Signal(Signal&&) = delete;
+		#endif
 		//! Destructor
 		~Signal();
 		//@}
@@ -78,6 +82,12 @@ namespace Thread
 		bool operator ! () const;
 		//! Operator =
 		Signal& operator = (const Signal&);
+
+		# ifdef YUNI_HAS_CPP_MOVE
+		// Like mutexes, a signal must have invariant address and thus can not be moved
+		Signal& operator = (Signal&&) = delete;
+		#endif
+
 		//@}
 
 
