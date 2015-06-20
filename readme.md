@@ -2,6 +2,8 @@
 About the Yuni project
 ======================
 
+[![Join the chat at https://gitter.im/libyuni/libyuni](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/libyuni/libyuni?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Yuni is a cross-platform C++ framework for developing high-level, complex and
 fast applications. It is meant as a reliable and simple bridge between
 different worlds, allowing to write all sorts of applications, while
