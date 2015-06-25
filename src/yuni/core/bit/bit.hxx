@@ -12,7 +12,7 @@ namespace Bit
 	inline yuint32 Count(yuint32 i)
 	{
 		#ifdef YUNI_HAS_GCC_BUILTIN_POPCOUNT
-		return __builtin_popcount(i);
+		return static_cast<yuint32>(__builtin_popcount(i));
 		#else
 		// variable-precision SWAR algorithm
 		i = i - ((i >> 1) & 0x55555555);
