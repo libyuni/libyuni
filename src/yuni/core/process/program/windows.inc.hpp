@@ -10,6 +10,8 @@
 # include "../../system/windows.hdr.h"
 # include <WinNT.h>
 # include "../../string/wstring.h"
+# include <io.h>
+
 
 
 namespace Yuni
@@ -81,7 +83,7 @@ namespace Process
 
 		// Create the child process.
 		// ** FORK **
-		bool success = ::CreateProcessW(nullptr,
+		bool success = 0 != ::CreateProcessW(nullptr,
 			cmdLine.c_str(),	// command line
 			nullptr,			// process security attributes
 			nullptr,			// primary thread security attributes
