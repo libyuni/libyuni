@@ -168,8 +168,8 @@ namespace Process
 					std::cerr << "invalid working directory: " << procinfo.workingDirectory << std::endl;
 			}
 
-			::execvp(argv0, args); // shall never returns
-			_exit(1);
+			int status = ::execvp(argv0, args); // shall never returns
+			_exit(status);
 		}
 		else // PARENT
 		{
