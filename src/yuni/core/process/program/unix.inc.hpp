@@ -169,7 +169,7 @@ namespace Process
 			}
 
 			::execvp(argv0, args); // shall never returns
-			_exit(0);
+			_exit(1);
 		}
 		else // PARENT
 		{
