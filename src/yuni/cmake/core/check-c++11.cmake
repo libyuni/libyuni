@@ -1,23 +1,24 @@
 
-# C++0x
-check_cxx_compiler_flag("-std=c++0x" YUNI_HAS_GCC_CPP0X_SUPPORT)
-if(YUNI_HAS_GCC_CPP0X_SUPPORT)
-	if(MINGW)
-		set(YUNI_GCC_CPP0X_FLAG "-std=gnu++0x")
-	else()
-		set(YUNI_GCC_CPP0X_FLAG "-std=c++0x")
+if (NOT MSVC)
+	# C++0x
+	check_cxx_compiler_flag("-std=c++0x" YUNI_HAS_GCC_CPP0X_SUPPORT)
+	if(YUNI_HAS_GCC_CPP0X_SUPPORT)
+		if(MINGW)
+			set(YUNI_GCC_CPP0X_FLAG "-std=gnu++0x")
+		else()
+			set(YUNI_GCC_CPP0X_FLAG "-std=c++0x")
+		endif()
+		LIBYUNI_CONFIG_CFLAG("both" "core"	"${YUNI_GCC_CPP0X_FLAG}")
 	endif()
-	LIBYUNI_CONFIG_CFLAG("both" "core"	"${YUNI_GCC_CPP0X_FLAG}")
-endif()
 
 
-
-# C++11 nullptr
-if(YUNI_HAS_GCC_CPP0X_SUPPORT)
-	if(MINGW)
-		set(CMAKE_REQUIRED_FLAGS "-std=gnu++0x")
-	else()
-		set(CMAKE_REQUIRED_FLAGS "-std=c++0x")
+	# C++11 nullptr
+	if(YUNI_HAS_GCC_CPP0X_SUPPORT)
+		if(MINGW)
+			set(CMAKE_REQUIRED_FLAGS "-std=gnu++0x")
+		else()
+			set(CMAKE_REQUIRED_FLAGS "-std=c++0x")
+		endif()
 	endif()
 endif()
 
@@ -80,22 +81,25 @@ else()
 endif()
 
 
-# gcc __attribute__((pure))
-check_cxx_source_compiles("
-	__attribute__((pure)) static int max(int x, int y) { return x > y ? x : y;}
-	int main(void)
-	{
-		return max(42, 0);
-	} "  YUNI_HAS_GCC_ATTR_PURE)
+if (NOT MSVC)
 
-# gcc __attribute__((const))
-check_cxx_source_compiles("
-	__attribute__((const)) static int max(int x, int y) { return x > y ? x : y;}
-	int main(void)
-	{
-		return max(42, 0);
-	} "  YUNI_HAS_GCC_ATTR_CONST)
+	# gcc __attribute__((pure))
+	check_cxx_source_compiles("
+		__attribute__((pure)) static int max(int x, int y) { return x > y ? x : y;}
+		int main(void)
+		{
+			return max(42, 0);
+		} "  YUNI_HAS_GCC_ATTR_PURE)
 
+	# gcc __attribute__((const))
+	check_cxx_source_compiles("
+		__attribute__((const)) static int max(int x, int y) { return x > y ? x : y;}
+		int main(void)
+		{
+			return max(42, 0);
+		} "  YUNI_HAS_GCC_ATTR_CONST)
+
+endif()
 
 
 
