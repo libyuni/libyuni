@@ -83,7 +83,7 @@ namespace Job
 
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
-		Taskgroup(Taskgroup&&) = default;
+		Taskgroup(Taskgroup&&) = delete;
 		# endif
 
 		/*!
@@ -184,7 +184,7 @@ namespace Job
 
 		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
-		Taskgroup& operator = (Taskgroup&&) = default;
+		Taskgroup& operator = (Taskgroup&&) = delete;
 		# endif
 		//@}
 
