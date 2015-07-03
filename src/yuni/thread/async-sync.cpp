@@ -34,7 +34,7 @@ namespace Yuni
 
 	Job::IJob::Ptr  async(Job::QueueService& queueservice, const Bind<void ()>& callback)
 	{
-		AsyncJob::Ptr job = new AsyncJob(callback);
+		AsyncJob* job = new AsyncJob(callback);
 		queueservice += job;
 		return job;
 	}
