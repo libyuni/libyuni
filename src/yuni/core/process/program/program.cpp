@@ -10,8 +10,7 @@
 # ifndef YUNI_OS_WINDOWS
 #	include <sys/wait.h>
 # else
-#	warning check the definition of SIGKILL on VS and mingw
-#	define SIGKILL SIGINT // SIGKILL is not defined on Windows
+#	define SIGKILL SIGTERM // SIGKILL is not defined on Windows
 # endif
 #else
 #endif

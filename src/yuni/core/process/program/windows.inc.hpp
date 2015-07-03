@@ -146,7 +146,7 @@ namespace Process
 		do
 		{
 			uint32 waitStatus = ::WaitForMultipleObjectsEx(NbHandles, handleList, false, INFINITE, true);
-			if (waitStatus >= WAIT_OBJECT_0 and waitStatus < WAIT_OBJECT_0 + NbHandles)
+			if (/*waitStatus >= WAIT_OBJECT_0 and*/ waitStatus < WAIT_OBJECT_0 + NbHandles)
 			{
 				HANDLE signalled = handleList[waitStatus - WAIT_OBJECT_0];
 				DWORD exitCode;

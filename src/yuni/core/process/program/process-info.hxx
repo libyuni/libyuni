@@ -2,7 +2,6 @@
 #include "process-info.h"
 
 
-
 namespace Yuni
 {
 namespace Process
@@ -34,6 +33,31 @@ namespace Process
 	}
 
 
+	# ifdef YUNI_OS_WINDOWS
+
+	# include <vector>
+
+	namespace // anonymous
+	{
+
+		std::vector<DWORD> FindProcessWindows(DWORD processID)
+		{
+			assert(processID != 0);
+			std::vector<DWORD> threads;
+			for (HWND hwnd = ::GetTopWindow(nullptr); hwnd; hwnd = ::GetNextWindow(hwnd, GW_HWNDNEXT))
+			{
+				DWORD windowProcessID;
+				DWORD threadID = ::GetWindowThreadProcessId(hwnd, &windowProcessID);
+				if (windowProcessID == processID)
+					threads.push_back(threadID);
+			}
+			return threads;
+		}
+
+	} // namespace anonymous
+	# endif
+
+
 	template<bool WithLock>
 	inline bool Program::ProcessSharedInfo::sendSignal(int sigvalue)
 	{
@@ -56,21 +80,13 @@ namespace Process
 		}
 		# else
 		{
-			#ifndef YUNI_OS_MSVC
-			# warning not implemented
-			#endif
-
-			HWND handle = ::FindWindow(NULL, TEXT("Calc"));
-			if (handle)
+			switch (sigvalue)
 			{
-				std::cout << "Signaling process !" << std::endl;
-				switch (sigvalue)
-				{
-				case SIGKILL:
-				default:
-					::PostMessage(handle, WM_CLOSE, 0, 0);
-					break;
-				}
+			// All signals are handled by force-quitting the child process' window threads.
+			default:
+				for (DWORD threadID: FindProcessWindows(processID))
+					::PostThreadMessage(threadID, WM_QUIT, 0, 0);
+				break;
 			}
 
 			if (WithLock)
@@ -111,9 +127,8 @@ namespace Process
 					#ifdef YUNI_OS_UNIX
 					::kill(pid, SIGKILL);
 					#else
-					# ifndef YUNI_OS_MSVC
-					#	warning not implemented
-					# endif
+					for (DWORD threadID: FindProcessWindows(pid))
+						::PostThreadMessage(threadID, WM_QUIT, 0, 0);
 					#endif
 				}
 				return false; // stop the thread, does not suspend it

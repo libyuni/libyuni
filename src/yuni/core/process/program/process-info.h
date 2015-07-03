@@ -4,8 +4,8 @@
 #include "../../../thread/thread.h"
 #ifdef YUNI_OS_UNIX
 # include <sys/types.h>
-# include <signal.h>
 #endif
+#include <signal.h>
 
 
 

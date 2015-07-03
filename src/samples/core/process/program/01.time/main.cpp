@@ -3,8 +3,9 @@
 #include <yuni/datetime/timestamp.h>
 #include <yuni/core/getopt.h>
 #include <iostream>
-#ifdef YUNI_OS_UNIX
 #include <signal.h>
+#ifdef YUNI_OS_WINDOWS
+# include <windows.h>
 #endif
 
 using namespace Yuni;
@@ -13,12 +14,25 @@ using namespace Yuni;
 static Process::Program process;
 
 
-#ifdef YUNI_OS_UNIX
+#ifdef YUNI_OS_WINDOWS
+BOOL ctrlHandler(DWORD ctrlType)
+{
+	switch (ctrlType)
+	{
+    case CTRL_C_EVENT:
+    case CTRL_BREAK_EVENT:
+		process.signal(SIGINT);
+		return FALSE;
+	default:
+		return FALSE;
+	}
+}
+#else
 void signalHandler(int sig)
 {
 	// sending the same signal to the sub-process. If the sub-process
 	// handles the signal, it may have a chance to stop properly and should behave
-	// the same than without being executed by this program.
+	// the same as if not executed by this program.
 	process.signal(sig);
 
 	if (sig == SIGINT) // ctrl-c
@@ -52,7 +66,9 @@ int main(int argc, char* argv[])
 	// redirect the output to the console
 	process.redirectToConsole(true);
 
-	#ifdef YUNI_OS_UNIX
+	#ifdef YUNI_OS_WINDOWS
+	::SetConsoleCtrlHandler((PHANDLER_ROUTINE)ctrlHandler, TRUE);
+	#else
 	// install signal handler for SIGINT (ctrl-c) and SIGTERM (quit)
 	// see note in the 'signalHandler' routine
 	::signal(SIGINT,  signalHandler); // interrupt program (^C ctrl-c)
@@ -76,4 +92,3 @@ int main(int argc, char* argv[])
 	std::cout << '\n';
 	return exitStatus;
 }
-
