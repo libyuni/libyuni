@@ -35,26 +35,25 @@ namespace Process
 
 	# ifdef YUNI_OS_WINDOWS
 
-	# include <vector>
-
 	namespace // anonymous
 	{
 
-		std::vector<DWORD> FindProcessWindows(DWORD processID)
+		void QuitProcess(DWORD processID)
 		{
 			assert(processID != 0);
-			std::vector<DWORD> threads;
+			// Loop on process windows
 			for (HWND hwnd = ::GetTopWindow(nullptr); hwnd; hwnd = ::GetNextWindow(hwnd, GW_HWNDNEXT))
 			{
 				DWORD windowProcessID;
 				DWORD threadID = ::GetWindowThreadProcessId(hwnd, &windowProcessID);
 				if (windowProcessID == processID)
-					threads.push_back(threadID);
+					// Send WM_QUIT to the process thread
+					::PostThreadMessage(threadID, WM_QUIT, 0, 0);
 			}
-			return threads;
 		}
 
 	} // namespace anonymous
+
 	# endif
 
 
@@ -84,8 +83,7 @@ namespace Process
 			{
 			// All signals are handled by force-quitting the child process' window threads.
 			default:
-				for (DWORD threadID: FindProcessWindows(processID))
-					::PostThreadMessage(threadID, WM_QUIT, 0, 0);
+				QuitProcess(processID);
 				break;
 			}
 
@@ -127,8 +125,7 @@ namespace Process
 					#ifdef YUNI_OS_UNIX
 					::kill(pid, SIGKILL);
 					#else
-					for (DWORD threadID: FindProcessWindows(pid))
-						::PostThreadMessage(threadID, WM_QUIT, 0, 0);
+					QuitProcess(pid);
 					#endif
 				}
 				return false; // stop the thread, does not suspend it
