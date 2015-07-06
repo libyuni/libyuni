@@ -22,6 +22,7 @@ if (NOT WIN32 AND NOT WIN64)
 else()
 	LIBYUNI_CONFIG_DEFINITION("both" "core" "UNICODE")
 	LIBYUNI_CONFIG_DEFINITION("both" "core" "_UNICODE")
+	LIBYUNI_CONFIG_DEFINITION("both" "core" "_USE_64BIT_TIME_T")
 	if (YUNI_TARGET MATCHES "debug")
 		LIBYUNI_CONFIG_CFLAG("both" "core" "-ggdb3")
 	endif()
@@ -508,6 +509,7 @@ add_library(yuni-static-core STATIC
 if (WIN32 OR WIN64)
 	add_definitions("-DUNICODE")
 	add_definitions("-D_UNICODE")
+	add_definitions("-D_USE_64BIT_TIME_T")
 endif ()
 
 # Setting output path
