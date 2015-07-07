@@ -1,7 +1,6 @@
 
 #include "../io.h"
 #include "../directory.h"
-#include "../../core/slist.h"
 #include "info.h"
 #include "../file.h"
 
@@ -24,14 +23,14 @@ namespace Directory
 			uint64  size;
 			String filename;
 		};
-		typedef LinkedList<InfoItem> List;
+		typedef std::vector<InfoItem> List;
 
 	} // anonymous namespace
 
 
 
-	bool Copy(const AnyString& src, const AnyString& dst, bool recursive,
-		bool overwrite, const IO::Directory::CopyOnUpdateBind& onUpdate)
+	bool Copy(const AnyString& src, const AnyString& dst, bool recursive, bool overwrite,
+		const IO::Directory::CopyOnUpdateBind& onUpdate)
 	{
 		// normalize paths
 		String fsrc;
@@ -42,15 +41,21 @@ namespace Directory
 		String fdst;
 		IO::Normalize(fdst, dst);
 
-		// The list of files to copy
-		List list;
-		uint64 totalSize = 0;
-
 		// Adding the target folder, to create it if required
 		if (not onUpdate(cpsGatheringInformation, fdst, fdst, 0, 1))
 			return false;
-		IO::Directory::Create(fdst);
 
+		if (not IO::Directory::Create(fdst))
+			return false;
+
+		// The list of files to copy
+		List list;
+		list.reserve(512);
+		// the total number of bytes to copy
+		uint64 totalSize = 0;
+
+
+		// get the complete list of all files to copy and all folders to create
 		{
 			IO::Directory::Info info(fsrc);
 			if (recursive)
@@ -58,35 +63,40 @@ namespace Directory
 				const IO::Directory::Info::recursive_iterator& end = info.recursive_end();
 				for (IO::Directory::Info::recursive_iterator i = info.recursive_begin(); i != end; ++i)
 				{
-					list.push_back();
+					list.resize(list.size() + 1);
 					InfoItem& info = list.back();
 					info.filename = i.filename();
 					info.isFile   = i.isFile();
 					totalSize += i.size();
-					if (!onUpdate(cpsGatheringInformation, *i, *i, 0, list.size()))
+					if (not onUpdate(cpsGatheringInformation, *i, *i, 0, list.size()))
 						return false;
 				}
 			}
 			else
 			{
-				const IO::Directory::Info::recursive_iterator& end = info.recursive_end();
-				for (IO::Directory::Info::recursive_iterator i = info.recursive_begin(); i != end; ++i)
+				const IO::Directory::Info::iterator& end = info.end();
+				for (IO::Directory::Info::iterator i = info.begin(); i != end; ++i)
 				{
-					list.push_back();
+					list.resize(list.size() + 1);
 					InfoItem& info = list.back();
 					info.filename = i.filename();
 					info.isFile   = i.isFile();
 					totalSize += i.size();
 
-					if (!onUpdate(cpsGatheringInformation, i.filename(), i.filename(), 0, list.size()))
+					if (not onUpdate(cpsGatheringInformation, i.filename(), i.filename(), 0, list.size()))
 						return false;
 				}
 			}
 		}
 
+		if (list.empty())
+			return true;
+
+
 		uint64 current = 0;
 		// A temporary string
 		String tmp;
+		tmp.reserve(1024);
 
 		// Streams : in the worst scenario, the last file to copy will be closed
 		// at the end of this routine
@@ -99,10 +109,13 @@ namespace Directory
 		// 16k seems to be a good choice (better than smaller block size when used
 		// in Virtual Machines)
 		enum { bufferSize = 8192 };
-		char* buffer = new char[bufferSize];
+		char* const buffer = new char[(uint) bufferSize];
 
 		// reduce overhead brought by `onUpdate`
-		uint skip = 8;
+		enum { maxSkip = 6 };
+		uint skip = (uint) maxSkip;
+		// result
+		bool success = true;
 
 		const List::const_iterator end = list.end();
 		for (List::const_iterator i = list.begin(); i != end; ++i)
@@ -117,13 +130,11 @@ namespace Directory
 
 			if (not info.isFile)
 			{
-				// The target file is actually a folder
-				// We have to create it before copying its content
-				if (!onUpdate(cpsCopying, info.filename, tmp, current, totalSize)
-					|| !IO::Directory::Create(tmp))
+				// The target file is actually a folder - must be created before copying its content
+				if (not onUpdate(cpsCopying, info.filename, tmp, current, totalSize) or not IO::Directory::Create(tmp))
 				{
-					delete[] buffer;
-					return false;
+					success = false;
+					break;
 				}
 			}
 			else
@@ -143,7 +154,7 @@ namespace Directory
 					{
 						// reading the whole source file
 						uint64 numRead;
-						while ((numRead = fromFile.read(buffer, bufferSize)) != 0)
+						while ((numRead = fromFile.read(buffer, (uint) bufferSize)) > 0)
 						{
 							// progression
 							current += numRead;
@@ -151,29 +162,39 @@ namespace Directory
 							// Trying to copy the block which has just been read
 							if (numRead != toFile.write((const char*)buffer, numRead))
 							{
-								delete[] buffer;
-								return false;
+								success = false;
+								break;
 							}
 
 							// Notify the user from time to time about the progression
-							if (!--skip)
+							if (0 == --skip)
 							{
-								if (!onUpdate(cpsCopying, info.filename, tmp, current, totalSize))
+								if (not onUpdate(cpsCopying, info.filename, tmp, current, totalSize))
 								{
-									delete[] buffer;
-									return false;
+									success = false;
+									break;
 								}
-								skip = 8;
+								skip = (uint) maxSkip;
 							}
 						} // read
 					}
+					else
+					{
+						success = false;
+						break;
+					}
+				}
+				else
+				{
+					success = false;
+					break;
 				}
 			}
 		}
 
 		delete[] buffer;
 
-		return true;
+		return success;
 	}
 
 
