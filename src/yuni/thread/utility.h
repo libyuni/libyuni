@@ -1,11 +1,10 @@
-#ifndef __YUNI_THREAD_CORE_H__
-# define __YUNI_THREAD_CORE_H__
+#pragma once
+#include "../yuni.h"
+#include "timer.h"
+#include "../job/job.h"
+#include "../job/queue/service.h"
+#include "../core/bind.h"
 
-# include "../yuni.h"
-# include "timer.h"
-# include "../job/job.h"
-# include "../job/queue/service.h"
-# include "../core/bind.h"
 
 
 namespace Yuni
@@ -143,8 +142,17 @@ namespace Yuni
 	Job::IJob::Ptr  async(Job::QueueService& queueservice, const Bind<void ()>& callback);
 
 
+	/*!
+	** \brief Convenient wrapper for creating a job from a lambda
+	**
+	** Since no queueservice is provided, the job will only be created and not added in
+	** any queue (and thus not executed).
+	**
+	** \param callback The callback to execute
+	*/
+	Job::IJob::Ptr  async(const Bind<void ()>& callback);
+
+
 
 
 } // namespace Yuni
-
-#endif // __YUNI_THREAD_CORE_H__

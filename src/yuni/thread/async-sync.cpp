@@ -40,6 +40,13 @@ namespace Yuni
 	}
 
 
+	Job::IJob::Ptr  async(const Bind<void ()>& callback)
+	{
+		return new AsyncJob(callback);
+	}
+
+
+
 
 
 } // namespace Yuni
