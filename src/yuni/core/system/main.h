@@ -12,7 +12,7 @@
 	/* Forward declaration */ \
 	int main(int argc, char** argv); \
 	\
-	int WINAPI WinMain(HINSTANCE instance, HINSTANCE previousInstance, char* cmdLine, int) \
+	int WINAPI WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPTSTR* cmdLine, int) \
 	{ \
 		int argc; \
 		char** argv; \

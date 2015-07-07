@@ -4,7 +4,7 @@
 /* This header must remain compatible with C compilers */
 
 
-# ifdef YUNI_OS_WINDOWS
+#ifdef YUNI_OS_WINDOWS
 #	ifdef YUNI_OS_MSVC
 #		pragma warning(push)
 #		pragma warning(disable : 4995)
@@ -25,7 +25,7 @@
 #	ifdef YUNI_OS_MSVC
 #		pragma warning(pop)
 #	endif
-# endif
+#endif
 
 
 /* On some compiler, the macro min() and max() are defined... (Visual Studio for example...) */
@@ -36,3 +36,36 @@
 #   undef max
 # endif
 
+
+
+
+
+#ifdef YUNI_OS_WINDOWS
+namespace Yuni
+{
+namespace Windows
+{
+
+	inline yint64 FILETIMEToTimestamp(const FILETIME& filetime)
+	{
+		LARGE_INTEGER date, adjust;
+		date.HighPart = filetime.dwHighDateTime;
+		date.LowPart = filetime.dwLowDateTime;
+
+		// 100-nanoseconds = milliseconds * 10000
+		adjust.QuadPart = 11644473600000 * 10000;
+
+		// removes the diff between 1970 and 1601
+		date.QuadPart -= adjust.QuadPart;
+
+		// converts back from 100-nanoseconds to seconds
+		return date.QuadPart / 10000000;
+	}
+
+
+
+
+
+} // namespace Windows
+} // namespace Yuni
+#endif

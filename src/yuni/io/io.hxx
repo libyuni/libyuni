@@ -1,5 +1,5 @@
-#ifndef __YUNI_IO_IO_HXX__
-# define __YUNI_IO_IO_HXX__
+#pragma once
+#include "io.h"
 
 
 namespace Yuni
@@ -14,7 +14,6 @@ namespace IO
 
 
 
+
 } // namespace IO
 } // namespace Yuni
-
-#endif // __YUNI_IO_IO_HXX__

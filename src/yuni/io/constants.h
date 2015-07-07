@@ -35,6 +35,12 @@ namespace IO
 		typeFolder = 1,
 		//! The node is a file
 		typeFile = 2,
+		//! The node is a symlink
+		typeSymlink = 3,
+		//! The node is a socket
+		typeSocket = 4,
+		//! The node is special (pipe, block special...)
+		typeSpecial = 5,
 	};
 
 

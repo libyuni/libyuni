@@ -1,10 +1,8 @@
-#ifndef __YUNI_IO_IO_H__
-# define __YUNI_IO_IO_H__
-
-# include "../yuni.h"
-# include "../core/string.h"
-# include "error.h"
-# include "constants.h"
+#pragma once
+#include "../yuni.h"
+#include "../core/string.h"
+#include "error.h"
+#include "constants.h"
 
 
 
@@ -20,7 +18,7 @@ namespace IO
 	/*!
 	** \brief Test if a node exists (whatever its type, a folder or a file)
 	**
-	** \param filename The file/directory to test
+	** \param filename The file/directory to test (must be zero-terminated)
 	** \return True if it exists, false otherwise
 	*/
 	bool Exists(const AnyString& filename);
@@ -28,10 +26,25 @@ namespace IO
 	/*!
 	** \brief Get the type of a node
 	**
-	** \param filename The file/directory to test
+	** \param filename The file/directory to test (must be zero-terminated)
+	** \param followSymLink True to get information about the real file
 	** \return True if it exists, false otherwise
 	*/
-	NodeType TypeOf(const AnyString& filename);
+	NodeType TypeOf(const AnyString& filename, bool followSymLink = true);
+
+
+	/*!
+	** \brief Get the type of a node and directly retrieve its size
+	**
+	** \see TypeOf()
+	** \param filename The file/directory to test (must be zero-terminated)
+	** \param[out] size The size of the node (reset to zero if not found)
+	** \param followSymLink True to get information about the real file
+	** \return True if it exists, false otherwise
+	*/
+	NodeType FetchFileStatus(const AnyString& filename, yuint64& size, yint64& lastModified, bool followSymLink = true);
+
+
 
 
 
@@ -40,8 +53,7 @@ namespace IO
 } // namespace IO
 } // namespace Yuni
 
-# include "filename-manipulation.h"
-# include "directory.h"
-# include "io.hxx"
+#include "filename-manipulation.h"
+#include "directory.h"
+#include "io.hxx"
 
-#endif // __YUNI_IO_IO_H__

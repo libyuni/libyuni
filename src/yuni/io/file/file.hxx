@@ -1,4 +1,5 @@
 #pragma once
+#include "file.h"
 #include "../../core/traits/cstring.h"
 #include "../../core/traits/length.h"
 #include "../../core/static/remove.h"
@@ -23,7 +24,8 @@ namespace File
 
 	inline bool Exists(const AnyString& filename)
 	{
-		return ((Yuni::IO::typeFile & Yuni::IO::TypeOf(filename)) != 0);
+		Yuni::IO::NodeType type = Yuni::IO::TypeOf(filename);
+		return (Yuni::IO::typeFolder != type and Yuni::IO::typeUnknown != type);
 	}
 
 
@@ -92,4 +94,3 @@ namespace File
 } // namespace File
 } // namespace IO
 } // namespace Yuni
-

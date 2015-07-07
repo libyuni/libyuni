@@ -50,7 +50,7 @@ namespace Directory
 
 	inline bool Exists(const AnyString& path)
 	{
-		return ((IO::typeFolder & IO::TypeOf(path)) != 0);
+		return (IO::typeFolder == IO::TypeOf(path));
 	}
 
 
