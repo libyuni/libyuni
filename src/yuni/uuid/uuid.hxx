@@ -1,7 +1,5 @@
-#ifndef __YUNI_UUID_UUID_HXX__
-# define __YUNI_UUID_UUID_HXX__
-
-# include "uuid.h"
+#pragma once
+#include "uuid.h"
 
 
 
@@ -209,4 +207,3 @@ namespace CString
 // ostream
 std::ostream& operator << (std::ostream& out, const Yuni::UUID& rhs);
 
-#endif // __YUNI_UUID_UUID_HXX__

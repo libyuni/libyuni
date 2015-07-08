@@ -1,5 +1,4 @@
-#ifndef __YUNI_PRIVATE_DBI_CHANNEL_HXX__
-# define __YUNI_PRIVATE_DBI_CHANNEL_HXX__
+#pragma once
 
 
 
@@ -165,5 +164,3 @@ namespace DBI
 } // namespace DBI
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_PRIVATE_DBI_CHANNEL_HXX__

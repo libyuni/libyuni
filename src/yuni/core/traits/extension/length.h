@@ -1,11 +1,10 @@
-#ifndef __YUNI_CORE_TRAITS_EXTENSION_INTO_LENGTH_H__
-# define __YUNI_CORE_TRAITS_EXTENSION_INTO_LENGTH_H__
+#pragma once
+#include "../../../yuni.h"
+#include <string>
+#include <cstring>
+#include "../../smartptr.h"
+#include "../length.h"
 
-# include "../../../yuni.h"
-# include <string>
-# include <cstring>
-# include "../../smartptr.h"
-# include "../length.h"
 
 
 namespace Yuni
@@ -234,5 +233,3 @@ namespace Extension
 
 } // namespace Extension
 } // namespace Yuni
-
-#endif // __YUNI_CORE_TRAITS_EXTENSION_INTO_LENGTH_H__

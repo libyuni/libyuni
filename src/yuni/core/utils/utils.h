@@ -1,7 +1,5 @@
-#ifndef __YUNI_CORE_UTILS_UTILS_H__
-# define __YUNI_CORE_UTILS_UTILS_H__
-
-# include "hexdump.h"
+#pragma once
+#include "hexdump.h"
 
 
 namespace Yuni
@@ -23,5 +21,3 @@ namespace Utils
 } // namespace Utils
 } // namespace Core
 } // namespace Yuni
-
-#endif // __YUNI_CORE_UTILS_UTILS_H__

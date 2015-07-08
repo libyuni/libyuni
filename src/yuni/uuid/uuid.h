@@ -1,9 +1,9 @@
-#ifndef __YUNI_UUID_UUID_H__
-# define __YUNI_UUID_UUID_H__
+#pragma once
+#include "../yuni.h"
+#include "fwd.h"
+#include "../core/string.h"
 
-# include "../yuni.h"
-# include "fwd.h"
-# include "../core/string.h"
+
 
 
 namespace Yuni
@@ -183,6 +183,4 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "uuid.hxx"
-
-#endif // __YUNI_UUID_UUID_H__
+#include "uuid.hxx"

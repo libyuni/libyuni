@@ -1,7 +1,6 @@
-#ifndef __YUNI_THREAD_ID_H__
-# define __YUNI_THREAD_ID_H__
+#pragma once
+#include "../yuni.h"
 
-# include "../yuni.h"
 
 
 namespace Yuni
@@ -21,5 +20,3 @@ namespace Thread
 
 } // namespace Thread
 } // namespace Yuni
-
-#endif // __YUNI_THREAD_ID_H__

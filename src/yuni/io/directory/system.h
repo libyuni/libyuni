@@ -1,7 +1,6 @@
-#ifndef __YUNI_IO_DIRECTORY_SYSTEM_H__
-# define __YUNI_IO_DIRECTORY_SYSTEM_H__
+#pragma once
+#include "../directory.h"
 
-# include "../directory.h"
 
 
 namespace Yuni
@@ -77,10 +76,7 @@ namespace System
 
 
 
-
 } // namespace System
 } // namespace Directory
 } // namespace IO
 } // namespace Yuni
-
-#endif // __YUNI_IO_DIRECTORY_SYSTEM_H__

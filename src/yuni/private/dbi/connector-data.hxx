@@ -1,7 +1,5 @@
-#ifndef __YUNI_PRIVATE_DBI_CONNECTOR_DATA_HXX__
-# define __YUNI_PRIVATE_DBI_CONNECTOR_DATA_HXX__
-
-# include "../../thread/id.h"
+#pragma once
+#include "../../thread/id.h"
 
 
 namespace Yuni
@@ -46,5 +44,3 @@ namespace DBI
 } // namespace DBI
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_PRIVATE_DBI_CONNECTOR_DATA_HXX__

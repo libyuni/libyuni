@@ -1,10 +1,9 @@
-#ifndef __YUNI_CORE_TRAITS_EXTENSION_INTO_CSTRING_H__
-# define __YUNI_CORE_TRAITS_EXTENSION_INTO_CSTRING_H__
+#pragma once
+#include "../../../yuni.h"
+#include <string>
+#include "../../smartptr.h"
+#include "../cstring.h"
 
-# include "../../../yuni.h"
-# include <string>
-# include "../../smartptr.h"
-# include "../cstring.h"
 
 
 namespace Yuni
@@ -157,5 +156,3 @@ namespace Extension
 
 } // namespace Extension
 } // namespace Yuni
-
-#endif // __YUNI_CORE_TRAITS_EXTENSION_INTO_CSTRING_H__

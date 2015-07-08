@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_NON_COPYABLE_H__
-# define __YUNI_CORE_NON_COPYABLE_H__
+#pragma once
+
 
 
 namespace Yuni
@@ -15,7 +15,7 @@ namespace Yuni
 	** };
 	** \endcode
 	*/
-	template <class T>
+	template<class T>
 	class YUNI_DECL NonCopyable
 	{
 	protected:
@@ -53,5 +53,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_NON_COPYABLE_H__

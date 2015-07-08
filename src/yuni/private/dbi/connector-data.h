@@ -1,11 +1,9 @@
-#ifndef __YUNI_PRIVATE_DBI_CONNECTOR_DATA_H__
-# define __YUNI_PRIVATE_DBI_CONNECTOR_DATA_H__
-
-# include "../../dbi/settings.h"
-# include "../../dbi/fwd.h"
-# include "../../dbi/adapter.h"
-# include "channel.h"
-# include "../../core/event/event.h"
+#pragma once
+#include "../../dbi/settings.h"
+#include "../../dbi/fwd.h"
+#include "../../dbi/adapter.h"
+#include "channel.h"
+#include "../../core/event/event.h"
 
 
 
@@ -72,6 +70,4 @@ namespace DBI
 } // namespace Private
 } // namespace Yuni
 
-# include "connector-data.hxx"
-
-#endif // __YUNI_PRIVATE_DBI_CONNECTOR_DATA_H__
+#include "connector-data.hxx"

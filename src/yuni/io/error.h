@@ -1,5 +1,5 @@
-#ifndef __YUNI_IO_ERROR_H__
-# define __YUNI_IO_ERROR_H__
+#pragma once
+
 
 
 namespace Yuni
@@ -35,5 +35,3 @@ namespace IO
 
 } // namespace IO
 } // namespace Yuni
-
-#endif // __YUNI_IO_ERROR_H__

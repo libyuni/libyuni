@@ -1,7 +1,6 @@
-#ifndef __YUNI_PRIVATE_JOBS_QUEUE_THREAD_HXX__
-# define __YUNI_PRIVATE_JOBS_QUEUE_THREAD_HXX__
+#pragma once
+#include "thread.h"
 
-# include "thread.h"
 
 
 namespace Yuni
@@ -42,5 +41,3 @@ namespace QueueService
 } // namespace QueueService
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_PRIVATE_JOBS_QUEUE_THREAD_HXX__

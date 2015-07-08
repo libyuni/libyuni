@@ -1,7 +1,7 @@
-#ifndef __YUNI_IO_FILE_STREAM_HXX__
-# define __YUNI_IO_FILE_STREAM_HXX__
+#pragma once
+#include "stream.h"
+#include "../../core/string.h"
 
-# include "../../core/string.h"
 
 
 namespace Yuni
@@ -11,8 +11,8 @@ namespace IO
 namespace File
 {
 
-	inline Stream::Stream() :
-		pFd(nullptr)
+	inline Stream::Stream()
+		: pFd(nullptr)
 	{
 		// Do nothing
 	}
@@ -379,5 +379,3 @@ namespace File
 } // namespace File
 } // namespace IO
 } // namespace Yuni
-
-#endif // __YUNI_IO_FILE_STREAM_HXX__

@@ -1,14 +1,11 @@
-#ifndef __YUNI_IO_CONSTANTS_H__
-# define __YUNI_IO_CONSTANTS_H__
-
-# include "io.h"
+#pragma once
+#include "io.h"
 
 
 namespace Yuni
 {
 namespace IO
 {
-
 
 	/*!
 	** \brief Flow control used in the IO module
@@ -100,5 +97,3 @@ namespace IO
 
 } // namespace IO
 } // namespace Yuni
-
-#endif // __YUNI_IO_CONSTANTS_H__

@@ -1,7 +1,7 @@
-#ifndef __YUNI_CORE_STRING_WSTRING_HXX__
-# define __YUNI_CORE_STRING_WSTRING_HXX__
+#pragma once
+#include "wstring.h"
+#ifdef YUNI_OS_WINDOWS
 
-# ifdef YUNI_OS_WINDOWS
 
 namespace Yuni
 {
@@ -169,5 +169,4 @@ namespace Private
 } // namespace Private
 } // namespace Yuni
 
-# endif // YUNI_OS_WINDOWS
-#endif // __YUNI_CORE_STRING_WSTRING_HXX__
+#endif // YUNI_OS_WINDOWS

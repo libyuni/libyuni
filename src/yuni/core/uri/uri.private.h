@@ -1,7 +1,5 @@
-#ifndef __YUNI_CORE_URI_PRIVATE_H__
-# define __YUNI_CORE_URI_PRIVATE_H__
-
-# include "../string.h"
+#pragma once
+#include "../string.h"
 
 
 
@@ -83,5 +81,3 @@ namespace Uri
 } // namespace Uri
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_CORE_URI_PRIVATE_H__

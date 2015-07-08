@@ -1,8 +1,7 @@
-#ifndef __YUNI_CORE_TRAITS_C_STRING_H__
-# define __YUNI_CORE_TRAITS_C_STRING_H__
+#pragma once
+#include "../../yuni.h"
+#include "../static/remove.h"
 
-# include "../../yuni.h"
-# include "../static/remove.h"
 
 
 namespace Yuni
@@ -77,6 +76,4 @@ namespace Traits
 } // namespace Traits
 } // namespace Yuni
 
-# include "extension/into-cstring.h"
-
-#endif // __YUNI_CORE_TRAITS_C_STRING_H__
+#include "extension/into-cstring.h"

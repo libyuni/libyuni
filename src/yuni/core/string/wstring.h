@@ -1,7 +1,5 @@
-#ifndef __YUNI_CORE_STRING_WSTRING_H__
-# define __YUNI_CORE_STRING_WSTRING_H__
-
-# ifdef YUNI_OS_WINDOWS
+#pragma once
+#ifdef YUNI_OS_WINDOWS
 
 # include "../../yuni.h"
 # include "string.h"
@@ -91,5 +89,4 @@ namespace Private
 
 # include "wstring.hxx"
 
-# endif // YUNI_OS_WINDOWS
-#endif // __YUNI_CORE_STRING_WSTRING_H__
+#endif // YUNI_OS_WINDOWS

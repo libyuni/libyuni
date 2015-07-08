@@ -1,14 +1,12 @@
-#ifndef __YUNI_THREAD_FWD_H__
-# define __YUNI_THREAD_FWD_H__
-
-# ifndef YUNI_NO_THREAD_SAFE
+#pragma once
+#ifndef YUNI_NO_THREAD_SAFE
 #	ifdef YUNI_OS_WINDOWS
 #		include "../core/system/windows.hdr.h"
 #		define YUNI_THREAD_FNC_RETURN   DWORD WINAPI
 #	else
 #		define YUNI_THREAD_FNC_RETURN   void*
 #	endif
-# endif
+#endif
 
 
 namespace Yuni
@@ -64,7 +62,7 @@ namespace Job
 
 
 
-# ifndef YUNI_NO_THREAD_SAFE
+#ifndef YUNI_NO_THREAD_SAFE
 
 namespace Yuni
 {
@@ -84,6 +82,4 @@ namespace Thread
 } // namespace Private
 } // namespace Thread
 
-# endif // YUNI_NO_THREAD_SAFE
-
-#endif // __YUNI_THREAD_FWD_H__
+#endif // YUNI_NO_THREAD_SAFE

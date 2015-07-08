@@ -1,19 +1,18 @@
-#ifndef __YUNI_PRIVATE_DBI_CHANNEL_H__
-# define __YUNI_PRIVATE_DBI_CHANNEL_H__
+#pragma once
+#include "../../yuni.h"
+#include "../../core/dictionary.h"
+#include "../../datetime/timestamp.h"
+#include "../../core/noncopyable.h"
+#include "../../dbi/settings.h"
+#include "../../dbi/error.h"
+#include "../../dbi/adapter/entries.h"
 
-# include "../../yuni.h"
-# include "../../core/dictionary.h"
-# include "../../datetime/timestamp.h"
-# include "../../core/noncopyable.h"
-# include "../../dbi/settings.h"
-# include "../../dbi/error.h"
-# include "../../dbi/adapter/entries.h"
-
-# ifdef YUNI_OS_32
+#ifdef YUNI_OS_32
 #	define YUNI_PRIVATE_DBI_ATOMIC_INT  32
-# else
+#else
 #	define YUNI_PRIVATE_DBI_ATOMIC_INT  64
-# endif
+#endif
+
 
 
 namespace Yuni
@@ -98,6 +97,4 @@ namespace DBI
 } // namespace Private
 } // namespace Yuni
 
-# include "channel.hxx"
-
-#endif // __YUNI_PRIVATE_DBI_CHANNEL_H__
+#include "channel.hxx"

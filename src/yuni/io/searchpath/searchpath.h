@@ -1,13 +1,11 @@
-#ifndef __YUNI_IO_SEARCHPATH_SEARCH_PATH_H__
-# define __YUNI_IO_SEARCHPATH_SEARCH_PATH_H__
-
-# include "../../yuni.h"
-# include "../../core/string.h"
-# include "../../core/bind.h"
-# include <map>
-# ifdef SearchPath
+#pragma once
+#include "../../yuni.h"
+#include "../../core/string.h"
+#include "../../core/bind.h"
+#include <map>
+#ifdef SearchPath
 #	undef SearchPath // On Windows, SearchPath is a macro...
-# endif
+#endif
 
 
 namespace Yuni
@@ -138,6 +136,5 @@ namespace IO
 } // namespace IO
 } // namespace Yuni
 
-# include "searchpath.hxx"
+#include "searchpath.hxx"
 
-#endif // __YUNI_IO_SEARCHPATH_SEARCH_PATH_H__

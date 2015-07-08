@@ -1,7 +1,5 @@
-#ifndef __YUNI_IO_DIRECTORY_INFO_PLATFORM_H__
-# define __YUNI_IO_DIRECTORY_INFO_PLATFORM_H__
-
-# include "../../../core/string.h"
+#pragma once
+#include "../../../core/string.h"
 
 
 namespace Yuni
@@ -49,5 +47,3 @@ namespace Directory
 } // namespace IO
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_IO_DIRECTORY_INFO_PLATFORM_H__

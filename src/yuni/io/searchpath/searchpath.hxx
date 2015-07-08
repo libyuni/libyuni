@@ -1,5 +1,5 @@
-#ifndef __YUNI_IO_SEARCHPATH__SEARCH_PATH_HXX__
-# define __YUNI_IO_SEARCHPATH__SEARCH_PATH_HXX__
+#pragma once
+#include "searchpath.h"
 
 
 namespace Yuni
@@ -32,5 +32,3 @@ namespace IO
 
 } // namespace IO
 } // namespace Yuni
-
-#endif // __YUNI_IO_SEARCHPATH__SEARCH_PATH_HXX__

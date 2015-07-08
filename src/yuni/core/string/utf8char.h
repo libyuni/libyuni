@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_STRING_STRING_UTF8_CHAR_H__
-# define __YUNI_CORE_STRING_STRING_UTF8_CHAR_H__
+#pragma once
+#include "../../yuni.h"
 
 
 
@@ -147,6 +147,4 @@ bool operator == (const AnyString& multiByteStr, Yuni::UTF8::Char c);
 bool operator != (const AnyString& multiByteStr, Yuni::UTF8::Char c);
 
 
-# include "utf8char.hxx"
-
-#endif // __YUNI_CORE_STRING_STRING_UTF8_CHAR_H__
+#include "utf8char.hxx"

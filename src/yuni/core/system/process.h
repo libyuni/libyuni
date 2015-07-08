@@ -1,7 +1,5 @@
-#ifndef __YUNI_CORE_SYSTEM_PROCESS_H__
-# define __YUNI_CORE_SYSTEM_PROCESS_H__
-
-# include "../../yuni.h"
+#pragma once
+#include "../../yuni.h"
 
 
 namespace Yuni
@@ -15,5 +13,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_SYSTEM_PROCESS_H__

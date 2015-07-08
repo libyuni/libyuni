@@ -1,13 +1,11 @@
-#ifndef __YUNI_IO_FILE_STREAM_H__
-# define __YUNI_IO_FILE_STREAM_H__
-
-# include "../../yuni.h"
-# include "../../core/static/assert.h"
-# include "../../core/string.h"
-# include "../../core/static/remove.h"
-# include "../../core/noncopyable.h"
-# include "openmode.h"
-# include <stdio.h>
+#pragma once
+#include "../../yuni.h"
+#include "../../core/static/assert.h"
+#include "../../core/string.h"
+#include "../../core/static/remove.h"
+#include "../../core/noncopyable.h"
+#include "openmode.h"
+#include <stdio.h>
 
 
 
@@ -437,6 +435,4 @@ namespace File
 } // namespace IO
 } // namespace Yuni
 
-# include "stream.hxx"
-
-#endif // __YUNI_IO_FILE_STREAM_H__
+#include "stream.hxx"

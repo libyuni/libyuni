@@ -1,5 +1,4 @@
-#ifndef __YUNI_UUID_FWD_H__
-# define __YUNI_UUID_FWD_H__
+#pragma once
 
 
 namespace Yuni
@@ -19,5 +18,3 @@ namespace UUID
 } // namespace UUID
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_UUID_FWD_H__

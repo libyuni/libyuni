@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_STRING_STRING_UTF8_CHAR_HXX__
-# define __YUNI_CORE_STRING_STRING_UTF8_CHAR_HXX__
+#pragma once
+#include "utf8char.h"
 
 
 
@@ -8,18 +8,18 @@ namespace Yuni
 namespace UTF8
 {
 
-	inline Char::Char() :
-		pValue()
+	inline Char::Char()
+		: pValue()
 	{}
 
 
-	inline Char::Char(const Char& rhs) :
-		pValue(rhs.pValue)
+	inline Char::Char(const Char& rhs)
+		: pValue(rhs.pValue)
 	{}
 
 
-	inline Char::Char(uint c) :
-		pValue(c)
+	inline Char::Char(uint c)
+		: pValue(c)
 	{}
 
 
@@ -253,7 +253,7 @@ namespace UTF8
 
 
 
-# ifdef YUNI_HAS_STL_HASH
+#ifdef YUNI_HAS_STL_HASH
 
 namespace std
 {
@@ -268,7 +268,4 @@ namespace std
 
 } // namespace std
 
-# endif // YUNI_HAS_STL_HASH
-
-
-#endif // __YUNI_CORE_STRING_STRING_UTF8_CHAR_HXX__
+#endif // YUNI_HAS_STL_HASH

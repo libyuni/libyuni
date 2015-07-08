@@ -1,6 +1,4 @@
-#ifndef __YUNI_IO_DIRECTORY_COMMONS_H__
-# define __YUNI_IO_DIRECTORY_COMMONS_H__
-
+#pragma once
 #include "../io.h"
 #include "../directory.h"
 #include "../../core/system/windows.hdr.h"
@@ -24,6 +22,3 @@
 #ifndef S_ISDIR
 # define S_ISDIR(mode) ( (mode & S_IFMT) == S_IFDIR)
 #endif
-
-
-#endif // __YUNI_IO_DIRECTORY_COMMONS_H__

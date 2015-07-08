@@ -1,5 +1,5 @@
-#ifndef __YUNI_IO_FILE_OPEN_MODE_H__
-# define __YUNI_IO_FILE_OPEN_MODE_H__
+#pragma once
+
 
 
 namespace Yuni
@@ -42,5 +42,3 @@ namespace OpenMode
 } // namespace OpenMode
 } // namespace IO
 } // namespace Yuni
-
-#endif // __YUNI_IO_FILE_OPEN_MODE_H__

@@ -1,8 +1,7 @@
-#ifndef __YUNI_CORE_UTILS_HEXDUMP_H__
-# define __YUNI_CORE_UTILS_HEXDUMP_H__
+#pragma once
+#include "../../yuni.h"
+#include "../string.h"
 
-# include "../../yuni.h"
-# include "../string.h"
 
 
 namespace Yuni
@@ -142,7 +141,4 @@ std::ostream& operator<< (std::ostream& outStream, const Yuni::Core::Utils::Hexd
 //@}
 
 
-# include "hexdump.hxx"
-
-#endif // __YUNI_CORE_UTILS_HEXDUMP_H__
-
+#include "hexdump.hxx"

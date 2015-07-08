@@ -1,8 +1,7 @@
-#ifndef __YUNI_CORE_TRAITS_LENGTH_H__
-# define __YUNI_CORE_TRAITS_LENGTH_H__
+#pragma once
+#include "../../yuni.h"
+#include "../static/remove.h"
 
-# include "../../yuni.h"
-# include "../static/remove.h"
 
 
 namespace Yuni
@@ -85,6 +84,4 @@ namespace Traits
 } // namespace Traits
 } // namespace Yuni
 
-# include "extension/length.h"
-
-#endif // __YUNI_CORE_TRAITS_LENGTH_H__
+#include "extension/length.h"

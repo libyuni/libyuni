@@ -1,5 +1,6 @@
-#ifndef __YUNI_CORE_UTILS_HEXDUMP_HXX__
-# define __YUNI_CORE_UTILS_HEXDUMP_HXX__
+#pragma once
+#include "hexdump.h"
+
 
 
 namespace Yuni
@@ -10,18 +11,18 @@ namespace Utils
 {
 
 	inline Hexdump::Hexdump(const char* buffer, uint size)
-		:pBuffer(buffer), pSize(size)
+		: pBuffer(buffer), pSize(size)
 	{}
 
 
 	inline Hexdump::Hexdump(const Hexdump& rhs)
-		:pBuffer(rhs.pBuffer), pSize(rhs.pSize)
+		: pBuffer(rhs.pBuffer), pSize(rhs.pSize)
 	{}
 
 
 	template<class U>
 	inline Hexdump::Hexdump(const U& buffer)
-		:pBuffer((const char *)buffer.data()), pSize(buffer.sizeInBytes())
+		: pBuffer((const char *)buffer.data()), pSize(buffer.sizeInBytes())
 	{}
 
 
@@ -76,6 +77,3 @@ inline std::ostream& operator<< (std::ostream& outStream, const Yuni::Core::Util
 	hexDumper.dump(outStream);
 	return outStream;
 }
-
-
-#endif // __YUNI_CORE_UTILS_HEXDUMP_HXX__
