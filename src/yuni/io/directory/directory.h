@@ -117,6 +117,16 @@ namespace Directory
 	**
 	** \param source The source folder
 	** \param destination The destination folder
+	** \param onUpdate Event
+	** \return True if the operation succeeded, false otherwise
+	*/
+	bool Copy(const AnyString& source, const AnyString& destination, const CopyOnUpdateBind& onUpdate);
+
+	/*!
+	** \brief Copy a directory
+	**
+	** \param source The source folder
+	** \param destination The destination folder
 	** \param recursive True to copy recursively
 	** \param overwrite True to overwrite the files even if they already exist
 	** \param onUpdate Event

@@ -62,6 +62,12 @@ namespace Directory
 	}
 
 
+	inline bool Copy(const AnyString& source, const AnyString& destination, const CopyOnUpdateBind& onUpdate)
+	{
+		return Copy(source, destination, true, true, onUpdate);
+	}
+
+
 
 
 } // namespace Directory
