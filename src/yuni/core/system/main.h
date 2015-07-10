@@ -4,81 +4,71 @@
 
 # ifdef YUNI_OS_WINDOWS
 #   include "windows.hdr.h"
+#	include <shellapi.h>
+
 
 #	define YUNI_MAIN() \
 	int main(int argc, char** argv)
 
-#   define YUNI_MAIN_CONSOLE()  \
+#   define YUNI_MAIN_CONSOLE(argc, argv)  \
 	/* Forward declaration */ \
-	int main(int argc, char** argv); \
+	int WINAPI main(int argc, char** argv); \
 	\
-	int WINAPI WinMain(HINSTANCE instance, HINSTANCE previousInstance, LPTSTR* cmdLine, int) \
+	int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) \
 	{ \
 		int argc; \
 		char** argv; \
 		\
-		char* arg; \
-		int index; \
-		int result; \
+		/* convert the command line arguments */ \
+		LPWSTR* arglist = CommandLineToArgvW(GetCommandLineW(), &argc); \
+		if (nullptr == arglist) \
+			return EXIT_FAILURE; \
 		\
-		/* Count the arguments */ \
-		argc = 1; \
-		arg  = cmdLine; \
-		while (arg[0] != 0) \
-		{ \
-			while (arg[0] != 0 and arg[0] == ' ') \
-				++arg; \
-			\
-			if (arg[0] != 0) \
-			{ \
-				++argc; \
-				while (arg[0] != 0 and arg[0] != ' ') \
-					++arg; \
-			} \
-		} \
+		argv = (char**) malloc(sizeof(char*) * (argc + 1)); \
+		argv[argc] = nullptr; \
 		\
-		/* Tokenize the arguments */ \
-		argv = (char**) malloc(argc * sizeof(char*)); \
-		arg = cmdLine; \
-		index = 1; \
-		while (arg[0] != 0) \
+		for (int i = 0; i < argc; ++i) \
 		{ \
-			while (arg[0] != 0 and arg[0] == ' ') \
-				++arg; \
-			\
-			if (arg[0] != 0) \
+			if (arglist[i] && *(arglist[i]) != L'\0') \
 			{ \
-				argv[index] = arg; \
-				++index; \
-				while (arg[0] != 0 and arg[0] != ' ') \
-					++arg; \
-				\
-				if (arg[0] != 0) \
+				int length = WideCharToMultiByte(CP_UTF8, 0, arglist[i], -1, NULL, 0, NULL, NULL); \
+				if (length <= 0) \
 				{ \
-					arg[0] = 0; \
-					++arg; \
+					LocalFree(arglist); \
+					return EXIT_FAILURE; \
 				} \
+				\
+				argv[i] = (char*) malloc(sizeof(char) * (length + 1)); \
+				WideCharToMultiByte(CP_UTF8, 0, arglist[i], -1, argv[i], length, NULL, NULL); \
+				argv[i][length] = '\0'; \
+			} \
+			else \
+			{ \
+				argv[i] = (char*) malloc(sizeof(char) * 1); \
+				argv[i][0] = '\0'; \
 			} \
 		} \
 		\
-		/* Put the program name into argv[0] */ \
-		char filename[_MAX_PATH]; \
+		LocalFree(arglist); \
 		\
-		GetModuleFileName(NULL, filename, _MAX_PATH); \
-		argv[0] = filename; \
 		\
-		/* Call the user specified main function */ \
-		result = main(argc, argv); \
+		int exitcode = main(argc, argv); \
 		\
+		/* release memory*/ \
+		for (int i = 0; i < argc; ++i) \
+			free(argv[i]); \
 		free(argv); \
-		return result; \
+		\
+		return exitcode; \
 	} \
 	\
-	int main(int argc, char* argv[])
+	\
+	int WINAPI main(int argc, char* argv[])
+
 
 #else
 
-#   define YUNI_MAIN_CONSOLE() \
+#   define YUNI_MAIN_CONSOLE(argc, argv) \
 		int main(int argc, char* argv[])
 
 #   define YUNI_MAIN() \
