@@ -1,5 +1,5 @@
-#ifndef __YUNI_PARSER_GENERATOR_GRAMMAR_HXX__
-# define __YUNI_PARSER_GENERATOR_GRAMMAR_HXX__
+#pragma once
+#include "grammar.h"
 
 
 namespace Yuni
@@ -21,5 +21,3 @@ namespace PEG
 } // namespace PEG
 } // namespace Parser
 } // namespace Yuni
-
-#endif // __YUNI_PARSER_GENERATOR_GRAMMAR_H__

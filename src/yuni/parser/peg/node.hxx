@@ -1,7 +1,5 @@
-#ifndef __YUNI_PARSER_GENERATOR_NODE_HXX__
-# define __YUNI_PARSER_GENERATOR_NODE_HXX__
-
-# include "node.h"
+#pragma once
+#include "node.h"
 
 
 namespace Yuni
@@ -62,5 +60,3 @@ namespace PEG
 } // namespace PEG
 } // namespace Parser
 } // namespace Yuni
-
-#endif // __YUNI_PARSER_GENERATOR_NODE_HXX__

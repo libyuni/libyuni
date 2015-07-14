@@ -1,12 +1,10 @@
-#ifndef __YUNI_PARSER_GENERATOR_GRAMMAR_H__
-# define __YUNI_PARSER_GENERATOR_GRAMMAR_H__
-
-# include "../../yuni.h"
-# include "../../core/string.h"
-# include "../../core/noncopyable.h"
-# include "../../core/event/event.h"
-# include "node.h"
-# include <iosfwd>
+#pragma once
+#include "../../yuni.h"
+#include "../../core/string.h"
+#include "../../core/noncopyable.h"
+#include "../../core/event/event.h"
+#include "node.h"
+#include <iosfwd>
 
 
 namespace Yuni
@@ -72,6 +70,5 @@ namespace PEG
 
 std::ostream& operator << (std::ostream& out, const Yuni::Parser::PEG::Grammar& grammar);
 
-# include "grammar.hxx"
+#include "grammar.hxx"
 
-#endif // __YUNI_PARSER_GENERATOR_GRAMMAR_H__

@@ -1,10 +1,9 @@
-#ifndef __YUNI_PARSER_GENERATOR_NODE_H__
-# define __YUNI_PARSER_GENERATOR_NODE_H__
+#pragma once
+#include "../../yuni.h"
+#include "../../core/string.h"
+#include <map>
+#include <iosfwd>
 
-# include "../../yuni.h"
-# include "../../core/string.h"
-# include <map>
-# include <iosfwd>
 
 
 namespace Yuni
@@ -104,6 +103,4 @@ namespace PEG
 } // namespace Parser
 } // namespace Yuni
 
-# include "node.hxx"
-
-#endif // __YUNI_PARSER_GENERATOR_NODE_H__
+#include "node.hxx"
