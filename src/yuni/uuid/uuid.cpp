@@ -1,4 +1,3 @@
-
 #include "uuid.h"
 #ifndef YUNI_OS_WINDOWS
 # include <uuid/uuid.h>

@@ -73,7 +73,7 @@ namespace Yuni
 		**
 		** \param flag Flag to know how to initialize the UUID
 		*/
-		UUID(Flag flag);
+		explicit UUID(Flag flag);
 		/*!
 		** \brief Constructor from a string
 		*/
