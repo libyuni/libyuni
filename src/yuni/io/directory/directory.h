@@ -41,16 +41,18 @@ namespace Directory
 		**
 		** \param[out] out The variable where the current directory will be written
 		** \param clearBefore True to clean \p out before
+		** \return True if the operation succeeded. False otherwise
 		*/
-		void Get(String& out, bool clearBefore = true);
+		bool Get(String& out, bool clearBefore = true);
 
 		/*!
 		** \brief Get the current directory (clob)
 		**
 		** \param[out] out The variable where the current directory will be written
 		** \param clearBefore True to clean \p out before
+		** \return True if the operation succeeded. False otherwise
 		*/
-		void Get(Clob& out, bool clearBefore = true);
+		bool Get(Clob& out, bool clearBefore = true);
 
 		/*!
 		** \brief Get the current directory

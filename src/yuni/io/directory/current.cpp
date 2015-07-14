@@ -25,32 +25,64 @@ namespace Current
 	{
 
 		template<class StringT>
-		static inline void AppendCurrentDirectory(StringT& string)
+		static inline bool FetchAndAppendCurrentDirectory(StringT& string)
 		{
 			#ifdef YUNI_OS_WINDOWS
 			{
-				const wchar_t* c = _wgetcwd(nullptr, 0 /* Arbitrary value */);
-
-				const int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, c, -1, nullptr, 0,  nullptr, nullptr);
-				if (sizeRequired > 0)
+				wchar_t* cwd = _wgetcwd(nullptr, 0); // length: Arbitrary value
+				if (cwd != nullptr)
 				{
-					char* buffer = new (std::nothrow) char[sizeRequired + 1];
-					if (nullptr != buffer)
+					const int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, cwd, -1, nullptr, 0,  nullptr, nullptr);
+					if (sizeRequired > 0)
 					{
-						if (WideCharToMultiByte(CP_UTF8, 0, c, -1, buffer, sizeRequired,  nullptr, nullptr) > 0)
+						string.reserve(string.size() + sizeRequired + 1);
+						char* buffer = string.data();
+						if (nullptr != buffer) // just in case
 						{
-							buffer[sizeRequired] = '\0'; // just in case
-							string.append(buffer, sizeRequired);
+							buffer += string.size();
+
+							if (WideCharToMultiByte(CP_UTF8, 0, cwd, -1, buffer, sizeRequired,  nullptr, nullptr) > 0)
+							{
+								string.resize(string.size() + sizeRequired);
+								free(cwd);
+								return true;
+							}
 						}
-						delete[] buffer;
 					}
+
+					free(cwd);
 				}
 			}
 			#else
 			{
-				string.append(::getcwd(nullptr, 0 /* arbitrary value */));
+				// arbitrary - good enough for most cases
+				uint more = 512 - 1;
+				do
+				{
+					string.reserve(string.size() + more);
+					char* buffer = string.data();
+					// making sure that the buffer has been allocated
+					if (YUNI_UNLIKELY(nullptr == buffer or string.capacity() <= string.size()))
+						return false;
+
+					buffer += string.size();
+					size_t length = string.capacity() - string.size() - 1;
+
+					char* path = ::getcwd(buffer, length);
+					if (YUNI_LIKELY(path))
+					{
+						string.resize(string.size() + (uint)strlen(path));
+						return true;
+					}
+					more += 2096; // already have -1
+				}
+				while (more < 65535);
 			}
 			#endif
+
+			// just in case the inner content has been modified
+			string.resize(string.size());
+			return false;
 		}
 
 	} // anonymous namespace
@@ -60,24 +92,24 @@ namespace Current
 	String Get()
 	{
 		String current;
-		AppendCurrentDirectory(current);
+		FetchAndAppendCurrentDirectory(current);
 		return current;
 	}
 
 
-	void Get(String& out, bool clearBefore)
+	bool Get(String& out, bool clearBefore)
 	{
 		if (clearBefore)
 			out.clear();
-		AppendCurrentDirectory(out);
+		return FetchAndAppendCurrentDirectory(out);
 	}
 
 
-	void Get(Clob& out, bool clearBefore)
+	bool Get(Clob& out, bool clearBefore)
 	{
 		if (clearBefore)
 			out.clear();
-		AppendCurrentDirectory(out);
+		return FetchAndAppendCurrentDirectory(out);
 	}
 
 
