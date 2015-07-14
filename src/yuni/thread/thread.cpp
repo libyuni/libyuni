@@ -78,7 +78,7 @@ namespace Thread
 	{
 		// assert, for the debugger
 		assert(arg and "Yuni Thread Internal: invalid argument (pthread callback)");
-		if (!arg)
+		if (nullptr == arg)
 			return 0;
 
 		// Get back our object.
