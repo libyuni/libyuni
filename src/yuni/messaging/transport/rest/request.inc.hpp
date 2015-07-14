@@ -1,6 +1,8 @@
-
 #include "../../../core/system/cpu.h"
 #include "../../../thread/id.h"
+#include <iostream>
+
+
 
 
 namespace Yuni

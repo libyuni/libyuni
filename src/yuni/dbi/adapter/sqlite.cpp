@@ -1,4 +1,3 @@
-
 #include "../../yuni.h"
 #include "../../core/string.h"
 #include "../../core/noncopyable.h"
@@ -8,6 +7,7 @@
 #include "../../thread/signal.h"
 #include <string.h>
 #include <cassert>
+#include <iostream>
 
 
 
