@@ -42,7 +42,15 @@ namespace Directory
 		** \param[out] out The variable where the current directory will be written
 		** \param clearBefore True to clean \p out before
 		*/
-		template<class StringT> void Get(StringT& out, bool clearBefore = true);
+		void Get(String& out, bool clearBefore = true);
+
+		/*!
+		** \brief Get the current directory (clob)
+		**
+		** \param[out] out The variable where the current directory will be written
+		** \param clearBefore True to clean \p out before
+		*/
+		void Get(Clob& out, bool clearBefore = true);
 
 		/*!
 		** \brief Get the current directory

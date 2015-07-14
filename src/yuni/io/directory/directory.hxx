@@ -20,12 +20,6 @@ namespace IO
 namespace Directory
 {
 
-	/*!
-	** \brief Get the current directory which must be freed
-	*/
-	char* CurrentDirectory();
-
-
 	inline bool DummyCopyUpdateEvent(Yuni::IO::Directory::CopyState, const String&, const String&, uint64, uint64)
 	{
 		return true;
@@ -73,44 +67,3 @@ namespace Directory
 } // namespace Directory
 } // namespace IO
 } // namespace Yuni
-
-
-
-
-
-namespace Yuni
-{
-namespace IO
-{
-namespace Directory
-{
-namespace Current
-{
-
-	template<class StringT>
-	inline void Get(StringT& out, bool clearBefore)
-	{
-		char* c = Yuni::Private::IO::Directory::CurrentDirectory();
-		if (c)
-		{
-			if (clearBefore)
-				out = c;
-			else
-				out += c;
-			::free(c);
-		}
-		else
-		{
-			if (clearBefore)
-				out.clear();
-		}
-	}
-
-
-
-
-} // namespace Current
-} // namespace Directory
-} // namespace IO
-} // namespace Yuni
-

@@ -93,6 +93,14 @@ namespace Directory
 			return true;
 
 
+		// A temporary buffer for copying files' contents
+		// 16k seems to be a good choice (better than smaller block size when used
+		// in Virtual Machines)
+		const uint bufferSize = 16384;
+		char* const buffer = new (std::nothrow) char[bufferSize];
+		if (YUNI_UNLIKELY(nullptr == buffer))
+			return false;
+
 		uint64 current = 0;
 		// A temporary string
 		String tmp;
@@ -105,11 +113,6 @@ namespace Directory
 		// Stream on the target file
 		IO::File::Stream toFile;
 
-		// A temporary buffer for copying files' contents
-		// 16k seems to be a good choice (better than smaller block size when used
-		// in Virtual Machines)
-		enum { bufferSize = 8192 };
-		char* const buffer = new char[(uint) bufferSize];
 
 		// reduce overhead brought by `onUpdate`
 		enum { maxSkip = 6 };
@@ -141,7 +144,7 @@ namespace Directory
 			{
 				// The target file is a real file (and not a folder)
 				// Checking first for overwritting
-				if (not overwrite && IO::Exists(tmp))
+				if (not overwrite and IO::Exists(tmp))
 					continue;
 
 				// Try to open the source file
@@ -154,7 +157,7 @@ namespace Directory
 					{
 						// reading the whole source file
 						uint64 numRead;
-						while ((numRead = fromFile.read(buffer, (uint) bufferSize)) > 0)
+						while ((numRead = fromFile.read(buffer, bufferSize)) > 0)
 						{
 							// progression
 							current += numRead;

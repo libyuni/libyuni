@@ -89,20 +89,23 @@ namespace Directory
 
 		static bool RecursiveDeleteWindow(const wchar_t* path, uint size)
 		{
-			enum { maxLen = (MAX_PATH < 1024) ? 1024 : MAX_PATH };
+			enum { maxLen = (MAX_PATH < 4096) ? 4096 : MAX_PATH };
 
 			if (size >= maxLen)
 				return false;
 
 			// temporary buffer for filename manipulation
-			wchar_t* filename = new wchar_t[maxLen];
+			wchar_t* filename = new (std::nothrow) wchar_t[maxLen];
+			if (nullptr == filename)
+				return false;
 			::wcsncpy_s(filename, maxLen, path, size);
 			if (size + 2 < maxLen)
 			{
 				filename[size++] = L'\\';
 				filename[size++] = L'*';
-				filename[size] = L'\0';
+				filename[size]   = L'\0';
 			}
+
 			// temporary buffer
 			WIN32_FIND_DATAW filedata;
 			HANDLE handle = ::FindFirstFileW(filename, &filedata);
@@ -134,9 +137,9 @@ namespace Directory
 					}
 
 					// Recursively delete the sub-folder
-					if ((filedata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+					if (0 != (filedata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 					{
-						if (!RecursiveDeleteWindow(filename, newSize))
+						if (not RecursiveDeleteWindow(filename, newSize))
 						{
 							::FindClose(handle);
 							delete[] filename;
@@ -150,6 +153,7 @@ namespace Directory
 						// remove it first.
 						if (0 != (filedata.dwFileAttributes & FILE_ATTRIBUTE_READONLY))
 							::SetFileAttributesW(filename, FILE_ATTRIBUTE_NORMAL);
+
 						// Trying to delete the file
 						if (not ::DeleteFileW(filename))
 						{
@@ -183,31 +187,32 @@ namespace Directory
 			return true;
 
 		# ifdef YUNI_OS_WINDOWS
-		using namespace std;
+		{
+			String canon;
+			Canonicalize(canon, path);
 
-		String canon;
-		Canonicalize(canon, path);
+			Private::WString<true /*false*/, false> fsource(canon);
+			if (fsource.empty())
+				return false;
 
-		Private::WString<true /*false*/, false> fsource(canon);
-		if (fsource.empty())
-			return false;
+			// SHFILEOPSTRUCT operation;
+			// operation.hwnd = nullptr;
+			// operation.wFunc = FO_DELETE;
+			// operation.fFlags |= FOF_NOCONFIRMATION;
+			// // Requires double '\0' termination
+			// auto doubleTerminated = new wchar_t[fsource.size() + 2];
+			// ::wcsncpy(doubleTerminated, fsource.c_str(), fsource.size() + 1);
+			// doubleTerminated[fsource.size() + 1] = L'\0';
+			// operation.pFrom = doubleTerminated;
+			// return 0 == ::SHFileOperation(&operation);
 
-		/*
-		SHFILEOPSTRUCT operation;
-		operation.hwnd = nullptr;
-		operation.wFunc = FO_DELETE;
-		operation.fFlags |= FOF_NOCONFIRMATION;
-		// Requires double '\0' termination
-		auto doubleTerminated = new wchar_t[fsource.size() + 2];
-		::wcsncpy(doubleTerminated, fsource.c_str(), fsource.size() + 1);
-		doubleTerminated[fsource.size() + 1] = L'\0';
-		operation.pFrom = doubleTerminated;
-		return 0 == ::SHFileOperation(&operation);
-		*/
-		return RecursiveDeleteWindow(fsource.c_str(), fsource.size());
+			return RecursiveDeleteWindow(fsource.c_str(), fsource.size());
+		}
 		# else
-		String p(path);
-		return RmDirRecursiveInternal(p);
+		{
+			String p(path);
+			return RmDirRecursiveInternal(p);
+		}
 		# endif
 	}
 

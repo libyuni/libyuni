@@ -29,8 +29,7 @@ namespace IO
 
 		static inline NodeType Stat(const AnyString& filename, yuint64& outSize, yint64& lastModified, bool followSymLink)
 		{
-			if (filename.empty())
-				return Yuni::IO::typeUnknown;
+			assert(not filename.empty());
 
 			# ifdef YUNI_OS_WINDOWS
 			{
@@ -109,7 +108,8 @@ namespace IO
 	{
 		yuint64 size; // useless
 		yint64 lastModified;
-		return Stat(filename, size, lastModified, followSymLink);
+		return (YUNI_LIKELY(not filename.empty()))
+			? Stat(filename, size, lastModified, followSymLink) : IO::typeUnknown;
 	}
 
 
@@ -117,7 +117,8 @@ namespace IO
 	{
 		size = 0u;
 		lastModified = 0;
-		return Stat(filename, size, lastModified, followSymLink);
+		return (YUNI_LIKELY(not filename.empty()))
+			? Stat(filename, size, lastModified, followSymLink) : IO::typeUnknown;
 	}
 
 
