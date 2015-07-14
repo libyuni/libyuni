@@ -1,50 +1,48 @@
-#ifndef __YUNI_CORE_STRING_STRING_H__
-# define __YUNI_CORE_STRING_STRING_H__
+#pragma once
+#include "../../yuni.h"
+#include "../static/remove.h"
+#include "../static/assert.h"
+#include "../static/typedef.h"
+#include "../traits/cstring.h"
+#include "../traits/length.h"
+#include "../smartptr.h"
 
-# include "../../yuni.h"
-# include "../static/remove.h"
-# include "../static/assert.h"
-# include "../static/typedef.h"
-# include "../traits/cstring.h"
-# include "../traits/length.h"
-# include "../smartptr.h"
+#ifdef YUNI_OS_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4995)
+#pragma warning(push, 0)
+#endif
 
-# ifdef YUNI_OS_MSVC
-#	pragma warning(push)
-#	pragma warning(disable : 4995)
-#	pragma warning(push, 0)
-# endif
+#include <cstdio>
+#ifdef YUNI_HAS_STDARG_H
+# include <stdarg.h>
+#endif
 
-# include <cstdio>
-# ifdef YUNI_HAS_STDARG_H
-#	include <stdarg.h>
-# endif
-
-# include <string>
-# include <functional> // std::hash
+#include <string>
+#include <functional> // std::hash
 
 
-# ifdef YUNI_HAS_VECTOR
-#	include <vector>
-# endif
-# include <list>
+#ifdef YUNI_HAS_VECTOR
+# include <vector>
+#endif
+#include <list>
 
-# ifdef YUNI_OS_MSVC
-#	pragma warning(pop)
-# endif
+#ifdef YUNI_OS_MSVC
+#pragma warning(pop)
+#endif
 
-# include "utf8char.h"
-# include "../iterator.h"
-# include "traits/traits.h"
-# include "traits/append.h"
-# include "traits/assign.h"
-# include "traits/fill.h"
-# include "traits/vnsprintf.h"
-# include "traits/into.h"
+#include "utf8char.h"
+#include "../iterator.h"
+#include "traits/traits.h"
+#include "traits/append.h"
+#include "traits/assign.h"
+#include "traits/fill.h"
+#include "traits/vnsprintf.h"
+#include "traits/into.h"
 
-# ifdef YUNI_HAS_CPP_MOVE
+#ifdef YUNI_HAS_CPP_MOVE
 # include <utility>
-# endif
+#endif
 
 
 
@@ -218,13 +216,13 @@ namespace Yuni
 		static int ToLower(int c);
 		//! Lower case to upper case letter conversion (man 3 toupper)
 		static int ToUpper(int c);
-		//! White-space character test
+		//! White-space character test (' \t\r\n...')
 		static bool IsSpace(int c);
-		//! decimal-digit character test
+		//! decimal-digit character test (0-9)
 		static bool IsDigit(int c);
-		//! decimal-digit character test (without zero)
+		//! decimal-digit character test (without zero - 1-9)
 		static bool IsDigitNonZero(int c);
-		//! alphabetic character test
+		//! alphabetic character test (a-zA-Z)
 		static bool IsAlpha(int c);
 		//@}
 
@@ -232,7 +230,7 @@ namespace Yuni
 
 	private:
 		// Implements the following iterator models for String
-		# include "iterator.inc.hpp"
+		#include "iterator.inc.hpp"
 
 	public:
 		//! \name Iterators
@@ -2096,8 +2094,7 @@ namespace Traits
 } // namespace Traits
 } // namespace Yuni
 
-# include "iterator.hxx"
-# include "string.hxx"
-# include "operators.hxx"
+#include "iterator.hxx"
+#include "string.hxx"
+#include "operators.hxx"
 
-#endif // __YUNI_CORE_STRING_STRING_H__

@@ -7,6 +7,7 @@
 #ifdef YUNI_OS_LINUX
 # include <sys/prctl.h>
 #endif
+#include <iostream>
 
 
 

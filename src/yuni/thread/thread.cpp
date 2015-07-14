@@ -1,4 +1,3 @@
-
 #include "../yuni.h"
 #include <time.h>
 #include <sys/timeb.h>
@@ -18,6 +17,7 @@
 
 #include "thread.h"
 #include <limits.h> // for PTHREAD_STACK_MIN
+#include <iostream>
 
 
 

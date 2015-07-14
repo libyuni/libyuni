@@ -1,12 +1,10 @@
-#ifndef __YUNI_CORE_STRING_STRING_HXX__
-# define __YUNI_CORE_STRING_STRING_HXX__
-
-# include <iostream>
-# include <ctype.h>
-# include <cassert>
-# ifdef YUNI_HAS_VA_COPY
-#	include <stdarg.h>
-# endif // YUNI_HAS_VA_COPY
+#pragma once
+#include "string.h"
+#include <ctype.h>
+#include <cassert>
+#ifdef YUNI_HAS_VA_COPY
+# include <stdarg.h>
+#endif // YUNI_HAS_VA_COPY
 
 
 
@@ -17,18 +15,14 @@ namespace Yuni
 	template<uint ChunkSizeT, bool ExpandableT>
 	inline int CString<ChunkSizeT,ExpandableT>::ToLower(int c)
 	{
-		return (static_cast<uint>(c) - 'A' < 26)
-			? c | 32
-			: c;
+		return (static_cast<uint>(c) - 'A' < 26) ? (c | 32) : c;
 	}
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
 	inline int CString<ChunkSizeT,ExpandableT>::ToUpper(int c)
 	{
-		return (static_cast<uint>(c) - 'a' < 26)
-			? c & 0x5f
-			: c;
+		return (static_cast<uint>(c) - 'a' < 26) ? (c & 0x5f) : c;
 	}
 
 
@@ -3407,5 +3401,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_STRING_STRING_HXX__
