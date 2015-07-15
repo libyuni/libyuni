@@ -2,6 +2,9 @@
 #include "object.h"
 #include <cassert>
 #include "../core/string/escape.h"
+#include "../core/dictionary.h"
+#include <vector>
+
 
 
 namespace Yuni
@@ -9,79 +12,94 @@ namespace Yuni
 namespace Marshal
 {
 
-	template<class UnionT>
-	static inline void ObjectCopy(Object::Type& type, UnionT& value, Object::Type fromType, const UnionT& fromValue)
+	enum
 	{
-		switch ((type = fromType))
+		//! Index within enum Type of the first complex datatype (for internal uses)
+		firstComplexDatatype = Object::otArray,
+	};
+
+	//! Array of object
+	typedef std::vector<Object>  InternalArray;
+	//! Object mapping
+	typedef Dictionary<String, Object>::Hash  InternalTable;
+
+
+	namespace // anonymous
+	{
+
+		template<class UnionT>
+		static inline void ObjectCopy(Object::Type& type, UnionT& value, Object::Type fromType, const UnionT& fromValue)
 		{
-			case Object::otString:
+			switch ((type = fromType))
+			{
+				case Object::otString:
 				{
 					assert(fromValue.string);
 					value.string = new String(*fromValue.string);
 					break;
 				}
-			case Object::otDictionary:
+				case Object::otDictionary:
 				{
 					assert(fromValue.dictionary);
-					value.dictionary = new Object::InternalTable(*fromValue.dictionary);
+					value.dictionary = new InternalTable(*((InternalTable*) fromValue.dictionary));
 					break;
 				}
-			case Object::otArray:
+				case Object::otArray:
 				{
 					assert(fromValue.array);
-					value.array = new Object::InternalArray(*fromValue.array);
+					value.array = new InternalArray(*((InternalArray*) fromValue.array));
 					break;
 				}
-			default:
-				value.biggest = fromValue.biggest;
+				default:
+					value.blob = fromValue.blob;
+			}
 		}
-	}
 
 
-	template<class UnionT>
-	static inline void ObjectRelease(Object::Type type, UnionT& value)
-	{
-		switch (type)
+		template<class UnionT>
+		static inline void ObjectRelease(Object::Type type, UnionT& value)
 		{
-			case Object::otString:
+			switch (type)
+			{
+				case Object::otString:
 				{
 					delete value.string;
 					break;
 				}
-			case Object::otDictionary:
+				case Object::otDictionary:
 				{
-					delete value.dictionary;
+					delete ((InternalTable*) value.dictionary);
 					break;
 				}
-			case Object::otArray:
+				case Object::otArray:
 				{
-					delete value.array;
+					delete ((InternalArray*) value.array);
 					break;
 				}
-			default:
-				break; // does nothing
+				default:
+					break; // does nothing
+			}
 		}
-	}
 
 
-	template<class UnionT>
-	static inline Object& ObjectPushBack(Object::Type& type, UnionT& value)
-	{
-		switch (type)
+		template<class UnionT>
+		static inline Object& ObjectPushBack(Object::Type& type, UnionT& value)
 		{
-			case Object::otArray:
+			switch (type)
+			{
+				case Object::otArray:
 				{
-					value.array->push_back(Object());
-					return value.array->back();
+					((InternalArray*) value.array)->push_back(Object());
+					return ((InternalArray*) value.array)->back();
 				}
-			case Object::otNil:
+				case Object::otNil:
 				{
 					type = Object::otArray;
-					Object::InternalArray* array = new Object::InternalArray(1);
+					InternalArray* array = new InternalArray(1);
 					value.array = array;
 					return array->back();
 				}
-			case Object::otDictionary:
+				case Object::otDictionary:
 				{
 					// not really efficient, but it would make the job whatever it takes
 					String key;
@@ -89,26 +107,33 @@ namespace Marshal
 					do
 					{
 						key = index;
-						if (value.dictionary->count(key) == 0)
-							return (*value.dictionary)[key];
+						if (((InternalTable*) value.dictionary)->count(key) == 0)
+							return (*((InternalTable*)value.dictionary))[key];
 						++index;
 						assert(index < (uint) -1 and "infinite loop");
 					}
 					while (true);
+					break;
 				}
-			default:
+				default:
 				{
 					// mutate
-					Object::InternalArray* array = new Object::InternalArray();
+					InternalArray* array = new InternalArray();
 					array->push_back(Object(type, value));
 					array->push_back(Object());
 					type = Object::otArray;
 					value.array = array;
 					return array->back();
 				}
+			}
+			assert(false and "something is missing within the switch/case");
 		}
-		assert(false and "something is missing within the switch/case");
-	}
+
+	} // anonymous namespace
+
+
+
+
 
 
 
@@ -140,23 +165,25 @@ namespace Marshal
 			switch (pType)
 			{
 				case otString:
-					{
-						(*pValue.string) = *rhs.pValue.string;
-						break;
-					}
+				{
+					(*pValue.string) = *rhs.pValue.string;
+					break;
+				}
 				case otArray:
-					{
-						(*pValue.array) = *rhs.pValue.array;
-						break;
-					}
+				{
+					(* ((InternalArray*) pValue.array)) = * ((InternalArray*) rhs.pValue.array);
+					break;
+				}
 				case otDictionary:
-					{
-						(*pValue.dictionary) = *rhs.pValue.dictionary;
-						break;
-					}
+				{
+					(*((InternalTable*) pValue.dictionary)) = * ((InternalTable*) rhs.pValue.dictionary);
+					break;
+				}
 				default:
+				{
 					// raw copy
 					pValue = rhs.pValue;
+				}
 			}
 		}
 		else
@@ -214,18 +241,20 @@ namespace Marshal
 	}
 
 
-	uint Object::size() const
+	size_t Object::size() const
 	{
 		switch (pType)
 		{
 			case otArray:
-				return (uint )pValue.array->size();
+				assert(pValue.array != nullptr);
+				return ((InternalArray*) pValue.array)->size();
 			case otDictionary:
-				return (uint) pValue.dictionary->size();
+				assert(pValue.dictionary != nullptr);
+				return ((InternalTable*) pValue.dictionary)->size();
 			case otNil:
-				return 0;
+				return 0u;
 			default:
-				return 1;
+				return 1u;
 		}
 	}
 
@@ -241,98 +270,108 @@ namespace Marshal
 		switch (pType)
 		{
 			case otDictionary:
-				{
-					return (*pValue.dictionary)[key];
-				}
+			{
+				return (* ((InternalTable*) pValue.dictionary))[key];
+			}
 			case otArray:
+			{
+				InternalArray& array = * ((InternalArray*) pValue.array);
+				uint index = 0;
+				if (key.empty() or key.to(index))
 				{
-					InternalArray& array = *pValue.array;
-					uint index = 0;
-					if (key.empty() or key.to(index))
-					{
-						if (index >= array.size())
-							array.resize(index + 1);
-						return array[index];
-					}
-					else
-					{
-						// mutate into a dictionary
-						InternalTable* dict = new InternalTable();
-						String k;
-						for (uint i = 0; i != array.size(); ++i)
-							(*dict)[(k = i)].swap(array[i]);
-						delete pValue.array;
-
-						pValue.dictionary = dict;
-						pType = otDictionary;
-						return (*dict)[key];
-					}
+					if (index >= array.size())
+						array.resize(index + 1);
+					return array[index];
 				}
-			case otNil:
+				else
 				{
-					pType = otDictionary;
-					pValue.dictionary = new InternalTable();
-					return (*pValue.dictionary)[key];
-				}
-			default:
-				{
-					pType = otDictionary;
+					// mutate into a dictionary
 					InternalTable* dict = new InternalTable();
-					(*dict)["0"] = *this;
+					String k;
+					for (uint i = 0; i != array.size(); ++i)
+						(*dict)[(k = i)].swap(array[i]);
+					delete ((InternalArray*) pValue.array);
+
 					pValue.dictionary = dict;
+					pType = otDictionary;
 					return (*dict)[key];
 				}
+			}
+			case otNil:
+			{
+				pType = otDictionary;
+				pValue.dictionary = new InternalTable();
+				return (* ((InternalTable*) pValue.dictionary))[key];
+			}
+			default:
+			{
+				pType = otDictionary;
+				InternalTable* dict = new InternalTable();
+				(*dict)["0"] = *this;
+				pValue.dictionary = dict;
+				return (*dict)[key];
+			}
 		}
 	}
 
 
 
-	template<class StreamT, class ValueT>
-	static inline bool ObjectBuiltinTypeToJSON(StreamT& out, Object::Type type, const ValueT& value)
+
+
+
+
+	namespace // anonymous
 	{
-		switch (type)
+
+		template<class StreamT, class ValueT>
+		static inline bool ObjectBuiltinTypeToJSON(StreamT& out, Object::Type type, const ValueT& value)
 		{
-			case Object::otString:
+			switch (type)
+			{
+				case Object::otString:
 				{
 					out += '"';
 					AppendEscapedString(out, *value.string, '"');
 					out += '"';
 					return true;
 				}
-			case Object::otInteger:
+				case Object::otInteger:
 				{
 					out << value.integer;
 					return true;
 				}
-			case Object::otBool:
+				case Object::otBool:
 				{
 					out << ((value.boolean) ? '1' : '0');
 					return true;
 				}
-			case Object::otDouble:
+				case Object::otDouble:
 				{
 					out << value.decimal;
 					return true;
 				}
-			case Object::otNil:
+				case Object::otNil:
 				{
 					out << "null";
 					return true;
 				}
-			default:
-				return false;
+				default:
+					return false;
+			}
+			return false;
 		}
-		return false;
-	}
 
 
-	template<class StreamT>
-	static inline void AppendIndentSpaces(StreamT& out, uint depth, uint tabsize = 4)
-	{
-		assert(tabsize <= 16);
-		for (uint i = 0; i != depth; ++i)
-			out.append("                ", tabsize);
-	}
+		template<class StreamT>
+		static inline void AppendIndentSpaces(StreamT& out, uint depth, uint tabsize = 4)
+		{
+			assert(tabsize <= 16);
+			for (uint i = 0; i != depth; ++i)
+				out.append("                ", tabsize);
+		}
+
+	} // anonymous namespace
+
 
 
 	template<bool PrettyT, class StreamT>
@@ -341,112 +380,112 @@ namespace Marshal
 		switch (pType)
 		{
 			case otDictionary:
+			{
+				InternalTable& table = * ((InternalTable*) pValue.dictionary);
+				if (table.empty())
 				{
-					InternalTable& table = *pValue.dictionary;
-					if (table.empty())
+					out.append("{ }", 3);
+					break;
+				}
+
+				if (PrettyT)
+					out.append("{\n", 2);
+				else
+					out += '{';
+
+				// manually handling the first item, to not be annyoyed again by commas
+				if (PrettyT)
+					AppendIndentSpaces(out, depth);
+				InternalTable::const_iterator it = table.begin();
+				out += '"';
+				AppendEscapedString(out, it->first, '"');
+				out += "\": ";
+				{
+					const Object& child = it->second;
+					if ((uint) child.pType < (uint) firstComplexDatatype)
 					{
-						out.append("{ }", 3);
-						break;
+						// simple type
+						ObjectBuiltinTypeToJSON(out, child.pType, child.pValue);
 					}
-
-					if (PrettyT)
-						out.append("{\n", 2);
 					else
-						out += '{';
+					{
+						// complex type, recursive call
+						child.valueToJSON<PrettyT>(out, depth + 1);
+					}
+				}
+				++it;
 
-					// manually handling the first item, to not be annyoyed again by commas
+				// each item
+				InternalTable::const_iterator end = table.end();
+				for (; it != end; ++it)
+				{
 					if (PrettyT)
+					{
+						out.append(",\n", 2);
 						AppendIndentSpaces(out, depth);
-					InternalTable::const_iterator it = table.begin();
+					}
+					else
+						out += ',';
+
 					out += '"';
 					AppendEscapedString(out, it->first, '"');
 					out += "\": ";
+					const Object& child = it->second;
+					if ((uint) child.pType < (uint) firstComplexDatatype)
 					{
-						const Object& child = it->second;
-						if ((uint) child.pType < (uint) Object::firstComplexDatatype)
-						{
-							// simple type
-							ObjectBuiltinTypeToJSON(out, child.pType, child.pValue);
-						}
-						else
-						{
-							// complex type, recursive call
-							child.valueToJSON<PrettyT>(out, depth + 1);
-						}
+						// simple type
+						ObjectBuiltinTypeToJSON(out, child.pType, child.pValue);
 					}
-					++it;
-
-					// each item
-					InternalTable::const_iterator end = table.end();
-					for (; it != end; ++it)
+					else
 					{
-						if (PrettyT)
-						{
-							out.append(",\n", 2);
-							AppendIndentSpaces(out, depth);
-						}
-						else
-							out += ',';
-
-						out += '"';
-						AppendEscapedString(out, it->first, '"');
-						out += "\": ";
-						const Object& child = it->second;
-						if ((uint) child.pType < (uint) Object::firstComplexDatatype)
-						{
-							// simple type
-							ObjectBuiltinTypeToJSON(out, child.pType, child.pValue);
-						}
-						else
-						{
-							// complex type, recursive call
-							child.valueToJSON<PrettyT>(out, depth + 1);
-						}
+						// complex type, recursive call
+						child.valueToJSON<PrettyT>(out, depth + 1);
 					}
-
-					// final
-					if (PrettyT)
-					{
-						out += '\n';
-						--depth;
-						AppendIndentSpaces(out, depth);
-					}
-					out += '}';
-					break;
 				}
 
-			case otArray:
+				// final
+				if (PrettyT)
 				{
-					out << "[\n";
-					InternalArray& array = *pValue.array;
-
-					for (uint index = 0; index != array.size(); ++index)
-					{
-						AppendIndentSpaces(out, depth);
-						const Object& child = array[index];
-						if ((uint) child.pType < (uint) Object::firstComplexDatatype)
-						{
-							// simple type
-							ObjectBuiltinTypeToJSON(out, child.pType, child.pValue);
-						}
-						else
-						{
-							// complex type, recursive call
-							child.valueToJSON<PrettyT>(out, depth + 1);
-						}
-						out << ",\n";
-					}
-
+					out += '\n';
 					--depth;
 					AppendIndentSpaces(out, depth);
-					out << "]\n";
-					break;
 				}
-			default:
+				out += '}';
+				break;
+			}
+
+			case otArray:
+			{
+				out << "[\n";
+				InternalArray& array = * ((InternalArray*) pValue.array);
+
+				for (uint index = 0; index != array.size(); ++index)
 				{
-					ObjectBuiltinTypeToJSON(out, pType, pValue);
-					break;
+					AppendIndentSpaces(out, depth);
+					const Object& child = array[index];
+					if ((uint) child.pType < (uint) firstComplexDatatype)
+					{
+						// simple type
+						ObjectBuiltinTypeToJSON(out, child.pType, child.pValue);
+					}
+					else
+					{
+						// complex type, recursive call
+						child.valueToJSON<PrettyT>(out, depth + 1);
+					}
+					out << ",\n";
 				}
+
+				--depth;
+				AppendIndentSpaces(out, depth);
+				out << "]\n";
+				break;
+			}
+			default:
+			{
+				ObjectBuiltinTypeToJSON(out, pType, pValue);
+				break;
+			}
 		}
 	}
 
@@ -460,8 +499,18 @@ namespace Marshal
 	}
 
 
+	#ifdef YUNI_HAS_CPP_MOVE
+	inline Object& Object::operator = (Object&& rhs)
+	{
+		ObjectRelease(pType, pValue);
+		pType = rhs.pType;
+		pValue = rhs.pValue;
+		rhs.pType = otNil;
+		return *this;
+	}
+	#endif
+
 
 
 } // namespace Marshal
 } // namespace Yuni
-

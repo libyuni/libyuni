@@ -1,10 +1,7 @@
-#ifndef __YUNI_MARSHAL_OBJECT_H__
-# define __YUNI_MARSHAL_OBJECT_H__
+#pragma once
+#include "../yuni.h"
+#include "../core/string.h"
 
-# include "../yuni.h"
-# include "../core/string.h"
-# include <vector>
-# include "../core/dictionary.h"
 
 
 namespace Yuni
@@ -23,6 +20,7 @@ namespace Marshal
 	class Object final
 	{
 	public:
+
 		//! Internal type
 		enum Type
 		{
@@ -43,16 +41,6 @@ namespace Marshal
 			//! Dictionary
 			otDictionary
 		};
-		enum
-		{
-			//! Index within enum Type of the first complex datatype (for internal uses)
-			firstComplexDatatype = otArray,
-		};
-
-		//! Array of object
-		typedef std::vector<Object>  InternalArray;
-		//! Object mapping
-		typedef Dictionary<String, Object>::Hash  InternalTable;
 
 		// \internal for some reasons, the compiler requires to have this type public
 		// (does not compile otherwise in object.cpp)
@@ -67,12 +55,13 @@ namespace Marshal
 			//! String
 			String* string;
 			//! Array
-			InternalArray* array;
+			void* array;
 			//! Dictionary
-			InternalTable* dictionary;
-			//! Largest possible type
-			void* biggest;
+			void* dictionary;
+			//! blob
+			void* blob;
 		};
+
 
 	public:
 		//! \name Constructors & Destructor
@@ -80,6 +69,10 @@ namespace Marshal
 		Object();
 		//! Copy constructor
 		Object(const Object& rhs);
+		#ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		Object(Object&&);
+		#endif
 		//! Constructor for internal operations
 		Object(Type type, InternalDatatype value);
 		//! Destructor
@@ -134,7 +127,7 @@ namespace Marshal
 		**
 		** \return The number of items if an array or a dictionary, 0 if nil, 1 otherwise
 		*/
-		uint size() const;
+		size_t size() const;
 
 		/*!
 		** \brief Swap the content of two object
@@ -159,6 +152,10 @@ namespace Marshal
 		//@{
 		//! Copy operator
 		Object& operator = (const Object& rhs);
+		#ifdef YUNI_HAS_CPP_MOVE
+		//! Move opertor
+		Object& operator = (Object&&);
+		#endif
 		//! assign string
 		template<uint N> Object& operator = (const char string[N]);
 		//! assign something else
@@ -189,6 +186,4 @@ namespace Marshal
 } // namespace Marshal
 } // namespace Yuni
 
-# include "object.hxx"
-
-#endif // __YUNI_MARSHAL_OBJECT_H__
+#include "object.hxx"

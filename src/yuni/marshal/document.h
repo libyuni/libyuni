@@ -1,8 +1,7 @@
-#ifndef __YUNI_MARSHAL_DOCUMENT_H__
-# define __YUNI_MARSHAL_DOCUMENT_H__
+#pragma once
+#include "../yuni.h"
+#include "object.h"
 
-# include "../yuni.h"
-# include "object.h"
 
 
 namespace Yuni
@@ -30,5 +29,3 @@ namespace Marshal
 
 } // namespace Marshal
 } // namespace Yuni
-
-#endif // __YUNI_MARSHAL_DOCUMENT_H__

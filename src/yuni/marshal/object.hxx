@@ -1,5 +1,6 @@
-#ifndef __YUNI_MARSHAL_OBJECT_HXX__
-# define __YUNI_MARSHAL_OBJECT_HXX__
+#pragma once
+#include "object.h"
+
 
 
 namespace Yuni
@@ -9,15 +10,22 @@ namespace Marshal
 
 	inline Object::Object()
 		: pType(otNil)
-	{
-	}
+	{}
 
 
 	inline Object::Object(Type type, InternalDatatype value)
 		: pType(type)
 		, pValue(value)
+	{}
+
+	#ifdef YUNI_HAS_CPP_MOVE
+	inline Object::Object(Object&& rhs)
+		: pType(rhs.pType)
+		, pValue(rhs.pValue)
 	{
+		rhs.pType = otNil;
 	}
+	#endif
 
 
 	inline void Object::assign(const char* string)
@@ -86,8 +94,5 @@ namespace Marshal
 
 
 
-
 } // namespace Marshal
 } // namespace Yuni
-
-#endif // __YUNI_MARSHAL_OBJECT_HXX__
