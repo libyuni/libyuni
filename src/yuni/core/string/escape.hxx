@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_STRING_ESCAPE_HXX__
-# define __YUNI_CORE_STRING_ESCAPE_HXX__
+#pragma once
+#include "escape.h"
 
 
 
@@ -38,5 +38,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_STRING_ESCAPE_HXX__

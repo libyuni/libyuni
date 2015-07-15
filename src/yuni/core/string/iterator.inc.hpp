@@ -1,6 +1,4 @@
-#ifndef __YUNI_CORE_STRING_ITERATOR_H__
-# define __YUNI_CORE_STRING_ITERATOR_H__
-
+#pragma once
 
 // !!! Do not use includes here
 
@@ -469,10 +467,4 @@ struct Model
 	}; // class ByteIterator
 
 
-
-
-
-
 }; // class Model
-
-#endif // __YUNI_CORE_STRING_ITERATOR_H__

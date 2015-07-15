@@ -1,7 +1,5 @@
-#ifndef __YUNI_CORE_STRING_TRAITS_FILL_H__
-# define __YUNI_CORE_STRING_TRAITS_FILL_H__
-
-# include "../../traits/length.h"
+#pragma once
+#include "../../traits/length.h"
 
 
 namespace Yuni
@@ -62,5 +60,3 @@ namespace CString
 } // namespace CString
 } // namespace Extension
 } // namespace Yuni
-
-#endif // __YUNI_CORE_STRING_TRAITS_FILL_H__

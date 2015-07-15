@@ -1,8 +1,6 @@
-#ifndef __YUNI_CORE_MEMORY_BUFFER_TRAITS_INTEGER_APPEND_H__
-# define __YUNI_CORE_MEMORY_BUFFER_TRAITS_INTEGER_APPEND_H__
-
-# include "../../math/base.h"
-# include <cmath>
+#pragma once
+#include "../../math/base.h"
+#include <cmath>
 
 
 namespace Yuni
@@ -213,6 +211,3 @@ namespace CStringImpl
 } // namespace CStringImpl
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_CORE_MEMORY_BUFFER_TRAITS_INTEGER_APPEND_H__
-

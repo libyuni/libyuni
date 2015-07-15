@@ -1,8 +1,6 @@
-#ifndef __YUNI_CORE_STRING_ESCAPE_H__
-# define __YUNI_CORE_STRING_ESCAPE_H__
-
-# include "../../yuni.h"
-# include "string.h"
+#pragma once
+#include "../../yuni.h"
+#include "string.h"
 
 
 namespace Yuni
@@ -18,6 +16,4 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "escape.hxx"
-
-#endif // __YUNI_CORE_STRING_ESCAPE_H__
+#include "escape.hxx"

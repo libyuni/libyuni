@@ -1,16 +1,14 @@
-#ifndef __YUNI_CORE_MEMORY_BUFFER_TRAITS_APPEND_H__
-# define __YUNI_CORE_MEMORY_BUFFER_TRAITS_APPEND_H__
+#pragma once
+#include "../../traits/length.h"
+#include "integer.h"
+#include <stdio.h>
+#include <cassert>
 
-# include "../../traits/length.h"
-# include "integer.h"
-# include <stdio.h>
-# include <cassert>
-
-# ifdef YUNI_OS_MSVC
+#ifdef YUNI_OS_MSVC
 #	define YUNI_PRIVATE_MEMBUF_SPTRINF(BUFFER,SIZE, F, V)  ::sprintf_s(BUFFER,SIZE,F,V)
-# else
+#else
 #	define YUNI_PRIVATE_MEMBUF_SPTRINF(BUFFER,SIZE, F, V)  ::snprintf(BUFFER,SIZE,F,V)
-# endif
+#endif
 
 
 namespace Yuni
@@ -279,6 +277,4 @@ namespace CString
 } // namespace Extension
 } // namespace Yuni
 
-# undef YUNI_PRIVATE_MEMBUF_SPTRINF
-
-#endif // __YUNI_CORE_MEMORY_BUFFER_TRAITS_APPEND_H__
+#undef YUNI_PRIVATE_MEMBUF_SPTRINF

@@ -1,6 +1,5 @@
-#ifndef __YUNI_CORE_STRING_OPERATORS_HXX__
-# define __YUNI_CORE_STRING_OPERATORS_HXX__
-
+#pragma once
+#include "string.h"
 
 
 
@@ -197,7 +196,3 @@ namespace std
 } // namespace std
 
 # endif // YUNI_HAS_STL_HASH
-
-
-
-#endif // __YUNI_CORE_STRING_OPERATORS_HXX__

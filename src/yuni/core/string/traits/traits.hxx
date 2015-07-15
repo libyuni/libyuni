@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_STRING_TRAITS_TRAITS_HXX__
-# define __YUNI_CORE_STRING_TRAITS_TRAITS_HXX__
+#pragma once
+#include "traits.h"
 
 
 
@@ -342,5 +342,3 @@ namespace CStringImpl
 } // namespace CStringImpl
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_CORE_STRING_TRAITS_TRAITS_HXX__

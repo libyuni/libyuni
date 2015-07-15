@@ -1,8 +1,7 @@
-#ifndef __YUNI_CORE_MEMORYBUFFER_ISTRING_TRAITS_INTO_H__
-# define __YUNI_CORE_MEMORYBUFFER_ISTRING_TRAITS_INTO_H__
+#pragma once
+#include <stdlib.h>
+#include <ctype.h>
 
-# include <stdlib.h>
-# include <ctype.h>
 
 
 namespace Yuni
@@ -551,5 +550,3 @@ namespace CString
 } // namespace CString
 } // namespace Extension
 } // namespace Yuni
-
-#endif // __YUNI_CORE_MEMORYBUFFER_ISTRING_TRAITS_INTO_H__

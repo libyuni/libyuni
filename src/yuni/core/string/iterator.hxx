@@ -1,5 +1,5 @@
-#ifndef __YUNI_CORE_STRING_ITERATOR_HXX__
-# define __YUNI_CORE_STRING_ITERATOR_HXX__
+#pragma once
+
 
 
 namespace Yuni
@@ -72,5 +72,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_STRING_ITERATOR_HXX__
