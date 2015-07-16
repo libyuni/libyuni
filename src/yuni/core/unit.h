@@ -37,9 +37,5 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_UNIT_H__
-# define __YUNI_CORE_UNIT_H__
-
-# include "unit/unit.h"
-
-#endif // __YUNI_CORE_UNIT_H__
+#pragma once
+#include "unit/unit.h"

@@ -37,10 +37,6 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_DYNAMICLIBRARY_H__
-# define __YUNI_CORE_DYNAMICLIBRARY_H__
-
-# include "dynamiclibrary/symbol.h"
-# include "dynamiclibrary/file.h"
-
-#endif // __YUNI_CORE_DYNAMICLIBRARY_H__
+#pragma once
+#include "dynamiclibrary/symbol.h"
+#include "dynamiclibrary/file.h"

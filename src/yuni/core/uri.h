@@ -37,9 +37,5 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_URI_H__
-# define __YUNI_CORE_URI_H__
-
-# include "uri/uri.h"
-
-#endif // __YUNI_CORE_URI_H__
+#pragma once
+#include "uri/uri.h"

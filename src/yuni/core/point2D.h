@@ -37,9 +37,5 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_POINT_2D_H__
-# define __YUNI_CORE_POINT_2D_H__
-
-# include "math/geometry/point2D.h"
-
-#endif // __YUNI_CORE_POINT_2D_H__
+#pragma once
+#include "math/geometry/point2D.h"
