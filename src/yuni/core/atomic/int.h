@@ -208,6 +208,5 @@ namespace Atomic
 } // namespace Atomic
 } // namespace Yuni
 
-# include "int.hxx"
-# include "string.hxx"
-
+#include "int.hxx"
+#include "string.hxx"

@@ -37,8 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_ATOMIC_STRING_HXX__
-# define __YUNI_CORE_ATOMIC_STRING_HXX__
+#pragma once
+
 
 
 namespace Yuni
@@ -97,5 +97,3 @@ namespace CString
 } // namespace CString
 } // namespace Extension
 } // namespace Yuni
-
-#endif // __YUNI_CORE_ATOMIC_STRING_HXX__
