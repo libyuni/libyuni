@@ -37,13 +37,12 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_FUNCTIONAL_FOLD_H__
-# define __YUNI_CORE_FUNCTIONAL_FOLD_H__
+#pragma once
+
 
 
 namespace Yuni
 {
-
 
 	/*!
 	** \brief Folding implementation
@@ -68,6 +67,4 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "fold.hxx"
-
-#endif // __YUNI_CORE_FUNCTIONAL_FOLD_H__
+#include "fold.hxx"

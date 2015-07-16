@@ -37,17 +37,16 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_FUNCTIONAL_LOOP_H__
-# define __YUNI_CORE_FUNCTIONAL_LOOP_H__
+#pragma once
+#include "../math.h"
+#include "view.h"
 
-# include "../math.h"
-# include "view.h"
+
 
 namespace Yuni
 {
 namespace Functional
 {
-
 
 	template<class CollectionT>
 	class Loop final
@@ -248,8 +247,6 @@ namespace Functional
 
 
 
+
 } // namespace Functional
 } // namespace Yuni
-
-
-#endif // __YUNI_CORE_FUNCTIONAL_LOOP_H__

@@ -37,10 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_FUNCTIONAL_VIEW_H__
-# define __YUNI_CORE_FUNCTIONAL_VIEW_H__
+#pragma once
+#include "../../yuni.h"
 
-# include "../../yuni.h"
 
 
 namespace Yuni
@@ -60,14 +59,12 @@ namespace Functional
 
 
 
-# include "view.hxx"
+#include "view.hxx"
 
 
 
 namespace Yuni
 {
-
-
 
 	/*!
 	** \brief Create a view on a collection
@@ -105,7 +102,6 @@ namespace Yuni
 	}
 
 
+
+
 } // namespace Yuni
-
-
-#endif // __YUNI_CORE_FUNCTIONAL_VIEW_H__

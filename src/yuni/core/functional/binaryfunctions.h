@@ -37,11 +37,11 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_FUNCTIONAL_BINARYFUNCTIONS_H__
-# define __YUNI_CORE_FUNCTIONAL_BINARYFUNCTIONS_H__
+#pragma once
+#include "../../yuni.h"
+#include "../math.h"
 
-# include "../../yuni.h"
-# include "../math.h"
+
 
 namespace Yuni
 {
@@ -166,16 +166,16 @@ namespace Functional
 	}; // class Xor
 
 
-#define lambda(A, B, EXPR) struct { \
-		bool operator () (A, B) const \
+	#define lambda(A, B, EXPR) \
+		struct \
 		{ \
-			EXPR; \
-		} \
-	}
+			bool operator () (A, B) const \
+			{ \
+				EXPR; \
+			} \
+		}
 
 
 
 } // namespace Functional
 } // namespace Yuni
-
-#endif // __YUNI_CORE_FUNCTIONAL_BINARYFUNCTIONS_H__
