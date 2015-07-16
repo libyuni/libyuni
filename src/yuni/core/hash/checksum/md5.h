@@ -37,11 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_HASH_CHECKSUM_MD5_H__
-# define __YUNI_CORE_HASH_CHECKSUM_MD5_H__
-
-# include "../../../yuni.h"
-# include "checksum.h"
+#pragma once
+#include "../../../yuni.h"
+#include "checksum.h"
 
 
 
@@ -51,7 +49,6 @@ namespace Hash
 {
 namespace Checksum
 {
-
 
 	/*!
 	** \brief MD5 Checksum
@@ -124,6 +121,4 @@ namespace Checksum
 } // namespace Hash
 } // namespace Yuni
 
-# include "md5.hxx"
-
-#endif // __YUNI_CORE_HASH_CHECKSUM_MD5_H__
+#include "md5.hxx"

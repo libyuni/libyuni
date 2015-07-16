@@ -37,9 +37,5 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_HASH_TABLE_H__
-# define __YUNI_CORE_HASH_TABLE_H__
-
-# include "table/table.h"
-
-#endif // __YUNI_CORE_HASH_TABLE_H__
+#pragma once
+#include "table/table.h"

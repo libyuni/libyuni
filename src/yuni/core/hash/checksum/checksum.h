@@ -37,11 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_HASH_CHECKSUM_CHECKSUM_H__
-# define __YUNI_CORE_HASH_CHECKSUM_CHECKSUM_H__
+#pragma once
+#include "../../../yuni.h"
+#include "../../string.h"
 
-# include "../../../yuni.h"
-# include "../../string.h"
 
 
 namespace Yuni
@@ -58,8 +57,6 @@ namespace Hash
 */
 namespace Checksum
 {
-
-
 
 	/*!
 	** \brief Checksum Implementation (Abstract)
@@ -133,6 +130,4 @@ namespace Checksum
 } // namespace Hash
 } // namespace Yuni
 
-# include "checksum.hxx"
-
-#endif // __YUNI_CORE_HASH_CHECKSUM_CHECKSUM_H__
+#include "checksum.hxx"
