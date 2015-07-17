@@ -3,6 +3,7 @@
 #include "../core/math.h"
 #include "../core/noncopyable.h"
 #include "../core/dictionary.h"
+#include <iostream>
 #include <map>
 #include <ft2build.h>
 

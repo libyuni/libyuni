@@ -42,6 +42,7 @@
 
 #include "openal.h"
 #include "../../core/math.h"
+#include <iostream>
 
 namespace Yuni
 {
