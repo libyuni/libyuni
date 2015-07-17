@@ -1,4 +1,3 @@
-
 #include "md5.h"
 #include "../../../core/system/windows.hdr.h"
 #include "../../../io/file/stream.h"
@@ -431,4 +430,3 @@ namespace Checksum
 } // namespace Checksum
 } // namespace Hash
 } // namespace Yuni
-

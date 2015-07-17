@@ -37,11 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_ATOMIC_BOOL_H__
-# define __YUNI_CORE_ATOMIC_BOOL_H__
-
-# include "../../yuni.h"
-# include "int.h"
+#pragma once
+#include "../../yuni.h"
+#include "int.h"
 
 
 
@@ -61,5 +59,3 @@ namespace Atomic
 
 } // namespace Atomic
 } // namespace Yuni
-
-#endif // __YUNI_CORE_ATOMIC_BOOL_H__

@@ -37,31 +37,29 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_ATOMIC_TRAITS_H__
-# define __YUNI_CORE_ATOMIC_TRAITS_H__
-
-# include "../static/if.h"
-# ifdef YUNI_OS_WINDOWS
+#pragma once
+#include "../static/if.h"
+#ifdef YUNI_OS_WINDOWS
 #	include "../system/windows.hdr.h"
-# endif
+#endif
 
 
 // Determine if we must use a mutex or not
-# if defined(YUNI_OS_WINDOWS) || YUNI_OS_GCC_VERSION >= 40102 || defined(YUNI_OS_CLANG)
+#if defined(YUNI_OS_WINDOWS) || YUNI_OS_GCC_VERSION >= 40102 || defined(YUNI_OS_CLANG)
 #	if !defined(YUNI_OS_WINDOWS) && !defined(YUNI_HAS_SYNC_ADD_AND_FETCH)
 #		define YUNI_ATOMIC_MUST_USE_MUTEX 1
 #	else
 #		define YUNI_ATOMIC_MUST_USE_MUTEX 0
 #	endif
-# else
+#else
 #	define YUNI_ATOMIC_MUST_USE_MUTEX 1
-# endif
+#endif
 
-# if YUNI_ATOMIC_MUST_USE_MUTEX == 1
+#if YUNI_ATOMIC_MUST_USE_MUTEX == 1
 #	define YUNI_ATOMIC_INHERITS  : public TP<Int<Size,TP> >
-# else
+#else
 #	define YUNI_ATOMIC_INHERITS
-# endif
+#endif
 
 
 
@@ -90,7 +88,7 @@ namespace AtomicImpl
 	template<int ThreadSafe, class C>
 	struct ThreadingPolicy final
 	{
-		# if YUNI_ATOMIC_MUST_USE_MUTEX == 1
+		#if YUNI_ATOMIC_MUST_USE_MUTEX == 1
 		// If the class must be thread-safe, we have to provide a lock
 		// mecanism to ensure thread-safety
 		typedef typename Static::If<ThreadSafe,
@@ -99,7 +97,7 @@ namespace AtomicImpl
 		// No lock is required, the operating system or the compiler already
 		// provides all we need
 		typedef Policy::SingleThreaded<C> Type;
-		# endif
+		#endif
 
 	}; // class ThreadingPolicy
 
@@ -109,7 +107,7 @@ namespace AtomicImpl
 	template<int ThreadSafe, class T>
 	struct Volatile final
 	{
-		# if YUNI_ATOMIC_MUST_USE_MUTEX == 1
+		#if YUNI_ATOMIC_MUST_USE_MUTEX == 1
 		// We have to use our own mutex, we don't care of the volatile keyword
 		typedef T Type;
 		# else
@@ -119,7 +117,7 @@ namespace AtomicImpl
 		// when the class must be thread-safe (to avoid cache-optimisations
 		// SMP processors for example)
 		typedef typename Static::If<ThreadSafe, volatile T, T>::ResultType Type;
-		# endif
+		#endif
 
 	}; // class Volatile
 
@@ -176,7 +174,7 @@ namespace AtomicImpl
 		template<class T>
 		static typename Yuni::Atomic::Int<32,TP>::Type Increment(T& t)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			return ::InterlockedIncrement((LONG*)&t.pValue);
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
@@ -185,13 +183,13 @@ namespace AtomicImpl
 			#	else
 			return __sync_add_and_fetch(&t.pValue, 1);
 			#	endif
-			# endif
+			#endif
 		}
 
 		template<class T>
 		static typename Yuni::Atomic::Int<32,TP>::Type Increment(const T& t, typename T::ScalarType value)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			return InterlockedExchange((LONG*)&t.pValue, (LONG)(t.pValue + value));
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
@@ -200,13 +198,13 @@ namespace AtomicImpl
 			#	else
 			return __sync_add_and_fetch(&t.pValue, value);
 			#	endif
-			# endif
+			#endif
 		}
 
 		template<class T>
 		static typename Yuni::Atomic::Int<32,TP>::Type Decrement(T& t)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			#   ifdef YUNI_OS_MINGW
 			return ::InterlockedDecrement((LONG*)&t.pValue);
 			#   else
@@ -219,13 +217,13 @@ namespace AtomicImpl
 			#	else
 			return __sync_add_and_fetch(&t.pValue, -1);
 			#	endif
-			# endif
+			#endif
 		}
 
 		template<class T>
 		static typename Yuni::Atomic::Int<32,TP>::Type Decrement(T& t, typename T::ScalarType value)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			return InterlockedExchange((LONG*)&t.pValue, (LONG)(t.pValue - value));
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
@@ -234,13 +232,13 @@ namespace AtomicImpl
 			#	else
 			return __sync_add_and_fetch(&t.pValue, -value);
 			#	endif
-			# endif
+			#endif
 		}
 
 		template<class T>
 		static void Zero(T& t)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			::InterlockedExchange((LONG*)&t.pValue, 0);
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
@@ -249,13 +247,13 @@ namespace AtomicImpl
 			#	else
 			__sync_and_and_fetch(&t.pValue, 0);
 			#	endif
-			# endif
+			#endif
 		}
 
 		template<class T>
 		static void Set(T& t, sint32 newvalue)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			::InterlockedExchange((LONG*)&t.pValue, newvalue);
 			# else
 			#	if YUNI_ATOMIC_MUST_USE_MUTEX == 1
@@ -265,7 +263,7 @@ namespace AtomicImpl
 			__sync_synchronize();
 			t.pValue = newvalue;
 			#	endif
-			# endif
+			#endif
 		}
 
 	}; // class Operator<32, TP>
@@ -280,7 +278,7 @@ namespace AtomicImpl
 		template<class T>
 		static typename Yuni::Atomic::Int<64,TP>::Type Increment(T& t)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
 			YUNI_STATIC_ASSERT(false, AtomicOperator_NotImplementedWithMinGW);
 			#	else
@@ -293,13 +291,13 @@ namespace AtomicImpl
 			#	else
 			return __sync_add_and_fetch(&t.pValue, 1);
 			#	endif
-			# endif
+			#endif
 		}
 
 		template<class T>
 		static typename Yuni::Atomic::Int<64,TP>::Type Increment(const T& t, typename T::ScalarType value)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
 			YUNI_STATIC_ASSERT(false, AtomicOperator_NotImplementedWithMinGW);
 			#	else
@@ -312,13 +310,13 @@ namespace AtomicImpl
 			#	else
 			return __sync_add_and_fetch(&t.pValue, value);
 			#	endif
-			# endif
+			#endif
 		}
 
 		template<class T>
 		static typename Yuni::Atomic::Int<64,TP>::Type Decrement(T& t)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
 			YUNI_STATIC_ASSERT(false, AtomicOperator_NotImplementedWithMinGW);
 			#	else
@@ -331,13 +329,13 @@ namespace AtomicImpl
 			#	else
 			return __sync_add_and_fetch(&t.pValue, -1);
 			#	endif
-			# endif
+			#endif
 		}
 
 		template<class T>
 		static typename Yuni::Atomic::Int<64,TP>::Type Decrement(T& t, typename T::ScalarType value)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
 			YUNI_STATIC_ASSERT(false, AtomicOperator_NotImplementedWithMinGW);
 			#	else
@@ -350,13 +348,13 @@ namespace AtomicImpl
 			#	else
 			return __sync_add_and_fetch(&t.pValue, -value);
 			#	endif
-			# endif
+			#endif
 		}
 
 		template<class T>
 		static void Zero(T& t)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
 			YUNI_STATIC_ASSERT(false, AtomicOperator_NotImplementedWithMinGW);
 			#	else
@@ -369,13 +367,13 @@ namespace AtomicImpl
 			#	else
 			__sync_and_and_fetch(&t.pValue, 0);
 			#	endif
-			# endif
+			#endif
 		}
 
 		template<class T>
 		static void Set(T& t, sint64 newvalue)
 		{
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			#	ifdef YUNI_OS_MINGW32
 			YUNI_STATIC_ASSERT(false, AtomicOperator_NotImplementedWithMinGW);
 			#	else
@@ -389,7 +387,7 @@ namespace AtomicImpl
 			__sync_synchronize();
 			t.pValue = newvalue;
 			#	endif
-			# endif
+			#endif
 		}
 
 	}; // class Operator<64, TP>
@@ -401,5 +399,3 @@ namespace AtomicImpl
 } // namespace AtomicImpl
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_CORE_ATOMIC_TRAITS_H__

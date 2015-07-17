@@ -37,10 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_HASH_TABLE_TABLE_H__
-# define __YUNI_HASH_TABLE_TABLE_H__
-
-# include <map>
+#pragma once
+#include <map>
 
 
 namespace Yuni
@@ -131,6 +129,3 @@ namespace Hash
 
 } // namespace Hash
 } // namespace Yuni
-
-
-#endif // __YUNI_HASH_TABLE_TABLE_H__
