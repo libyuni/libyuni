@@ -37,14 +37,16 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-
+#pragma once
+#include "geometry.h"
 #include <cassert>
+
+
 
 namespace Yuni
 {
 namespace Geometry
 {
-
 
 	template<typename T>
 	inline Point3D<T> LinePlaneIntersection(const Point3D<T>& linePoint,

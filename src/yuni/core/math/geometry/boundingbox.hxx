@@ -37,25 +37,25 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_BOUNDINGBOX_HXX__
-# define __YUNI_CORE_MATH_GEOMETRY_BOUNDINGBOX_HXX__
+#pragma once
+#include "boundingbox.h"
+
 
 
 namespace Yuni
 {
 
-
 	template<class T>
 	inline BoundingBox<T>::BoundingBox()
-		:pMin(), pMax(), pCenter()
+		: pMin(), pMax(), pCenter()
 	{}
 
 
 	template<class T>
 	inline
 	BoundingBox<T>::BoundingBox(const Point3D<T>& min, const Point3D<T>& max)
-		:pMin(min), pMax(max),
-		pCenter((min.x + max.x) / 2, (min.y + max.y) / 2, (min.z + max.z) / 2)
+		: pMin(min), pMax(max)
+		, pCenter((min.x + max.x) / 2, (min.y + max.y) / 2, (min.z + max.z) / 2)
 	{}
 
 
@@ -110,6 +110,5 @@ namespace Yuni
 	}
 
 
-} // namespace Yuni
 
-#endif // __YUNI_CORE_MATH_GEOMETRY_BOUNDINGBOX_HXX__
+} // namespace Yuni

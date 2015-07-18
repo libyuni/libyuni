@@ -37,8 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_RECT_2D_HXX__
-# define __YUNI_CORE_MATH_GEOMETRY_RECT_2D_HXX__
+#pragma once
+#include "rect2D.h"
 
 
 namespace Yuni
@@ -281,5 +281,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_RECT_2D_HXX__

@@ -37,11 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_QUATERNION_H__
-# define __YUNI_CORE_MATH_GEOMETRY_QUATERNION_H__
+#pragma once
+#include <ostream>
+#include "vector3D.h"
 
-# include <ostream>
-# include "vector3D.h"
 
 
 namespace Yuni
@@ -228,7 +227,4 @@ inline const Yuni::Quaternion<T> operator * (const Yuni::Quaternion<T>& lhs, con
 //@}
 
 
-# include "quaternion.hxx"
-
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_QUATERNION_H__
+#include "quaternion.hxx"

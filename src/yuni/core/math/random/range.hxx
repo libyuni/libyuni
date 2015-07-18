@@ -37,8 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_RANDOM_RANGE_HXX__
-# define __YUNI_CORE_MATH_RANDOM_RANGE_HXX__
+#pragma once
+#include "range.h"
 
 
 
@@ -142,5 +142,3 @@ namespace Random
 } // namespace Random
 } // namespace Math
 } // namespace Yuni
-
-#endif // __YUNI_CORE_MATH_RANDOM_RANGE_HXX__

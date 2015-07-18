@@ -37,11 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_MSVC_HXX__
-# define __YUNI_CORE_MATH_MSVC_HXX__
+#pragma once
 
 
-# if defined(YUNI_OS_MSVC) && _MSC_VER < 1800
+#if defined(YUNI_OS_MSVC) && _MSC_VER < 1800
 
 
 /* Those functions are not available on Windows... */
@@ -122,7 +121,4 @@ inline long long int llrintf(float nr)
 	return (((c -nr) >= (nr - f)) ? (long long int)f : (long long int)c);
 }
 
-# endif /* ifdef MSVC */
-
-
-#endif // __YUNI_CORE_MATH_MSVC_HXX__
+#endif /* ifdef MSVC */

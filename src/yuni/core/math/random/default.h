@@ -37,12 +37,11 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_RANDOM_DEFAULT_H__
-# define __YUNI_CORE_MATH_RANDOM_DEFAULT_H__
+#pragma once
+#include <stdlib.h>
+#include <time.h>
+#include "distribution.h"
 
-# include <stdlib.h>
-# include <time.h>
-# include "distribution.h"
 
 
 namespace Yuni
@@ -51,8 +50,6 @@ namespace Math
 {
 namespace Random
 {
-
-
 
 	/*!
 	** \brief Default Pseudo random number generator
@@ -91,6 +88,4 @@ namespace Random
 } // namespace Math
 } // namespace Yuni
 
-# include "default.hxx"
-
-#endif // __YUNI_CORE_MATH_RANDOM_RANDOM_H__
+#include "default.hxx"

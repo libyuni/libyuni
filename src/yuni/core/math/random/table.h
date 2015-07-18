@@ -37,14 +37,13 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_RANDOM_TABLE_H__
-# define __YUNI_CORE_MATH_RANDOM_TABLE_H__
+#pragma once
+#include "../math.h"
+#include "../../../thread/policy.h"
+#include "../../static/assert.h"
+#include "../../static/if.h"
+#include "../../atomic/int.h"
 
-# include "../math.h"
-# include "../../../thread/policy.h"
-# include "../../static/assert.h"
-# include "../../static/if.h"
-# include "../../atomic/int.h"
 
 
 namespace Yuni
@@ -53,7 +52,6 @@ namespace Math
 {
 namespace Random
 {
-
 
 	/*!
 	** \brief Pre-Cached table of random numbers
@@ -189,6 +187,4 @@ namespace Random
 } // namespace Math
 } // namespace Yuni
 
-# include "table.hxx"
-
-#endif // __YUNI_CORE_MATH_RANDOM_TABLE_H__
+#include "table.hxx"

@@ -37,10 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_DISTANCE_HXX__
-# define __YUNI_CORE_MATH_DISTANCE_HXX__
-
-# include "../static/types.h"
+#pragma once
+#include "../static/types.h"
 
 
 namespace Yuni
@@ -116,5 +114,3 @@ namespace Math
 
 } // namespace Math
 } // namespace Yuni
-
-#endif // __YUNI_CORE_MATH_DISTANCE_H__

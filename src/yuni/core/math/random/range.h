@@ -37,11 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_RANDOM_RANGE_H__
-# define __YUNI_CORE_MATH_RANDOM_RANGE_H__
+#pragma once
+#include "../math.h"
+#include "distribution.h"
 
-# include "../math.h"
-# include "distribution.h"
 
 
 namespace Yuni
@@ -50,7 +49,6 @@ namespace Math
 {
 namespace Random
 {
-
 
 	/*!
 	** \brief Wrapper for any random number generator to generate any numbers within a desired range
@@ -130,6 +128,4 @@ namespace Random
 } // namespace Math
 } // namespace Yuni
 
-# include "range.hxx"
-
-#endif // __YUNI_CORE_MATH_RANDOM_RANGE_H__
+#include "range.hxx"

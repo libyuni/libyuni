@@ -37,18 +37,16 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_TRIANGLE_H__
-# define __YUNI_CORE_MATH_GEOMETRY_TRIANGLE_H__
+#pragma once
+#include "../../../yuni.h"
+#include "../../smartptr.h"
+#include "edge.h"
+#include "vector3D.h"
 
-# include "../../../yuni.h"
-# include "../../smartptr.h"
-# include "edge.h"
-# include "vector3D.h"
 
 
 namespace Yuni
 {
-
 
 	/*!
 	** \brief A triangle is a 3-sided polygon
@@ -174,5 +172,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_TRIANGLE_H__
