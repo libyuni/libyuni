@@ -37,7 +37,6 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-
 # ifdef YUNI_UNIT_IMPL
 #	undef YUNI_UNIT_IMPL
 # endif

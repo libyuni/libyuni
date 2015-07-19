@@ -37,7 +37,6 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-
 #ifndef __YUNI_UI_GLXWINDOW_H__
 # define __YUNI_UI_GLXWINDOW_H__
 
