@@ -37,9 +37,5 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_SLIST_H__
-# define __YUNI_CORE_SLIST_H__
-
-# include "slist/slist.h"
-
-#endif // __YUNI_CORE_SLIST_H__
+#pragma once
+#include "slist/slist.h"

@@ -37,8 +37,7 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_SINGLETON_POLICIES_CREATION_H__
-# define __YUNI_CORE_SINGLETON_POLICIES_CREATION_H__
+#pragma once
 
 /*!
 ** \file
@@ -83,5 +82,3 @@ namespace Creation
 } // namespace Creation
 } // namespace Policy
 } // namespace Yuni
-
-#endif // __YUNI_CORE_SINGLETON_POLICIES_CREATION_H__

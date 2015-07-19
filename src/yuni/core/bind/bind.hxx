@@ -37,8 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_BIND_BIND_HXX__
-# define __YUNI_CORE_BIND_BIND_HXX__
+#pragma once
+#include "bind.h"
+
+
 
 
 /*!
@@ -24168,5 +24170,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_BIND_BIND_H__

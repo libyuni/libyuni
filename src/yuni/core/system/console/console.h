@@ -126,5 +126,4 @@ namespace Console
 } // namespace System
 } // namespace Yuni
 
-# include "console.hxx"
-
+#include "console.hxx"

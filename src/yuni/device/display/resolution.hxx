@@ -37,8 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DEVICE_DISPLAY_RESOLUTION_HXX__
-# define __YUNI_DEVICE_DISPLAY_RESOLUTION_HXX__
+#pragma once
+#include "resolution.h"
 
 
 namespace Yuni
@@ -99,5 +99,3 @@ namespace Display
 } // namespace Display
 } // namespace Device
 } // namespace Yuni
-
-#endif // __YUNI_DEVICE_DISPLAY_RESOLUTION_H__

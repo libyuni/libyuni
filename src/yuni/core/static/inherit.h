@@ -37,10 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_STATIC_INHERIT_H__
-# define __YUNI_CORE_STATIC_INHERIT_H__
+#pragma once
+#include "../../yuni.h"
 
-# include "../../yuni.h"
 
 
 namespace Yuni
@@ -102,5 +101,3 @@ namespace Static
 
 } // namespace Static
 } // namespace Yuni
-
-#endif // __YUNI_CORE_STATIC_INHERIT_H__

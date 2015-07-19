@@ -37,8 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_ALGORITHM_LUHN_HXX__
-# define __YUNI_ALGORITHM_LUHN_HXX__
+#pragma once
+#include "luhn.h"
+
 
 
 namespace Yuni
@@ -56,6 +57,3 @@ namespace Algorithm
 
 } // namespace Algorithm
 } // namespace Yuni
-
-
-#endif // __YUNI_ALGORITHM_LUHN_HXX__

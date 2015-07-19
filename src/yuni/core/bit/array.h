@@ -37,13 +37,12 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_BIT_BIT_ARRAY_H__
-# define __YUNI_CORE_BIT_BIT_ARRAY_H__
+#pragma once
+#include "../../yuni.h"
+#include "../string.h"
+#include "bit.h"
+#include <iostream>
 
-# include "../../yuni.h"
-# include "../string.h"
-# include "bit.h"
-# include <iostream>
 
 
 namespace Yuni
@@ -282,6 +281,4 @@ namespace Bit
 } // namespace Bit
 } // namespace Yuni
 
-# include "array.hxx"
-
-#endif // __YUNI_CORE_BIT_BIT_ARRAY_H__
+#include "array.hxx"

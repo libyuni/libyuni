@@ -37,9 +37,5 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_SINGLETON_H__
-# define __YUNI_CORE_SINGLETON_H__
-
-# include "singleton/singleton.h"
-
-#endif // __YUNI_CORE_SINGLETON_H__
+#pragma once
+#include "singleton/singleton.h"

@@ -37,13 +37,11 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_VARIANT_VARIANT_DATAHOLDER_H__
-# define __YUNI_CORE_VARIANT_VARIANT_DATAHOLDER_H__
-
-# include <sstream>
-# include "../../static/types.h"
-# include "../../math/math.h"
-# include "../../smartptr/intrusive.h"
+#pragma once
+#include <sstream>
+#include "../../static/types.h"
+#include "../../math/math.h"
+#include "../../smartptr/intrusive.h"
 
 
 namespace Yuni
@@ -743,5 +741,3 @@ namespace Variant
 } // namespace Yuni
 
 #include "dataholder.hxx"
-
-#endif /* !__YUNI_CORE_VARIANT_VARIANT_DATAHOLDER_H__ */

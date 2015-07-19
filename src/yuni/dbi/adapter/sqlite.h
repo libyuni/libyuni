@@ -37,10 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DBI_ADAPTER_SQLITE_H__
-# define __YUNI_DBI_ADAPTER_SQLITE_H__
-
-# include "adapter.h"
+#pragma once
+#include "adapter.h"
 
 
 namespace Yuni
@@ -71,5 +69,3 @@ namespace Adapter
 } // namespace Adapter
 } // namespace DBI
 } // namespace Yuni
-
-#endif // __YUNI_DBI_ADAPTER_SQLITE_H__

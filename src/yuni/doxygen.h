@@ -37,9 +37,7 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DOXYGEN_H__
-# define __YUNI_DOXYGEN_H__
-
+#pragma once
 
 
 /*!
@@ -125,7 +123,3 @@
 **
 ** \defgroup UI User Interface
 */
-
-
-
-#endif // __YUNI_DOXYGEN_H__

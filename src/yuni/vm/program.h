@@ -37,12 +37,11 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_VM_PROGRAM_H__
-# define __YUNI_VM_PROGRAM_H__
+#pragma once
+#include "../yuni.h"
+#include "std.h"
+#include "fwd.h"
 
-# include "../yuni.h"
-# include "std.h"
-# include "fwd.h"
 
 
 namespace Yuni
@@ -128,6 +127,4 @@ namespace VM
 } // namespace Private
 } // namespace Yuni
 
-# include "program.hxx"
-
-#endif // __YUNI_VM_PROGRAM_H__
+#include "program.hxx"

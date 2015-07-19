@@ -37,30 +37,28 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_PREPROCESSOR_STANDARD_H__
-# define __YUNI_CORE_PREPROCESSOR_STANDARD_H__
-
+#pragma once
 /* !!! "C compatibility" header !!! */
 
 
 /*!
 ** \brief String concatenation
 */
-# define YUNI_JOIN(X,Y)  X ## Y
+#define YUNI_JOIN(X,Y)  X ## Y
 
 /*!
 ** \brief Convenient define to deal with temporary (or not) unused parameter
 */
-# define YUNI_UNUSED_ARGUMENT(X) (void)(X)
+#define YUNI_UNUSED_ARGUMENT(X) (void)(X)
 
 
 
-# define __YN_STRINGIZE(X) #X
+#define __YN_STRINGIZE(X) #X
 
 /*!
 ** \brief Transform X into a string
 */
-# define YUNI_STRINGIZE(X)  __YN_STRINGIZE(X)
+#define YUNI_STRINGIZE(X)  __YN_STRINGIZE(X)
 
 /*!
 ** \brief Test if something is empty
@@ -82,23 +80,19 @@
 
 
 /*! The identity function */
-# define YUNI_IDENTITY(...) __VA_ARGS__
+#define YUNI_IDENTITY(...) __VA_ARGS__
 
 /*! An empty value */
-# define YUNI_EMPTY
+#define YUNI_EMPTY
 
 /*! Comma */
-# define YUNI_COMMA ,
+#define YUNI_COMMA ,
 
 /*! Semicolon */
-# define YUNI_SEMICOLON ;
+#define YUNI_SEMICOLON ;
 
 /*! Dot */
-# define YUNI_DOT .
+#define YUNI_DOT .
 
 /*! Minus */
-# define YUNI_MINUS -
-
-
-
-#endif /* __YUNI_CORE_PREPROCESSOR_STANDARD_H__ */
+#define YUNI_MINUS -

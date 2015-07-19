@@ -37,8 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_VARIANT_FWD_H__
-# define __YUNI_CORE_VARIANT_FWD_H__
+#pragma once
+
 
 
 namespace Yuni
@@ -56,5 +56,3 @@ namespace Variant
 } // namespace Variant
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_CORE_VARIANT_FWD_H__

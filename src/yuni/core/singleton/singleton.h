@@ -37,19 +37,16 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_SINGLETON_SINGLETON_H__
-# define __YUNI_CORE_SINGLETON_SINGLETON_H__
-
-# include "../../yuni.h"
-# include "../../thread/policy.h"
-# include "../noncopyable.h"
-# include "policies/creation.h"
-# include "policies/lifetime.h"
+#pragma once
+#include "../../yuni.h"
+#include "../../thread/policy.h"
+#include "../noncopyable.h"
+#include "policies/creation.h"
+#include "policies/lifetime.h"
 
 
 namespace Yuni
 {
-
 
 	/*!
 	** \brief Holder for a singleton class
@@ -133,6 +130,4 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "singleton.hxx"
-
-#endif // __YUNI_CORE_SINGLETON_SINGLETON_H__
+#include "singleton.hxx"

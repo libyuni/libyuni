@@ -37,12 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_STATIC_TYPES_H__
-# define __YUNI_CORE_STATIC_TYPES_H__
-
-# include "../../yuni.h"
-# include "remove.h"
-# include "../smartptr/smartptr.h"
+#pragma once
+#include "../../yuni.h"
+#include "remove.h"
+#include "../smartptr/smartptr.h"
 
 
 namespace Yuni
@@ -351,6 +349,3 @@ namespace Type
 } // namespace Type
 } // namespace Static
 } // namespace Yuni
-
-
-#endif // __YUNI_CORE_STATIC_TYPES_H__

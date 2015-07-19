@@ -1,6 +1,5 @@
-
-#include <map>
 #include "list.h"
+#include <map>
 
 
 
@@ -26,16 +25,16 @@ namespace Display
 
 
 
-# ifdef YUNI_OS_MAC
+#ifdef YUNI_OS_MAC
 #	include "macosx.hxx"
-# else
+#else
 #	ifdef YUNI_OS_WINDOWS
 #		include "windows.hxx"
 #	endif
 #	ifdef YUNI_OS_UNIX
 #		include "linux.hxx"
 #	endif
-# endif
+#endif
 
 
 
@@ -49,8 +48,8 @@ namespace Display
 {
 
 
-	List::List() :
-		pNullMonitor(new Monitor(YUNI_DEVICE_DISPLAY_LIST_FAIL_SAFE_NAME))
+	List::List()
+		: pNullMonitor(new Monitor(YUNI_DEVICE_DISPLAY_LIST_FAIL_SAFE_NAME))
 	{
 		// Adding the default monitor
 		pMonitors.push_back(pNullMonitor);
@@ -58,10 +57,10 @@ namespace Display
 	}
 
 
-	List::List(const List& c) :
-		pMonitors(c.pMonitors),
-		pPrimary(c.pPrimary),
-		pNullMonitor(c.pNullMonitor)
+	List::List(const List& c)
+		: pMonitors(c.pMonitors)
+		, pPrimary(c.pPrimary)
+		, pNullMonitor(c.pNullMonitor)
 	{}
 
 
@@ -185,4 +184,3 @@ namespace Display
 } // namespace Display
 } // namespace Device
 } // namespace Yuni
-

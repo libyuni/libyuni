@@ -1,20 +1,19 @@
-
 #include "variant.h"
 
 
 namespace Yuni
 {
 
-	Variant::Variant(const Private::Variant::IDataHolder* rhs, bool ref) :
-		pData(const_cast<Private::Variant::IDataHolder*>(rhs)),
-		pShareContent(ref)
+	Variant::Variant(const Private::Variant::IDataHolder* rhs, bool ref)
+		: pData(const_cast<Private::Variant::IDataHolder*>(rhs))
+		, pShareContent(ref)
 	{
 	}
 
 
-	Variant::Variant(Private::Variant::IDataHolder* rhs, bool ref) :
-		pData(rhs),
-		pShareContent(ref)
+	Variant::Variant(Private::Variant::IDataHolder* rhs, bool ref)
+		: pData(rhs)
+		, pShareContent(ref)
 	{
 	}
 

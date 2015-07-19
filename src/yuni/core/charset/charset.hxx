@@ -37,8 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_CHARSET_CHARSET_HXX__
-# define __YUNI_CORE_CHARSET_CHARSET_HXX__
+#pragma once
+#include "charset.h"
+
+
 
 namespace Yuni
 {
@@ -223,8 +225,5 @@ namespace Charset
 
 
 
-
 } // namespace Charset
 } // namespace Yuni
-
-#endif // __YUNI_CORE_CHARSET_CHARSET_HXX__

@@ -37,16 +37,14 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_FUNCTIONAL_VIEW_HXX__
-# define __YUNI_CORE_FUNCTIONAL_VIEW_HXX__
+#pragma once
+#include "../static/if.h"
+#include "binaryfunctions.h"
+#include "loop.h"
 
-# include "../static/if.h"
-# include "binaryfunctions.h"
-# include "loop.h"
-
-# ifdef YUNI_HAS_CPP_LAMBDA
-#	include <utility>
-# endif
+#ifdef YUNI_HAS_CPP_LAMBDA
+#include <utility>
+#endif
 
 
 namespace Yuni
@@ -54,11 +52,11 @@ namespace Yuni
 namespace Functional
 {
 
-# ifdef YUNI_HAS_CPP_LAMBDA
+	#ifdef YUNI_HAS_CPP_LAMBDA
 	//! Forward declaration
 	template<class T, class CallbackT>
 	struct Mapping;
-# endif
+	#endif
 
 
 	//! Filter selects elements from the view that fulfill a certain predicate
@@ -317,7 +315,3 @@ namespace Functional
 
 } // namespace Functional
 } // namespace Yuni
-
-
-
-#endif // __YUNI_CORE_FUNCTIONAL_VIEW_HXX__

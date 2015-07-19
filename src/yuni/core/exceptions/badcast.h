@@ -37,11 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_EXCEPTIONS_BAD_CAST_H__
-# define __YUNI_CORE_EXCEPTIONS_BAD_CAST_H__
-
-# include <stdexcept>
-# include <typeinfo>
+#pragma once
+#include <stdexcept>
+#include <typeinfo>
 
 
 
@@ -90,8 +88,3 @@ namespace Exceptions
 
 } // namespace Exceptions
 } // namespace Yuni
-
-
-
-
-#endif // __YUNI_CORE_EXCEPTIONS_BAD_CAST_H__

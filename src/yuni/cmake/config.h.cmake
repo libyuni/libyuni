@@ -1,5 +1,4 @@
-#ifndef __YUNI_CONFIG_H__
-# define __YUNI_CONFIG_H__
+#pragma once
 
 /* Generate from config.h.cmake */
 
@@ -71,7 +70,3 @@
 /*! Is DirectX available ? */
 # define YUNI_HAS_SUPPORT_FOR_DIRECTX  @YUNI_COMPILED_WITH_SUPPORT_FOR_DIRECTX@
 /*@}*/
-
-
-
-#endif /* __YUNI_CONFIG_H__ */

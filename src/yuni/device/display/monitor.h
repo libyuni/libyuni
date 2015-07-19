@@ -37,19 +37,17 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DEVICE_DISPLAY_MONITOR_H__
-# define __YUNI_DEVICE_DISPLAY_MONITOR_H__
-
-# include "../../yuni.h"
-# include "resolution.h"
-# include "../../core/string.h"
-# include "../../core/smartptr/smartptr.h"
+#pragma once
+#include "../../yuni.h"
+#include "resolution.h"
+#include "../../core/string.h"
+#include "../../core/smartptr/smartptr.h"
 
 
-# if defined(YUNI_OS_MACOSX)
+#if defined(YUNI_OS_MACOSX)
 #	define YUNI_DEVICE_DISPLAY_HANDLE         uint32
 #	define YUNI_DEVICE_DISPLAY_INVALIDHANDLE  (uint32(-1))
-# else
+#else
 #	if defined(YUNI_OS_WINDOWS)
 #		define YUNI_DEVICE_DISPLAY_HANDLE         wchar_t*
 #		define YUNI_DEVICE_DISPLAY_INVALIDHANDLE  0
@@ -58,7 +56,7 @@
 #		define YUNI_DEVICE_DISPLAY_HANDLE         int
 #		define YUNI_DEVICE_DISPLAY_INVALIDHANDLE  (int(-1))
 #	endif
-# endif
+#endif
 
 
 
@@ -69,13 +67,12 @@ namespace Device
 namespace Display
 {
 
-
 	/*!
 	** \brief Information about a single Frame Buffer Device
 	**
 	** This class is not thread-safe
 	*/
-	class Monitor
+	class Monitor final
 	{
 	public:
 		//! The most suitable smart pointer to use with the class `Monitor`
@@ -275,6 +272,4 @@ namespace Display
 } // namespace Device
 } // namespace Yuni
 
-# include "monitor.hxx"
-
-#endif // __YUNI_DEVICE_DISPLAY_MONITOR_H__
+#include "monitor.hxx"

@@ -37,11 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_EVENT_FLOW_CONTINUOUS_H__
-# define __YUNI_CORE_EVENT_FLOW_CONTINUOUS_H__
+#pragma once
+#include "../../../yuni.h"
+#include "../../../thread/thread.h"
 
-# include "../../../yuni.h"
-# include "../../../thread/thread.h"
 
 
 namespace Yuni
@@ -133,5 +132,3 @@ namespace Flow
 } // namespace EventLoop
 } // namespace Core
 } // namespace Yuni
-
-#endif // __YUNI_CORE_EVENT_FLOW_CONTINUOUS_H__

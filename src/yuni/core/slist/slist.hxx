@@ -37,8 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_SLIST_SLIST_HXX__
-# define __YUNI_CORE_SLIST_SLIST_HXX__
+#pragma once
+#include "slist.h"
+
 
 
 namespace Yuni
@@ -770,9 +771,4 @@ namespace Yuni
 
 
 
-
-
 } // namespace Yuni
-
-
-#endif // __YUNI_CORE_SLIST_SLIST_HXX__

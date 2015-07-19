@@ -37,16 +37,14 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_SLIST_SLIST_H__
-# define __YUNI_CORE_SLIST_SLIST_H__
-
-# include "../../yuni.h"
-# include <list>
-# include <vector>
-# include "../static/remove.h"
-# include "../static/types.h"
-# include "../iterator.h"
-# include "../noncopyable.h"
+#pragma once
+#include "../../yuni.h"
+#include <list>
+#include <vector>
+#include "../static/remove.h"
+#include "../static/types.h"
+#include "../iterator.h"
+#include "../noncopyable.h"
 
 
 namespace Yuni
@@ -409,6 +407,4 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "slist.hxx"
-
-#endif // __YUNI_CORE_SLIST_SLIST_H__
+#include "slist.hxx"

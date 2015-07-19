@@ -37,18 +37,17 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_ALGORITHM_LUHN_H__
-# define __YUNI_ALGORITHM_LUHN_H__
+#pragma once
+#include "../yuni.h"
+#include "../core/string/string.h"
 
-# include "../yuni.h"
-# include "../core/string/string.h"
+
 
 
 namespace Yuni
 {
 namespace Algorithm
 {
-
 
 	/*!
 	** \brief The Luhn algorithms (or Luhn formula)
@@ -79,6 +78,7 @@ namespace Algorithm
 		*/
 		static bool IsValidCreditCardNumber(const AnyString& s);
 
+
 	public:
 		/*!
 		** \brief Generate the check digit of a string using the `Luhn mode 10` algorithm
@@ -99,27 +99,27 @@ namespace Algorithm
 		** \code
 		** static int CodePointsHexa(const char c)
 		** {
-		** 	switch (c)
-		** 	{
-		** 		case '0' : return 0;
-		** 		case '1' : return 1;
-		** 		case '2' : return 2;
-		** 		case '3' : return 3;
-		** 		case '4' : return 4;
-		** 		case '5' : return 5;
-		** 		case '6' : return 6;
-		** 		case '7' : return 7;
-		** 		case '8' : return 8;
-		** 		case '8' : return 8;
-		** 		case '8' : return 8;
-		** 	}
+		**	switch (c)
+		**	{
+		**		case '0' : return 0;
+		**		case '1' : return 1;
+		**		case '2' : return 2;
+		**		case '3' : return 3;
+		**		case '4' : return 4;
+		**		case '5' : return 5;
+		**		case '6' : return 6;
+		**		case '7' : return 7;
+		**		case '8' : return 8;
+		**		case '8' : return 8;
+		**		case '8' : return 8;
+		**	}
 		** }
 		**
 		** int main(void)
 		** {
-		** 	char check = Yuni::Algorithms::Luhn::ModN("a340bd2f", &CodePointsHexa);
-		** 	std::
-		** 	return 0;
+		**	char check = Yuni::Algorithms::Luhn::ModN("a340bd2f", &CodePointsHexa);
+		**	std::
+		**	return 0;
 		** }
 		** \endcode
 		**
@@ -138,6 +138,4 @@ namespace Algorithm
 } // namespace Algorithm
 } // namespace Yuni
 
-# include "luhn.hxx"
-
-#endif // __YUNI_ALGORITHM_LUHN_H__
+#include "luhn.hxx"

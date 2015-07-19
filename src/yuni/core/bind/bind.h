@@ -37,18 +37,17 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_BIND_BIND_H__
-# define __YUNI_CORE_BIND_BIND_H__
+#pragma once
+#include "../../yuni.h"
+#include "../../thread/policy.h"
+#include "../static/types.h"
+#include "../static/assert.h"
+#include "../static/remove.h"
+#include "../smartptr.h"
+#include "traits.h"
+#include "../dynamiclibrary/symbol.h"
+#include "fwd.h"
 
-# include "../../yuni.h"
-# include "../../thread/policy.h"
-# include "../static/types.h"
-# include "../static/assert.h"
-# include "../static/remove.h"
-# include "../smartptr.h"
-# include "traits.h"
-# include "../dynamiclibrary/symbol.h"
-# include "fwd.h"
 
 
 /*!
@@ -19796,7 +19795,10 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "bind.hxx"
+#include "bind.hxx"
+
+
+
 
 
 template<class P, class DummyT>
@@ -20061,4 +20063,3 @@ inline bool operator != (R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A1
 
 
 
-#endif // __YUNI_CORE_BIND_BIND_H__

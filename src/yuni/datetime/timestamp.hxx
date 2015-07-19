@@ -37,10 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DATETIME_TIMESTAMP_HXX__
-# define __YUNI_DATETIME_TIMESTAMP_HXX__
-
-# include <cstdlib>
+#pragma once
+#include <cstdlib>
+#include "timestamp.h"
 
 
 
@@ -67,7 +66,7 @@ namespace DateTime
 {
 
 	template<class StringT>
-	bool TimestampToString(StringT& out, const AnyString& format, Timestamp timestamp, bool emptyBefore)
+	inline bool TimestampToString(StringT& out, const AnyString& format, Timestamp timestamp, bool emptyBefore)
 	{
 		if (emptyBefore)
 			out.clear();
@@ -89,5 +88,3 @@ namespace DateTime
 
 } // namespace DateTime
 } // namespace Yuni
-
-#endif // __YUNI_DATETIME_TIMESTAMP_H__

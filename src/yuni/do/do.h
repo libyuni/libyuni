@@ -37,12 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DO_H__
-# define __YUNI_DO_H__
-
-# include "../yuni.h"
+#pragma once
+#include "../yuni.h"
 
 
 void DummyFunctionForCompiling();
-
-#endif // __YUNI_DO_H__

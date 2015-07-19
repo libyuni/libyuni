@@ -37,17 +37,14 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DEVICE_DISPLAY_LIST_LIST_H__
-# define __YUNI_DEVICE_DISPLAY_LIST_LIST_H__
-
-# include "../../../yuni.h"
-# include "../../../core/string.h"
-# include "../resolution.h"
-# include "../monitor.h"
-
+#pragma once
+#include "../../../yuni.h"
+#include "../../../core/string.h"
+#include "../resolution.h"
+#include "../monitor.h"
 
 //! Name to use for the fail-safe device
-# define YUNI_DEVICE_DISPLAY_LIST_FAIL_SAFE_NAME   "Fail-safe Device"
+#define YUNI_DEVICE_DISPLAY_LIST_FAIL_SAFE_NAME   "Fail-safe Device"
 
 
 
@@ -82,7 +79,7 @@ namespace Display
 	** \endcode
 	** \warning This class is not thread-safe
 	*/
-	class List
+	class List final
 	{
 	private:
 		//! Vector of Monitor
@@ -204,9 +201,7 @@ namespace Display
 ** \internal This define is especially usefull where a limited is required
 ** by the operating system
 */
-# define YUNI_DEVICE_MONITOR_COUNT_HARD_LIMIT   64
+#define YUNI_DEVICE_MONITOR_COUNT_HARD_LIMIT   64
 
 
-# include "list.hxx"
-
-#endif // __YUNI_DEVICE_DISPLAY_LIST_LIST_H__
+#include "list.hxx"

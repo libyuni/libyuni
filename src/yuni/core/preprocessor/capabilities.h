@@ -585,4 +585,3 @@ namespace Yuni
 //# endif
 
 #endif /* __cplusplus */
-

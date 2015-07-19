@@ -37,9 +37,5 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_CHARSET_H__
-# define __YUNI_CORE_CHARSET_H__
-
-# include "charset/charset.h"
-
-#endif // __YUNI_CORE_CHARSET_H__
+#pragma once
+#include "charset/charset.h"

@@ -37,8 +37,7 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_BIND_FWD_H__
-# define __YUNI_CORE_BIND_FWD_H__
+#pragma once
 
 
 
@@ -70,10 +69,6 @@ namespace BindImpl
 
 
 
-
-
 } // namespace BindImpl
 } // namespace Private
 } // anonymous namespace
-
-#endif // __YUNI_CORE_BIND_FWD_H__

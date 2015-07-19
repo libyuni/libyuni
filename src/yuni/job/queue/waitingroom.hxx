@@ -37,8 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_JOB_WAITING_ROOM_HXX__
-# define __YUNI_JOB_WAITING_ROOM_HXX__
+#pragma once
+#include "waitingroom.h"
 
 
 namespace Yuni
@@ -61,11 +61,6 @@ namespace QueueService
 
 
 
-
 } // namespace QueueService
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_JOB_WAITING_ROOM_HXX__
-
-

@@ -37,11 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_STATIC_HAS_METHOD_H__
-# define __YUNI_CORE_STATIC_HAS_METHOD_H__
-
-# include "../../yuni.h"
-# include "remove.h"
+#pragma once
+#include "../../yuni.h"
+#include "remove.h"
 
 
 /*!
@@ -50,11 +48,11 @@
 **
 ** \bug The signature is not checked in C++11
 */
-# if !defined(YUNI_HAS_CPP_KEYWORD_FINAL)
+#if !defined(YUNI_HAS_CPP_KEYWORD_FINAL)
 
 // No keyword final, thus we always can inherit from the given Type
 
-# define YUNI_IMPL_STATIC_HAS_METHOD(METHOD, RETURN_TYPE, ...)  \
+#define YUNI_IMPL_STATIC_HAS_METHOD(METHOD, RETURN_TYPE, ...)  \
 		template<class T> \
 		class METHOD final \
 		{ \
@@ -82,11 +80,11 @@
 		}
 
 
-# else
+#else
 
-# include <type_traits>
+#include <type_traits>
 
-# define YUNI_IMPL_STATIC_HAS_METHOD(METHOD, RETURN_TYPE, ...)  \
+#define YUNI_IMPL_STATIC_HAS_METHOD(METHOD, RETURN_TYPE, ...)  \
 		template<class T> \
 		class METHOD final \
 		{ \
@@ -108,7 +106,7 @@
 		}
 
 
-# endif
+#endif
 
 
 
@@ -144,5 +142,3 @@ namespace HasMethod
 } // namespace HasMethod
 } // namespace Static
 } // namespace Yuni
-
-#endif // __YUNI_CORE_STATIC_HAS_METHOD_H__

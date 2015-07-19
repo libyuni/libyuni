@@ -37,17 +37,14 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_VERSION_H__
-# define __YUNI_CORE_VERSION_H__
-
-# include "../../yuni.h"
-# include "../string.h"
+#pragma once
+#include "../../yuni.h"
+#include "../string.h"
 
 
 
 namespace Yuni
 {
-
 
 	/*!
 	** \brief Version number
@@ -192,6 +189,4 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "version.hxx"
-
-#endif // __YUNI_CORE_VERSION_H__
+#include "version.hxx"
