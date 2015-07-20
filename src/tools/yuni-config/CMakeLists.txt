@@ -53,6 +53,7 @@ set(src
 	../../yuni/core/string/utf8char.hxx
 	../../yuni/core/string/wstring.h
 	../../yuni/core/string/wstring.hxx
+	../../yuni/core/string/wstring.cpp
 
 	../../yuni/core/version/version.cpp
 	../../yuni/core/getopt/option.cpp ../../yuni/core/getopt/parser.cpp

@@ -69,10 +69,16 @@ namespace Yuni
 			return;
 		}
 
+		if (string.size() > INT_MAX)
+		{
+			clear();
+			return;
+		}
+
 		// Offset according to the presence of the UNC prefix
 		const uint offset = (not uncprefix) ? 0 : 4;
 
-		#ifdef YUNI_OW_WINDOWS
+		#ifdef YUNI_OS_WINDOWS
 		{
 			// Allocate and convert the C-String. Several iterations may be required
 			// for allocating enough room for the conversion.
@@ -93,7 +99,7 @@ namespace Yuni
 			}
 
 			// Converting into Wide String
-			const int n = MultiByteToWideChar(CP_UTF8, 0, string.c_str(), string.size(), pWString + offset, pSize - offset);
+			const int n = MultiByteToWideChar(CP_UTF8, 0, string.c_str(), static_cast<int>(string.size()), pWString + offset, static_cast<int>(pSize - offset));
 			if (n != sizeRequired)
 			{
 				assert(false and "most likely an error");
@@ -125,7 +131,7 @@ namespace Yuni
 			}
 
 			memset (&state, '\0', sizeof (state));
-			size_t written = mbsnrtowcs(pWString + offset, &wcstr, string.size(), pSize - offset, &state);
+			size_t written = mbsnrtowcs(pWString + offset, &wcstr, static_cast<int>(string.size()), pSize - offset, &state);
 			if (0 == written or (size_t) -1 == written)
 			{
 				clear();
