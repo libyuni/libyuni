@@ -301,6 +301,12 @@ namespace Yuni
 		//! Constructor from a mere CString
 		CString(const char* const block, Size blockSize);
 
+		//! Constructor with a null-terminated wide string
+		CString(const wchar_t* text);
+
+		//! Constructor from a wide string
+		CString(const wchar_t* block, Size blockSize);
+
 		/*!
 		** \brief Constructor from another string
 		*/
@@ -403,7 +409,7 @@ namespace Yuni
 		template<class U> explicit CString(const U& rhs);
 
 		//! Destructor
-		~CString();
+		~CString() {}
 		//@}
 
 

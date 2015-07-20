@@ -122,11 +122,6 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	inline CString<ChunkSizeT,ExpandableT>::~CString()
-	{}
-
-
-	template<uint ChunkSizeT, bool ExpandableT>
 	template<class ModelT, bool ConstT, class ModelT2, bool ConstT2>
 	inline
 	CString<ChunkSizeT,ExpandableT>::CString(
@@ -168,6 +163,18 @@ namespace Yuni
 		assign(text);
 	}
 
+
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline CString<ChunkSizeT,ExpandableT>::CString(const wchar_t* text)
+	{
+		assign(text);
+	}
+
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline CString<ChunkSizeT,ExpandableT>::CString(const wchar_t* text, Size blockSize)
+	{
+		assign(text, blockSize);
+	}
 
 	template<uint ChunkSizeT, bool ExpandableT>
 	inline CString<ChunkSizeT,ExpandableT>::CString(bool value)
