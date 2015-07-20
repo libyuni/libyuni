@@ -155,16 +155,16 @@ namespace Marshal
 				}
 				default:
 				{
-					// mutate
-					InternalArray* array = new InternalArray();
-					array->push_back(Object(type, value));
-					array->push_back(Object());
-					type = Object::otArray;
-					value.array = array;
-					return array->back();
+					break;
 				}
 			}
-			assert(false and "something is missing within the switch/case");
+
+			InternalArray* array = new InternalArray();
+			array->push_back(Object(type, value));
+			array->push_back(Object());
+			type = Object::otArray;
+			value.array = array;
+			return array->back();
 		}
 
 	} // anonymous namespace
