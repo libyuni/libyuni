@@ -37,12 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_ITERATOR_ITERATOR_H__
-# define __YUNI_CORE_ITERATOR_ITERATOR_H__
-
-# include "../../yuni.h"
-# include "../static/if.h"
-# include <iterator> // iterator traits from STL
+#pragma once
+#include "../../yuni.h"
+#include "../static/if.h"
+#include <iterator> // iterator traits from STL
 
 
 namespace Yuni
@@ -249,7 +247,3 @@ operator - (typename Yuni::IIterator<ModelT,ConstT>::difference_type n, const Yu
 {
 	return (Yuni::IIterator<ModelT,ConstT>(it) -= n);
 }
-
-
-
-#endif // __YUNI_CORE_ITERATOR_ITERATOR_H__

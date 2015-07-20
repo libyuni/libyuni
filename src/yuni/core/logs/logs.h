@@ -283,4 +283,3 @@ namespace Logs
 } // namespace Yuni
 
 #include "logs.hxx"
-

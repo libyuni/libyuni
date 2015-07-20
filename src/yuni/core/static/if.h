@@ -37,10 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_STATIC_IF_H__
-# define __YUNI_CORE_STATIC_IF_H__
-
-# include "remove.h"
+#pragma once
+#include "remove.h"
 
 
 
@@ -48,7 +46,6 @@ namespace Yuni
 {
 namespace Static
 {
-
 
 	/*!
 	** \brief Choose statically between two types
@@ -104,7 +101,3 @@ namespace Static
 
 } // namespace Static
 } // namespaec Yuni
-
-
-
-#endif // __YUNI_CORE_STATIC_IF_H__

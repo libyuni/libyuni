@@ -37,8 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_VM_INSTRUCTIONS_H__
-# define __YUNI_VM_INSTRUCTIONS_H__
+#pragma once
+
 
 namespace Yuni
 {
@@ -69,5 +69,3 @@ namespace Instruction
 } // namespace VM
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_VM_INSTRUCTIONS_H__

@@ -37,8 +37,11 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_ANY_ANY_HXX__
-#define __YUNI_CORE_ANY_ANY_HXX__
+#pragma once
+#include "any.h"
+
+
+
 
 namespace Yuni
 {
@@ -52,6 +55,7 @@ namespace Yuni
 		else
 			pObject = new T(source);
 	}
+
 
 	template <typename T>
 	Any& Any::assign(const T& rhs)
@@ -97,8 +101,9 @@ namespace Yuni
 		return *this;
 	}
 
+
 	template <typename T>
-	const T& Any::to() const
+	inline const T& Any::to() const
 	{
 		if (type() != typeid(T))
 			throw Exceptions::BadCast(type(), typeid(T));
@@ -109,8 +114,9 @@ namespace Yuni
 		return *reinterpret_cast<T const*>(pObject);
 	}
 
+
 	template <typename T>
-	void Any::initFromCString(T source)
+	inline void Any::initFromCString(T source)
 	{
 		pTable = Private::Any::Table<String>::Get();
 		if (sizeof(String) <= sizeof(void*))
@@ -119,6 +125,7 @@ namespace Yuni
 			pObject = new String(source);
 	}
 
-}
 
-#endif /* !__YUNI_CORE_ANY_ANY_HXX__ */
+
+
+} // namespace Yuni

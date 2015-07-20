@@ -37,8 +37,7 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_PREDICATE_RESULT_SUM_H__
-# define __YUNI_CORE_PREDICATE_RESULT_SUM_H__
+#pragma once
 
 
 namespace Yuni
@@ -91,5 +90,3 @@ namespace Result
 
 } // namespace Result
 } // namespace Yuni
-
-#endif // __YUNI_CORE_PREDICATE_RESULT_SUM_H__

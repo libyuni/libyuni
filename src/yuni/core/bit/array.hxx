@@ -37,11 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_BIT_BIT_ARRAY_HXX__
-# define __YUNI_CORE_BIT_BIT_ARRAY_HXX__
-
-# include <string.h> // memset
-# include <cassert>
+#pragma once
+#include <string.h> // memset
+#include <cassert>
 
 
 
@@ -266,6 +264,3 @@ inline std::ostream& operator << (std::ostream& out, const Yuni::Bit::Array& rhs
 	return out;
 }
 //@}
-
-
-#endif // __YUNI_CORE_BIT_BIT_ARRAY_HXX__

@@ -37,8 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_POINT2D_HXX__
-# define __YUNI_CORE_MATH_GEOMETRY_POINT2D_HXX__
+#pragma once
+#include "point2D.h"
+
 
 
 namespace Yuni
@@ -319,6 +320,3 @@ inline Yuni::Point2D<T> operator * (const U& lhs, const Yuni::Point2D<T>& rhs)
 {
 	return Yuni::Point2D<T>(rhs) *= lhs;
 }
-
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_POINT2D_HXX__

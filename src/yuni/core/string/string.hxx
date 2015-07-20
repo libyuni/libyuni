@@ -44,6 +44,7 @@
 #ifdef YUNI_HAS_VA_COPY
 # include <stdarg.h>
 #endif // YUNI_HAS_VA_COPY
+#include <iostream>
 
 
 
@@ -3434,6 +3435,64 @@ namespace Yuni
 		return hash;
 	}
 
+
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline bool
+	CString<ChunkSizeT,ExpandableT>::append(const wchar_t* wbuffer, Size wsize, Size offset)
+	{
+		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
+
+		if ((wbuffer != nullptr) and wsize != 0)
+		{
+			if (offset < wsize)
+			{
+				wbuffer += offset;
+				wsize -= offset;
+				return append(wbuffer, wsize);
+			}
+		}
+		return false;
+	}
+
+
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline bool
+	CString<ChunkSizeT,ExpandableT>::append(const wchar_t* wbuffer, Size wsize)
+	{
+		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
+
+		if ((wbuffer == nullptr) or wsize == 0)
+			return false;
+
+		size_t needed = Yuni::Private::CStringImpl::WCharToUTF8SizeNeeded(wbuffer, wsize);
+		if (needed == 0)
+			return false;
+
+		// resize the internal buffer
+		reserve(AncestorType::size + (Size) needed + zeroTerminated);
+
+		Size maxAllowedSize = capacity() - AncestorType::size;
+		if (maxAllowedSize <= 1)
+			return false; // failed to extend the string
+		maxAllowedSize -= (uint) zeroTerminated;
+
+		char* cstr = data();
+		if (cstr == nullptr) // making sure that the buffer has been allocated
+			return false;
+		cstr += AncestorType::size;
+
+		size_t written = Yuni::Private::CStringImpl::WCharToUTF8(cstr, maxAllowedSize, wbuffer, wsize);
+		if (written != 0)
+		{
+			assert(AncestorType::size + written < capacity());
+			resize(AncestorType::size + (Size) written); // making sure that the string is zero-terminated
+			return true;
+		}
+
+		// reset the final zero just in case
+		resize(AncestorType::size);
+		return false;
+	}
 
 
 

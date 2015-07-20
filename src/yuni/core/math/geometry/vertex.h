@@ -37,15 +37,13 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_VERTEX_H__
-# define __YUNI_CORE_MATH_GEOMETRY_VERTEX_H__
-
-# include "../../../yuni.h"
-# include <vector>
-# include "point3D.h"
-# include "vector3D.h"
-# include "../../string.h"
-# include "../../smartptr.h"
+#pragma once
+#include "../../../yuni.h"
+#include <vector>
+#include "point3D.h"
+#include "vector3D.h"
+#include "../../string.h"
+#include "../../smartptr.h"
 
 
 
@@ -144,5 +142,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_VERTEX_H__

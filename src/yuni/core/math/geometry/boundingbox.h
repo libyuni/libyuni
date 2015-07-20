@@ -37,18 +37,15 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_BOUNDINGBOX_H__
-# define __YUNI_CORE_MATH_GEOMETRY_BOUNDINGBOX_H__
-
-# include "../../../yuni.h"
-# include "point3D.h"
-# include "triangle.h"
+#pragma once
+#include "../../../yuni.h"
+#include "point3D.h"
+#include "triangle.h"
 
 
 
 namespace Yuni
 {
-
 
 	/*!
 	** \brief A bounding box in 3D that grows with what is added inside
@@ -115,9 +112,9 @@ namespace Yuni
 	}; // class BoundingBox
 
 
+
+
+
 } // namespace Yuni
 
-
-# include "boundingbox.hxx"
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_BOUNDINGBOX_H__
+#include "boundingbox.hxx"

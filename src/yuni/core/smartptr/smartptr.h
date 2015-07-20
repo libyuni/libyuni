@@ -491,4 +491,3 @@ namespace Yuni
 
 #include "smartptr.hxx"
 #include "stl.hxx"
-

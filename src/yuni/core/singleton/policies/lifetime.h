@@ -37,11 +37,11 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_SINGLETON_POLICIES_LIFETIME_H__
-# define __YUNI_CORE_SINGLETON_POLICIES_LIFETIME_H__
+#pragma once
+#include <cstdlib>
+#include <stdexcept>
 
-# include <cstdlib>
-# include <stdexcept>
+
 
 namespace Yuni
 {
@@ -142,5 +142,3 @@ namespace Private
 } // namespace Lifetime
 } // namespace Policy
 } // namespace Yuni
-
-#endif // __YUNI_CORE_SINGLETON_POLICIES_LIFETIME_H__

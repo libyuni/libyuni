@@ -37,10 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_STATIC_ASSERT_H__
-# define __YUNI_CORE_STATIC_ASSERT_H__
+#pragma once
+#include "../preprocessor/std.h"
 
-# include "../preprocessor/std.h"
+
 
 
 /*!
@@ -111,15 +111,15 @@
 ** \param X An expression
 ** \param ID An unique ID for the scope
 */
-# ifdef YUNI_HAS_CPP_STATIC_ASSERT
+#ifdef YUNI_HAS_CPP_STATIC_ASSERT
 #	define YUNI_STATIC_ASSERT(X, ID)   static_assert((X), #ID)
-# else
+#else
 #	define YUNI_STATIC_ASSERT(X, ID)  \
 		struct StaticAssert_##ID { \
 			enum { Assert_##ID = Yuni::Static::Assert<(0 != (X))>::result }; \
 		}; \
 		typedef char invokeStaticAssert_##ID[StaticAssert_##ID::Assert_##ID]
-# endif
+#endif
 
 
 
@@ -135,5 +135,3 @@ namespace Static
 
 } // namespace Static
 } // namespaec Yuni
-
-#endif // __YUNI_CORE_STATIC_ASSERT_H__

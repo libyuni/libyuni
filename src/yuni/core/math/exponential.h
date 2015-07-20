@@ -37,10 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_EXPONENTIAL_H__
-# define __YUNI_CORE_MATH_EXPONENTIAL_H__
-
-# include "math.h"
+#pragma once
+#include "math.h"
 
 
 namespace Yuni
@@ -59,6 +57,4 @@ namespace Math
 } // namespace Math
 } // namespace Yuni
 
-# include "exponential.hxx"
-
-#endif // __YUNI_CORE_MATH_EXPONENTIAL_H__
+#include "exponential.hxx"

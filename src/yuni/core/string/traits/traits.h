@@ -69,6 +69,10 @@ namespace CStringImpl
 	YUNI_DECL bool Glob(const char* const s, uint l1, const char* const pattern, uint patternlen);
 
 
+	YUNI_DECL size_t WCharToUTF8SizeNeeded(const wchar_t* wbuffer, size_t length);
+	YUNI_DECL size_t WCharToUTF8(char*& out, size_t maxlength, const wchar_t* wbuffer, size_t length);
+
+
 
 	template<bool AdapterT>
 	struct FinalZero final

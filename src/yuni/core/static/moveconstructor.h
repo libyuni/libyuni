@@ -37,8 +37,7 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_STATIC_REF_TO_VALUE_H__
-# define __YUNI_CORE_STATIC_REF_TO_VALUE_H__
+#pragma once
 
 
 
@@ -76,5 +75,3 @@ namespace Static
 
 } // namespace Static
 } // namespace Yuni
-
-#endif // __YUNI_CORE_STATIC_REF_TO_VALUE_H__

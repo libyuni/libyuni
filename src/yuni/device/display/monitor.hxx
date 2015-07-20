@@ -37,8 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DEVICE_DISPLAY_MONITOR_HXX__
-# define __YUNI_DEVICE_DISPLAY_MONITOR_HXX__
+#pragma once
+#include "monitor.h"
+
 
 
 namespace Yuni
@@ -95,5 +96,3 @@ namespace Display
 } // namespace Display
 } // namespace Device
 } // namespace Yuni
-
-#endif // __YUNI_DEVICE_DISPLAY_MONITOR_HXX__

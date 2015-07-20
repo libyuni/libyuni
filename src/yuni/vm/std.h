@@ -37,10 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_VM_STD_H__
-# define __YUNI_VM_STD_H__
+#pragma once
+#include "../yuni.h"
 
-# include "../yuni.h"
 
 
 namespace Yuni
@@ -57,6 +56,3 @@ namespace VM
 
 } // namespace VM
 } // namespace Yuni
-
-
-#endif // __YUNI_VM_STD_H__

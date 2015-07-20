@@ -37,11 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DBI_ADAPTER_ENTRIES_H__
-# define __YUNI_DBI_ADAPTER_ENTRIES_H__
-
-# include "../../yuni.h"
-# include "../error.h"
+#pragma once
+#include "../../yuni.h"
+#include "../error.h"
 
 
 /*!
@@ -124,8 +122,3 @@ struct yn_dbi_adapter
 	void (*close) (void* dbh);
 
 }; // class Adapter
-
-
-
-
-#endif /* __YUNI_DBI_ADAPTER_ENTRIES_H__ */

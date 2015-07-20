@@ -37,17 +37,16 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_VECTOR3D_H__
-# define __YUNI_CORE_MATH_GEOMETRY_VECTOR3D_H__
+#pragma once
+#include "../../../yuni.h"
+#include "../math.h"
+#include "../trigonometric.h"
+#include "point3D.h"
 
-# include "../../../yuni.h"
-# include "../math.h"
-# include "../trigonometric.h"
-# include "point3D.h"
+
 
 namespace Yuni
 {
-
 
 	/*!
 	** \brief Represents a 3D-vector, with generic homogeneous content
@@ -441,12 +440,11 @@ namespace Yuni
 } // namespace Yuni
 
 
-# include "vector3D.hxx"
+#include "vector3D.hxx"
 
 
 //! \name Operator overload for stream printing
 //@{
-
 template<class T>
 inline std::ostream& operator << (std::ostream& out, const Yuni::Vector3D<T>& v)
 { return v.print(out); }
@@ -458,8 +456,4 @@ inline const Yuni::Vector3D<T> operator + (const Yuni::Vector3D<T>& lhs, const Y
 template<class T>
 inline const Yuni::Vector3D<T> operator * (const Yuni::Vector3D<T>& lhs, const T& rhs)
 { return Yuni::Vector3D<T>(lhs) *= rhs; }
-
 //@}
-
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_VECTOR3D_H__

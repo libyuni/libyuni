@@ -37,8 +37,7 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_MARSHAL_FWD_H__
-# define __YUNI_MARSHAL_FWD_H__
+#pragma once
 
 
 namespace Yuni
@@ -55,5 +54,3 @@ namespace Marshal
 
 } // namespace Marshal
 } // namespace Yuni
-
-#endif // __YUNI_MARSHAL_FWD_H__

@@ -37,15 +37,12 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_LOG_H__
-# define __YUNI_CORE_MATH_LOG_H__
-
-# include "math.h"
-
-
+#pragma once
+#include "math.h"
 
 //! The constant value for `log(2)`
-# define YUNI_LOG_2   0.301029996
+#define YUNI_LOG_2   0.301029996
+
 
 
 
@@ -90,6 +87,4 @@ namespace Math
 } // namespace Math
 } // namespace Yuni
 
-# include "log.hxx"
-
-#endif // __YUNI_CORE_MATH_LOG_H__
+#include "log.hxx"

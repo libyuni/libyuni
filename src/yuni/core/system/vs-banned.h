@@ -1,64 +1,42 @@
-/*
-** YUNI's default license is the GNU Lesser Public License (LGPL), with some
-** exclusions (see below). This basically means that you can get the full source
-** code for nothing, so long as you adhere to a few rules.
-**
-** Under the LGPL you may use YUNI for any purpose you wish, and modify it if you
-** require, as long as you:
-**
-** Pass on the (modified) YUNI source code with your software, with original
-** copyrights intact :
-**  * If you distribute electronically, the source can be a separate download
-**    (either from your own site if you modified YUNI, or to the official YUNI
-**    website if you used an unmodified version) – just include a link in your
-**    documentation
-**  * If you distribute physical media, the YUNI source that you used to build
-**    your application should be included on that media
-** Make it clear where you have customised it.
-**
-** In addition to the LGPL license text, the following exceptions / clarifications
-** to the LGPL conditions apply to YUNI:
-**
-**  * Making modifications to YUNI configuration files, build scripts and
-**    configuration headers such as yuni/platform.h in order to create a
-**    customised build setup of YUNI with the otherwise unmodified source code,
-**    does not constitute a derived work
-**  * Building against YUNI headers which have inlined code does not constitute a
-**    derived work
-**  * Code which subclasses YUNI classes outside of the YUNI libraries does not
-**    form a derived work
-**  * Statically linking the YUNI libraries into a user application does not make
-**    the user application a derived work.
-**  * Using source code obsfucation on the YUNI source code when distributing it
-**    is not permitted.
-** As per the terms of the LGPL, a "derived work" is one for which you have to
-** distribute source code for, so when the clauses above define something as not
-** a derived work, it means you don't have to distribute source code for it.
-** However, the original YUNI source code with all modifications must always be
-** made available.
-*/
+/***
 * banned.h - list of Microsoft Security Development Lifecycle (SDL) banned APIs
+* Copyright (c) Microsoft Corporation. All rights reserved.
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+* and associated documentation files (the "Software"), to deal in the Software without
+* restriction, including without limitation the rights to use, copy, modify, merge, publish,
+* distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
+* Software is furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all copies or
+* substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+* INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+* PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+* FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+* ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
 *
 * Purpose:
 *       This include file contains a list of banned APIs which should not be used in new code and
 *       removed from legacy code over time.
 *
 * History
-* 01-Jan-2006 - mikehow - Initial Version
-* 22-Apr-2008 - mikehow	- Updated to SDL 4.1, commented out recommendations and added memcpy
-* 26-Jan-2009 - mikehow - Updated to SDL 5.0, made the list sane, added SDL compliance levels
-* 10-Feb-2009 - mikehow - Updated based on feedback from MS Office
-* 12-May-2009 - jpardue - Added wmemcpy
-* 08-Jul-2009 - mikehow - Fixed header #ifndef/#endif logic, made the SDL recommended compliance level name more obvious
-* 05-Nov-2009 - mikehow	- Added vsnprintf (ANSI version of _vsnprintf)
-* 01-Jan-2010 - mikehow - Added better strsafe integration, now the following works:
+* 01-Jan-2006 - mikehow  - Initial Version
+* 22-Apr-2008 - mikehow	 - Updated to SDL 4.1, commented out recommendations and added memcpy
+* 26-Jan-2009 - mikehow  - Updated to SDL 5.0, made the list sane, added SDL compliance levels
+* 10-Feb-2009 - mikehow  - Updated based on feedback from MS Office
+* 12-May-2009 - jpardue  - Added wmemcpy
+* 08-Jul-2009 - mikehow  - Fixed header #ifndef/#endif logic, made the SDL recommended compliance level name more obvious
+* 05-Nov-2009 - mikehow	 - Added vsnprintf (ANSI version of _vsnprintf)
+* 01-Jan-2010 - mikehow  - Added better strsafe integration, now the following works:
 *							#include "strsafe.h"
 *							#include "banned.h"
-* 04-Jun-2010 - mikehow - Small "#if" bug fix
-* 16-Jun-2011 - mikehow	- Added the two _CRT_SECURE_xxxxx macros
-* 07-Jul-2011 - mikehow - Bugfix when using recommended banned functions and StrSafe. Locally surpressed C4005 warnings
-*
-*
+* 04-Jun-2010 - mikehow  - Small "#if" bug fix
+* 16-Jun-2011 - mikehow	 - Added the two _CRT_SECURE_xxxxx macros
+* 07-Jul-2011 - mikehow  - Bugfix when using recommended banned functions and StrSafe. Locally surpressed C4005 warnings
+*	01-Feb-2013 - martinwo - Added license to header.
 ***/
 
 #ifndef _INC_BANNED
@@ -143,5 +121,3 @@
 #	endif // _MSC_VER_
 
 #endif  // _INC_BANNED
-
-

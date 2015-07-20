@@ -37,11 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_COMPLEX_H__
-# define __YUNI_CORE_MATH_COMPLEX_H__
-
-# include "../../yuni.h"
-# include <complex>
+#pragma once
+#include "../../yuni.h"
+#include <complex>
 
 
 /*
@@ -55,7 +53,4 @@
 ** The Yuni framework only provides a few specializations.
 */
 
-
-# include "complex.hxx"
-
-#endif // __YUNI_CORE_MATH_COMPLEX_H__
+#include "complex.hxx"

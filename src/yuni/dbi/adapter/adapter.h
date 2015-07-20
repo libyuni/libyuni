@@ -37,10 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DBI_ADAPTER_ADAPTER_H__
-# define __YUNI_DBI_ADAPTER_ADAPTER_H__
-
-# include "entries.h"
+#pragma once
+#include "entries.h"
 
 
 namespace Yuni
@@ -81,5 +79,3 @@ namespace Adapter
 } // namespace Adapter
 } // namespace DBI
 } // namespace Yuni
-
-#endif // __YUNI_DBI_ADAPTER_ADAPTER_H__

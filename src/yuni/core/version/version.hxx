@@ -37,35 +37,36 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_VERSION_HXX__
-# define __YUNI_CORE_VERSION_HXX__
+#pragma once
+#include "version.h"
+
 
 
 namespace Yuni
 {
 
-	inline Version::Version() :
-		hi(), lo(), revision()
+	inline Version::Version()
+		: hi(), lo(), revision()
 	{}
 
 
-	inline Version::Version(uint major) :
-		hi(major), lo(), revision()
+	inline Version::Version(uint major)
+		: hi(major), lo(), revision()
 	{}
 
 
-	inline Version::Version(uint major, uint minor) :
-		hi(major), lo(minor), revision()
+	inline Version::Version(uint major, uint minor)
+		: hi(major), lo(minor), revision()
 	{}
 
 
-	inline Version::Version(uint major, uint minor, uint rev) :
-		hi(major), lo(minor), revision(rev)
+	inline Version::Version(uint major, uint minor, uint rev)
+		: hi(major), lo(minor), revision(rev)
 	{}
 
 
-	inline Version::Version(const Version& c) :
-		hi(c.hi), lo(c.lo), revision(c.revision)
+	inline Version::Version(const Version& c)
+		: hi(c.hi), lo(c.lo), revision(c.revision)
 	{}
 
 
@@ -162,6 +163,3 @@ inline std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs)
 	rhs.print(out);
 	return out;
 }
-
-
-#endif // __YUNI_CORE_VERSION_HXX__

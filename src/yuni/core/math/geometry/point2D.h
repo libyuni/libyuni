@@ -37,10 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_POINT2D_H__
-# define __YUNI_CORE_MATH_GEOMETRY_POINT2D_H__
-
-# include "../math.h"
+#pragma once
+#include "../math.h"
 
 
 
@@ -257,7 +255,7 @@ namespace Yuni
 } // namespace Yuni
 
 
-# include "point2D.hxx"
+#include "point2D.hxx"
 
 //! name Operator overload for stream printing
 //@{
@@ -276,6 +274,3 @@ inline Yuni::Point2D<T> operator * (const Yuni::Point2D<T>& lhs, const U& rhs);
 template<class T, class U>
 inline Yuni::Point2D<T> operator * (const U& lhs, const Yuni::Point2D<T>& rhs);
 //@}
-
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_POINT2D_H__

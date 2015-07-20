@@ -37,17 +37,15 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_STATIC_HAS_TYPEDEF_H__
-# define __YUNI_CORE_STATIC_HAS_TYPEDEF_H__
-
-# include "../../yuni.h"
-# include "remove.h"
+#pragma once
+#include "../../yuni.h"
+#include "remove.h"
 
 
 /*!
 ** \brief Macro for implementing a check for Determining whether a class has a specific typedef or not
 */
-# define YUNI_IMPL_STATIC_HAS_TYPEDEF(TYPEDEF)  \
+#define YUNI_IMPL_STATIC_HAS_TYPEDEF(TYPEDEF)  \
 		template<class T> \
 		class TYPEDEF final \
 		{ \
@@ -108,5 +106,3 @@ namespace HasTypedef
 } // namespace HasMethod
 } // namespace Static
 } // namespace Yuni
-
-#endif // __YUNI_CORE_STATIC_HAS_TYPEDEF_H__

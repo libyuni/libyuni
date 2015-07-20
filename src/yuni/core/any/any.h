@@ -37,13 +37,11 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_ANY_ANY_H__
-#define __YUNI_CORE_ANY_ANY_H__
-
-# include "../../yuni.h"
-# include "../exceptions/badcast.h"
-# include "../string.h"
-# include "any.private.h"
+#pragma once
+#include "../../yuni.h"
+#include "../exceptions/badcast.h"
+#include "../string.h"
+#include "any.private.h"
 
 
 
@@ -196,8 +194,4 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "any.hxx"
-
-#endif /* !__YUNI_CORE_ANY_ANY_H__ */
-
-
+#include "any.hxx"

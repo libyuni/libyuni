@@ -37,11 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_POINT3D_H__
-# define __YUNI_CORE_MATH_GEOMETRY_POINT3D_H__
-
-# include <cassert>
-# include "../math.h"
+#pragma once
+#include <cassert>
+#include "../math.h"
 
 
 
@@ -446,7 +444,6 @@ namespace Yuni
 
 //! \name Operator overload for stream printing
 //@{
-
 template<class T>
 inline std::ostream& operator << (std::ostream& out, const Yuni::Point3D<T>& p)
 { return p.print(out); }
@@ -466,8 +463,4 @@ inline Yuni::Point3D<T> operator * (const Yuni::Point3D<T>& lhs, const U& rhs)
 template<class T, class U>
 inline Yuni::Point3D<T> operator * (const U& lhs, const Yuni::Point3D<T>& rhs)
 { return Yuni::Point3D<T>(rhs) *= lhs; }
-
 //@}
-
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_POINT3D_H__

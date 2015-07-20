@@ -37,11 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DBI_UTILS_H__
-# define __YUNI_DBI_UTILS_H__
-
-# include "../yuni.h"
-# include "../core/string.h"
+#pragma once
+#include "../yuni.h"
+#include "../core/string.h"
 
 
 namespace Yuni
@@ -60,5 +58,3 @@ namespace DBI
 
 } // namespace DBI
 } // namespace Yuni
-
-#endif // __YUNI_DBI_UTILS_H__

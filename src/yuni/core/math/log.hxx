@@ -37,10 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_LOG_HXX__
-# define __YUNI_CORE_MATH_LOG_HXX__
+#pragma once
+#include <cassert>
 
-# include <cassert>
 
 
 namespace Yuni
@@ -113,6 +112,3 @@ namespace Math
 
 } // namespace Math
 } // namespace Yuni
-
-
-#endif // __YUNI_CORE_MATH_LOG_HXX__

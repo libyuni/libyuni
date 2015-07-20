@@ -37,9 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_RANDOM_TABLE_HXX__
-# define __YUNI_CORE_MATH_RANDOM_TABLE_HXX__
-
+#pragma once
+#include "table.h"
 
 
 namespace Yuni
@@ -156,9 +155,6 @@ namespace Random
 
 
 
-
 } // namespace Random
 } // namespace Math
 } // namespace Yuni
-
-#endif // __YUNI_CORE_MATH_RANDOM_TABLE_HXX__

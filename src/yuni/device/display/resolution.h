@@ -37,14 +37,12 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DEVICE_DISPLAY_RESOLUTION_H__
-# define __YUNI_DEVICE_DISPLAY_RESOLUTION_H__
-
-# include "../../yuni.h"
-# include <vector>
-# include <list>
-# include "../../core/string.h"
-# include "../../core/smartptr/smartptr.h"
+#pragma once
+#include "../../yuni.h"
+#include <vector>
+#include <list>
+#include "../../core/string.h"
+#include "../../core/smartptr/smartptr.h"
 
 
 
@@ -58,7 +56,7 @@ namespace Display
 	/*!
 	** \brief Screen/Monitor resolution
 	*/
-	class Resolution
+	class Resolution final
 	{
 	public:
 		//! The most suitable smart pointer to use with the class `Resolution`
@@ -205,7 +203,7 @@ namespace Display
 } // namespace Device
 } // namespace Yuni
 
-# include "resolution.hxx"
+#include "resolution.hxx"
 
 
 //! \name Operator overload for stream printing
@@ -215,6 +213,3 @@ inline std::ostream& operator << (std::ostream& out, const Yuni::Device::Display
 inline std::ostream& operator << (std::ostream& out, const Yuni::Device::Display::Resolution::Ptr& rhs)
 { return rhs->print(out); }
 //@}
-
-
-#endif // __YUNI_DEVICE_DISPLAY_RESOLUTION_H__

@@ -37,9 +37,7 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DBI_AUTO_COMMIT_ROLLBACK_H__
-# define __YUNI_DBI_AUTO_COMMIT_ROLLBACK_H__
-
+#pragma once
 
 
 namespace Yuni
@@ -79,5 +77,3 @@ namespace DBI
 
 } // namespace DBI
 } // namespace Yuni
-
-#endif // __YUNI_DBI_AUTO_COMMIT_ROLLBACK_H__

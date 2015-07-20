@@ -37,19 +37,17 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_MATH_HXX__
-# define __YUNI_CORE_MATH_MATH_HXX__
-
-# include <algorithm>
-# include <cmath>
-# include <stdlib.h>
-# include <stdio.h>
-# include <math.h>
-# include <float.h>
+#pragma once
+#include <algorithm>
+#include <cmath>
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <float.h>
 
 
 
-# if defined(YUNI_OS_MSVC) && _MSC_VER < 1800
+#if defined(YUNI_OS_MSVC) && _MSC_VER < 1800
 /* Those functions are not available on Windows... */
 double rint(double nr);
 #	ifdef YUNI_HAS_LONG_DOUBLE
@@ -66,7 +64,7 @@ long long int llrint(double x);
 long long int llrintl(long double x);
 #	endif
 long long int llrintf(float x);
-# endif
+#endif
 
 
 
@@ -631,8 +629,6 @@ namespace Math
 } // namespace Math
 } // namespace Yuni
 
-# if defined(YUNI_OS_MSVC) && _MSC_VER < 1800
+#if defined(YUNI_OS_MSVC) && _MSC_VER < 1800
 #	include "msvc.hxx"
-# endif
-
-#endif // __YUNI_CORE_MATH_MATH_HXX__
+#endif

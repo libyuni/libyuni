@@ -37,9 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_VARIANT_VARIANT_DATAHOLDER_HXX__
-#define __YUNI_CORE_VARIANT_VARIANT_DATAHOLDER_HXX__
-
+#pragma once
+#include "dataholder.h"
 
 
 namespace Yuni
@@ -92,5 +91,3 @@ namespace Variant
 } // namespace Variant
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_CORE_VARIANT_VARIANT_DATAHOLDER_HXX__

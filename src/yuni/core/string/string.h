@@ -616,6 +616,16 @@ namespace Yuni
 		template<class StringT> void append(const StringT& s, Size size);
 
 		/*!
+		** \brief Append to the end of the string a wchar_t buffer
+		**
+		** \note The buffer is always considered as UTF-16 on Windows
+		** \param wbuffer A wchar_t buffer (can be null)
+		** \param wsize Size of the container
+		** \return True if the convertion succeeded and if something has been added
+		*/
+		bool append(const wchar_t* wbuffer, Size wsize);
+
+		/*!
 		** \brief Append to the end of the string a new value
 		**
 		** \param s      Any supported value
@@ -624,6 +634,17 @@ namespace Yuni
 		*/
 		template<class StringT>
 		void append(const StringT& s, Size size, Size offset);
+
+		/*!
+		** \brief Append to the end of the string a new value
+		**
+		** \note The buffer is always considered as UTF-16 on Windows
+		** \param wbuffer A wchar_t buffer (can be null)
+		** \param wsize   Size of the container
+		** \param offset Offset of the first character to append
+		** \return True if the convertion succeeded and if something has been added
+		*/
+		bool append(const wchar_t* wbuffer, Size wsize, Size offset);
 
 
 

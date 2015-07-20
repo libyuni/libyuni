@@ -37,30 +37,30 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_H__
-# define __YUNI_H__
+#pragma once
 
 
-# ifdef YUNI_CONFIG_H_LOCATION
+
+#ifdef YUNI_CONFIG_H_LOCATION
 #	include YUNI_CONFIG_H_LOCATION
-# else
+#else
 #	include "config.h"
-# endif
+#endif
 
 
 /* Platform checks */
-# include "platform.h"
+#include "platform.h"
 /* Standard Preprocessor tools */
-# include "core/preprocessor/std.h"
+#include "core/preprocessor/std.h"
 /* Operating System / Capabilities auto-detection */
-# include "core/system/capabilities.h"
+#include "core/system/capabilities.h"
 /* Standard Types */
-# include "core/system/stdint.h"
+#include "core/system/stdint.h"
 /* ISO 646 - part of C90 standard but not by default on all compilers */
-# include <iso646.h>
+#include <iso646.h>
 
 
-# ifdef __cplusplus /* Only with a C++ Compiler */
+#ifdef __cplusplus /* Only with a C++ Compiler */
 
 /*!
 ** \brief The Yuni Framework
@@ -69,16 +69,13 @@ namespace Yuni
 {}
 
 /* nullptr */
-# include "core/system/nullptr.h"
+#include "core/system/nullptr.h"
 /* All standard forward declarations */
-# include "core/fwd.h"
+#include "core/fwd.h"
 
 /* banned.h - SDL requirement */
-# ifdef YUNI_OS_MSVC
+#ifdef YUNI_OS_MSVC
 //#	include "core/system/vs-banned.h"
-# endif
+#endif
 
-# endif
-
-
-#endif /* __YUNI_H__ */
+#endif

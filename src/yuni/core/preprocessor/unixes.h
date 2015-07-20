@@ -37,53 +37,52 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_PREPROCESSOR_CAPABILITIES_UNIXES_H__
-# define __YUNI_CORE_PREPROCESSOR_CAPABILITIES_UNIXES_H__
+#pragma once
 
 /*
 ** Information about Unix capabilities
 */
 
 /* Unix compliant */
-# define YUNI_OS_UNIX
+#define YUNI_OS_UNIX
 
-# undef  YUNI_OS_FLAG_UNIX
-# define YUNI_OS_FLAG_UNIX 1
+#undef  YUNI_OS_FLAG_UNIX
+#define YUNI_OS_FLAG_UNIX 1
 
 
-# if defined(__HAIKU) || defined(__HAIKU__) || defined(_HAIKU)
+#if defined(__HAIKU) || defined(__HAIKU__) || defined(_HAIKU)
 /* Haiku */
 #	define YUNI_OS_HAIKU
 #	define YUNI_OS_NAME "Haiku"
-# else
+#else
 /* BeOS */
 #	if defined(__BeOS) || defined(__BEOS__) || defined(_BEOS)
 #		define YUNI_OS_BEOS
 #		define YUNI_OS_NAME "BeOS"
 #	endif
-# endif
+#endif
 
 
 
 /* Linux */
-# if defined(__linux) || defined(linux) || defined(__linux__)
+#if defined(__linux) || defined(linux) || defined(__linux__)
 #	define YUNI_OS_LINUX
 #	define YUNI_OS_NAME "GNU/Linux"
 #	undef  YUNI_OS_FLAG_LINUX
 #	define YUNI_OS_FLAG_LINUX 1
-# else
+#else
 
 /* AIX */
-# 	if defined(_AIX)
+#	if defined(_AIX)
 #		define YUNI_OS_AIX
 #		define YUNI_OS_NAME "AIX"
-# 	endif
+#	endif
 
 /* DragonFly */
-# 	if defined(__DragonFly__)
-# 		define YUNI_OS_DRAGONFLY
+#	if defined(__DragonFly__)
+#		define YUNI_OS_DRAGONFLY
 #		define YUNI_OS_NAME "DragonFly"
-# 	endif
+#	endif
 
 /* HP-UX */
 #	if defined(_hpux) || defined(__hpux) || defined(__hpux__)
@@ -153,13 +152,10 @@
 #	endif
 
 
-# endif /* Linux */
+#endif /* Linux */
 
 
-# if defined(VMS) || defined(__VMS)
+#if defined(VMS) || defined(__VMS)
 #	define YUNI_OS_VMS
 #   define YUNI_OS_NAME "VMS"
-# endif
-
-
-#endif /* __YUNI_CORE_PREPROCESSOR_CAPABILITIES_UNIXES_H__ */
+#endif

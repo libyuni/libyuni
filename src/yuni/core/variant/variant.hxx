@@ -37,11 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_VARIANT_VARIANT_HXX__
-# define __YUNI_CORE_VARIANT_VARIANT_HXX__
+#pragma once
+#include "variant.h"
 
-
-# define YUNI_VARIANT_DEFINE_SUPPORTED_TYPE(TYPE)  \
+#define YUNI_VARIANT_DEFINE_SUPPORTED_TYPE(TYPE)  \
 	template<> struct Variant::SupportedType<TYPE> \
 	{ \
 		enum \
@@ -51,6 +50,7 @@
 		\
 		typedef TYPE OperatorType; \
 	};
+
 
 
 namespace Yuni
@@ -110,90 +110,90 @@ namespace Yuni
 
 
 
-	inline Variant::Variant() :
-		pShareContent(false)
+	inline Variant::Variant()
+		: pShareContent(false)
 	{}
 
 
-	inline Variant::Variant(const NullPtr&) :
-		pShareContent(false)
+	inline Variant::Variant(const NullPtr&)
+		: pShareContent(false)
 	{}
 
 
-	inline Variant::Variant(const Variant& rhs) :
-		pShareContent(false)
+	inline Variant::Variant(const Variant& rhs)
+		: pShareContent(false)
 	{
 		assign(rhs);
 	}
 
 
 	template<uint ChunkT, bool ExpT>
-	inline Variant::Variant(const CString<ChunkT, ExpT>& rhs) :
-		pShareContent(false)
+	inline Variant::Variant(const CString<ChunkT, ExpT>& rhs)
+		: pShareContent(false)
 	{
 		assign(rhs);
 	}
 
 
-	inline Variant::Variant(const char* rhs) :
-		pShareContent(false)
+	inline Variant::Variant(const char* rhs)
+		: pShareContent(false)
 	{
 		assign(rhs);
 	}
 
 
-	inline Variant::Variant(bool rhs) :
-		pShareContent(false)
+	inline Variant::Variant(bool rhs)
+		: pShareContent(false)
 	{
 		assign(rhs);
 	}
 
 
-	inline Variant::Variant(char rhs) :
-		pShareContent(false)
+	inline Variant::Variant(char rhs)
+		: pShareContent(false)
 	{
 		assign(rhs);
 	}
 
 
 
-	inline Variant::Variant(sint32 rhs) :
-		pShareContent(false)
+	inline Variant::Variant(sint32 rhs)
+		: pShareContent(false)
 	{
 		assign(rhs);
 	}
 
 
-	inline Variant::Variant(sint64 rhs) :
-		pShareContent(false)
+	inline Variant::Variant(sint64 rhs)
+		: pShareContent(false)
 	{
 		assign(rhs);
 	}
 
 
-	inline Variant::Variant(uint32 rhs) :
-		pShareContent(false)
+	inline Variant::Variant(uint32 rhs)
+		: pShareContent(false)
 	{
 		assign(rhs);
 	}
 
 
-	inline Variant::Variant(uint64 rhs) :
-		pShareContent(false)
+	inline Variant::Variant(uint64 rhs)
+		: pShareContent(false)
 	{
 		assign(rhs);
 	}
 
 
-	inline Variant::Variant(float rhs) :
-		pShareContent(false)
+	inline Variant::Variant(float rhs)
+		: pShareContent(false)
 	{
 		assign(rhs);
 	}
 
 
-	inline Variant::Variant(double rhs) :
-		pShareContent(false)
+	inline Variant::Variant(double rhs)
+		: pShareContent(false)
 	{
 		assign(rhs);
 	}
@@ -494,7 +494,5 @@ inline std::ostream& operator << (std::ostream& out, const Yuni::Variant& rhs)
 
 
 
-# undef YUNI_VARIANT_OPERATOR_TYPE
-# undef YUNI_VARIANT_DEFINE_SUPPORTED_TYPE
-
-#endif // __YUNI_CORE_VARIANT_VARIANT_HXX__
+#undef YUNI_VARIANT_OPERATOR_TYPE
+#undef YUNI_VARIANT_DEFINE_SUPPORTED_TYPE

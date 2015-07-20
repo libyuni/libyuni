@@ -37,18 +37,17 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_VARIANT_VARIANT_H__
-# define __YUNI_CORE_VARIANT_VARIANT_H__
+#pragma once
+#include "../../yuni.h"
+#include "../string.h"
+#include "../static/remove.h"
+#include "../static/if.h"
+#include "fwd.h"
+#include "types.h"
+#include "dataholder/dataholder.h"
+#include "dataholder/string.h"
+#include "dataholder/array.h"
 
-# include "../../yuni.h"
-# include "../string.h"
-# include "../static/remove.h"
-# include "../static/if.h"
-# include "fwd.h"
-# include "types.h"
-# include "dataholder/dataholder.h"
-# include "dataholder/string.h"
-# include "dataholder/array.h"
 
 
 namespace Yuni
@@ -312,6 +311,4 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "variant.hxx"
-
-#endif // __YUNI_CORE_VARIANT_VARIANT_H__
+#include "variant.hxx"

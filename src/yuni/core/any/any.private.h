@@ -37,10 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_ANY_ANY_PRIVATE_H__
-#define __YUNI_CORE_ANY_ANY_PRIVATE_H__
-
+#pragma once
 #include "../static/types.h"
+
 
 
 namespace Yuni
@@ -191,6 +190,3 @@ namespace Any
 } // namespace Any
 } // namespace Private
 } // namespace Yuni
-
-
-#endif /* !__YUNI_CORE_ANY_ANY_PRIVATE_H__ */

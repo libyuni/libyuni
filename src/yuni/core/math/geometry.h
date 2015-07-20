@@ -37,12 +37,11 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
+#pragma once
+#include "geometry/point3D.h"
+#include "geometry/vector3D.h"
 
-#ifndef __YUNI_CORE_MATH_GEOMETRY_H__
-# define __YUNI_CORE_MATH_GEOMETRY_H__
 
-# include "geometry/point3D.h"
-# include "geometry/vector3D.h"
 
 namespace Yuni
 {
@@ -147,9 +146,9 @@ namespace Geometry
 	static T VectorAngle(const Vector3D<T>& start, const Vector3D<T>& destination);
 
 
+
+
 } // namespace Geometry
 } // namespace Yuni
 
-# include "geometry.hxx"
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_H__
+#include "geometry.hxx"

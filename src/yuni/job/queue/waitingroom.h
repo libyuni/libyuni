@@ -37,13 +37,11 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_JOB_WAITING_ROOM_H__
-# define __YUNI_JOB_WAITING_ROOM_H__
-
-# include "../job.h"
-# include "../../core/slist/slist.h"
-# include "../../core/atomic/bool.h"
-# include <deque>
+#pragma once
+#include "../job.h"
+#include "../../core/slist/slist.h"
+#include "../../core/atomic/bool.h"
+#include <deque>
 
 
 
@@ -145,6 +143,4 @@ namespace QueueService
 } // namespace Private
 } // namespace Yuni
 
-# include "waitingroom.hxx"
-
-#endif // __YUNI_JOB_WAITING_ROOM_H__
+#include "waitingroom.hxx"

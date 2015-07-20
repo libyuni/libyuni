@@ -37,11 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_DATETIME_TIMESTAMP_H__
-# define __YUNI_DATETIME_TIMESTAMP_H__
+#pragma once
+#include "../yuni.h"
+#include "../core/string.h"
 
-# include "../yuni.h"
-# include "../core/string.h"
 
 
 namespace Yuni
@@ -92,6 +91,4 @@ namespace DateTime
 } // namespace DateTime
 } // namespace Yuni
 
-# include "timestamp.hxx"
-
-#endif // __YUNI_DATETIME_TIMESTAMP_H__
+#include "timestamp.hxx"

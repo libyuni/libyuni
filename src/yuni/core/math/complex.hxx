@@ -37,8 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_COMPLEX_HXX__
-# define __YUNI_CORE_MATH_COMPLEX_HXX__
+#pragma once
+#include "complex.h"
 
 
 namespace Yuni
@@ -65,5 +65,3 @@ namespace IStringImpl
 } // namespace IStringImpl
 } // namespace Private
 } // namespace Yuni
-
-#endif // __YUNI_CORE_MATH_COMPLEX_HXX__

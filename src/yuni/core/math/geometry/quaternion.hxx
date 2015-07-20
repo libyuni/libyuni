@@ -37,15 +37,13 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_QUATERNION_HXX__
-# define __YUNI_CORE_MATH_GEOMETRY_QUATERNION_HXX__
+#pragma once
+#include "../math.h"
 
-# include "../math.h"
 
 
 namespace Yuni
 {
-
 
 	template<class T>
 	inline T Quaternion<T>::Magnitude(const Quaternion& q)
@@ -226,6 +224,3 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_QUATERNION_HXX__
-

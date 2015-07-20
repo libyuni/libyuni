@@ -37,10 +37,9 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_RANDOM_DEFAULT_H__
-# define __YUNI_CORE_MATH_RANDOM_DEFAULT_H__
+#pragma once
+#include "distribution.h"
 
-# include "distribution.h"
 
 
 namespace Yuni
@@ -85,6 +84,4 @@ namespace Random
 } // namespace Math
 } // namespace Yuni
 
-# include "default.hxx"
-
-#endif // __YUNI_CORE_MATH_RANDOM_RANDOM_H__
+#include "default.hxx"

@@ -37,11 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_GEOMETRY_RECT_2D_H__
-# define __YUNI_CORE_MATH_GEOMETRY_RECT_2D_H__
+#pragma once
+#include "../../../yuni.h"
+#include "point2D.h"
 
-# include "../../../yuni.h"
-# include "point2D.h"
 
 
 namespace Yuni
@@ -307,7 +306,7 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "rect2D.hxx"
+#include "rect2D.hxx"
 
 
 
@@ -317,6 +316,3 @@ template<class T>
 inline std::ostream& operator << (std::ostream& out, const Yuni::Rect2D<T>& p)
 { return p.print(out); }
 //@}
-
-
-#endif // __YUNI_CORE_MATH_GEOMETRY_RECT_2D_H__

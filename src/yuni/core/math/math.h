@@ -37,10 +37,8 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_MATH_MATH_H__
-# define __YUNI_CORE_MATH_MATH_H__
-
-# include "../../yuni.h"
+#pragma once
+#include "../../yuni.h"
 
 
 /*!
@@ -52,7 +50,7 @@
 **
 ** \ingroup Math
 */
-# define YUNI_EPSILON        1.e-6
+#define YUNI_EPSILON        1.e-6
 
 /*!
 ** \brief Pi, a mathematical constant (π)
@@ -62,21 +60,21 @@
 ** \see http://en.wikipedia.org/wiki/Pi
 ** \ingroup Math
 */
-# define YUNI_PI             3.14159265358979323846
+#define YUNI_PI             3.14159265358979323846
 
 /*!
 ** \brief The reciprocal value of PI
 **
 ** \ingroup Math
 */
-# define YUNI_RECIPROCAL_PI  0.318309886183791 // = 1. / YUNI_PI
+#define YUNI_RECIPROCAL_PI  0.318309886183791 // = 1. / YUNI_PI
 
 /*!
 ** \brief The half value of PI
 **
 ** \ingroup Math
 */
-# define YUNI_HALF_PI        1.570796326794897 // = YUNI_PI / 2.
+#define YUNI_HALF_PI        1.570796326794897 // = YUNI_PI / 2.
 
 /*!
 ** \brief E, A Mathematical constant
@@ -86,7 +84,7 @@
 ** \see http://en.wikipedia.org/wiki/E_(mathematical_constant)
 ** \ingroup Math
 */
-# define YUNI_NAT_E          2.71828182845904523536
+#define YUNI_NAT_E          2.71828182845904523536
 
 
 
@@ -420,6 +418,4 @@ namespace Math
 } // namespace Math
 } // namespace Yuni
 
-# include "math.hxx"
-
-#endif // __YUNI_CORE_MATH_MATH_H__
+#include "math.hxx"
