@@ -45,6 +45,8 @@ namespace Yuni
 {
 
 	inline WString::WString(const AnyString& string, bool uncprefix)
+		: pWString(nullptr)
+		, pSize()
 	{
 		prepareWString(string, uncprefix);
 	}
