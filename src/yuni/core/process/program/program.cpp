@@ -76,21 +76,21 @@ namespace Process
 		Stream::Ptr stream;
 
 		# ifndef YUNI_OS_WINDOWS
-		struct
-		{
-			int outfd[2];
-			int infd[2];
-			int errd[2];
-		}
-		channels;
+		typedef int FD;
 		pid_t pid;
 		#else
+		typedef HANDLE FD;
 		HANDLE processHandle;
 		HANDLE threadHandle;
-		HANDLE outfd;
-		HANDLE infd;
-		HANDLE errfd;
 		#endif
+
+		struct
+		{
+			FD outfd[2];
+			FD infd[2];
+			FD errd[2];
+		}
+		channels;
 
 		bool pRedirectToConsole;
 

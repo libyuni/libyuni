@@ -4,20 +4,107 @@
 #ifdef YUNI_OS_WINDOWS
 
 // http://msdn.microsoft.com/en-us/library/ms682499%28v=vs.85%29.aspx
+// http://blogs.msdn.com/b/oldnewthing/archive/2011/12/16/10248328.aspx
 // http://stackoverflow.com/questions/53208/how-do-i-automatically-destroy-child-processes-in-windows
-// http://stackoverflow.com/questions/985281/what-is-the-closest-thing-windows-has-to-fork/985525#985525
 
 # include "../../system/windows.hdr.h"
 # include <WinNT.h>
 # include "../../string/wstring.h"
+# if _WIN32_WINNT >= 0x0600
+#	include <processthreadsapi.h>
+# endif
+# include <iostream>
 # include <io.h>
-
 
 
 namespace Yuni
 {
 namespace Process
 {
+
+	namespace // anonymous
+	{
+
+		static inline bool pipe(HANDLE (&fd)[2], SECURITY_ATTRIBUTES& attr, const char* const pipeName)
+		{
+			// Create a pipe for the child process's STDOUT.
+			if (!::CreatePipe(fd, fd + 1, &attr, 0))
+			{
+				std::cerr << "pipe failed : failed to create pipe for "
+						  << pipeName << '\n';
+				return false;
+			}
+
+			// Ensure the read handle to the pipe for STDOUT is not inherited.
+			if (!::SetHandleInformation(fd[0], HANDLE_FLAG_INHERIT, 0))
+			{
+				std::cerr << "pipe failed : failed to set handle information on "
+						  << pipeName << " pipe\n";
+				return false;
+			}
+
+			return true;
+		}
+
+
+#if _WIN32_WINNT >= 0x0600
+		static inline bool fillProcAttributeList(HANDLE (&handles)[3], LPPROC_THREAD_ATTRIBUTE_LIST& attrList)
+		{
+			SIZE_T size = 0;
+			if (!::InitializeProcThreadAttributeList(nullptr, 1, 0, &size))
+				return false;
+			if ((attrList = reinterpret_cast<LPPROC_THREAD_ATTRIBUTE_LIST>(
+				::HeapAlloc(::GetProcessHeap(), 0, size))) != nullptr)
+				return false;
+			if (!::InitializeProcThreadAttributeList(attrList, 1, 0, &size))
+				return false;
+			return ::UpdateProcThreadAttribute(attrList, 0, PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
+				handles, 3 * sizeof(HANDLE), nullptr, nullptr);
+		}
+#endif
+
+
+		bool connectToNewClient(HANDLE hPipe, LPOVERLAPPED lpo)
+		{
+			bool connected = false;
+			bool pendingIO = false;
+
+			// Start an overlapped connection for this pipe instance.
+			fConnected = ::ConnectNamedPipe(hPipe, lpo);
+
+			// Overlapped ConnectNamedPipe should return zero.
+			if (fConnected)
+			{
+				std::cerr << "ConnectNamedPipe failed with " << ::GetLastError() << '\n';
+				return false;
+			}
+
+			switch (::GetLastError())
+			{
+				// The overlapped connection in progress.
+				case ERROR_IO_PENDING:
+					pendingIO = TRUE;
+					break;
+
+					// Client is already connected, so signal an event.
+				case ERROR_PIPE_CONNECTED:
+					if (::SetEvent(lpo->hEvent))
+						break;
+
+					// If an error occurs during the connect operation...
+				default:
+					{
+						std::cerr << "ConnectNamedPipe failed with " << ::GetLastError() << '\n';
+						return 0;
+					}
+			}
+
+			return pendingIO;
+		}
+
+
+	} // namespace anonymous
+
 
 
 
@@ -30,51 +117,51 @@ namespace Process
 		saAttr.bInheritHandle = TRUE;
 		saAttr.lpSecurityDescriptor = nullptr;
 
-		HANDLE readOut = nullptr;
-		HANDLE writeOut = nullptr;
-		// Create a pipe for the child process's STDOUT.
-		if (!::CreatePipe(&readOut, &writeOut, &saAttr, 0))
-		{
-			std::cerr << "pipe failed : failed to create pipe for stdout\n";
+		if (!pipe(channels.outfd, saAttr, "stdout"))
 			return false;
-		}
 
-		// Ensure the read handle to the pipe for STDOUT is not inherited.
-		if (!::SetHandleInformation(readOut, HANDLE_FLAG_INHERIT, 0))
-		{
-			std::cerr << "pipe failed : failed to set handle information on stdout pipe\n";
+		if (!pipe(channels.infd, saAttr, "stdin"))
 			return false;
-		}
 
-		HANDLE readIn = nullptr;
-		HANDLE writeIn = nullptr;
-		// Create a pipe for the child process's STDIN.
-		if (!::CreatePipe(&readIn, &writeIn, &saAttr, 0))
-		{
-			std::cerr << "pipe failed : failed to create pipe for stdin\n";
+		if (!pipe(channels.errd, saAttr, "stderr"))
 			return false;
-		}
 
-		// Ensure the write handle to the pipe for STDIN is not inherited.
-		if (!::SetHandleInformation(writeIn, HANDLE_FLAG_INHERIT, 0))
-		{
-			std::cerr << "pipe failed : failed to set handle information on stdin pipe\n";
-			return false;
-		}
+
+#if _WIN32_WINNT >= 0x0600
+		// Prepare inherited handle list for STARTUPINFOEX
+		LPPROC_THREAD_ATTRIBUTE_LIST attrList = nullptr;
+		HANDLE inheritedHandles[3] = {
+			channels.outfd[0],
+			channels.infd[1],
+			channels.errd[1],
+		};
+		fillProcAttributeList(inheritedHandles, attrList);
+
+		// Set up members of the STARTUPINFOEX structure.
+		// This structure specifies the handles for redirection.
+		// It is necessary to use the EX version, otherwise _all_ inheritable
+		// handles in the program are inherited by the child.
+		STARTUPINFOEX startInfo;
+		::ZeroMemory(&startInfo, sizeof(STARTUPINFOEX));
+		startInfo.StartupInfo.cb = (uint32) sizeof(STARTUPINFOEX);
+		startInfo.lpAttributeList = attrList;
+		startInfo.StartupInfo.dwFlags |= STARTF_USESTDHANDLES;
+		startInfo.StartupInfo.hStdOutput = channels.outfd[0];
+		startInfo.StartupInfo.hStdInput = channels.infd[1];
+		startInfo.StartupInfo.hStdError = channels.errd[1];
+#else
+		STARTUPINFO startInfo;
+		::ZeroMemory(&startInfo, sizeof(STARTUPINFO));
+		startInfo.cb = (uint32) sizeof(STARTUPINFO);
+		startInfo.dwFlags |= STARTF_USESTDHANDLES;
+		startInfo.hStdOutput = channels.outfd[0];
+		startInfo.hStdInput = channels.infd[1];
+		startInfo.hStdError = channels.errd[1];
+#endif // _WIN32_WINNT < 0x0600
 
 		// Set up members of the PROCESS_INFORMATION structure.
 		PROCESS_INFORMATION winProcInfo;
 		::ZeroMemory(&winProcInfo, sizeof(PROCESS_INFORMATION));
-
-		// Set up members of the STARTUPINFO structure.
-		// This structure specifies the STDIN and STDOUT handles for redirection.
-		STARTUPINFO startInfo;
-		::ZeroMemory(&startInfo, sizeof(STARTUPINFO));
-		startInfo.cb = (uint32) sizeof(STARTUPINFO);
-		startInfo.hStdError = writeOut;
-		startInfo.hStdOutput = writeOut;
-		startInfo.hStdInput = readIn;
-		startInfo.dwFlags |= STARTF_USESTDHANDLES;
 
 		Yuni::Private::WString<> cmdLine(procinfo.executable);
 
@@ -87,14 +174,14 @@ namespace Process
 			cmdLine.c_str(),	// command line
 			nullptr,			// process security attributes
 			nullptr,			// primary thread security attributes
-			false,				// handles are not inherited
+			true,				// handles are inherited (necessary for STARTF_USESTDHANDLES)
 			0,					// creation flags
 			nullptr,			// use parent's environment
 			nullptr,			// use parent's current directory
 			&startInfo,			// STARTUPINFO pointer
 			&winProcInfo);		// receives PROCESS_INFORMATION
 
-		// If an error occurs, exit the application.
+		// If an error occurs, give up
 		if (!success)
 		{
 			//DWORD error = ::GetLastError();
@@ -104,8 +191,8 @@ namespace Process
 			//	LPVOID lpMsgBuf = nullptr;
 			//	DWORD bufLen = ::FormatMessageW(
 			//		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-			//		NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			//		(LPTSTR) &lpMsgBuf, 1024, NULL);
+			//		nullptr, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			//		(LPTSTR) &lpMsgBuf, 1024, nullptr);
 			//	if (bufLen)
 			//	{
 			//		LPCTSTR lpMsgStr = (LPCTSTR)lpMsgBuf;
@@ -119,15 +206,14 @@ namespace Process
 		}
 
 		// Close streams passed to the child process
-		::CloseHandle(writeOut);
+		::CloseHandle(channels.outfd[0]);
+		::CloseHandle(channels.infd[1]);
+		::CloseHandle(channels.errd[1]);
 
 		processHandle = winProcInfo.hProcess;
 		threadHandle = winProcInfo.hThread;
-		outfd = readOut;
-		infd = writeIn;
-		//errfd = ;
 		procinfo.processID = (int)winProcInfo.dwProcessId;
-		procinfo.processInput = _open_osfhandle(reinterpret_cast<intptr_t>(readIn), 0);
+		procinfo.processInput = _open_osfhandle(reinterpret_cast<intptr_t>(channels.infd[0]), 0);
 
 		// timeout for the sub process
 		procinfo.createThreadForTimeoutWL();
@@ -138,18 +224,35 @@ namespace Process
 
 	void Program::ThreadMonitor::waitForSubProcess()
 	{
-		static const uint NbHandles = 3;
+		// a 4K buffer seems the most efficient size
+		enum { bufferSize = 4096 };
+		enum { nbHandles = 3 };
+
+		OVERLAPPED outOverlap;
+		HANDLE outEvent = ::CreateEvent(nullptr, false, false, nullptr);
+		outOverlap.hEvent = outEvent;
+		connectToNewClient(channels.infd[0], &outOverlap);
+		OVERLAPPED errOverlap;
+		HANDLE errEvent = ::CreateEvent(nullptr, false, false, nullptr);
+		errOverlap.hEvent = errEvent;
+		connectToNewClient(channels.errd[0], &errOverlap);
+
+		// Wait for all these handles
+		HANDLE handleList[nbHandles] = {
+			processHandle,
+			outEvent,
+			errEvent
+		};
 
 		bool finished = false;
-		HANDLE handleList[NbHandles] = { processHandle, outfd, infd };
-
 		do
 		{
-			uint32 waitStatus = ::WaitForMultipleObjectsEx(NbHandles, handleList, false, INFINITE, true);
-			if (/*waitStatus >= WAIT_OBJECT_0 and*/ waitStatus < WAIT_OBJECT_0 + NbHandles)
+			uint32 waitStatus = ::WaitForMultipleObjectsEx(nbHandles, handleList, false, INFINITE, true);
+			if (/*waitStatus >= WAIT_OBJECT_0 and*/ waitStatus < WAIT_OBJECT_0 + nbHandles)
 			{
 				HANDLE signalled = handleList[waitStatus - WAIT_OBJECT_0];
 				DWORD exitCode;
+				// If the process was signalled
 				if (signalled == processHandle && ::GetExitCodeProcess(processHandle, &exitCode))
 				{
 					// It is forbidden to use STILL_ACTIVE as an exit code
@@ -161,12 +264,40 @@ namespace Process
 					// TODO : How to know if the process was signalled or exited ?
 					// pKilled = true;
 				}
+				else // If the child wrote to stdout or stderr
+				{
+					DWORD readBytes;
+					DWORD writtenBytes;
+					DWORD totalAvailBytes;
+					DWORD bytesLeft;
+					char buffer[bufferSize];
+					bool cout = waitStatus - WAIT_OBJECT_0 == 1; // otherwise, cerr
+					HANDLE writeTo = ::GetStdHandle(cout ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);
+					HANDLE readFrom = cout ? channels.infd[0] : channels.errd[0];
+
+					while (true)
+					{/*
+						bool success = ::PeekNamedPipe(readFrom, nullptr, bufferSize, &readBytes,
+							&totalAvailBytes, &bytesLeft);
+						std::cout << "Peeking : " << readBytes << " bytes to read" << std::endl;
+						if (not success || readBytes == 0)
+						break;*/
+						std::cout << "Ready to read !" << std::endl;
+						success = ::ReadFile(readFrom, buffer, bufferSize, &readBytes, nullptr);
+						std::cout << "Read " << readBytes << " characters" << std::endl;
+						if (not success || readBytes == 0)
+							break;
+						success = ::WriteFile(writeTo, buffer, readBytes, &writtenBytes, nullptr);
+						if (not success)
+							break;
+					}
+				}
 			}
-			else
+			else // Abnormal completion
 			{
 				switch (waitStatus)
 				{
-					// I/O event
+					// Async I/O event
 					case WAIT_IO_COMPLETION:
 						// TODO Manage I/O for IPC
 						break;
@@ -201,6 +332,9 @@ namespace Process
 			procinfo.timeoutThread = nullptr;
 		}
 
+		::CloseHandle(channels.outfd[1]);
+		::CloseHandle(channels.infd[0]);
+		::CloseHandle(channels.errd[0]);
 		::CloseHandle(processHandle);
 		::CloseHandle(threadHandle);
 	}
