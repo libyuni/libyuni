@@ -25,10 +25,23 @@ namespace Process
 	namespace // anonymous
 	{
 
+		static inline void closeHD(HANDLE& handle)
+		{
+			if (INVALID_HANDLE_VALUE != handle)
+			{
+				std::cout << " :: closing handle " << handle << std::endl;
+				BOOL success = ::CloseHandle(handle);
+				(void) success;
+				assert(success != FALSE);
+				handle = INVALID_HANDLE_VALUE;
+			}
+		}
+
 		static inline bool pipe(HANDLE (&fd)[2], SECURITY_ATTRIBUTES& attr, const char* const pipeName)
 		{
 			// Create a pipe for the child process's STDOUT.
-			if (!::CreatePipe(fd, fd + 1, &attr, 0))
+			// CreatePipe(read, write, attr, null)
+			if (FALSE == ::CreatePipe(fd, fd + 1, &attr, 0))
 			{
 				std::cerr << "pipe failed : failed to create pipe for "
 						  << pipeName << '\n';
@@ -36,10 +49,9 @@ namespace Process
 			}
 
 			// Ensure the read handle to the pipe for STDOUT is not inherited.
-			if (!::SetHandleInformation(fd[0], HANDLE_FLAG_INHERIT, 0))
+			if (FALSE == ::SetHandleInformation(fd[0], HANDLE_FLAG_INHERIT, 0))
 			{
-				std::cerr << "pipe failed : failed to set handle information on "
-						  << pipeName << " pipe\n";
+				std::cerr << "pipe failed : failed to set handle information on " << pipeName << " pipe\n";
 				return false;
 			}
 
@@ -47,56 +59,59 @@ namespace Process
 		}
 
 
-#if _WIN32_WINNT >= 0x0600
+		#if _WIN32_WINNT >= 0x0600
 		static inline bool fillProcAttributeList(HANDLE (&handles)[3], LPPROC_THREAD_ATTRIBUTE_LIST& attrList)
 		{
 			SIZE_T size = 0;
-			if (!::InitializeProcThreadAttributeList(nullptr, 1, 0, &size))
+			if (FALSE == ::InitializeProcThreadAttributeList(nullptr, 1, 0, &size))
 				return false;
 			if ((attrList = reinterpret_cast<LPPROC_THREAD_ATTRIBUTE_LIST>(
 				::HeapAlloc(::GetProcessHeap(), 0, size))) != nullptr)
 				return false;
-			if (!::InitializeProcThreadAttributeList(attrList, 1, 0, &size))
+			if (FALSE == ::InitializeProcThreadAttributeList(attrList, 1, 0, &size))
 				return false;
-			return ::UpdateProcThreadAttribute(attrList, 0, PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
-				handles, 3 * sizeof(HANDLE), nullptr, nullptr);
+
+			return (FALSE != ::UpdateProcThreadAttribute(attrList, 0, PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
+				handles, 3 * sizeof(HANDLE), nullptr, nullptr));
 		}
-#endif
+		#endif
 
 
 		bool connectToNewClient(HANDLE hPipe, LPOVERLAPPED lpo)
 		{
-			bool connected = false;
-			bool pendingIO = false;
-
 			// Start an overlapped connection for this pipe instance.
-			fConnected = ::ConnectNamedPipe(hPipe, lpo);
+			bool connected = ::ConnectNamedPipe(hPipe, lpo);
 
 			// Overlapped ConnectNamedPipe should return zero.
-			if (fConnected)
+			if (connected)
 			{
 				std::cerr << "ConnectNamedPipe failed with " << ::GetLastError() << '\n';
 				return false;
 			}
 
+			bool pendingIO = false;
 			switch (::GetLastError())
 			{
 				// The overlapped connection in progress.
 				case ERROR_IO_PENDING:
-					pendingIO = TRUE;
+				{
+					pendingIO = true;
 					break;
+				}
 
-					// Client is already connected, so signal an event.
+				// Client is already connected, so signal an event.
 				case ERROR_PIPE_CONNECTED:
+				{
 					if (::SetEvent(lpo->hEvent))
 						break;
+				}
 
-					// If an error occurs during the connect operation...
+				// If an error occurs during the connect operation...
 				default:
-					{
-						std::cerr << "ConnectNamedPipe failed with " << ::GetLastError() << '\n';
-						return 0;
-					}
+				{
+					std::cerr << "ConnectNamedPipe failed with " << ::GetLastError() << '\n';
+					return false;
+				}
 			}
 
 			return pendingIO;
@@ -117,20 +132,21 @@ namespace Process
 		saAttr.bInheritHandle = TRUE;
 		saAttr.lpSecurityDescriptor = nullptr;
 
-		if (!pipe(channels.outfd, saAttr, "stdout"))
+		if (not pipe(channels.outfd, saAttr, "stdout"))
 			return false;
 
-		if (!pipe(channels.infd, saAttr, "stdin"))
+		if (not pipe(channels.infd, saAttr, "stdin"))
 			return false;
 
-		if (!pipe(channels.errd, saAttr, "stderr"))
+		if (not pipe(channels.errd, saAttr, "stderr"))
 			return false;
 
 
-#if _WIN32_WINNT >= 0x0600
+		#if _WIN32_WINNT >= 0x0600
 		// Prepare inherited handle list for STARTUPINFOEX
 		LPPROC_THREAD_ATTRIBUTE_LIST attrList = nullptr;
-		HANDLE inheritedHandles[3] = {
+		HANDLE inheritedHandles[3] =
+		{
 			channels.outfd[0],
 			channels.infd[1],
 			channels.errd[1],
@@ -146,18 +162,19 @@ namespace Process
 		startInfo.StartupInfo.cb = (uint32) sizeof(STARTUPINFOEX);
 		startInfo.lpAttributeList = attrList;
 		startInfo.StartupInfo.dwFlags |= STARTF_USESTDHANDLES;
-		startInfo.StartupInfo.hStdOutput = channels.outfd[0];
-		startInfo.StartupInfo.hStdInput = channels.infd[1];
+		startInfo.StartupInfo.hStdOutput = channels.infd[1];
+		startInfo.StartupInfo.hStdInput = channels.outfd[0];
 		startInfo.StartupInfo.hStdError = channels.errd[1];
-#else
+		#else
 		STARTUPINFO startInfo;
 		::ZeroMemory(&startInfo, sizeof(STARTUPINFO));
 		startInfo.cb = (uint32) sizeof(STARTUPINFO);
 		startInfo.dwFlags |= STARTF_USESTDHANDLES;
-		startInfo.hStdOutput = channels.outfd[0];
-		startInfo.hStdInput = channels.infd[1];
+		startInfo.hStdOutput = channels.infd[1];
+		startInfo.hStdInput = channels.outfd[0];
 		startInfo.hStdError = channels.errd[1];
-#endif // _WIN32_WINNT < 0x0600
+		#endif // _WIN32_WINNT < 0x0600
+
 
 		// Set up members of the PROCESS_INFORMATION structure.
 		PROCESS_INFORMATION winProcInfo;
@@ -170,16 +187,21 @@ namespace Process
 
 		// Create the child process.
 		// ** FORK **
-		bool success = 0 != ::CreateProcessW(nullptr,
-			cmdLine.c_str(),	// command line
-			nullptr,			// process security attributes
-			nullptr,			// primary thread security attributes
-			true,				// handles are inherited (necessary for STARTF_USESTDHANDLES)
-			0,					// creation flags
-			nullptr,			// use parent's environment
-			nullptr,			// use parent's current directory
-			&startInfo,			// STARTUPINFO pointer
-			&winProcInfo);		// receives PROCESS_INFORMATION
+		bool success = (0 != ::CreateProcessW(nullptr,
+			cmdLine.c_str(), // command line
+			nullptr,         // process security attributes
+			nullptr,         // primary thread security attributes
+			true,            // handles are inherited (necessary for STARTF_USESTDHANDLES)
+			0,               // creation flags
+			nullptr,         // use parent's environment
+			nullptr,         // use parent's current directory
+			&startInfo,      // STARTUPINFO pointer
+			&winProcInfo));  // receives PROCESS_INFORMATION
+
+		// Close streams passed to the child process
+		closeHD(channels.outfd[0]);
+		closeHD(channels.infd[1]);
+		closeHD(channels.errd[1]);
 
 		// If an error occurs, give up
 		if (!success)
@@ -205,11 +227,6 @@ namespace Process
 			return false;
 		}
 
-		// Close streams passed to the child process
-		::CloseHandle(channels.outfd[0]);
-		::CloseHandle(channels.infd[1]);
-		::CloseHandle(channels.errd[1]);
-
 		processHandle = winProcInfo.hProcess;
 		threadHandle = winProcInfo.hThread;
 		procinfo.processID = (int)winProcInfo.dwProcessId;
@@ -228,6 +245,7 @@ namespace Process
 		enum { bufferSize = 4096 };
 		enum { nbHandles = 3 };
 
+		/*
 		OVERLAPPED outOverlap;
 		HANDLE outEvent = ::CreateEvent(nullptr, false, false, nullptr);
 		outOverlap.hEvent = outEvent;
@@ -236,61 +254,73 @@ namespace Process
 		HANDLE errEvent = ::CreateEvent(nullptr, false, false, nullptr);
 		errOverlap.hEvent = errEvent;
 		connectToNewClient(channels.errd[0], &errOverlap);
-
+*/
 		// Wait for all these handles
-		HANDLE handleList[nbHandles] = {
-			processHandle,
-			outEvent,
-			errEvent
-		};
+		//		const HANDLE handleList[nbHandles] = { processHandle, outEvent, errEvent };
+		const HANDLE handleList[nbHandles] = { channels.infd[0], channels.errd[0], processHandle };
 
 		bool finished = false;
 		do
 		{
-			uint32 waitStatus = ::WaitForMultipleObjectsEx(nbHandles, handleList, false, INFINITE, true);
-			if (/*waitStatus >= WAIT_OBJECT_0 and*/ waitStatus < WAIT_OBJECT_0 + nbHandles)
+			YUNI_STATIC_ASSERT(WAIT_OBJECT_0 == 0, waitObject0IsNotZero_CodeRequiresAttention);
+			assert(nbHandles < MAXIMUM_WAIT_OBJECTS);
+
+			std::cout << " ... waiting ..." << std::endl;
+			DWORD waitStatus = ::WaitForMultipleObjectsEx(nbHandles, handleList, false, INFINITE, true);
+			std::cout << " ... event !!" << std::endl;
+
+			if (/*waitStatus >= WAIT_OBJECT_0 and*/ waitStatus < (WAIT_OBJECT_0 + (uint) nbHandles))
 			{
+				assert(waitStatus - WAIT_OBJECT_0 < nbHandles);
+
 				HANDLE signalled = handleList[waitStatus - WAIT_OBJECT_0];
-				DWORD exitCode;
+				DWORD exitCode = 0;
+				std::cout << " :: event on handle " << (waitStatus - WAIT_OBJECT_0) << " = " << signalled << std::endl;
+
 				// If the process was signalled
-				if (signalled == processHandle && ::GetExitCodeProcess(processHandle, &exitCode))
+				if (signalled == processHandle)
 				{
-					// It is forbidden to use STILL_ACTIVE as an exit code
-					// However, if it happens in real life, let it happen
-					assert(exitCode != STILL_ACTIVE and "Child process uses STILL_ACTIVE as exit status !");
-					pExitStatus = (int)exitCode;
 					pEndTime = currentTime();
 					finished = true;
-					// TODO : How to know if the process was signalled or exited ?
-					// pKilled = true;
+
+					if (0 != ::GetExitCodeProcess(processHandle, &exitCode))
+					{
+						// It is forbidden to use STILL_ACTIVE as an exit code
+						// However, if it happens in real life, let it happen
+						assert(exitCode != STILL_ACTIVE and "Child process uses STILL_ACTIVE as exit status !");
+						pExitStatus = (int)exitCode;
+
+						// TODO : How to know if the process was signalled or exited ?
+						// pKilled = true;
+					}
+					else
+						pExitStatus = STILL_ACTIVE - 1; // arbitrary
 				}
 				else // If the child wrote to stdout or stderr
 				{
-					DWORD readBytes;
-					DWORD writtenBytes;
-					DWORD totalAvailBytes;
-					DWORD bytesLeft;
+					DWORD readBytes = 0;
 					char buffer[bufferSize];
-					bool cout = waitStatus - WAIT_OBJECT_0 == 1; // otherwise, cerr
-					HANDLE writeTo = ::GetStdHandle(cout ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);
+					bool cout = (0 == (waitStatus - WAIT_OBJECT_0)); // otherwise, cerr
 					HANDLE readFrom = cout ? channels.infd[0] : channels.errd[0];
+					std::ostream& out = (cout) ? std::cout : std::cerr;
+					//LPOVERLAPPED overlap = cout ? &outOverlap : &errOverlap;
+					//DWORD totalAvailBytes = 0;
 
-					while (true)
-					{/*
-						bool success = ::PeekNamedPipe(readFrom, nullptr, bufferSize, &readBytes,
-							&totalAvailBytes, &bytesLeft);
-						std::cout << "Peeking : " << readBytes << " bytes to read" << std::endl;
-						if (not success || readBytes == 0)
-						break;*/
-						std::cout << "Ready to read !" << std::endl;
-						success = ::ReadFile(readFrom, buffer, bufferSize, &readBytes, nullptr);
-						std::cout << "Read " << readBytes << " characters" << std::endl;
-						if (not success || readBytes == 0)
+					//bool success = (FALSE != ::PeekNamedPipe(readFrom, nullptr, 0, nullptr, &totalAvailBytes, nullptr));
+					//if (success and totalAvailBytes > 0)
+					do
+					{
+						//std::cout << " ... peeking : " << totalAvailBytes << " bytes to read" << std::endl;
+
+						std::cout << " ... reading\n" << std::flush;
+						bool success = (FALSE != ::ReadFile(readFrom, buffer, sizeof(char) * 1, &readBytes, nullptr));
+						if (not success or readBytes == 0)
 							break;
-						success = ::WriteFile(writeTo, buffer, readBytes, &writtenBytes, nullptr);
-						if (not success)
-							break;
+
+						out.write(buffer, readBytes);
+						out << std::flush;
 					}
+					while (true);
 				}
 			}
 			else // Abnormal completion
@@ -302,8 +332,6 @@ namespace Process
 						// TODO Manage I/O for IPC
 						break;
 					case WAIT_FAILED: // if WaitFSO failed, give up looping
-						pEndTime = currentTime();
-						finished = true;
 						break;
 					case WAIT_TIMEOUT: // Normally not possible with INFINITE
 						assert(false and "Program::ThreadMonitor::waitForSubProcess : Timeout on infinite !");
@@ -312,6 +340,12 @@ namespace Process
 					default: // WAIT_ABANDONED_X is only for mutexes, this should never occur
 						assert(false and "Program::ThreadMonitor::waitForSubProcess : Unmanaged WaitForSingleObject return code !");
 						break;
+				}
+
+				if (WAIT_IO_COMPLETION != waitStatus)
+				{
+					pEndTime = currentTime();
+					finished = true;
 				}
 			}
 		}
@@ -332,11 +366,11 @@ namespace Process
 			procinfo.timeoutThread = nullptr;
 		}
 
-		::CloseHandle(channels.outfd[1]);
-		::CloseHandle(channels.infd[0]);
-		::CloseHandle(channels.errd[0]);
-		::CloseHandle(processHandle);
-		::CloseHandle(threadHandle);
+		closeHD(channels.outfd[1]);
+		closeHD(channels.infd[0]);
+		closeHD(channels.errd[0]);
+		closeHD(processHandle);
+		closeHD(threadHandle);
 	}
 
 

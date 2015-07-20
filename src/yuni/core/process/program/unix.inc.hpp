@@ -135,9 +135,9 @@ namespace Process
 		if (0 == pid) // CHILD
 		{
 			// Code executed from the child process
+			closeFD(channels.outfd[1]);
 			closeFD(channels.infd[0]);
 			closeFD(channels.errd[0]);
-			closeFD(channels.outfd[1]);
 			::close(0);
 			::close(1);
 			::close(2);
