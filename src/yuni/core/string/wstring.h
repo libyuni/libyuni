@@ -38,42 +38,42 @@
 ** made available.
 */
 #pragma once
-#ifdef YUNI_OS_WINDOWS
+#include "../../yuni.h"
+#include "string.h"
+#include "../noncopyable.h"
 
-# include "../../yuni.h"
-# include "string.h"
-# include "../system/windows.hdr.h"
-# include "../noncopyable.h"
 
 
 namespace Yuni
 {
-namespace Private
-{
 
 	/*!
-	** \brief Convert a C-String into a Wide String (Windows Only)
-	**
-	** \TODO This class should be dedicated to Yuni::IO
+	** \brief Lightweight helper for manipulating wide strings
 	*/
-	template<bool UNCPrefix = false, bool AppendSeparatorT = false>
-	class YUNI_DECL WString final
-		: private NonCopyable<WString<UNCPrefix, AppendSeparatorT> >
+	class YUNI_DECL WString final : private NonCopyable<WString>
 	{
 	public:
 		//! \name Constructor & Destructor
 		//@{
 		/*!
 		** \brief Constructor
+		**
+		** \param uncprefix True to prepend the Windows UNC `\\?\` before converting
 		*/
-		WString(const AnyString& string);
-		/*!
-		** \brief Constructor with a C-String
-		*/
-		WString(const char* cstring, uint size);
+		explicit WString(const AnyString& string, bool uncprefix = false);
 		//! Destructor
 		~WString();
 		//@}
+
+		/*!
+		** \brief Reset with a new wide string
+		*/
+		void assign(const AnyString& string, bool uncprefix = false);
+
+		/*!
+		** \brief Clear the buffer
+		*/
+		void clear();
 
 		/*!
 		** \brief Size of the wide string
@@ -98,7 +98,7 @@ namespace Private
 		/*!
 		** \brief Replace all occurences of a single char
 		*/
-		void replace(char from, char to);
+		void replace(wchar_t from, wchar_t to);
 
 		//! \name Operators
 		//@{
@@ -109,13 +109,13 @@ namespace Private
 
 	private:
 		//! Convert a C-String into a Wide String
-		void prepareWString(const char* const cstring, uint size);
+		void prepareWString(const AnyString& string, bool uncprefix);
 
 	private:
 		//! Wide string
 		wchar_t* pWString;
 		//! Size of the wide string
-		uint pSize;
+		size_t pSize;
 
 	}; // class WString
 
@@ -123,9 +123,6 @@ namespace Private
 
 
 
-} // namespace Private
 } // namespace Yuni
 
-# include "wstring.hxx"
-
-#endif // YUNI_OS_WINDOWS
+#include "wstring.hxx"

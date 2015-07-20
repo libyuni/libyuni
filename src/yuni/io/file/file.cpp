@@ -96,7 +96,7 @@ namespace File
 		String  norm;
 		Yuni::IO::Normalize(norm, AnyString(p, len));
 		// Conversion into wchar_t
-		Private::WString<true> wstr(norm);
+		WString wstr(norm, true);
 		if (wstr.empty())
 		{
 			value = 0u;
@@ -166,10 +166,11 @@ namespace File
 		if (len == 2 and p[1] == ':')
 			return Yuni::IO::errBadFilename;
 
-		String  norm;
+		String norm;
 		Yuni::IO::Normalize(norm, AnyString(p, len));
+
 		// Conversion into wchar_t
-		Private::WString<true> wstr(norm);
+		WString wstr(norm, true);
 		if (wstr.empty())
 			return Yuni::IO::errUnknown;
 		wstr.replace('/', '\\');

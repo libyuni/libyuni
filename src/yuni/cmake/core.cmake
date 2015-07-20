@@ -308,6 +308,7 @@ add_library(yuni-static-core STATIC
 		core/string/utf8char.h
 		core/string/utf8char.hxx
 		core/string/wstring.h
+		core/string/wstring.cpp
 		core/string/wstring.hxx
 		core/string.h
 		core/suspend.h

@@ -65,7 +65,7 @@ namespace Environment
 
 			#ifdef YUNI_OS_WINDOWS
 			{
-				Private::WString<> nameUTF16(name);
+				WString nameUTF16(name);
 
 				DWORD size = GetEnvironmentVariableW(nameUTF16.c_str(), nullptr, 0);
 				if (size > 0 and size <= 32767) // windows hard-coded value

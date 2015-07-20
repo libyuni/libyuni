@@ -229,7 +229,7 @@ namespace Directory
 			String canon;
 			Canonicalize(canon, path);
 
-			Private::WString<true /*false*/, false> fsource(canon);
+			WString fsource(canon, true);
 			if (fsource.empty())
 				return false;
 

@@ -91,15 +91,15 @@ namespace File
 
 		static Stream::HandleType OpenFileOnWindows(const AnyString& filename, int mode)
 		{
-			Private::WString<> wfilenm(filename);
+			WString wfilenm(filename);
 			if (wfilenm.empty())
-				return NULL;
+				return nullptr;
 
 			FILE* f;
 			# ifdef YUNI_OS_MSVC
 			{
 				if (0 != _wfopen_s(&f, wfilenm.c_str(), OpenMode::ToWCString(mode)))
-					return NULL;
+					return nullptr;
 			}
 			# else
 			{
@@ -115,8 +115,8 @@ namespace File
 
 
 
-	Stream::Stream(const AnyString& filename, int mode) :
-		pFd(NULL)
+	Stream::Stream(const AnyString& filename, int mode)
+		: pFd(nullptr)
 	{
 		open(filename, mode);
 	}

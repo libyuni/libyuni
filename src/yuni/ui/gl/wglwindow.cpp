@@ -704,7 +704,7 @@ namespace UI
 
 		// Create the window
 		if (!(pHWnd = ::CreateWindowEx(
-			dwExStyle, L"OpenGL", Private::WString<>(pTitle).c_str(),
+			dwExStyle, L"OpenGL", WString{pTitle}.c_str(),
 			dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
 			pLeft, pTop, // Position
 			windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, // Dimensions
@@ -941,7 +941,7 @@ namespace UI
 	void WGLWindow::setIcon(const AnyString& path)
 	{
 		// Load 32x32 icon (alt-tab menu)
-		Private::WString<> wstr(path);
+		WString wstr(path);
 		const HICON hIcon = (HICON)::LoadImage(nullptr, wstr.c_str(), IMAGE_ICON, 32, 32, LR_LOADFROMFILE);
 		if (hIcon)
 			::SendMessage(pHWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);

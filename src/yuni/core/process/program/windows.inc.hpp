@@ -163,7 +163,7 @@ namespace Process
 		PROCESS_INFORMATION winProcInfo;
 		::ZeroMemory(&winProcInfo, sizeof(PROCESS_INFORMATION));
 
-		Yuni::Private::WString<> cmdLine(procinfo.executable);
+		WString cmdLine(procinfo.executable);
 
 		// Getting the start time of execution
 		pStartTime = currentTime();

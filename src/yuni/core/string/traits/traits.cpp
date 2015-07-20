@@ -45,6 +45,7 @@
 #else
 #include "../../../core/system/windows.hdr.h"
 #endif
+#include <limits.h>
 
 
 
@@ -151,6 +152,9 @@ namespace CStringImpl
 
 	size_t WCharToUTF8SizeNeeded(const wchar_t* wbuffer, size_t length)
 	{
+		if (length > INT_MAX) // consistency between platforms (windows)
+			return 0;
+
 		#ifndef YUNI_OS_WINDOWS
 		{
 			mbstate_t state;
@@ -160,7 +164,7 @@ namespace CStringImpl
 		}
 		#else
 		{
-			int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, wbuffer, length, nullptr, 0,  nullptr, nullptr);
+			int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, wbuffer, static_cast<int>(length), nullptr, 0,  nullptr, nullptr);
 			return sizeRequired > 0 ? (size_t) sizeRequired : 0;
 		}
 		#endif
@@ -178,7 +182,7 @@ namespace CStringImpl
 		}
 		#else
 		{
-			int written = WideCharToMultiByte(CP_UTF8, 0, wbuffer, length, out, maxlength,  nullptr, nullptr);
+			int written = WideCharToMultiByte(CP_UTF8, 0, wbuffer, static_cast<int>(length), out, maxlength,  nullptr, nullptr);
 			return (written > 0) ? (size_t) written : 0;
 		}
 		#endif

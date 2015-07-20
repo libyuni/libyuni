@@ -92,7 +92,7 @@ namespace IO
 				Yuni::IO::Normalize(norm, AnyString(p, len));
 
 				// Conversion into wchar_t
-				Private::WString<true> wstr(norm);
+				WString wstr(norm, true);
 				if (not wstr.empty())
 				{
 					WIN32_FILE_ATTRIBUTE_DATA infoFile;
