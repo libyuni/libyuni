@@ -154,6 +154,30 @@ namespace CString
 	};
 
 
+	// wchar_t
+	template<class CStringT>
+	class Append<CStringT, wchar_t*> final
+	{
+	public:
+		static void Perform(CStringT& string, const wchar_t* rhs)
+		{
+			string.append(rhs, Yuni::Traits::Length<wchar_t*, typename CStringT::Size>::Value(rhs));
+		}
+	};
+
+	// wchar_t
+	template<class CStringT, int N>
+	class Append<CStringT, wchar_t[N]> final
+	{
+	public:
+		static void Perform(CStringT& string, const wchar_t rhs[N])
+		{
+			if (N > 0 and rhs)
+				string.append(rhs, N - ((rhs[N-1] == wchar_t()) ? 1 : 0));
+		}
+	};
+
+
 	// void*
 	template<class CStringT>
 	class Append<CStringT, void*> final

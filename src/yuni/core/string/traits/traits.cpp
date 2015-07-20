@@ -40,6 +40,11 @@
 #include "../../../yuni.h"
 #include "traits.h"
 #include <ctype.h>
+#ifndef YUNI_OS_WINDOWS
+#include <wchar.h>
+#else
+#include "../../../core/system/windows.hdr.h"
+#endif
 
 
 
@@ -144,9 +149,45 @@ namespace CStringImpl
 
 
 
+	size_t WCharToUTF8SizeNeeded(const wchar_t* wbuffer, size_t length)
+	{
+		#ifndef YUNI_OS_WINDOWS
+		{
+			mbstate_t state;
+			memset (&state, '\0', sizeof (state));
+			size_t written = wcsnrtombs(nullptr, &wbuffer, length, 0, &state);
+			return (written != (size_t) -1) ? written : 0;
+		}
+		#else
+		{
+			int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, wbuffer, length, nullptr, 0,  nullptr, nullptr);
+			return sizeRequired > 0 ? (size_t) sizeRequired : 0;
+		}
+		#endif
+	}
+
+
+	size_t WCharToUTF8(char*& out, size_t maxlength, const wchar_t* wbuffer, size_t length)
+	{
+		#ifndef YUNI_OS_WINDOWS
+		{
+			mbstate_t state;
+			memset (&state, '\0', sizeof (state));
+			size_t written = wcsnrtombs(out, &wbuffer, length, maxlength, &state);
+			return (written != (size_t) -1) ? written : 0;
+		}
+		#else
+		{
+			int written = WideCharToMultiByte(CP_UTF8, 0, wbuffer, length, out, maxlength,  nullptr, nullptr);
+			return (written > 0) ? (size_t) written : 0;
+		}
+		#endif
+	}
+
+
+
 
 
 } // namespace CStringImpl
 } // namespace Private
 } // namespace Yuni
-
