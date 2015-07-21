@@ -44,8 +44,25 @@
 namespace Yuni
 {
 
+	inline WString::WString()
+		: pWString()
+		, pSize()
+	{}
+
+
+	#ifdef YUNI_HAS_CPP_MOVE
+	inline WString::WString(WString&& rhs)
+		: pWString(rhs.pWString)
+		, pSize(rhs.pSize)
+	{
+		rhs.pWString = nullptr;
+		rhs.pSize = 0;
+	}
+	#endif
+
+
 	inline WString::WString(const AnyString& string, bool uncprefix)
-		: pWString(nullptr)
+		: pWString()
 		, pSize()
 	{
 		prepareWString(string, uncprefix);
@@ -94,23 +111,36 @@ namespace Yuni
 	}
 
 
+	inline wchar_t* WString::data()
+	{
+		return pWString;
+	}
+
+
 	inline const wchar_t* WString::c_str() const
 	{
-		return pWString;
+		return pWString ? pWString : L"";
 	}
 
 
-	inline wchar_t* WString::c_str()
+	#ifdef YUNI_HAS_CPP_MOVE
+	inline WString& WString::operator = (WString&& rhs)
 	{
-		return pWString;
+		free(pWString);
+		pWString = rhs.pWString;
+		pSize = rhs.pSize;
+		rhs.pWString = nullptr;
+		rhs.pSize = 0;
+		return *this;
 	}
+	#endif
 
 
-	inline WString::operator const wchar_t* () const
+	inline WString& WString::operator = (const AnyString& string)
 	{
-		return pWString;
+		prepareWString(string, false);
+		return *this;
 	}
-
 
 
 

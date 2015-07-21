@@ -49,18 +49,35 @@ namespace Yuni
 
 	/*!
 	** \brief Lightweight helper for manipulating wide strings
+	**
+	** This helper is especially usefull for Windows API
+	** \warning Due to Windows API limitations, the size of a WString is limited to 2147483648 chars
 	*/
-	class YUNI_DECL WString final : private NonCopyable<WString>
+	class YUNI_DECL WString final
 	{
 	public:
 		//! \name Constructor & Destructor
 		//@{
+		/*!
+		** \brief Default constructor
+		*/
+		WString();
+
+		//! Copy constructor
+		WString(const WString&);
+
+		#ifdef YUNI_HAS_CPP_MOVE
+		//! Move constructor
+		WString(WString&& rhs);
+		#endif
+
 		/*!
 		** \brief Constructor
 		**
 		** \param uncprefix True to prepend the Windows UNC `\\?\` before converting
 		*/
 		explicit WString(const AnyString& string, bool uncprefix = false);
+
 		//! Destructor
 		~WString();
 		//@}
@@ -93,7 +110,7 @@ namespace Yuni
 		/*!
 		** \brief Get the wide string
 		*/
-		wchar_t* c_str();
+		wchar_t* data();
 
 		/*!
 		** \brief Replace all occurences of a single char
@@ -102,8 +119,15 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
-		//! Cast to wchar_t*
-		operator const wchar_t* () const;
+		//! Copy
+		WString& operator = (const WString& string);
+		//! Assignment
+		WString& operator = (const AnyString& string);
+
+		#ifdef YUNI_HAS_CPP_MOVE
+		//! move operator
+		WString& operator = (WString&& rhs);
+		#endif
 		//@}
 
 

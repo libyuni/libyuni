@@ -43,12 +43,31 @@
 #else
 #include <wchar.h>
 #endif
+#include "limits.h"
 
 
 
 
 namespace Yuni
 {
+
+	WString::WString(const WString& rhs)
+		: pSize(rhs.pSize)
+	{
+		pWString = (wchar_t*)::malloc(sizeof(wchar_t) * (pSize + 1));
+		memcpy(pWString, rhs.pWString, pSize + 1);
+	}
+
+
+	WString& WString::operator = (const WString& rhs)
+	{
+		free(pWString);
+		pSize = rhs.pSize;
+		pWString = (wchar_t*)::malloc(sizeof(wchar_t) * (pSize + 1));
+		memcpy(pWString, rhs.pWString, pSize + 1);
+		return *this;
+	}
+
 
 	void WString::prepareWString(const AnyString& string, bool uncprefix)
 	{
