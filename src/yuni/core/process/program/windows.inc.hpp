@@ -77,47 +77,6 @@ namespace Process
 		#endif
 
 
-		bool connectToNewClient(HANDLE hPipe, LPOVERLAPPED lpo)
-		{
-			// Start an overlapped connection for this pipe instance.
-			bool connected = ::ConnectNamedPipe(hPipe, lpo);
-
-			// Overlapped ConnectNamedPipe should return zero.
-			if (connected)
-			{
-				std::cerr << "ConnectNamedPipe failed with " << ::GetLastError() << '\n';
-				return false;
-			}
-
-			bool pendingIO = false;
-			switch (::GetLastError())
-			{
-				// The overlapped connection in progress.
-				case ERROR_IO_PENDING:
-				{
-					pendingIO = true;
-					break;
-				}
-
-				// Client is already connected, so signal an event.
-				case ERROR_PIPE_CONNECTED:
-				{
-					if (::SetEvent(lpo->hEvent))
-						break;
-				}
-
-				// If an error occurs during the connect operation...
-				default:
-				{
-					std::cerr << "ConnectNamedPipe failed with " << ::GetLastError() << '\n';
-					return false;
-				}
-			}
-
-			return pendingIO;
-		}
-
-
 	} // namespace anonymous
 
 
@@ -188,7 +147,7 @@ namespace Process
 		// Create the child process.
 		// ** FORK **
 		bool success = (0 != ::CreateProcessW(nullptr,
-			cmdLine.c_str(), // command line
+			cmdLine.data(),  // command line
 			nullptr,         // process security attributes
 			nullptr,         // primary thread security attributes
 			true,            // handles are inherited (necessary for STARTF_USESTDHANDLES)
@@ -245,18 +204,7 @@ namespace Process
 		enum { bufferSize = 4096 };
 		enum { nbHandles = 3 };
 
-		/*
-		OVERLAPPED outOverlap;
-		HANDLE outEvent = ::CreateEvent(nullptr, false, false, nullptr);
-		outOverlap.hEvent = outEvent;
-		connectToNewClient(channels.infd[0], &outOverlap);
-		OVERLAPPED errOverlap;
-		HANDLE errEvent = ::CreateEvent(nullptr, false, false, nullptr);
-		errOverlap.hEvent = errEvent;
-		connectToNewClient(channels.errd[0], &errOverlap);
-*/
 		// Wait for all these handles
-		//		const HANDLE handleList[nbHandles] = { processHandle, outEvent, errEvent };
 		const HANDLE handleList[nbHandles] = { channels.infd[0], channels.errd[0], processHandle };
 
 		bool finished = false;

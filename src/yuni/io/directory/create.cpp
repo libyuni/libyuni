@@ -64,7 +64,7 @@ namespace Directory
 		WString wstr(norm, true);
 		if (wstr.size() < 4)
 			return false;
-		wchar_t* t = wstr.c_str() + 4;
+		wchar_t* t = wstr.data() + 4;
 
 		while (*t != L'\0')
 		{
