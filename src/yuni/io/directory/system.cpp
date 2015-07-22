@@ -61,7 +61,7 @@ namespace System
 			if (emptyBefore)
 				out.clear();
 
-			# if defined(YUNI_OS_WINDOWS)
+			#if defined(YUNI_OS_WINDOWS)
 			{
 				if (not Yuni::System::Environment::Read("TEMP", out, false))
 				{
@@ -69,7 +69,7 @@ namespace System
 						return false;
 				}
 			}
-			# else
+			#else
 			{
 				// On UNIXes, the environment variable TMPDIR must be checked
 				// first. Unfortunately, It may happen that no env variable is available.
@@ -82,7 +82,7 @@ namespace System
 					}
 				}
 			}
-			# endif
+			#endif
 
 			return true;
 		}
@@ -95,7 +95,7 @@ namespace System
 			if (emptyBefore)
 				out.clear();
 
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			{
 				if (not Yuni::System::Environment::Read("HOMEDRIVE", out, false))
 					out += "C:"; // C by default
@@ -103,12 +103,12 @@ namespace System
 					out += '\\';
 				return true;
 			}
-			# else
+			#else
 			{
 				// UNIX
 				return Yuni::System::Environment::Read("HOME", out, false);
 			}
-			# endif
+			#endif
 
 			return false; // fallback
 		}
@@ -121,28 +121,24 @@ namespace System
 			if (emptyBefore)
 				out.clear();
 
-			# ifdef YUNI_OS_WINDOWS
+			#ifdef YUNI_OS_WINDOWS
 			{
 				if (not Yuni::System::Environment::Read("WINDIR", out, false))
 					out += "C:\\Windows"; // C:\Windows by default
 				out += "\\Fonts\\";
 			}
-			# elif defined(YUNI_OS_MACOS)
+			#elif defined(YUNI_OS_MACOS)
 			{
 				out = "/Library/Fonts/";
 			}
-			# else // YUNI_OS_LINUX
+			#else // YUNI_OS_LINUX
 			{
 				out = "/usr/share/fonts/truetype/";
 			}
-			# endif
+			#endif
 
 			return true;
 		}
-
-
-
-
 
 
 	} // anonymous namespace
@@ -192,10 +188,7 @@ namespace System
 
 
 
-
-
 } // namespace System
 } // namespace Directory
 } // namespace IO
 } // namespace Yuni
-
