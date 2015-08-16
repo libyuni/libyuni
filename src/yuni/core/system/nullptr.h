@@ -50,6 +50,10 @@
 # endif
 
 
+
+
+
+
 # ifdef YUNI_HAS_NULLPTR
 
 typedef decltype(nullptr) YuniNullPtr;
@@ -127,5 +131,27 @@ inline bool operator != (const T* rhs, const Yuni::NullPtr&)
 # endif
 # endif
 
-# endif /* C++ Compiler */
 
+
+namespace Yuni
+{
+
+	template<class T>
+	static inline void deleteAndNull(T*& object)
+	{
+		delete object;
+		object = nullptr;
+	}
+
+	template<class T>
+	static inline void deleteArrayAndNull(T*& object)
+	{
+		delete[] object;
+		object = nullptr;
+	}
+
+} // namespace Yuni
+
+
+
+#endif /* C++ Compiler */
