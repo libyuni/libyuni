@@ -37,17 +37,14 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_TRIBOOL_H__
-# define __YUNI_CORE_TRIBOOL_H__
-
-# include "../yuni.h"
-# include "string.h"
+#pragma once
+#include "../yuni.h"
+#include "string.h"
 
 
 
 namespace Yuni
 {
-
 
 	/*!
 	** \brief 3-state boolean
@@ -57,12 +54,12 @@ namespace Yuni
 	public:
 		//! \name Constructors
 		//@{
-		//! Default constructor
+		//! Default constructor (indeterminate by default)
 		Tribool();
-		//! default constructor
-		Tribool(bool value);
+		//! default constructor, with a default when indeterminate
+		Tribool(bool value, bool defvalue = false);
 		//! default constructor to indeterminate
-		Tribool(const NullPtr&);
+		Tribool(const NullPtr&, bool defvalue = false);
 		//! copy constructor
 		Tribool(const Tribool&);
 		//@}
@@ -78,6 +75,16 @@ namespace Yuni
 		*/
 		bool indeterminate() const;
 
+		//! Get the default value, for bool conversion when indeterminate
+		bool defaultValue() const;
+		//! Set the default value, for bool conversion when indeterminate
+		void defaultValue(bool defvalue);
+
+		/*!
+		** \brief Convert to a bool value, using the default value when indeterminate
+		*/
+		bool toBool() const;
+
 		/*!
 		** \brief Print
 		*/
@@ -85,22 +92,37 @@ namespace Yuni
 
 		//! \name Operators
 		//@{
+		//! Assign from a bool value
 		Tribool& operator = (bool value);
+		//! Reset to 'indeterminate'
 		Tribool& operator = (const NullPtr&);
+		//! Copy from another tribool
 		Tribool& operator = (const Tribool&);
 
+		//! Get if equal to a bool value (see toBool())
 		bool operator == (bool value) const;
+		//! Get if indeterminate
 		bool operator == (const NullPtr&) const;
+		//! Get if strictly equal to another tribool
 		bool operator == (const Tribool&) const;
 
+		//! Get the bool representation of this tribool, see toBool()
 		operator bool () const;
 		//@}
 
 
 	private:
-		//! internal value
-		yint8 pValue;
-	};
+		//! internal value (0: false, 1: true, -1: indeterminate)
+		// The second value is the default one
+		union TriboolValue
+		{
+			TriboolValue();
+			TriboolValue(yuint8 value, yuint8 defvalue);
+			yint8 flags[2];
+			uint u32;
+		} pValue;
+
+	}; // class Tribool
 
 
 
@@ -108,6 +130,4 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "tribool.hxx"
-
-#endif // __YUNI_CORE_TRIBOOL_H__
+#include "tribool.hxx"

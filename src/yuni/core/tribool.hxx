@@ -37,28 +37,40 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_CORE_TRIBOOL_HXX__
-# define __YUNI_CORE_TRIBOOL_HXX__
-
-# include "tribool.h"
+#pragma once
+#include "tribool.h"
 
 
 
 namespace Yuni
 {
+	inline Tribool::TriboolValue::TriboolValue()
+	{
+		flags[0] = -1;
+		flags[1] = 0;
+	}
+
+	inline Tribool::TriboolValue::TriboolValue(yuint8 value, yuint8 defvalue)
+	{
+		flags[0] = value;
+		flags[1] = defvalue;
+	}
+
+
+
+
 
 	inline Tribool::Tribool()
-		: pValue(-1)
 	{}
 
 
-	inline Tribool::Tribool(bool value)
-		: pValue((yint8) value)
+	inline Tribool::Tribool(bool value, bool defvalue)
+		: pValue(static_cast<yuint8>(value), static_cast<yuint8>(defvalue))
 	{}
 
 
-	inline Tribool::Tribool(const NullPtr&)
-		: pValue(-1)
+	inline Tribool::Tribool(const NullPtr&, bool defvalue)
+		: pValue(-1, static_cast<yuint8>(defvalue))
 	{}
 
 
@@ -69,26 +81,45 @@ namespace Yuni
 
 	inline void Tribool::clear()
 	{
-		pValue = -1;
+		pValue = TriboolValue(); // reset to indeterminate
 	}
 
 
 	inline bool Tribool::indeterminate() const
 	{
-		return (pValue == -1);
+		return (pValue.flags[0] < 0);
+	}
+
+
+	inline bool Tribool::defaultValue() const
+	{
+		return static_cast<bool>(pValue.flags[1]);
+	}
+
+	inline void Tribool::defaultValue(bool defvalue)
+	{
+		pValue.flags[1] = static_cast<yuint8>(defvalue);
+	}
+
+
+	inline bool Tribool::toBool() const
+	{
+		return (indeterminate())
+			? static_cast<bool>(pValue.flags[1])   // using the default value
+			: static_cast<bool>(pValue.flags[0]);
 	}
 
 
 	inline Tribool& Tribool::operator = (const NullPtr&)
 	{
-		pValue = -1;
+		pValue.flags[0] = -1;
 		return *this;
 	}
 
 
 	inline Tribool& Tribool::operator = (bool value)
 	{
-		pValue = (yint8) value;
+		pValue.flags[0] = static_cast<yuint8>(value);
 		return *this;
 	}
 
@@ -102,35 +133,35 @@ namespace Yuni
 
 	inline bool Tribool::operator == (bool value) const
 	{
-		return (pValue == (yint8) value);
+		return (operator bool ()) == value;
 	}
 
 
 	inline bool Tribool::operator == (const NullPtr&) const
 	{
-		return (pValue == -1);
+		return indeterminate();
 	}
 
 
 	inline bool Tribool::operator == (const Tribool& rhs) const
 	{
-		return pValue == rhs.pValue;
+		return pValue.u32 == rhs.pValue.u32;
 	}
 
 
 	inline Tribool::operator bool () const
 	{
-		return pValue == 1;
+		return toBool();
 	}
 
 
 	template<class StreamT> inline void Tribool::print(StreamT& out) const
 	{
-		switch (pValue)
+		switch (pValue.flags[0])
 		{
-			case 1:  out << "true"; break;
-			case 0:  out << "false"; break;
-			case -1: out << "indeterminate"; break;
+			case 0:  out.write("false", 5);
+			case 1:  out.write("true", 4);
+			default: out.write("indeterminate", 13);
 		}
 	}
 
@@ -210,7 +241,7 @@ namespace CString
 						out = false;
 						return true;
 					}
-					if ("indeterminate" == s2 or "null" == s2 or "undefined" == s2 or "undef" == s2)
+					if ("indeterminate" == s2 or "null" == s2 or "undefined" == s2 or "undef" == s2 or "default" == s2)
 					{
 						out.clear();
 						return true;
@@ -236,5 +267,3 @@ namespace CString
 } // namespace CString
 } // namespace Extension
 } // namespace Yuni
-
-#endif // __YUNI_CORE_TRIBOOL_HXX__
