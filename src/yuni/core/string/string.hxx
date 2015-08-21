@@ -44,7 +44,6 @@
 #ifdef YUNI_HAS_VA_COPY
 # include <stdarg.h>
 #endif // YUNI_HAS_VA_COPY
-#include <iostream>
 
 
 
