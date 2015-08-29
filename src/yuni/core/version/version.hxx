@@ -158,8 +158,4 @@ namespace Yuni
 
 
 
-inline std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs)
-{
-	rhs.print(out);
-	return out;
-}
+std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs);

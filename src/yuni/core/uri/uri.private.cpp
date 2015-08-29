@@ -39,6 +39,8 @@
 */
 #include "uri.private.h"
 #include <limits.h>
+#include <iostream>
+
 
 
 namespace Yuni
@@ -49,26 +51,22 @@ namespace Uri
 {
 
 
-	Informations::Informations() :
-		port(INT_MIN),
-		isValid(false)
+	Informations::Informations()
+		: port(INT_MIN)
+		, isValid(false)
 	{}
 
 
-	Informations::Informations(const Informations& rhs) :
-		scheme(rhs.scheme),
-		user(rhs.user),
-		password(rhs.password),
-		server(rhs.server),
-		port(rhs.port),
-		path(rhs.path),
-		query(rhs.query),
-		fragment(rhs.fragment),
-		isValid(rhs.isValid)
-	{}
-
-
-	Informations::~Informations()
+	Informations::Informations(const Informations& rhs)
+		: scheme(rhs.scheme)
+		, user(rhs.user)
+		, password(rhs.password)
+		, server(rhs.server)
+		, port(rhs.port)
+		, path(rhs.path)
+		, query(rhs.query)
+		, fragment(rhs.fragment)
+		, isValid(rhs.isValid)
 	{}
 
 

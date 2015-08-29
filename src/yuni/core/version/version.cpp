@@ -38,11 +38,12 @@
 ** made available.
 */
 #include "version.h"
+#include <iostream>
+
 
 
 namespace Yuni
 {
-
 
 	void Version::InternalLib(Version& v)
 	{
@@ -89,7 +90,13 @@ namespace Yuni
 
 
 
-
-
 } // namespace Yuni
 
+
+
+
+std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs)
+{
+	rhs.print(out);
+	return out;
+}

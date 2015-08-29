@@ -38,6 +38,7 @@
 ** made available.
 */
 #include "option.h"
+#include <iostream>
 
 #define YUNI_GETOPT_HELPUSAGE_30CHAR  "                             "
 

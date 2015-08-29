@@ -79,8 +79,13 @@ set(src
 	../../yuni/io/directory/iterator/iterator.cpp
 	../../yuni/io/directory/iterator/detachedthread.h
 
-	versions.h versions.hxx versions.cpp
-	program.h program.hxx program.cpp
+	versions.h
+	versions.hxx
+	versions.cpp
+	
+	program.h
+	program.hxx
+	program.cpp
 	main.cpp)
 
 # Build the in-tree version of yuni-config.

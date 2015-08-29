@@ -62,8 +62,6 @@ namespace Uri
 		Informations();
 		//! Copy constructor
 		Informations(const Informations& rhs);
-		//! Destructor
-		~Informations();
 		//@}
 
 		/*!

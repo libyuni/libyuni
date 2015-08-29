@@ -65,6 +65,7 @@
 # include <vector>
 #endif
 #include <list>
+#include <iosfwd>
 
 #ifdef YUNI_OS_MSVC
 #pragma warning(pop)

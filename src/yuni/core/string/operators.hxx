@@ -44,19 +44,16 @@
 
 //! \name Operator overload for stream printing
 //@{
+std::ostream& operator << (std::ostream& out, const Yuni::String& rhs);
+std::ostream& operator << (std::ostream& out, const Yuni::Clob& rhs);
+std::ostream& operator << (std::ostream& out, const Yuni::ShortString16& rhs);
+std::ostream& operator << (std::ostream& out, const Yuni::ShortString32& rhs);
+std::ostream& operator << (std::ostream& out, const Yuni::ShortString64& rhs);
+std::ostream& operator << (std::ostream& out, const Yuni::ShortString128& rhs);
+std::ostream& operator << (std::ostream& out, const Yuni::ShortString256& rhs);
+std::ostream& operator << (std::ostream& out, const Yuni::ShortString512& rhs);
 
-template<uint SizeT, bool ExpT>
-inline std::ostream& operator << (std::ostream& out, const Yuni::CString<SizeT,ExpT>& rhs)
-{
-	out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
-	return out;
-}
-
-inline std::ostream& operator << (std::ostream& out, const Yuni::UTF8::Char& rhs)
-{
-	rhs.write(out);
-	return out;
-}
+std::ostream& operator << (std::ostream& out, const Yuni::UTF8::Char& rhs);
 
 
 template<class CharT, class TraitsT, uint SizeT, bool ExpT>

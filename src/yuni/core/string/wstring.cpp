@@ -150,7 +150,7 @@ namespace Yuni
 			}
 
 			memset (&state, '\0', sizeof (state));
-			size_t written = mbsnrtowcs(pWString + offset, &wcstr, static_cast<int>(string.size()), pSize - offset, &state);
+			size_t written = mbsnrtowcs(pWString + offset, &wcstr, string.size(), pSize - offset, &state);
 			if (0 == written or (size_t) -1 == written)
 			{
 				clear();
