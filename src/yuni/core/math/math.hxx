@@ -392,6 +392,19 @@ namespace Math
 	}
 
 
+	template<class T> inline T RoundUp(T value, T multiple)
+	{
+		if (multiple == T())
+			return value;
+
+		T remainder = Abs(value) % multiple;
+		if (remainder == T())
+			return value;
+		if (value < 0)
+			return -(Abs(value) - remainder);
+		return value + multiple - remainder;
+	}
+
 
 
 	template<class T> inline T Trunc(T x, uint)

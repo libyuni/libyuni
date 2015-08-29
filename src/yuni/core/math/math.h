@@ -390,6 +390,12 @@ namespace Math
 
 
 	/*!
+	** \brief Rounding up to the nearest multiple of a number
+	*/
+	template<class T> T YUNI_DECL RoundUp(T value, T multiple);
+
+
+	/*!
 	** \brief Determine whether a value is in fact an integer or not
 	**
 	** \param x A number
