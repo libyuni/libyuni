@@ -45,6 +45,7 @@
 #include "../../thread/signal.h"
 #include "q-event.h"
 #include "../../core/dictionary.h"
+#include "../../core/smartptr/intrusive.h"
 
 
 
@@ -57,14 +58,17 @@ namespace Job
 	** \brief Multithreaded Job QueueService
 	*/
 	class YUNI_DECL QueueService final
-		: public Policy::ObjectLevelLockableNotRecursive<QueueService>
+		: public IIntrusiveSmartPtr<QueueService, false>
 		, public NonCopyable<QueueService>
 	{
 	public:
-		//! The threading policy
-		typedef Policy::ObjectLevelLockableNotRecursive<QueueService> ThreadingPolicy;
+		//! Ancestor
+		typedef IIntrusiveSmartPtr<QueueService, false>  Ancestor;
 		//! The most suitable smart pointer for the class
-		typedef SmartPtr<QueueService> Ptr;
+		typedef Ancestor::SmartPtrType<QueueService>::PtrThreadSafe Ptr;
+		//! The threading policy
+		typedef Ancestor::ThreadingPolicy ThreadingPolicy;
+
 		enum
 		{
 			//! A default timeout
@@ -339,4 +343,3 @@ namespace Job
 } // namespace Yuni
 
 #include "service.hxx"
-
