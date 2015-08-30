@@ -50,61 +50,74 @@ namespace Yuni
 
 
 
+std::ostream& operator << (std::ostream& out, const AnyString& rhs)
+{
+	if (not rhs.empty())
+		out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
+	return out;
+}
+
 
 std::ostream& operator << (std::ostream& out, const Yuni::ShortString16& rhs)
 {
-	out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
+	if (not rhs.empty())
+		out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
 	return out;
 }
 
 
 std::ostream& operator << (std::ostream& out, const Yuni::ShortString32& rhs)
 {
-	out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
+	if (not rhs.empty())
+		out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
 	return out;
 }
 
 
 std::ostream& operator << (std::ostream& out, const Yuni::ShortString64& rhs)
 {
-	out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
+	if (not rhs.empty())
+		out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
 	return out;
 }
 
 
 std::ostream& operator << (std::ostream& out, const Yuni::ShortString128& rhs)
 {
-	out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
+	if (not rhs.empty())
+		out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
 	return out;
 }
 
 
 std::ostream& operator << (std::ostream& out, const Yuni::ShortString256& rhs)
 {
-	out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
+	if (not rhs.empty())
+		out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
 	return out;
 }
 
 
 std::ostream& operator << (std::ostream& out, const Yuni::ShortString512& rhs)
 {
-	out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
+	if (not rhs.empty())
+		out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
 	return out;
 }
 
 
-
-
 std::ostream& operator << (std::ostream& out, const Yuni::Clob& rhs)
 {
-	out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
+	if (not rhs.empty())
+		out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
 	return out;
 }
 
 
 std::ostream& operator << (std::ostream& out, const Yuni::String& rhs)
 {
-	out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
+	if (not rhs.empty())
+		out.write(rhs.data(), static_cast<std::streamsize>(rhs.size()));
 	return out;
 }
 

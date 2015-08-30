@@ -44,6 +44,7 @@
 
 //! \name Operator overload for stream printing
 //@{
+std::ostream& operator << (std::ostream& out, const AnyString& rhs);
 std::ostream& operator << (std::ostream& out, const Yuni::String& rhs);
 std::ostream& operator << (std::ostream& out, const Yuni::Clob& rhs);
 std::ostream& operator << (std::ostream& out, const Yuni::ShortString16& rhs);
