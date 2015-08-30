@@ -141,8 +141,6 @@ namespace Job
 		**
 		** This method has no effect if the taskgroup was already running and will
 		** stop immediatly if no job/callback has been added first.
-		**
-		** \param cancelOnError True to automatically cancel the task when the first error is encountered. False to continue anyway
 		*/
 		void start();
 
@@ -170,9 +168,9 @@ namespace Job
 		/*!
 		** \brief Get the current status of the task and Fetch various information in the same time
 		**
-		** \param[out] status The current status of the task
-		** \param jobCount The total number of jobs [optional]
-		** \param doneCount The total number of jobs which have terminated [optional]
+		** \param[out] jobCount The total number of jobs [optional]
+		** \param[out] doneCount The total number of jobs which have terminated [optional]
+		** \return status The current status of the task
 		*/
 		Status status(uint* jobCount = nullptr, uint* doneCount = nullptr) const;
 
@@ -199,7 +197,6 @@ namespace Job
 		** \brief Add a new job in the task
 		**
 		** The job will be added to the default queueservice immediatly if the taskgroup is running
-		** \param queueservice Any queueservice can be used.
 		** \param callback A functor / lambda
 		*/
 		void add(const Bind<bool (IJob&)>& callback);
@@ -210,7 +207,6 @@ namespace Job
 		** The job will be added to the queueservice immediatly if the taskgroup is running
 		** \param queueservice Any queueservice can be used.
 		** \param callback A functor / lambda
-		** \param autostart True to automatically run the task if not already running
 		*/
 		void add(QueueService& queueservice, const Bind<bool (IJob&)>& callback);
 		//@}
