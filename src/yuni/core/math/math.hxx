@@ -578,7 +578,7 @@ namespace Math
 
 	template<class T> inline T Abs(const T x)
 	{
-		return ::abs(x);
+		return static_cast<T>(::abs(static_cast<int>(x)));
 	}
 
 	template<> inline long Abs<long>(const long x)
