@@ -1212,9 +1212,7 @@ namespace PEG
 				while (i > 0);
 			}
 
-			h << '\n' << "# include \"" << localInclude << "hxx\"\n\n";
-			h << "#endif // " << headerGuardID << "_H__\n";
-			hxx << "\n#endif // " << headerGuardID << "_HXX__\n";
+			h << '\n' << "#include \"" << localInclude << "hxx\"\n";
 		}
 
 
