@@ -125,21 +125,19 @@ namespace PEG
 		{
 			const Node::Map::const_iterator end = rules.end();
 
-			h << "#ifndef " << headerGuardID << "_H__\n";
-			h << "# define " << headerGuardID << "_H__\n";
-			h << '\n';
-			h << "# include <yuni/yuni.h>\n";
-			h << "# include <yuni/core/string.h>\n";
-			h << "# include <yuni/core/bind.h>\n";
-			h << "# include <yuni/core/dictionary.h>\n";
-			h << "# include <yuni/core/smartptr/intrusive.h>\n";
-			h << "# if (__cplusplus > 199711L || (defined(_MSC_VER) && _MSC_VER >= 1800))\n";
+			h << "#pragma once\n";
+			h << "#include <yuni/yuni.h>\n";
+			h << "#include <yuni/core/string.h>\n";
+			h << "#include <yuni/core/bind.h>\n";
+			h << "#include <yuni/core/dictionary.h>\n";
+			h << "#include <yuni/core/smartptr/intrusive.h>\n";
+			h << "#if (__cplusplus > 199711L || (defined(_MSC_VER) && _MSC_VER >= 1800))\n";
 			h << "#	define " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST  1\n";
-			h << "#	include <initializer_list>\n";
-			h << "# endif";
+			h << "#include <initializer_list>\n";
+			h << "#endif";
 			h << "\n\n";
 			h << "//! Metadata support\n";
-			h << "# define " << headerGuardID << "_HAS_METADATA  1\n";
+			h << "#define " << headerGuardID << "_HAS_METADATA  1\n";
 			h << '\n';
 			h << '\n';
 			h << '\n';
@@ -388,8 +386,7 @@ namespace PEG
 
 		inline void CPPConverter::generateHXX()
 		{
-			hxx << "#ifndef " << headerGuardID << "_HXX__\n";
-			hxx << "# define " << headerGuardID << "_HXX__\n";
+			hxx << "#pragma once\n";
 			hxx << '\n';
 			hxx << "\n\n\n";
 
@@ -766,6 +763,7 @@ namespace PEG
 			cpp << "#include <yuni/core/noncopyable.h>\n";
 			cpp << "#include <yuni/datetime/timestamp.h>\n";
 			cpp << "#include <yuni/core/system/console/console.h>\n";
+			cpp << "#include <iostream\n>";
 			cpp << '\n';
 			cpp << "using namespace Yuni;\n";
 			cpp << "\n\n";
