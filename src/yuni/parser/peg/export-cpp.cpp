@@ -763,7 +763,7 @@ namespace PEG
 			cpp << "#include <yuni/core/noncopyable.h>\n";
 			cpp << "#include <yuni/datetime/timestamp.h>\n";
 			cpp << "#include <yuni/core/system/console/console.h>\n";
-			cpp << "#include <iostream\n>";
+			cpp << "#include <iostream>\n";
 			cpp << '\n';
 			cpp << "using namespace Yuni;\n";
 			cpp << "\n\n";
