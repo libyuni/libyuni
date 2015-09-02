@@ -118,7 +118,6 @@ namespace Job
 	}
 
 
-
 	inline TaskgroupJobCallback::TaskgroupJobCallback(QueueService& queueservice, const Bind<bool (IJob&)>& callback)
 		: Taskgroup::ITaskgroupJob(queueservice)
 		, callback(callback)

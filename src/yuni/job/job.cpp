@@ -92,8 +92,15 @@ namespace Job
 
 		// Here we go !
 		pState = stateRunning;
+
 		// Execute the specific implementation of the job
-		onExecute();
+		try
+		{
+			onExecute();
+		}
+		catch (...)
+		{}
+
 		// The state must be reset to idle as soon as possible while the
 		// other values are still valid.
 		pState = stateIdle;

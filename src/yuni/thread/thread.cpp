@@ -147,8 +147,15 @@ namespace Thread
 			// Launch the code
 			do
 			{
-				if (not thread.onExecute())
+				try
+				{
+					if (not thread.onExecute())
+						break;
+				}
+				catch (...)
+				{
 					break;
+				}
 
 				// check if the thread should stop as soon as possible
 				{
