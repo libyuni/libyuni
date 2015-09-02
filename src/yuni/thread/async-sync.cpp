@@ -38,6 +38,9 @@
 ** made available.
 */
 #include "utility.h"
+#include "../job/queue/service.h"
+#include "../job/taskgroup.h"
+
 
 
 namespace Yuni
@@ -83,6 +86,11 @@ namespace Yuni
 		return new AsyncJob(callback);
 	}
 
+
+	void async(Job::Taskgroup& task, const Bind<bool (Job::IJob&)>& callback)
+	{
+		task.add(callback);
+	}
 
 
 

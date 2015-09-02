@@ -41,13 +41,15 @@
 #include "../yuni.h"
 #include "timer.h"
 #include "../job/job.h"
-#include "../job/queue/service.h"
 #include "../core/bind.h"
 
+namespace Yuni { namespace Job { class QueueService; }}
+namespace Yuni { namespace Job { class Taskgroup; }}
 
 
 namespace Yuni
 {
+
 
 	/*!
 	** \brief Convenient wrapper for executing some code into another thread
@@ -189,7 +191,13 @@ namespace Yuni
 	**
 	** \param callback The callback to execute
 	*/
-	Job::IJob::Ptr  async(const Bind<void ()>& callback);
+	Job::IJob::Ptr  async(const Bind<bool (Job::IJob&)>& callback);
+
+
+	/*!
+	** \brief Convenient wrapper for creating a job from a lambda into a taskgroup
+	*/
+	void async(Job::Taskgroup& task, const Bind<bool (Job::IJob&)>& callback);
 
 
 
