@@ -90,6 +90,7 @@ namespace Yuni
 		*/
 		template<class StreamT> void print(StreamT&) const;
 
+
 		//! \name Operators
 		//@{
 		//! Assign from a bool value
@@ -106,6 +107,13 @@ namespace Yuni
 		//! Get if strictly equal to another tribool
 		bool operator == (const Tribool&) const;
 
+		//! Get if equal to a bool value (see toBool())
+		bool operator != (bool value) const;
+		//! Get if indeterminate
+		bool operator != (const NullPtr&) const;
+		//! Get if strictly equal to another tribool
+		bool operator != (const Tribool&) const;
+
 		//! Get the bool representation of this tribool, see toBool()
 		operator bool () const;
 		//@}
@@ -116,8 +124,6 @@ namespace Yuni
 		// The second value is the default one
 		union TriboolValue
 		{
-			TriboolValue();
-			TriboolValue(yuint8 value, yuint8 defvalue);
 			yint8 flags[2];
 			uint u32;
 		} pValue;

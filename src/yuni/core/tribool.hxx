@@ -44,44 +44,38 @@
 
 namespace Yuni
 {
-	inline Tribool::TriboolValue::TriboolValue()
-	{
-		flags[0] = -1;
-		flags[1] = 0;
-	}
-
-	inline Tribool::TriboolValue::TriboolValue(yuint8 value, yuint8 defvalue)
-	{
-		flags[0] = value;
-		flags[1] = defvalue;
-	}
-
-
-
-
 
 	inline Tribool::Tribool()
-	{}
+	{
+		pValue.flags[0] = -1;
+		pValue.flags[1] =  0;
+	}
 
 
 	inline Tribool::Tribool(bool value, bool defvalue)
-		: pValue(static_cast<yuint8>(value), static_cast<yuint8>(defvalue))
-	{}
+	{
+		pValue.flags[0] = static_cast<yint8>(value);
+		pValue.flags[1] = static_cast<yint8>(defvalue);
+	}
 
 
 	inline Tribool::Tribool(const NullPtr&, bool defvalue)
-		: pValue(-1, static_cast<yuint8>(defvalue))
-	{}
+	{
+		pValue.flags[0] = static_cast<yint8>(-1);
+		pValue.flags[1] = static_cast<yint8>(defvalue);
+	}
 
 
 	inline Tribool::Tribool(const Tribool& rhs)
-		: pValue(rhs.pValue)
-	{}
+	{
+		pValue.u32 = rhs.pValue.u32;
+	}
 
 
 	inline void Tribool::clear()
 	{
-		pValue = TriboolValue(); // reset to indeterminate
+		pValue.flags[0] = -1; // reset to indeterminate
+		pValue.flags[1] =  0;
 	}
 
 
@@ -119,14 +113,14 @@ namespace Yuni
 
 	inline Tribool& Tribool::operator = (bool value)
 	{
-		pValue.flags[0] = static_cast<yuint8>(value);
+		pValue.flags[0] = static_cast<yint8>(value);
 		return *this;
 	}
 
 
 	inline Tribool& Tribool::operator = (const Tribool& rhs)
 	{
-		pValue = rhs.pValue;
+		pValue.u32 = rhs.pValue.u32;
 		return *this;
 	}
 
@@ -146,6 +140,24 @@ namespace Yuni
 	inline bool Tribool::operator == (const Tribool& rhs) const
 	{
 		return pValue.u32 == rhs.pValue.u32;
+	}
+
+
+	inline bool Tribool::operator != (bool value) const
+	{
+		return (operator bool ()) != value;
+	}
+
+
+	inline bool Tribool::operator != (const NullPtr&) const
+	{
+		return not indeterminate();
+	}
+
+
+	inline bool Tribool::operator != (const Tribool& rhs) const
+	{
+		return pValue.u32 != rhs.pValue.u32;
 	}
 
 
