@@ -131,7 +131,9 @@ namespace CStringImpl
 						*p = *(BaseT::Digit() + (value % BaseT::n));
 						--p;
 						++nbChar;
-					} while ((value /= BaseT::n));
+					}
+					while (0 != (value = static_cast<T>(value / BaseT::n)));
+
 					str.appendWithoutChecking(++p, nbChar);
 				}
 				else
@@ -141,10 +143,12 @@ namespace CStringImpl
 					// our case
 					do
 					{
-						*p = *(BaseT::Digit() - (value % BaseT::n));
+						*p = *(BaseT::Digit() - (value % static_cast<Type>(BaseT::n)));
 						--p;
 						++nbChar;
-					} while ((value /= BaseT::n));
+					}
+					while (0 != (value = static_cast<T>(value / BaseT::n)));
+
 					*p = '-';
 					str.appendWithoutChecking(p, ++nbChar);
 				}
