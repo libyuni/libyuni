@@ -151,6 +151,7 @@ namespace Yuni
 
 
 
+	std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs);
 
 
 
@@ -158,4 +159,3 @@ namespace Yuni
 
 
 
-std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs);

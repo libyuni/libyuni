@@ -88,15 +88,12 @@ namespace Yuni
 		return String() << hi << '.' << lo << '.' << revision;
 	}
 
+	std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs)
+	{
+		rhs.print(out);
+		return out;
+	}
+
 
 
 } // namespace Yuni
-
-
-
-
-std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs)
-{
-	rhs.print(out);
-	return out;
-}

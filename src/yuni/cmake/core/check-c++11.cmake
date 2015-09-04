@@ -1,24 +1,8 @@
 
 if (NOT MSVC)
-	# C++0x
-	check_cxx_compiler_flag("-std=c++0x" YUNI_HAS_GCC_CPP0X_SUPPORT)
-	if(YUNI_HAS_GCC_CPP0X_SUPPORT)
-		if(MINGW)
-			set(YUNI_GCC_CPP0X_FLAG "-std=gnu++0x")
-		else()
-			set(YUNI_GCC_CPP0X_FLAG "-std=c++0x")
-		endif()
-		LIBYUNI_CONFIG_CFLAG("both" "core"	"${YUNI_GCC_CPP0X_FLAG}")
-	endif()
-
-
-	# C++11 nullptr
-	if(YUNI_HAS_GCC_CPP0X_SUPPORT)
-		if(MINGW)
-			set(CMAKE_REQUIRED_FLAGS "-std=gnu++0x")
-		else()
-			set(CMAKE_REQUIRED_FLAGS "-std=c++0x")
-		endif()
+	if (NOT "${YUNI_CPP_STD}" STREQUAL "")
+		LIBYUNI_CONFIG_CFLAG("both" "core" "${YUNI_CPP_STD}")
+		set(CMAKE_REQUIRED_FLAGS "${YUNI_CPP_STD}")
 	endif()
 endif()
 

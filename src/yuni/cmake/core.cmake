@@ -547,6 +547,18 @@ install(FILES yuni.version
 	COMPONENT ${YUNICOMPONENT_CORE}
 	DESTINATION include/${YUNI_VERSIONED_INST_PATH}/ RENAME "yuni.version")
 
+install(FILES core/string/iterator.inc.hpp
+	COMPONENT ${YUNICOMPONENT_CORE}
+	DESTINATION include/${YUNI_VERSIONED_INST_PATH}/yuni/core/string)
+
+install(FILES core/slist/iterator.inc.hpp
+	COMPONENT ${YUNICOMPONENT_CORE}
+	DESTINATION include/${YUNI_VERSIONED_INST_PATH}/yuni/core/slist)
+
+install(FILES io/directory/info/iterator.inc.hpp
+	COMPONENT ${YUNICOMPONENT_CORE}
+	DESTINATION include/${YUNI_VERSIONED_INST_PATH}/yuni/io/directory/info)
+
 install(FILES "${YUNI_LIBYUNI_CONFIG_TARGET_INIFILE}"
 	COMPONENT ${YUNICOMPONENT_CORE}
 	DESTINATION include/${YUNI_VERSIONED_INST_PATH}/ RENAME "yuni.config.${YUNI_LIBYUNI_CONFIG_COMPILER}")

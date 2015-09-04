@@ -48,7 +48,6 @@ namespace Yuni
 
 
 
-
 	std::ostream& operator << (std::ostream& out, const AnyString& rhs)
 	{
 		if (not rhs.empty())
@@ -126,6 +125,7 @@ namespace Yuni
 		rhs.write(out);
 		return out;
 	}
+
 
 
 } // namespace Yuni
