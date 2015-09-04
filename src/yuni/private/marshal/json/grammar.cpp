@@ -48,6 +48,7 @@
 #include "internal-dfa.hxx"
 #include "internal-table.hxx"
 #include <cassert>
+#include <iostream>
 #include <stack>
 
 using namespace Yuni;
