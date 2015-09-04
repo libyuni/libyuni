@@ -42,35 +42,44 @@
 
 
 
-//! \name Operator overload for stream printing
-//@{
-std::ostream& operator << (std::ostream& out, const AnyString& rhs);
-std::ostream& operator << (std::ostream& out, const Yuni::String& rhs);
-std::ostream& operator << (std::ostream& out, const Yuni::Clob& rhs);
-std::ostream& operator << (std::ostream& out, const Yuni::ShortString16& rhs);
-std::ostream& operator << (std::ostream& out, const Yuni::ShortString32& rhs);
-std::ostream& operator << (std::ostream& out, const Yuni::ShortString64& rhs);
-std::ostream& operator << (std::ostream& out, const Yuni::ShortString128& rhs);
-std::ostream& operator << (std::ostream& out, const Yuni::ShortString256& rhs);
-std::ostream& operator << (std::ostream& out, const Yuni::ShortString512& rhs);
-
-std::ostream& operator << (std::ostream& out, const Yuni::UTF8::Char& rhs);
-
-
-template<class CharT, class TraitsT, uint SizeT, bool ExpT>
-inline std::basic_istream<CharT, TraitsT>& operator >> (std::basic_istream<CharT, TraitsT>& stream, Yuni::CString<SizeT,ExpT>& string)
+namespace Yuni
 {
-	string.clear();
-	while (stream.good())
+
+	//! \name Operator overload for stream printing
+	//@{
+	std::ostream& operator << (std::ostream& out, const AnyString& rhs);
+	std::ostream& operator << (std::ostream& out, const Yuni::String& rhs);
+	std::ostream& operator << (std::ostream& out, const Yuni::Clob& rhs);
+	std::ostream& operator << (std::ostream& out, const Yuni::ShortString16& rhs);
+	std::ostream& operator << (std::ostream& out, const Yuni::ShortString32& rhs);
+	std::ostream& operator << (std::ostream& out, const Yuni::ShortString64& rhs);
+	std::ostream& operator << (std::ostream& out, const Yuni::ShortString128& rhs);
+	std::ostream& operator << (std::ostream& out, const Yuni::ShortString256& rhs);
+	std::ostream& operator << (std::ostream& out, const Yuni::ShortString512& rhs);
+
+	std::ostream& operator << (std::ostream& out, const Yuni::UTF8::Char& rhs);
+
+
+	template<class CharT, class TraitsT, uint SizeT, bool ExpT>
+	inline std::basic_istream<CharT, TraitsT>& operator >> (std::basic_istream<CharT, TraitsT>& stream, Yuni::CString<SizeT,ExpT>& string)
 	{
-		char c;
-		stream.get(c);
-		if (c == ' ' || c == '\t' || c == '\r' || c == '\n')
-			break;
-		string.append(c);
+		string.clear();
+		while (stream.good())
+		{
+			char c;
+			stream.get(c);
+			if (c == ' ' || c == '\t' || c == '\r' || c == '\n')
+				break;
+			string.append(c);
+		}
+		return stream;
 	}
-	return stream;
-}
+
+
+} // namespace Yuni
+
+
+
 
 
 
