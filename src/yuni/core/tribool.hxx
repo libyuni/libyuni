@@ -68,7 +68,7 @@ namespace Yuni
 
 	inline Tribool::Tribool(const Tribool& rhs)
 	{
-		pValue.u32 = rhs.pValue.u32;
+		pValue.u16 = rhs.pValue.u16;
 	}
 
 
@@ -120,7 +120,7 @@ namespace Yuni
 
 	inline Tribool& Tribool::operator = (const Tribool& rhs)
 	{
-		pValue.u32 = rhs.pValue.u32;
+		pValue.u16 = rhs.pValue.u16;
 		return *this;
 	}
 
@@ -139,7 +139,7 @@ namespace Yuni
 
 	inline bool Tribool::operator == (const Tribool& rhs) const
 	{
-		return pValue.u32 == rhs.pValue.u32;
+		return pValue.u16 == rhs.pValue.u16;
 	}
 
 
@@ -157,7 +157,7 @@ namespace Yuni
 
 	inline bool Tribool::operator != (const Tribool& rhs) const
 	{
-		return pValue.u32 != rhs.pValue.u32;
+		return pValue.u16 != rhs.pValue.u16;
 	}
 
 

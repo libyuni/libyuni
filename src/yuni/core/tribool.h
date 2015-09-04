@@ -125,7 +125,7 @@ namespace Yuni
 		union TriboolValue
 		{
 			yint8 flags[2];
-			uint u32;
+			yuint16 u16;
 		} pValue;
 
 	}; // class Tribool
