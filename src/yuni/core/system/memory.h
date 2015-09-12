@@ -119,24 +119,10 @@ namespace Memory
 
 
 
-	/*!
-	** \brief Constants to use when information about the memory usage could not
-	**   be retrieved
-	*/
-	enum
-	{
-		//! The default amount of available physical memory
-		defaultAvailable = 1024 * 1024 * 512,  // 512Mo
-		//! The default amount of total physical memory
-		defaultTotal     = 1024 * 1024 * 1024, // 1Go
-	};
-
-
 
 
 } // namespace Memory
 } // namespace System
 } // namespace Yuni
 
-# include "memory.hxx"
-
+#include "memory.hxx"

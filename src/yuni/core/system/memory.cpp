@@ -75,9 +75,23 @@ namespace System
 namespace Memory
 {
 
+	//! Constants to use when information about the memory usage could not be retrieved
+	enum
+	{
+		//! The default amount of available physical memory
+		defaultAvailable = 1024 * 1024 * 512,  // 512Mo
+		//! The default amount of total physical memory
+		defaultTotal     = 1024 * 1024 * 1024, // 1Go
+	};
 
-#ifdef YUNI_OS_WINDOWS
-#define SYSTEM_MEMORY_IS_IMPLEMENTED
+
+
+
+
+
+
+	#ifdef YUNI_OS_WINDOWS
+	#define SYSTEM_MEMORY_IS_IMPLEMENTED
 
 	uint64 Total()
 	{
@@ -116,94 +130,96 @@ namespace Memory
 		return false;
 	}
 
-#endif // YUNI_OS_WINDOWS
+	#endif // YUNI_OS_WINDOWS
 
 
 
 
 
 
-#if defined(YUNI_OS_LINUX) || defined(YUNI_OS_CYGWIN)
-#define SYSTEM_MEMORY_IS_IMPLEMENTED
+	#if defined(YUNI_OS_LINUX) || defined(YUNI_OS_CYGWIN)
+	#define SYSTEM_MEMORY_IS_IMPLEMENTED
 
-	/*!
-	** \brief Read a line from a file
-	*/
-	static inline int fgetline(FILE* fp, char* s, int maxlen)
+	namespace // anonymous
 	{
-		int i = 0;
-		char c;
 
-		while ((c = (char)fgetc(fp)) != EOF)
+		//! Read a line from a file
+		static inline int fgetline(FILE* fp, char* s, int maxlen)
 		{
-			if (c == '\n')
-			{
-				*s = '\0';
-				return i;
-			}
-			if (i >= maxlen)
-				return i;
+			int i = 0;
+			char c;
 
-			*s++ = c;
-			++i;
+			while ((c = (char)fgetc(fp)) != EOF)
+			{
+				if (c == '\n')
+				{
+					*s = '\0';
+					return i;
+				}
+				if (i >= maxlen)
+					return i;
+
+				*s++ = c;
+				++i;
+			}
+			return (!i) ? EOF : i;
 		}
 
-		return (!i) ? EOF : i;
-	}
 
+		static inline uint64 readvalue(char* line)
+		{
+			// Here is a sample for /proc/meminfo :
+			//
+			// MemTotal:      1929228 kB
+			// MemFree:         12732 kB
+			// Buffers:         72176 kB
+			// Cached:        1076572 kB
+			// SwapCached:     151412 kB
+			// Active:        1491184 kB
+			// Inactive:       190832 kB
+			// HighTotal:           0 kB
+			// HighFree:            0 kB
+			// LowTotal:      1929228 kB
+			// LowFree:         12732 kB
+			// SwapTotal:     2096472 kB
+			// SwapFree:      1732964 kB
+			// Dirty:             736 kB
+			// Writeback:           0 kB
+			// AnonPages:      512004 kB
+			// Mapped:         702148 kB
+			// Slab:           154320 kB
+			// PageTables:      34712 kB
+			// NFS_Unstable:        0 kB
+			// Bounce:              0 kB
+			// CommitLimit:   3061084 kB
+			// Committed_AS:  1357596 kB
+			// VmallocTotal: 34359738367 kB
+			// VmallocUsed:    263492 kB
+			// VmallocChunk: 34359474679 kB
+			// HugePages_Total:     0
+			// HugePages_Free:      0
+			// HugePages_Rsvd:      0
+			// Hugepagesize:     2048 kB
 
-	static uint64 readvalue(char* line)
-	{
-		// Here is a sample for /proc/meminfo :
-		//
-		// MemTotal:      1929228 kB
-		// MemFree:         12732 kB
-		// Buffers:         72176 kB
-		// Cached:        1076572 kB
-		// SwapCached:     151412 kB
-		// Active:        1491184 kB
-		// Inactive:       190832 kB
-		// HighTotal:           0 kB
-		// HighFree:            0 kB
-		// LowTotal:      1929228 kB
-		// LowFree:         12732 kB
-		// SwapTotal:     2096472 kB
-		// SwapFree:      1732964 kB
-		// Dirty:             736 kB
-		// Writeback:           0 kB
-		// AnonPages:      512004 kB
-		// Mapped:         702148 kB
-		// Slab:           154320 kB
-		// PageTables:      34712 kB
-		// NFS_Unstable:        0 kB
-		// Bounce:              0 kB
-		// CommitLimit:   3061084 kB
-		// Committed_AS:  1357596 kB
-		// VmallocTotal: 34359738367 kB
-		// VmallocUsed:    263492 kB
-		// VmallocChunk: 34359474679 kB
-		// HugePages_Total:     0
-		// HugePages_Free:      0
-		// HugePages_Rsvd:      0
-		// Hugepagesize:     2048 kB
+			// Trimming the string from the begining
+			while (*line == ' ' and *line != '\0')
+				++line;
+			const char* first = line;
 
-		// Trimming the string from the begining
-		while (*line == ' ' and *line != '\0')
-			++line;
-		const char* first = line;
+			// Looking for the end of the number
+			while (*line != ' ' and *line != '\0')
+				++line;
+			// Tagging the end of the number
+			*line = '\0';
 
-		// Looking for the end of the number
-		while (*line != ' ' and *line != '\0')
-			++line;
-		// Tagging the end of the number
-		*line = '\0';
+			# ifdef YUNI_OS_32
+			return (uint64) atol(first) * 1024u;
+			# else
+			return (uint64) atoll(first) * 1024u;
+			# endif
+		}
 
-		# ifdef YUNI_OS_32
-		return (uint64) atol(first) * 1024u;
-		# else
-		return (uint64) atoll(first) * 1024u;
-		# endif
-	}
+	} // anonymous namespace
 
 
 	bool Usage::update()
@@ -283,21 +299,27 @@ namespace Memory
 
 	uint64 Total()
 	{
-#ifdef YUNI_OS_LINUX
-		// Directly using sysinfo (2), which should be faster than parsing /proc/meminfo
-		struct sysinfo s;
-		return (!sysinfo(&s)) ? (s.mem_unit * s.totalram) : (uint64) defaultTotal;
-#else
-		return Usage().total;
-#endif
+		#ifdef YUNI_OS_LINUX
+		{
+			// Directly using sysinfo (2), which should be faster than parsing /proc/meminfo
+			struct sysinfo s;
+			return (!sysinfo(&s)) ? (s.mem_unit * s.totalram) : (uint64) defaultTotal;
+		}
+		#else
+		{
+			return Usage().total;
+		}
+		#endif
 	}
 
-#endif // YUNI_OS_LINUX
+	#endif // YUNI_OS_LINUX
 
 
 
-#ifdef YUNI_OS_MAC
-#define SYSTEM_MEMORY_IS_IMPLEMENTED
+
+
+	#ifdef YUNI_OS_MAC
+	#define SYSTEM_MEMORY_IS_IMPLEMENTED
 
 	uint64 Total()
 	{
@@ -345,7 +367,7 @@ namespace Memory
 		return true;
 	}
 
-#endif // YUNI_OS_MAC
+	#endif // YUNI_OS_MAC
 
 
 
@@ -354,8 +376,9 @@ namespace Memory
 
 
 
-#ifndef SYSTEM_MEMORY_IS_IMPLEMENTED
-#warning Yuni::System::Memory: The implementation is missing for this operating system
+	#ifndef SYSTEM_MEMORY_IS_IMPLEMENTED
+	#warning Yuni::System::Memory: The implementation is missing for this operating system
+
 
 	uint64 Total()
 	{
@@ -374,12 +397,10 @@ namespace Memory
 		return false;
 	}
 
-#endif // Fallback
+	#endif // Fallback
 
 
 
 } // namespace Memory
 } // namespace System
 } // namespace Yuni
-
-
