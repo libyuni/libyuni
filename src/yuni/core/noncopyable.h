@@ -45,6 +45,7 @@ namespace Yuni
 {
 
 	/*!
+	** \class NonCopyable
 	** \brief Prevent objects of a class from being copy-constructed or assigned to each other
 	**
 	** \code
@@ -54,39 +55,46 @@ namespace Yuni
 	** };
 	** \endcode
 	*/
+	#if defined(YUNI_HAS_CPP_MOVE)
+
 	template<class T>
 	class YUNI_DECL NonCopyable
 	{
-	protected:
-		//! \name Constructor & Destructor
-		//@{
-		/*!
-		** \brief Default constructor
-		*/
-		NonCopyable() {}
-		//! Protected non-virtual destructor
-		~NonCopyable() {}
-		//@}
-
-
-	private:
-		#if defined(YUNI_HAS_CPP_MOVE)
+	public:
+		NonCopyable() = default;
 		// no copy constructor
 		NonCopyable(const NonCopyable&) = delete;
 		// no copy operator
 		template<class U> NonCopyable& operator = (const U&) = delete;
 		NonCopyable& operator = (const NonCopyable&) = delete;
-		#else
+		// destructor
+		~NonCopyable() = default;
+
+	}; // class NonCopyable
+
+
+	#else
+
+	template<class T>
+	class YUNI_DECL NonCopyable
+	{
+	protected:
+		//! Default constructor
+		NonCopyable() {}
+		//! Protected non-virtual destructor
+		~NonCopyable() {}
+
+
+	private:
 		// Private copy constructor
 		NonCopyable(const NonCopyable &) {}
 		// Private copy operator
 		template<class U> T& operator = (const U&) {return *static_cast<T*>(this);}
 		NonCopyable& operator = (const NonCopyable&) {return *static_cast<T*>(this);}
-		#endif
 
 	}; // class NonCopyable
 
-
+	#endif
 
 
 

@@ -38,80 +38,55 @@
 ** made available.
 */
 #pragma once
-#include "rwmutex.h"
 
 
 
 namespace Yuni
 {
 
-	inline RWMutex::RWMutex(uint maxReaders)
-		# ifndef YUNI_NO_THREAD_SAFE
-		: pSemaphore(maxReaders), pMutex()
-		# endif
+	/*!
+	** \class NonMovable
+	** \brief Prevent objects of a class from being move-constructed or assigned to each other
+	**
+	** \code
+	** class ClassThatCanNotBeCopied : private NonMovable<ClassThatCanNotBeCopied>
+	** {
+	** // ...
+	** };
+	** \endcode
+	*/
+	#if defined(YUNI_HAS_CPP_MOVE)
+
+	template<class T>
+	class YUNI_DECL NonMovable
 	{
-	}
+	protected:
+		// default constructor
+		NonMovable() = default;
+		// copy constructor
+		NonMovable(const NonMovable&) = default;
+		// no move constructor
+		NonMovable(NonMovable&&) = delete;
+		// no copy operator
+		NonMovable& operator = (NonMovable&&) = delete;
+		// default destructor
+		~NonMovable() = default;
+
+	}; // class NonMovable
 
 
-	inline RWMutex::RWMutex(const RWMutex& copy)
-		: NonMovable()
-		# ifndef YUNI_NO_THREAD_SAFE
-		, pSemaphore(copy.pSemaphore), pMutex()
-		# endif
+	#else
+
+	template<class T> class YUNI_DECL NonMovable
 	{
-	}
+	protected:
+		//! Default constructor
+		NonCopyable() {}
+		//! Protected non-virtual destructor
+		~NonCopyable() {}
+	};
 
-
-	inline RWMutex& RWMutex::operator = (const RWMutex&)
-	{
-		// Does nothing on purpose
-		return *this;
-	}
-
-
-	inline void RWMutex::readLock()
-	{
-		# ifndef YUNI_NO_THREAD_SAFE
-		pSemaphore.acquire();
-		# endif
-	}
-
-
-	inline void RWMutex::readUnlock()
-	{
-		# ifndef YUNI_NO_THREAD_SAFE
-		pSemaphore.release();
-		# endif
-	}
-
-
-
-
-
-	inline ReadMutexLocker::ReadMutexLocker(RWMutex& m) :
-		pMutex(m)
-	{
-		m.readLock();
-	}
-
-
-	inline ReadMutexLocker::~ReadMutexLocker()
-	{
-		pMutex.readUnlock();
-	}
-
-
-	inline WriteMutexLocker::WriteMutexLocker(RWMutex& m) :
-		pMutex(m)
-	{
-		m.writeLock();
-	}
-
-
-	inline WriteMutexLocker::~WriteMutexLocker()
-	{
-		pMutex.writeUnlock();
-	}
+	#endif
 
 
 

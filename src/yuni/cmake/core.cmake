@@ -229,6 +229,7 @@ add_library(yuni-static-core STATIC
 		core/math/trigonometric.hxx
 		core/math.h
 		core/noncopyable.h
+		core/nonmovable.h
 		core/nullable/extension.hxx
 		core/nullable/holder.h
 		core/nullable/nullable.h

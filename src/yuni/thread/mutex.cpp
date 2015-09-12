@@ -69,7 +69,6 @@ namespace Yuni
 	};
 
 
-
 	inline void Mutex::destroy()
 	{
 		# ifndef YUNI_NO_THREAD_SAFE
@@ -107,7 +106,7 @@ namespace Yuni
 	{
 		# ifndef YUNI_NO_THREAD_SAFE
 		# ifdef YUNI_OS_WINDOWS
-		InitializeCriticalSectionAndSpinCount(&pSection, spinCount);
+		InitializeCriticalSectionAndSpinCount(&pSection, static_cast<DWORD>(spinCount));
 		(void) rhs; // unused
 		# else
 		::pthread_mutexattr_init(&pAttr);
@@ -133,6 +132,7 @@ namespace Yuni
 
 
 	Mutex::Mutex(const Mutex& rhs)
+		: NonMovable(rhs)
 	{
 		copy(rhs);
 	}
@@ -149,7 +149,7 @@ namespace Yuni
 		# ifndef YUNI_NO_THREAD_SAFE
 		# ifdef YUNI_OS_WINDOWS
 		(void) recursive; // already recursive on Windows
-		InitializeCriticalSectionAndSpinCount(&pSection, spinCount);
+		InitializeCriticalSectionAndSpinCount(&pSection, static_cast<DWORD>(spinCount));
 		# else
 		::pthread_mutexattr_init(&pAttr);
 		if (recursive)

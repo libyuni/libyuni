@@ -52,7 +52,7 @@ namespace Yuni
 	**
 	** \ingroup Threads
 	*/
-	class YUNI_DECL RWMutex final
+	class YUNI_DECL RWMutex final : public NonMovable<RWMutex>
 	{
 	public:
 		/*!
@@ -76,7 +76,7 @@ namespace Yuni
 		/*!
 		** \brief Default constructor
 		*/
-		RWMutex(uint maxReaders = 64); // arbitrary limit
+		explicit RWMutex(uint maxReaders = 64); // arbitrary limit
 		/*!
 		** \brief Copy constructor
 		**
@@ -84,10 +84,6 @@ namespace Yuni
 		** of other classes which would implement a copy constructor
 		*/
 		RWMutex(const RWMutex&);
-		/*!
-		** \brief Destructor
-		*/
-		~RWMutex();
 		//@}
 
 
@@ -199,5 +195,4 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "rwmutex.hxx"
-
+#include "rwmutex.hxx"

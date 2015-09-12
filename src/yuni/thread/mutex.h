@@ -40,6 +40,7 @@
 #pragma once
 #include "../yuni.h"
 #include "../core/noncopyable.h"
+#include "../core/nonmovable.h"
 #ifndef YUNI_NO_THREAD_SAFE
 # include "pthread.h"
 # ifdef YUNI_OS_WINDOWS
@@ -58,6 +59,7 @@ namespace Yuni
 	** \ingroup Threads
 	*/
 	class YUNI_DECL Mutex final
+		: public NonMovable<Mutex> // an OS's native mutex must have invariant address and thus can not be moved
 	{
 	public:
 		/*!
@@ -92,17 +94,10 @@ namespace Yuni
 		** of other classes which would implement a copy constructor
 		*/
 		Mutex(const Mutex&);
-
-		# ifdef YUNI_HAS_CPP_MOVE
-		// an OS's native mutex must have invariant address and thus can not be moved
-		Mutex(Mutex&&) = delete;
-		#endif
-
-		/*!
-		** \brief Destructor
-		*/
+		//! Destructor
 		~Mutex();
 		//@}
+
 
 		//! \name Lock & Unlock
 		//@{
@@ -124,6 +119,7 @@ namespace Yuni
 		void unlock();
 		//@}
 
+
 		# ifndef YUNI_NO_THREAD_SAFE
 		# ifndef YUNI_OS_WINDOWS
 		//! \name Native
@@ -141,10 +137,6 @@ namespace Yuni
 		//@{
 		//! Operator = (do nothing)
 		Mutex& operator = (const Mutex&);
-		# ifdef YUNI_HAS_CPP_MOVE
-		// an OS's native mutex must have invariant address and thus can not be moved
-		Mutex& operator = (Mutex&&) = delete;
-		#endif
 		//@}
 
 
@@ -233,5 +225,4 @@ namespace Yuni
 
 } // namespace Yuni
 
-# include "mutex.hxx"
-
+#include "mutex.hxx"
