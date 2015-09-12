@@ -6,14 +6,20 @@ LIBYUNI_CONFIG_LIB("both" "parser"        "yuni-static-parser")
 include_directories("..")
 
 
-# generate cpp file
-file(READ "private/parser/peg/__parser.include.cpp.template" cpp_contents)
-string(REPLACE "\\" "\\\\" cpp_contents "${cpp_contents}")
-string(REPLACE "\"" "\\\"" cpp_contents "${cpp_contents}")
-string(REPLACE "\n" "\\n\";\n\tout << \"" cpp_contents "${cpp_contents}")
-set(cpp_contents "\ntemplate<class StreamT>\nstatic inline void PrepareCPPInclude(StreamT& out)\n{\n\tout << \"${cpp_contents}\";\n}\n")
-string(REPLACE "<< \"\\n\";" "<< '\\n';" cpp_contents "${cpp_contents}")
-file(WRITE "private/parser/peg/__parser.include.cpp.hxx" "${cpp_contents}")
+add_executable(yuni-tool-parser-template EXCLUDE_FROM_ALL cmake/parser/importer.cpp)
+target_link_libraries(yuni-tool-parser-template yuni-static-core)
+set_target_properties(yuni-tool-parser-template PROPERTIES
+	RUNTIME_OUTPUT_DIRECTORY "${YUNI_OUTPUT_DIRECTORY}/bin")
+
+
+add_custom_command(
+	OUTPUT  "private/parser/peg/__parser.include.cpp.hxx"
+	DEPENDS "private/parser/peg/__parser.include.cpp.template" yuni-tool-parser-template
+	COMMAND "$<TARGET_FILE:yuni-tool-parser-template>"
+		"${CMAKE_CURRENT_SOURCE_DIR}/private/parser/peg/__parser.include.cpp.template"
+		"${CMAKE_CURRENT_SOURCE_DIR}/private/parser/peg/__parser.include.cpp.hxx"
+	)
+
 
 
 
@@ -32,9 +38,7 @@ source_group("Parser\\Generator" FILES ${SRC_PARSER})
 
 
 
-add_Library(yuni-static-parser STATIC
-	${SRC_PARSER}
-)
+add_Library(yuni-static-parser STATIC ${SRC_PARSER})
 
 # Setting output path
 SET_TARGET_PROPERTIES(yuni-static-parser PROPERTIES
@@ -52,5 +56,4 @@ install(
 		PATTERN "*.hxx"
 	PATTERN ".svn" EXCLUDE
 	PATTERN "CMakeFiles" EXCLUDE
-	PATTERN "cmake" EXCLUDE
-)
+	PATTERN "cmake" EXCLUDE)

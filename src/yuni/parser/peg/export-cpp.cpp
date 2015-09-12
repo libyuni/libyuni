@@ -49,13 +49,12 @@ namespace Parser
 namespace PEG
 {
 
-	#include "../../private/parser/peg/__parser.include.cpp.hxx"
-
-
-
-
 	namespace // anonymous
 	{
+
+		#include "../../private/parser/peg/__parser.include.cpp.hxx"
+
+
 
 		class CPPConverter final
 		{
