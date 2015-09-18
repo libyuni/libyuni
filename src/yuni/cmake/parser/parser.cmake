@@ -6,19 +6,19 @@ LIBYUNI_CONFIG_LIB("both" "parser"        "yuni-static-parser")
 include_directories("..")
 
 
-add_executable(yuni-tool-parser-template EXCLUDE_FROM_ALL cmake/parser/importer.cpp)
+add_executable(yuni-tool-parser-template EXCLUDE_FROM_ALL "${CMAKE_CURRENT_SOURCE_DIR}/cmake/parser/importer.cpp")
+
 target_link_libraries(yuni-tool-parser-template yuni-static-core)
-set_target_properties(yuni-tool-parser-template PROPERTIES
-	RUNTIME_OUTPUT_DIRECTORY "${YUNI_OUTPUT_DIRECTORY}/bin")
+set_target_properties(yuni-tool-parser-template PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${YUNI_OUTPUT_DIRECTORY}/bin")
 
 
 add_custom_command(
-	OUTPUT  "private/parser/peg/__parser.include.cpp.hxx"
-	DEPENDS "private/parser/peg/__parser.include.cpp.template" yuni-tool-parser-template
+	OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/private/parser/peg/__parser.include.cpp.hxx"
+	DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/private/parser/peg/__parser.include.cpp.template"
+	        yuni-tool-parser-template
 	COMMAND "$<TARGET_FILE:yuni-tool-parser-template>"
 		"${CMAKE_CURRENT_SOURCE_DIR}/private/parser/peg/__parser.include.cpp.template"
-		"${CMAKE_CURRENT_SOURCE_DIR}/private/parser/peg/__parser.include.cpp.hxx"
-	)
+		"${CMAKE_CURRENT_BINARY_DIR}/private/parser/peg/__parser.include.cpp.hxx")
 
 
 
@@ -32,7 +32,7 @@ set(SRC_PARSER
 	parser/peg/node.cpp
 	parser/peg/export-cpp.cpp
 	parser/peg/export-dot.cpp
-	private/parser/peg/__parser.include.cpp.hxx
+	"${CMAKE_CURRENT_BINARY_DIR}/private/parser/peg/__parser.include.cpp.hxx"
 )
 source_group("Parser\\Generator" FILES ${SRC_PARSER})
 

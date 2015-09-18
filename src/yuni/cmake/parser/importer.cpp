@@ -1,6 +1,7 @@
 #include <yuni/yuni.h>
 #include <yuni/string.h>
 #include <yuni/io/file.h>
+#include <yuni/io/directory.h>
 #include <iostream>
 
 using namespace Yuni;
@@ -39,34 +40,41 @@ int main(int argc, char* argv[])
 	}
 
 	AnyString tmplfile(argv[1]);
+	AnyString targetfile{argv[2]};
+
+	if (not IO::IsAbsolute(tmplfile))
+	{
+		std::cerr << "the template filename '" << tmplfile << "' is not absolute\n";
+		return 1;
+	}
+	if (not IO::IsAbsolute(targetfile))
+	{
+		std::cerr << "the target filename '" << targetfile << "' is not absolute\n";
+		return 1;
+	}
+
+	String targetFolder;
+	IO::ExtractFilePath(targetFolder, targetfile);
+
 	String tmplcontent;
 
 	Reader reader;
 	reader.content  = "\n\n// GENERATED\n";
 	reader.content += "\n\ntemplate<class StreamT>\nstatic inline void PrepareCPPInclude(StreamT& out)\n{\n";
 
-	bool success = IO::File::ReadLineByLine(argv[1], reader);
-
-	reader.content << "}\n";
-
-	/*
-	if (IO::errNone != IO::File::LoadFromFile(tmplcontent, tmplfile) or tmplcontent.empty())
+	if (not IO::File::ReadLineByLine(tmplfile, reader))
 	{
-		std::cerr << "failed to load '" << tmplfile << "'\n";
+		std::cerr << "failed to read '" << tmplfile << "'\n";
 		return 1;
 	}
 
+	reader.content << "}\n";
 
-	tmplcontent.replace("\\", "\\\\");
-	tmplcontent.replace("\"", "\\\"");
-	tmplcontent.replace("\n", "\\n\";\n\tout << \"");
+	if (not IO::Directory::Create(targetFolder))
+	{
+		std::cerr << "failed to create the directory '" << targetFolder << "'\n";
+		return 1;
+	}
 
-	tmplcontent.prepend("\ntemplate<class StreamT>\nstatic inline void PrepareCPPInclude(StreamT& out)\n{\n\tout << \"");
-	tmplcontent << "\";\n}\n";
-	tmplcontent.replace("<< \"\\n\";", "<< '\\n';");
-
-	tmplcontent.replace("out << ", "out.append(");
-	tmplcontent.replace(";\n", ");\n");*/
-
-	return (success and IO::File::SetContent(argv[2], reader.content)) ? 0 : 1;
+	return (IO::File::SetContent(argv[2], reader.content)) ? 0 : 1;
 }
