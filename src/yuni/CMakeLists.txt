@@ -168,7 +168,13 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.cmake ${CMAKE_CURRENT_S
 #
 add_definitions("-DYUNI_LIBRARY_STATIC")
 LIBYUNI_CONFIG_DEFINITION("both" "core" "YUNI_LIBRARY_STATIC")
+
 include_directories(${YUNI_INCLUDE})
+
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../")
+if (NOT "${CMAKE_CURRENT_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
+	include_directories("${CMAKE_CURRENT_BINARY_DIR}/../")
+endif()
 
 
 
