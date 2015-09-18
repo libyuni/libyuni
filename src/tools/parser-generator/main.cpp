@@ -71,9 +71,11 @@ public:
 
 public:
 	//! All filenames
-	String::Vector filenames;
+	String filename;
 	//! Namespace
 	String namespaceName;
+	//! Output folder
+	String outputFolder;
 
 	//! Export format
 	Format format;
@@ -103,13 +105,14 @@ static void ParseError(const AnyString& message)
 static inline void ParseCommandLine(int argc, char** argv, Settings& settings)
 {
 	GetOpt::Parser options;
-	String::Vector optFilenames;
+	String optFilename;
 	ShortString16 format;
+	String outputFolder;
 
-	options.add(optFilenames, 'i', "input", "The input grammar");
-	options.add(settings.namespaceName, 'n', "namespace", "The target namespace (mandatory)");
+	options.add(optFilename, 'i', "input", "The input grammar");
+	options.add(settings.namespaceName, 'n', "namespace", "The target namespace (required)");
 	options.add(format, 'f', "format", "Output format [cpp]");
-	options.remainingArguments(optFilenames);
+	options.add(outputFolder, 'o', "output", "Output folder (required)");
 
 	if (not options(argc, argv))
 	{
@@ -121,9 +124,15 @@ static inline void ParseCommandLine(int argc, char** argv, Settings& settings)
 		exit(0);
 	}
 
-	if (optFilenames.empty())
+	if (not IO::File::Exists(optFilename))
 	{
-		logs.error() << "please provide a grammar file";
+		logs.error() << "input grammar file not found: '" << optFilename << "'";
+		exit(EXIT_FAILURE);
+	}
+
+	if (outputFolder.empty())
+	{
+		logs.error() << "an output folder is required";
 		exit(EXIT_FAILURE);
 	}
 
@@ -146,9 +155,8 @@ static inline void ParseCommandLine(int argc, char** argv, Settings& settings)
 		exit(EXIT_FAILURE);
 	}
 
-	settings.filenames.resize((uint) optFilenames.size());
-	for (uint i = 0; i != (uint) optFilenames.size(); ++i)
-		IO::Canonicalize(settings.filenames[i], optFilenames[i]);
+	IO::Canonicalize(settings.filename, optFilename);
+	IO::Canonicalize(settings.outputFolder, outputFolder);
 }
 
 
@@ -170,43 +178,32 @@ int main(int argc, char** argv)
 	grammar.onWarning.connect(& ParseWarning);
 	grammar.onError.connect(& ParseError);
 
-	String output;
-
-	for (uint i = 0; i != (uint) settings.filenames.size(); ++i)
+	// generate C++ classes from grammar file
+	if (grammar.loadFromFile(settings.filename))
 	{
-		const String& url = settings.filenames[i];
+		String barname;
+		IO::ExtractFileName(barname, settings.filename);
 
-		if (not IO::File::Exists(url))
+		String output;
+		output << settings.outputFolder << IO::Separator << barname;
+		IO::ReplaceExtension(output, "."); // remove extension
+
+		switch (settings.format)
 		{
-			logs.error() << "error: \"" << url << "\" file not found";
-			hasError = true;
-			continue;
-		}
-
-		if (grammar.loadFromFile(url))
-		{
-			//std::cout << grammar << std::endl;
-
-			output = url;
-			IO::ReplaceExtension(output, ".");
-
-			switch (settings.format)
+			case Settings::sfCPP:
 			{
-				case Settings::sfCPP:
-				{
-					logs.info() << "generating c++ parser from " << url;
-					grammar.exportToCPP(output, settings.namespaceName);
-					break;
-				}
+				logs.info() << "generating c++ parser from " << settings.filename;
+				logs.info() << "c++ classes output: " << output;
+				grammar.exportToCPP(output, settings.namespaceName);
+				break;
 			}
 		}
-		else
-		{
-			logs.error() << "impossible to load the grammar " << url;
-			hasError = true;
-		}
 	}
-
-	return (not hasError) ? 0 : EXIT_FAILURE;
+	else
+	{
+		logs.error() << "impossible to load the grammar " << settings.filename;
+		return EXIT_FAILURE;
+	}
+	return 0;
 }
 
