@@ -272,7 +272,9 @@ namespace PEG
 			h << "		//! Default constructor\n";
 			h << "		Node();\n";
 			h << "		//! Default constructor with a pre-defined rule\n";
-			h << "		Node(enum ASTRule);\n";
+			h << "		explicit Node(enum ASTRule);\n";
+			h << "		//! Default constructor with a pre-defined rule and a given text\n";
+			h << "		Node(enum ASTRule, const AnyString& text);\n";
 			h << "		//! Copy constructor\n";
 			h << "		Node(const Node& rhs);\n";
 			h << "		//! Destructor\n";
@@ -440,6 +442,17 @@ namespace PEG
 			hxx << "		: rule(rule)\n";
 			hxx << "		, offset()\n";
 			hxx << "		, offsetEnd()\n";
+			hxx << "		#if " << headerGuardID << "_HAS_METADATA != 0\n";
+			hxx << "		, metadata()\n";
+			hxx << "		#endif\n";
+			hxx << "	{}\n";
+			hxx << '\n';
+			hxx << '\n';
+			hxx << "	inline Node::Node(enum ASTRule rule, const AnyString& text)\n";
+			hxx << "		: rule(rule)\n";
+			hxx << "		, offset()\n";
+			hxx << "		, offsetEnd()\n";
+			hxx << "		, text(text)\n";
 			hxx << "		#if " << headerGuardID << "_HAS_METADATA != 0\n";
 			hxx << "		, metadata()\n";
 			hxx << "		#endif\n";
