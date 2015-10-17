@@ -11,4 +11,3 @@ endif()
 if (YUNI_MODULE_DOCUMENTATION)
 	#add_subdirectory(yuni-docmake)
 endif()
-
