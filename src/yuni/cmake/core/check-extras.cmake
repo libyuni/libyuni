@@ -1,5 +1,5 @@
 
-# Macro va_copy
+# macro va_copy
 check_cxx_source_compiles("#include <stdarg.h>
 	int main() {va_list a, b; va_copy(a, b);}" YUNI_HAS_VA_COPY)
 
@@ -23,7 +23,6 @@ if (NOT MSVC)
 else()
 	check_c_compiler_flag("/nowarn" YUNI_HAS_VS_NOWARNING)
 endif()
-
 
 
 # posix_fallocate - Linux only
@@ -55,5 +54,3 @@ if (UNIX)
 			return 0;
 		} " YUNI_HAS_PTHREAD_ATTR_SETSTACKSIZE)
 endif()
-
-

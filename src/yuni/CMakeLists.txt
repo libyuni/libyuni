@@ -45,7 +45,7 @@ if(YUNI_MODULE_CORE)
 		add_definitions("-DYUNI_CONFIG_H_LOCATION=\"${CMAKE_CURRENT_BINARY_DIR}/config.h\"")
 	endif()
 	# Core
-	include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/core.cmake")
+	include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/core/core.cmake")
 endif()
 
 if(YUNI_MODULE_VM)

@@ -1,5 +1,3 @@
-
-
 YMESSAGE_MODULE("Core")
 
 # Paths for yuni-config, embedded version.
@@ -38,14 +36,13 @@ endif()
 
 
 
-
 set(CMAKE_REQUIRED_FLAGS_PREVIOUS ${CMAKE_REQUIRED_FLAGS})
 set(CMAKE_REQUIRED_FLAGS "")
 
-include(cmake/core/check-includes.cmake)
-include(cmake/core/check-c++11.cmake)
-include(cmake/core/check-stdint.cmake)
-include(cmake/core/check-extras.cmake)
+include("${CMAKE_CURRENT_LIST_DIR}/check-includes.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/check-cxx11.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/check-stdint.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/check-extras.cmake")
 
 set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS_PREVIOUS})
 
@@ -563,5 +560,3 @@ install(FILES io/directory/info/iterator.inc.hpp
 install(FILES "${YUNI_LIBYUNI_CONFIG_TARGET_INIFILE}"
 	COMPONENT ${YUNICOMPONENT_CORE}
 	DESTINATION include/${YUNI_VERSIONED_INST_PATH}/ RENAME "yuni.config.${YUNI_LIBYUNI_CONFIG_COMPILER}")
-
-

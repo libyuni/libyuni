@@ -1,6 +1,5 @@
-
 if (NOT MSVC)
-	if (NOT "${YUNI_CPP_STD}" STREQUAL "")
+	if (NOT "x${YUNI_CPP_STD}" STREQUAL "x")
 		LIBYUNI_CONFIG_CFLAG("both" "core" "${YUNI_CPP_STD}")
 		set(CMAKE_REQUIRED_FLAGS "${YUNI_CPP_STD}")
 	endif()
@@ -161,6 +160,9 @@ check_cxx_source_compiles("
 
 
 # constexpr
+#if (MSVC14) # Visual Studio 2015
+#	set(YUNI_HAS_CONSTEXPR TRUE CACHE INTERNAL "" FORCE)
+#endif()
 #if(YUNI_HAS_GCC_CPP0X_SUPPORT)
 #	set(CMAKE_REQUIRED_FLAGS_SAVE ${CMAKE_REQUIRED_FLAGS})
 #	set(CMAKE_REQUIRED_FLAGS "${YUNI_GCC_CPP0X_FLAG}")
@@ -183,5 +185,3 @@ check_cxx_source_compiles("
 #		int main() {return 0;}"
 #		YUNI_HAS_CONSTEXPR)
 #endif()
-
-
