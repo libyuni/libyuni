@@ -533,7 +533,7 @@ install(
 )
 # Install other core-related base files
 install(FILES
-	Doxygen.txt
+	doxygen.txt
 	doxygen.h
 	platform.h
 	yuni.h
