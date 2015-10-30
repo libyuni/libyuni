@@ -74,7 +74,23 @@ namespace Process
 	bool Execute(MainLoopT& mainloop, const AnyString& commandline, uint timeout = 0u);
 
 
+	/*!
+	** \brief Execute a command and capture the outputs
+	**
+	** \param commandline An arbitrary command line (example: "ls -l")
+	** \param timeout Maximum execution time allowed for the command (in seconds - 0 means infinite)
+	** \return True if the command has been executed and if the exit status is equal to 0
+	*/
+	bool System(String* cout, String* cerr, const AnyString& commandline, uint timeout = 0u);
 
+	/*!
+	** \brief Execute a command and capture the outputs
+	**
+	** \param commandline An arbitrary command line (example: "ls -l")
+	** \param timeout Maximum execution time allowed for the command (in seconds - 0 means infinite)
+	** \return The command output (cout)
+	*/
+	String System(const AnyString& commandline, bool trim = true, uint timeout = 0u);
 
 
 

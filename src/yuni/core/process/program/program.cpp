@@ -735,10 +735,46 @@ namespace Process
 	}
 
 
+	bool Execute(const AnyString& commandLine, uint timeout)
+	{
+		Program program;
+		program.commandLine(commandLine);
+		return (program.execute(timeout)) ? (0 == program.wait()) : false;
+	}
+
+
+	bool System(String* cout, String* cerr, const AnyString& commandline, uint timeout)
+	{
+		Program program;
+		program.commandLine(commandline);
+
+		CaptureOutput* output = new CaptureOutput();
+		program.stream(output);
+		bool success = program.execute(timeout) and (0 == program.wait());
+
+		if (cout)
+			*cout = output->cout;
+		if (cerr)
+			*cerr = output->cerr;
+		return success;
+	}
+
+
+	String System(const AnyString& commandline, bool trim, uint timeout)
+	{
+		Program program;
+		program.commandLine(commandline);
+
+		CaptureOutput* output = new CaptureOutput();
+		program.stream(output);
+		program.execute(timeout) and (0 == program.wait());
+		if (trim)
+			output->cout.trim();
+		return output->cout;
+	}
 
 
 
 
 } // namespace Process
 } // namespace Yuni
-

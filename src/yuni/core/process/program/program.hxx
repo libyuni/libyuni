@@ -55,13 +55,6 @@ namespace Process
 		return (program.execute(mainloop, timeout)) ? (0 == program.wait()) : false;
 	}
 
-	inline bool Execute(const AnyString& commandLine, uint timeout)
-	{
-		Program program;
-		program.commandLine(commandLine);
-		return (program.execute(timeout)) ? (0 == program.wait()) : false;
-	}
-
 
 
 
