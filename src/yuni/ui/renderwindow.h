@@ -312,7 +312,6 @@ namespace UI
 		void doCharInput(const AnyString& str);
 		//@}
 
-
 	protected:
 		//! Text displayed in the title bar
 		String pTitle;

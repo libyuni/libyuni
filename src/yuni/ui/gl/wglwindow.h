@@ -87,8 +87,11 @@ namespace UI
 		//! Minimize the window
 		virtual void maximize() override { if (wsMaximized != pState) ::ShowWindow(pHWnd, SW_MAXIMIZE); }
 
-		//! Minimize the window
+		//! Restore the window when minimized
 		virtual void restore() override { if (wsNormal != pState) ::ShowWindow(pHWnd, SW_RESTORE); }
+
+		//! Force a window resize event
+		virtual void resize(uint width, uint height) override;
 
 		//! Swap front and back buffers (OS-specific)
 		virtual void swapBuffers() override { ::SwapBuffers(pHDC); }
@@ -159,6 +162,8 @@ namespace UI
 
 		//! Initialize the pixel format for multi-sampling
 		bool initMultisamplePixelFormat(const PIXELFORMATDESCRIPTOR& pfd, bool set);
+
+		void internalResize(uint width, uint height);
 
 	protected:
 		//! Static list of registered GDI windows

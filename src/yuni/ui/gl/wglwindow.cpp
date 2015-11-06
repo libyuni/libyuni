@@ -474,7 +474,10 @@ namespace UI
 
 			case WM_SIZE:
 			{
-				window->resize(LOWORD(lParam), HIWORD(lParam));
+				auto width = LOWORD(lParam);
+				auto height = HIWORD(lParam);
+				if (width != window->width() || height != window->height())
+					window->internalResize(width, height);
 				break;
 			}
 
@@ -588,7 +591,7 @@ namespace UI
 		{
 			found = (deviceMode.dmPelsWidth == (DWORD)pResWidth) &&
 				(deviceMode.dmPelsHeight == (DWORD)pResHeight) &&
-				(deviceMode.dmBitsPerPel == (DWORD)pBitDepth);
+				(deviceMode.dmBitsPerPel >= (DWORD)pBitDepth);
 		}
 
 		if (not found)
@@ -831,7 +834,7 @@ namespace UI
 		::SetFocus(pHWnd);
 
 		// Set up our perspective GL screen
-		resize(pWidth, pHeight);
+		internalResize(pWidth, pHeight);
 
 		TRACKMOUSEEVENT tme;
 		tme.cbSize = (DWORD)sizeof(TRACKMOUSEEVENT);
@@ -995,6 +998,22 @@ namespace UI
 			::glEnable(GL_MULTISAMPLE);
 		else
 			::glDisable(GL_MULTISAMPLE);
+	}
+
+
+	void WGLWindow::resize(uint width, uint height)
+	{
+		if (width != this->width() || height != this->height())
+		{
+			internalResize(width, height);
+			::SetWindowPos(pHWnd, nullptr, 0, 0, width, height, SWP_NOMOVE);
+		}
+	}
+
+
+	void WGLWindow::internalResize(uint width, uint height)
+	{
+		GLWindow::resize(width, height);
 	}
 
 
