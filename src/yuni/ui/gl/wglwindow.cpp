@@ -474,7 +474,7 @@ namespace UI
 
 			case WM_SIZE:
 			{
-				window->resize(LOWORD(lParam), HIWORD(lParam));
+				window->internalResize(LOWORD(lParam), HIWORD(lParam));
 				break;
 			}
 
@@ -568,84 +568,33 @@ namespace UI
 
 	bool WGLWindow::enableFullScreen()
 	{
-		::ShowWindow(pHWnd, SW_HIDE);
-
-		// Find out the name of the device this window
-		// is on (this is for multi-monitor setups)
-		::HMONITOR hMonitor = ::MonitorFromWindow(pHWnd, MONITOR_DEFAULTTOPRIMARY);
-		::MONITORINFOEX monitorInfo;
-		::memset(&monitorInfo, 0, sizeof(::MONITORINFOEX));
-		monitorInfo.cbSize = (DWORD)sizeof(::MONITORINFOEX);
-		::GetMonitorInfo(hMonitor, &monitorInfo);
-
-		// Device Mode
-		::DEVMODE deviceMode;
-		::memset(&deviceMode, 0, sizeof(deviceMode));
-		deviceMode.dmSize = (WORD)sizeof(deviceMode);
-
-		bool found;
-		for (int i = 0; not found and ::EnumDisplaySettings(monitorInfo.szDevice, i, &deviceMode); ++i)
+		/*		if (pState == wsMaximized)
 		{
-			found = (deviceMode.dmPelsWidth == (DWORD)pResWidth) &&
-				(deviceMode.dmPelsHeight == (DWORD)pResHeight) &&
-				(deviceMode.dmBitsPerPel == (DWORD)pBitDepth);
-		}
+			::SendMessage(pHWnd, WM_SYSCOMMAND, SC_RESTORE, 0);
+			pState = wsNormal;
+			}*/
+		long savedStyle = ::GetWindowLong(pHWnd, GWL_STYLE);
+		long savedExStyle = ::GetWindowLong(pHWnd, GWL_EXSTYLE);
+		RECT savedRect;
+		::GetWindowRect(pHWnd, &savedRect);
 
-		if (not found)
-		{
-			::ShowWindow(pHWnd, SW_SHOW);
-			return false;
-		}
+		// Set new window style and size.
+		::SetWindowLong(pHWnd, GWL_STYLE,
+			savedStyle & ~(WS_CAPTION | WS_THICKFRAME));
+		::SetWindowLong(pHWnd, GWL_EXSTYLE,
+			savedExStyle & ~(WS_EX_DLGMODALFRAME |
+			WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
 
-		// Only change these 3 fields
-		deviceMode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+		// On expand, if we're given a window_rect, grow to it, otherwise do
+		// not resize.
+		MONITORINFO monitorInfo;
+		monitorInfo.cbSize = sizeof(monitorInfo);
+		::GetMonitorInfo(::MonitorFromWindow(pHWnd, MONITOR_DEFAULTTONEAREST), &monitorInfo);
+		::SetWindowPos(pHWnd, nullptr, monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top,
+			monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left,
+			monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top,
+			SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
 
-		// Try To Set Selected Mode And Get Results.
-		// NOTE: CDS_FULLSCREEN gets rid of Start Bar.
-		int ret = ::ChangeDisplaySettingsEx(nullptr, &deviceMode, nullptr, CDS_FULLSCREEN, nullptr);
-		if (ret != DISP_CHANGE_SUCCESSFUL)
-		{
-			// If the mode fails, use Windowed Mode.
-			std::cerr << "Window init error : The requested full-screen mode is not supported !" << std::endl;
-			switch (ret)
-			{
-				case DISP_CHANGE_BADFLAGS:
-					std::cerr << "!! An invalid set of flags was passed in." << std::endl;
-					break;
-				case DISP_CHANGE_BADMODE:
-					std::cerr << "!! The graphics mode is not supported. " << std::endl;
-					break;
-				case DISP_CHANGE_BADPARAM:
-					std::cerr << "!! An invalid parameter was passed in. This can include an invalid flag or combination of flags. " << std::endl;
-					break;
-				case DISP_CHANGE_FAILED:
-					std::cerr << "!! The display driver failed the specified graphics mode. " << std::endl;
-					break;
-				case DISP_CHANGE_NOTUPDATED:
-					std::cerr << "!! Windows NT/2000/XP: Unable to write settings to the registry. " << std::endl;
-					break;
-				case DISP_CHANGE_RESTART:
-					std::cerr << "!! The computer must be restarted in order for the graphics mode to work. " << std::endl;
-					break;
-			};
-
-			::ShowWindow(pHWnd, SW_SHOW);
-			return false;
-		}
-
-		// Hide mouse pointer
-		::ShowCursor(false);
-
-		// Remove title bar / window borders
-		DWORD dwStyle = WS_POPUP;
-		DWORD dwExStyle = WS_EX_APPWINDOW;
-		::SetWindowLong(pHWnd, GWL_STYLE, dwStyle);
-		::SetWindowLong(pHWnd, GWL_EXSTYLE, dwExStyle);
-
-		// Adjust window to proper size
-		::MoveWindow(pHWnd, 0, 0, pResWidth, pResHeight, true);
-
-		::ShowWindow(pHWnd, SW_SHOW);
 		return true;
 	}
 
@@ -831,7 +780,7 @@ namespace UI
 		::SetFocus(pHWnd);
 
 		// Set up our perspective GL screen
-		resize(pWidth, pHeight);
+		internalResize(pWidth, pHeight);
 
 		TRACKMOUSEEVENT tme;
 		tme.cbSize = (DWORD)sizeof(TRACKMOUSEEVENT);
@@ -995,6 +944,22 @@ namespace UI
 			::glEnable(GL_MULTISAMPLE);
 		else
 			::glDisable(GL_MULTISAMPLE);
+	}
+
+
+	void WGLWindow::resize(uint width, uint height)
+	{
+		if (width != this->width() || height != this->height())
+		{
+			internalResize(width, height);
+			::SetWindowPos(pHWnd, nullptr, 0, 0, width, height, SWP_NOMOVE);
+		}
+	}
+
+
+	void WGLWindow::internalResize(uint width, uint height)
+	{
+		GLWindow::resize(width, height);
 	}
 
 
