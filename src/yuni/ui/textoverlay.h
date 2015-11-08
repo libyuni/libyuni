@@ -114,6 +114,9 @@ namespace UI
 		//! Current height of the internal texture
 		float height() const;
 
+		//! Text ascent (Y bearing = distance from the top of the text to the baseline)
+		int ascent() const { return pAscent; }
+
 		//! Modify the color used
 		void color(float r, float g, float b);
 		void color(float r, float g, float b, float a);
