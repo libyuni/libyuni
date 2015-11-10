@@ -119,6 +119,9 @@ namespace UI
 		//! Is the window full screen ?
 		virtual bool fullScreen() const override;
 
+		//! Force a window resize event
+		virtual void resize(uint width, uint height) override;
+
 	private:
 		/*!
 		** \brief Callback method for windows events
@@ -163,6 +166,7 @@ namespace UI
 		//! Initialize the pixel format for multi-sampling
 		bool initMultisamplePixelFormat(const PIXELFORMATDESCRIPTOR& pfd, bool set);
 
+		//! Only resize the internal data, this supposes the window is actually already resized
 		void internalResize(uint width, uint height);
 
 	protected:

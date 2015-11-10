@@ -135,6 +135,14 @@ namespace UI
 		//! Overlay management
 		void addOverlay(const TextOverlay::Ptr& text) { pTexts.push_back(text); }
 		void addOverlay(const PictureOverlay::Ptr& picture) { pPictures.push_back(picture); }
+		void removeOverlay(const TextOverlay::Ptr& text)
+		{
+			pTexts.erase(std::remove_if(pTexts.begin(), pTexts.end(),
+				[&text](const TextOverlay::Ptr& removeText) -> bool
+				{
+					return removeText == text;
+				}), pTexts.end());
+		}
 		void clearOverlays() { pTexts.clear(); pPictures.clear(); }
 
 		//! Add a UI control to the view

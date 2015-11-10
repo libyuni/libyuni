@@ -109,7 +109,7 @@ namespace UI
 		// If necessary, offset by the Ascent to reach the text baseline
 		if (pDrawOnBaseline)
 		{
-			yPos += (float)pAscent;
+			yPos -= (float)pAscent;
 		}
 		// Ensure dimensions are pixel-aligned
 		float xPos = (float)(int)pX;
