@@ -1745,7 +1745,7 @@ namespace Yuni
 				++count;
 			}
 		}
-		return 0;
+		return count;
 	}
 
 
