@@ -186,11 +186,32 @@ namespace UI
 			invalidate();
 		}
 		//! Scale to reach a given width, keeping the aspect ratio intact
-		void scaleOnWidth(float newWidth) { pSize(newWidth, pSize.y * newWidth / pSize.x ); invalidate(); }
+		void scaleOnWidth(float newWidth)
+		{
+			if (not Math::Equals(newWidth, pSize.x))
+			{
+				pSize(newWidth, pSize.y * newWidth / pSize.x);
+				invalidate();
+			}
+		}
 		//! Scale to reach a given height, keeping the aspect ratio intact
-		void scaleOnHeight(float newHeight) { pSize(pSize.x * newHeight / pSize.y, newHeight); invalidate(); }
+		void scaleOnHeight(float newHeight)
+		{
+			if (not Math::Equals(newHeight, pSize.y))
+			{
+				pSize(pSize.x * newHeight / pSize.y, newHeight);
+				invalidate();
+			}
+		}
 		//! Scale both width and height by a given factor
-		void scale(float factor) { pSize(pSize.x * factor, pSize.y * factor); invalidate(); }
+		void scale(float factor)
+		{
+			if (not Math::Equals(factor, 1.0f) and not Math::Equals(factor, 0.0f))
+			{
+				pSize(pSize.x * factor, pSize.y * factor);
+				invalidate();
+			}
+		}
 
 		//! Cursor used when hovering the control
 		// const Cursor& cursor() const;

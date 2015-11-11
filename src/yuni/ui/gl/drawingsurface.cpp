@@ -508,10 +508,15 @@ namespace UI
 		float yStart = y;
 		float xEnd = xStart + overlayWidth;
 		float yEnd = yStart + overlayHeight;
+		float maxXBound = xStart + texWidth;
+		float maxYBound = yStart + texHeight;
 		switch (dispMode)
 		{
 			case dmStretch:
-				// Nothing to do, coordinates are perfect
+				// We do not want Bounds to interfere with display, so increase them properly
+				maxXBound = xEnd;
+				maxYBound = yEnd;
+				// Nothing to do on coordinates are perfect
 				break;
 			case dmNone:
 			case dmOffset:
@@ -556,7 +561,7 @@ namespace UI
 
 		pImpl->pictureShader->bindUniform("FillColor", fillColor);
 		pImpl->pictureShader->bindUniform("Opacity", imageOpacity);
-		pImpl->pictureShader->bindUniform("Bounds", xStart, yStart, texWidth + xStart, texHeight + yStart);
+		pImpl->pictureShader->bindUniform("Bounds", xStart, yStart, maxXBound, maxYBound);
 		::glBindTexture(GL_TEXTURE_2D, texture->id());
 		// Tex coords
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
