@@ -251,7 +251,10 @@ namespace Media
 	inline void Stream<TypeT>::rewind()
 	{
 		if (pFrame)
+		{
 			::av_free(pFrame);
+			pFrame = nullptr;
+		}
 		::av_seek_frame(pFormat, pIndex, 0, 0);
 	}
 
@@ -306,6 +309,11 @@ namespace Media
 		assert(pFormat);
 		assert(pFormat->streams[pIndex]);
 
+		auto rational = ::av_guess_frame_rate(pFormat, pFormat->streams[pIndex], pFrame);
+		if (rational.den > 0.0f && rational.num > 0.0f)
+			return (float)rational.num / rational.den;
+
+		// Fallback methods
 		auto* avStream = pFormat->streams[pIndex];
 
 		float den = (float)avStream->avg_frame_rate.den;
