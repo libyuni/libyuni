@@ -132,7 +132,13 @@ namespace UI
 	}
 
 
-	void GLXWindow::setIcon(const AnyString& path)
+	void GLXWindow::icon(const AnyString& path)
+	{
+		// TODO
+	}
+
+
+	void GLXWindow::title(const AnyString& path)
 	{
 		// TODO
 	}

@@ -887,7 +887,7 @@ namespace UI
 	}
 
 
-	void WGLWindow::setIcon(const AnyString& path)
+	void WGLWindow::icon(const AnyString& path)
 	{
 		// Load 32x32 icon (alt-tab menu)
 		WString wstr(path);
@@ -903,6 +903,13 @@ namespace UI
 			::SendMessage(pHWnd, WM_SETICON, ICON_SMALL, (LPARAM)hIconSmall);
 		else
 			std::cerr << "Error : Could not load small icon : \"" << path << "\"" << std::endl;
+	}
+
+
+	void WGLWindow::title(const AnyString& title)
+	{
+		if (!::SetWindowText(pHWnd, WString{ title }.c_str()))
+			std::cerr << "Error : Could not change window title to : \"" << title << "\"" << std::endl;
 	}
 
 

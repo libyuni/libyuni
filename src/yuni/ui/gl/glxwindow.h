@@ -90,7 +90,10 @@ namespace UI
 		virtual void refreshAndSwap() override;
 
 		//! Set window icon
-		virtual void setIcon(const AnyString& path) override;
+		virtual void icon(const AnyString& path) override;
+
+		//! Set window title
+		virtual void title(const AnyString& path) override;
 
 		//! Enable / Disable vertical sync
 		virtual void vsync(bool enable) override;

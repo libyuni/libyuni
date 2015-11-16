@@ -220,7 +220,12 @@ namespace UI
 		virtual void swapBuffers() = 0;
 
 		//! Set window icon (OS-specific)
-		virtual void setIcon(const AnyString& path) = 0;
+		virtual void icon(const AnyString& path) = 0;
+
+		//! Set window title (OS-specific)
+		virtual void title(const AnyString& path) = 0;
+		//! Get window title
+		const String& title() const { return pTitle; }
 
 		//! Enable / Disable vertical sync (OS-specific)
 		virtual void vsync(bool enable) = 0;
