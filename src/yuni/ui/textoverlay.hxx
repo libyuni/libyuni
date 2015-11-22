@@ -113,7 +113,6 @@ namespace UI
 
 	inline TextOverlay& TextOverlay::operator = (const AnyString& newText)
 	{
-		pModified = true;
 		pPrevText = pText;
 		pText = newText;
 		return *this;
@@ -121,7 +120,6 @@ namespace UI
 
 	inline String& TextOverlay::operator << (const AnyString& newText)
 	{
-		pModified = true;
 		pPrevText = pText;
 		return pText << newText;
 	}
@@ -129,7 +127,6 @@ namespace UI
 
 	inline String& TextOverlay::clear()
 	{
-		pModified = true;
 		pPrevText = pText;
 		return pText.clear();
 	}
@@ -137,8 +134,6 @@ namespace UI
 
 	inline String& TextOverlay::text()
 	{
-		// We are not sure that it will be modified, but it will probably be
-		pModified = true;
 		pPrevText = pText;
 		return pText;
 	}
@@ -212,6 +207,7 @@ namespace UI
 
 	inline void TextOverlay::antiAliased(bool newValue)
 	{
+		pModified = true;
 		pAntiAliased = newValue;
 	}
 
