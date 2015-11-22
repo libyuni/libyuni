@@ -95,21 +95,35 @@ namespace Media
 
 	bool Frame::valid() const
 	{
-		assert(pImpl);
+		assert(pImpl && pImpl->frame);
 		return pImpl->frame and pImpl->frame->linesize[0] > 0
 			and pImpl->frame->linesize[1] > 0 and pImpl->frame->linesize[2] > 0;
+	}
+
+	bool Frame::isVideo() const
+	{
+		assert(pImpl && pImpl->frame);
+		return pImpl->frame->width > 0;
+	}
+
+	bool Frame::isAudio() const
+	{
+		assert(pImpl && pImpl->frame);
+		return pImpl->frame->nb_samples > 0;
 	}
 
 
 	uint Frame::width() const
 	{
 		assert(pImpl->frame);
+		assert(isVideo());
 		return pImpl->frame->width;
 	}
 
 	uint Frame::height() const
 	{
 		assert(pImpl->frame);
+		assert(isVideo());
 		return pImpl->frame->height;
 	}
 
@@ -117,12 +131,14 @@ namespace Media
 	uint8* Frame::audioData()
 	{
 		assert(pImpl->frame);
+		assert(isAudio());
 		return pImpl->frame->extended_data[0];
 	}
 
 	uint Frame::audioSize() const
 	{
 		assert(pImpl->frame);
+		assert(isAudio());
 		return pImpl->frame->linesize[0];
 	}
 
@@ -130,18 +146,21 @@ namespace Media
 	uint8* Frame::dataY() const
 	{
 		assert(pImpl->frame);
+		assert(isVideo());
 		return pImpl->frame->data[0];
 	}
 
 	uint8* Frame::dataCb() const
 	{
 		assert(pImpl->frame);
+		assert(isVideo());
 		return pImpl->frame->data[1];
 	}
 
 	uint8* Frame::dataCr() const
 	{
 		assert(pImpl->frame);
+		assert(isVideo());
 		return pImpl->frame->data[2];
 	}
 
@@ -149,18 +168,21 @@ namespace Media
 	uint Frame::lineSizeY() const
 	{
 		assert(pImpl->frame);
+		assert(isVideo());
 		return pImpl->frame->linesize[0];
 	}
 
 	uint Frame::lineSizeCb() const
 	{
 		assert(pImpl->frame);
+		assert(isVideo());
 		return pImpl->frame->linesize[1];
 	}
 
 	uint Frame::lineSizeCr() const
 	{
 		assert(pImpl->frame);
+		assert(isVideo());
 		return pImpl->frame->linesize[0];
 	}
 
@@ -168,6 +190,12 @@ namespace Media
 	double Frame::timestamp() const
 	{
 		return pTimestamp;
+	}
+
+	uint Frame::frameNumber() const
+	{
+		assert(isVideo());
+		return ::av_frame_get_best_effort_timestamp(pImpl->frame);
 	}
 
 

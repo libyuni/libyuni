@@ -178,17 +178,7 @@ namespace Media
 				// If the frame is finished (should be in one shot)
 				if (frameFinished)
 				{
-					if ((uint64)AV_NOPTS_VALUE == (uint64)packet->dts and pFrame->opaque
-						&& (uint64)AV_NOPTS_VALUE != *(uint64*)pFrame->opaque)
-						pCrtPts = (double)*(uint64*)pFrame->opaque;
-					else if ((uint64)AV_NOPTS_VALUE != (uint64)packet->dts)
-						pCrtPts = (double)packet->dts;
-					else
-						pCrtPts = 0.0;
-					// pCrtPts = ::av_frame_get_best_effort_timestamp(pFrame);
-					double timeRatio = ::av_q2d(pFormat->streams[pIndex]->time_base);
-					pCrtPts *= timeRatio;
-					pCrtPts -= (pFormat->streams[pIndex]->start_time * timeRatio);
+					pCrtPts = ::av_frame_get_best_effort_timestamp(pFrame) / fps();
 					break;
 				}
 			}
@@ -304,7 +294,9 @@ namespace Media
 	template<StreamType TypeT>
 	inline float Stream<TypeT>::fps() const
 	{
-		YUNI_STATIC_ASSERT(IsVideo, NotAccessibleInAudio);
+		if (!IsVideo)
+			return 0.0f;
+
 		assert(pCodec);
 		assert(pFormat);
 		assert(pFormat->streams[pIndex]);

@@ -84,6 +84,12 @@ namespace Media
 		//! Is the frame valid ?
 		bool valid() const;
 
+		//! Does the frame contain video data ?
+		bool isVideo() const;
+
+		//! Does the frame contain audio data ?
+		bool isAudio() const;
+
 		//! Image width (Video only !)
 		uint width() const;
 		//! Image height (Video only !)
@@ -114,6 +120,8 @@ namespace Media
 
 		//! Presentation time stamp for this frame
 		double timestamp() const;
+
+		uint frameNumber() const;
 
 	private:
 		//! Read a frame from the stream
