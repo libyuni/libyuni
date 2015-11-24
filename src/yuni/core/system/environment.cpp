@@ -39,7 +39,7 @@
 */
 #include "environment.h"
 #include "windows.hdr.h"
-#include "../traits/cstring.h"
+#include "../../string.h"
 #ifdef YUNI_HAS_STDLIB_H
 #	include <stdlib.h>
 #endif
@@ -117,6 +117,53 @@ namespace Environment
 
 
 
+	bool ReadAsBool(const AnyString& name)
+	{
+		#ifdef YUNI_OS_WINDOWS
+		{
+			String out;
+			ReadImpl(name, out, false);
+			if (not out.empty())
+				return out.to<bool>();
+		}
+		#else
+		{
+			# ifdef YUNI_HAS_STDLIB_H
+			AnyString value = ::getenv(name.c_str());
+			if (not value.empty())
+				return value.to<bool>();
+			# else
+			#error not implemented
+			# endif
+		}
+		#endif
+		return false;
+	}
+
+
+	yint64 ReadAsInt64(const AnyString& name, yint64 defvalue)
+	{
+		#ifdef YUNI_OS_WINDOWS
+		{
+			String out;
+			ReadImpl(name, out, false);
+			if (not out.empty())
+				return out.to<yint64>();
+		}
+		#else
+		{
+			# ifdef YUNI_HAS_STDLIB_H
+			AnyString value = ::getenv(name.c_str());
+			if (not value.empty())
+				return value.to<yint64>();
+			# else
+			#error not implemented
+			# endif
+		}
+		#endif
+		return defvalue;
+	}
+
 
 	String Read(const AnyString& name)
 	{
@@ -131,7 +178,7 @@ namespace Environment
 			# ifdef YUNI_HAS_STDLIB_H
 			return ::getenv(name.c_str());
 			# else
-			#error not implemented			
+			#error not implemented
 			# endif
 		}
 		#endif

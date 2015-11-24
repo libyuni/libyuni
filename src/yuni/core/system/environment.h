@@ -51,6 +51,22 @@ namespace Environment
 {
 
 	/*!
+	** \brief Get a value from the current environment and convert it as a bool
+	**
+	** \param name Name of the variable
+	** \return true if present and equal to "1", "on" or "true"
+	*/
+	YUNI_DECL bool ReadAsBool(const AnyString& name);
+
+	/*!
+	** \brief Get a value from the current environment and convert it as an integer
+	**
+	** \param name Name of the variable
+	** \param defvalue The default value to take if the value of the variable is empty
+	*/
+	YUNI_DECL yint64 ReadAsInt64(const AnyString& name, yint64 defvalue = 0);
+
+	/*!
 	** \brief Get a value from the current environment
 	**
 	** \param name Name of the variable
