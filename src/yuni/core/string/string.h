@@ -110,7 +110,7 @@ namespace Yuni
 	** Example for iterating through all characters (the recommended way)
 	** \code
 	** String t = "こんにちは";
-	** const String::const_utf8iterator end = t.utf8end();
+	** const String::null_iterator end = t.utf8end();
 	** for (String::const_utf8iterator i = t.utf8begin(); i != end; ++i)
 	**	std::cout << "char at offset " << i.offset() << ": " << *i << std::endl;
 	** \endcode
