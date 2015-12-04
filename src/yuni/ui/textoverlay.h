@@ -47,6 +47,7 @@
 # include "../core/color/rgba.h"
 # include <vector>
 # include "ftfont.h"
+# include "pictureoverlay.h"
 # include "gl/materialsurface.h"
 # include "gl/shaderprogram.h"
 # include "gl/texture.h"
@@ -146,6 +147,9 @@ namespace UI
 		float x() const;
 		//! Get the Y coordinate
 		float y() const;
+
+		//! Convert to a new picture overlay (e.g. for resizing)
+		PictureOverlay::Ptr toPicture() const;
 
 	private:
 		//! Text to display

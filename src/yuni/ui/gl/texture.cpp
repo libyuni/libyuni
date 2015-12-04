@@ -371,6 +371,16 @@ namespace Gfx3D
 	}
 
 
+	Texture::Ptr Texture::Copy(const Texture::Ptr& other, bool mipmaps)
+	{
+		Texture::Ptr newTex = New3D(other->width(), other->height(), other->depth(),
+			other->colorDepth(), other->type(), nullptr, mipmaps);
+		::glCopyTexImage2D(GL_TEXTURE_2D, 0, DepthToGLEnumInternal(other->colorDepth()), 0, 0,
+			other->width(), other->height(), 0);
+		return newTex;
+	}
+
+
 	Texture::Ptr Texture::NewMS(uint width, uint height, uint colorDepth,
 		DataType type, uint samples, const uint8* /*data*/)
 	{
@@ -392,6 +402,8 @@ namespace Gfx3D
 
 		return new Texture(id, width, height, colorDepth, type);
 	}
+
+
 
 
 	Texture::Texture(ID id, uint width, uint height, uint colorDepth, DataType type):

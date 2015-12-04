@@ -115,6 +115,12 @@ namespace UI
 		pHeight = height;
 	}
 
+	inline void PictureOverlay::scale(float factor)
+	{
+		pWidth = (uint)((float)pWidth * factor);
+		pHeight = (uint)((float)pHeight * factor);
+	}
+
 
 	inline unsigned int PictureOverlay::width() const
 	{

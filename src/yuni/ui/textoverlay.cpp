@@ -207,6 +207,12 @@ namespace UI
 	}
 
 
+	PictureOverlay::Ptr TextOverlay::toPicture() const
+	{
+		return new PictureOverlay(Gfx3D::Texture::Copy(pTexture), (int)pX, (int)pY);
+	}
+
+
 
 } // namespace UI
 } // namespace Yuni

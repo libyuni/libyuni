@@ -106,6 +106,9 @@ namespace Gfx3D
 		//! Load texture from encoded data in memory
 		static Texture::Ptr LoadFromMemory(uint length, const uint8* data);
 
+		//! Copy a texture by creating a new one and copying the data to it
+		static Texture::Ptr Copy(const Texture::Ptr& other, bool mipmaps = true);
+
 		//! Release several OpenGL textures at once
 		static void ReleaseGLTextures(uint nbTextures, uint* textures);
 

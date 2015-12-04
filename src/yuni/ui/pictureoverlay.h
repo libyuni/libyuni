@@ -92,6 +92,9 @@ namespace UI
 		//! Set the size of the picture
 		void resize(uint width, uint height);
 
+		//! Scale both dimensions by a factor
+		void scale(float factor);
+
 		//! Width of the picture (in pixels)
 		uint width() const;
 		//! Height of the picture (in pixels)
