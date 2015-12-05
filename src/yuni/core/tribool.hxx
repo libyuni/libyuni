@@ -171,9 +171,9 @@ namespace Yuni
 	{
 		switch (pValue.flags[0])
 		{
-			case 0:  out.write("false", 5);
-			case 1:  out.write("true", 4);
-			default: out.write("indeterminate", 13);
+			case 0:  out.write("false", 5); break;
+			case 1:  out.write("true", 4); break;
+			default: out.write("indeterminate", 13); break;
 		}
 	}
 
