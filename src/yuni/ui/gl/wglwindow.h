@@ -183,6 +183,11 @@ namespace UI
 		HDC pHDC;
 		HGLRC pHRC;
 
+		long pPrevStyle;
+		long pPrevExStyle;
+		bool pPrevMaximized;
+		RECT pPrevRect;
+
 		//! True if the window has already been created with a MultiSampling pixel format.
 		bool pHasMSAASupport;
 

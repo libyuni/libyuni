@@ -568,21 +568,22 @@ namespace UI
 
 	bool WGLWindow::enableFullScreen()
 	{
-		/*		if (pState == wsMaximized)
+		if (pState == wsMaximized)
 		{
+			pPrevMaximized = true;
 			::SendMessage(pHWnd, WM_SYSCOMMAND, SC_RESTORE, 0);
-			pState = wsNormal;
-			}*/
-		long savedStyle = ::GetWindowLong(pHWnd, GWL_STYLE);
-		long savedExStyle = ::GetWindowLong(pHWnd, GWL_EXSTYLE);
-		RECT savedRect;
-		::GetWindowRect(pHWnd, &savedRect);
+		}
+		else
+			pPrevMaximized = false;
+		pPrevStyle = ::GetWindowLong(pHWnd, GWL_STYLE);
+		pPrevExStyle = ::GetWindowLong(pHWnd, GWL_EXSTYLE);
+		::GetWindowRect(pHWnd, &pPrevRect);
 
 		// Set new window style and size.
 		::SetWindowLong(pHWnd, GWL_STYLE,
-			savedStyle & ~(WS_CAPTION | WS_THICKFRAME));
+			pPrevStyle & ~(WS_CAPTION | WS_THICKFRAME));
 		::SetWindowLong(pHWnd, GWL_EXSTYLE,
-			savedExStyle & ~(WS_EX_DLGMODALFRAME |
+			pPrevExStyle & ~(WS_EX_DLGMODALFRAME |
 			WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
 
 		// On expand, if we're given a window_rect, grow to it, otherwise do
@@ -601,38 +602,18 @@ namespace UI
 
 	bool WGLWindow::disableFullScreen()
 	{
-		::ShowWindow(pHWnd, SW_HIDE);
-
-		// Find out the name of the device this window
-		// is on (this is for multi-monitor setups)
-		::HMONITOR hMonitor = ::MonitorFromWindow(pHWnd, MONITOR_DEFAULTTOPRIMARY);
-		::MONITORINFOEX monitorInfo;
-		::memset(&monitorInfo, 0, sizeof(::MONITORINFOEX));
-		monitorInfo.cbSize = (DWORD)sizeof(::MONITORINFOEX);
-		::GetMonitorInfo(hMonitor, &monitorInfo);
-
-		// Restore the display resolution
-		if (::ChangeDisplaySettingsEx(monitorInfo.szDevice, nullptr, nullptr, 0, nullptr) != DISP_CHANGE_SUCCESSFUL)
-		{
-			::ShowWindow(pHWnd, SW_SHOW);
-			return false;
-		}
-
-		pFullScreen = false;
-
-		// Show mouse pointer
-		::ShowCursor(true);
-
 		// Reset the window style
-		DWORD dwStyle = WS_OVERLAPPEDWINDOW;
-		DWORD dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
-		::SetWindowLong(pHWnd, GWL_STYLE, dwStyle);
-		::SetWindowLong(pHWnd, GWL_EXSTYLE, dwExStyle);
+		::SetWindowLong(pHWnd, GWL_STYLE, pPrevStyle);
+		::SetWindowLong(pHWnd, GWL_EXSTYLE, pPrevExStyle);
 
 		// Adjust window to proper size
-		::MoveWindow(pHWnd, pLeft, pTop, pWidth, pHeight, true);
+		::SetWindowPos(pHWnd, nullptr, pPrevRect.left,  pPrevRect.top,
+			pPrevRect.right - pPrevRect.left,
+			pPrevRect.bottom - pPrevRect.top,
+			SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
 
-		::ShowWindow(pHWnd, SW_SHOW);
+		if (pPrevMaximized)
+			::SendMessage(pHWnd, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
 
 		return true;
 	}
