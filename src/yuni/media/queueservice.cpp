@@ -229,11 +229,11 @@ namespace Media
 	///////////////////////////////// Emitters
 
 
-	Emitter::Ptr QueueService::Emitters::get(const AnyString& name)
+	Emitter::Ptr QueueService::Emitters::get(const AnyString& name) const
 	{
 		ThreadingPolicy::MutexLocker locker(*this);
 
-		Emitter::Map::iterator it = pEmitters.find(name);
+		Emitter::Map::const_iterator it = pEmitters.find(name);
 		if (it == pEmitters.end())
 			return nullptr;
 		return it->second;
@@ -400,13 +400,13 @@ namespace Media
 	}
 
 
-	bool QueueService::Emitters::playing(const AnyString& name)
+	bool QueueService::Emitters::playing(const AnyString& name) const
 	{
 		return playing(get(name));
 	}
 
 
-	bool QueueService::Emitters::playing(Emitter::Ptr emitter)
+	bool QueueService::Emitters::playing(Emitter::Ptr emitter) const
 	{
 		if (not emitter)
 			return false;
@@ -414,13 +414,13 @@ namespace Media
 	}
 
 
-	bool QueueService::Emitters::paused(const AnyString& name)
+	bool QueueService::Emitters::paused(const AnyString& name) const
 	{
 		return paused(get(name));
 	}
 
 
-	bool QueueService::Emitters::paused(Emitter::Ptr emitter)
+	bool QueueService::Emitters::paused(Emitter::Ptr emitter) const
 	{
 		if (not emitter)
 			return false;

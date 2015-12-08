@@ -86,7 +86,7 @@ namespace Media
 
 		public:
 			//! Get an emitter
-			Emitter::Ptr get(const AnyString& name);
+			Emitter::Ptr get(const AnyString& name) const;
 
 			//! Add an emitter
 			bool add(const AnyString& name);
@@ -122,14 +122,14 @@ namespace Media
 			float elapsedTime(Emitter::Ptr emitter);
 
 			//! Get whether an emitter is playing
-			bool playing(const AnyString& name);
+			bool playing(const AnyString& name) const;
 			//! Get whether an emitter is playing
-			bool playing(Emitter::Ptr emitter);
+			bool playing(Emitter::Ptr emitter) const;
 
 			//! Get whether an emitter is paused
-			bool paused(const AnyString& name);
+			bool paused(const AnyString& name) const;
 			//! Get whether an emitter is paused
-			bool paused(Emitter::Ptr emitter);
+			bool paused(Emitter::Ptr emitter) const;
 
 			//! Start playback on an emitter
 			bool play(const AnyString& name);
