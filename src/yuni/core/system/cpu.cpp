@@ -71,7 +71,7 @@ namespace CPU
 	{
 		// The number of processors online (capable of running processes)
 		long cpus = sysconf(_SC_NPROCESSORS_ONLN);
-		return (cpus < 1) ? 1 : (uint) cpus;
+		return (cpus < 1) ? 1 : static_cast<uint>(cpus);
 	}
 	#endif
 
@@ -93,4 +93,3 @@ namespace CPU
 } // namespace CPU
 } // namespace System
 } // namespace Yuni
-

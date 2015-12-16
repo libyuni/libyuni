@@ -77,7 +77,7 @@ namespace CString
 	public:
 		static void Perform(CStringT& s, const T* rhs)
 		{
-			s = (void*) rhs;
+			s = reinterpret_cast<void*>(rhs);
 		}
 	};
 
@@ -90,7 +90,9 @@ namespace CString
 		static void Perform(CStringT& s, const void* rhs)
 		{
 			if (!rhs)
+			{
 				s.assignWithoutChecking("0x0", 3);
+			}
 			else
 			{
 				# ifdef YUNI_OS_MSVC

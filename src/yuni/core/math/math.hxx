@@ -192,7 +192,7 @@ namespace Math
 	template<class U>
 	inline U SquareRoot(U x)
 	{
-		return (x < YUNI_EPSILON) ? U() : (U)::sqrt((double)x);
+		return (x < YUNI_EPSILON) ? U() : static_cast<U>(::sqrt(static_cast<double>(x)));
 	}
 
 	template<> inline double SquareRoot(double x)
@@ -209,7 +209,7 @@ namespace Math
 	template<class U>
 	inline U SquareRootNoCheck(U x)
 	{
-		return (U)::sqrt((double)x);
+		return static_cast<U>(::sqrt(static_cast<double>(x)));
 	}
 
 	template<> inline double SquareRootNoCheck(double x)
@@ -228,19 +228,19 @@ namespace Math
 
 	inline bool PowerOfTwo(int x)
 	{
-		return !(x & (x - 1)) && x;
+		return not (x & (x - 1)) and x;
 	}
 
 
 	template<class T> inline T DegreeToRadian(T x)
 	{
-		return (x * (T)0.017453292);
+		return x * static_cast<T>(0.017453292);
 	}
 
 
 	template<class T> inline T RadianToDegree(T x)
 	{
-		return (x * (T)57.29578122);
+		return x * static_cast<T>(57.29578122);
 	}
 
 
@@ -486,7 +486,7 @@ namespace Math
 		static inline ResultType Value(Type x)
 		{
 			// Default Behavior
-			return (ResultType)(Round<Type>(x));
+			return static_cast<ResultType>(Round<Type>(x));
 		}
 	};
 
@@ -508,7 +508,7 @@ namespace Math
 	{
 		typedef float Type;
 		typedef double ResultType;
-		static inline ResultType Value(Type x) { return (ResultType) x; }
+		static inline ResultType Value(Type x) { return static_cast<ResultType>(x); }
 	};
 
 	template<>
@@ -516,7 +516,7 @@ namespace Math
 	{
 		typedef double Type;
 		typedef float ResultType;
-		static inline ResultType Value(Type x) { return (ResultType) x; }
+		static inline ResultType Value(Type x) { return static_cast<ResultType>(x); }
 	};
 
 

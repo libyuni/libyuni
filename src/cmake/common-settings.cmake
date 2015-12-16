@@ -245,6 +245,7 @@ if (NOT MSVC)
 	compile_flag("-Wcast-align"               W_CAST_ALIGN   RELEASE DEBUG RELWITHDEBINFO)
 	compile_flag("-Wuninitialized"            W_UNINITIALIZED   RELEASE DEBUG RELWITHDEBINFO)
 	compile_flag("-Wdocumentation"            W_DOCUMENTATION   RELEASE DEBUG RELWITHDEBINFO)
+	#compile_flag("-Wold-style-cast"           W_OLD_STYLE_CAST  RELEASE DEBUG RELWITHDEBINFO)
 endif()
 
 

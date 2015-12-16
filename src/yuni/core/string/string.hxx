@@ -267,7 +267,7 @@ namespace Yuni
 			if (length > n)
 				length = n;
 			if (not adapter)
-				AncestorType::assign((const char* const) s.c_str() + offset, length);
+				AncestorType::assign(reinterpret_cast<const char* const>(s.c_str()) + offset, length);
 			else
 				adapt(s.c_str() + offset, length);
 		}
@@ -281,7 +281,7 @@ namespace Yuni
 		if (offset < s.size())
 		{
 			if (not adapter)
-				AncestorType::assign((const char* const) s.c_str() + offset, s.size() - offset);
+				AncestorType::assign(reinterpret_cast<const char* const>(s.c_str()) + offset, s.size() - offset);
 			else
 				adapt(s.c_str() + offset, s.size() - offset);
 		}
@@ -307,7 +307,7 @@ namespace Yuni
 			if (length > n)
 				length = n;
 			if (not adapter)
-				AncestorType::assign((const char* const) s.c_str() + offset, length);
+				AncestorType::assign(reinterpret_cast<const char* const>(s.c_str()) + offset, length);
 			else
 				adapt(s.c_str() + offset, length);
 		}
@@ -321,7 +321,7 @@ namespace Yuni
 		if (offset < s.size())
 		{
 			if (not adapter)
-				AncestorType::assign((const char* const) s.c_str() + offset, s.size() - offset);
+				AncestorType::assign(reinterpret_cast<const char* const>(s.c_str()) + offset, s.size() - offset);
 			else
 				adapt(s.c_str() + offset, s.size() - offset);
 		}
@@ -1489,11 +1489,11 @@ namespace Yuni
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
 	CString<ChunkSizeT,ExpandableT>::ifind_first_of(char c, Size offset) const
 	{
-		c = (char) ToLower(c);
+		c = static_cast<char>(ToLower(c));
 		for (Size i = offset; i < AncestorType::size; ++i)
 		{
 			// alias to the current character
-			if (c == (char) ToLower(AncestorType::data[i]))
+			if (c == static_cast<char>(ToLower(AncestorType::data[i])))
 				return i;
 		}
 		return npos;
@@ -1864,7 +1864,7 @@ namespace Yuni
 	{
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
 		uint count = 0;
-		from = (char) ToLower(from);
+		from = static_cast<char>(ToLower(from));
 		for (Size i = offset; i < AncestorType::size; ++i)
 		{
 			if (from == AncestorType::data[i])
@@ -2398,7 +2398,7 @@ namespace Yuni
 	inline size_t
 	CString<ChunkSizeT,ExpandableT>::sizeInBytes() const
 	{
-		return (size_t) AncestorType::size * sizeof(Char);
+		return static_cast<size_t>(AncestorType::size) * sizeof(Char);
 	}
 
 
@@ -2423,7 +2423,7 @@ namespace Yuni
 	inline size_t
 	CString<ChunkSizeT,ExpandableT>::capacityInBytes() const
 	{
-		return (size_t) AncestorType::capacity * sizeof(Char);
+		return static_cast<size_t>(AncestorType::capacity) * sizeof(Char);
 	}
 
 
@@ -2803,7 +2803,7 @@ namespace Yuni
 					// An error occured
 					return;
 				}
-				AncestorType::size += (Size) i;
+				AncestorType::size += static_cast<Size>(i);
 				if (zeroTerminated)
 					AncestorType::data[AncestorType::size] = Char();
 				return;
@@ -2820,7 +2820,7 @@ namespace Yuni
 					(AncestorType::capacity - AncestorType::size), format, args);
 				if (i >= 0)
 				{
-					AncestorType::size += (Size) i;
+					AncestorType::size += static_cast<Size>(i);
 					if (zeroTerminated)
 						AncestorType::data[AncestorType::size] = Char();
 				}
@@ -2846,7 +2846,7 @@ namespace Yuni
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
 		for (Size i = 0; i < AncestorType::size; ++i)
 		{
-			if (UTF8::Char::IsASCII((unsigned char)AncestorType::data[i]))
+			if (UTF8::Char::IsASCII(static_cast<unsigned char>(AncestorType::data[i])))
 				AncestorType::data[i] = static_cast<Char>(ToLower(AncestorType::data[i]));
 		}
 		return *this;
@@ -2860,8 +2860,8 @@ namespace Yuni
 		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
 		for (Size i = 0; i < AncestorType::size; ++i)
 		{
-			if (UTF8::Char::IsASCII((unsigned char)AncestorType::data[i]))
-				AncestorType::data[i] = (Char) ToUpper(AncestorType::data[i]);
+			if (UTF8::Char::IsASCII(static_cast<unsigned char>(AncestorType::data[i])))
+				AncestorType::data[i] = static_cast<Char>(ToUpper(AncestorType::data[i]));
 		}
 		return *this;
 	}
@@ -3437,7 +3437,7 @@ namespace Yuni
 	{
 		size_t hash = 0;
 		for (uint i = 0; i != AncestorType::size; ++i)
-			hash = (uint) AncestorType::data[i] + (hash << 6) + (hash << 16) - hash;
+			hash = static_cast<uint>(AncestorType::data[i]) + (hash << 6) + (hash << 16) - hash;
 		return hash;
 	}
 
@@ -3475,12 +3475,12 @@ namespace Yuni
 			return false;
 
 		// resize the internal buffer
-		reserve(AncestorType::size + (Size) needed + zeroTerminated);
+		reserve(AncestorType::size + static_cast<Size>(needed) + zeroTerminated);
 
 		Size maxAllowedSize = capacity() - AncestorType::size;
 		if (maxAllowedSize <= 1)
 			return false; // failed to extend the string
-		maxAllowedSize -= (uint) zeroTerminated;
+		maxAllowedSize -= static_cast<uint>(zeroTerminated);
 
 		char* cstr = data();
 		if (cstr == nullptr) // making sure that the buffer has been allocated
@@ -3491,7 +3491,7 @@ namespace Yuni
 		if (written != 0)
 		{
 			assert(AncestorType::size + written < capacity());
-			resize(AncestorType::size + (Size) written); // making sure that the string is zero-terminated
+			resize(AncestorType::size + static_cast<Size>(written)); // making sure that the string is zero-terminated
 			return true;
 		}
 

@@ -59,7 +59,7 @@ namespace Atomic
 	template<int Size, template<class> class TP>
 	inline Int<Size,TP>::Int(sint16 v) :
 		# if YUNI_ATOMIC_MUST_USE_MUTEX != 1
-		pValue((ScalarType)v)
+		pValue(static_cast<ScalarType>(v))
 		# else
 		TP<Int<Size,TP> >(), pValue((ScalarType)v)
 		# endif
@@ -68,7 +68,7 @@ namespace Atomic
 	template<int Size, template<class> class TP>
 	inline Int<Size,TP>::Int(sint32 v) :
 		# if YUNI_ATOMIC_MUST_USE_MUTEX != 1
-		pValue((ScalarType)v)
+		pValue(static_cast<ScalarType>(v))
 		# else
 		TP<Int<Size,TP> >(), pValue((ScalarType)v)
 		# endif
@@ -78,9 +78,9 @@ namespace Atomic
 	template<int Size, template<class> class TP>
 	inline Int<Size,TP>::Int(sint64 v) :
 		# if YUNI_ATOMIC_MUST_USE_MUTEX != 1
-		pValue((ScalarType)v)
+		pValue(static_cast<ScalarType>(v))
 		# else
-		TP<Int<Size,TP> >(), pValue((ScalarType)v)
+		TP<Int<Size,TP> >(), pValue(static_cast<ScalarType>(v))
 		# endif
 	{}
 
@@ -90,7 +90,7 @@ namespace Atomic
 	template<int Size, template<class> class TP>
 	inline Int<Size,TP>::Int(const Int<Size,TP>& v) :
 		# if YUNI_ATOMIC_MUST_USE_MUTEX != 1
-		pValue((ScalarType)v)
+		pValue(static_cast<ScalarType>(v))
 		# else
 		TP<Int<Size,TP> >(), pValue((ScalarType)v.pValue)
 		# endif
@@ -107,9 +107,9 @@ namespace Atomic
 		# endif
 	{
 		if (threadSafe)
-			Private::AtomicImpl::Operator<size,TP>::Increment(*this, (ScalarType) v.pValue);
+			Private::AtomicImpl::Operator<size,TP>::Increment(*this, static_cast<ScalarType>(v.pValue));
 		else
-			pValue = (ScalarType)v.pValue;
+			pValue = static_cast<ScalarType>(v.pValue);
 	}
 
 

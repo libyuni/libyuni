@@ -83,7 +83,7 @@ namespace UTF8
 
 	inline Char& Char::operator = (uint value)
 	{
-		pValue = (uint32) value;
+		pValue = static_cast<uint32>(value);
 		return *this;
 	}
 
@@ -132,7 +132,7 @@ namespace UTF8
 
 	inline Char::operator unsigned char () const
 	{
-		return (pValue < 0x80) ? static_cast<uchar>(pValue) : (uchar)'\0';
+		return (pValue < 0x80) ? static_cast<uchar>(pValue) : static_cast<uchar>('\0');
 	}
 
 
@@ -231,7 +231,7 @@ namespace UTF8
 
 	inline bool Char::isAscii() const
 	{
-		return pValue < (uint) asciiLimit;
+		return pValue < static_cast<uint>(asciiLimit);
 	}
 
 

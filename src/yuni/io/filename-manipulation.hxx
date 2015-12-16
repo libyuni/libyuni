@@ -127,7 +127,7 @@ namespace IO
 						{
 							if (not dot)
 							{
-								if (++i >= (uint) filename.size())
+								if (++i >= static_cast<uint>(filename.size()))
 									return true;
 							}
 							out.append(filename.c_str() + i, filename.size() - i);

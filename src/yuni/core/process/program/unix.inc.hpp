@@ -22,8 +22,8 @@ namespace Process
 
 		static inline char* duplicateString(const AnyString& string)
 		{
-			const uint bytes = (uint) sizeof(char) * string.size();
-			char* copy = (char*)::malloc(bytes + 1);
+			const uint bytes = static_cast<uint>(sizeof(char)) * string.size();
+			char* copy = reinterpret_cast<char*>(::malloc(bytes + 1));
 			if (copy)
 			{
 				YUNI_MEMCPY(copy, bytes, string.c_str(), bytes);
@@ -75,11 +75,11 @@ namespace Process
 		const char* const argv0 = procinfo.executable.c_str();
 		char** args;
 		{
-			uint count = (uint) procinfo.arguments.size();
+			uint count = static_cast<uint>(procinfo.arguments.size());
 			if (count)
 			{
 				// if there are additional arguments, argv0 must be duplicated
-				args = (char**)::malloc(sizeof(char*) * (count + 2));
+				args = reinterpret_cast<char**>(::malloc(sizeof(char*) * (count + 2)));
 				if (YUNI_LIKELY(args))
 				{
 					args[0] = duplicateString(procinfo.executable);
@@ -265,7 +265,7 @@ namespace Process
 						{
 							// just in case - if the calling code uses ::strlen on the buffer
 							buffer[stdcerrsize] = '\0';
-							stream->onErrorRead(AnyString(buffer, (uint) stdcerrsize));
+							stream->onErrorRead(AnyString(buffer, static_cast<uint>(stdcerrsize)));
 						}
 
 						hasInputOnStdcerr = true;
@@ -280,14 +280,14 @@ namespace Process
 					{
 						if (pRedirectToConsole)
 						{
-							std::cout.write(buffer, (std::streamsize) stdcoutsize);
+							std::cout.write(buffer, static_cast<std::streamsize>(stdcoutsize));
 							std::cout << std::flush;
 						}
 						if (hasStream)
 						{
 							// just in case - if the calling code uses ::strlen on the buffer
 							buffer[stdcoutsize] = '\0';
-							stream->onRead(AnyString(buffer, (uint) stdcoutsize));
+							stream->onRead(AnyString(buffer, static_cast<uint>(stdcoutsize)));
 						}
 
 						// something has been read from std::cout - trying again anyway

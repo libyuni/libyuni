@@ -110,7 +110,7 @@ namespace Yuni
 	** \brief Constant int64 value to indicate that the size must be autodetected by the location
 	** of the terminating null character
 	*/
-	static const uint64 AutoDetectNullChar = (uint64)(-1);
+	static const uint64 AutoDetectNullChar = static_cast<uint64>(-1);
 
 	# ifndef YUNI_HAS_SSIZE_T
 	/*! ssize_t */

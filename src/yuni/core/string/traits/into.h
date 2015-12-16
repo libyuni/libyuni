@@ -176,13 +176,13 @@ namespace CString
 
 		template<class StringT> static bool Perform(const StringT& s, unsigned char& out)
 		{
-			out = (unsigned char)((!s) ? '\0' : s[0]);
+			out = static_cast<unsigned char>((!s) ? '\0' : s[0]);
 			return true;
 		}
 
 		template<class StringT> static unsigned char Perform(const StringT& s)
 		{
-			return (unsigned char)((!s) ? '\0' : s[0]);
+			return static_cast<unsigned char>((!s) ? '\0' : s[0]);
 		}
 	};
 
@@ -329,13 +329,13 @@ namespace CString
 					buffer[bufferSize - 1] = '\0'; \
 				} \
 				const char* p = AutoDetectBaseNumber::Value(buffer, s.size(), base); \
-				out = (IntoType)::CONVERT(p, &pend, base); \
+				out = static_cast<IntoType>(::CONVERT(p, &pend, base)); \
 				return (NULL != pend and '\0' == *pend); \
 			} \
 			else \
 			{ \
 				const char* p = AutoDetectBaseNumber::Value(s.c_str(), s.size(), base); \
-				out = (IntoType)::CONVERT(p, &pend, base); \
+				out = static_cast<IntoType>(::CONVERT(p, &pend, base)); \
 				return NULL != pend and (pend - p == s.size()); \
 			} \
 		} \
@@ -436,9 +436,9 @@ namespace CString
 
 				# ifdef YUNI_OS_MSVC
 				// Visual Studio does not support strtof
-				out = (float)strtod(cstr, &pend);
+				out = static_cast<float>(strtod(cstr, &pend));
 				# else
-				out = (float)strtof(cstr, &pend);
+				out = static_cast<float>(strtof(cstr, &pend));
 				# endif
 				return (pend and pend - cstr == s.size());
 			}
@@ -472,9 +472,9 @@ namespace CString
 
 				# ifdef YUNI_OS_MSVC
 				// Visual Studio does not support strtof
-				return (float)::strtod(cstr, &pend);
+				return static_cast<float>(::strtod(cstr, &pend));
 				# else
-				return (float)::strtof(cstr, &pend);
+				return static_cast<float>(::strtof(cstr, &pend));
 				# endif
 			}
 			return 0.f;
@@ -516,7 +516,7 @@ namespace CString
 				else
 					cstr = s.c_str();
 
-				out = (double)::strtod(cstr, &pend);
+				out = static_cast<double>(::strtod(cstr, &pend));
 				return (NULL != pend and '\0' == *pend);
 			}
 			out = 0.;
@@ -547,7 +547,7 @@ namespace CString
 				else
 					cstr = s.c_str();
 
-				return (double)::strtod(cstr, &pend);
+				return static_cast<double>(::strtod(cstr, &pend));
 			}
 			return 0.;
 		}
@@ -568,7 +568,7 @@ namespace CString
 			Static::If<sizeof(void*) == 4, uint32, uint64>::Type  p;
 			if (Into<uint32>::Perform(s, p))
 			{
-				out = (void*) p;
+				out = reinterpret_cast<void*>(p);
 				return true;
 			}
 			out = 0x0;
@@ -577,7 +577,7 @@ namespace CString
 
 		template<class StringT> static void* Perform(const StringT& s)
 		{
-			return (void*)((sizeof(void*) == 4)
+			return reinterpret_cast<void*>((sizeof(void*) == 4)
 				? Into<uint32>::Perform(s) : Into<uint64>::Perform(s));
 		}
 	};

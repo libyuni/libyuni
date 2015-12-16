@@ -67,10 +67,10 @@ namespace CStringImpl
 		{
 			if (chunkSize != 0)
 			{
-				capacity += (uint) zeroTerminated;
-				data = (C*)::malloc(sizeof(C) * (uint) capacity);
-				YUNI_MEMCPY(const_cast<void*>(static_cast<const void*>(data)), (uint) capacity, rhs.data, sizeof(C) * size);
-				if ((uint) zeroTerminated)
+				capacity += static_cast<uint>(zeroTerminated);
+				data = reinterpret_cast<C*>(::malloc(sizeof(C) * static_cast<uint>(capacity)));
+				YUNI_MEMCPY(const_cast<void*>(static_cast<const void*>(data)), static_cast<uint>(capacity), rhs.data, sizeof(C) * size);
+				if (static_cast<uint>(zeroTerminated))
 					(const_cast<char*>(data))[size] = C();
 			}
 			else
@@ -134,7 +134,7 @@ namespace CStringImpl
 	Data<ChunkSizeT,ExpandableT>::adapt(const char* const cstring)
 	{
 		data = const_cast<char*>(cstring);
-		capacity = size = (data ? (Size)::strlen(data) : 0);
+		capacity = size = (data ? static_cast<Size>(::strlen(data)) : 0);
 	}
 
 
@@ -151,7 +151,7 @@ namespace CStringImpl
 	inline void
 	Data<ChunkSizeT,ExpandableT>::clear()
 	{
-		if ((uint) zeroTerminated)
+		if (static_cast<uint>(zeroTerminated))
 		{
 			if (size)
 			{
@@ -172,8 +172,8 @@ namespace CStringImpl
 		{
 			if (size)
 			{
-				capacity = size + (uint) zeroTerminated;
-				data = (char*)::realloc(const_cast<char*>(data), (uint) capacity);
+				capacity = size + static_cast<uint>(zeroTerminated);
+				data = reinterpret_cast<char*>(::realloc(const_cast<char*>(data), static_cast<uint>(capacity)));
 			}
 			else
 			{
@@ -190,15 +190,16 @@ namespace CStringImpl
 	Data<ChunkSizeT,ExpandableT>::insert(Size offset, const C* const buffer, const Size len)
 	{
 		// Reserving enough space to insert the buffer
-		reserve(len + size + (uint) zeroTerminated);
+		reserve(len + size + static_cast<uint>(zeroTerminated));
 		// Move the existing block of data
-		(void)::memmove(const_cast<char*>(data) + sizeof(C) * (offset + len), const_cast<char*>(data) + sizeof(C) * (offset), sizeof(C) * (size - offset));
+		(void)::memmove(const_cast<char*>(data) + sizeof(C) * (offset + len),
+			const_cast<char*>(data) + sizeof(C) * (offset), sizeof(C) * (size - offset));
 		// Copying the given buffer
-		YUNI_MEMCPY(const_cast<char*>(data) + sizeof(C) * (offset), (uint) capacity, buffer, sizeof(C) * len);
+		YUNI_MEMCPY(const_cast<char*>(data) + sizeof(C) * (offset), static_cast<uint>(capacity), buffer, sizeof(C) * len);
 		// Updating the size
 		size += len;
 		// zero-terminated
-		if ((uint) zeroTerminated)
+		if (static_cast<uint>(zeroTerminated))
 			(const_cast<char*>(data))[size] = C();
 	}
 
@@ -208,12 +209,12 @@ namespace CStringImpl
 	Data<ChunkSizeT,ExpandableT>::put(const C rhs)
 	{
 		// Making sure that we have enough space
-		reserve(size + 1 + (uint) zeroTerminated);
+		reserve(size + 1 + static_cast<uint>(zeroTerminated));
 		// Raw copy
 		(const_cast<char*>(data))[size] = rhs;
 		// New size
 		++size;
-		if ((uint) zeroTerminated)
+		if (static_cast<uint>(zeroTerminated))
 			(const_cast<char*>(data))[size] = C();
 	}
 
@@ -224,29 +225,29 @@ namespace CStringImpl
 	{
 		if (adapter)
 			return;
-		mincapacity += (uint) zeroTerminated;
-		if ((uint) capacity < mincapacity)
+		mincapacity += static_cast<uint>(zeroTerminated);
+		if (static_cast<uint>(capacity) < mincapacity)
 		{
 			// This loop may be a little faster than the following replacement code :
-			// (uint) capacity = min(uint) capacity + min(uint) capacity % chunkSize;
+			// static_cast<uint>(capacity) = minstatic_cast<uint>(capacity) + minstatic_cast<uint>(capacity) % chunkSize;
 			// Especially when chunkSize is not a power of 2
-			Size newcapacity = (uint) capacity;
+			Size newcapacity = static_cast<uint>(capacity);
 			do
 			{
-				// Increase the (uint) capacity until we have enough space
+				// Increase the static_cast<uint>(capacity) until we have enough space
 				newcapacity += chunkSize;
 			}
 			while (newcapacity < mincapacity);
 
 			// Realloc the internal buffer
-			C* newdata = (C*)::realloc(const_cast<char*>(data), (size_t)(sizeof(C) * newcapacity));
+			C* newdata = reinterpret_cast<C*>(::realloc(const_cast<char*>(data), (sizeof(C) * newcapacity)));
 			// The returned value can be NULL
 			if (!newdata)
 				throw "Yuni::CString: Impossible to realloc";
 			{
 				data = newdata;
 				capacity = newcapacity;
-				if ((uint) zeroTerminated)
+				if (static_cast<uint>(zeroTerminated))
 					(const_cast<char*>(data))[size] = C();
 			}
 		}
@@ -260,30 +261,30 @@ namespace CStringImpl
 	{
 		// We have to trunk the size if we are outer limits
 		// This condition is a little faster than the folowing replacement code :
-		// blockSize = Math::Min<Size>(blockSize, (uint) capacity - size);
+		// blockSize = Math::Min<Size>(blockSize, static_cast<uint>(capacity) - size);
 		//
 		// We have better performance if the two cases have their own code block
 		// (perhaps because of the constant values)
 		//
-		if (blockSize > (uint) capacity)
+		if (blockSize > static_cast<uint>(capacity))
 		{
-			// The new blocksize is actually the (uint) capacity itself
-			// The (uint) capacity can not be null
+			// The new blocksize is actually the static_cast<uint>(capacity) itself
+			// The static_cast<uint>(capacity) can not be null
 			// Raw copy
-			YUNI_MEMCPY(const_cast<char*>(data), (uint) capacity, block, sizeof(C) * (uint) capacity);
+			YUNI_MEMCPY(const_cast<char*>(data), static_cast<uint>(capacity), block, sizeof(C) * static_cast<uint>(capacity));
 			// New size
-			size = (uint) capacity;
-			if ((uint) zeroTerminated)
-				(const_cast<char*>(data))[(uint) capacity] = C();
-			return (uint) capacity;
+			size = static_cast<uint>(capacity);
+			if (static_cast<uint>(zeroTerminated))
+				(const_cast<char*>(data))[static_cast<uint>(capacity)] = C();
+			return static_cast<uint>(capacity);
 		}
 		// else
 		{
 			// Raw copy
-			YUNI_MEMCPY(const_cast<char*>(data), (uint) capacity, block, sizeof(C) * blockSize);
+			YUNI_MEMCPY(const_cast<char*>(data), static_cast<uint>(capacity), block, sizeof(C) * blockSize);
 			// New size
 			size = blockSize;
-			if ((uint) zeroTerminated)
+			if (static_cast<uint>(zeroTerminated))
 				(const_cast<char*>(data))[size] = C();
 			return blockSize;
 		}
@@ -296,33 +297,33 @@ namespace CStringImpl
 	{
 		// We have to trunk the size if we are outer limits
 		// This condition is a little faster than the folowing replacement code :
-		// blockSize = Math::Min<Size>(blockSize, (uint) capacity - size);
+		// blockSize = Math::Min<Size>(blockSize, static_cast<uint>(capacity) - size);
 		//
 		// We have better performance if the two cases have their own code block
 		// (perhaps because of the constant values)
 		//
-		if (blockSize + size > (uint) capacity)
+		if (blockSize + size > static_cast<uint>(capacity))
 		{
 			// Computing the new block size to copy
-			blockSize = (uint) capacity - size;
+			blockSize = static_cast<uint>(capacity) - size;
 			// The performance are a bit better if we interupt the process sooner
 			if (!blockSize)
 				return 0;
 			// Raw copy
-			YUNI_MEMCPY(data + size * sizeof(C), (uint) capacity, block, sizeof(C) * blockSize);
+			YUNI_MEMCPY(data + size * sizeof(C), static_cast<uint>(capacity), block, sizeof(C) * blockSize);
 			// New size
-			size = (uint) capacity;
-			if ((uint) zeroTerminated)
-				(const_cast<char*>(data))[(uint) capacity] = C();
+			size = static_cast<uint>(capacity);
+			if (static_cast<uint>(zeroTerminated))
+				(const_cast<char*>(data))[static_cast<uint>(capacity)] = C();
 			return blockSize;
 		}
 		// else
 		{
 			// Raw copy
-			YUNI_MEMCPY(data + size * sizeof(C), (uint) capacity, block, sizeof(C) * blockSize);
+			YUNI_MEMCPY(data + size * sizeof(C), static_cast<uint>(capacity), block, sizeof(C) * blockSize);
 			// New size
 			size += blockSize;
-			if ((uint) zeroTerminated)
+			if (static_cast<uint>(zeroTerminated))
 				(const_cast<char*>(data))[size] = C();
 			return blockSize;
 		}
@@ -335,7 +336,7 @@ namespace CStringImpl
 	{
 		data[0] = c;
 		size = 1;
-		if ((uint) zeroTerminated)
+		if (static_cast<uint>(zeroTerminated))
 			(const_cast<char*>(data))[1] = C();
 		return 1;
 	}
@@ -345,16 +346,14 @@ namespace CStringImpl
 	typename Data<ChunkSizeT,false>::Size
 	Data<ChunkSizeT,false>::appendWithoutChecking(const C c)
 	{
-		if (size == (uint) capacity)
+		if (YUNI_UNLIKELY(size == static_cast<uint>(capacity)))
 			return 0;
-		// else
-		{
-			data[size] = c;
-			++size;
-			if ((uint) zeroTerminated)
-				(const_cast<char*>(data))[size] = C();
-			return 1;
-		}
+
+		data[size] = c;
+		++size;
+		if (static_cast<uint>(zeroTerminated))
+			(const_cast<char*>(data))[size] = C();
+		return 1;
 	}
 
 
@@ -363,13 +362,13 @@ namespace CStringImpl
 	Data<ChunkSizeT,false>::put(const C rhs)
 	{
 		// Making sure that we have enough space
-		if (size != (uint) capacity)
+		if (size != static_cast<uint>(capacity))
 		{
 			// Raw copy
 			data[size] = rhs;
 			// New size
 			++size;
-			if ((uint) zeroTerminated)
+			if (static_cast<uint>(zeroTerminated))
 				(const_cast<char*>(data))[size] = C();
 		}
 	}

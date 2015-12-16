@@ -81,7 +81,7 @@ namespace EventImpl
 
 		bool operator == (const BindT& rhs) const
 		{
-			return  (pObject == (const void*)rhs.object());
+			return  (pObject == reinterpret_cast<const void*>(rhs.object()));
 		}
 	private:
 		const void* pObject;

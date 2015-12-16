@@ -91,7 +91,7 @@ namespace Yuni
 
 	inline uint WString::size() const
 	{
-		return (uint) pSize;
+		return static_cast<uint>(pSize);
 	}
 
 

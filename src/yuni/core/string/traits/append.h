@@ -68,7 +68,7 @@ namespace CString
 	public:
 		static void Perform(CStringT& s, const T* rhs)
 		{
-			s += (void*) rhs;
+			s += reinterpret_cast<void*>(rhs);
 		}
 	};
 

@@ -59,7 +59,7 @@ namespace Bit
 
 			for (uint i = (offset >> 3); i < pBuffer.size(); ++i)
 			{
-				if ((uchar)(pBuffer[i]) != (ValueT ? (uchar)0 : (uchar)0xFF))
+				if (static_cast<uchar>(pBuffer[i]) != (ValueT ? static_cast<uchar>(0) : static_cast<uchar>(0xFF)))
 				{
 					const uchar c = static_cast<uchar>(pBuffer[i]);
 
@@ -157,7 +157,7 @@ namespace Bit
 	{
 		for (uint i = 0; i != pBuffer.size(); ++i)
 		{
-			if ((uchar) pBuffer[i] != 0xFF)
+			if (static_cast<uchar>(pBuffer[i]) != 0xFF)
 				return false;
 		}
 		return true;

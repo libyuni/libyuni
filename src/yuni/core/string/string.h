@@ -198,7 +198,7 @@ namespace Yuni
 			//! Size for a single chunk
 			chunkSize      = AncestorType::chunkSize,
 			//! Invalid offset
-			npos           = (Size)(-1),
+			npos           = static_cast<Size>(-1),
 			//! A non-zero value if the string must be zero terminated
 			zeroTerminated = 1, //AncestorType::zeroTerminated,
 			//! A non-zero value if the string can be expanded
