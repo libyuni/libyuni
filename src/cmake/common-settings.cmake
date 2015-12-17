@@ -223,9 +223,14 @@ if (NOT MSVC)
 
 	# debugging symbols
 	compile_flag("-g"     DEBUG_G     DEBUG RELWITHDEBINFO)
+	compile_flag("-g3"    DEBUG_G3    DEBUG RELWITHDEBINFO)
 	compile_flag("-gfull" DEBUG_GFULL DEBUG RELWITHDEBINFO)
 	compile_flag("-ggdb"  DEBUG_GDB   DEBUG RELWITHDEBINFO)
 	compile_flag("-ggdb3" DEBUG_GDB3  DEBUG RELWITHDEBINFO)
+
+	# extra debugging tools
+	#compile_flag("-fsanitize=undefined" DEBUG_SANITIZE_UNDEF DEBUG RELWITHDEBINFO)
+	#compile_flag("-fsanitize=address"   DEBUG_SANITIZE_ADDR  DEBUG RELWITHDEBINFO)
 
 	# warnings
 	compile_flag("-W"                         W   RELEASE DEBUG RELWITHDEBINFO)
@@ -240,6 +245,7 @@ if (NOT MSVC)
 	compile_flag("-Wcast-align"               W_CAST_ALIGN   RELEASE DEBUG RELWITHDEBINFO)
 	compile_flag("-Wuninitialized"            W_UNINITIALIZED   RELEASE DEBUG RELWITHDEBINFO)
 	compile_flag("-Wdocumentation"            W_DOCUMENTATION   RELEASE DEBUG RELWITHDEBINFO)
+	#compile_flag("-Wold-style-cast"           W_OLD_STYLE_CAST  RELEASE DEBUG RELWITHDEBINFO)
 endif()
 
 

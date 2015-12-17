@@ -115,13 +115,13 @@ namespace CStringImpl
 				// From this point, the value can not be null
 
 				// A temporary buffer to store the result
-				char buffer[(uint)bufferCapacity];
+				char buffer[static_cast<uint>(bufferCapacity)];
 				// A pointer to the current char (at the end of the buffer)
-				char* p = buffer + ((uint)bufferCapacity - 1);
+				char* p = buffer + (static_cast<uint>(bufferCapacity) - 1);
 				// Char count
 				uint nbChar = 0;
 
-				if ((uint) strictlyPositiveByContract or value > 0)
+				if (static_cast<uint>(strictlyPositiveByContract) or value > 0)
 				{
 					// The given variable is strictly positive, by contract or by value
 					// note: The do..while structure has better performances in
@@ -214,17 +214,17 @@ namespace CStringImpl
 		{
 			const Type integral = ::floor(value);
 			if (integral < 4294967295u)
-				From<BaseT, uint32_t>::AppendTo(str, (uint32_t)integral);
+				From<BaseT, uint32_t>::AppendTo(str, static_cast<uint32_t>(integral));
 			else
-				From<BaseT, uint64_t>::AppendTo(str, (uint64_t)integral);
+				From<BaseT, uint64_t>::AppendTo(str, static_cast<uint64_t>(integral));
 			if (precision > 0)
 			{
 				str += '.';
 				const Type decimal = ::round((value - integral) * Power10(precision));
 				if (decimal < 4294967295u)
-					From<BaseT, uint32_t>::AppendTo(str, (uint32_t)decimal);
+					From<BaseT, uint32_t>::AppendTo(str, static_cast<uint32_t>(decimal));
 				else
-					From<BaseT, uint64_t>::AppendTo(str, (uint64_t)decimal);
+					From<BaseT, uint64_t>::AppendTo(str, static_cast<uint64_t>(decimal));
 			}
 		}
 

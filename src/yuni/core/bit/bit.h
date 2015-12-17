@@ -47,21 +47,21 @@
 ** \ingroup Bit
 */
 # define YUNI_BIT_GET(DATA,INDEX)   \
-	(((const unsigned char*)(DATA))[(INDEX) >> 3] & (1 << (7 - ((INDEX) & 7))))
+	((reinterpret_cast<const unsigned char*>(DATA))[(INDEX) >> 3] & (1 << (7 - ((INDEX) & 7))))
 
 /*!
 ** \brief Set the Nth bit in a raw char* buffer
 ** \ingroup Bit
 */
 # define YUNI_BIT_SET(DATA,INDEX)  \
-	(((unsigned char*)(DATA))[(INDEX) >> 3] |= (unsigned char)(1 << (7 - ((INDEX) & 7))))
+	((reinterpret_cast<unsigned char*>(DATA))[(INDEX) >> 3] |= static_cast<unsigned char>(1 << (7 - ((INDEX) & 7))))
 
 /*!
 ** \brief Unset the Nth bit in a raw char* buffer
 ** \ingroup Bit
 */
 # define YUNI_BIT_UNSET(DATA,INDEX)  \
-	(((unsigned char*)(DATA))[(INDEX) >> 3] &= (unsigned char)~(1 << (7 - ((INDEX) & 7))))
+	((reinterpret_cast<unsigned char*>(DATA))[(INDEX) >> 3] &= static_cast<unsigned char>(~(1 << (7 - ((INDEX) & 7)))))
 
 
 

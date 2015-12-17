@@ -305,7 +305,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(<%=generator.list(i)%>)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -332,7 +332,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(<%=generator.list(i)%>)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(<%=generator.variableList(i)%>) const override
@@ -362,7 +362,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(<%=generator.list(i)%>)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -422,7 +422,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(<%=generator.list(i)%>)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -485,7 +485,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(<%=generator.list(i-1)%>)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override

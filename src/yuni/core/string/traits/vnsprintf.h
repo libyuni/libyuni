@@ -91,7 +91,7 @@ namespace CStringImpl
 			// (See also below under NOTES.)  If an output error is encountered, a negative
 			// value is returned.
 			int r = ::vsnprintf(buffer, bufferSize, format, argptr);
-			return (((size_t) r >= bufferSize) ? -1 : r);
+			return ((static_cast<size_t>(r) >= bufferSize) ? -1 : r);
 		}
 		#endif
 	}

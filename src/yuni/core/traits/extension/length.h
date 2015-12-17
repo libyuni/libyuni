@@ -83,7 +83,7 @@ namespace Extension
 	public:
 		static SizeT Value(const char* const container)
 		{
-			return container ? (SizeT)::strlen(container) : 0;
+			return container ? static_cast<SizeT>(::strlen(container)) : 0u;
 		}
 	};
 
@@ -99,7 +99,7 @@ namespace Extension
 	public:
 		static SizeT Value(const wchar_t* const container)
 		{
-			return container ? (SizeT)::wcslen(container) : 0;
+			return container ? static_cast<SizeT>(::wcslen(container)) : 0u;
 		}
 	};
 
@@ -115,7 +115,7 @@ namespace Extension
 		enum { valid = 1, isFixed = 1, fixedLength = 1, };
 
 	public:
-		static SizeT Value(const char) {return (SizeT) 1;}
+		static SizeT Value(const char) {return 1u;}
 	};
 
 
@@ -128,7 +128,7 @@ namespace Extension
 		enum { valid = 1, isFixed = 1, fixedLength = 1, };
 
 	public:
-		static SizeT Value(const wchar_t) {return (SizeT) 2;}
+		static SizeT Value(const wchar_t) {return 2u;}
 	};
 
 
@@ -149,7 +149,7 @@ namespace Extension
 	public:
 		static SizeT Value(const CStringType& container)
 		{
-			return (SizeT) container.size();
+			return static_cast<SizeT>(container.size());
 		}
 	};
 
@@ -170,7 +170,7 @@ namespace Extension
 	public:
 		static SizeT Value(const CStringTypePtr& container)
 		{
-			return (!container) ? 0 : (SizeT) container->size();
+			return (!container) ? 0 : static_cast<SizeT>(container->size());
 		}
 	};
 
@@ -185,7 +185,7 @@ namespace Extension
 	public:
 		static SizeT Value(const Yuni::CString<ChunkSizeT, ExpandableT>* const container)
 		{
-			return (container) ? (SizeT) container->size() : 0;
+			return (container) ? static_cast<SizeT>(container->size()) : 0u;
 		}
 	};
 
@@ -205,7 +205,7 @@ namespace Extension
 	public:
 		static SizeT Value(const StringType& container)
 		{
-			return (SizeT)container.size();
+			return static_cast<SizeT>(container.size());
 		}
 	};
 
@@ -226,7 +226,7 @@ namespace Extension
 	public:
 		static SizeT Value(const StringTypePtr& container)
 		{
-			return (!container) ? 0 : (SizeT) container->size();
+			return (!container) ? 0 : static_cast<SizeT>(container->size());
 		}
 	};
 
@@ -244,7 +244,7 @@ namespace Extension
 	public:
 		static SizeT Value(const StringType* const container)
 		{
-			return container ? (SizeT) container->size() : 0;
+			return container ? static_cast<SizeT>(container->size()) : 0u;
 		}
 	};
 
@@ -263,7 +263,7 @@ namespace Extension
 	public:
 		static SizeT Value(const YuniNullPtr&)
 		{
-			return 0;
+			return 0u;
 		}
 	};
 

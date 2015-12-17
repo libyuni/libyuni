@@ -1221,7 +1221,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)()) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1272,7 +1272,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1323,7 +1323,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1374,7 +1374,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1425,7 +1425,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1476,7 +1476,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1527,7 +1527,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1578,7 +1578,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1629,7 +1629,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1680,7 +1680,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1731,7 +1731,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1782,7 +1782,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1833,7 +1833,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1884,7 +1884,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1935,7 +1935,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -1986,7 +1986,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) const override
 		{
-			return (NULL == pointer);
+			return (nullptr == pointer);
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2013,7 +2013,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)()) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke() const override
@@ -2043,7 +2043,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)()) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2069,7 +2069,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0) const override
@@ -2099,7 +2099,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2125,7 +2125,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1) const override
@@ -2155,7 +2155,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2181,7 +2181,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2) const override
@@ -2211,7 +2211,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2237,7 +2237,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3) const override
@@ -2267,7 +2267,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2293,7 +2293,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const override
@@ -2323,7 +2323,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2349,7 +2349,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const override
@@ -2379,7 +2379,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2405,7 +2405,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) const override
@@ -2435,7 +2435,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2461,7 +2461,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) const override
@@ -2491,7 +2491,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2517,7 +2517,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) const override
@@ -2547,7 +2547,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2573,7 +2573,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) const override
@@ -2603,7 +2603,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2629,7 +2629,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) const override
@@ -2659,7 +2659,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2685,7 +2685,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) const override
@@ -2715,7 +2715,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2741,7 +2741,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) const override
@@ -2771,7 +2771,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2797,7 +2797,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) const override
@@ -2827,7 +2827,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2853,7 +2853,7 @@ namespace BindImpl
 		BoundWithFunction(R(*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) :
 			pPointer(pointer)
 		{
-			assert(pointer != NULL and "binded pointer-to-function can not be null");
+			assert(pointer != nullptr and "binded pointer-to-function can not be null");
 		}
 
 		virtual R invoke(A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) const override
@@ -2883,7 +2883,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2943,7 +2943,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)()) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -2998,7 +2998,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3053,7 +3053,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3108,7 +3108,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3163,7 +3163,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3218,7 +3218,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3273,7 +3273,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3328,7 +3328,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3383,7 +3383,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3438,7 +3438,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3493,7 +3493,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3548,7 +3548,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3603,7 +3603,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3658,7 +3658,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3713,7 +3713,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3768,7 +3768,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) const override
 		{
-			return ((void*)&pFunctor == (void*)pointer);
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3831,7 +3831,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)()) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3890,7 +3890,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -3949,7 +3949,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4008,7 +4008,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4067,7 +4067,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4126,7 +4126,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4185,7 +4185,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4244,7 +4244,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4303,7 +4303,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4362,7 +4362,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4421,7 +4421,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4480,7 +4480,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4539,7 +4539,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4598,7 +4598,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4657,7 +4657,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
@@ -4716,7 +4716,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) const override
 		{
-			return ((void*)pPointer == (void*)pointer);
+			return (reinterpret_cast<void*>(pPointer) == reinterpret_cast<void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override

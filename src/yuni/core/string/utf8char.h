@@ -101,7 +101,7 @@ namespace UTF8
 		enum
 		{
 			//! The maximum valid code point
-			codePointMax = (uint32) 0x0010ffffu,
+			codePointMax = static_cast<uint32>(0x0010ffffu),
 			//! Ascii maximum value
 			asciiLimit = 0x80,
 		};

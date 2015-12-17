@@ -61,7 +61,7 @@ namespace CString
 		typedef typename Static::Remove::Const<TypeC>::Type C;
 		static void Perform(CStringT& s, const Yuni::Atomic::Int<SizeT, TP>& rhs)
 		{
-			s.append((typename Yuni::Atomic::Int<SizeT, TP>::ScalarType) rhs);
+			s.append(static_cast<typename Yuni::Atomic::Int<SizeT, TP>::ScalarType>(rhs));
 		}
 	};
 

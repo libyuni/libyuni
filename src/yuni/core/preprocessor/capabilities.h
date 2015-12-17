@@ -482,24 +482,24 @@
 #ifndef NDEBUG
 #	ifdef YUNI_OS_MSVC
 #		define YUNI_MEMCPY(dst, dstsize, source, count)   do \
-			{ \
-				assert(dstsize >= count && "memcpy: destination buffer too small"); \
-				memcpy_s(dst, (size_t) dstsize, source, (size_t) count); \
-			} while (0)
+		{ \
+			assert(dstsize >= count && "memcpy: destination buffer too small"); \
+			memcpy_s(dst, static_cast<size_t>(dstsize), source, static_cast<size_t>(count)); \
+		} while (0)
 #	 else
 #		define YUNI_MEMCPY(dst, dstsize, source, count)   do \
-			{ \
-				assert(dstsize >= count && "memcpy: destination buffer too small"); \
-				memcpy(dst, source, (size_t)count); \
-			} while(0)
+		{ \
+			assert(dstsize >= count && "memcpy: destination buffer too small"); \
+			memcpy(dst, source, static_cast<size_t>(count)); \
+		} while(0)
 #	endif
 #else
 #	ifdef YUNI_OS_MSVC
 #		define YUNI_MEMCPY(dst, dstsize, source, count) \
-			(void) memcpy_s(dst, (size_t) dstsize, source, (size_t) count)
+		(void) memcpy_s(dst, static_cast<size_t>(dstsize), source, static_cast<size_t>(count))
 #	 else
 #		define YUNI_MEMCPY(dst, dstsize, source, count) \
-			(void) memcpy(dst, source, (size_t) count)
+		(void) memcpy(dst, source, static_cast<size_t>(count))
 #	endif
 #endif
 

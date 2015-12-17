@@ -138,7 +138,7 @@ namespace Yuni
 		std::size_t r = 0;
 		const uchar* p = pValue.cstring;
 		for (uint i = 0; i != 16; ++i)
-			r = (uint)(p[i]) + (r << 6) + (r << 16) - r;
+			r = static_cast<uint>(p[i]) + (r << 6) + (r << 16) - r;
 
 		return r;
 	}

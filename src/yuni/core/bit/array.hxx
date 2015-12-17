@@ -69,19 +69,19 @@ namespace Bit
 
 	inline void Array::unset()
 	{
-		(void)::memset(pBuffer.data(), 0, (size_t)pBuffer.sizeInBytes());
+		(void)::memset(pBuffer.data(), 0, pBuffer.sizeInBytes());
 	}
 
 
 	inline void Array::reset()
 	{
-		(void)::memset(pBuffer.data(), 0, (size_t)pBuffer.sizeInBytes());
+		(void)::memset(pBuffer.data(), 0, pBuffer.sizeInBytes());
 	}
 
 
 	inline void Array::reset(bool value)
 	{
-		(void)::memset(pBuffer.data(), (value ? 0xFF : 0), (size_t)pBuffer.sizeInBytes());
+		(void)::memset(pBuffer.data(), (value ? 0xFF : 0), pBuffer.sizeInBytes());
 	}
 
 
@@ -145,7 +145,7 @@ namespace Bit
 
 	inline uint Array::sizeInBytes() const
 	{
-		return (uint) pBuffer.sizeInBytes();
+		return static_cast<uint>(pBuffer.sizeInBytes());
 	}
 
 

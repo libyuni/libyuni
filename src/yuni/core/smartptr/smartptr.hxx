@@ -48,11 +48,19 @@ namespace Yuni
 	template<typename T, template <class> class OwspP, template <class> class ChckP,
 		class ConvP,
 		template <class> class StorP, template <class> class ConsP>
-	inline T* SmartPtr<T,OwspP,ChckP,ConvP,StorP,ConsP>::WeakPointer(const SmartPtr& p)
+	inline T* SmartPtr<T,OwspP,ChckP,ConvP,StorP,ConsP>::WeakPointer(const SmartPtr& ptr)
 	{
-		return storagePointer(p);
+		return storagePointer(ptr);
 	}
 
+
+	template<typename T, template <class> class OwspP, template <class> class ChckP,
+		class ConvP,
+		template <class> class StorP, template <class> class ConsP>
+	inline T* SmartPtr<T,OwspP,ChckP,ConvP,StorP,ConsP>::WeakPointer(T* wptr)
+	{
+		return wptr;
+	}
 
 
 
