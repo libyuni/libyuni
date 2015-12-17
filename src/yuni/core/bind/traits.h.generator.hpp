@@ -422,7 +422,7 @@ namespace BindImpl
 
 		virtual bool compareWithPointerToFunction(R (*pointer)(<%=generator.list(i)%>)) const override
 		{
-			return (reinterpret_cast<void*>(&pFunctor) == reinterpret_cast<void*>(pointer));
+			return (reinterpret_cast<const void*>(&pFunctor) == reinterpret_cast<const void*>(pointer));
 		}
 
 		virtual bool compareWithPointerToObject(const void*) const override
