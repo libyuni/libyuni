@@ -3449,12 +3449,13 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	size_t
-	CString<ChunkSizeT,ExpandableT>::hash() const
+	inline size_t CString<ChunkSizeT,ExpandableT>::hash() const
 	{
 		size_t hash = 0;
-		for (uint i = 0; i != AncestorType::size; ++i)
-			hash = static_cast<uint>(AncestorType::data[i]) + (hash << 6) + (hash << 16) - hash;
+		const char* p   = AncestorType::data;
+		const char* end = AncestorType::data + AncestorType::size;
+		for (; p != end; ++p)
+			hash = static_cast<uint>(*p) + (hash << 6) + (hash << 16) - hash;
 		return hash;
 	}
 
