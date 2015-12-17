@@ -229,8 +229,8 @@ if (NOT MSVC)
 	compile_flag("-ggdb3" DEBUG_GDB3  DEBUG RELWITHDEBINFO)
 
 	# extra debugging tools
-	compile_flag("-fsanitize=undefined" DEBUG_SANITIZE_UNDEF DEBUG RELWITHDEBINFO)
-	compile_flag("-fsanitize=address"   DEBUG_SANITIZE_ADDR  DEBUG RELWITHDEBINFO)
+	#compile_flag("-fsanitize=undefined" DEBUG_SANITIZE_UNDEF DEBUG RELWITHDEBINFO)
+	#compile_flag("-fsanitize=address"   DEBUG_SANITIZE_ADDR  DEBUG RELWITHDEBINFO)
 
 	# warnings
 	compile_flag("-W"                         W   RELEASE DEBUG RELWITHDEBINFO)
