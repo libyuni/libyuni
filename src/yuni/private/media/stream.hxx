@@ -83,7 +83,10 @@ namespace Media
 		}
 
 		if (IsAudio)
-			pALFormat = Private::Media::OpenAL::GetFormat(16u, pCodec->channels);
+		{
+			uint bitsPerSample = ::av_get_bytes_per_sample(pCodec->sample_fmt) * 8;
+			pALFormat = Private::Media::OpenAL::GetFormat(bitsPerSample, pCodec->channels);
+		}
 	}
 
 
