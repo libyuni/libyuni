@@ -840,12 +840,7 @@ namespace Yuni
 	typename CString<ChunkSizeT,ExpandableT>::Size
 	CString<ChunkSizeT,ExpandableT>::find(char c) const
 	{
-		for (Size i = 0; i != AncestorType::size; ++i)
-		{
-			if (c == AncestorType::data[i])
-				return i;
-		}
-		return npos;
+		return find(c, 0);
 	}
 
 
@@ -853,10 +848,16 @@ namespace Yuni
 	typename CString<ChunkSizeT,ExpandableT>::Size
 	CString<ChunkSizeT,ExpandableT>::find(char c, Size offset) const
 	{
-		for (Size i = offset; i < AncestorType::size; ++i)
+		if (offset < AncestorType::size)
 		{
-			if (c == AncestorType::data[i])
-				return i;
+			const char* p   = AncestorType::data + offset;
+			const char* end = AncestorType::data + (AncestorType::size);
+
+			for (; p != end; ++p)
+			{
+				if (c == *p)
+					return static_cast<Size>(p - AncestorType::data);
+			}
 		}
 		return npos;
 	}
@@ -868,13 +869,16 @@ namespace Yuni
 	{
 		if (cstr and len and len <= AncestorType::size)
 		{
-			Size end = AncestorType::size - len + 1;
-			for (Size i = offset; i < end; ++i)
+			// Size end = AncestorType::size - len + 1;
+			const char* p   = AncestorType::data + offset;
+			const char* end = AncestorType::data + (AncestorType::size - len + 1);
+			char needle     = *cstr;
+			for (; p != end; ++p)
 			{
-				if (AncestorType::data[i] == *cstr)
+				if (*p == needle)
 				{
-					if (0 == ::memcmp(AncestorType::data + i, cstr, len))
-						return i;
+					if (0 == ::memcmp(p, cstr, len))
+						return static_cast<Size>(p - AncestorType::data);
 				}
 			}
 		}
@@ -1153,9 +1157,11 @@ namespace Yuni
 	bool
 	CString<ChunkSizeT,ExpandableT>::contains(char c) const
 	{
-		for (Size i = 0; i != AncestorType::size; ++i)
+		const char* p   = AncestorType::data;
+		const char* end = AncestorType::data + AncestorType::size;
+		for (; p != end; ++p)
 		{
-			if (c == AncestorType::data[i])
+			if (c == *p)
 				return true;
 		}
 		return false;
@@ -1166,14 +1172,17 @@ namespace Yuni
 	bool
 	CString<ChunkSizeT,ExpandableT>::contains(const char* const cstr, Size len) const
 	{
-		if (cstr and len and len <= AncestorType::size)
+		if (len and cstr and len < AncestorType::size)
 		{
-			Size end = AncestorType::size - len + 1;
-			for (Size i = 0; i != end; ++i)
+			const char* p    = AncestorType::data;
+			const char* end  = AncestorType::data + AncestorType::size;
+			const char* jend = cstr + len;
+
+			for (; p != end; ++p)
 			{
-				if (AncestorType::data[i] == *cstr)
+				for (const char* j = cstr; j != jend; ++j)
 				{
-					if (0 == ::memcmp(AncestorType::data + i, cstr, len))
+					if (*j == *p)
 						return true;
 				}
 			}
@@ -1489,12 +1498,17 @@ namespace Yuni
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
 	CString<ChunkSizeT,ExpandableT>::ifind_first_of(char c, Size offset) const
 	{
-		c = static_cast<char>(ToLower(c));
-		for (Size i = offset; i < AncestorType::size; ++i)
+		if (offset < AncestorType::size)
 		{
-			// alias to the current character
-			if (c == static_cast<char>(ToLower(AncestorType::data[i])))
-				return i;
+			c = static_cast<char>(ToLower(c));
+			const char* p   = AncestorType::data + offset;
+			const char* end = AncestorType::data + (AncestorType::size);
+
+			for (; p != end; ++p)
+			{
+				if (c == static_cast<char>(ToLower(*p)))
+					return static_cast<Size>(p - AncestorType::data);
+			}
 		}
 		return npos;
 	}
@@ -1505,19 +1519,21 @@ namespace Yuni
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
 	CString<ChunkSizeT,ExpandableT>::find_first_of(const AnyString& sequence, Size offset) const
 	{
-		// The given sequence
-		const char* const s = sequence.c_str();
-		Size len = sequence.size();
-		Size j;
-
-		for (Size i = offset; i < AncestorType::size; ++i)
+		if (offset < AncestorType::size and not sequence.empty())
 		{
-			// alias to the current character
-			char c = AncestorType::data[i];
-			for (j = 0; j != len; ++j)
+			const char* p    = AncestorType::data + offset;
+			const char* end  = AncestorType::data + (AncestorType::size);
+
+			const char* jfirst = sequence.c_str();
+			const char* jend   = jfirst + sequence.size();
+
+			for (; p != end; ++p)
 			{
-				if (s[j] == c)
-					return i;
+				for (const char* j = jfirst; j != jend; ++j)
+				{
+					if (*j == *p)
+						return static_cast<Size>(p - AncestorType::data);
+				}
 			}
 		}
 		return npos;
@@ -1528,13 +1544,16 @@ namespace Yuni
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
 	CString<ChunkSizeT,ExpandableT>::find_first_not_of(char c, Size offset) const
 	{
-		for (Size i = offset; i < AncestorType::size; ++i)
+		if (offset < AncestorType::size)
 		{
-			// alias to the current character
-			if (c == AncestorType::data[i])
-				continue;
-			else
-				return i;
+			const char* p   = AncestorType::data + offset;
+			const char* end = AncestorType::data + (AncestorType::size);
+
+			for (; p != end; ++p)
+			{
+				if (c != *p)
+					return static_cast<Size>(p - AncestorType::data);
+			}
 		}
 		return npos;
 	}
@@ -1544,14 +1563,17 @@ namespace Yuni
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
 	CString<ChunkSizeT,ExpandableT>::ifind_first_not_of(char c, Size offset) const
 	{
-		c = static_cast<char>(ToLower(c));
-		for (Size i = offset; i < AncestorType::size; ++i)
+		if (offset < AncestorType::size)
 		{
-			// alias to the current character
-			if (c == static_cast<char>(ToLower(AncestorType::data[i])))
-				continue;
-			else
-				return i;
+			c = static_cast<char>(ToLower(c));
+			const char* p   = AncestorType::data + offset;
+			const char* end = AncestorType::data + (AncestorType::size);
+
+			for (; p != end; ++p)
+			{
+				if (c != static_cast<char>(ToLower(*p)))
+					return static_cast<Size>(p - AncestorType::data);
+			}
 		}
 		return npos;
 	}
@@ -1562,27 +1584,22 @@ namespace Yuni
 	inline typename CString<ChunkSizeT,ExpandableT>::Size
 	CString<ChunkSizeT,ExpandableT>::find_first_not_of(const AnyString& sequence, Size offset) const
 	{
-		// The given sequence
-		const char* const s = sequence.c_str();
-		Size len = sequence.size();
-		Size j;
-
-		for (Size i = offset; i < AncestorType::size; ++i)
+		if (offset < AncestorType::size and not sequence.empty())
 		{
-			bool stop = true;
-			// alias to the current character
-			char c = AncestorType::data[i];
-			for (j = 0; j != len; ++j)
+			const char* p    = AncestorType::data + offset;
+			const char* end  = AncestorType::data + (AncestorType::size);
+
+			const char* jfirst = sequence.c_str();
+			const char* jend   = jfirst + sequence.size();
+
+			for (; p != end; ++p)
 			{
-				if (s[j] == c)
+				for (const char* j = jfirst; j != jend; ++j)
 				{
-					stop = false;
-					break;
+					if (*j != *p)
+						return static_cast<Size>(p - AncestorType::data);
 				}
 			}
-			if (stop)
-				return i;
-
 		}
 		return npos;
 	}
