@@ -58,9 +58,9 @@ namespace Gfx3D
 	}
 
 
+# ifndef NDEBUG
 	inline bool GLTestError(const AnyString& location)
 	{
-		# ifndef NDEBUG
 
 		GLenum err = ::glGetError();
 		if (err == GL_NO_ERROR)
@@ -97,10 +97,13 @@ namespace Gfx3D
 
 		std::cerr << errorText << " in " << location << std::endl;
 		return false;
-
-		# endif // !NDEBUG
+	}
+# else
+	inline bool GLTestError(const AnyString&)
+	{
 		return true;
 	}
+# endif // !NDEBUG
 
 
 
