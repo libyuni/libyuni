@@ -38,7 +38,7 @@
 ** made available.
 */
 #include "node.h"
-#include <iostream>
+
 
 
 namespace Yuni
