@@ -45,6 +45,7 @@
 #endif
 #include "../core/string.h"
 #include <cassert>
+#include <iostream>
 
 
 
