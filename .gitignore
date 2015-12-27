@@ -1,5 +1,6 @@
-# hidden / vim files
+# hidden / vim / emacs files
 .*
+*~
 
 # Visual Studio
 Debug
@@ -85,5 +86,3 @@ cmake_install.cmake
 # parser
 /src/yuni/private/parser/peg/__parser.include.cpp.hxx
 /src/tools/parser-generator/yuni-parser-generator*
-
-
