@@ -23,4 +23,4 @@ else()
 	endif()
 endif()
 
-target_link_libraries(yuni-parser-generator yuni-static-parser yuni-static-core yuni-static-uuid "${ADDITIONAL_LIBS}")
+target_link_libraries(yuni-parser-generator yuni-static-parser yuni-static-core "${ADDITIONAL_LIBS}")
