@@ -55,6 +55,7 @@
 #include "../../../datetime/timestamp.h"
 #include "../../../io/directory.h"
 #include "process-info.h"
+#include <iostream>
 
 
 
@@ -512,8 +513,11 @@ namespace Process
 	}
 
 
-	void Program::commandLine(const AnyString& cmd)
+	void Program::commandLine(AnyString cmd)
 	{
+		// remove all whitespaces
+		cmd.trim();
+
 		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
@@ -526,68 +530,76 @@ namespace Process
 		env.executable.clear();
 		env.arguments.clear();
 
-		if (not cmd.empty())
+		if (cmd.empty())
+			return;
+
+
+		String* str = &env.executable;
+		char instring = '\0';
+		const AnyString::null_iterator end = cmd.utf8end();
+		for (AnyString::const_utf8iterator i = cmd.utf8begin(); i != end; ++i)
 		{
-			uint offset = 0;
-			bool foundExecutable = false;
-
-			do
+			char c = *i;
+			switch (c)
 			{
-				// Looking for the next whitespace
-				offset = cmd.find_first_not_of(" \t\r\n", offset);
-				if (offset >= cmd.size())
+				default:
+				{
+					*str += i.value();
 					break;
-
-				// ok, we have a new entry
-				uint next = offset;
-				bool escape = false;
-				char withinString = '\0';
-				do
+				}
+				case '"':
+				case '\'':
 				{
-					char c = cmd[next];
-					if (c == '\\')
+					if (instring == '\0')
 					{
-						escape = not escape;
+						instring = c;
 					}
 					else
 					{
-						if (c == '\'' or c == '"')
+						if (instring == c)
+							instring = '\0';
+						else
+							*str += c;
+					}
+					break;
+				}
+				case '\\':
+				{
+					++i;
+					if (YUNI_UNLIKELY(i == end))
+						return;
+					c = *i;
+					switch (c)
+					{
+						case 'n':  (*str) += '\n'; break;
+						case 't':  (*str) += '\t'; break;
+						case 'r':  (*str) += '\r'; break;
+						case 'b':  (*str) += '\b'; break;
+						case 'f':  (*str) += '\f'; break;
+						case 'v':  (*str) += '\v'; break;
+						case '0':  (*str) += '\0'; break;
+						case 'e':
+						case 'a':
+						case 'E':  break;
+						default:   (*str) << '\\' << c; break;
+					}
+				}
+				case ' ':
+				case '\t':
+				{
+					if (instring == '\0')
+					{
+						if (not str->empty())
 						{
-							if (not escape)
-							{
-								if (withinString == c)
-									withinString = '\0'; // end of literal
-								else if (withinString == '\0') // starts a new literal
-									withinString = c;
-							}
-						}
-						if (withinString == '\0')
-						{
-							if (c == ' ' or c == '\t' or c == '\r' or c == '\n')
-								break;
+							env.arguments.push_back(nullptr);
+							str = &(env.arguments.back());
 						}
 					}
-					++next;
-				}
-				while (next < cmd.size());
-
-				if (next > offset)
-				{
-					AnyString arg;
-					if (next - offset > 1 and cmd[next - 1] == cmd[offset] and (cmd[offset] == '"' or cmd[offset] == '\''))
-						arg.adapt(cmd.c_str() + offset + 1, next - offset - 2);
 					else
-						arg.adapt(cmd.c_str() + offset, next - offset);
-
-					if (not foundExecutable)
-						env.executable = arg;
-					else
-						env.arguments.push_back(arg);
-					foundExecutable = true;
+						*str += c;
+					break;
 				}
-				offset = next;
 			}
-			while (offset < cmd.size());
 		}
 	}
 
