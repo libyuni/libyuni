@@ -15,7 +15,7 @@ find_library(OPENAL_LIBRARY
 	PATH_SUFFIXES lib64 lib libs64 libs libs/Win32 libs/Win64
 	PATHS ${YUNI_DvP_OPENAL_PREFIX})
 
-LIBYUNI_CONFIG_INCLUDE_PATH("both" "audio" "${OPENAL_INCLUDE_DIR}")
-LIBYUNI_CONFIG_LIB("both" "audio" "${OPENAL_LIBRARY}")
+LIBYUNI_CONFIG_INCLUDE_PATH("both" "media" "${OPENAL_INCLUDE_DIR}")
+LIBYUNI_CONFIG_LIB("both" "media" "${OPENAL_LIBRARY}")
 include_directories(${OPENAL_INCLUDE_DIR})
 
