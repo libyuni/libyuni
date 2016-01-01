@@ -37,14 +37,13 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_INPUT_MOUSE_H__
-# define __YUNI_INPUT_MOUSE_H__
+#pragma once
 
-# include "../../yuni.h"
-# include "../../core/bind.h"
-# include "../../core/smartptr.h"
-# include "../../core/point2D.h"
-# include "../eventpropagation.h"
+#include "../../yuni.h"
+#include "../../core/bind.h"
+#include "../../core/smartptr.h"
+#include "../../core/point2D.h"
+#include "../eventpropagation.h"
 
 namespace Yuni
 {
@@ -166,5 +165,3 @@ namespace Input
 } // namespace Input
 } // namespace Yuni
 
-
-#endif // __YUNI_INPUT_MOUSE_H__
