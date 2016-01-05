@@ -503,9 +503,6 @@ endif()
 if (YUNI_MODULE_DBI)
 	set(YUNI_MODULE_DBI_SQLITE true)
 endif()
-if (YUNI_MODULE_PARSER)
-	set(YUNI_MODULE_EXTRA_UUID true)
-endif()
 
 
 

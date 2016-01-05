@@ -37,11 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_UI_INPUT_WINMOUSE_H__
-# define __YUNI_UI_INPUT_WINMOUSE_H__
+#pragma once
 
-# include "../../core/system/windows.hdr.h"
-# include "mouse.h"
+#include "../../core/system/windows.hdr.h"
+#include "mouse.h"
 
 namespace Yuni
 {
@@ -78,6 +77,3 @@ namespace Input
 
 } // namespace Input
 } // namespace Yuni
-
-
-#endif // __YUNI_UI_INPUT_WINMOUSE_H__

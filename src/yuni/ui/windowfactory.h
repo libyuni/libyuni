@@ -37,11 +37,10 @@
 ** However, the original YUNI source code with all modifications must always be
 ** made available.
 */
-#ifndef __YUNI_UI_WINDOW_FACTORY__
-# define __YUNI_UI_WINDOW_FACTORY__
+#pragma once
 
-# include "../yuni.h"
-# include "../core/string.h"
+#include "../yuni.h"
+#include "../core/string.h"
 
 namespace Yuni
 {
@@ -70,5 +69,3 @@ namespace UI
 
 } // UI
 } // Yuni
-
-#endif // __YUNI_UI_WINDOW_FACTORY__

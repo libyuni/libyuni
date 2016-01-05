@@ -136,6 +136,4 @@ install(
 )
 
 target_link_libraries(yuni-static-media-core ${OPENAL_LIBRARY})
-LIBYUNI_CONFIG_INCLUDE_PATH("both" "media" "${OPENAL_INCLUDE_DIR}")
-LIBYUNI_CONFIG_LIB_RAW_COMMAND("both" "media" "${OPENAL_LIBRARY}")
 

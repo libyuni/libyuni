@@ -157,7 +157,7 @@ namespace Process
 		/*!
 		** \brief Reset all arguments from a complete command line (ex: `ls -l /somewhere`)
 		*/
-		void commandLine(const AnyString& cmd);
+		void commandLine(AnyString cmd);
 
 		//! Get the program that will be executed
 		String program() const;

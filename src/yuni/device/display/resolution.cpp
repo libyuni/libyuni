@@ -41,7 +41,7 @@
 #include "../../core/hash/checksum/md5.h"
 #include "../../core/math.h"
 #include <cassert>
-
+#include <iostream>
 
 namespace Yuni
 {
@@ -76,7 +76,7 @@ namespace Display
 		String ret;
 		ret << pWidth << 'x' << pHeight;
 		if (pBitsPerPixel)
-			ret << " (" << (int)pBitsPerPixel << "Bits)";
+		  ret << " (" << (int)pBitsPerPixel << "Bits)";
 		return ret;
 	}
 
@@ -115,10 +115,10 @@ namespace Display
 
 	std::ostream& Resolution::print(std::ostream& out) const
 	{
-		out << pWidth << "x" << pHeight;
-		if (pBitsPerPixel)
-			out << " (" << (int) pBitsPerPixel << "Bits)";
-		return out;
+	  out << pWidth << "x" << pHeight;
+	  if (pBitsPerPixel)
+	    out << " (" << (int) pBitsPerPixel << "Bits)";
+	  return out;
 	}
 
 
