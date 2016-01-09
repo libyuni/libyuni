@@ -505,13 +505,13 @@
 
 		offset = from + 1;
 
-		Chunk& cursor      = stack[offset];
-		const Chunk& prev  = stack[offset - 1];
+		Chunk* const cursor     = &(stack[offset]);
+		const Chunk* const prev = cursor - 1;
 
-		cursor.offset    = prev.offset;
-		cursor.urlindex  = prev.urlindex;
-		cursor.rule      = 0;
-		TRACE_LOCAL("    restart at offset " << cursor.offset);
+		cursor->offset    = prev->offset;
+		cursor->urlindex  = prev->urlindex;
+		cursor->rule      = 0;
+		TRACE_LOCAL("    restart at offset " << cursor->offset);
 	}
 
 
