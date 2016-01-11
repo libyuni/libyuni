@@ -459,13 +459,12 @@ namespace PEG
 			{
 				Node::Map::const_iterator r = rules.find(rule.text);
 				if (r != rules.end())
+				{
 					stmt << neg << "yy" << r->second.enumID << "(ctx)";
+				}
 				else
 				{
-					if (not rule.text.empty())
-					{
-						assert(false and "missing rule !");
-					}
+					assert(rule.text.empty() and "missing rule !");
 					return;
 				}
 				break;

@@ -1258,7 +1258,7 @@ namespace PEG
 	bool Grammar::exportToCPP(const AnyString& rootfilename, const AnyString& name) const
 	{
 		CPPConverter data(rootfilename, pRules);
-		if (not data.initialize(name))
+		if (YUNI_UNLIKELY(not data.initialize(name)))
 			return false;
 
 		data.startHeaderheaderGuardID();
