@@ -52,6 +52,112 @@ namespace PEG
 	{
 
 		template<class StreamT>
+		static inline StreamT& PrintTabs(StreamT& out, uint depth)
+		{
+			assert(depth < 1000u); // arbitrary value
+			assert(out.size() < 1024 * 1024 * 10);
+			assert(out.capacity() < 1024 * 1024 * 10);
+			for (uint i = 0; i != depth; ++i)
+				out << '\t';
+
+			assert(out.size() < 1024 * 1024 * 10);
+			assert(out.capacity() < 1024 * 1024 * 10);
+			return out;
+		}
+
+		static inline std::ostream& PrintTabs(std::ostream& out, uint depth)
+		{
+			assert(depth < 10000u); // arbitrary value
+			for (uint i = 0; i != depth; ++i)
+				out << '\t';
+			return out;
+		}
+
+
+		template<class StreamT>
+		static inline StreamT& PrintString(StreamT& out, const String& text)
+		{
+			assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
+			assert(out.size() < 1024 * 1024 * 500);
+			String::const_utf8iterator end = text.utf8end();
+			String::const_utf8iterator i   = text.utf8begin();
+
+			for (; i != end; ++i)
+			{
+				if (i->size() == 1)
+				{
+					switch ((char) *i)
+					{
+						case '\n': out << "\\n"; break;
+						case '\t': out << "\\t"; break;
+						case '\r': out << "\\r"; break;
+						case '\f': out << "\\f"; break;
+						case '\v': out << "\\v"; break;
+						case '"' : out << "\\\""; break;
+						case '\\': out << "\\\\";break;
+						default: out << *i;
+					}
+				}
+				else
+					out << *i;
+			}
+			return out;
+		}
+
+
+		template<class StreamT>
+		static inline void PrintAsciiChar(StreamT& out, char c)
+		{
+			assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
+			assert(out.size() < 1024 * 1024 * 500);
+
+			switch (c)
+			{
+				case '\\':  out << "\\\\";break;
+				case '\'':  out << "\\\'";break;
+				case '\n':  out << "\\n";break;
+				case '\t':  out << "\\t";break;
+				case '\r':  out << "\\r";break;
+				case '\f':  out << "\\f";break;
+				case '\v':  out << "\\v";break;
+				default: out << c;
+			}
+		}
+
+
+
+		struct AutoReset final
+		{
+			AutoReset(bool enabled, Clob& out, uint& depth)
+				: enabled(enabled), out(out), depth(depth)
+			{
+				if (enabled)
+				{
+					out << "\n";
+					PrintTabs(out, depth) << "{\n";
+					++depth;
+					PrintTabs(out, depth) << "// not allowed to eat :(\n";
+					PrintTabs(out, depth) << "OffsetAutoReset autoreset(ctx);\n\n";
+				}
+			}
+
+			~AutoReset()
+			{
+				if (enabled)
+				{
+					PrintTabs(out, depth) << "}\n";
+					--depth;
+				}
+			}
+
+			bool enabled;
+			Clob& out;
+			uint& depth;
+		};
+
+
+
+		template<class StreamT>
 		static inline void PrintText(StreamT& out, const String& text)
 		{
 			String::const_utf8iterator end = text.utf8end();
@@ -349,80 +455,6 @@ namespace PEG
 	}
 
 
-	template<class StreamT>
-	static inline StreamT& PrintTabs(StreamT& out, uint depth)
-	{
-		assert(depth < 1000u); // arbitrary value
-		assert(out.size() < 1024 * 1024 * 10);
-		assert(out.capacity() < 1024 * 1024 * 10);
-		for (uint i = 0; i != depth; ++i)
-			out << '\t';
-
-		assert(out.size() < 1024 * 1024 * 10);
-		assert(out.capacity() < 1024 * 1024 * 10);
-		return out;
-	}
-
-	static inline std::ostream& PrintTabs(std::ostream& out, uint depth)
-	{
-		assert(depth < 10000u); // arbitrary value
-		for (uint i = 0; i != depth; ++i)
-			out << '\t';
-		return out;
-	}
-
-
-	template<class StreamT>
-	static inline StreamT& PrintString(StreamT& out, const String& text)
-	{
-		assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
-		assert(out.size() < 1024 * 1024 * 500);
-		String::const_utf8iterator end = text.utf8end();
-		String::const_utf8iterator i   = text.utf8begin();
-
-		for (; i != end; ++i)
-		{
-			if (i->size() == 1)
-			{
-				switch ((char) *i)
-				{
-					case '\n': out << "\\n"; break;
-					case '\t': out << "\\t"; break;
-					case '\r': out << "\\r"; break;
-					case '\f': out << "\\f"; break;
-					case '\v': out << "\\v"; break;
-					case '"' : out << "\\\""; break;
-					case '\\': out << "\\\\";break;
-					default: out << *i;
-				}
-			}
-			else
-				out << *i;
-		}
-		return out;
-	}
-
-
-	template<class StreamT>
-	static inline void PrintAsciiChar(StreamT& out, char c)
-	{
-		assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
-		assert(out.size() < 1024 * 1024 * 500);
-
-		switch (c)
-		{
-			case '\\':  out << "\\\\";break;
-			case '\'':  out << "\\\'";break;
-			case '\n':  out << "\\n";break;
-			case '\t':  out << "\\t";break;
-			case '\r':  out << "\\r";break;
-			case '\f':  out << "\\f";break;
-			case '\v':  out << "\\v";break;
-			default: out << c;
-		}
-	}
-
-
 
 	void Node::exportCPP(Clob& out, const Map& rules, Clob::Vector& helpers, String::Vector& datatext, uint depth, bool canreturn, uint& sp) const
 	{
@@ -634,12 +666,7 @@ namespace PEG
 		assert(out.size() < 1024 * 1024 * 100); // arbitrary - consistency check - 100MiB should be enough
 		assert(out.capacity() < 1024 * 1024 * 100);
 
-		if (not attributes.canEat)
-		{
-			out << "\n";
-			PrintTabs(out, d) << "// not allowed to eat :(\n";
-			PrintTabs(out, d) << "OffsetAutoReset autoreset(ctx);\n\n";
-		}
+		AutoReset autoreset(not attributes.canEat, out, d);
 
 		if (match.min == 0 and match.max == 1)
 		{
