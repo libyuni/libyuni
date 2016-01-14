@@ -48,186 +48,282 @@ namespace Parser
 namespace PEG
 {
 
-	/* static inline AnyString RuleTypeToString(Node::Type rule)
+	namespace // anonymous
 	{
-		switch (rule)
+
+		template<class StreamT>
+		static inline StreamT& PrintTabs(StreamT& out, uint depth)
 		{
-			case Node::asRule:   return "rule";
-			case Node::asString: return "string";
-			case Node::asSet:    return "set";
-			case Node::asAND:    return "and";
-			case Node::asOR:     return "or";
+			assert(depth < 1000u); // arbitrary value
+			assert(out.size() < 1024 * 1024 * 10);
+			assert(out.capacity() < 1024 * 1024 * 10);
+			for (uint i = 0; i != depth; ++i)
+				out << '\t';
+
+			assert(out.size() < 1024 * 1024 * 10);
+			assert(out.capacity() < 1024 * 1024 * 10);
+			return out;
 		}
-		return "";
-	}*/
 
-
-	template<class StreamT>
-	static inline void PrintText(StreamT& out, const String& text)
-	{
-		String::const_utf8iterator end = text.utf8end();
-		String::const_utf8iterator i   = text.utf8begin();
-
-		for (; i != end; ++i)
+		static inline std::ostream& PrintTabs(std::ostream& out, uint depth)
 		{
-			if (i->size() == 1)
+			assert(depth < 10000u); // arbitrary value
+			for (uint i = 0; i != depth; ++i)
+				out << '\t';
+			return out;
+		}
+
+
+		template<class StreamT>
+		static inline StreamT& PrintString(StreamT& out, const String& text)
+		{
+			assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
+			assert(out.size() < 1024 * 1024 * 500);
+			String::const_utf8iterator end = text.utf8end();
+			String::const_utf8iterator i   = text.utf8begin();
+
+			for (; i != end; ++i)
 			{
-				switch ((char) *i)
+				if (i->size() == 1)
 				{
-					case '\n': out << "\\\\n"; break;
-					case '\t': out << "\\\\t"; break;
-					case '\r': out << "\\\\r"; break;
-					case '\f': out << "\\\\f"; break;
-					case '\v': out << "\\\\v"; break;
-					case '"' : out << "\\\\\""; break;
-					default: out << *i;
+					switch ((char) *i)
+					{
+						case '\n': out << "\\n"; break;
+						case '\t': out << "\\t"; break;
+						case '\r': out << "\\r"; break;
+						case '\f': out << "\\f"; break;
+						case '\v': out << "\\v"; break;
+						case '"' : out << "\\\""; break;
+						case '\\': out << "\\\\";break;
+						default: out << *i;
+					}
+				}
+				else
+					out << *i;
+			}
+			return out;
+		}
+
+
+		template<class StreamT>
+		static inline void PrintAsciiChar(StreamT& out, char c)
+		{
+			assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
+			assert(out.size() < 1024 * 1024 * 500);
+
+			switch (c)
+			{
+				case '\\':  out << "\\\\";break;
+				case '\'':  out << "\\\'";break;
+				case '\n':  out << "\\n";break;
+				case '\t':  out << "\\t";break;
+				case '\r':  out << "\\r";break;
+				case '\f':  out << "\\f";break;
+				case '\v':  out << "\\v";break;
+				default: out << c;
+			}
+		}
+
+
+
+		struct AutoReset final
+		{
+			AutoReset(bool enabled, Clob& out, uint& depth)
+				: enabled(enabled), out(out), depth(depth)
+			{
+				if (enabled)
+				{
+					out << "\n";
+					PrintTabs(out, depth) << "{\n";
+					++depth;
+					PrintTabs(out, depth) << "// not allowed to eat :(\n";
+					PrintTabs(out, depth) << "OffsetAutoReset autoreset(ctx);\n\n";
 				}
 			}
-			else
-				out << *i;
-		}
-	}
+
+			~AutoReset()
+			{
+				if (enabled)
+				{
+					PrintTabs(out, depth) << "}\n";
+					--depth;
+				}
+			}
+
+			bool enabled;
+			Clob& out;
+			uint& depth;
+		};
 
 
 
-	static inline void PrintSubNodesIDs(Clob& out, const Node& node)
-	{
-		if (node.rule.type == Node::asRule and node.rule.text == "EOF")
-			return;
-
-		out << "\t\t\"" << node.id << "\" [label = \"";
-		if (node.match.negate)
-			out << "! ";
-
-		switch (node.rule.type)
+		template<class StreamT>
+		static inline void PrintText(StreamT& out, const String& text)
 		{
-			case Node::asAND:
+			String::const_utf8iterator end = text.utf8end();
+			String::const_utf8iterator i   = text.utf8begin();
+
+			for (; i != end; ++i)
 			{
-				out << "AND";
-				break;
-			}
-			case Node::asOR:
-			{
-				out << "OR";
-				break;
-			}
-			case Node::asString:
-			{
-				out << "\\\"";
-				PrintText(out, node.rule.text);
-				out << "\\\"";
-				break;
-			}
-			case Node::asSet:
-			{
-				out << "one of \\\"";
-				PrintText(out, node.rule.text);
-				out << "\\\"";
-				break;
-			}
-			case Node::asRule:
-			{
-				PrintText(out, node.rule.text);
-				break;
-			}
-			default:
-				PrintText(out, node.rule.text);
-		}
-
-		out << "\"";
-
-		if (node.rule.type == Node::asAND or node.rule.type == Node::asOR)
-			out << " shape = diamond";
-
-		out << "];\n";
-		for (uint i = 0; i != (uint) node.children.size(); ++i)
-			PrintSubNodesIDs(out, node.children[i]);
-	}
-
-
-	static inline void PrintSubNodesLinks(Clob& out, const Node::Map& rules, const Node& node, const String& source, bool inverseColor)
-	{
-		if (node.rule.type == Node::asRule)
-			return;
-
-		if (node.rule.type == Node::asRule)
-		{
-			Node::Map::const_iterator i = rules.find(node.rule.text);
-			if (i != rules.end())
-				out << "\t\t\"" << source << "\" -> \"" << i->second.id << "\"";
-			else
-				out << "\t\t\"" << source << "\" -> \"" << node.id << "\"";
-		}
-		else
-			out << "\t\t\"" << source << "\" -> \"" << node.id << "\"";
-
-		out << ";\n";
-
-		// relation
-		if (not (node.match.min == 1 and node.match.max == 1))
-		{
-			out << "\t\t\"" << node.id << "\" -> \"" << node.id << "\" [";
-			if (node.rule.type == Node::asRule)
-				out << "lhead = \"cluster-" << node.rule.text << "\"; ";
-			out << "label=<<font color=\"#FF5500\">";
-
-			if (node.match.min == 0 and node.match.max == (uint) -1)
-				out << '*' << node.id;
-			else if (node.match.min == 0 and node.match.max == 1)
-				out << '?';
-			else if (node.match.min == 1 and node.match.max == (uint) -1)
-				out << '+';
-			else
-			{
-				out << '{' << node.match.min << ',';
-				if (node.match.max == (uint) -1)
-					out << 'n';
+				if (i->size() == 1)
+				{
+					switch ((char) *i)
+					{
+						case '\n': out << "\\\\n"; break;
+						case '\t': out << "\\\\t"; break;
+						case '\r': out << "\\\\r"; break;
+						case '\f': out << "\\\\f"; break;
+						case '\v': out << "\\\\v"; break;
+						case '"' : out << "\\\\\""; break;
+						default: out << *i;
+					}
+				}
 				else
-					out << node.match.max;
-				out << '}';
+					out << *i;
 			}
-
-			out << "</font>>];\n";
 		}
 
-		// display all subnodes
-		if (not node.children.empty())
+
+		static inline void PrintSubNodesIDs(Clob& out, const Node& node)
 		{
-			out << "\t\tsubgraph \"cluster-" << node.id << "\" {\n";
-			if (inverseColor)
-			{
-				out << "\t\tstyle = filled;\n";
-				out << "\t\tcolor = lightgrey;\n";
-				out << "\t\tnode [style = filled, color = white];\n";
-			}
-			else
-			{
-				out << "\t\tstyle = filled;\n";
-				out << "\t\tcolor = \"#dfdfdf\";\n";
-				out << "\t\tnode [style = filled, color = lightgrey];\n";
-			}
+			if (node.rule.type == Node::asRule and node.rule.text == "EOF")
+				return;
+
+			out << "\t\t\"" << node.id << "\" [label = \"";
+			if (node.match.negate)
+				out << "! ";
 
 			switch (node.rule.type)
 			{
+				case Node::asAND:
+				{
+					out << "AND";
+					break;
+				}
 				case Node::asOR:
 				{
-					PrintSubNodesLinks(out, rules, node.children[0], node.id, not inverseColor);
-					for (uint i = 1; i < (uint) node.children.size(); ++i)
-						PrintSubNodesLinks(out, rules, node.children[i], node.id, not inverseColor);
+					out << "OR";
+					break;
+				}
+				case Node::asString:
+				{
+					out << "\\\"";
+					PrintText(out, node.rule.text);
+					out << "\\\"";
+					break;
+				}
+				case Node::asSet:
+				{
+					out << "one of \\\"";
+					PrintText(out, node.rule.text);
+					out << "\\\"";
+					break;
+				}
+				case Node::asRule:
+				{
+					PrintText(out, node.rule.text);
 					break;
 				}
 				default:
-				{
-					PrintSubNodesLinks(out, rules, node.children[0], node.id, not inverseColor);
-					for (uint i = 1; i < (uint) node.children.size(); ++i)
-						PrintSubNodesLinks(out, rules, node.children[i], node.children[i - 1].id, not inverseColor);
-				}
+					PrintText(out, node.rule.text);
 			}
 
-			out << "\t\t}\n";
-		}
-	}
+			out << "\"";
 
+			if (node.rule.type == Node::asAND or node.rule.type == Node::asOR)
+				out << " shape = diamond";
+
+			out << "];\n";
+			for (uint i = 0; i != (uint) node.children.size(); ++i)
+				PrintSubNodesIDs(out, node.children[i]);
+		}
+
+
+		static inline void PrintSubNodesLinks(Clob& out, const Node::Map& rules, const Node& node, const String& source, bool inverseColor)
+		{
+			if (node.rule.type == Node::asRule)
+				return;
+
+			if (node.rule.type == Node::asRule)
+			{
+				Node::Map::const_iterator i = rules.find(node.rule.text);
+				if (i != rules.end())
+					out << "\t\t\"" << source << "\" -> \"" << i->second.id << "\"";
+				else
+					out << "\t\t\"" << source << "\" -> \"" << node.id << "\"";
+			}
+			else
+				out << "\t\t\"" << source << "\" -> \"" << node.id << "\"";
+
+			out << ";\n";
+
+			// relation
+			if (not (node.match.min == 1 and node.match.max == 1))
+			{
+				out << "\t\t\"" << node.id << "\" -> \"" << node.id << "\" [";
+				if (node.rule.type == Node::asRule)
+					out << "lhead = \"cluster-" << node.rule.text << "\"; ";
+				out << "label=<<font color=\"#FF5500\">";
+
+				if (node.match.min == 0 and node.match.max == (uint) -1)
+					out << '*' << node.id;
+				else if (node.match.min == 0 and node.match.max == 1)
+					out << '?';
+				else if (node.match.min == 1 and node.match.max == (uint) -1)
+					out << '+';
+				else
+				{
+					out << '{' << node.match.min << ',';
+					if (node.match.max == (uint) -1)
+						out << 'n';
+					else
+						out << node.match.max;
+					out << '}';
+				}
+
+				out << "</font>>];\n";
+			}
+
+			// display all subnodes
+			if (not node.children.empty())
+			{
+				out << "\t\tsubgraph \"cluster-" << node.id << "\" {\n";
+				if (inverseColor)
+				{
+					out << "\t\tstyle = filled;\n";
+					out << "\t\tcolor = lightgrey;\n";
+					out << "\t\tnode [style = filled, color = white];\n";
+				}
+				else
+				{
+					out << "\t\tstyle = filled;\n";
+					out << "\t\tcolor = \"#dfdfdf\";\n";
+					out << "\t\tnode [style = filled, color = lightgrey];\n";
+				}
+
+				switch (node.rule.type)
+				{
+					case Node::asOR:
+					{
+						PrintSubNodesLinks(out, rules, node.children[0], node.id, not inverseColor);
+						for (uint i = 1; i < (uint) node.children.size(); ++i)
+							PrintSubNodesLinks(out, rules, node.children[i], node.id, not inverseColor);
+						break;
+					}
+					default:
+					{
+						PrintSubNodesLinks(out, rules, node.children[0], node.id, not inverseColor);
+						for (uint i = 1; i < (uint) node.children.size(); ++i)
+							PrintSubNodesLinks(out, rules, node.children[i], node.children[i - 1].id, not inverseColor);
+					}
+				}
+
+				out << "\t\t}\n";
+			}
+		}
+
+
+	} // anonymous namepace
 
 
 
@@ -359,80 +455,6 @@ namespace PEG
 	}
 
 
-	template<class StreamT>
-	static inline StreamT& PrintTabs(StreamT& out, uint depth)
-	{
-		assert(depth < 1000u); // arbitrary value
-		assert(out.size() < 1024 * 1024 * 10);
-		assert(out.capacity() < 1024 * 1024 * 10);
-		for (uint i = 0; i != depth; ++i)
-			out << '\t';
-
-		assert(out.size() < 1024 * 1024 * 10);
-		assert(out.capacity() < 1024 * 1024 * 10);
-		return out;
-	}
-
-	static inline std::ostream& PrintTabs(std::ostream& out, uint depth)
-	{
-		assert(depth < 10000u); // arbitrary value
-		for (uint i = 0; i != depth; ++i)
-			out << '\t';
-		return out;
-	}
-
-
-	template<class StreamT>
-	static inline StreamT& PrintString(StreamT& out, const String& text)
-	{
-		assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
-		assert(out.size() < 1024 * 1024 * 500);
-		String::const_utf8iterator end = text.utf8end();
-		String::const_utf8iterator i   = text.utf8begin();
-
-		for (; i != end; ++i)
-		{
-			if (i->size() == 1)
-			{
-				switch ((char) *i)
-				{
-					case '\n': out << "\\n"; break;
-					case '\t': out << "\\t"; break;
-					case '\r': out << "\\r"; break;
-					case '\f': out << "\\f"; break;
-					case '\v': out << "\\v"; break;
-					case '"' : out << "\\\""; break;
-					case '\\': out << "\\\\";break;
-					default: out << *i;
-				}
-			}
-			else
-				out << *i;
-		}
-		return out;
-	}
-
-
-	template<class StreamT>
-	static inline void PrintAsciiChar(StreamT& out, char c)
-	{
-		assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
-		assert(out.size() < 1024 * 1024 * 500);
-
-		switch (c)
-		{
-			case '\\':  out << "\\\\";break;
-			case '\'':  out << "\\\'";break;
-			case '\n':  out << "\\n";break;
-			case '\t':  out << "\\t";break;
-			case '\r':  out << "\\r";break;
-			case '\f':  out << "\\f";break;
-			case '\v':  out << "\\v";break;
-			default: out << c;
-		}
-	}
-
-
 
 	void Node::exportCPP(Clob& out, const Map& rules, Clob::Vector& helpers, String::Vector& datatext, uint depth, bool canreturn, uint& sp) const
 	{
@@ -459,13 +481,12 @@ namespace PEG
 			{
 				Node::Map::const_iterator r = rules.find(rule.text);
 				if (r != rules.end())
+				{
 					stmt << neg << "yy" << r->second.enumID << "(ctx)";
+				}
 				else
 				{
-					if (not rule.text.empty())
-					{
-						assert(false and "missing rule !");
-					}
+					assert(rule.text.empty() and "missing rule !");
 					return;
 				}
 				break;
@@ -645,12 +666,7 @@ namespace PEG
 		assert(out.size() < 1024 * 1024 * 100); // arbitrary - consistency check - 100MiB should be enough
 		assert(out.capacity() < 1024 * 1024 * 100);
 
-		if (not attributes.canEat)
-		{
-			out << "\n";
-			PrintTabs(out, d) << "// not allowed to eat :(\n";
-			PrintTabs(out, d) << "OffsetAutoReset autoreset(ctx);\n\n";
-		}
+		AutoReset autoreset(not attributes.canEat, out, d);
 
 		if (match.min == 0 and match.max == 1)
 		{

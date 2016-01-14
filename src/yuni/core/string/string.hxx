@@ -1271,7 +1271,10 @@ namespace Yuni
 	inline bool
 	CString<ChunkSizeT,ExpandableT>::startsWith(const AnyString& string) const
 	{
-		return startsWith(string.c_str(), string.size());
+		uint len = string.size();
+		return (len != 0 and len <= AncestorType::size)
+			? (0 == ::memcmp(AncestorType::data, string.c_str(), len))
+			: false;
 	}
 
 

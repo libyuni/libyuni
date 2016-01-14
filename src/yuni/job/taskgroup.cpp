@@ -56,7 +56,11 @@ namespace Job
 
 
 	public:
-		ITaskgroupJob(QueueService& queueservice);
+		ITaskgroupJob(QueueService& queueservice)
+			: taskgroup(nullptr)
+			, queueservice(queueservice)
+		{}
+
 		virtual ~ITaskgroupJob() {}
 
 
@@ -68,7 +72,15 @@ namespace Job
 
 
 	protected:
-		void onTerminate(bool success);
+		void onTerminate(bool success)
+		{
+			ThreadingPolicy::MutexLocker locker(*this);
+			if (taskgroup) // notify that the job has finished
+			{
+				taskgroup->onJobTerminated(*this, success);
+				taskgroup = nullptr;
+			}
+		}
 
 	}; // class TaskgroupJob
 
@@ -83,7 +95,11 @@ namespace Job
 
 
 	public:
-		TaskgroupJobCallback(QueueService& queueservice, const Bind<bool (IJob&)>& callback);
+		TaskgroupJobCallback(QueueService& queueservice, const Bind<bool (IJob&)>& callback)
+			: Taskgroup::ITaskgroupJob(queueservice)
+			, callback(callback)
+		{}
+
 		virtual ~TaskgroupJobCallback() {}
 
 
@@ -92,47 +108,14 @@ namespace Job
 		Bind<bool (IJob&)> callback;
 
 	protected:
-		virtual void onExecute() override;
+		virtual void onExecute() override
+		{
+			bool success = false;
+			try { success = callback(*this); } catch (...) {}
+			onTerminate(success);
+		}
 
 	}; // class TaskgroupJob
-
-
-
-
-
-	inline Taskgroup::ITaskgroupJob::ITaskgroupJob(QueueService& queueservice)
-		: taskgroup(nullptr)
-		, queueservice(queueservice)
-	{}
-
-
-	inline void Taskgroup::ITaskgroupJob::onTerminate(bool success)
-	{
-		// notify that the job has finished
-		ThreadingPolicy::MutexLocker locker(*this);
-		if (taskgroup)
-		{
-			taskgroup->onJobTerminated(*this, success);
-			taskgroup = nullptr;
-		}
-	}
-
-
-	inline TaskgroupJobCallback::TaskgroupJobCallback(QueueService& queueservice, const Bind<bool (IJob&)>& callback)
-		: Taskgroup::ITaskgroupJob(queueservice)
-		, callback(callback)
-	{}
-
-
-	void TaskgroupJobCallback::onExecute()
-	{
-		// execute the real work
-		bool success = false;
-		// if the user likes c++exceptions
-		try { success = callback(*this); } catch (...) {}
-		// finish !
-		onTerminate(success);
-	}
 
 
 
@@ -164,7 +147,8 @@ namespace Job
 
 	inline void Taskgroup::deleteAllJobsWL()
 	{
-		for (uint i = 0; i != (uint) pJobs.size(); ++i)
+		uint jobCount = static_cast<uint>(pJobs.size());
+		for (uint i = 0; i != jobCount; ++i)
 		{
 			ITaskgroupJob* job = pJobs[i];
 			job->taskgroup = nullptr; // should be useless and already done
@@ -197,19 +181,20 @@ namespace Job
 	inline void Taskgroup::stopAllJobsWL()
 	{
 		// remove all waiting jobs
-		if (not pJobs.empty())
+		uint jobCount = static_cast<uint>(pJobs.size());
+		if (jobCount != 0)
 		{
 			bool atLeastOneJobWasAlive = false;
 
-			for (uint i = 0; i != (uint) pJobs.size(); ++i)
+			for (uint i = 0; i != jobCount; ++i)
 			{
-				ITaskgroupJob* job = pJobs[i];
+				ITaskgroupJob& job = *(pJobs[i]);
 
-				ITaskgroupJob::ThreadingPolicy::MutexLocker joblocker(*(job));
-				if (job->taskgroup)
+				ITaskgroupJob::ThreadingPolicy::MutexLocker joblocker(job);
+				if (job.taskgroup)
 				{
-					job->taskgroup = nullptr;
-					job->cancel();
+					job.taskgroup = nullptr;
+					job.cancel();
 					atLeastOneJobWasAlive = true;
 				}
 			}
@@ -230,7 +215,7 @@ namespace Job
 			return;
 
 		// we may need to stop at the first encoutered error
-		bool forceCancel = ((not success and pTaskStatus == stSucceeded) and pCancelOnError);
+		bool forceCancel = (pCancelOnError and (not success and pTaskStatus == stSucceeded));
 		// update the status of the task
 		if (not success and (pTaskStatus == stSucceeded)) // no update if == stCanceled for example
 			pTaskStatus = stFailed;

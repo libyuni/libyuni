@@ -1,10 +1,17 @@
 	//! Add traces to the stdcout
 	# define HAS_TRACES 0
 
+	//! Enable time-consuming checks
+	#ifndef NDEBUG
+	# define MORE_CHECKS 1
+	#else
+	# define MORE_CHECKS 0
+	#endif
+
 	# define HAS_STATISTICS 0
 
 	//! Size (in bytes), when increasing the stack capacity
-	# define GROW_CHUNK  1024 // 1024 * sizeof(Chunk) -> 16KiB
+	# define GROW_CHUNK  4096 // 1024 * sizeof(Chunk) -> 16KiB
 
 	//! Arbitrary value for consistency checks
 	# define ARBITRARY_HARD_LIMIT  (1024 * 1024 * 500)
@@ -96,14 +103,16 @@
 	{
 		//! ASTRule ID - a negative value means that the rule has not been commited yet
 		int rule;
+		//! hint about the parent frame (last uncommited)
+		uint lastUncommited;
+		//! Parent rule
+		uint parent;
 		//! Iterator on the source
 		uint offset;
 		//! Index of the current source url (see `urls`)
 		uint urlindex;
 		//! End offset - means nothing if rule == 0
 		uint offsetEnd;
-		//! Parent rule
-		uint parent;
 	};
 
 
@@ -235,7 +244,7 @@
 
 
 
-	# ifndef NDEBUG
+	#if MORE_CHECKS != 0
 	static inline std::ostream& PrintFrame(std::ostream& out, const Chunk& cursor)
 	{
 		out << "{offset: " << cursor.offset
@@ -298,6 +307,7 @@
 		firstFrame.offsetEnd = 0;
 		// no parent
 		firstFrame.parent = 0;
+		firstFrame.lastUncommited = 0;
 	}
 
 
@@ -305,22 +315,28 @@
 	{
 		// WARNING The variable 'offset' might be unreliable for displying
 		// and/or checking values from the stack frames
+		#if MORE_CHECKS != 0
 		assert(capacity + GROW_CHUNK < ARBITRARY_HARD_LIMIT); // arbitrary
+		#endif
 
 		// grow the stack
 		stack = (Chunk*)::realloc(stack, (capacity += GROW_CHUNK) * sizeof(Chunk));
-		// post-checks
+
+		#if MORE_CHECKS != 0  // post-checks
 		assert(offset < capacity);
+		#endif
 	}
 
 
 	inline void Datasource::pushInclude(uint urlindex)
 	{
+		#if MORE_CHECKS != 0
 		assert(urlindex < ARBITRARY_HARD_LIMIT);
 		assert(capacity + GROW_CHUNK < ARBITRARY_HARD_LIMIT); // arbitrary
 		assert(offset < ARBITRARY_HARD_LIMIT); // arbitrary
 		assert(urls.size() == contents.size());
 		assert(urls.size() == reverseUrlIndexes.size());
+		#endif
 
 		if (YUNI_UNLIKELY(not (++offset < capacity))) // grow
 			grow();
@@ -331,13 +347,16 @@
 		cursor.rule      = 0;
 		cursor.offsetEnd = 0;
 		cursor.parent    = (uint) -1;
+		cursor.lastUncommited = (uint) -1;
 	}
 
 
 	inline uint Datasource::push()
 	{
+		#if MORE_CHECKS != 0
 		assert(capacity + GROW_CHUNK < ARBITRARY_HARD_LIMIT); // arbitrary
 		assert(offset < ARBITRARY_HARD_LIMIT); // arbitrary
+		#endif
 
 		if (YUNI_UNLIKELY(not (++offset < capacity))) // grow
 			grow();
@@ -348,29 +367,34 @@
 			maxOffset = offset;
 		# endif
 
-		Chunk& cursor      = stack[offset];
-		const Chunk& prev  = stack[offset - 1];
+		Chunk* const cursor     = &(stack[offset]);
+		const Chunk* const prev = cursor - 1;
 
-		assert(prev.offset < ARBITRARY_HARD_LIMIT);
-		assert(prev.urlindex < ARBITRARY_HARD_LIMIT);
+		#if MORE_CHECKS != 0
+		assert(prev->offset   < ARBITRARY_HARD_LIMIT);
+		assert(prev->urlindex < ARBITRARY_HARD_LIMIT);
+		#endif
 
-		cursor.offset    = prev.offset;
-		cursor.urlindex  = prev.urlindex;
-		cursor.rule      = 0;
-		// cursor.offsetEnd = 0;  means nothing if rule == 0
+		cursor->offset    = prev->offset;
+		cursor->urlindex  = prev->urlindex;
+		cursor->rule      = 0;
+		// cursor->offsetEnd = 0;  means nothing if rule == 0
+		cursor->lastUncommited = prev->lastUncommited;
 
 		// Since TRACE_LOCAL uses cursor.offset, this macro must be called after
 		// the previous initialization
-		TRACE_LOCAL("    push at offset " << prev.offset);
+		TRACE_LOCAL("    push at offset " << prev->offset);
 		return offset - 1;
 	}
 
 
 	inline uint Datasource::enterRule(enum ASTRule rule)
 	{
+		#if MORE_CHECKS != 0
 		assert(capacity + GROW_CHUNK < ARBITRARY_HARD_LIMIT); // arbitrary
 		assert(offset < ARBITRARY_HARD_LIMIT); // arbitrary
 		assert((uint) rule < (uint) ruleCount);
+		#endif
 
 		// This method is quite similar to `push`
 		// Grow !
@@ -382,17 +406,21 @@
 			maxOffset = offset;
 		# endif
 
+		#if MORE_CHECKS != 0
 		assert(offset > 0);
 		assert(capacity < ARBITRARY_HARD_LIMIT);
-		Chunk& cursor      = stack[offset];
-		const Chunk& prev  = stack[offset - 1];
+		#endif
 
-		cursor.offset    = prev.offset;
-		cursor.urlindex  = prev.urlindex;
-		cursor.rule      = - ((int) rule);
-		cursor.offsetEnd = cursor.offset; // store offset for reuse at commit
+		Chunk* const cursor     = &(stack[offset]);
+		const Chunk* const prev = cursor - 1;
 
-		TRACE_LOCAL("    enter at offset " << cursor.offset);
+		cursor->offset    = prev->offset;
+		cursor->urlindex  = prev->urlindex;
+		cursor->rule      = - ((int) rule);
+		cursor->offsetEnd = cursor->offset; // store offset for reuse at commit*/
+		cursor->lastUncommited = offset;
+
+		TRACE_LOCAL("    enter at offset " << cursor->offset);
 		return offset;
 	}
 
@@ -406,15 +434,16 @@
 		// if a stack frame with the variable 'rule' not null (aka a stack frame
 		// dedicated to create a node in the AST), then it would not be safe to
 		// get rid of the end of the stack
-		for (uint i = ruleOffset + 1; i <= offset; ++i)
+		const Chunk* const end = &(stack[offset]);
+		const Chunk* it = &(stack[ruleOffset + 1]);
+		for (; it <= end; ++it)
 		{
-			if (stack[i].rule != 0)
+			if (it->rule != 0)
 			{
 				++offset;
 				return;
 			}
 		}
-
 		// it seems that it is safe to ignore the end of the stack - hourray \o/
 		offset = ruleOffset + 1;
 	}
@@ -422,51 +451,46 @@
 
 	inline void Datasource::commit(uint ruleOffset, enum ASTRule rule)
 	{
-		assert(stack[ruleOffset].rule == - (int) rule and "inconsistency ruleid in the stack");
-		assert(offset >= ruleOffset and "invalid stack entre/commit");
-		assert(stack[offset].offset >= stack[ruleOffset].offset and "Huh? Should go forward...");
-		(void) rule; // avoid warning in release mode
-
 		// committing the current stack frame
 		{
-			Chunk& ruleCursor = stack[ruleOffset];
+			Chunk* const ruleCursor = &(stack[ruleOffset]);
+
+			#if MORE_CHECKS != 0
+			assert(ruleCursor->rule == - (int) rule and "inconsistency ruleid in the stack");
+			assert(offset >= ruleOffset and "invalid stack entre/commit");
+			assert(stack[offset].offset >= ruleCursor->offset and "Huh? Should go forward...");
+			#endif
 
 			// restore previous offset - a temporary variable must be used
 			// it may happen that `offset` and `ruleOffset` are the same
-			uint newEndOffset    = stack[offset].offset;
-			ruleCursor.offset    = ruleCursor.offsetEnd;
-			ruleCursor.offsetEnd = newEndOffset;
-			ruleCursor.rule      = (int) rule;
+			uint newEndOffset     = stack[offset].offset;
+			ruleCursor->offset    = ruleCursor->offsetEnd;
+			ruleCursor->offsetEnd = newEndOffset;
+			ruleCursor->rule      = static_cast<int>(rule);
 
-			assert(ruleCursor.offset <= ruleCursor.offsetEnd and "invalid boundaries");
+			#if MORE_CHECKS != 0
+			assert(ruleCursor->offset <= ruleCursor->offsetEnd and "invalid boundaries");
+			#endif
 
-			// Looking for the parent node
+			// try to find the lastest uncommited rule
 			{
-				# ifndef NDEBUG
-				bool parentFound = false;
-				# endif
-
-				uint i = ruleOffset;
+				uint lastUncommited = ruleOffset - 1;
 				do
 				{
-					if (stack[--i].rule < 0)
+					assert(lastUncommited < capacity);
+					Chunk* element = &(stack[lastUncommited]);
+					if (element->rule < 0)
 					{
-						ruleCursor.parent = i;
-						# ifndef NDEBUG
-						parentFound = true;
-						# endif
+						ruleCursor->parent = lastUncommited;
+						if (lastUncommited > 0)
+							element->lastUncommited = (element - 1)->lastUncommited;
 						break;
 					}
-				}
-				while (i != 0);
 
-				# ifndef NDEBUG
-				if (not parentFound)
-				{
-					std::cerr << "invalid parent commiting " << ruleCursor.rule << " at offset " << ruleOffset << std::endl;
-					assert(false);
+					assert(lastUncommited > 0);
+					lastUncommited = (element - 1)->lastUncommited;
 				}
-				# endif
+				while (true);
 			}
 
 			# if HAS_TRACES != 0
@@ -480,42 +504,48 @@
 		// calculating the new offset: [optimization]
 		findOptimalNewOffsetAfterCommit(ruleOffset);
 
-		if (YUNI_UNLIKELY(not (offset < capacity))) // grow !
-			grow();
-
 		# if HAS_STATISTICS != 0 && !defined(NDEBUG)
 		if (offset > maxOffset)
 			maxOffset = offset;
 		# endif
 
+		if (YUNI_UNLIKELY(not (offset < capacity))) // grow !
+			grow();
+
 		// the item at `ruleOffset` may have changed - re-acquiring a new ref on it
-		Chunk& ruleCursor = stack[ruleOffset];
+		// (cf `grow()`)
+		assert(ruleOffset != 0 and ruleOffset < capacity);
+		const Chunk* ruleCursor = &(stack[ruleOffset]);
 		Chunk& cursor     = stack[offset];
-		cursor.offset     = ruleCursor.offsetEnd;
-		cursor.urlindex   = ruleCursor.urlindex;
+		cursor.offset     = ruleCursor->offsetEnd;
+		cursor.urlindex   = ruleCursor->urlindex;
 		cursor.rule       = 0;
+		cursor.lastUncommited = (ruleCursor - 1)->lastUncommited;
 	}
 
 
 	inline void Datasource::restart(uint from)
 	{
 		// the method `push` returns `offset - 1`
+		#if MORE_CHECKS != 0
 		assert(from + 1 < capacity);
 		assert(from < offset and "can not restart from a non existing frame");
+		#endif
 
 		offset = from + 1;
 
-		Chunk& cursor      = stack[offset];
-		const Chunk& prev  = stack[offset - 1];
+		Chunk* const cursor     = &(stack[offset]);
+		const Chunk* const prev = cursor - 1;
 
-		cursor.offset    = prev.offset;
-		cursor.urlindex  = prev.urlindex;
-		cursor.rule      = 0;
-		TRACE_LOCAL("    restart at offset " << cursor.offset);
+		cursor->offset   = prev->offset;
+		cursor->urlindex = prev->urlindex;
+		cursor->rule     = 0;
+		cursor->lastUncommited = prev->lastUncommited;
+		TRACE_LOCAL("    restart at offset " << cursor->offset);
 	}
 
 
-	inline bool Datasource::open(const AnyString& newurl)
+	bool Datasource::open(const AnyString& newurl)
 	{
 		// getting the root directory once and for all if not already done
 		// the operation is not done in the constructor to let the caller
@@ -551,7 +581,7 @@
 	}
 
 
-	inline void Datasource::openContent(const AnyString& content)
+	void Datasource::openContent(const AnyString& content)
 	{
 		const String filename = "<memory>";
 		// filename index
@@ -561,7 +591,7 @@
 		{
 			assert(contents.size() == urls.size());
 			// indexes
-			index = (uint) contents.size();
+			index = static_cast<uint>(contents.size());
 			reverseUrlIndexes[filename] = index;
 			urls.push_back(filename);
 			// load the entire content in memory
@@ -577,7 +607,9 @@
 
 	inline bool Datasource::matchSingleAsciiChar(char c)
 	{
+		assert(offset < capacity);
 		Chunk& cursor    = stack[offset];
+		assert(cursor.urlindex < contents.size());
 		const Clob& data = contents[cursor.urlindex];
 		if (cursor.offset < data.size() and c == data[cursor.offset])
 		{
@@ -590,10 +622,10 @@
 
 	inline bool Datasource::matchString(const AnyString& text)
 	{
-		Chunk& cursor    = stack[offset];
-		const Clob& data = contents[cursor.urlindex];
-
-		if (AnyString(data, cursor.offset).startsWith(text))
+		assert(offset < capacity);
+		Chunk& cursor = stack[offset];
+		assert(cursor.urlindex < contents.size());
+		if (AnyString(contents[cursor.urlindex], cursor.offset).startsWith(text))
 		{
 			cursor.offset += text.size();
 			return true;
@@ -604,7 +636,9 @@
 
 	inline bool Datasource::matchOneOf(const AnyString& text)
 	{
+		assert(offset < capacity);
 		Chunk& cursor    = stack[offset];
+		assert(cursor.urlindex < contents.size());
 		const Clob& data = contents[cursor.urlindex];
 
 		if (cursor.offset < data.size())
@@ -621,8 +655,11 @@
 
 	inline bool Datasource::notMatchSingleAsciiChar(char c)
 	{
+		assert(offset < capacity);
 		Chunk& cursor    = stack[offset];
+		assert(cursor.urlindex < contents.size());
 		const Clob& data = contents[cursor.urlindex];
+
 		if (cursor.offset < data.size() and c != data[cursor.offset])
 		{
 			++cursor.offset;
@@ -634,7 +671,9 @@
 
 	inline bool Datasource::notMatchOneOf(const AnyString& text)
 	{
+		assert(offset < capacity);
 		Chunk& cursor    = stack[offset];
+		assert(cursor.urlindex < contents.size());
 		const Clob& data = contents[cursor.urlindex];
 
 		if (cursor.offset < data.size())
@@ -788,7 +827,8 @@
 
 
 	template<bool ColorT>
-	static void InternalNodeExportConsole(Clob& out, const Node& node, bool hasSibling, String& indent, String& tmp, Node::ExportCallback callback)
+	static void InternalNodeExportConsole(Clob& out, const Node& node, bool hasSibling, String& indent,
+		String& tmp, Node::ExportCallback callback)
 	{
 		using namespace ::Yuni::System::Console;
 		assert(&node != NULL);
@@ -954,8 +994,10 @@
 			TRACE_INFO("STATISTICS");
 			TRACE_INFO("result: " << (success ? "OK" : "FAILED") << "  (" << duration << "ms)");
 			uint ratio = (uint)((double) realRuleCount * 100. / offset);
-			TRACE_INFO("stack: " << realRuleCount << " rules for " << offset << " stack frames, ratio: " << ratio << "% (higher is better), max depth: " << maxOffset);
-			TRACE_INFO("stack: " << ((capacity * sizeof(Chunk)) / 1024) << " KiB (capacity: " << capacity << ", " << sizeof(Chunk) << " bytes per frame)");
+			TRACE_INFO("stack: " << realRuleCount << " rules for " << offset << " stack frames, ratio: "
+				<< ratio << "% (higher is better), max depth: " << maxOffset);
+			TRACE_INFO("stack: " << ((capacity * sizeof(Chunk)) / 1024) << " KiB (capacity: " << capacity
+				<< ", " << sizeof(Chunk) << " bytes per frame)");
 			uint64 totalCapa = 0;
 			for (uint i = 0; i != (uint) contents.size(); ++i)
 				totalCapa += contents[i].capacity();
@@ -985,88 +1027,93 @@
 		assert(stack[0].rule == + (int) rgEOF and "invalid stack (should have called isParseComplete())");
 
 		// all AST nodes, mapping the stack elements
-		Node::Vector astNodes;
-		astNodes.resize(offset + 1);
+		uint astNodesSize = offset + 1;
+		Node** astNodes = (Node**)::calloc(astNodesSize, sizeof(void*));
 
 		// pseudo root node to avoid special cases for retrieving the parent node
 		astNodes[0] = new Node();
 		astNodes[0]->rule = rgUnknown;
 		astNodes[0]->offset = 0;
 		astNodes[0]->offsetEnd = 0;
-		Node& pseudoRootNode = *astNodes[0];
+
+		const Chunk* cursor = &(stack[0]);
+		const Chunk* const end = &(stack[offset]);
+		uint i = 0;
 
 		// starting from the first real frame
-		for (uint i = 1; i != offset; ++i)
+		while (++cursor != end)
 		{
-			const Chunk& cursor = stack[i];
-
-			# ifndef NDEBUG
-			if (cursor.rule < 0)
+			++i;
+			#if MORE_CHECKS != 0
+			if (YUNI_UNLIKELY(cursor->rule < 0))
 			{
 				std::cerr << "assert failed: invalid rule  ";
-				PrintFrame(std::cerr, cursor) << std::endl;
-				assert(cursor.rule >= 0 and "some rules are not commited - the parse should have failed");
+				PrintFrame(std::cerr, *cursor) << std::endl;
+				assert(cursor->rule >= 0 and "some rules are not commited - the parse should have failed");
 			}
 			# endif
 
-			if (cursor.rule <= 0)
-				continue;
 
-			# ifndef NDEBUG
-			if (not (cursor.parent < offset))
+			if (cursor->rule > 0) // only commited rules
 			{
-				std::cerr << "assert failed: invalid parent: " << i << "/" << offset << ",  ";
-				PrintFrame(std::cerr, cursor) << std::endl;
-				assert(cursor.parent < offset and "invalid parent index");
-			}
-			assert(cursor.parent < astNodes.size());
-			assert(!(!astNodes[cursor.parent]) and "invalid parent");
-			# endif
+				#if MORE_CHECKS != 0
+				if (YUNI_UNLIKELY(not (cursor->parent < offset)))
+				{
+					std::cerr << "assert failed: invalid parent: " << i << "/" << offset << ",  ";
+					PrintFrame(std::cerr, *cursor) << std::endl;
+					assert(cursor->parent < offset and "invalid parent index");
+				}
+				assert(cursor->parent < astNodesSize);
+				assert(!(!astNodes[cursor->parent]) and "invalid parent");
+				# endif
 
-			// The grammar rule for the current node
-			enum ASTRule rule = (enum ASTRule) cursor.rule;
+				// The grammar rule for the current node
+				enum ASTRule rule = (enum ASTRule) cursor->rule;
 
-			assert(cursor.parent < astNodes.size());
-			assert((uint64) i < astNodes.size());
+				assert(cursor->parent < astNodesSize);
 
-			Node::Ptr newnode = new Node();
-			astNodes[i] = newnode;
-			astNodes[cursor.parent]->children.push_back(newnode);
+				Node* newnode = new Node();
+				newnode->rule      = rule;
+				newnode->offset    = cursor->offset;
+				newnode->offsetEnd = cursor->offsetEnd;
 
-			newnode->rule      = rule;
-			newnode->offset    = cursor.offset;
-			newnode->offsetEnd = cursor.offsetEnd;
+				// Flag to determine whether the node has to capture the content or not
+				if (RuleAttributeCapture(rule))
+				{
+					// Checking integrity of the captured content
+					assert(
+						cursor->offsetEnd >= cursor->offset                // valid end offset
+						and cursor->offsetEnd != (uint) -1                // valid end offset
+						and cursor->offset    != (uint) -1                // valid offset
+						and cursor->urlindex  <  (uint)contents.size()    // valuid url index
+						and cursor->offset    <  contents[cursor->urlindex].size()  // valid range
+						and cursor->offsetEnd <= contents[cursor->urlindex].size() // valid range
+						and "invalid offset for content capture");
 
-			// Flag to determine whether the node has to capture the content or not
-			bool attrCapture = RuleAttributeCapture(rule);
-			if (attrCapture)
-			{
-				// Checking integrity of the captured content
-				assert(
-					cursor.offsetEnd >= cursor.offset                // valid end offset
-					and cursor.offsetEnd != (uint) -1                // valid end offset
-					and cursor.offset    != (uint) -1                // valid offset
-					and cursor.urlindex  <  (uint)contents.size()    // valuid url index
-					and cursor.offset    <  contents[cursor.urlindex].size()  // valid range
-					and cursor.offsetEnd <= contents[cursor.urlindex].size() // valid range
-					and "invalid offset for content capture");
+					// size of the captured content
+					uint size = cursor->offsetEnd - cursor->offset;
+					// Captured content
+					newnode->text.assign(contents[cursor->urlindex], size, cursor->offset);
+				}
 
-				// size of the captured content
-				uint size = cursor.offsetEnd - cursor.offset;
-				// Captured content
-				newnode->text.assign(contents[cursor.urlindex], size, cursor.offset);
+				astNodes[i] = newnode;
+				astNodes[cursor->parent]->children.push_back(newnode);
 			}
 		}
 
-		rootnode = (pseudoRootNode.children.size() == 1)
-			? pseudoRootNode.children[0]
-			: nullptr;
+		rootnode = YUNI_LIKELY((astNodes[0]->children.size() == 1))
+			? astNodes[0]->children[0] : nullptr;
+
+		delete astNodes[0];
+		free(astNodes);
 	}
 
 
 	void Datasource::notify(const AnyString& message) const
 	{
+		assert(offset < capacity);
 		Chunk& cursor    = stack[offset];
+		assert(cursor.urlindex < contents.size());
 		const Clob& data = contents[cursor.urlindex];
 
 		uint line = 1;
@@ -1097,7 +1144,7 @@
 	}
 
 
-	inline bool Datasource::isParseComplete() const
+	bool Datasource::isParseComplete() const
 	{
 		if (offset > 1)
 		{
@@ -1109,35 +1156,32 @@
 			stack[0].rule = + (int) rgEOF;
 
 			// trying to find the commit rule "start", which should be at index 1
-			uint startoffset = 1;
+			const Chunk* const end = &(stack[offset]);
+			const Chunk* cursor = &(stack[1]);
 			do
 			{
-				if (stack[startoffset].rule == rgStart)
+				if (cursor->rule == rgStart)
 				{
-					Chunk& cursor = stack[startoffset];
-
-					if (cursor.urlindex == 0) // the original input source
+					if (cursor->urlindex == 0) // the original input source
 					{
 						// the original content
-						const Clob& data = contents[cursor.urlindex];
+						const Clob& data = contents[cursor->urlindex];
 
-						if (cursor.offset < data.size() and cursor.offsetEnd <= data.size())
+						if (cursor->offset < data.size() and cursor->offsetEnd <= data.size())
 						{
-							if (data.size() == cursor.offsetEnd)
+							if (data.size() == cursor->offsetEnd)
 								return true;
 						}
 					}
-
 					break;
 				}
 
-				++startoffset;
+				++cursor;
 			}
-			while (startoffset <= offset);
+			while (cursor <= end);
 
 			notify("failed to parse");
 		}
-
 		return false;
 	}
 
@@ -1155,9 +1199,13 @@
 
 			column = 0;
 			line = 1;
-			for (uint x = 0; x != maxSize; ++x)
+
+			const char* c = &(content[0]);
+			const char* const end = c + maxSize;
+
+			for (; c != end; ++c)
 			{
-				if (content[x] == '\n')
+				if (*c == '\n')
 				{
 					column = 0;
 					++line;
