@@ -67,7 +67,7 @@ namespace Yuni
 
 	template<class ChildT, bool VirtualT, template<class> class TP>
 	inline IIntrusiveSmartPtr<ChildT,VirtualT,TP> &
-	IIntrusiveSmartPtr<ChildT,VirtualT,TP>::operator = (const IIntrusiveSmartPtr&) const
+	IIntrusiveSmartPtr<ChildT,VirtualT,TP>::operator = (const IIntrusiveSmartPtr&)
 	{
 		// Does nothing
 		return *this;
@@ -137,7 +137,7 @@ namespace Yuni
 
 	template<class ChildT, template<class> class TP>
 	inline IIntrusiveSmartPtr<ChildT,false,TP> &
-	IIntrusiveSmartPtr<ChildT,false,TP>::operator = (const IIntrusiveSmartPtr&) const
+	IIntrusiveSmartPtr<ChildT,false,TP>::operator = (const IIntrusiveSmartPtr&)
 	{
 		// Does nothing
 		return *this;
