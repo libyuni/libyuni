@@ -148,6 +148,8 @@ namespace Process
 		** \brief Default constructor
 		*/
 		Program();
+		//! Copy constructor
+		Program(const Program& rhs);
 		//! Destructor
 		~Program();
 		//@}
@@ -280,6 +282,13 @@ namespace Process
 		DurationPrecision  durationPrecision() const;
 		//! Set the precision used for calculating a duration (only if the process is not running)
 		void durationPrecision(DurationPrecision precision);
+		//@}
+
+
+		//! \name Operators
+		//@{
+		//! Assignment
+		Program& operator = (const Program& rhs);
 		//@}
 
 
