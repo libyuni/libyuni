@@ -44,6 +44,7 @@
 # include "control.h"
 # include "../font.h"
 # include "../displaymode.h"
+# include "../theme.h"
 
 namespace Yuni
 {
@@ -71,6 +72,8 @@ namespace Control
 			pBeingClicked(false),
 			pOffsetX(0),
 			pOffsetY(0),
+			pTextColor(Theme::Current()->textColor),
+			pBackColor(Theme::Current()->buttonColor),
 			pFillColor(0.0f, 0.0f, 0.0f, 1.0f),
 			pDisplay(dmNone)
 		{}
@@ -80,6 +83,8 @@ namespace Control
 			pBeingClicked(false),
 			pOffsetX(0),
 			pOffsetY(0),
+			pTextColor(Theme::Current()->textColor),
+			pBackColor(Theme::Current()->buttonColor),
 			pFillColor(0.0f, 0.0f, 0.0f, 1.0f),
 			pDisplay(dmNone)
 		{}
@@ -89,6 +94,8 @@ namespace Control
 			pBeingClicked(false),
 			pOffsetX(0),
 			pOffsetY(0),
+			pTextColor(Theme::Current()->textColor),
+			pBackColor(Theme::Current()->buttonColor),
 			pFillColor(0.0f, 0.0f, 0.0f, 1.0f),
 			pDisplay(dmNone)
 		{}
@@ -139,6 +146,16 @@ namespace Control
 			return epStop;
 		}
 
+		//! Get the text color
+		const Color::RGBA<float>& textColor() const { return pTextColor; }
+		//! Set the text color
+		void textColor(const Color::RGBA<float>& color) { pTextColor = color; invalidate(); }
+
+		//! Get the back color
+		const Color::RGBA<float>& backColor() const { return pBackColor; }
+		//! Set the back color
+		void backColor(const Color::RGBA<float>& color) { pBackColor = color; invalidate(); }
+
 		//! Get the fill color
 		const Color::RGBA<float>& fillColor() const { return pFillColor; }
 		//! Set the fill color
@@ -183,6 +200,12 @@ namespace Control
 
 		//! Offset of the rectangle over the image in Y (only used in Offset display mode)
 		float pOffsetY;
+
+		//! Text color: Use the theme color by default
+		Color::RGBA<float> pTextColor;
+
+		//! Background color : Use the theme color by default
+		Color::RGBA<float> pBackColor;
 
 		//! Fill color for when a part of the overlay is empty
 		Color::RGBA<float> pFillColor;

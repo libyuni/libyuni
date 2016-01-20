@@ -38,7 +38,6 @@
 ** made available.
 */
 # include "button.h"
-# include "../theme.h"
 
 namespace Yuni
 {
@@ -59,18 +58,18 @@ namespace Control
 
 		surface->beginRectangleClipping(pos.x, pos.y, pSize.x, pSize.y);
 		// Manual full-background drawing (FIXME : this is not optimal)
-		surface->drawFilledRectangle(theme.borderColor, theme.buttonColor, pos.x, pos.y,
+		surface->drawFilledRectangle(theme.borderColor, pBackColor, pos.x, pos.y,
 			pSize.x, pSize.y, theme.borderWidth);
 		// Try drawing images on top
 		if (pBeingClicked && !(!pImageClicking))
-			surface->drawImage(pImageClicking, pos.x, pos.y, pSize.x, pSize.y, theme.buttonColor,
+			surface->drawImage(pImageClicking, pos.x, pos.y, pSize.x, pSize.y, pBackColor,
 				pDisplay, pOffsetX, pOffsetY, pOpacity);
 		else if (!(!pImage))
-			surface->drawImage(pImage, pos.x, pos.y, pSize.x, pSize.y, theme.buttonColor, pDisplay,
+			surface->drawImage(pImage, pos.x, pos.y, pSize.x, pSize.y, pBackColor, pDisplay,
 				pOffsetX, pOffsetY, pOpacity);
 		// Draw the text if any
 		if (!pText.empty())
-			surface->drawTextOnColorInRect(pText, theme.font, theme.textColor, theme.buttonColor,
+			surface->drawTextOnColorInRect(pText, theme.font, pTextColor, pBackColor,
 				pos.x, pos.y, pSize.x, pSize.y);
 		surface->endClipping();
 		pModified = false;
