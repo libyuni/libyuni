@@ -1,0 +1,41 @@
+version: 1.2.0-win32-{build}
+
+platform: Any CPU
+
+configuration:
+  - debug
+  - release
+
+environment:
+  matrix:
+  - BUILD_TYPE: cmake
+    VS_VERSION: Visual Studio 14 2015
+
+# scripts that run after cloning repository
+install:
+
+before_build:
+
+after_build:
+
+build_script:
+  - echo build_script
+  - if "%BUILD_TYPE%" == "cmake" SET VS_FULL=%VS_VERSION%
+  - if "%BUILD_TYPE%" == "cmake" if "%platform%" == "x64" SET VS_FULL=%VS_VERSION% Win64
+  - if "%BUILD_TYPE%" == "cmake" if "%platform%" == "x86" SET VS_FULL=%VS_VERSION%
+  - if "%BUILD_TYPE%" == "cmake" cd src
+  - if "%BUILD_TYPE%" == "cmake" echo "cmake generator:" "%VS_FULL%"
+  - if "%BUILD_TYPE%" == "cmake" cmake -G "%VS_FULL%" . -DCMAKE_BUILD_TYPE=%CONFIGURATION%
+  - if "%BUILD_TYPE%" == "cmake" cmake --build . --config %CONFIGURATION%
+
+test_script:
+  - echo test_script
+
+# clone depth
+clone_depth: 5
+
+# this is how to allow failing jobs in the matrix
+matrix:
+  fast_finish: true # set this flag to immediately finish build once one of the jobs fails.
+
+deploy: off

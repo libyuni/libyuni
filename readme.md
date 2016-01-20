@@ -4,6 +4,19 @@ About the Yuni project
 
 [![Join the chat at https://gitter.im/libyuni/libyuni](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/libyuni/libyuni?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+
+Build Status
+------------
+
+| Platform  | Build Status |
+| :------------- | :------------- |
+| GNU/Linux, MacOS, (via travis-ci)  |   |
+| Windows, `VS2015` (via appveyor)  | [![Build Status](https://ci.appveyor.com/api/projects/status/github/libyuni/libyuni)](https://ci.appveyor.com/project/milipili/libyuni)  |
+
+
+What is Yuni ?
+--------------
+
 Yuni is a cross-platform C++ framework for developing high-level, complex and
 fast applications. It is meant as a reliable and simple bridge between
 different worlds, allowing to write all sorts of applications, while

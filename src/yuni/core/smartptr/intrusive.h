@@ -117,7 +117,7 @@ namespace Yuni
 		** \param rhs Assignment source
 		** \return Reference to "this"
 		*/
-		IIntrusiveSmartPtr& operator = (const IIntrusiveSmartPtr& rhs) const;
+		IIntrusiveSmartPtr& operator = (const IIntrusiveSmartPtr& rhs);
 		//@}
 
 
@@ -224,7 +224,7 @@ namespace Yuni
 		** \param rhs Assignment source
 		** \return Reference to "this"
 		*/
-		IIntrusiveSmartPtr& operator = (const IIntrusiveSmartPtr& rhs) const;
+		IIntrusiveSmartPtr& operator = (const IIntrusiveSmartPtr& rhs);
 		//@}
 
 

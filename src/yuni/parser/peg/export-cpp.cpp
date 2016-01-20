@@ -307,10 +307,6 @@ namespace PEG
 			h << "		#endif\n";
 			// h << "		Node::Ptr  xpath(enum ASTRule path) const;\n";
 			h << '\n';
-			h << "		#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
-			h << "		bool xpathExists(std::initializer_list<enum ASTRule> path) const;\n";
-			h << "		#endif\n";
-			h << '\n';
 			h << "		Node& operator = (const Node& rhs);\n";
 			h << '\n';
 			h << "		void toText(YString& out) const;\n";
@@ -664,12 +660,6 @@ namespace PEG
 			// hxx << "	}\n";
 			// hxx << '\n';
 			// hxx << '\n';
-			hxx << "	#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
-			hxx << "	inline bool  Node::xpathExists(std::initializer_list<enum ASTRule> path) const\n";
-			hxx << "	{\n";
-			hxx << "		return !(!xpathExists(std::move(path)));\n";
-			hxx << "	}\n";
-			hxx << "	#endif\n";
 			hxx << '\n';
 			hxx << '\n';
 		}

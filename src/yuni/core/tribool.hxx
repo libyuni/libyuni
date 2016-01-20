@@ -87,7 +87,7 @@ namespace Yuni
 
 	inline bool Tribool::defaultValue() const
 	{
-		return static_cast<bool>(pValue.flags[1]);
+		return (0 != pValue.flags[1]);
 	}
 
 	inline void Tribool::defaultValue(bool defvalue)
@@ -99,8 +99,8 @@ namespace Yuni
 	inline bool Tribool::toBool() const
 	{
 		return (indeterminate())
-			? static_cast<bool>(pValue.flags[1])   // using the default value
-			: static_cast<bool>(pValue.flags[0]);
+			? (0 != pValue.flags[1])   // using the default value
+			: (0 != pValue.flags[0]);
 	}
 
 

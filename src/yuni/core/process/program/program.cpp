@@ -267,9 +267,25 @@ namespace Process
 	}
 
 
+	Program::Program(const Program& rhs)
+		: pEnv(rhs.pEnv)
+		, pStream(rhs.pStream)
+	{
+		// keep the symbol local
+	}
+
+
 	Program::~Program()
 	{
 		// keep the symbol local
+	}
+
+
+	Program& Program::operator = (const Program& rhs)
+	{
+		pEnv = rhs.pEnv;
+		pStream = rhs.pStream;
+		return *this;
 	}
 
 
