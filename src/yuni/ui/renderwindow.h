@@ -204,6 +204,10 @@ namespace UI
 		virtual void clear() const = 0;
 		//! Clear the rendering area to a given color
 		virtual void clear(const Color::RGB<>& color) const = 0;
+		//! Clear the rendering area to a given color using floats (0.0f -> 1.0f)
+		virtual void clear(float red, float green, float blue) const = 0;
+		//! Clear the rendering area to a given color using integers (0 -> 255)
+		virtual void clear(uint red, uint green, uint blue) const = 0;
 
 		//! Clear a rectangle in the rendering area to black
 		virtual void clearRect(int x, int y, uint width, uint height) const = 0;

@@ -202,6 +202,23 @@ namespace UI
 	}
 
 
+	void GLWindow::clear(float red, float green, float blue) const
+	{
+		pFB.activate();
+		::glClearColor(red, green, blue, 1.0f);
+		::glClear(GL_COLOR_BUFFER_BIT);
+		pFB.deactivate();
+	}
+
+	void GLWindow::clear(uint red, uint green, uint blue) const
+	{
+		pFB.activate();
+		::glClearColor((float)red / 255.0f, (float)green / 255.0f, (float)blue / 255.0f, 1.0f);
+		::glClear(GL_COLOR_BUFFER_BIT);
+		pFB.deactivate();
+	}
+
+
 	void GLWindow::clearRect(int x, int y, uint width, uint height) const
 	{
 		pFB.activate();

@@ -99,7 +99,9 @@ namespace Gfx3D
 
 		// Framebuffer to link everything together
 		::glGenFramebuffers(1, &id);
+		GLTestError("glGenFramebuffers frame buffer creation");
 		::glBindFramebuffer(frameBufferUsage, id);
+		GLTestError("glBindFramebuffers frame buffer binding");
 		::glFramebufferTexture2D(frameBufferUsage, GL_COLOR_ATTACHMENT0, textureType, pTexture->id(), 0);
 		GLTestError("glFramebufferTexture2D frame buffer color attachment");
 		::glFramebufferRenderbuffer(frameBufferUsage, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pDepth);
@@ -125,7 +127,7 @@ namespace Gfx3D
 
 	void FrameBuffer::activate() const
 	{
-		if (!valid())
+		if (not valid())
 			return;
 		::glBindFramebuffer(UsageToGLUsage(pUsage), pID);
 		GLTestError("glBindFrameBuffer() binding");
@@ -148,7 +150,7 @@ namespace Gfx3D
 
 		// If the FB is not properly initialized, just update the size internally
 		// for future use by initialize(), but do nothing else
-		if (!valid())
+		if (not valid())
 			return;
 
 		// Resize the texture

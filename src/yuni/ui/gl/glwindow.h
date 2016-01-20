@@ -92,6 +92,12 @@ namespace UI
 		//! Clear the rendering area to black
 		virtual void clear(const Color::RGB<>& color) const override;
 
+		//! Clear the rendering area to a given color using floats (0.0f -> 1.0f)
+		virtual void clear(float red, float green, float blue) const override;
+
+		//! Clear the rendering area to a given color using integers (0 -> 255)
+		virtual void clear(uint red, uint green, uint blue) const override;
+
 		//! Clear a rectangle in the rendering area to black
 		virtual void clearRect(int x, int y, uint width, uint height) const override;
 
