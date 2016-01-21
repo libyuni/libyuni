@@ -300,7 +300,7 @@ namespace UI
 		// Always resize the texture, fail if one dimension is zero
 		if (!width || !height)
 			return;
-		texture->resize(width, height);
+		texture->resize(width + 1, height + 1);
 		texture->clear();
 
 		Glyph::Ptr glyph;
