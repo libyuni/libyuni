@@ -64,6 +64,9 @@ namespace Gfx3D
 
 	bool FrameBuffer::initialize(Usage usage, UI::MultiSampling::Type msType, Texture::DataType type)
 	{
+		if (not pSize.x || not pSize.y)
+			return false;
+
 		pUsage = usage;
 		if (UI::MultiSampling::msNone == msType)
 		{
@@ -145,6 +148,9 @@ namespace Gfx3D
 
 	void FrameBuffer::resize(uint width, uint height)
 	{
+		if (not pSize.x || not pSize.y)
+			return;
+
 		// Update the size internally
 		pSize(width, height);
 

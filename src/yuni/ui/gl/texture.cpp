@@ -439,6 +439,9 @@ namespace Gfx3D
 	{
 		assert(width > 0 && "Texture resize : width is null !");
 		assert(height > 0 && "Texture resize : height is null !");
+		assert(width <= GL_MAX_TEXTURE_SIZE && "Texture resize : width is too high !");
+		assert(height <= GL_MAX_TEXTURE_SIZE && "Texture resize : height is too high !");
+
 		// Update sizes
 		pWidth = width;
 		pHeight = height;

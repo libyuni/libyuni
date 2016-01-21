@@ -480,8 +480,8 @@ namespace UI
 
 			case WM_SIZING:
 			{
-				//window->resize(rect.right - rect.left, rect.bottom - rect.top);
-				//std::cout << "Resizing to " << rect.right - rect.left << 'x' << rect.bottom - rect.top << std::endl;
+				RECT* rect = (RECT*)lParam;
+				window->internalResize(rect->right - rect->left, rect->bottom - rect->top);
 				break;
 			}
 
