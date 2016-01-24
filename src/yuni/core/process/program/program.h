@@ -71,7 +71,7 @@ namespace Process
 	** \return True if the command has been executed and if the exit status is equal to 0
 	*/
 	template<class MainLoopT>
-	bool Execute(MainLoopT& mainloop, const AnyString& commandline, uint timeout = 0u);
+	bool Execute(MainLoopT& mainloop, const AnyString& commandline, uint timeout);
 
 
 	/*!
