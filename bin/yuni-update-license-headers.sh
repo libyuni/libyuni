@@ -32,6 +32,8 @@ tmpfile=$(mktemp yuni-tmp-license-updater-XXXXXX)
 license=$(cat "${rootfolder}/bin/__license-header.txt")
 [ "$?" -eq 0 ] || die "failed to read the license file template"
 
+bin_dos2unix=$(which dos2unix)
+[ -f "${bin_dos2unix}" ] || die "the program 'dos2unix' is missing"
 
 
 
@@ -41,7 +43,7 @@ update_file()
 	local isHeaderFile="$2"
 
 	echo " . updating ${filename}"
-	dos2unix -f -q -S "${filename}"
+	"${bin_dos2unix}" -f -q -S "${filename}"
 
 	local isHeader=1
 	local content="${license}"
