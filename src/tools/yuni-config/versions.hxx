@@ -9,7 +9,8 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
 #pragma once
-#include "version.h"
+#include "versions.h"
+
 
 
 namespace Yuni
