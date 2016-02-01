@@ -31,6 +31,8 @@ namespace UI
 				pTexture->clear();
 			else
 			{
+				if (not pFont || not pFont->valid())
+					return;
 				uint width = 0u;
 				uint height = 0u;
 				int descent = 0;
