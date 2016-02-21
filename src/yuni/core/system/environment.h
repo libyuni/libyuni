@@ -38,6 +38,15 @@ namespace Environment
 	YUNI_DECL yint64 ReadAsInt64(const AnyString& name, yint64 defvalue = 0);
 
 	/*!
+	** \brief Get a value from the current environment and convert it as an unsigned integer
+	**
+	** \param name Name of the variable
+	** \param defvalue The default value to take if the value of the variable is empty
+	*/
+	YUNI_DECL yuint64 ReadAsUInt64(const AnyString& name, yuint64 defvalue = 0);
+
+
+	/*!
 	** \brief Get a value from the current environment
 	**
 	** \param name Name of the variable

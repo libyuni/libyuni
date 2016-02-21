@@ -144,6 +144,38 @@ namespace Environment
 	}
 
 
+	yuint64 ReadAsUInt64(const AnyString& name, yuint64 defvalue)
+	{
+		#ifdef YUNI_OS_WINDOWS
+		{
+			String out;
+			ReadImpl(name, out, false);
+			if (not out.empty())
+			{
+				yuint64 result;
+				if (out.to<yuint64>(result))
+					return result;
+			}
+		}
+		#else
+		{
+			# ifdef YUNI_HAS_STDLIB_H
+			AnyString value = ::getenv(name.c_str());
+			if (not value.empty())
+			{
+				yuint64 result;
+				if (value.to<yuint64>(result))
+					return result;
+			}
+			# else
+			#error not implemented
+			# endif
+		}
+		#endif
+		return defvalue;
+	}
+
+
 	String Read(const AnyString& name)
 	{
 		#ifdef YUNI_OS_WINDOWS
