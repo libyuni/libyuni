@@ -119,14 +119,22 @@ namespace Environment
 			String out;
 			ReadImpl(name, out, false);
 			if (not out.empty())
-				return out.to<yint64>();
+			{
+				yint64 result;
+				if (out.to<yint64>(result))
+					return result;
+			}
 		}
 		#else
 		{
 			# ifdef YUNI_HAS_STDLIB_H
 			AnyString value = ::getenv(name.c_str());
 			if (not value.empty())
-				return value.to<yint64>();
+			{
+				yint64 result;
+				if (value.to<yint64>(result))
+					return result;
+			}
 			# else
 			#error not implemented
 			# endif
