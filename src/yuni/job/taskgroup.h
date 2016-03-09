@@ -195,7 +195,6 @@ namespace Job
 		//@}
 
 
-
 	public:
 		//! All events
 		struct
@@ -206,7 +205,6 @@ namespace Job
 			Event<void (Status success)> terminated;
 		}
 		on;
-
 
 
 	private:

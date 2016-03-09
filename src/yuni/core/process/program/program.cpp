@@ -28,6 +28,11 @@
 #include "process-info.h"
 #include <iostream>
 
+#ifdef YUNI_OS_UNIX
+# include <sys/types.h>
+#endif
+#include <signal.h>
+
 
 
 
@@ -217,6 +222,152 @@ namespace Process
 
 
 
+
+
+
+
+
+	Program::ProcessSharedInfo::~ProcessSharedInfo()
+	{
+		if (YUNI_UNLIKELY(timeoutThread))
+		{
+			// should never go in this section
+			assert(false and "the thread for handling the timeout has not been properly stopped");
+			timeoutThread->stop();
+			delete timeoutThread;
+		}
+
+		if (thread and thread->release())
+			delete thread;
+	}
+
+
+	# ifdef YUNI_OS_WINDOWS
+	namespace // anonymous
+	{
+
+		static inline void QuitProcess(DWORD processID)
+		{
+			assert(processID != 0);
+			// Loop on process windows
+			for (HWND hwnd = ::GetTopWindow(nullptr); hwnd; hwnd = ::GetNextWindow(hwnd, GW_HWNDNEXT))
+			{
+				DWORD windowProcessID;
+				DWORD threadID = ::GetWindowThreadProcessId(hwnd, &windowProcessID);
+				if (windowProcessID == processID)
+					// Send WM_QUIT to the process thread
+					::PostThreadMessage(threadID, WM_QUIT, 0, 0);
+			}
+		}
+
+	} // namespace anonymous
+	# endif
+
+
+	bool Program::ProcessSharedInfo::sendSignal(bool withLock, int sigvalue)
+	{
+		if (withLock)
+			mutex.lock();
+		if (0 == running)
+		{
+			if (withLock)
+				mutex.unlock();
+			return false;
+		}
+
+		# ifndef YUNI_OS_WINDOWS
+		{
+			const pid_t pid = static_cast<pid_t>(processID);
+			if (withLock)
+				mutex.unlock();
+			if (pid > 0)
+				return (0 == ::kill(pid, sigvalue));
+		}
+		# else
+		{
+			switch (sigvalue)
+			{
+				// All signals are handled by force-quitting the child process' window threads.
+				default:
+					QuitProcess(processID);
+					break;
+			}
+
+			if (withLock)
+				mutex.unlock();
+		}
+		# endif
+
+		// mutex must be unlocked here
+		return false;
+	}
+
+
+
+
+	namespace // anonymous
+	{
+
+		class TimeoutThread final: public Thread::IThread
+		{
+		public:
+			TimeoutThread(int pid, uint timeout)
+				: timeout(timeout)
+				, pid(pid)
+			{
+				assert(pid > 0);
+			}
+
+			virtual ~TimeoutThread() {}
+
+
+		protected:
+			virtual bool onExecute() override
+			{
+				// wait for timeout... (note: the timeout is in seconds)
+				if (not suspend(timeout * 1000))
+				{
+					// the timeout has been reached
+
+					#ifdef YUNI_OS_UNIX
+					::kill(pid, SIGKILL);
+					#else
+					QuitProcess(pid);
+					#endif
+				}
+				return false; // stop the thread, does not suspend it
+			}
+
+
+		private:
+			//! Timeout in seconds
+			uint timeout;
+			//! PID of the sub process
+			int pid;
+		};
+
+
+	} // anonymous namespace
+
+
+	void Program::ProcessSharedInfo::createThreadForTimeoutWL()
+	{
+		delete timeoutThread; // for code safety
+
+		if (processID > 0 and timeout > 0)
+		{
+			timeoutThread = new TimeoutThread(processID, timeout);
+			timeoutThread->start();
+		}
+		else
+		{
+			// no valid pid, no thread required for a timeout
+			timeoutThread = nullptr;
+		}
+	}
+
+
+
 } // namespace Process
 } // namespace Yuni
 
@@ -265,7 +416,7 @@ namespace Process
 		#ifndef YUNI_OS_MSVC
 		ProcessSharedInfo::Ptr envptr = pEnv;
 		if (!(!envptr))
-			envptr->sendSignal<true>(sig);
+			envptr->sendSignal(true, sig);
 		#else
 		// Signals are not supported on Windows. Silently ignoring it.
 		(void) sig;
@@ -323,22 +474,17 @@ namespace Process
 		}
 
 		// starting a new thread
-		// prepare commands
-		ThreadMonitor* newthread = new ThreadMonitor(*this);
-
-		// keep a local reference to avoid race condition if `env.thread` is modified
-		// by another thread
-		ThreadMonitor::Ptr localRef = newthread;
-		(void) localRef; // avoid compiler warning
+		ThreadMonitor* localRef = new ThreadMonitor(*this);
+		localRef->addRef();
 		// keep somewhere
-		env.thread = newthread;
+		env.thread = localRef;
 
 		// execute the sub command from the **calling** thread
-		bool processReady = newthread->spawnProcess();
+		bool processReady = localRef->spawnProcess();
 
 		// start a sub thread to monitor the underlying process
 		if (processReady)
-			newthread->start();
+			localRef->start();
 		return processReady;
 	}
 
@@ -354,11 +500,11 @@ namespace Process
 		}
 		ProcessSharedInfo& env = *envptr;
 
-		ThreadPtr thread;
+		ThreadMonitor* thread = nullptr;
 		// checking environment
 		{
 			MutexLocker locker(env.mutex);
-			if (not env.running or not env.thread)
+			if (not env.running or (nullptr == env.thread))
 			{
 				if (duration)
 					*duration = env.duration;
@@ -366,16 +512,24 @@ namespace Process
 			}
 			// capture the thread
 			thread = env.thread;
+			thread->addRef();
 		}
 
 		// wait for the end of the thread
+		assert(thread != nullptr);
 		thread->wait();
 
+
+		MutexLocker locker(env.mutex);
+
 		// since the thread has finished, we can safely destroy it
+		if (env.thread)
+			env.thread->release();
 		env.thread = nullptr;
 
-		// results
-		MutexLocker locker(env.mutex);
+		if (thread->release())
+			delete thread;
+
 		if (duration)
 			*duration = env.duration;
 		return env.exitstatus;

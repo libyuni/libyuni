@@ -12,10 +12,7 @@
 #include "program.h"
 #include "../../noncopyable.h"
 #include "../../../thread/thread.h"
-#ifdef YUNI_OS_UNIX
-# include <sys/types.h>
-#endif
-#include <signal.h>
+
 
 
 
@@ -31,12 +28,13 @@ namespace Process
 	**
 	** \note This class may be shared by several threads
 	*/
-	class Program::ProcessSharedInfo final : public Yuni::NonCopyable<Program::ProcessSharedInfo>
+	class Program::ProcessSharedInfo final
+		: public Yuni::NonCopyable<Program::ProcessSharedInfo>
 	{
 	public:
 		//! Smart pointer
 		// \note This type must match the definition of \p pEnv
-		typedef SmartPtr<ProcessSharedInfo> Ptr;
+		typedef Yuni::SmartPtr<Program::ProcessSharedInfo> Ptr;
 
 	public:
 		//! \name Constructor & Destructor
@@ -51,7 +49,7 @@ namespace Process
 		/*!
 		** \return True if the signal has been delivered
 		*/
-		template<bool WithLock> bool sendSignal(int value);
+		bool sendSignal(bool withLock, int value);
 
 		/*!
 		** \brief Create a thread dedicated to handle the execution timeout
@@ -72,7 +70,7 @@ namespace Process
 		//! input file descriptors
 		int processInput;
 		//! Thread
-		ThreadPtr thread;
+		Yuni::Process::Program::ThreadMonitor* thread;
 		//! Duration in seconds
 		sint64 duration;
 		//! Duration precision

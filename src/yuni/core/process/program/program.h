@@ -271,8 +271,6 @@ namespace Process
 		// forward declaration
 		class ProcessSharedInfo;
 		class ThreadMonitor;
-		//! Alias to the thread monitor's smartptr
-		typedef SmartPtr<Yuni::Process::Program::ThreadMonitor, Yuni::Policy::Ownership::COMReferenceCounted>  ThreadPtr;
 
 		//! Information on the program currently executed
 		// \note This class may be shared by several threads
@@ -291,4 +289,5 @@ namespace Process
 } // namespace Process
 } // namespace Yuni
 
+#include "process-info.h"
 #include "program.hxx"

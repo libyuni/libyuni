@@ -356,7 +356,7 @@ namespace Process
 		if (procinfo.processID > 0)
 		{
 			// killing the sub-process, until it is really dead
-			if (procinfo.sendSignal<false>(SIGKILL))
+			if (procinfo.sendSignal(false, SIGKILL))
 			{
 				int status;
 				::waitpid(procinfo.processID, &status, /*WNOHANG |*/ WUNTRACED | WCONTINUED);
