@@ -38,21 +38,28 @@ namespace Environment
 			{
 				WString nameUTF16(name);
 
+				// Getting the size of the content
+				// (in characters, *INCLUDING* the null-character since input buffer is null)
 				DWORD size = GetEnvironmentVariableW(nameUTF16.c_str(), nullptr, 0);
-				if (size > 0 and size <= 32767) // windows hard-coded value
+				if (size > 1 and size <= 32767) // windows hard-coded value
 				{
 					// allocating a new buffer for receiving the value
+					// TODO use a buffer on the stack for very small values to reduce memory allocations
+					// (especially for ReadAsBool, ReadAsInt64 and ReadAsUInt64)
 					wchar_t* buffer = (wchar_t*)::malloc(sizeof(wchar_t) * size);
 					if (buffer)
 					{
+						// retrieving the content of the var into 'buffer'
+						// since the buffer will be large enough, the returned size
+						// will be the number of characters *NOT INCLUDING* the null-character
 						size = GetEnvironmentVariableW(nameUTF16.c_str(), buffer, size);
 						if (size != 0)
 						{
-							int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, buffer, (int) size - 1, NULL, 0, NULL, NULL);
+							int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, buffer, (int) size, NULL, 0, NULL, NULL);
 							if (sizeRequired > 0)
 							{
 								out.reserve(out.size() + sizeRequired);
-								int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, buffer, (int) size - 1, out.data() + out.size(), size, NULL, NULL);
+								int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, buffer, (int) size, out.data() + out.size(), size, NULL, NULL);
 								::free(buffer);
 								out.resize(out.size() + (uint) sizeRequired);
 								return true;
