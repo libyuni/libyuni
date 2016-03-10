@@ -29,11 +29,8 @@ namespace Environment
 	{
 
 		template<class StringT>
-		inline bool ReadImpl(const AnyString& name, StringT& out, bool emptyBefore)
+		inline bool ReadImpl(const AnyString& name, StringT& out)
 		{
-			if (emptyBefore)
-				out.clear();
-
 			#ifdef YUNI_OS_WINDOWS
 			{
 				WString nameUTF16(name);
@@ -73,7 +70,7 @@ namespace Environment
 			{
 				# ifdef YUNI_HAS_STDLIB_H
 				const char* e = ::getenv(name.c_str());
-				if (e and '\0' != *e)
+				if (e)
 				{
 					out += e;
 					return true;
@@ -95,124 +92,209 @@ namespace Environment
 
 
 
-	bool ReadAsBool(const AnyString& name)
+	bool ReadAsBool(const AnyString& name, bool defvalue)
 	{
-		#ifdef YUNI_OS_WINDOWS
+		if (not name.empty())
 		{
-			String out;
-			ReadImpl(name, out, false);
-			if (not out.empty())
-				return out.to<bool>();
+			#ifdef YUNI_OS_WINDOWS
+			{
+				String out;
+				if (ReadImpl(name, out) and not out.empty())
+					return out.to<bool>();
+			}
+			#else
+			{
+				# ifdef YUNI_HAS_STDLIB_H
+				AnyString value = ::getenv(name.c_str());
+				if (not value.empty())
+				{
+					bool result;
+					if (value.to<bool>(result))
+						return result;
+				}
+				# else
+				#error not implemented
+				# endif
+			}
+			#endif
 		}
-		#else
-		{
-			# ifdef YUNI_HAS_STDLIB_H
-			AnyString value = ::getenv(name.c_str());
-			if (not value.empty())
-				return value.to<bool>();
-			# else
-			#error not implemented
-			# endif
-		}
-		#endif
-		return false;
+		return defvalue;
 	}
 
 
 	yint64 ReadAsInt64(const AnyString& name, yint64 defvalue)
 	{
-		#ifdef YUNI_OS_WINDOWS
+		if (not name.empty())
 		{
-			String out;
-			ReadImpl(name, out, false);
-			if (not out.empty())
+			#ifdef YUNI_OS_WINDOWS
 			{
-				yint64 result;
-				if (out.to<yint64>(result))
-					return result;
+				String out;
+				ReadImpl(name, out);
+				if (ReadImpl(name, out) and not out.empty())
+				{
+					yint64 result;
+					if (out.to<yint64>(result))
+						return result;
+				}
 			}
-		}
-		#else
-		{
-			# ifdef YUNI_HAS_STDLIB_H
-			AnyString value = ::getenv(name.c_str());
-			if (not value.empty())
+			#else
 			{
-				yint64 result;
-				if (value.to<yint64>(result))
-					return result;
+				# ifdef YUNI_HAS_STDLIB_H
+				AnyString value = ::getenv(name.c_str());
+				if (not value.empty())
+				{
+					yint64 result;
+					if (value.to<yint64>(result))
+						return result;
+				}
+				# else
+				#error not implemented
+				# endif
 			}
-			# else
-			#error not implemented
-			# endif
+			#endif
 		}
-		#endif
 		return defvalue;
 	}
 
 
 	yuint64 ReadAsUInt64(const AnyString& name, yuint64 defvalue)
 	{
-		#ifdef YUNI_OS_WINDOWS
+		if (not name.empty())
 		{
-			String out;
-			ReadImpl(name, out, false);
-			if (not out.empty())
+			#ifdef YUNI_OS_WINDOWS
 			{
-				yuint64 result;
-				if (out.to<yuint64>(result))
-					return result;
+				String out;
+				if (ReadImpl(name, out) and not out.empty())
+				{
+					yuint64 result;
+					if (out.to<yuint64>(result))
+						return result;
+				}
 			}
-		}
-		#else
-		{
-			# ifdef YUNI_HAS_STDLIB_H
-			AnyString value = ::getenv(name.c_str());
-			if (not value.empty())
+			#else
 			{
-				yuint64 result;
-				if (value.to<yuint64>(result))
-					return result;
+				# ifdef YUNI_HAS_STDLIB_H
+				AnyString value = ::getenv(name.c_str());
+				if (not value.empty())
+				{
+					yuint64 result;
+					if (value.to<yuint64>(result))
+						return result;
+				}
+				# else
+				#error not implemented
+				# endif
 			}
-			# else
-			#error not implemented
-			# endif
+			#endif
 		}
-		#endif
 		return defvalue;
 	}
 
 
 	String Read(const AnyString& name)
 	{
-		#ifdef YUNI_OS_WINDOWS
+		if (not name.empty())
 		{
-			String out;
-			ReadImpl(name, out, false);
-			return out;
+			#ifdef YUNI_OS_WINDOWS
+			{
+				String out;
+				ReadImpl(name, out);
+				return out;
+			}
+			#else
+			{
+				# ifdef YUNI_HAS_STDLIB_H
+				return ::getenv(name.c_str());
+				# else
+				#error not implemented
+				# endif
+			}
+			#endif
 		}
-		#else
-		{
-			# ifdef YUNI_HAS_STDLIB_H
-			return ::getenv(name.c_str());
-			# else
-			#error not implemented
-			# endif
-		}
-		#endif
 		return String(); // fallback
 	}
 
 
 	bool Read(const AnyString& name, Clob& out, bool emptyBefore)
 	{
-		return ReadImpl(name, out, emptyBefore);
+		if (emptyBefore)
+			out.clear();
+		return (not name.empty()) ? ReadImpl(name, out) : false;
 	}
 
 
 	bool Read(const AnyString& name, String& out, bool emptyBefore)
 	{
-		return ReadImpl(name, out, emptyBefore);
+		if (emptyBefore)
+			out.clear();
+		return (not name.empty()) ? ReadImpl(name, out) : false;
+	}
+
+
+	bool Exists(const AnyString& name)
+	{
+		if (not name.empty())
+		{
+			#ifdef YUNI_OS_WINDOWS
+			{
+				WString nameUTF16(name);
+				DWORD size = GetEnvironmentVariableW(nameUTF16.c_str(), nullptr, 0);
+				return (size >= 0);
+			}
+			#else
+			# ifdef YUNI_HAS_STDLIB_H
+			return (nullptr != ::getenv(name.c_str()));
+			# else
+			# error not implemented
+			# endif
+			#endif
+		}
+		return false;
+	}
+
+
+	void Set(const AnyString& name, const AnyString& value)
+	{
+		if (not name.empty())
+		{
+			#ifdef YUNI_OS_WINDOWS
+			{
+				WString nameUTF16(name);
+				if (not value.empty())
+				{
+					WString valueUTF16(value);
+					const wchar_t* w = (not valueUTF16.empty()) ? valueUTF16.c_str() : L"";
+					SetEnvironmentVariable(nameUTF16.c_str(), w);
+				}
+				else
+					SetEnvironmentVariable(nameUTF16.c_str(), L"");
+			}
+			#else
+			# ifdef YUNI_HAS_STDLIB_H
+			::setenv(name.c_str(), (not value.empty()) ? value.c_str() : "", 1);
+			# else
+			# error not implemented
+			# endif
+			#endif
+		}
+	}
+
+
+	void Unset(const AnyString& name)
+	{
+		if (not name.empty())
+		{
+			#ifdef YUNI_OS_WINDOWS
+			WString nameUTF16(name);
+			SetEnvironmentVariable(nameUTF16.c_str(), nullptr);
+			#else
+			# ifdef YUNI_HAS_STDLIB_H
+			::unsetenv(name.c_str());
+			# else
+			# error not implemented
+			# endif
+			#endif
+		}
 	}
 
 
