@@ -796,6 +796,8 @@
 				tmp = i->second;
 				tmp.replace("\"", "\\\"");
 				tmp.replace("\n", "\\n");
+				tmp.replace("\t", "\\t");
+				tmp.replace("\r", "\\r");
 
 				if (not first)
 					out << ",\n";
@@ -870,6 +872,8 @@
 		{
 			tmp = node.text;
 			tmp.replace("\n", "\\n");
+			tmp.replace("\t", "\\t");
+			tmp.replace("\r", "\\r");
 			out << ": ";
 
 			if (ColorT)
