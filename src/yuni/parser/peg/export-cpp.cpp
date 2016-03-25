@@ -276,6 +276,8 @@ namespace PEG
 			h << "		const Node& lastChild() const;\n";
 			h << "		Node& lastChild();\n";
 			h << '\n';
+			h << "		template<enum Rule R> Node& append();\n";
+			h << '\n';
 			h << '\n';
 			h << '\n';
 			h << "	public:\n";
@@ -585,6 +587,14 @@ namespace PEG
 			hxx << "			}\n";
 			hxx << "		}\n";
 			hxx << "		return nullptr;\n";
+			hxx << "	}\n";
+			hxx << '\n';
+			hxx << '\n';
+			hxx << "	template<enum Rule R> inline Node& Node::append()\n";
+			hxx << "	{\n";
+			hxx << "		Node* node = new Node{R};\n";
+			hxx << "		children.push_back(node);\n";
+			hxx << "		return *node;\n";
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
