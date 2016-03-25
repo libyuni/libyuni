@@ -101,7 +101,7 @@
 
 	struct Chunk
 	{
-		//! ASTRule ID - a negative value means that the rule has not been commited yet
+		//! Rule ID - a negative value means that the rule has not been commited yet
 		int rule;
 		//! hint about the parent frame (last uncommited)
 		uint lastUncommited;
@@ -144,9 +144,9 @@
 		//@{
 		void pushInclude(uint urlindex);
 		uint push();
-		uint enterRule(enum ASTRule rule);
+		uint enterRule(enum Rule rule);
 		void restart(uint from);
-		void commit(uint ruleOffset, enum ASTRule rule);
+		void commit(uint ruleOffset, enum Rule rule);
 		//@}
 
 		//! \name Filename manipulation
@@ -388,7 +388,7 @@
 	}
 
 
-	inline uint Datasource::enterRule(enum ASTRule rule)
+	inline uint Datasource::enterRule(enum Rule rule)
 	{
 		#if MORE_CHECKS != 0
 		assert(capacity + GROW_CHUNK < ARBITRARY_HARD_LIMIT); // arbitrary
@@ -449,7 +449,7 @@
 	}
 
 
-	inline void Datasource::commit(uint ruleOffset, enum ASTRule rule)
+	inline void Datasource::commit(uint ruleOffset, enum Rule rule)
 	{
 		// committing the current stack frame
 		{
@@ -496,7 +496,7 @@
 			# if HAS_TRACES != 0
 			uint csize = ruleCursor.offsetEnd - ruleCursor.offset;
 			AnyString content(contents[ruleCursor.urlindex], ruleCursor.offset, csize);
-			TRACE_LOCAL("    COMMIT " << ASTRuleToString(rule) << ", offset " << newEndOffset << ": " << content);
+			TRACE_LOCAL("    COMMIT " << ruleToString(rule) << ", offset " << newEndOffset << ": " << content);
 			# endif
 		}
 
@@ -586,7 +586,7 @@
 		const String filename = "<memory>";
 		// filename index
 		uint index;
-		::Yuni::Dictionary<String, uint>::Unordered::const_iterator knownIndex = reverseUrlIndexes.find(filename);
+		auto knownIndex = reverseUrlIndexes.find(filename);
 		if (YUNI_LIKELY(knownIndex == reverseUrlIndexes.end()))
 		{
 			assert(contents.size() == urls.size());
@@ -707,9 +707,9 @@
 	{
 		assert(&node != NULL);
 		out << indent << "<div class=\"node\">";
-		out << "<span class=\"rule\">" << ASTRuleToString(node.rule) << "</span>";
+		out << "<span class=\"rule\">" << ruleToString(node.rule) << "</span>";
 
-		bool attrCapture = RuleAttributeCapture(node.rule);
+		bool attrCapture = ruleAttributeCapture(node.rule);
 		if (attrCapture)
 		{
 			// out << " <span class=\"line\">l." << node.line << "</span> ";
@@ -739,29 +739,29 @@
 
 
 	static void InternalNodeExportJSON(Clob& out, const Node& node, bool hasSibling, String& indent, String& tmp,
-		void (*callback)(Yuni::Dictionary<AnyString, YString>::Unordered&, const Nany::Node&))
+		void (*callback)(Yuni::Dictionary<AnyString, YString>::Unordered&, const Node&))
 	{
 		using namespace ::Yuni::System::Console;
 		assert(&node != NULL);
 
 		typedef Yuni::Dictionary<AnyString, YString>::Unordered  DictType;
 		DictType dict;
-		dict["rule"] = ASTRuleToString(node.rule);
+		dict["rule"] = ruleToString(node.rule);
 		dict["prefix"] = indent;
 
-		if (YUNI_UNLIKELY(RuleAttributeError(node.rule)))
+		if (YUNI_UNLIKELY(ruleAttributeError(node.rule)))
 		{
 			dict["rule-type"] = "error";
 		}
 		else
 		{
-			if (YUNI_UNLIKELY(RuleAttributeImportant(node.rule)))
+			if (YUNI_UNLIKELY(ruleAttributeImportant(node.rule)))
 				dict["rule-type"] = "important";
 			else
 				dict["rule-type"] = nullptr;
 		}
 
-		bool attrCapture = RuleAttributeCapture(node.rule);
+		bool attrCapture = ruleAttributeCapture(node.rule);
 		if (attrCapture)
 		{
 			dict["text"] = node.text;
@@ -771,7 +771,7 @@
 		{
 			// it can be interresting to print the text itself when the node
 			// is a simple text capture
-			AnyString textCapture = RuleAttributeSimpleTextCapture(node.rule);
+			AnyString textCapture = ruleAttributeSimpleTextCapture(node.rule);
 			if (not textCapture.empty())
 			{
 				dict["text"] = nullptr;
@@ -841,33 +841,33 @@
 
 		if (not ColorT)
 		{
-			out << ASTRuleToString(node.rule);
+			out << ruleToString(node.rule);
 		}
 		else
 		{
-			if (YUNI_UNLIKELY(RuleAttributeError(node.rule)))
+			if (YUNI_UNLIKELY(ruleAttributeError(node.rule)))
 			{
 				::Yuni::System::Console::SetTextColor(out, red);
-				out << ASTRuleToString(node.rule);
+				out << ruleToString(node.rule);
 				::Yuni::System::Console::ResetTextColor(out);
 			}
 			else
 			{
-				if (YUNI_UNLIKELY(RuleAttributeImportant(node.rule)))
+				if (YUNI_UNLIKELY(ruleAttributeImportant(node.rule)))
 				{
 					::Yuni::System::Console::SetTextColor(out, purple);
-					out << ASTRuleToString(node.rule);
+					out << ruleToString(node.rule);
 					::Yuni::System::Console::ResetTextColor(out);
 				}
 				else
 				{
 					::Yuni::System::Console::ResetTextColor(out);
-					out << ASTRuleToString(node.rule);
+					out << ruleToString(node.rule);
 				}
 			}
 		}
 
-		bool attrCapture = RuleAttributeCapture(node.rule);
+		bool attrCapture = ruleAttributeCapture(node.rule);
 		if (attrCapture)
 		{
 			tmp = node.text;
@@ -886,7 +886,7 @@
 		{
 			// it can be interresting to print the text itself when the node
 			// is a simple text capture
-			AnyString textCapture = RuleAttributeSimpleTextCapture(node.rule);
+			AnyString textCapture = ruleAttributeSimpleTextCapture(node.rule);
 			if (not textCapture.empty())
 			{
 				out << ", ";
@@ -1072,7 +1072,7 @@
 				# endif
 
 				// The grammar rule for the current node
-				enum ASTRule rule = (enum ASTRule) cursor->rule;
+				auto rule = (enum Rule) cursor->rule;
 
 				assert(cursor->parent < astNodesSize);
 
@@ -1082,7 +1082,7 @@
 				newnode->offsetEnd = cursor->offsetEnd;
 
 				// Flag to determine whether the node has to capture the content or not
-				if (RuleAttributeCapture(rule))
+				if (ruleAttributeCapture(rule))
 				{
 					// Checking integrity of the captured content
 					assert(

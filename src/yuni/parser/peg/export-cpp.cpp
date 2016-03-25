@@ -101,10 +101,7 @@ namespace PEG
 			h << "#include <yuni/core/bind.h>\n";
 			h << "#include <yuni/core/dictionary.h>\n";
 			h << "#include <yuni/core/smartptr/intrusive.h>\n";
-			h << "#if (__cplusplus > 199711L || (defined(_MSC_VER) && _MSC_VER >= 1800))\n";
-			h << "#	define " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST  1\n";
 			h << "#include <initializer_list>\n";
-			h << "#endif";
 			h << "\n\n";
 			h << "//! Metadata support\n";
 			h << "#define " << headerGuardID << "_HAS_METADATA  1\n";
@@ -117,7 +114,7 @@ namespace PEG
 			for (uint i = 0; i != namespaces.size(); ++i)
 				h << "namespace " << namespaces[i] << "\n{\n";
 			h << '\n';
-			h << "	enum ASTRule\n";
+			h << "	enum Rule\n";
 			h << "	{\n";
 			h << "		//! Unknown rule\n";
 			h << "		rgUnknown = 0,\n";
@@ -128,44 +125,42 @@ namespace PEG
 				if (i->second.attributes.inlined)
 					h << " [inline]";
 				h << '\n';
-				h << "		" << i->second.enumID << " = " << enumIndex << ",\n";
+				h << "		" << i->second.enumID << ", // = " << enumIndex << '\n';
 			}
-
 			h << "		//! enum for the final rule\n";
-			h << "		rgEOF = " << (enumIndex++) << '\n';
-
+			h << "		rgEOF // " << (enumIndex++) << '\n';
 			h << "	};\n";
 
 			// rule count
-			h << "	enum\n";
-			h << "	{\n";
-			h << "		//! The total number of rules\n";
-			h << "		ruleCount = " << enumIndex << '\n';
-			h << "	};\n";
+			h << '\n';
+			h << '\n';
+			h << "	//! The total number of rules\n";
+			h << "	constexpr const uint32_t ruleCount = " << enumIndex << ";\n";
 			h << "\n\n\n";
 
 			h << "	//! Convert a rule id into its text representation\n";
-			h << "	YUNI_DECL AnyString ASTRuleToString(enum ASTRule);\n";
-			h << '\n';
+			h << "	YUNI_DECL AnyString ruleToString(enum Rule);\n";
 			h << '\n';
 			h << "	//! Get if a rule is an error\n";
-			h << "	YUNI_DECL bool  ASTRuleIsError(enum ASTRule ruleid);\n";
-			h << '\n';
+			h << "	YUNI_DECL bool ruleIsError(enum Rule ruleid);\n";
 			h << '\n';
 			h << "	//! Get if the rule should be ignored when duplucating an AST (starting from 'tk-' and some special rules)\n";
-			h << "	YUNI_DECL bool ShouldIgnoreASTRuleForDuplication(enum ASTRule);\n";
+			h << "	YUNI_DECL bool shouldIgnoreForDuplication(enum Rule);\n";
 			h << '\n';
 			h << '\n';
 			h << '\n';
-			h << "	enum Error\n";
+			h << "	enum class Error\n";
 			h << "	{\n";
 			h << "		//! No error\n";
-			h << "		errNone,\n";
+			h << "		none,\n";
 			h << "		//! Parse error\n";
-			h << "		errParse,\n";
+			h << "		parse,\n";
 			h << "	};\n";
-			h << "\n\n\n\n\n";
-
+			h << '\n';
+			h << '\n';
+			h << '\n';
+			h << '\n';
+			h << '\n';
 			h << "	class YUNI_DECL Notification final\n";
 			h << "	{\n";
 			h << "	public:\n";
@@ -175,22 +170,16 @@ namespace PEG
 			h << "		typedef std::vector<Ptr> Vector;\n";
 			h << '\n';
 			h << "	public:\n";
-			h << "		Notification()\n";
-			h << "			: offset()\n";
-			h << "			, line()\n";
-			h << "		{}\n";
-			h << '\n';
-			h << "	public:\n";
 			h << "		//! Start offset\n";
-			h << "		uint offset;\n";
+			h << "		uint offset = 0;\n";
 			h << "		//! Line Index\n";
-			h << "		uint line;\n";
+			h << "		uint line = 0;\n";
 			h << "		//! Filename\n";
 			h << "		YString message;\n";
 			h << "		//! Filename\n";
 			h << "		YString filename;\n";
 			h << '\n';
-			h << "	};\n";
+			h << "	}; // class Notification\n";
 			h << '\n';
 			h << '\n';
 			h << '\n';
@@ -229,7 +218,7 @@ namespace PEG
 			h << "		//! Export the tree node into a JSON object\n";
 			h << "		static void ExportToJSON(Yuni::Clob& out, const Node& node);\n";
 			h << "		//! Export the tree node into a JSON object (with callback for additional data)\n";
-			h << "		static void ExportToJSON(Yuni::Clob& out, const Node& node, void (*callback)(Yuni::Dictionary<AnyString, YString>::Unordered&, const Nany::Node&));\n";
+			h << "		static void ExportToJSON(Yuni::Clob& out, const Node& node, void (*callback)(Yuni::Dictionary<AnyString, YString>::Unordered&, const Node&));\n";
 			h << '\n';
 			h << "		#if " << headerGuardID << "_HAS_METADATA != 0\n";
 			h << "		//! Callback for releasing metadata\n";
@@ -241,11 +230,11 @@ namespace PEG
 			h << '\n';
 			h << "	public:\n";
 			h << "		//! Default constructor\n";
-			h << "		Node();\n";
+			h << "		Node() = default;\n";
 			h << "		//! Default constructor with a pre-defined rule\n";
-			h << "		explicit Node(enum ASTRule);\n";
+			h << "		explicit Node(enum Rule);\n";
 			h << "		//! Default constructor with a pre-defined rule and a given text\n";
-			h << "		Node(enum ASTRule, const AnyString& text);\n";
+			h << "		Node(enum Rule, const AnyString& text);\n";
 			h << "		//! Copy constructor\n";
 			h << "		Node(const Node& rhs);\n";
 			h << "		//! Destructor\n";
@@ -261,22 +250,20 @@ namespace PEG
 			h << "		//! Iterate through all child nodes (const)\n";
 			h << "		template<class F> bool each(const F& callback) const;\n";
 			h << '\n';
-			h << "		template<class F> bool each(enum ASTRule rule, const F& callback);\n";
+			h << "		template<class F> bool each(enum Rule rule, const F& callback);\n";
 			h << '\n';
-			h << "		template<class F> bool each(enum ASTRule rule, const F& callback) const;\n";
+			h << "		template<class F> bool each(enum Rule rule, const F& callback) const;\n";
 			h << '\n';
-			h << "		template<class StringT> bool extractFirstChildText(StringT& out, enum ASTRule rule) const;\n";
+			h << "		template<class StringT> bool extractFirstChildText(StringT& out, enum Rule rule) const;\n";
 			h << '\n';
-			h << "		template<class StringT> bool extractChildText(StringT& out, enum ASTRule rule, const AnyString& separator = nullptr) const;\n";
+			h << "		template<class StringT> bool extractChildText(StringT& out, enum Rule rule, const AnyString& separator = nullptr) const;\n";
 			h << '\n';
-			h << "		uint findFirst(enum ASTRule rule) const;\n";
+			h << "		uint findFirst(enum Rule rule) const;\n";
 			h << '\n';
-			h << "		bool exists(enum ASTRule rule) const;\n";
+			h << "		bool exists(enum Rule rule) const;\n";
 			h << '\n';
-			h << "		#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
-			h << "		Node::Ptr  xpath(std::initializer_list<enum ASTRule> path) const;\n";
-			h << "		#endif\n";
-			// h << "		Node::Ptr  xpath(enum ASTRule path) const;\n";
+			h << "		Node::Ptr  xpath(std::initializer_list<enum Rule> path) const;\n";
+			// h << "		Node::Ptr  xpath(enum Rule path) const;\n";
 			h << '\n';
 			h << "		Node& operator = (const Node& rhs);\n";
 			h << '\n';
@@ -293,17 +280,17 @@ namespace PEG
 			h << '\n';
 			h << "	public:\n";
 			h << "		//! The rule ID\n";
-			h << "		enum ASTRule rule;\n";
+			h << "		enum Rule rule = rgUnknown;\n";
 			h << "		//! Start offset\n";
-			h << "		uint offset;\n";
+			h << "		uint offset = 0;\n";
 			h << "		//! End offset\n";
-			h << "		uint offsetEnd;\n";
+			h << "		uint offsetEnd = 0;\n";
 			h << "		//! Text associated to the node (if any)\n";
 			h << "		AnyString text;\n";
 			h << '\n';
 			h << "		#if " << headerGuardID << "_HAS_METADATA != 0\n";
 			h << "		//! Metadata\n";
-			h << "		void* metadata;\n";
+			h << "		void* metadata = nullptr;\n";
 			h << "		#endif\n";
 			h << '\n';
 			h << "		//! Children\n";
@@ -322,6 +309,7 @@ namespace PEG
 			h << '\n';
 			h << "	public:\n";
 			h << "		Parser();\n";
+			h << "		Parser(const Parser&) = delete;\n";
 			h << "		~Parser();\n";
 			h << '\n';
 			h << "		void clear();\n";
@@ -330,6 +318,8 @@ namespace PEG
 			h << "		void translateOffset(uint& column, uint& line, const Node&) const;\n";
 			h << "		void translateOffset(uint& column, uint& line, uint offset) const;\n";
 			h << "		uint translateOffsetToLine(const Node& node) const;\n";
+			h << '\n';
+			h << "		Parser& operator = (const Parser&) = delete;\n";
 			h << '\n';
 			h << '\n';
 			h << "	public:\n";
@@ -346,7 +336,7 @@ namespace PEG
 			h << '\n';
 			h << '\n';
 			h << "	private:\n";
-			h << "		void* pData;\n";
+			h << "		void* pData = nullptr;\n";
 			h << '\n';
 			h << "	}; // class Parser\n";
 		}
@@ -395,34 +385,14 @@ namespace PEG
 				hxx << "namespace " << namespaces[i] << "\n{\n";
 			hxx << "\n\n";
 
-			hxx << "	inline Node::Node()\n";
-			hxx << "		: rule(rgUnknown)\n";
-			hxx << "		, offset()\n";
-			hxx << "		, offsetEnd()\n";
-			hxx << "		#if " << headerGuardID << "_HAS_METADATA != 0\n";
-			hxx << "		, metadata()\n";
-			hxx << "		#endif\n";
+			hxx << "	inline Node::Node(enum Rule rule)\n";
+			hxx << "		: rule(rule)\n";
 			hxx << "	{}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	inline Node::Node(enum ASTRule rule)\n";
+			hxx << "	inline Node::Node(enum Rule rule, const AnyString& text)\n";
 			hxx << "		: rule(rule)\n";
-			hxx << "		, offset()\n";
-			hxx << "		, offsetEnd()\n";
-			hxx << "		#if " << headerGuardID << "_HAS_METADATA != 0\n";
-			hxx << "		, metadata()\n";
-			hxx << "		#endif\n";
-			hxx << "	{}\n";
-			hxx << '\n';
-			hxx << '\n';
-			hxx << "	inline Node::Node(enum ASTRule rule, const AnyString& text)\n";
-			hxx << "		: rule(rule)\n";
-			hxx << "		, offset()\n";
-			hxx << "		, offsetEnd()\n";
 			hxx << "		, text(text)\n";
-			hxx << "		#if " << headerGuardID << "_HAS_METADATA != 0\n";
-			hxx << "		, metadata()\n";
-			hxx << "		#endif\n";
 			hxx << "	{}\n";
 			hxx << '\n';
 			hxx << '\n';
@@ -440,7 +410,7 @@ namespace PEG
 			hxx << '\n';
 			hxx << "	template<class F> inline bool Node::each(const F& callback)\n";
 			hxx << "	{\n";
-			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			hxx << "		for (uint i = 0; i != (uint) children.size(); ++i)\n";
 			hxx << "		{\n";
 			hxx << "			if (not callback(*children[i]))\n";
 			hxx << "				return false;\n";
@@ -451,7 +421,7 @@ namespace PEG
 			hxx << '\n';
 			hxx << "	template<class F> inline bool Node::each(const F& callback) const\n";
 			hxx << "	{\n";
-			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			hxx << "		for (uint i = 0; i != (uint) children.size(); ++i)\n";
 			hxx << "		{\n";
 			hxx << "			if (not callback(*children[i]))\n";
 			hxx << "				return false;\n";
@@ -460,9 +430,9 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	template<class F> inline bool Node::each(enum ASTRule rule, const F& callback)\n";
+			hxx << "	template<class F> inline bool Node::each(enum Rule rule, const F& callback)\n";
 			hxx << "	{\n";
-			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			hxx << "		for (uint i = 0; i != (uint) children.size(); ++i)\n";
 			hxx << "		{\n";
 			hxx << "			Node& subnode = *children[i];\n";
 			hxx << "			if (subnode.rule == rule and not callback(subnode))\n";
@@ -472,9 +442,9 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	template<class F> inline bool Node::each(enum ASTRule rule, const F& callback) const\n";
+			hxx << "	template<class F> inline bool Node::each(enum Rule rule, const F& callback) const\n";
 			hxx << "	{\n";
-			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			hxx << "		for (uint i = 0; i != (uint) children.size(); ++i)\n";
 			hxx << "		{\n";
 			hxx << "			const Node& subnode = *children[i];\n";
 			hxx << "			if (subnode.rule == rule and not callback(subnode))\n";
@@ -484,9 +454,9 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	template<class StringT> inline bool Node::extractFirstChildText(StringT& out, enum ASTRule rule) const\n";
+			hxx << "	template<class StringT> inline bool Node::extractFirstChildText(StringT& out, enum Rule rule) const\n";
 			hxx << "	{\n";
-			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			hxx << "		for (uint i = 0; i != (uint) children.size(); ++i)\n";
 			hxx << "		{\n";
 			hxx << "			const Node& subnode = *children[i];\n";
 			hxx << "			if (subnode.rule == rule)\n";
@@ -499,13 +469,13 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	template<class StringT> inline bool Node::extractChildText(StringT& out, enum ASTRule rule, const AnyString& separator) const\n";
+			hxx << "	template<class StringT> inline bool Node::extractChildText(StringT& out, enum Rule rule, const AnyString& separator) const\n";
 			hxx << "	{\n";
 			hxx << "		bool somethingFound = false;\n";
 			hxx << '\n';
 			hxx << "		if (separator.empty())\n";
 			hxx << "		{\n";
-			hxx << "			for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			hxx << "			for (uint i = 0; i != (uint) children.size(); ++i)\n";
 			hxx << "			{\n";
 			hxx << "				const Node& subnode = *children[i];\n";
 			hxx << "				if (subnode.rule == rule)\n";
@@ -517,7 +487,7 @@ namespace PEG
 			hxx << "		}\n";
 			hxx << "		else\n";
 			hxx << "		{\n";
-			hxx << "			for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			hxx << "			for (uint i = 0; i != (uint) children.size(); ++i)\n";
 			hxx << "			{\n";
 			hxx << "				const Node& subnode = *children[i];\n";
 			hxx << "				if (subnode.rule == rule)\n";
@@ -533,9 +503,9 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	inline uint Node::findFirst(enum ASTRule rule) const\n";
+			hxx << "	inline uint Node::findFirst(enum Rule rule) const\n";
 			hxx << "	{\n";
-			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			hxx << "		for (uint i = 0; i != (uint) children.size(); ++i)\n";
 			hxx << "		{\n";
 			hxx << "			if (children[i]->rule == rule)\n";
 			hxx << "				return i;\n";
@@ -544,9 +514,9 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	inline bool Node::exists(enum ASTRule rule) const\n";
+			hxx << "	inline bool Node::exists(enum Rule rule) const\n";
 			hxx << "	{\n";
-			hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			hxx << "		for (uint i = 0; i != (uint) children.size(); ++i)\n";
 			hxx << "		{\n";
 			hxx << "			if (children[i]->rule == rule)\n";
 			hxx << "				return true;\n";
@@ -572,24 +542,23 @@ namespace PEG
 			hxx << "	inline const Node& Node::lastChild() const\n";
 			hxx << "	{\n";
 			hxx << "		assert(not children.empty());\n";
-			hxx << "		return *(children[children.size() - 1]);\n";
+			hxx << "		return *(children.back());\n";
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
 			hxx << "	inline Node& Node::lastChild()\n";
 			hxx << "	{\n";
 			hxx << "		assert(not children.empty());\n";
-			hxx << "		return *(children[children.size() - 1]);\n";
+			hxx << "		return *(children.back());\n";
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			hxx << "	#ifdef " << headerGuardID << "_HAS_CXX_INITIALIZER_LIST\n";
-			hxx << "	inline Node::Ptr  Node::xpath(std::initializer_list<enum ASTRule> path) const\n";
+			hxx << "	inline Node::Ptr  Node::xpath(std::initializer_list<enum Rule> path) const\n";
 			hxx << "	{\n";
 			hxx << "		if (path.size() > 0)\n";
 			hxx << "		{\n";
 			hxx << "			auto it = path.begin();\n";
-			hxx << "			for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			hxx << "			for (uint i = 0; i != (uint) children.size(); ++i)\n";
 			hxx << "			{\n";
 			hxx << "				if (children[i]->rule == *it)\n";
 			hxx << "				{\n";
@@ -599,7 +568,7 @@ namespace PEG
 			hxx << "					{\n";
 			hxx << "						bool found = false;\n";
 			hxx << "						auto& subnode = *result;\n";
-			hxx << "						for (unsigned int j = 0; j != (unsigned) subnode.children.size(); ++j)\n";
+			hxx << "						for (uint j = 0; j != (uint) subnode.children.size(); ++j)\n";
 			hxx << "						{\n";
 			hxx << "							if (subnode.children[j]->rule == *it)\n";
 			hxx << "							{\n";
@@ -617,12 +586,11 @@ namespace PEG
 			hxx << "		}\n";
 			hxx << "		return nullptr;\n";
 			hxx << "	}\n";
-			hxx << "	#endif\n";
 			hxx << '\n';
 			hxx << '\n';
-			// hxx << "	inline Node::Ptr  Node::xpath(enum ASTRule path) const\n";
+			// hxx << "	inline Node::Ptr  Node::xpath(enum Rule path) const\n";
 			// hxx << "	{\n";
-			// hxx << "		for (unsigned int i = 0; i != (unsigned) children.size(); ++i)\n";
+			// hxx << "		for (uint i = 0; i != (uint) children.size(); ++i)\n";
 			// hxx << "		{\n";
 			// hxx << "			if (children[i]->rule == path)\n";
 			// hxx << "				return children[i];\n";
@@ -698,9 +666,9 @@ namespace PEG
 				}
 			}
 
-			cpp << "	//! ASTRule " << name << '\n';
+			cpp << "	//! Rule " << name << '\n';
 			cpp << "	";
-			cpp << ((node.enumID != "rgStart") ? "static inline " : "static ");
+			cpp << ((node.enumID != "Rule::start") ? "static inline " : "static ");
 
 			cpp << "bool yy" << node.enumID << "(Datasource& ctx)\n";
 			cpp << "	{\n";
@@ -747,7 +715,7 @@ namespace PEG
 			cpp << "namespace // anonymous\n{\n";
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static const bool _attrAttributeCapture[] =\n";
+			cpp << "	static constexpr const bool _attrAttributeCapture[] =\n";
 			cpp << "	{\n";
 			cpp << "		false, // rgUnknown\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
@@ -756,7 +724,7 @@ namespace PEG
 			cpp << "	};\n";
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static bool  RuleAttributeCapture(enum ASTRule ruleid)\n";
+			cpp << "	static bool ruleAttributeCapture(enum Rule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
 			cpp << "		return _attrAttributeCapture[(uint) ruleid];\n";
@@ -764,7 +732,7 @@ namespace PEG
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static const bool _attrAttributeError[] =\n";
+			cpp << "	static constexpr const bool _attrAttributeError[] =\n";
 			cpp << "	{\n";
 			cpp << "		false, // rgUnknown\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
@@ -776,7 +744,7 @@ namespace PEG
 			cpp << "	};\n";
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static inline bool  RuleAttributeError(enum ASTRule ruleid)\n";
+			cpp << "	static inline bool ruleAttributeError(enum Rule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
 			cpp << "		return _attrAttributeError[(uint) ruleid];\n";
@@ -784,7 +752,7 @@ namespace PEG
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static const bool _attrAttributeImportant[] = {\n";
+			cpp << "	static constexpr const bool _attrAttributeImportant[] = {\n";
 			cpp << "		false, // rgUnknown\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
 				cpp << "		" << (i->second.attributes.important ? "true" : "false") << ", // " << i->second.enumID << '\n';
@@ -792,7 +760,7 @@ namespace PEG
 			cpp << "	};\n";
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static inline bool  RuleAttributeImportant(enum ASTRule ruleid)\n";
+			cpp << "	static inline bool ruleAttributeImportant(enum Rule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
 			cpp << "		return _attrAttributeImportant[(uint) ruleid];\n";
@@ -824,7 +792,7 @@ namespace PEG
 			cpp << "	};\n";
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static AnyString  RuleAttributeSimpleTextCapture(enum ASTRule ruleid)\n";
+			cpp << "	static AnyString ruleAttributeSimpleTextCapture(enum Rule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
 			cpp << "		return _attrAttributeSimpleTextCapture[(uint) ruleid];\n";
@@ -859,7 +827,7 @@ namespace PEG
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	bool ShouldIgnoreASTRuleForDuplication(enum ASTRule rule)\n";
+			cpp << "	bool shouldIgnoreForDuplication(enum Rule rule)\n";
 			cpp << "	{\n";
 			cpp << "		static const bool hints[] = {\n";
 			cpp << "			false, // rgUnknown\n";
@@ -876,14 +844,14 @@ namespace PEG
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	bool  ASTRuleIsError(enum ASTRule ruleid)\n";
+			cpp << "	bool  ruleIsError(enum Rule ruleid)\n";
 			cpp << "	{\n";
-			cpp << "		return RuleAttributeError(ruleid);\n";
+			cpp << "		return ruleAttributeError(ruleid);\n";
 			cpp << "	}\n";
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	AnyString ASTRuleToString(enum ASTRule ruleid)\n";
+			cpp << "	AnyString ruleToString(Rule ruleid)\n";
 			cpp << "	{\n";
 			cpp << "		switch (ruleid)\n";
 			cpp << "		{\n";
@@ -904,7 +872,6 @@ namespace PEG
 			cpp << '\n';
 			cpp << '\n';
 			cpp << "	Parser::Parser()\n";
-			cpp << "		: pData()\n";
 			cpp << "	{\n";
 			cpp << "		onURILoading.bind(& StandardURILoaderHandler);\n";
 			cpp << "	}\n";
@@ -1026,7 +993,7 @@ namespace PEG
 			cpp << "	}\n";
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	void Node::ExportToJSON(Yuni::Clob& out, const Node& node, void (*callback)(Yuni::Dictionary<AnyString, YString>::Unordered&, const Nany::Node&))\n";
+			cpp << "	void Node::ExportToJSON(Yuni::Clob& out, const Node& node, void (*callback)(Yuni::Dictionary<AnyString, YString>::Unordered&, const Node&))\n";
 			cpp << "	{\n";
 			cpp << "		String tmp;\n";
 			cpp << "		String indent;\n";
@@ -1071,7 +1038,7 @@ namespace PEG
 			cpp << "		if (not rhs.children.empty())\n";
 			cpp << "		{\n";
 			cpp << "			children.resize(rhs.children.size());\n";
-			cpp << "			for (unsigned int i = 0; i != (unsigned) rhs.children.size(); ++i)\n";
+			cpp << "			for (uint i = 0; i != (uint) rhs.children.size(); ++i)\n";
 			cpp << "				children[i] = new Node(*rhs.children[i]);\n";
 			cpp << "		}\n";
 			cpp << "	}\n";
