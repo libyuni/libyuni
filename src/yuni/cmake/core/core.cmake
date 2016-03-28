@@ -147,6 +147,8 @@ add_library(yuni-static-core STATIC
 		core/event.h
 		core/exceptions/badcast.h
 		core/exceptions.h
+		core/flags.h
+		core/flags.hxx
 		core/foreach.h
 		core/functional/fold.h
 		core/functional/fold.hxx
