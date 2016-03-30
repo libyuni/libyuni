@@ -38,6 +38,53 @@ namespace DynamicLibrary
 
 
 	/*!
+	** \brief Relocation options
+	**
+	** When an object is brought into the address space of a process, it may
+	** contain references to symbols whose addresses are not known until the
+	** object is loaded. These references shall be relocated before the
+	** symbols can be accessed (man dlopen).
+	**
+	** These options are actually ignored on Windows.
+	*/
+	enum class Relocation
+	{
+		/*!
+		** \brief Relocations shall be performed at an implementation-defined
+		** time (see RTLD_LAZY, Unix only)
+		*/
+		lazy,
+		/*!
+		** \brief All necessary relocations shall be performed when the object
+		** is first loaded (see RTLD_NOW, Unix only)
+		*/
+		now,
+	};
+
+	/*!
+	** \brief Scope of visibility options
+	*/
+	enum class Visibility
+	{
+		/*!
+		** \brief OS Dependant default implementation
+		*/
+		vdefault,
+		/*!
+		** \brief  The object’s symbols shall be made available for the
+		** relocation processing of any other object (Unix only)
+		*/
+		global,
+		/*!
+		** \brief The object’s symbols shall not be made available for the
+		** relocation processing of any other object (Unix only)
+		*/
+		local,
+	};
+
+
+
+	/*!
 	** \brief An Executable Object file
 	** \ingroup DynamicLibs
 	**
@@ -108,67 +155,18 @@ namespace DynamicLibrary
 		//! An invalid handle
 		static const Handle NullHandle;
 
-		/*!
-		** \brief Relocation options
-		**
-		** When an object is brought into the address space of a process, it may
-		** contain references to symbols whose addresses are not known until the
-		** object is loaded. These references shall be relocated before the
-		** symbols can be accessed (man dlopen).
-		**
-		** These options are actually ignored on Windows.
-		*/
-		enum Relocation
-		{
-			/*!
-			** \brief Relocations shall be performed at an implementation-defined
-			** time (see RTLD_LAZY, Unix only)
-			*/
-			relocationLazy,
-			/*!
-			** \brief All necessary relocations shall be performed when the object
-			** is first loaded (see RTLD_NOW, Unix only)
-			*/
-			relocationNow,
-		};
-
-		/*!
-		** \brief Scope of visibility options
-		*/
-		enum Visibility
-		{
-			/*!
-			** \brief OS Dependant default implementation
-			*/
-			visibilityDefault,
-			/*!
-			** \brief  The object’s symbols shall be made available for the
-			** relocation processing of any other object (Unix only)
-			*/
-			visibilityGlobal,
-			/*!
-			** \brief The object’s symbols shall not be made available for the
-			** relocation processing of any other object (Unix only)
-			*/
-			visibilityLocal,
-		};
-
 
 	public:
 		//! \name Constructor & DEstructor
 		//@{
-		/*!
-		** \brief Default constructor
-		*/
+		//! Default constructor
 		File();
-
 		/*!
 		** \brief Constructor - Load an dynamic library
 		**
 		** \param filename Filename of the library to load
 		*/
 		explicit File(const AnyString& filename);
-
 		/*!
 		** \brief Constructor - Load an dynamic library
 		**
@@ -176,12 +174,10 @@ namespace DynamicLibrary
 		** \param relocation The relocation mode (no effect on Windows)
 		** \param visibility The visibility mode (no effect on Windows)
 		*/
-		File(const AnyString& filename, Relocation relocation /* = relocationLazy */,
-			Visibility visibility = visibilityDefault);
-
+		File(const AnyString& filename, Relocation relocation /*= lazy*/,
+			Visibility visibility = Visibility::vdefault);
 		/*!
 		** \brief Destructor
-		**
 		** The library will be automatically unloaded if needed.
 		*/
 		~File();
@@ -215,8 +211,8 @@ namespace DynamicLibrary
 		** \param v The visibility mode (no effect on Windows)
 		** \return True if the library has been loaded
 		*/
-		bool loadFromFile(const AnyString& filename, Relocation r = relocationLazy,
-			Visibility v = visibilityDefault);
+		bool loadFromFile(const AnyString& filename, Relocation r = Relocation::lazy,
+			Visibility v = Visibility::vdefault);
 
 		/*!
 		** \brief Load a dynamic library from its filename
@@ -231,8 +227,8 @@ namespace DynamicLibrary
 		** \param v The visibility mode (no effect on Windows)
 		** \return True if the library has been loaded
 		*/
-		bool loadFromRawFilename(const AnyString& filename, Relocation r = relocationLazy,
-			Visibility v = visibilityDefault);
+		bool loadFromRawFilename(const AnyString& filename, Relocation r = Relocation::lazy,
+			Visibility v = Visibility::vdefault);
 
 		/*!
 		** \brief Unload the dynamic library
@@ -333,4 +329,3 @@ namespace DynamicLibrary
 #include "file.hxx"
 
 #undef YUNI_DYNAMICLIBRARY_OS_HANDLE
-

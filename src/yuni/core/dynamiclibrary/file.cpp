@@ -121,7 +121,7 @@ namespace DynamicLibrary
 	File::File(const AnyString& filename) :
 		pHandle(NullHandle)
 	{
-		(void) loadFromFile(filename, relocationLazy, visibilityDefault);
+		(void) loadFromFile(filename, Relocation::lazy, Visibility::vdefault);
 	}
 
 
@@ -137,7 +137,7 @@ namespace DynamicLibrary
 	}
 
 
-	bool File::loadFromFile(const AnyString& filename, File::Relocation r, File::Visibility v)
+	bool File::loadFromFile(const AnyString& filename, Relocation r, Visibility v)
 	{
 		// No filename
 		if (not filename.empty())
@@ -184,7 +184,7 @@ namespace DynamicLibrary
 	# ifdef YUNI_OS_WINDOWS
 
 	// Specific implementation for the Windows platform
-	bool File::loadFromRawFilename(const AnyString& filename, File::Relocation, File::Visibility)
+	bool File::loadFromRawFilename(const AnyString& filename, Relocation, Visibility)
 	{
 		// Unload the library if already loaded
 		unload();
@@ -209,7 +209,7 @@ namespace DynamicLibrary
 	# else
 
 	// Specific implementation for the Unix platforms
-	bool File::loadFromRawFilename(const AnyString& filename, File::Relocation r, File::Visibility v)
+	bool File::loadFromRawFilename(const AnyString& filename, Relocation r, Visibility v)
 	{
 		// Unload the library if already loaded
 		unload();
@@ -217,9 +217,9 @@ namespace DynamicLibrary
 		if (not filename.empty())
 		{
 			// The mode
-			int mode = ((relocationLazy == r) ? RTLD_LAZY : RTLD_NOW);
-			if (visibilityDefault != v)
-				mode |= ((visibilityGlobal == v) ? RTLD_GLOBAL : RTLD_LOCAL);
+			int mode = ((Relocation::lazy == r) ? RTLD_LAZY : RTLD_NOW);
+			if (Visibility::vdefault != v)
+				mode |= ((Visibility::global == v) ? RTLD_GLOBAL : RTLD_LOCAL);
 
 			// Loading
 			pHandle = YUNI_DYNLIB_DLOPEN(filename.c_str(), mode);
