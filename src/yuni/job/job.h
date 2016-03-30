@@ -111,7 +111,7 @@ namespace Job
 		//! \name States
 		//@{
 		//! Get the current state of the job
-		enum Job::State state() const;
+		Job::State state() const;
 
 		//! Get if the job is idle
 		bool idle() const;
@@ -208,4 +208,3 @@ namespace Job
 } // namespace Yuni
 
 # include "job.hxx"
-

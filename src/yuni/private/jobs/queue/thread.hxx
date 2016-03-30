@@ -22,8 +22,7 @@ namespace QueueService
 
 	inline QueueThread::QueueThread(Yuni::Job::QueueService& queueservice)
 		: pQueueService(queueservice)
-	{
-	}
+	{}
 
 
 	inline QueueThread::~QueueThread()
@@ -41,7 +40,7 @@ namespace QueueService
 
 	inline void WaitingRoom::add(const Yuni::Job::IJob::Ptr& job)
 	{
-		add(job, Yuni::Job::priorityDefault);
+		add(job, Yuni::Job::Priority::normal);
 	}
 
 

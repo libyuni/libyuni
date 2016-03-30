@@ -53,12 +53,12 @@ namespace QueueService
 		static void ThreadHasBeenKilled(JobT& job)
 		{
 			job.pThread = nullptr;
-			job.pState  = Yuni::Job::stateWaiting;
+			job.pState  = static_cast<int>(Yuni::Job::State::waiting);
 		}
 
 		static void AddedInTheWaitingRoom(JobT& job)
 		{
-			job.pState = Yuni::Job::stateWaiting;
+			job.pState = static_cast<int>(Yuni::Job::State::waiting);
 			job.pProgression = 0;
 		}
 

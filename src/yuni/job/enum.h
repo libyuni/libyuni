@@ -22,14 +22,14 @@ namespace Job
 	**
 	** \ingroup Jobs
 	*/
-	enum State
+	enum class State
 	{
 		//! The job does nothing (can be already done)
-		stateIdle = 0,
+		idle = 0,
 		//! The job is waiting for being executed
-		stateWaiting,
+		waiting,
 		//! The job is currently running
-		stateRunning,
+		running,
 	};
 
 
@@ -37,15 +37,14 @@ namespace Job
 	enum Priority
 	{
 		//! Low priority
-		priorityLow = 0,
+		low = 0,
 		//! Default priority
-		priorityDefault = 1,
+		normal = 1,
 		//! High priority
-		priorityHigh = 2,
-
-		priorityCount = 3,
+		high = 2,
 	};
 
+	constexpr const uint priorityCount = 3;
 
 
 

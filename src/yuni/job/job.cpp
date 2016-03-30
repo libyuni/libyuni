@@ -36,7 +36,7 @@ namespace Job
 		assert(pThread and "Job: The pointer to the attached thread must not be NULL");
 
 		// We can suspend the job only if it is running
-		if (pState == stateRunning)
+		if ((int) pState == static_cast<int>(State::running))
 		{
 			// It is important (for thread-safety reasons) that this method
 			// does not modify the state.
@@ -62,7 +62,7 @@ namespace Job
 		pProgression = 0;
 
 		// Here we go !
-		pState = stateRunning;
+		pState = static_cast<int>(State::running);
 
 		// Execute the specific implementation of the job
 		try
@@ -74,7 +74,7 @@ namespace Job
 
 		// The state must be reset to idle as soon as possible while the
 		// other values are still valid.
-		pState = stateIdle;
+		pState = static_cast<int>(State::idle);
 
 		// Other values
 		pThread = nullptr;

@@ -18,27 +18,27 @@ namespace Yuni
 namespace Job
 {
 
-	inline enum Job::State IJob::state() const
+	inline Job::State IJob::state() const
 	{
-		return (enum Job::State) ((sint32) pState);
+		return static_cast<Job::State>((int) pState);
 	}
 
 
 	inline bool IJob::idle() const
 	{
-		return (0 != (pState & stateIdle));
+		return ((int) pState == static_cast<int>(State::idle));
 	}
 
 
 	inline bool IJob::waiting() const
 	{
-		return (0 != (pState & stateWaiting));
+		return ((int) pState == static_cast<int>(State::waiting));
 	}
 
 
 	inline bool IJob::running() const
 	{
-		return (0 != (pState & stateRunning));
+		return ((int) pState == static_cast<int>(State::running));
 	}
 
 
@@ -63,7 +63,8 @@ namespace Job
 	inline bool IJob::finished() const
 	{
 		// The state must be at the very end
-		return (pProgression >= 100 and pState == stateIdle);
+		return  (pProgression >= 100
+			and (int) pState == static_cast<int>(State::idle));
 	}
 
 
@@ -78,7 +79,7 @@ namespace Job
 	void IJob::fillInformation(T& info)
 	{
 		// The first important value is the state
-		info.state = (Yuni::Job::State) ((int) (pState));
+		info.state = static_cast<Job::State>((int) pState);
 		// Then, if the job is canceling its work
 		info.canceling = (0 != pCanceling);
 

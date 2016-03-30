@@ -29,15 +29,6 @@ namespace QueueService
 	class YUNI_DECL WaitingRoom final
 	{
 	public:
-		enum
-		{
-			//! Alias for The default priority
-			priorityDefault = Yuni::Job::priorityDefault,
-			//! Alias for The number of priorities
-			priorityCount = Yuni::Job::priorityCount,
-		};
-
-	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Destructor
@@ -46,15 +37,13 @@ namespace QueueService
 
 		//! \name Container manipulation
 		//@{
-		/*!
-		** \brief Get if the waiting room is empty
-		*/
+		//! Get if the waiting room is empty
 		bool empty() const;
 
 		/*!
 		** \brief Add a job into the waiting room, with a default priority
 		**
-		** The job will see its state changed to `stateWaiting`.
+		** The job will see its state changed to `State::waiting`.
 		** \param job The job to add
 		*/
 		void add(const Yuni::Job::IJob::Ptr& job);
@@ -62,7 +51,7 @@ namespace QueueService
 		/*!
 		** \brief Add a job into the waiting room
 		**
-		** The job will see its state changed to `stateWaiting`.
+		** The job will see its state changed to `State::waiting`.
 		** \param job The job to add
 		** \param priority Its priority
 		*/
@@ -76,7 +65,7 @@ namespace QueueService
 		** \param priority The priority queue where to look for
 		** \return True if a job is actually available, false otherwise
 		*/
-		bool pop(Yuni::Job::IJob::Ptr& out, const Yuni::Job::Priority priority);
+		bool pop(Yuni::Job::IJob::Ptr& out, Yuni::Job::Priority priority);
 
 		/*!
 		** \brief Get the next job to execute
@@ -99,9 +88,9 @@ namespace QueueService
 		//! Number of job waiting to be executed
 		Atomic::Int<32>  pJobCount;
 		//! List of waiting jobs by priority
-		std::deque<Yuni::Job::IJob::Ptr>  pJobs[priorityCount];
+		std::deque<Yuni::Job::IJob::Ptr>  pJobs[Yuni::Job::priorityCount];
 		//! Mutexes, by priority to reduce congestion
-		Mutex pMutexes[priorityCount];
+		Mutex pMutexes[Yuni::Job::priorityCount];
 
 	}; // class WaitingRoom
 

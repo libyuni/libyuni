@@ -447,7 +447,7 @@ namespace Job
 					}
 				}
 				info->hasJob = false;
-				info->state = Yuni::Job::stateIdle;
+				info->state = Yuni::Job::State::idle;
 				info->canceling = false;
 				info->progression = 0;
 				pList->push_back(info);
