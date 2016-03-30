@@ -132,4 +132,3 @@ std::ostream& operator << (std::ostream& out, const Yuni::UUID& rhs)
 	out.write(cstring, 36);
 	return out;
 }
-

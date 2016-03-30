@@ -17,8 +17,7 @@
 namespace Yuni
 {
 
-	template<class StringT>
-	inline UUID::UUID(const StringT& string)
+	inline UUID::UUID(const AnyString& string)
 	{
 		if (not assign(string))
 			clear();
@@ -62,8 +61,7 @@ namespace Yuni
 	}
 
 
-	template<class StringT>
-	inline UUID& UUID::operator = (const StringT& string)
+	inline UUID& UUID::operator = (const AnyString& string)
 	{
 		if (not assign(string))
 			clear();

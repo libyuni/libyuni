@@ -85,9 +85,11 @@ namespace Yuni
 		*/
 		explicit UUID(Flag flag);
 		/*!
-		** \brief Constructor from a string
+		** \brief Constructor from a string (ex: "c705cf38-1d2f-4d7f-93d4-6b84c44a45b9")
+		**
+		** The input string will be trimmed
 		*/
-		template<class StringT> UUID(const StringT& string);
+		UUID(const AnyString& string);
 		//@}
 
 
@@ -111,6 +113,7 @@ namespace Yuni
 		**
 		** Contrary to the operator =, the internal value will remain untouched
 		** if the conversion failed.
+		** The input string will be trimmed
 		**
 		** \code
 		** UUID uuid;
@@ -139,7 +142,7 @@ namespace Yuni
 		**
 		** The UUID will be reset if the conversion failed.
 		*/
-		template<class StringT> UUID& operator = (const StringT& string);
+		UUID& operator = (const AnyString& string);
 
 		//! Null
 		bool operator ! () const;
@@ -174,7 +177,7 @@ namespace Yuni
 	private:
 		union StorageType
 		{
-			uchar cstring[16];
+			uchar  cstring[16];
 			uint32 n32[4];
 			uint64 n64[2];
 		};
