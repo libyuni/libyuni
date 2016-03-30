@@ -50,10 +50,7 @@
 #include "traits/fill.h"
 #include "traits/vnsprintf.h"
 #include "traits/into.h"
-
-#ifdef YUNI_HAS_CPP_MOVE
-# include <utility>
-#endif
+#include <utility>
 
 
 
@@ -285,10 +282,8 @@ namespace Yuni
 		template<uint SizeT, bool ExpT>
 		CString(const CString<SizeT,ExpT>& string);
 
-		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move constructor
 		CString(CString&& rhs);
-		# endif
 
 		/*!
 		** \brief Constructor from a copy of a substring of 's'
@@ -381,7 +376,7 @@ namespace Yuni
 		template<class U> explicit CString(const U& rhs);
 
 		//! Destructor
-		~CString() {}
+		~CString() = default;
 		//@}
 
 
@@ -2010,10 +2005,8 @@ namespace Yuni
 		//! The operator `=` (assign)
 		template<class U> CString& operator = (const U& rhs);
 
-		# ifdef YUNI_HAS_CPP_MOVE
 		//! Move operator
 		CString& operator = (CString&& rhs);
-		# endif
 
 
 		//! The operator `<`

@@ -86,4 +86,3 @@ namespace DynamicLibrary
 } // namespace Yuni
 
 #include "symbol.hxx"
-
