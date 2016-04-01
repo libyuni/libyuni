@@ -117,13 +117,13 @@ int main(void)
 	std::cout << "[M] Wait #1" << std::endl;
 	mutex.unlock();
 
-	qs.wait();
+	qs.wait(qseIdle);
 
 	mutex.lock();
 	std::cout << "[M] Wait #2" << std::endl;
 	mutex.unlock();
 
-	qs.wait();
+	qs.wait(qseIdle);
 
 	mutex.lock();
 	std::cout << "[M] Stop #1" << std::endl;

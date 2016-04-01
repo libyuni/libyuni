@@ -11,6 +11,7 @@
 #include <yuni/yuni.h>
 #include <yuni/core/color/rgb.h>
 #include <yuni/core/color/rgba.h>
+#include <iostream>
 
 
 using namespace Yuni;
