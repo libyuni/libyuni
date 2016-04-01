@@ -12,6 +12,7 @@
 #include <yuni/core/functional/view.h>
 #include <yuni/core/string.h>
 #include <vector>
+#include <iostream>
 
 
 using namespace Yuni;
@@ -31,10 +32,10 @@ int main(void)
 
 	// Make another view on the same container, and iterate on it using `each()`
 	makeView(list).each([](const uint& val) -> bool
-		{
-			std::cout << "Value : " << val << std::endl;
-			return true;
-		});
+	{
+		std::cout << "Value : " << val << std::endl;
+		return true;
+	});
 
 	// It is possible to eliminate some elements from a view using `filter()`
 	std::cout << "Number of values >= 10 : " << makeView(list)
@@ -107,4 +108,3 @@ int main(void)
 
 	return 0;
 }
-

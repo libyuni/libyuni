@@ -9,4 +9,4 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
 #pragma once
-#include "iterator/iterator.h"
+#include <yuni/io/directory/iterator/iterator.h>

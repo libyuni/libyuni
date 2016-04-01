@@ -11,8 +11,11 @@
 #include <yuni/yuni.h>
 #include <yuni/thread/utility.h>
 #include <yuni/core/system/suspend.h>
+#include <iostream>
 
 using namespace Yuni;
+
+
 
 
 # ifdef YUNI_HAS_CPP_LAMBDA
