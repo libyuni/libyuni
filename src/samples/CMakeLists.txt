@@ -45,6 +45,12 @@ if(Yuni_FOUND)
 	add_subdirectory(dbi)
 	add_subdirectory(parser)
 
+	YMESSAGE("")
+	YMESSAGE("To enable additional modules in libyuni, please refer to the cmake flag '-DMODULES'")
+	YMESSAGE("when compiling libyuni.")
+	YMESSAGE("To get the list of all modules, try 'cmake -DMODULES=help' in the libyuni source folder")
+	YMESSAGE("")
+
 else()
 
 	YMESSAGE("A working Yuni Framework was not found (could not locate yuni-config).")
