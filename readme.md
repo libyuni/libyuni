@@ -22,21 +22,6 @@ fast applications. It is meant as a reliable and simple bridge between
 different worlds, allowing to write all sorts of applications, while
 letting the developer focus on her real work.
 
-The Yuni project is connected to all these domains :
-
- * Cross-platform development
- * Threading / Parallel computing
- * Networking
- * Scripting languages
- * 2D/3D graphics
- * Physics
- * 2D/3D User Interface
- * 2D/3D Input devices
- * Sound playback for 2D/3D sounds
- * Video playback
- * Artificial Intelligence
- * Real-time multi-user Collaboration
- * And any other domain related to multimedia or user interaction.
 
 
 Target audience
@@ -53,3 +38,13 @@ some point, multi-threading at some other, graphics, sound, input,
 command line parsing, ... Yuni intends to provide all this in a portable
 way with a single, easy-to-use, object-oriented API.
 
+
+Supported compilers
+-------------------
+
+| libyuni  | Minimum Compiler Requirements |
+| :------------- | :------------- |
+| v2.x {`master`}  | `>=VS2015`, `>=g++-4.9`, `>=clang++-3.7` {C++14 required} |
+| v1.x | `>=VS2010`, `>=g++-4.4` (*) |
+
+**Special note**: `VS2012` and `g++-4.7` are not supported due (ICE on templates). Please consider to upgrade
