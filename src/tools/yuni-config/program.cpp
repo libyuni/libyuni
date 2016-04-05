@@ -31,7 +31,7 @@ namespace Yuni
 		pOptCxxFlags(false),
 		pOptLibFlags(false),
 		pOptPrintCompilerByDefault(false),
-		pOptPrintErrors(false),
+		pOptPrintErrors(true),
 		pOptPrintModulesDeps(false),
 		pOptDebug(false),
 		pOptCompiler(YUNI_LIBCONFIG_DEFAULT_COMPILER)
@@ -93,17 +93,21 @@ namespace Yuni
 
 		// Help
 		opts.addParagraph("\nHelp\n  * : Option related to the selected version of libyuni");
-		opts.addFlag(pOptPrintErrors, ' ', "verbose", "Print any error message");
+		bool quiet = false;
+		opts.addFlag(quiet, ' ', "quiet", "Suppress error messages");
 		opts.addFlag(pOptDebug, ' ', "debug", "Print debug messages");
 		opts.addFlag(pOptVersion, 'v', "version", "Print the version and exit");
 
 		if (!opts(argc, argv))
 		{
 			pExitStatus = opts.errors() ? 1 /*error*/ : 0;
-			if (pOptPrintErrors || pOptDebug)
+			if ((pOptPrintErrors and not quiet) || pOptDebug)
 				std::cout << "Error when parsing the command line\n";
 			return false;
 		}
+
+		if (quiet)
+			pOptPrintErrors = false;
 
 		if (pOptPrintCompilerByDefault)
 		{
@@ -380,11 +384,14 @@ namespace Yuni
 		const String::List::const_iterator end = pOptModules.end();
 		for (String::List::const_iterator i = pOptModules.begin(); i != end; ++i)
 		{
-			if (not isCoreModule(*i) && version.modules.end() == std::find(version.modules.begin(), version.modules.end(), *i))
+			if (not isCoreModule(*i))
 			{
-				pExitStatus = 3;
-				//if (pOptPrintErrors)
-				std::cerr << "Error: The module '" << *i << "' is required but not available\n";
+				if (version.modules.end() == std::find(version.modules.begin(), version.modules.end(), *i))
+				{
+					pExitStatus = 3;
+					if (pOptPrintErrors)
+						std::cerr << "error: The module '" << *i << "' is required but not available\n";
+				}
 			}
 		}
 		return (0 == pExitStatus);
@@ -400,8 +407,10 @@ namespace Yuni
 			pExitStatus = 1;
 			return false;
 		}
+
 		// Dependencies
 		computeDependencies(version);
+
 		if (pOptPrintModulesDeps)
 		{
 			printModulesDependencies();
