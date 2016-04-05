@@ -118,7 +118,7 @@ if(NOT __Yuni_ConfigNotFound)
     endif()
 
 	# Check if the required modules, and their dependencies are compiled in.
-	execute_process(COMMAND "${__Yuni_Config}" -c "${__Yuni_Compiler}"
+	execute_process(COMMAND "${__Yuni_Config}" --quiet -c "${__Yuni_Compiler}"
 		-m "${__Yuni_ModsOpts}" --module-deps
 		OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE __Yuni_ModsDeps
 		RESULT_VARIABLE __Yuni_Config_DepsResult)
