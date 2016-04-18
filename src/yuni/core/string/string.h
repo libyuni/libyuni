@@ -161,27 +161,18 @@ namespace Yuni
 		//! A string list
 		typedef std::list<Ptr> ListPtr;
 
-		enum
-		{
-			//! Size for a single chunk
-			chunkSize      = AncestorType::chunkSize,
-			//! Invalid offset
-			npos           = static_cast<Size>(-1),
-			//! A non-zero value if the string must be zero terminated
-			zeroTerminated = 1, //AncestorType::zeroTerminated,
-			//! A non-zero value if the string can be expanded
-			expandable     = AncestorType::expandable,
-			//! True if the string is a string adapter (only read-only operations are allowed)
-			adapter        = (0 == chunkSize and expandable),
-		};
-		//! char Case
-		enum charCase
-		{
-			//! The string should remain untouched
-			soCaseSensitive,
-			//! The string should be converted to lowercase
-			soIgnoreCase
-		};
+		//! Size for a single chunk
+		static constexpr yuint32 chunkSize = AncestorType::chunkSize;
+		//! A non-zero value if the string must be zero terminated
+		static constexpr bool zeroTerminated = true;
+		//! Invalid offset
+		static constexpr Size npos = static_cast<Size>(-1);
+		//! A non-zero value if the string can be expanded
+		static constexpr bool expandable = AncestorType::expandable;
+
+		//! True if the string is a string adapter (only read-only operations are allowed)
+		static constexpr bool adapter = (0 == chunkSize and expandable);
+
 
 		//! Self, which can be written
 		typedef typename Static::If<adapter or (0 == expandable and chunkSize > 512),
@@ -279,8 +270,7 @@ namespace Yuni
 		/*!
 		** \brief Constructor from another string
 		*/
-		template<uint SizeT, bool ExpT>
-		CString(const CString<SizeT,ExpT>& string);
+		template<uint SizeT, bool ExpT> CString(const CString<SizeT,ExpT>& string);
 
 		//! Move constructor
 		CString(CString&& rhs);
