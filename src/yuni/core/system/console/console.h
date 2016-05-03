@@ -81,13 +81,13 @@ namespace Console
 	/*!
 	** \brief Get if the standard output is a TTY
 	*/
-	YUNI_DECL bool IsStdoutTTY();
+	YUNI_DECL bool IsStdoutTTY() noexcept;
 
 
 	/*!
 	** \brief Get if the standard error output is a TTY
 	*/
-	YUNI_DECL bool IsStderrTTY();
+	YUNI_DECL bool IsStderrTTY() noexcept;
 
 
 

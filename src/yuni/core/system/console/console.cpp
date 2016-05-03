@@ -22,7 +22,7 @@ namespace System
 namespace Console
 {
 
-	bool IsStdoutTTY()
+	bool IsStdoutTTY() noexcept
 	{
 		# ifdef YUNI_OS_WINDOWS
 		return false;
@@ -32,7 +32,7 @@ namespace Console
 	}
 
 
-	bool IsStderrTTY()
+	bool IsStderrTTY() noexcept
 	{
 		# ifdef YUNI_OS_WINDOWS
 		return false;

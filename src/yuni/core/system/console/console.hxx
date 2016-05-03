@@ -116,9 +116,7 @@ namespace Console
 
 	template<> struct TextColor<bold> final
 	{
-		template<class U> static void Set(U&)
-		{
-		}
+		template<class U> static void Set(U&) {}
 	};
 
 
