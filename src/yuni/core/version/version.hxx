@@ -17,49 +17,50 @@ namespace Yuni
 {
 
 	inline Version::Version()
-		: hi(), lo(), revision()
+		: hi(), lo(), patch()
 	{}
 
 
-	inline Version::Version(uint major)
-		: hi(major), lo(), revision()
+	inline Version::Version(uint32_t major)
+		: hi(major), lo(), patch()
 	{}
 
 
-	inline Version::Version(uint major, uint minor)
-		: hi(major), lo(minor), revision()
+	inline Version::Version(uint32_t major, uint32_t minor)
+		: hi(major), lo(minor), patch()
 	{}
 
 
-	inline Version::Version(uint major, uint minor, uint rev)
-		: hi(major), lo(minor), revision(rev)
+	inline Version::Version(uint32_t major, uint32_t minor, uint32_t patch)
+		: hi(major), lo(minor), patch(patch)
 	{}
 
 
 	inline Version::Version(const Version& c)
-		: hi(c.hi), lo(c.lo), revision(c.revision)
+		: hi(c.hi), lo(c.lo), patch(c.patch)
 	{}
 
 
 
 
-	inline void Version::assign(uint major, uint minor, uint rev)
+	inline void Version::assign(uint32_t major, uint32_t minor, uint32_t p)
 	{
 		hi = major;
 		lo = minor;
-		revision = rev;
+		patch = p;
 	}
 
 
 	inline void Version::clear()
 	{
-		hi = lo = revision = 0;
+		hi = lo = patch = 0;
+		metadata.clear();
 	}
 
 
 	inline bool Version::isEqualTo(const Version& rhs) const
 	{
-		return (rhs.hi == hi) and (rhs.lo == lo) and (rhs.revision == revision);
+		return (rhs.hi == hi) and (rhs.lo == lo) and (rhs.patch == patch);
 	}
 
 
@@ -101,14 +102,16 @@ namespace Yuni
 
 	inline bool Version::null() const
 	{
-		return (hi == 0 and lo == 0 and revision == 0);
+		return (hi == 0 and lo == 0 and patch == 0);
 	}
 
 
 	template<class S>
 	inline void Version::print(S& out) const
 	{
-		out << hi << '.' << lo << '.' << revision;
+		out << hi << '.' << lo << '.' << patch;
+		if (not metadata.empty())
+			out << '-' << metadata;
 	}
 
 
@@ -116,13 +119,13 @@ namespace Yuni
 	{
 		hi = rhs.hi;
 		lo = rhs.lo;
-		revision = rhs.revision;
+		patch = rhs.patch;
+		metadata = rhs.metadata;
 		return *this;
 	}
 
 
 
-	std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs);
 
 
 
@@ -130,3 +133,9 @@ namespace Yuni
 
 
 
+
+std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs)
+{
+	rhs.print(out);
+	return out;
+}

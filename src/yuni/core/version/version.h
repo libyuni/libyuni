@@ -21,7 +21,7 @@ namespace Yuni
 	** \brief Version number
 	**
 	** A version number is composed by two numbers (major and minor), plus a
-	** revision number for fine-grained level.
+	** patchision number for fine-grained level.
 	**
 	** \ingroup Core
 	*/
@@ -44,7 +44,7 @@ namespace Yuni
 		**
 		** \param major The major version number
 		*/
-		explicit Version(uint major);
+		explicit Version(uint32_t major);
 
 		/*!
 		** \brief Constructor with a given version
@@ -52,16 +52,16 @@ namespace Yuni
 		** \param major The major version number
 		** \param minor The minor version number
 		*/
-		Version(uint major, uint minor);
+		Version(uint32_t major, uint32_t minor);
 
 		/*!
 		** \brief Constructor with a given version
 		**
 		** \param major The major version number
 		** \param minor The minor version number
-		** \param rev   The revision number
+		** \param patch   The patchision number
 		*/
-		Version(uint major, uint minor, uint rev);
+		Version(uint32_t major, uint32_t minor, uint32_t patch);
 
 		//! Copy constructor
 		Version(const Version& c);
@@ -82,7 +82,7 @@ namespace Yuni
 		/*!
 		** \brief Assign a new version numner
 		*/
-		void assign(uint major, uint minor, uint r = 0);
+		void assign(uint32_t major, uint32_t minor, uint32_t r = 0);
 
 		/*!
 		** \brief Set the version to 0.0.0
@@ -145,11 +145,13 @@ namespace Yuni
 
 	public:
 		//! The major version number
-		uint hi;
+		uint32_t hi;
 		//! The minor version number
-		uint lo;
-		//! Revision
-		uint revision;
+		uint32_t lo;
+		//! patchision
+		uint32_t patch;
+		//! Metadata
+		String metadata;
 
 	}; // class Version
 

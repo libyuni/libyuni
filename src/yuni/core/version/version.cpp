@@ -18,9 +18,9 @@ namespace Yuni
 
 	void Version::InternalLib(Version& v)
 	{
-		v.hi = YUNI_VERSION_HI;
-		v.lo = YUNI_VERSION_LO;
-		v.revision = YUNI_VERSION_REV;
+		v.hi    = YUNI_VERSION_HI;
+		v.lo    = YUNI_VERSION_LO;
+		v.patch = YUNI_VERSION_REV;
 	}
 
 
@@ -33,7 +33,7 @@ namespace Yuni
 			if (lo < rhs.lo)
 				return true;
 			if (lo == rhs.lo)
-				return revision < rhs.revision;
+				return patch < rhs.patch;
 		}
 		return false;
 	}
@@ -48,7 +48,7 @@ namespace Yuni
 			if (lo > rhs.lo)
 				return true;
 			if (lo == rhs.lo)
-				return revision > rhs.revision;
+				return patch > rhs.patch;
 		}
 		return false;
 	}
@@ -56,13 +56,7 @@ namespace Yuni
 
 	String Version::toString() const
 	{
-		return String() << hi << '.' << lo << '.' << revision;
-	}
-
-	std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs)
-	{
-		rhs.print(out);
-		return out;
+		return String() << hi << '.' << lo << '.' << patch;
 	}
 
 
