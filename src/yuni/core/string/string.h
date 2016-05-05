@@ -1844,6 +1844,10 @@ namespace Yuni
 		*/
 		char last() const;
 
+		/*!
+		** \brief Swap the content between two strings
+		*/
+		void swap(CString&);
 
 		/*!
 		** \brief Get if the string matches a simple pattern ('*' only managed)

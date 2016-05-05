@@ -345,6 +345,13 @@ namespace CStringImpl
 	}
 
 
+	template<uint ChunkSizeT>
+	void Data<ChunkSizeT,false>::swap(Data<ChunkSizeT,false>& rhs)
+	{
+		Data<ChunkSizeT,false> tmp(*this);
+		assignWithoutChecking(rhs.data, rhs.size);
+		rhs.assignWithoutChecking(tmp.data, tmp.size);
+	}
 
 
 

@@ -146,6 +146,13 @@ namespace CStringImpl
 
 		bool null() const { return (data == NULL); }
 
+		void swap(Data<ChunkSizeT,ExpandableT>& rhs)
+		{
+			std::swap(size, rhs.size);
+			std::swap(capacity, rhs.capacity);
+			std::swap(data, rhs.data);
+		}
+
 		Size assignWithoutChecking(const C* const block, const Size blockSize)
 		{
 			// Making sure that we have enough space
@@ -292,6 +299,8 @@ namespace CStringImpl
 		}
 
 		static bool null() { return false; }
+
+		void swap(Data<ChunkSizeT,false>& rhs);
 
 		Size assignWithoutChecking(const C* const block, Size blockSize);
 

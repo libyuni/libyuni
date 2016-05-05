@@ -3489,6 +3489,14 @@ namespace Yuni
 	}
 
 
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline void
+	CString<ChunkSizeT,ExpandableT>::swap(CString<ChunkSizeT,ExpandableT>& rhs)
+	{
+		YUNI_STATIC_ASSERT(!adapter, CString_Adapter_ReadOnly);
+		AncestorType::swap(rhs);
+	}
+
 
 
 } // namespace Yuni
