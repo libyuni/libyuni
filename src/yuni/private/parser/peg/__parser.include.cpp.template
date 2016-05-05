@@ -121,6 +121,12 @@
 	class Datasource final
 	{
 	public:
+		enum class OpenFlag
+		{
+			opened,
+			error,
+			ignore,
+		};
 
 	public:
 		//! \name Constructors
@@ -152,7 +158,7 @@
 		//! \name Filename manipulation
 		//@{
 		//! Open a new url
-		bool open(const AnyString& newurl);
+		OpenFlag open(const AnyString& newurl);
 		//! Open from anonymous origin
 		void openContent(const AnyString& content);
 		//! Close the current url
@@ -545,8 +551,10 @@
 	}
 
 
-	bool Datasource::open(const AnyString& newurl)
+	Datasource::OpenFlag Datasource::open(const AnyString& newurl)
 	{
+		if (YUNI_UNLIKELY(newurl.empty()))
+			return OpenFlag::error;
 		// getting the root directory once and for all if not already done
 		// the operation is not done in the constructor to let the caller
 		// initialize this variable if needed
@@ -554,54 +562,70 @@
 			::Yuni::IO::Directory::Current::Get(root, false);
 
 		// canonicalizing the filename
-		String filename;
+		::Yuni::String filename;
 		::Yuni::IO::Canonicalize(filename, newurl, root);
 
 		// filename index
 		uint index;
-		Yuni::Dictionary<String, uint>::Unordered::const_iterator knownIndex = reverseUrlIndexes.find(filename);
+		::Yuni::Dictionary<String, uint>::Unordered::const_iterator knownIndex = reverseUrlIndexes.find(filename);
 		if (YUNI_LIKELY(knownIndex == reverseUrlIndexes.end()))
 		{
+			// load the entire content in memory
+			Clob newContent;
+			if (YUNI_UNLIKELY(::Yuni::IO::errNone != ::Yuni::IO::File::LoadFromFile(newContent, filename)))
+				return OpenFlag::error;
+
+			newContent.trimRight();
+			if (YUNI_UNLIKELY(newContent.empty()))
+				return OpenFlag::ignore;
+
+			// adding an artifial line feed to make sure the parser will be able to end
+			newContent.append('\n');
+
 			assert(contents.size() == urls.size());
 			// indexes
 			index = (uint) contents.size();
 			reverseUrlIndexes[filename] = index;
-			// load the entire content in memory
-			contents.push_back(nullptr);
-			urls.push_back(filename);
-			if (::Yuni::IO::errNone != ::Yuni::IO::File::LoadFromFile(contents.back(), filename))
-				return false;
+
+			contents.emplace_back();
+			contents.back().swap(newContent);
+
+			urls.emplace_back();
+			urls.back().swap(filename);
 		}
 		else
 			index = knownIndex->second;
 
 		// new item in the stack
 		pushInclude(index);
-		return true;
+		return OpenFlag::opened;
 	}
 
 
 	void Datasource::openContent(const AnyString& content)
 	{
-		const String filename = "<memory>";
-		// filename index
-		uint index;
-		auto knownIndex = reverseUrlIndexes.find(filename);
-		if (YUNI_LIKELY(knownIndex == reverseUrlIndexes.end()))
+		if (not content.empty())
 		{
-			assert(contents.size() == urls.size());
-			// indexes
-			index = static_cast<uint>(contents.size());
-			reverseUrlIndexes[filename] = index;
-			urls.push_back(filename);
-			// load the entire content in memory
-			contents.push_back(nullptr);
-			contents.back() = content;
-		}
-		else
-			index = knownIndex->second;
+			const String filename = "<memory>";
+			// filename index
+			uint index;
+			auto knownIndex = reverseUrlIndexes.find(filename);
+			if (YUNI_LIKELY(knownIndex == reverseUrlIndexes.end()))
+			{
+				assert(contents.size() == urls.size());
+				// indexes
+				index = static_cast<uint>(contents.size());
+				reverseUrlIndexes[filename] = index;
+				urls.push_back(filename);
+				// load the entire content in memory
+				contents.push_back(nullptr);
+				contents.back() = content;
+			}
+			else
+				index = knownIndex->second;
 
-		pushInclude(index);
+			pushInclude(index);
+		}
 	}
 
 
