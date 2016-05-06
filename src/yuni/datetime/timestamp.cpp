@@ -19,7 +19,7 @@ namespace Yuni
 namespace DateTime
 {
 
-	Timestamp Now()
+	Timestamp Now() noexcept
 	{
 		# ifdef YUNI_OS_MSVC
 		return (sint64) ::_time64(nullptr);
@@ -29,7 +29,7 @@ namespace DateTime
 	}
 
 
-	Timestamp NowMilliSeconds()
+	Timestamp NowMilliSeconds() noexcept
 	{
 		timeval now;
 		YUNI_SYSTEM_GETTIMEOFDAY(&now, nullptr);

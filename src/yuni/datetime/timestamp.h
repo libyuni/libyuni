@@ -31,12 +31,12 @@ namespace DateTime
 	/*!
 	** \brief Get the current timestamp (in seconds since epoch)
 	*/
-	Timestamp Now();
+	Timestamp Now() noexcept;
 
 	/*!
 	** \brief Get the current timestamp (in milliseconds since epoch)
 	*/
-	Timestamp NowMilliSeconds();
+	Timestamp NowMilliSeconds() noexcept;
 
 
 	/*!
