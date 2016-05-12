@@ -36,6 +36,7 @@ set(VS_KEYWORD                   "YuniVS${YUNI_VERSION}")
 set(VERSION                      "${YUNI_VERSION}")
 set(VS_SCC_PROJECTNAME           "Yuni Framework")
 set(PROJECT_LABEL                "Yuni Framework")
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1) # vim / youcomplete / emacs / ...
 
 if (WIN32 AND NOT WIN64)
 	# We have to determine the platform architecture
