@@ -23,6 +23,14 @@ namespace Yuni
 	class Tribool final
 	{
 	public:
+		enum class Value
+		{
+			indeterminate,
+			yes,
+			no
+		};
+
+	public:
 		//! \name Constructors
 		//@{
 		//! Default constructor (indeterminate by default)
