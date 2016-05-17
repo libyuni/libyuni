@@ -2455,6 +2455,16 @@ namespace Yuni
 		return AncestorType::null();
 	}
 
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline bool
+	CString<ChunkSizeT,ExpandableT>::blank() const
+	{
+		if (0 == AncestorType::size)
+			return true;
+		AnyString view{*this};
+		view.trimRight();
+		return view.empty();
+	}
 
 	template<uint ChunkSizeT, bool ExpandableT>
 	inline void

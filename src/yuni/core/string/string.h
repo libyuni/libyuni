@@ -1766,6 +1766,11 @@ namespace Yuni
 		bool null() const;
 
 		/*!
+		** \brief Get if the string is empty string, or only whitespaces
+		*/
+		bool blank() const;
+
+		/*!
 		** \brief Get the current capacity of the string (in bytes)
 		** \return The amount of memory used by the string
 		*/
