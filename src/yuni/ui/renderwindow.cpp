@@ -41,6 +41,7 @@ namespace UI
 
 	RenderWindow::~RenderWindow()
 	{
+		kill();
 		onRefresh.unbind();
 		onResize.unbind();
 		onCleanUp.unbind();
