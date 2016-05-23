@@ -467,9 +467,9 @@ namespace Variant
 		virtual void mult(uint64 n) override { pValue *= (T)n; }
 		virtual void mult(sint64 n) override { pValue *= (T)n; }
 		virtual void mult(double n) override { pValue *= (T)n; }
-		virtual void mult(bool) { /* do nothing*/ }
-		virtual void mult(char n) { pValue *= (T) n; }
-		virtual void mult(const String& n) { pValue *= n.to<T>(); }
+		virtual void mult(bool) override { /* do nothing*/ }
+		virtual void mult(char n) override { pValue *= (T) n; }
+		virtual void mult(const String& n) override { pValue *= n.to<T>(); }
 
 		virtual void div(uint32 n) override { pValue /= (T)n; }
 		virtual void div(sint32 n) override { pValue /= (T)n; }

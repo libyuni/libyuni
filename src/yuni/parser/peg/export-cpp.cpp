@@ -960,7 +960,6 @@ namespace PEG
 			cpp << '\n';
 			cpp << "	void Parser::translateOffset(uint& column, uint& line, const Node& node) const\n";
 			cpp << "	{\n";
-			cpp << "		assert(&node and \"invalid pointer to node\");\n";
 			cpp << "		column = 0;\n";
 			cpp << "		line = 0;\n";
 			cpp << "		if (YUNI_LIKELY(pData))\n";
@@ -985,7 +984,6 @@ namespace PEG
 			cpp << '\n';
 			cpp << "	uint Parser::translateOffsetToLine(const Node& node) const\n";
 			cpp << "	{\n";
-			cpp << "		assert(&node and \"invalid pointer to node\");\n";
 			cpp << "		uint column;\n";
 			cpp << "		uint line;\n";
 			cpp << "		translateOffset(column, line, node);\n";
@@ -1013,8 +1011,6 @@ namespace PEG
 			cpp << '\n';
 			cpp << "	void Node::ExportToHTML(Clob& out, const Node& node)\n";
 			cpp << "	{\n";
-			cpp << "		assert(&node and \"invalid reference to node\");\n";
-			cpp << '\n';
 			cpp << "		String tmp;\n";
 			cpp << "		String indent;\n";
 			cpp << "		InternalNodeExportHTML(out, node, indent, tmp);\n";
@@ -1023,8 +1019,6 @@ namespace PEG
 			cpp << '\n';
 			cpp << "	void Node::Export(Clob& out, const Node& node, bool color, ExportCallback callback)\n";
 			cpp << "	{\n";
-			cpp << "		assert(&node and \"invalid reference to node\");\n";
-			cpp << '\n';
 			cpp << "		String tmp;\n";
 			cpp << "		String indent;\n";
 			cpp << "		if (not color)\n";

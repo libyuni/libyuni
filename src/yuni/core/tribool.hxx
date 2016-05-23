@@ -63,7 +63,7 @@ namespace Yuni
 
 	inline void Tribool::defaultValue(bool defvalue)
 	{
-		pValue.flags[1] = static_cast<yuint8>(defvalue);
+		pValue.flags[1] = static_cast<yint8>(defvalue);
 	}
 
 

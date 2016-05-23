@@ -61,9 +61,9 @@ namespace Process
 	protected:
 		virtual bool onExecute() override;
 
-		virtual void onPause();
+		virtual void onPause() override;
 
-		virtual void onStop();
+		virtual void onStop() override;
 
 		virtual void onKill() override;
 

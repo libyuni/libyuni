@@ -729,7 +729,6 @@
 
 	static void InternalNodeExportHTML(Clob& out, const Node& node, String& indent, String& tmp)
 	{
-		assert(&node != NULL);
 		out << indent << "<div class=\"node\">";
 		out << "<span class=\"rule\">" << ruleToString(node.rule) << "</span>";
 
@@ -766,7 +765,6 @@
 		void (*callback)(Yuni::Dictionary<AnyString, YString>::Unordered&, const Node&))
 	{
 		using namespace ::Yuni::System::Console;
-		assert(&node != NULL);
 
 		typedef Yuni::Dictionary<AnyString, YString>::Unordered  DictType;
 		DictType dict;
@@ -857,7 +855,6 @@
 		String& tmp, Node::ExportCallback callback)
 	{
 		using namespace ::Yuni::System::Console;
-		assert(&node != NULL);
 
 		if (ColorT)
 			::Yuni::System::Console::SetTextColor(out, blue);
