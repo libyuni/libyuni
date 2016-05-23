@@ -133,10 +133,10 @@ if(NOT MSVC)
 
 	# transform some warnings into errors to avoid common mistakes
 	check_cxx_compiler_flag("-Werror=switch"   YUNI_HAS_W2E_SWITCH)
-
 	if (YUNI_HAS_W2E_SWITCH)
 		set(YUNI_COMMON_CXX_OPTIONS  "${YUNI_COMMON_CXX_OPTIONS} -Werror=switch")
 	endif()
+
 endif()
 
 if (APPLE AND CLANG)

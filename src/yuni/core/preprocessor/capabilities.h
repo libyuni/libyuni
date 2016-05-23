@@ -240,6 +240,30 @@
 #	define YUNI_ATTR_PURE
 #endif
 
+/*!
+** \macro YUNI_ATTR_NODISCARD
+** \brief Warn if the return value is unused
+**
+** \code
+** static uint32_t sum(int x, int y) YUNI_ATTR_NODISCARD
+** {
+**     return x + y;
+** }
+**
+** int main()
+** {
+**     sum(2, 5); // warning: ignoring return value of ‘sum’
+**     return 0;
+** }
+** \endcode
+*/
+#if !defined(YUNI_ATTR_NODISCARD) && defined(YUNI_HAS_GCC_ATTR_NODISCARD)
+#	define YUNI_ATTR_NODISCARD  __attribute__((warn_unused_result))
+#endif
+#if !defined(YUNI_ATTR_NODISCARD)
+#	define YUNI_ATTR_NODISCARD
+#endif
+
 
 /*!
 ** \macro YUNI_ATTR_CONST

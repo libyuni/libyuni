@@ -82,6 +82,14 @@ if (NOT MSVC)
 			return max(42, 0);
 		} "  YUNI_HAS_GCC_ATTR_CONST)
 
+	# gcc __attribute__((warn_unused_result))
+	check_cxx_source_compiles("
+		__attribute__((warn_unused_result)) static int max(int x, int y) { return x > y ? x : y;}
+		int main(void)
+		{
+			return max(42, 0);
+		} "  YUNI_HAS_GCC_ATTR_NODISCARD)
+
 endif()
 
 

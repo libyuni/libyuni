@@ -146,6 +146,9 @@
 /* C++ gcc attribute 'pure' */
 #cmakedefine YUNI_HAS_GCC_ATTR_PURE
 
+/* C++ gcc attribute 'warn_unused_result' [[nodiscard]] */
+#cmakedefine YUNI_HAS_GCC_ATTR_NODISCARD
+
 /* C++ gcc attribute 'const' */
 #cmakedefine YUNI_HAS_GCC_ATTR_CONST
 
