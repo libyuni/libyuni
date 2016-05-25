@@ -1138,25 +1138,10 @@ namespace Yuni
 
 
 	template<uint ChunkSizeT, bool ExpandableT>
-	bool
+	inline bool
 	CString<ChunkSizeT,ExpandableT>::contains(const char* const cstr, Size len) const
 	{
-		if (len and cstr and len < AncestorType::size)
-		{
-			const char* p    = AncestorType::data;
-			const char* end  = AncestorType::data + AncestorType::size;
-			const char* jend = cstr + len;
-
-			for (; p != end; ++p)
-			{
-				for (const char* j = cstr; j != jend; ++j)
-				{
-					if (*j == *p)
-						return true;
-				}
-			}
-		}
-		return false;
+		return find(cstr, len) < size();
 	}
 
 
@@ -1164,7 +1149,7 @@ namespace Yuni
 	inline bool
 	CString<ChunkSizeT,ExpandableT>::contains(const AnyString& string) const
 	{
-		return contains(string.c_str(), string.size());
+		return find(string.c_str(), string.size()) < size();
 	}
 
 
