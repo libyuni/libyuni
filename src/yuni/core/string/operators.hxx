@@ -46,7 +46,7 @@ inline std::basic_istream<CharT, TraitsT>& operator >> (std::basic_istream<CharT
 	return stream;
 }
 
-}
+} // namespace Yuni
 
 
 
