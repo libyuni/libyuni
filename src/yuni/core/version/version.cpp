@@ -54,11 +54,6 @@ namespace Yuni
 	}
 
 
-	String Version::toString() const
-	{
-		return String() << hi << '.' << lo << '.' << patch;
-	}
-
 
 
 } // namespace Yuni

@@ -10,7 +10,8 @@
 */
 #pragma once
 #include "../../yuni.h"
-#include "../string.h"
+#include "../string/string.h"
+#include <iosfwd>
 
 
 

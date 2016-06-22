@@ -41,8 +41,6 @@ namespace Yuni
 	{}
 
 
-
-
 	inline void Version::assign(uint32_t major, uint32_t minor, uint32_t p)
 	{
 		hi = major;
@@ -106,6 +104,12 @@ namespace Yuni
 	}
 
 
+	inline String Version::toString() const
+	{
+		return String() << hi << '.' << lo << '.' << patch;
+	}
+
+
 	template<class S>
 	inline void Version::print(S& out) const
 	{
@@ -126,15 +130,12 @@ namespace Yuni
 
 
 
-
-
-
 } // namespace Yuni
 
 
 
 
-std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs)
+inline std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs)
 {
 	rhs.print(out);
 	return out;

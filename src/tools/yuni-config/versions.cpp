@@ -8,13 +8,15 @@
 ** github: https://github.com/libyuni/libyuni/
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
+#include <yuni/yuni.h>
 #include "versions.h"
 #include <yuni/io/directory.h>
 #include <yuni/io/file.h>
 #include <iostream>
 
-
 #define SEP IO::Separator
+
+
 
 
 namespace Yuni
@@ -130,7 +132,7 @@ namespace VersionInfo
 				if (key == "version.lo")
 					version.lo = value.to<unsigned int>();
 				if (key == "version.rev")
-					version.revision = value.to<unsigned int>();
+					version.patch = value.to<unsigned int>();
 				if (key == "version.target")
 					info.compilationMode = value;
 				if (key == "modules.available")
@@ -161,8 +163,9 @@ namespace VersionInfo
 
 				if (pOptDebug)
 				{
-					std::cout << "[yuni-config][debug]  - found installation `" << path
-						<< "` (" << version << ")" << std::endl;
+					std::cout << "[yuni-config][debug]  - found installation `" << path << "` (";
+					version.print(std::cout);
+					std::cout << ")\n";
 				}
 			}
 			else
@@ -190,7 +193,7 @@ namespace VersionInfo
 			const const_iterator end = pList.rend();
 			for (const_iterator i = pList.rbegin(); i != end; ++i)
 			{
-				std::cout << i->first;
+				(i->first).print(std::cout);
 				if (i->second.mapping == mappingSVNSources)
 					std::cout << " (svn-sources)";
 				std::cout << "\n";
@@ -206,7 +209,8 @@ namespace VersionInfo
 			const const_iterator end = pList.rend();
 			for (const_iterator i = pList.rbegin(); i != end; ++i)
 			{
-				std::cout << i->first << " " << i->second.compilationMode;
+				(i->first).print(std::cout);
+				std::cout << ' ' << i->second.compilationMode;
 				if (i->second.mapping == mappingSVNSources)
 					std::cout << " (svn-sources)";
 				std::cout << "\n";
