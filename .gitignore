@@ -36,6 +36,7 @@ cmake_install.cmake
 /src/yuni/platform.h
 /src/yuni/yuni.config.*
 /src/yuni/yuni.version
+/src/compile_commands.json
 
 # DevPacks
 /devpacks/*
