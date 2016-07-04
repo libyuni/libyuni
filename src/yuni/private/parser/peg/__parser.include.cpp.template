@@ -297,8 +297,11 @@
 		// avoid too much memory consumption
 		if (capacity > GROW_CHUNK * 1024)
 		{
+			auto* newstack = (Chunk*)::realloc(stack, sizeof(Chunk) * capacity);
+			if (YUNI_UNLIKELY(!newstack))
+				throw std::bad_alloc();
 			capacity = GROW_CHUNK * 1024;
-			stack = (Chunk*)::realloc(stack, sizeof(Chunk) * capacity);
+			stack = newstack;
 		}
 
 		// initializing the first frame
@@ -326,7 +329,11 @@
 		#endif
 
 		// grow the stack
-		stack = (Chunk*)::realloc(stack, (capacity += GROW_CHUNK) * sizeof(Chunk));
+		auto* newstack = (Chunk*)::realloc(stack, (capacity + GROW_CHUNK) * sizeof(Chunk));
+		if (YUNI_UNLIKELY(!newstack))
+			throw std::bad_alloc();
+		stack = newstack;
+		capacity += GROW_CHUNK;
 
 		#if MORE_CHECKS != 0  // post-checks
 		assert(offset < capacity);
