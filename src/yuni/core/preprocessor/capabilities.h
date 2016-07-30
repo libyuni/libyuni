@@ -40,6 +40,9 @@
 ** - FreeBSD
 ** YUNI_OS_FREEBSD (The value is the version)
 **
+** - Dragon Fly
+** YUNI_OS_DRAGONFLY (The value is the version)
+**
 ** - AIX
 ** YUNI_OS_AIX
 **

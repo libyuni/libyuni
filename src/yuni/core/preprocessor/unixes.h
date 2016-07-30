@@ -90,6 +90,12 @@
 #		define YUNI_OS_NAME "NetBSD"
 #	endif
 
+/* DragonFly */
+#	if defined(__DragonFly__)
+#		define YUNI_OS_DRAGONFLY __DragonFly__
+#		define YUNI_OS_NAME "DragonFly"
+#	endif
+
 /* OpenBSD */
 #	if defined(__OpenBSD__)
 #		define YUNI_OS_OPENBSD
