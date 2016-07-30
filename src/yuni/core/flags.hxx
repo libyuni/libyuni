@@ -94,13 +94,21 @@ namespace Yuni
 	template<class T>
 	inline bool Flags<T>::contains(const std::initializer_list<T>& list) const
 	{
+		auto bits = Type();
 		for (auto flag: list)
-		{
-			if (not get(flag))
-				return false;
-		}
-		return true;
+			bits |= (1 << static_cast<Type>(flag));
+		return (bits == (bits & pBits));
 	}
+
+	template<class T>
+	inline bool Flags<T>::containsOneOf(const std::initializer_list<T>& list) const
+	{
+		auto bits = Type();
+		for (auto flag: list)
+			bits |= (1 << static_cast<Type>(flag));
+		return (0 != (bits & pBits));
+	}
+
 
 
 

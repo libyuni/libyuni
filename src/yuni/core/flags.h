@@ -77,8 +77,10 @@ namespace Yuni
 
 		//! Get if a flag is set
 		bool get(T flag) const;
-		//! Get if a set of flags is set
+		//! Get if the set of flags is set
 		bool contains(const std::initializer_list<T>&) const;
+		//! Get if at least one of the given flag is set
+		bool containsOneOf(const std::initializer_list<T>&) const;
 
 
 		//! Set all but a particular flag
