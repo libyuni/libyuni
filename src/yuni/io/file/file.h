@@ -201,6 +201,15 @@ namespace File
 	bool ReadLineByLine(const AnyString& filename, const PredicateT& predicate);
 
 
+	/*!
+	** \brief Resize a file
+	*/
+	bool Resize(const AnyString& filename, uint64_t size);
+
+	/*!
+	** \brief Empty a file
+	*/
+	bool Truncate(const AnyString& filename);
 
 
 
@@ -211,4 +220,3 @@ namespace File
 
 #include "stream.h"
 #include "file.hxx"
-

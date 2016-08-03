@@ -97,6 +97,10 @@ namespace File
 	}
 
 
+	inline bool Truncate(const AnyString& filename)
+	{
+		return Resize(filename, 0u);
+	}
 
 
 

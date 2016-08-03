@@ -23,6 +23,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <fcntl.h>
 #endif
 
 
@@ -306,6 +307,44 @@ namespace File
 	}
 
 
+	bool Resize(const AnyString& filename, uint64_t size)
+	{
+		if (not filename.empty())
+		{
+			if (size < std::numeric_limits<off_t>::max())
+			{
+				#ifndef YUNI_OS_WINDOWS
+				{
+					assert((filename.c_str())[filename.size()] == '\0');
+					int fd = open(filename.c_str(), O_WRONLY|O_CREAT|O_LARGEFILE, 0644);
+					if (fd != -1)
+					{
+						bool success = (0 == ftruncate(fd, static_cast<off_t>(size)));
+						close(fd);
+						return success;
+					}
+				}
+				#else
+				{
+					WString wstr(filename, true);
+					if (not wstr.empty())
+					{
+						HANDLE hndl = CreateFileW(wstr.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+						if (hndl)
+						{
+							DWORD dwPtr = SetFilePointer(hndl, size, 0, FILE_BEGIN);
+							if (dwPtr != INVALID_SET_FILE_POINTER)
+								SetEndOfFile(hndl);
+							CloseHandle(hndl);
+							return true;
+						}
+					}
+				}
+				#endif
+			}
+		}
+		return false;
+	}
 
 
 
