@@ -285,13 +285,10 @@ namespace Process
 		}
 		# else
 		{
-			switch (sigvalue)
-			{
-				// All signals are handled by force-quitting the child process' window threads.
-				default:
-					QuitProcess(processID);
-					break;
-			}
+			// switch (sigvalue) ...
+
+			// All signals are handled by force-quitting the child process' window threads.
+			QuitProcess(processID);
 
 			if (withLock)
 				mutex.unlock();
