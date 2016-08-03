@@ -144,6 +144,8 @@ namespace CStringImpl
 
 		void clear();
 
+		void forgetContent();
+
 		bool null() const { return (data == NULL); }
 
 		void swap(Data<ChunkSizeT,ExpandableT>& rhs)
@@ -296,6 +298,11 @@ namespace CStringImpl
 			size = 0;
 			if (static_cast<uint>(zeroTerminated))
 				data[0] = C();
+		}
+
+		void forgetContent()
+		{
+			clear();
 		}
 
 		static bool null() { return false; }

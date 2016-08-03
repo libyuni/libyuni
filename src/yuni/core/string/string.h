@@ -1369,6 +1369,11 @@ namespace Yuni
 		CString& clear();
 
 		/*!
+		** \brief Return the inner C-string and clear the string without freeing the inner pointer
+		*/
+		char* forgetContent();
+
+		/*!
 		** \brief Erase a part of the string
 		**
 		** \param offset The offset (zero-based) of the first item to erase

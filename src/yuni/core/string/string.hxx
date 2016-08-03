@@ -3493,5 +3493,17 @@ namespace Yuni
 	}
 
 
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline char*
+	CString<ChunkSizeT,ExpandableT>::forgetContent()
+	{
+		char* cstring = data();
+		if (not adapter)
+			AncestorType::forgetContent();
+		else
+			AncestorType::size = 0;
+		return cstring;
+	}
+
 
 } // namespace Yuni

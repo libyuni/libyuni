@@ -134,6 +134,24 @@ namespace CStringImpl
 			size = 0;
 	}
 
+	template<uint ChunkSizeT, bool ExpandableT>
+	inline void
+	Data<ChunkSizeT,ExpandableT>::forgetContent()
+	{
+		capacity = 0;
+		data = nullptr; // forget me !
+		if (static_cast<uint>(zeroTerminated))
+		{
+			if (size)
+			{
+				size = 0;
+				*(const_cast<char*>(data)) = C();
+			}
+		}
+		else
+			size = 0;
+	}
+
 
 	template<uint ChunkSizeT, bool ExpandableT>
 	inline void
