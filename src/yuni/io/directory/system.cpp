@@ -68,11 +68,7 @@ namespace System
 
 			#ifdef YUNI_OS_WINDOWS
 			{
-				if (not Yuni::System::Environment::Read("HOMEDRIVE", out, false))
-					out += "C:"; // C by default
-				if (not Yuni::System::Environment::Read("HOMEPATH", out, false))
-					out += '\\';
-				return true;
+				return Yuni::System::Environment::Read("USERPROFILE", out, false);
 			}
 			#else
 			{
