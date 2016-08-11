@@ -35,6 +35,10 @@ namespace Yuni
 		Flags() = default;
 		//! Copy constructor
 		Flags(const Flags&) = default;
+		//! From null
+		Flags(std::nullptr_t) {}
+		//! From T itself
+		Flags(T flag);
 
 		//! Constructor from initializer_list
 		Flags(const std::initializer_list<T>&);
@@ -76,7 +80,7 @@ namespace Yuni
 
 
 		//! Get if a flag is set
-		bool get(T flag) const;
+		bool has(T flag) const;
 		//! Get if the set of flags is set
 		bool contains(const std::initializer_list<T>&) const;
 		//! Get if at least one of the given flag is set

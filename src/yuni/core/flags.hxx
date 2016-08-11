@@ -17,6 +17,12 @@ namespace Yuni
 {
 
 	template<class T>
+	inline Flags<T>::Flags(T flag)
+		: pBits(1 << static_cast<Type>(flag))
+	{}
+
+
+	template<class T>
 	inline Flags<T>::Flags(const std::initializer_list<T>& list)
 	{
 		set(list);
@@ -85,7 +91,7 @@ namespace Yuni
 
 
 	template<class T>
-	inline bool Flags<T>::get(T flag) const
+	inline bool Flags<T>::has(T flag) const
 	{
 		return 0 != (pBits & (1 << static_cast<Type>(flag)));
 	}
@@ -115,7 +121,7 @@ namespace Yuni
 	template<class T>
 	inline bool Flags<T>::operator () (T flag) const
 	{
-		return get(flag);
+		return has(flag);
 	}
 
 
