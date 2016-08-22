@@ -139,7 +139,6 @@ namespace CStringImpl
 	Data<ChunkSizeT,ExpandableT>::forgetContent()
 	{
 		capacity = 0;
-		data = nullptr; // forget me !
 		if (static_cast<uint>(zeroTerminated))
 		{
 			if (size)
@@ -150,6 +149,7 @@ namespace CStringImpl
 		}
 		else
 			size = 0;
+		data = nullptr; // forget me !
 	}
 
 
