@@ -72,13 +72,7 @@ namespace Checksum
 		static String FromRawData(const void* rawdata, uint64 size = AutoDetectNullChar);
 
 	public:
-		//! \name Constructor & Destructor
-		//@{
-		//! Default constructor
-		MD5() {}
-		//! Destructor
-		virtual ~MD5() {}
-		//@}
+		using IChecksum::IChecksum;
 
 		virtual const String& fromRawData(const void* rawdata, uint64 size = AutoDetectNullChar) override;
 		virtual const String& fromFile(const String& filename) override;

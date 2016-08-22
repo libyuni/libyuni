@@ -38,9 +38,9 @@ namespace Checksum
 		//! \name Constructor & Destructor
 		//@{
 		//! Default constructor
-		IChecksum() {}
+		IChecksum() = default;
 		//! Destructor
-		virtual ~IChecksum() {}
+		virtual ~IChecksum() = default;
 		//@}
 
 		/*!
@@ -79,6 +79,8 @@ namespace Checksum
 		const String& value() const;
 		//! Get the hash value
 		const String& operator() () const;
+		//! retrieve (and forget) the internal char* buffer
+		char* forgetContent();
 
 		/*!
 		** \brief Compute the hash value from a string and returns it
@@ -87,6 +89,7 @@ namespace Checksum
 		** \return The hash value
 		*/
 		const String& operator[] (const String& s);
+
 
 	protected:
 		//! The hash value

@@ -51,6 +51,11 @@ namespace Checksum
 		return pValue;
 	}
 
+	inline char* IChecksum::forgetContent()
+	{
+		return pValue.forgetContent();
+	}
+
 
 
 } // namespace Checksum
