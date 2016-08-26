@@ -391,13 +391,15 @@ namespace Checksum
 
 	const String& MD5::fromRawData(const void* rawdata, uint64 size)
 	{
-		pValue.clear();
 		if (!rawdata)
-			return pValue;
-		if (AutoDetectNullChar == size)
-			size = strlen((const char*) rawdata);
-		if (!size)
-			return pValue;
+		{
+			size = 0;
+		}
+		else
+		{
+			if (AutoDetectNullChar == size)
+				size = strlen((const char*) rawdata);
+		}
 
 		MD5TypeState state;
 		MD5TypeByte digest[16];
@@ -405,6 +407,7 @@ namespace Checksum
 		md5ImplInit(&state);
 		md5ImplAppend(&state, static_cast<const MD5TypeByte*>(rawdata), static_cast<uint>(size));
 		md5ImplFinish(&state, digest);
+		pValue.clear();
 		md5DigestToString(pValue, digest);
 		return pValue;
 	}
