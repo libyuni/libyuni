@@ -374,6 +374,45 @@ namespace PEG
 				hxx << "namespace " << namespaces[i] << "\n{\n";
 			hxx << "\n\n";
 
+			hxx << "	//! References for tokens\n";
+			hxx << "	static constexpr const bool isToken[] =\n";
+			hxx << "	{\n";
+			hxx << "		false, // rgUnknown\n";
+			for (auto& pair: rules)
+			{
+				if (pair.first.startsWith("tk-"))
+					hxx << "		true, // " << pair.first << '\n';
+				else
+					hxx << "		false, // " << pair.first << '\n';
+			}
+			hxx << "	};\n";
+			hxx << "\n\n";
+			hxx << "	inline bool shouldIgnoreForDuplication(enum Rule rule)\n";
+			hxx << "	{\n";
+			hxx << "		//assert(static_cast<uint32_t>(rule) < " << (rules.size() + 1) << ");\n";
+			hxx << "		return isToken[static_cast<uint32_t>(rule)];\n";
+			hxx << "	}\n";
+			hxx << '\n';
+			hxx << '\n';
+			hxx << "	static constexpr const bool isAttributeError[] =\n";
+			hxx << "	{\n";
+			hxx << "		false, // rgUnknown\n";
+			for (auto& pair: rules)
+			{
+				bool error = pair.first == "error" or pair.first.startsWith("error-");
+				hxx << "		" << (error ? "true" : "false") << ", // " << pair.second.enumID << '\n';
+			}
+			hxx << "		false, // rgEOF\n";
+			hxx << "	};\n";
+			hxx << '\n';
+			hxx << '\n';
+			hxx << "	inline bool ruleIsError(enum Rule ruleid)\n";
+			hxx << "	{\n";
+			hxx << "		// assert((uint) ruleid < (uint) ruleCount);\n";
+			hxx << "		return isAttributeError[static_cast<uint32_t>(ruleid)];\n";
+			hxx << "	}\n";
+
+			hxx << "\n\n\n\n";
 			hxx << "	inline Node::Node(enum Rule rule)\n";
 			hxx << "		: rule(rule)\n";
 			hxx << "	{}\n";
@@ -733,23 +772,6 @@ namespace PEG
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "	static constexpr const bool _attrAttributeError[] =\n";
-			cpp << "	{\n";
-			cpp << "		false, // rgUnknown\n";
-			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
-			{
-				bool error = i->first == "error" or i->first.startsWith("error-");
-				cpp << "		" << (error ? "true" : "false") << ", // " << i->second.enumID << '\n';
-			}
-			cpp << "		false, // rgEOF\n";
-			cpp << "	};\n";
-			cpp << '\n';
-			cpp << '\n';
-			cpp << "	static inline bool ruleAttributeError(enum Rule ruleid)\n";
-			cpp << "	{\n";
-			cpp << "		assert((uint) ruleid < (uint) ruleCount);\n";
-			cpp << "		return _attrAttributeError[(uint) ruleid];\n";
-			cpp << "	}\n";
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
@@ -825,30 +847,6 @@ namespace PEG
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
-			cpp << '\n';
-			cpp << '\n';
-			cpp << '\n';
-			cpp << "	bool shouldIgnoreForDuplication(enum Rule rule)\n";
-			cpp << "	{\n";
-			cpp << "		static const bool hints[] = {\n";
-			cpp << "			false, // rgUnknown\n";
-			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
-			{
-				if (i->first.startsWith("tk-"))
-					cpp << "			true, // " << i->first << '\n';
-				else
-					cpp << "			false, // " << i->first << '\n';
-			}
-			cpp << "		};";
-			cpp << "		return hints[(uint) rule];\n";
-			cpp << "	}\n";
-			cpp << '\n';
-			cpp << '\n';
-			cpp << '\n';
-			cpp << "	bool  ruleIsError(enum Rule ruleid)\n";
-			cpp << "	{\n";
-			cpp << "		return ruleAttributeError(ruleid);\n";
-			cpp << "	}\n";
 			cpp << '\n';
 			cpp << '\n';
 			cpp << '\n';
