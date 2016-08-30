@@ -14,7 +14,6 @@
 #include <yuni/core/getopt.h>
 #include <yuni/core/logs.h>
 #include <yuni/parser/peg/grammar.h>
-#include <yuni/core/variant.h>
 
 using namespace Yuni;
 

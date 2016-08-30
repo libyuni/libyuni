@@ -771,10 +771,10 @@
 		{
 			out << '\n' << indent << "<ul>\n";
 			indent.append("    ", 4);
-			for (uint32_t i = 0; i != (uint) node.children.size(); ++i)
+			for (uint32_t i = 0; i != node.children.size(); ++i)
 			{
 				out << indent << "<li>\n";
-				InternalNodeExportHTML(out, *(node.children[i]), indent, tmp);
+				InternalNodeExportHTML(out, node.children[i], indent, tmp);
 				out << indent << "</li>\n";
 			}
 
@@ -863,10 +863,10 @@
 			else
 				indent.append("    ", 4);
 
-			for (uint32_t i = 0; i != (uint) node.children.size(); ++i)
+			for (uint32_t i = 0; i != node.children.size(); ++i)
 			{
-				bool hasSibling = (i != (uint) node.children.size() - 1);
-				InternalNodeExportJSON(out, *(node.children[i]), hasSibling, indent, tmp, callback);
+				bool hasSibling = (i != node.children.size() - 1);
+				InternalNodeExportJSON(out, node.children[i], hasSibling, indent, tmp, callback);
 			}
 
 			indent.chop(4);
@@ -999,10 +999,10 @@
 			else
 				indent.append("    ", 4);
 
-			for (uint32_t i = 0; i != (uint) node.children.size(); ++i)
+			for (uint32_t i = 0; i != node.children.size(); ++i)
 			{
-				bool hasSibling = (i != (uint) node.children.size() - 1);
-				InternalNodeExportConsole<ColorT>(out, *(node.children[i]), hasSibling, indent, tmp, callback);
+				bool hasSibling = (i != node.children.size() - 1);
+				InternalNodeExportConsole<ColorT>(out, node.children[i], hasSibling, indent, tmp, callback);
 			}
 
 			indent.chop(4);
@@ -1147,11 +1147,11 @@
 			}
 
 			astNodes[i] = newnode;
-			astNodes[cursor->parent]->children.emplace_back(newnode);
+			astNodes[cursor->parent]->children.push_back(newnode);
 		}
 
 		rootnode = YUNI_LIKELY((astNodes[0]->children.size() == 1))
-			? astNodes[0]->children[0] : nullptr;
+			? &(astNodes[0]->children.front()) : nullptr;
 
 		delete astNodes[0];
 		free(astNodes);
