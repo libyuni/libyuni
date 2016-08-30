@@ -229,13 +229,30 @@ namespace Yuni
 
 	public:
 		/*!
+		** \brief Get the internal stored pointer (weak pointer) by the smart pointer (const)
+		**
+		** \note This method should be used with care, especially in a multithreaded world
+		** \param ptr The smart pointer
+		** \return The internal stored pointer (can be null)
+		*/
+		static const T* WeakPointer(const SmartPtr& ptr);
+		/*!
 		** \brief Get the internal stored pointer (weak pointer) by the smart pointer
 		**
 		** \note This method should be used with care, especially in a multithreaded world
 		** \param ptr The smart pointer
 		** \return The internal stored pointer (can be null)
 		*/
-		static T* WeakPointer(const SmartPtr& ptr);
+		static T* WeakPointer(SmartPtr& ptr);
+
+		/*!
+		** \brief Get the internal stored pointer (weak pointer) by the smart pointer (identity) (const)
+		**
+		** \note This method exists to avoid some common mistakes when mixing smartptr and raw pointers
+		** \param wptr The pointer
+		** \return The pointer wptr given in input
+		*/
+		static const T* WeakPointer(const T* wptr);
 		/*!
 		** \brief Get the internal stored pointer (weak pointer) by the smart pointer (identity)
 		**
