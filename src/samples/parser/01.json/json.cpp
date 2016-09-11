@@ -1,13 +1,4 @@
-/*
-** This file is part of libyuni, a cross-platform C++ framework (http://libyuni.org).
-**
-** This Source Code Form is subject to the terms of the Mozilla Public License
-** v.2.0. If a copy of the MPL was not distributed with this file, You can
-** obtain one at http://mozilla.org/MPL/2.0/.
-**
-** github: https://github.com/libyuni/libyuni/
-** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
-*/
+
 #include "json.h"
 #include <cassert>
 #include <yuni/core/string.h>
@@ -17,6 +8,7 @@
 #include <yuni/core/noncopyable.h>
 #include <yuni/datetime/timestamp.h>
 #include <yuni/core/system/console/console.h>
+#include <iostream>
 
 using namespace Yuni;
 
@@ -29,242 +21,194 @@ namespace // anonymous
 {
 
 
-	static bool  RuleAttributeCapture(enum Rule ruleid)
+	static constexpr const bool _attrAttributeCapture[] =
 	{
-		static const bool attr[] = {
-			false, // rgUnknown
-			false, // rgArray
-			false, // rgCharExtended
-			false, // rgDigit
-			true, // rgError
-			true, // rgErrorBracket
-			true, // rgErrorEol
-			true, // rgErrorParenthese
-			true, // rgErrorSemicolon
-			false, // rgFalse
-			false, // rgHex
-			true, // rgInteger
-			false, // rgKey
-			false, // rgNull
-			false, // rgNumber
-			true, // rgNumberDef
-			false, // rgNumberExponent
-			true, // rgNumberHexa
-			false, // rgNumberQualifier
-			true, // rgNumberQualifierType
-			true, // rgNumberSign
-			true, // rgNumberValue
-			false, // rgObject
-			false, // rgObjectEntry
-			true, // rgPunc
-			false, // rgSingleChar
-			false, // rgSp
-			false, // rgStart
-			false, // rgString
-			true, // rgStringLiteral
-			false, // rgTkBraceClose
-			false, // rgTkBraceOpen
-			false, // rgTkBracketClose
-			false, // rgTkBracketOpen
-			false, // rgTkColon
-			false, // rgTkComma
-			false, // rgTkCommentBlock
-			true, // rgTkCommentBlockContent
-			true, // rgTkCommentEndBlock
-			false, // rgTkCommentLine
-			true, // rgTkCommentLineContent
-			true, // rgTkCommentStartBlock
-			true, // rgTkCommentStartInline
-			false, // rgTkCommentSubbk
-			false, // rgTkDot
-			false, // rgTkDoubleQuote
-			false, // rgTrue
-			false, // rgValue
-			true, // rgWp
-			false, // rgEOF
-		};
+		false, // rgUnknown
+		false, // rgArray
+		false, // rgCharExtended
+		false, // rgDigit
+		true, // rgError
+		true, // rgErrorBracket
+		true, // rgErrorEol
+		true, // rgErrorParenthese
+		true, // rgErrorSemicolon
+		false, // rgFalse
+		false, // rgHex
+		true, // rgInteger
+		false, // rgKey
+		false, // rgNull
+		false, // rgNumber
+		true, // rgNumberDef
+		false, // rgNumberExponent
+		true, // rgNumberHexa
+		false, // rgNumberQualifier
+		true, // rgNumberQualifierType
+		true, // rgNumberSign
+		true, // rgNumberValue
+		false, // rgObject
+		false, // rgObjectEntry
+		true, // rgPunc
+		false, // rgSingleChar
+		false, // rgSp
+		false, // rgStart
+		false, // rgString
+		true, // rgStringLiteral
+		false, // rgTkBraceClose
+		false, // rgTkBraceOpen
+		false, // rgTkBracketClose
+		false, // rgTkBracketOpen
+		false, // rgTkColon
+		false, // rgTkComma
+		false, // rgTkCommentBlock
+		true, // rgTkCommentBlockContent
+		true, // rgTkCommentEndBlock
+		false, // rgTkCommentLine
+		true, // rgTkCommentLineContent
+		true, // rgTkCommentStartBlock
+		true, // rgTkCommentStartInline
+		false, // rgTkCommentSubbk
+		false, // rgTkDot
+		false, // rgTkDoubleQuote
+		false, // rgTrue
+		false, // rgValue
+		true, // rgWp
+		false, // rgEOF
+	};
+
+
+	static bool ruleAttributeCapture(enum Rule ruleid)
+	{
 		assert((uint) ruleid < (uint) ruleCount);
-		return attr[(uint) ruleid];
+		return _attrAttributeCapture[(uint) ruleid];
 	}
 
 
 
-	static inline bool  RuleAttributeError(enum Rule ruleid)
+
+
+
+	static constexpr const bool _attrAttributeImportant[] = {
+		false, // rgUnknown
+		false, // rgArray
+		false, // rgCharExtended
+		false, // rgDigit
+		false, // rgError
+		false, // rgErrorBracket
+		false, // rgErrorEol
+		false, // rgErrorParenthese
+		false, // rgErrorSemicolon
+		false, // rgFalse
+		false, // rgHex
+		false, // rgInteger
+		false, // rgKey
+		false, // rgNull
+		false, // rgNumber
+		false, // rgNumberDef
+		false, // rgNumberExponent
+		false, // rgNumberHexa
+		false, // rgNumberQualifier
+		false, // rgNumberQualifierType
+		false, // rgNumberSign
+		false, // rgNumberValue
+		false, // rgObject
+		false, // rgObjectEntry
+		false, // rgPunc
+		false, // rgSingleChar
+		false, // rgSp
+		false, // rgStart
+		false, // rgString
+		false, // rgStringLiteral
+		false, // rgTkBraceClose
+		false, // rgTkBraceOpen
+		false, // rgTkBracketClose
+		false, // rgTkBracketOpen
+		false, // rgTkColon
+		false, // rgTkComma
+		false, // rgTkCommentBlock
+		false, // rgTkCommentBlockContent
+		false, // rgTkCommentEndBlock
+		false, // rgTkCommentLine
+		false, // rgTkCommentLineContent
+		false, // rgTkCommentStartBlock
+		false, // rgTkCommentStartInline
+		false, // rgTkCommentSubbk
+		false, // rgTkDot
+		false, // rgTkDoubleQuote
+		false, // rgTrue
+		false, // rgValue
+		false, // rgWp
+		false, // rgEOF
+	};
+
+
+	static inline bool ruleAttributeImportant(enum Rule ruleid)
 	{
-		static const bool attr[] = {
-			false, // rgUnknown
-			false, // rgArray
-			false, // rgCharExtended
-			false, // rgDigit
-			true, // rgError
-			true, // rgErrorBracket
-			true, // rgErrorEol
-			true, // rgErrorParenthese
-			true, // rgErrorSemicolon
-			false, // rgFalse
-			false, // rgHex
-			false, // rgInteger
-			false, // rgKey
-			false, // rgNull
-			false, // rgNumber
-			false, // rgNumberDef
-			false, // rgNumberExponent
-			false, // rgNumberHexa
-			false, // rgNumberQualifier
-			false, // rgNumberQualifierType
-			false, // rgNumberSign
-			false, // rgNumberValue
-			false, // rgObject
-			false, // rgObjectEntry
-			false, // rgPunc
-			false, // rgSingleChar
-			false, // rgSp
-			false, // rgStart
-			false, // rgString
-			false, // rgStringLiteral
-			false, // rgTkBraceClose
-			false, // rgTkBraceOpen
-			false, // rgTkBracketClose
-			false, // rgTkBracketOpen
-			false, // rgTkColon
-			false, // rgTkComma
-			false, // rgTkCommentBlock
-			false, // rgTkCommentBlockContent
-			false, // rgTkCommentEndBlock
-			false, // rgTkCommentLine
-			false, // rgTkCommentLineContent
-			false, // rgTkCommentStartBlock
-			false, // rgTkCommentStartInline
-			false, // rgTkCommentSubbk
-			false, // rgTkDot
-			false, // rgTkDoubleQuote
-			false, // rgTrue
-			false, // rgValue
-			false, // rgWp
-			false, // rgEOF
-		};
 		assert((uint) ruleid < (uint) ruleCount);
-		return attr[(uint) ruleid];
+		return _attrAttributeImportant[(uint) ruleid];
 	}
 
 
 
-	static inline bool  RuleAttributeImportant(enum Rule ruleid)
+
+	static const char* const _attrAttributeSimpleTextCapture[] =
 	{
-		static const bool attr[] = {
-			false, // rgUnknown
-			false, // rgArray
-			false, // rgCharExtended
-			false, // rgDigit
-			false, // rgError
-			false, // rgErrorBracket
-			false, // rgErrorEol
-			false, // rgErrorParenthese
-			false, // rgErrorSemicolon
-			false, // rgFalse
-			false, // rgHex
-			false, // rgInteger
-			false, // rgKey
-			false, // rgNull
-			false, // rgNumber
-			false, // rgNumberDef
-			false, // rgNumberExponent
-			false, // rgNumberHexa
-			false, // rgNumberQualifier
-			false, // rgNumberQualifierType
-			false, // rgNumberSign
-			false, // rgNumberValue
-			false, // rgObject
-			false, // rgObjectEntry
-			false, // rgPunc
-			false, // rgSingleChar
-			false, // rgSp
-			false, // rgStart
-			false, // rgString
-			false, // rgStringLiteral
-			false, // rgTkBraceClose
-			false, // rgTkBraceOpen
-			false, // rgTkBracketClose
-			false, // rgTkBracketOpen
-			false, // rgTkColon
-			false, // rgTkComma
-			false, // rgTkCommentBlock
-			false, // rgTkCommentBlockContent
-			false, // rgTkCommentEndBlock
-			false, // rgTkCommentLine
-			false, // rgTkCommentLineContent
-			false, // rgTkCommentStartBlock
-			false, // rgTkCommentStartInline
-			false, // rgTkCommentSubbk
-			false, // rgTkDot
-			false, // rgTkDoubleQuote
-			false, // rgTrue
-			false, // rgValue
-			false, // rgWp
-			false, // rgEOF
-		};
-		assert((uint) ruleid < (uint) ruleCount);
-		return attr[(uint) ruleid];
-	}
+		nullptr, // rgUnknown
+		nullptr, // rgArray
+		nullptr, // rgCharExtended
+		nullptr, // rgDigit
+		nullptr, // rgError
+		nullptr, // rgErrorBracket
+		nullptr, // rgErrorEol
+		nullptr, // rgErrorParenthese
+		nullptr, // rgErrorSemicolon
+		"false", // rgFalse
+		nullptr, // rgHex
+		nullptr, // rgInteger
+		nullptr, // rgKey
+		"null", // rgNull
+		nullptr, // rgNumber
+		nullptr, // rgNumberDef
+		nullptr, // rgNumberExponent
+		nullptr, // rgNumberHexa
+		nullptr, // rgNumberQualifier
+		nullptr, // rgNumberQualifierType
+		nullptr, // rgNumberSign
+		nullptr, // rgNumberValue
+		nullptr, // rgObject
+		nullptr, // rgObjectEntry
+		nullptr, // rgPunc
+		nullptr, // rgSingleChar
+		nullptr, // rgSp
+		nullptr, // rgStart
+		nullptr, // rgString
+		nullptr, // rgStringLiteral
+		"}", // rgTkBraceClose
+		"{", // rgTkBraceOpen
+		"]", // rgTkBracketClose
+		"[", // rgTkBracketOpen
+		":", // rgTkColon
+		",", // rgTkComma
+		nullptr, // rgTkCommentBlock
+		nullptr, // rgTkCommentBlockContent
+		"*/", // rgTkCommentEndBlock
+		nullptr, // rgTkCommentLine
+		nullptr, // rgTkCommentLineContent
+		"/*", // rgTkCommentStartBlock
+		"//", // rgTkCommentStartInline
+		nullptr, // rgTkCommentSubbk
+		".", // rgTkDot
+		"\"", // rgTkDoubleQuote
+		"true", // rgTrue
+		nullptr, // rgValue
+		nullptr, // rgWp
+		nullptr, // rgEOF
+	};
 
 
-
-	static AnyString  RuleAttributeSimpleTextCapture(enum Rule ruleid)
+	static AnyString ruleAttributeSimpleTextCapture(enum Rule ruleid)
 	{
-		static const char* const attr[] = {
-			nullptr, // rgUnknown
-			nullptr, // rgArray
-			nullptr, // rgCharExtended
-			nullptr, // rgDigit
-			nullptr, // rgError
-			nullptr, // rgErrorBracket
-			nullptr, // rgErrorEol
-			nullptr, // rgErrorParenthese
-			nullptr, // rgErrorSemicolon
-			"false", // rgFalse
-			nullptr, // rgHex
-			nullptr, // rgInteger
-			nullptr, // rgKey
-			"null", // rgNull
-			nullptr, // rgNumber
-			nullptr, // rgNumberDef
-			nullptr, // rgNumberExponent
-			nullptr, // rgNumberHexa
-			nullptr, // rgNumberQualifier
-			nullptr, // rgNumberQualifierType
-			nullptr, // rgNumberSign
-			nullptr, // rgNumberValue
-			nullptr, // rgObject
-			nullptr, // rgObjectEntry
-			nullptr, // rgPunc
-			nullptr, // rgSingleChar
-			nullptr, // rgSp
-			nullptr, // rgStart
-			nullptr, // rgString
-			nullptr, // rgStringLiteral
-			"}", // rgTkBraceClose
-			"{", // rgTkBraceOpen
-			"]", // rgTkBracketClose
-			"[", // rgTkBracketOpen
-			":", // rgTkColon
-			",", // rgTkComma
-			nullptr, // rgTkCommentBlock
-			nullptr, // rgTkCommentBlockContent
-			"*/", // rgTkCommentEndBlock
-			nullptr, // rgTkCommentLine
-			nullptr, // rgTkCommentLineContent
-			"/*", // rgTkCommentStartBlock
-			"//", // rgTkCommentStartInline
-			nullptr, // rgTkCommentSubbk
-			".", // rgTkDot
-			"\"", // rgTkDoubleQuote
-			"true", // rgTrue
-			nullptr, // rgValue
-			nullptr, // rgWp
-			nullptr, // rgEOF
-		};
 		assert((uint) ruleid < (uint) ruleCount);
-		return attr[(uint) ruleid];
+		return _attrAttributeSimpleTextCapture[(uint) ruleid];
 	}
 
 
@@ -272,10 +216,15 @@ namespace // anonymous
 	//! Add traces to the stdcout
 	# define HAS_TRACES 0
 
+	//! Enable time-consuming checks
+	#ifndef NDEBUG
+	# define MORE_CHECKS 1
+	#else
+	# define MORE_CHECKS 0
+	#endif
+
 	# define HAS_STATISTICS 0
 
-	//! Size (in bytes), when increasing the stack capacity
-	# define GROW_CHUNK  1024 // 1024 * sizeof(Chunk) -> 16KiB
 
 	//! Arbitrary value for consistency checks
 	# define ARBITRARY_HARD_LIMIT  (1024 * 1024 * 500)
@@ -366,15 +315,17 @@ namespace // anonymous
 	struct Chunk
 	{
 		//! Rule ID - a negative value means that the rule has not been commited yet
-		int rule;
-		//! Iterator on the source
-		uint offset;
-		//! Index of the current source url (see `urls`)
-		uint urlindex;
-		//! End offset - means nothing if rule == 0
-		uint offsetEnd;
+		int32_t rule;
+		//! hint about the parent frame (last uncommited)
+		uint32_t lastUncommited;
 		//! Parent rule
-		uint parent;
+		uint32_t parent;
+		//! Iterator on the source
+		uint32_t offset;
+		//! Index of the current source url (see `urls`)
+		uint32_t urlindex;
+		//! End offset - means nothing if rule == 0
+		uint32_t offsetEnd;
 	};
 
 
@@ -383,6 +334,16 @@ namespace // anonymous
 	class Datasource final
 	{
 	public:
+		enum class OpenFlag
+		{
+			opened,
+			error,
+			ignore,
+		};
+
+		//! Size (in bytes), when increasing the stack capacity
+		static constexpr uint32_t chunkGrowSize = 4096; // 1024 * sizeof(Chunk) -> 16KiB
+
 
 	public:
 		//! \name Constructors
@@ -404,17 +365,17 @@ namespace // anonymous
 
 		//! \name Chunk
 		//@{
-		void pushInclude(uint urlindex);
-		uint push();
-		uint enterRule(enum Rule rule);
-		void restart(uint from);
-		void commit(uint ruleOffset, enum Rule rule);
+		void pushInclude(uint32_t urlindex);
+		uint32_t push();
+		uint32_t enterRule(enum Rule rule);
+		void restart(uint32_t from);
+		void commit(uint32_t ruleOffset, enum Rule rule);
 		//@}
 
 		//! \name Filename manipulation
 		//@{
 		//! Open a new url
-		bool open(const AnyString& newurl);
+		OpenFlag open(const AnyString& newurl);
 		//! Open from anonymous origin
 		void openContent(const AnyString& content);
 		//! Close the current url
@@ -442,19 +403,19 @@ namespace // anonymous
 
 		//! \name Address translation
 		//@{
-		void translateOffset(uint& column, uint& line, uint offset) const;
+		void translateOffset(uint32_t& column, uint32_t& line, uint32_t offset) const;
 		//@}
 
 
 	public:
 		//! Stack
 		Chunk* stack;
-		uint offset;
+		uint32_t offset;
 		# if HAS_STATISTICS != 0 && !defined(NDEBUG)
-		uint maxOffset;
+		uint32_t maxOffset;
 		uint64 duration;
 		# endif
-		uint capacity;
+		uint32_t capacity;
 
 		//! Root folder
 		YString root;
@@ -476,7 +437,7 @@ namespace // anonymous
 	private:
 		void grow();
 		void buildASTForNonEmptyContent();
-		void findOptimalNewOffsetAfterCommit(uint ruleOffset);
+		void findOptimalNewOffsetAfterCommit(uint32_t ruleOffset);
 
 	}; // class Datasource
 
@@ -499,14 +460,14 @@ namespace // anonymous
 
 	private:
 		Datasource& ctx;
-		uint oldOffset;
-		uint oldFileOffset;
+		uint32_t oldOffset;
+		uint32_t oldFileOffset;
 	};
 
 
 
 
-	# ifndef NDEBUG
+	#if MORE_CHECKS != 0
 	static inline std::ostream& PrintFrame(std::ostream& out, const Chunk& cursor)
 	{
 		out << "{offset: " << cursor.offset
@@ -521,24 +482,24 @@ namespace // anonymous
 
 
 
-	inline Datasource::Datasource(Notification::Vector& notifications) :
+	Datasource::Datasource(Notification::Vector& notifications) :
 		stack(),
 		offset(),
-		capacity(GROW_CHUNK),
+		capacity(chunkGrowSize),
 		notifications(notifications)
 	{
-		stack = (Chunk*)::malloc(sizeof(Chunk) * GROW_CHUNK);
+		stack = (Chunk*)::malloc(sizeof(Chunk) * chunkGrowSize);
 	}
 
 
-	inline Datasource::~Datasource()
+	Datasource::~Datasource()
 	{
 		// rootnode = nullptr
 		::free(stack);
 	}
 
 
-	inline void Datasource::clear()
+	void Datasource::clear()
 	{
 		offset = 0;
 		success = false;
@@ -551,10 +512,13 @@ namespace // anonymous
 		rootnode = nullptr;
 
 		// avoid too much memory consumption
-		if (capacity > GROW_CHUNK * 1024)
+		if (capacity > chunkGrowSize * 1024)
 		{
-			capacity = GROW_CHUNK * 1024;
-			stack = (Chunk*)::realloc(stack, sizeof(Chunk) * capacity);
+			auto* newstack = (Chunk*)::realloc(stack, sizeof(Chunk) * capacity);
+			if (YUNI_UNLIKELY(!newstack))
+				throw std::bad_alloc();
+			capacity = chunkGrowSize * 1024;
+			stack = newstack;
 		}
 
 		// initializing the first frame
@@ -569,29 +533,44 @@ namespace // anonymous
 		firstFrame.offsetEnd = 0;
 		// no parent
 		firstFrame.parent = 0;
+		firstFrame.lastUncommited = 0;
 	}
 
 
-	inline void Datasource::grow()
+	void Datasource::grow()
 	{
-		// WARNING The variable 'offset' might be unreliable for displying
-		// and/or checking values from the stack frames
-		assert(capacity + GROW_CHUNK < ARBITRARY_HARD_LIMIT); // arbitrary
+		if (not (offset < capacity))
+		{
+			uint32_t newcapacity = capacity + chunkGrowSize;
+			// WARNING The variable 'offset' might be unreliable for displying
+			// and/or checking values from the stack frames
+			#if MORE_CHECKS != 0
+			assert(newcapacity < ARBITRARY_HARD_LIMIT); // arbitrary
+			#endif
 
-		// grow the stack
-		stack = (Chunk*)::realloc(stack, (capacity += GROW_CHUNK) * sizeof(Chunk));
-		// post-checks
-		assert(offset < capacity);
+			// grow the stack
+			auto* newstack = (Chunk*) realloc(stack, newcapacity * sizeof(Chunk));
+			if (YUNI_UNLIKELY(!newstack))
+				throw std::bad_alloc();
+			stack = newstack;
+			capacity = newcapacity;
+
+			#if MORE_CHECKS != 0  // post-checks
+			assert(offset < capacity);
+			#endif
+		}
 	}
 
 
-	inline void Datasource::pushInclude(uint urlindex)
+	void Datasource::pushInclude(uint32_t urlindex)
 	{
+		#if MORE_CHECKS != 0
 		assert(urlindex < ARBITRARY_HARD_LIMIT);
-		assert(capacity + GROW_CHUNK < ARBITRARY_HARD_LIMIT); // arbitrary
+		assert(capacity + chunkGrowSize < ARBITRARY_HARD_LIMIT); // arbitrary
 		assert(offset < ARBITRARY_HARD_LIMIT); // arbitrary
 		assert(urls.size() == contents.size());
 		assert(urls.size() == reverseUrlIndexes.size());
+		#endif
 
 		if (YUNI_UNLIKELY(not (++offset < capacity))) // grow
 			grow();
@@ -602,73 +581,90 @@ namespace // anonymous
 		cursor.rule      = 0;
 		cursor.offsetEnd = 0;
 		cursor.parent    = (uint) -1;
+		cursor.lastUncommited = (uint) -1;
 	}
 
 
-	inline uint Datasource::push()
+	inline uint32_t Datasource::push()
 	{
-		assert(capacity + GROW_CHUNK < ARBITRARY_HARD_LIMIT); // arbitrary
+		#if MORE_CHECKS != 0
+		assert(capacity + chunkGrowSize < ARBITRARY_HARD_LIMIT); // arbitrary
 		assert(offset < ARBITRARY_HARD_LIMIT); // arbitrary
+		#endif
 
-		if (YUNI_UNLIKELY(not (++offset < capacity))) // grow
+		uint32_t oldoffset = offset;
+		uint32_t newoffset = oldoffset + 1;
+		offset = newoffset;
+		if (YUNI_UNLIKELY(0 == (newoffset % chunkGrowSize))) // grow
 			grow();
 
 		assert(offset < capacity);
 		# if HAS_STATISTICS != 0 && !defined(NDEBUG)
-		if (offset > maxOffset)
-			maxOffset = offset;
+		if (newoffset > maxOffset)
+			maxOffset = newoffset;
 		# endif
 
-		Chunk& cursor      = stack[offset];
-		const Chunk& prev  = stack[offset - 1];
+		Chunk* const prev   = &(stack[oldoffset]);
+		Chunk* const cursor = prev + 1;
 
-		assert(prev.offset < ARBITRARY_HARD_LIMIT);
-		assert(prev.urlindex < ARBITRARY_HARD_LIMIT);
+		#if MORE_CHECKS != 0
+		assert(prev->offset   < ARBITRARY_HARD_LIMIT);
+		assert(prev->urlindex < ARBITRARY_HARD_LIMIT);
+		#endif
 
-		cursor.offset    = prev.offset;
-		cursor.urlindex  = prev.urlindex;
-		cursor.rule      = 0;
-		// cursor.offsetEnd = 0;  means nothing if rule == 0
+		cursor->rule      = 0;
+		cursor->offset    = prev->offset;
+		cursor->urlindex  = prev->urlindex;
+		// cursor->offsetEnd = 0;  means nothing if rule == 0
+		cursor->lastUncommited = prev->lastUncommited;
 
 		// Since TRACE_LOCAL uses cursor.offset, this macro must be called after
 		// the previous initialization
-		TRACE_LOCAL("    push at offset " << prev.offset);
-		return offset - 1;
+		TRACE_LOCAL("    push at offset " << prev->offset);
+		return oldoffset;
 	}
 
 
-	inline uint Datasource::enterRule(enum Rule rule)
+	inline uint32_t Datasource::enterRule(enum Rule rule)
 	{
-		assert(capacity + GROW_CHUNK < ARBITRARY_HARD_LIMIT); // arbitrary
+		#if MORE_CHECKS != 0
+		assert(capacity + chunkGrowSize < ARBITRARY_HARD_LIMIT); // arbitrary
 		assert(offset < ARBITRARY_HARD_LIMIT); // arbitrary
 		assert((uint) rule < (uint) ruleCount);
+		#endif
 
 		// This method is quite similar to `push`
-		// Grow !
-		if (YUNI_UNLIKELY(not (++offset < capacity)))
+		uint32_t oldoffset = offset;
+		uint32_t newoffset = oldoffset + 1;
+		offset = newoffset;
+		if (YUNI_UNLIKELY(0 == (newoffset % chunkGrowSize)))
 			grow();
 
 		# if HAS_STATISTICS != 0 && !defined(NDEBUG)
-		if (offset > maxOffset)
-			maxOffset = offset;
+		if (newoffset > maxOffset)
+			maxOffset = newoffset;
 		# endif
 
-		assert(offset > 0);
+		#if MORE_CHECKS != 0
+		assert(newoffset > 0);
 		assert(capacity < ARBITRARY_HARD_LIMIT);
-		Chunk& cursor      = stack[offset];
-		const Chunk& prev  = stack[offset - 1];
+		#endif
 
-		cursor.offset    = prev.offset;
-		cursor.urlindex  = prev.urlindex;
-		cursor.rule      = - ((int) rule);
-		cursor.offsetEnd = cursor.offset; // store offset for reuse at commit
+		Chunk* const prev   = &(stack[oldoffset]);
+		Chunk* const cursor = prev + 1;
 
-		TRACE_LOCAL("    enter at offset " << cursor.offset);
-		return offset;
+		cursor->rule      = - (static_cast<int>(rule));
+		cursor->offset    = prev->offset;
+		cursor->urlindex  = prev->urlindex;
+		cursor->lastUncommited = offset;
+		cursor->offsetEnd = cursor->offset; // store offset for reuse at commit*/
+
+		TRACE_LOCAL("    enter at offset " << cursor->offset);
+		return newoffset;
 	}
 
 
-	inline void Datasource::findOptimalNewOffsetAfterCommit(uint ruleOffset)
+	inline void Datasource::findOptimalNewOffsetAfterCommit(uint32_t ruleOffset)
 	{
 		// trying to reduce the stack size by removing all stack frames which are
 		// not marked as a real rule this optimization can reduce by 3 the size of
@@ -677,73 +673,69 @@ namespace // anonymous
 		// if a stack frame with the variable 'rule' not null (aka a stack frame
 		// dedicated to create a node in the AST), then it would not be safe to
 		// get rid of the end of the stack
-		for (uint i = ruleOffset + 1; i <= offset; ++i)
+		const Chunk* const end = &(stack[offset]);
+		const Chunk* it = &(stack[ruleOffset + 1]);
+		for (; it <= end; ++it)
 		{
-			if (stack[i].rule != 0)
+			if (it->rule != 0)
 			{
 				++offset;
 				return;
 			}
 		}
-
 		// it seems that it is safe to ignore the end of the stack - hourray \o/
 		offset = ruleOffset + 1;
 	}
 
 
-	inline void Datasource::commit(uint ruleOffset, enum Rule rule)
+	void Datasource::commit(uint32_t ruleOffset, enum Rule rule)
 	{
-		assert(stack[ruleOffset].rule == - (int) rule and "inconsistency ruleid in the stack");
-		assert(offset >= ruleOffset and "invalid stack entre/commit");
-		assert(stack[offset].offset >= stack[ruleOffset].offset and "Huh? Should go forward...");
-		(void) rule; // avoid warning in release mode
-
 		// committing the current stack frame
 		{
-			Chunk& ruleCursor = stack[ruleOffset];
+			Chunk* const ruleCursor = &(stack[ruleOffset]);
+
+			#if MORE_CHECKS != 0
+			assert(ruleCursor->rule == - (int) rule and "inconsistency ruleid in the stack");
+			assert(offset >= ruleOffset and "invalid stack entre/commit");
+			assert(stack[offset].offset >= ruleCursor->offset and "Huh? Should go forward...");
+			#endif
 
 			// restore previous offset - a temporary variable must be used
 			// it may happen that `offset` and `ruleOffset` are the same
-			uint newEndOffset    = stack[offset].offset;
-			ruleCursor.offset    = ruleCursor.offsetEnd;
-			ruleCursor.offsetEnd = newEndOffset;
-			ruleCursor.rule      = (int) rule;
+			uint32_t newEndOffset     = stack[offset].offset;
+			ruleCursor->offset    = ruleCursor->offsetEnd;
+			ruleCursor->offsetEnd = newEndOffset;
+			ruleCursor->rule      = static_cast<int>(rule);
 
-			assert(ruleCursor.offset <= ruleCursor.offsetEnd and "invalid boundaries");
+			#if MORE_CHECKS != 0
+			assert(ruleCursor->offset <= ruleCursor->offsetEnd and "invalid boundaries");
+			#endif
 
-			// Looking for the parent node
+			// try to find the lastest uncommited rule
 			{
-				# ifndef NDEBUG
-				bool parentFound = false;
-				# endif
-
-				uint i = ruleOffset;
+				uint32_t lastUncommited = ruleOffset - 1;
 				do
 				{
-					if (stack[--i].rule < 0)
+					assert(lastUncommited < capacity);
+					Chunk* element = &(stack[lastUncommited]);
+					if (element->rule < 0)
 					{
-						ruleCursor.parent = i;
-						# ifndef NDEBUG
-						parentFound = true;
-						# endif
+						ruleCursor->parent = lastUncommited;
+						if (lastUncommited > 0)
+							element->lastUncommited = (element - 1)->lastUncommited;
 						break;
 					}
-				}
-				while (i != 0);
 
-				# ifndef NDEBUG
-				if (not parentFound)
-				{
-					std::cerr << "invalid parent commiting " << ruleCursor.rule << " at offset " << ruleOffset << std::endl;
-					assert(false);
+					assert(lastUncommited > 0);
+					lastUncommited = (element - 1)->lastUncommited;
 				}
-				# endif
+				while (true);
 			}
 
 			# if HAS_TRACES != 0
-			uint csize = ruleCursor.offsetEnd - ruleCursor.offset;
+			uint32_t csize = ruleCursor.offsetEnd - ruleCursor.offset;
 			AnyString content(contents[ruleCursor.urlindex], ruleCursor.offset, csize);
-			TRACE_LOCAL("    COMMIT " << RuleToString(rule) << ", offset " << newEndOffset << ": " << content);
+			TRACE_LOCAL("    COMMIT " << ruleToString(rule) << ", offset " << newEndOffset << ": " << content);
 			# endif
 		}
 
@@ -751,43 +743,51 @@ namespace // anonymous
 		// calculating the new offset: [optimization]
 		findOptimalNewOffsetAfterCommit(ruleOffset);
 
-		if (YUNI_UNLIKELY(not (offset < capacity))) // grow !
-			grow();
-
 		# if HAS_STATISTICS != 0 && !defined(NDEBUG)
 		if (offset > maxOffset)
 			maxOffset = offset;
 		# endif
 
+		if (YUNI_UNLIKELY(not (offset < capacity))) // grow !
+			grow();
+
 		// the item at `ruleOffset` may have changed - re-acquiring a new ref on it
-		Chunk& ruleCursor = stack[ruleOffset];
+		// (cf `grow()`)
+		assert(ruleOffset != 0 and ruleOffset < capacity);
+		const Chunk* ruleCursor = &(stack[ruleOffset]);
 		Chunk& cursor     = stack[offset];
-		cursor.offset     = ruleCursor.offsetEnd;
-		cursor.urlindex   = ruleCursor.urlindex;
+		cursor.offset     = ruleCursor->offsetEnd;
+		cursor.urlindex   = ruleCursor->urlindex;
 		cursor.rule       = 0;
+		cursor.lastUncommited = (ruleCursor - 1)->lastUncommited;
 	}
 
 
-	inline void Datasource::restart(uint from)
+	inline void Datasource::restart(uint32_t from)
 	{
 		// the method `push` returns `offset - 1`
+		#if MORE_CHECKS != 0
 		assert(from + 1 < capacity);
 		assert(from < offset and "can not restart from a non existing frame");
+		#endif
 
 		offset = from + 1;
 
-		Chunk& cursor      = stack[offset];
-		const Chunk& prev  = stack[offset - 1];
+		Chunk* const cursor     = &(stack[offset]);
+		const Chunk* const prev = cursor - 1;
 
-		cursor.offset    = prev.offset;
-		cursor.urlindex  = prev.urlindex;
-		cursor.rule      = 0;
-		TRACE_LOCAL("    restart at offset " << cursor.offset);
+		cursor->offset   = prev->offset;
+		cursor->urlindex = prev->urlindex;
+		cursor->rule     = 0;
+		cursor->lastUncommited = prev->lastUncommited;
+		TRACE_LOCAL("    restart at offset " << cursor->offset);
 	}
 
 
-	inline bool Datasource::open(const AnyString& newurl)
+	Datasource::OpenFlag Datasource::open(const AnyString& newurl)
 	{
+		if (YUNI_UNLIKELY(newurl.empty()))
+			return OpenFlag::error;
 		// getting the root directory once and for all if not already done
 		// the operation is not done in the constructor to let the caller
 		// initialize this variable if needed
@@ -795,60 +795,78 @@ namespace // anonymous
 			::Yuni::IO::Directory::Current::Get(root, false);
 
 		// canonicalizing the filename
-		String filename;
+		::Yuni::String filename;
 		::Yuni::IO::Canonicalize(filename, newurl, root);
 
 		// filename index
-		uint index;
-		Yuni::Dictionary<String, uint>::Unordered::const_iterator knownIndex = reverseUrlIndexes.find(filename);
+		uint32_t index;
+		::Yuni::Dictionary<String, uint>::Unordered::const_iterator knownIndex = reverseUrlIndexes.find(filename);
 		if (YUNI_LIKELY(knownIndex == reverseUrlIndexes.end()))
 		{
+			// load the entire content in memory
+			Clob newContent;
+			if (YUNI_UNLIKELY(::Yuni::IO::errNone != ::Yuni::IO::File::LoadFromFile(newContent, filename)))
+				return OpenFlag::error;
+
+			newContent.trimRight();
+			if (YUNI_UNLIKELY(newContent.empty()))
+				return OpenFlag::ignore;
+
+			// adding an artifial line feed to make sure the parser will be able to end
+			newContent.append('\n');
+
 			assert(contents.size() == urls.size());
 			// indexes
 			index = (uint) contents.size();
 			reverseUrlIndexes[filename] = index;
-			// load the entire content in memory
-			contents.push_back(nullptr);
-			urls.push_back(filename);
-			if (::Yuni::IO::errNone != ::Yuni::IO::File::LoadFromFile(contents.back(), filename))
-				return false;
+
+			contents.emplace_back();
+			contents.back().swap(newContent);
+
+			urls.emplace_back();
+			urls.back().swap(filename);
 		}
 		else
 			index = knownIndex->second;
 
 		// new item in the stack
 		pushInclude(index);
-		return true;
+		return OpenFlag::opened;
 	}
 
 
-	inline void Datasource::openContent(const AnyString& content)
+	void Datasource::openContent(const AnyString& content)
 	{
-		const String filename = "<memory>";
-		// filename index
-		uint index;
-		::Yuni::Dictionary<String, uint>::Unordered::const_iterator knownIndex = reverseUrlIndexes.find(filename);
-		if (YUNI_LIKELY(knownIndex == reverseUrlIndexes.end()))
+		if (not content.empty())
 		{
-			assert(contents.size() == urls.size());
-			// indexes
-			index = (uint) contents.size();
-			reverseUrlIndexes[filename] = index;
-			urls.push_back(filename);
-			// load the entire content in memory
-			contents.push_back(nullptr);
-			contents.back() = content;
-		}
-		else
-			index = knownIndex->second;
+			const String filename = "<memory>";
+			// filename index
+			uint32_t index;
+			auto knownIndex = reverseUrlIndexes.find(filename);
+			if (YUNI_LIKELY(knownIndex == reverseUrlIndexes.end()))
+			{
+				assert(contents.size() == urls.size());
+				// indexes
+				index = static_cast<uint>(contents.size());
+				reverseUrlIndexes[filename] = index;
+				urls.push_back(filename);
+				// load the entire content in memory
+				contents.push_back(nullptr);
+				contents.back() = content;
+			}
+			else
+				index = knownIndex->second;
 
-		pushInclude(index);
+			pushInclude(index);
+		}
 	}
 
 
 	inline bool Datasource::matchSingleAsciiChar(char c)
 	{
+		assert(offset < capacity);
 		Chunk& cursor    = stack[offset];
+		assert(cursor.urlindex < contents.size());
 		const Clob& data = contents[cursor.urlindex];
 		if (cursor.offset < data.size() and c == data[cursor.offset])
 		{
@@ -861,10 +879,10 @@ namespace // anonymous
 
 	inline bool Datasource::matchString(const AnyString& text)
 	{
-		Chunk& cursor    = stack[offset];
-		const Clob& data = contents[cursor.urlindex];
-
-		if (AnyString(data, cursor.offset).startsWith(text))
+		assert(offset < capacity);
+		Chunk& cursor = stack[offset];
+		assert(cursor.urlindex < contents.size());
+		if (AnyString(contents[cursor.urlindex], cursor.offset).startsWith(text))
 		{
 			cursor.offset += text.size();
 			return true;
@@ -875,7 +893,9 @@ namespace // anonymous
 
 	inline bool Datasource::matchOneOf(const AnyString& text)
 	{
+		assert(offset < capacity);
 		Chunk& cursor    = stack[offset];
+		assert(cursor.urlindex < contents.size());
 		const Clob& data = contents[cursor.urlindex];
 
 		if (cursor.offset < data.size())
@@ -892,8 +912,11 @@ namespace // anonymous
 
 	inline bool Datasource::notMatchSingleAsciiChar(char c)
 	{
+		assert(offset < capacity);
 		Chunk& cursor    = stack[offset];
+		assert(cursor.urlindex < contents.size());
 		const Clob& data = contents[cursor.urlindex];
+
 		if (cursor.offset < data.size() and c != data[cursor.offset])
 		{
 			++cursor.offset;
@@ -905,7 +928,9 @@ namespace // anonymous
 
 	inline bool Datasource::notMatchOneOf(const AnyString& text)
 	{
+		assert(offset < capacity);
 		Chunk& cursor    = stack[offset];
+		assert(cursor.urlindex < contents.size());
 		const Clob& data = contents[cursor.urlindex];
 
 		if (cursor.offset < data.size())
@@ -937,11 +962,10 @@ namespace // anonymous
 
 	static void InternalNodeExportHTML(Clob& out, const Node& node, String& indent, String& tmp)
 	{
-		assert(&node != NULL);
 		out << indent << "<div class=\"node\">";
-		out << "<span class=\"rule\">" << RuleToString(node.rule) << "</span>";
+		out << "<span class=\"rule\">" << ruleToString(node.rule) << "</span>";
 
-		bool attrCapture = RuleAttributeCapture(node.rule);
+		bool attrCapture = ruleAttributeCapture(node.rule);
 		if (attrCapture)
 		{
 			// out << " <span class=\"line\">l." << node.line << "</span> ";
@@ -956,10 +980,10 @@ namespace // anonymous
 		{
 			out << '\n' << indent << "<ul>\n";
 			indent.append("    ", 4);
-			for (uint i = 0; i != (uint) node.children.size(); ++i)
+			for (uint32_t i = 0; i != node.children.size(); ++i)
 			{
 				out << indent << "<li>\n";
-				InternalNodeExportHTML(out, *(node.children[i]), indent, tmp);
+				InternalNodeExportHTML(out, node.children[i], indent, tmp);
 				out << indent << "</li>\n";
 			}
 
@@ -970,11 +994,100 @@ namespace // anonymous
 	}
 
 
-	template<bool ColorT>
-	static void InternalNodeExportConsole(Clob& out, const Node& node, bool hasSibling, String& indent, String& tmp)
+	static void InternalNodeExportJSON(Clob& out, const Node& node, bool hasSibling, String& indent, String& tmp,
+		void (*callback)(Yuni::Dictionary<AnyString, YString>::Unordered&, const Node&))
 	{
 		using namespace ::Yuni::System::Console;
-		assert(&node != NULL);
+
+		typedef Yuni::Dictionary<AnyString, YString>::Unordered  DictType;
+		DictType dict;
+		dict["rule"] = ruleToString(node.rule);
+		dict["prefix"] = indent;
+
+		if (YUNI_UNLIKELY(ruleIsError(node.rule)))
+		{
+			dict["rule-type"] = "error";
+		}
+		else
+		{
+			if (YUNI_UNLIKELY(ruleAttributeImportant(node.rule)))
+				dict["rule-type"] = "important";
+			else
+				dict["rule-type"] = nullptr;
+		}
+
+		bool attrCapture = ruleAttributeCapture(node.rule);
+		if (attrCapture)
+		{
+			dict["text"] = node.text;
+			dict["text-capture"] = nullptr;
+		}
+		else
+		{
+			// it can be interresting to print the text itself when the node
+			// is a simple text capture
+			AnyString textCapture = ruleAttributeSimpleTextCapture(node.rule);
+			if (not textCapture.empty())
+			{
+				dict["text"] = nullptr;
+				dict["text-capture"] = textCapture;
+			}
+			else
+			{
+				dict["text"] = nullptr;
+				dict["text-capture"] = nullptr;
+			}
+		}
+
+		if (callback)
+			callback(dict, node);
+
+		// exporting the dict
+		{
+			out << "\t{";
+			bool  first = true;
+			for (DictType::const_iterator i = dict.begin(); i != dict.end(); ++i)
+			{
+				tmp = i->second;
+				tmp.replace("\"", "\\\"");
+				tmp.replace("\n", "\\n");
+				tmp.replace("\t", "\\t");
+				tmp.replace("\r", "\\r");
+
+				if (not first)
+					out << ",\n";
+				else
+					out << '\n';
+				out << "\t\t\"" << i->first << "\": \"" << tmp << "\"";
+				first = false;
+			}
+			out << "\n\t},\n";
+		}
+
+		// sub nodes
+		if (not node.children.empty())
+		{
+			if (hasSibling)
+				indent.append("|   ", 4);
+			else
+				indent.append("    ", 4);
+
+			for (uint32_t i = 0; i != node.children.size(); ++i)
+			{
+				bool hasSibling = (i != node.children.size() - 1);
+				InternalNodeExportJSON(out, node.children[i], hasSibling, indent, tmp, callback);
+			}
+
+			indent.chop(4);
+		}
+	}
+
+
+	template<bool ColorT>
+	static void InternalNodeExportConsole(Clob& out, const Node& node, bool hasSibling, String& indent,
+		String& tmp, Node::ExportCallback callback)
+	{
+		using namespace ::Yuni::System::Console;
 
 		if (ColorT)
 			::Yuni::System::Console::SetTextColor(out, blue);
@@ -982,37 +1095,39 @@ namespace // anonymous
 
 		if (not ColorT)
 		{
-			out << RuleToString(node.rule);
+			out << ruleToString(node.rule);
 		}
 		else
 		{
-			if (YUNI_UNLIKELY(RuleAttributeError(node.rule)))
+			if (YUNI_UNLIKELY(ruleIsError(node.rule)))
 			{
 				::Yuni::System::Console::SetTextColor(out, red);
-				out << RuleToString(node.rule);
+				out << ruleToString(node.rule);
 				::Yuni::System::Console::ResetTextColor(out);
 			}
 			else
 			{
-				if (YUNI_UNLIKELY(RuleAttributeImportant(node.rule)))
+				if (YUNI_UNLIKELY(ruleAttributeImportant(node.rule)))
 				{
 					::Yuni::System::Console::SetTextColor(out, purple);
-					out << RuleToString(node.rule);
+					out << ruleToString(node.rule);
 					::Yuni::System::Console::ResetTextColor(out);
 				}
 				else
 				{
 					::Yuni::System::Console::ResetTextColor(out);
-					out << RuleToString(node.rule);
+					out << ruleToString(node.rule);
 				}
 			}
 		}
 
-		bool attrCapture = RuleAttributeCapture(node.rule);
+		bool attrCapture = ruleAttributeCapture(node.rule);
 		if (attrCapture)
 		{
 			tmp = node.text;
 			tmp.replace("\n", "\\n");
+			tmp.replace("\t", "\\t");
+			tmp.replace("\r", "\\r");
 			out << ": ";
 
 			if (ColorT)
@@ -1025,7 +1140,7 @@ namespace // anonymous
 		{
 			// it can be interresting to print the text itself when the node
 			// is a simple text capture
-			AnyString textCapture = RuleAttributeSimpleTextCapture(node.rule);
+			AnyString textCapture = ruleAttributeSimpleTextCapture(node.rule);
 			if (not textCapture.empty())
 			{
 				out << ", ";
@@ -1042,9 +1157,48 @@ namespace // anonymous
 			if (ColorT)
 				::Yuni::System::Console::SetTextColor(out, blue);
 			out << " (+" << node.children.size() << ')';
+			if (ColorT)
+				::Yuni::System::Console::ResetTextColor(out);
 		}
 
 		out << '\n';
+		//if (!callback)
+		//	out << '\n';
+		//else
+		//{
+			//if (ColorT)
+			//	::Yuni::System::Console::SetTextColor(out, lightblue);
+			//out << " [" << (void*) &node << "]\n";
+			//if (ColorT)
+			//	::Yuni::System::Console::ResetTextColor(out);
+		//}
+
+		if (callback) // callback for additional information ?
+		{
+			tmp.clear();
+			callback(node, tmp);
+			if (not tmp.empty())
+			{
+				AnyString prefix = ":: ";
+				String newIndent;
+				newIndent += '\n';
+				newIndent += indent;
+				newIndent.append(prefix);
+
+				tmp.trimRight('\n');
+				tmp.replace("\n", newIndent);
+
+				if (ColorT)
+					::Yuni::System::Console::SetTextColor(out, blue);
+				out << indent;
+				if (ColorT)
+					::Yuni::System::Console::SetTextColor(out, yellow);
+				out << prefix;
+				if (ColorT)
+					::Yuni::System::Console::ResetTextColor(out);
+				out << tmp << '\n';
+			}
+		}
 
 		// sub nodes
 		if (not node.children.empty())
@@ -1054,10 +1208,10 @@ namespace // anonymous
 			else
 				indent.append("    ", 4);
 
-			for (uint i = 0; i != (uint) node.children.size(); ++i)
+			for (uint32_t i = 0; i != node.children.size(); ++i)
 			{
-				bool hasSibling = (i != (uint) node.children.size() - 1);
-				InternalNodeExportConsole<ColorT>(out, *(node.children[i]), hasSibling, indent, tmp);
+				bool hasSibling = (i != node.children.size() - 1);
+				InternalNodeExportConsole<ColorT>(out, node.children[i], hasSibling, indent, tmp, callback);
 			}
 
 			indent.chop(4);
@@ -1087,9 +1241,9 @@ namespace // anonymous
 
 		# if HAS_STATISTICS != 0 && !defined(NDEBUG)
 		{
-			uint realRuleCount = 0;
+			uint32_t realRuleCount = 0;
 
-			for (uint i = 0; i != offset; ++i)
+			for (uint32_t i = 0; i != offset; ++i)
 			{
 				if (stack[i].rule > 0)
 					++realRuleCount;
@@ -1097,16 +1251,18 @@ namespace // anonymous
 
 			TRACE_INFO("STATISTICS");
 			TRACE_INFO("result: " << (success ? "OK" : "FAILED") << "  (" << duration << "ms)");
-			uint ratio = (uint)((double) realRuleCount * 100. / offset);
-			TRACE_INFO("stack: " << realRuleCount << " rules for " << offset << " stack frames, ratio: " << ratio << "% (higher is better), max depth: " << maxOffset);
-			TRACE_INFO("stack: " << ((capacity * sizeof(Chunk)) / 1024) << " KiB (capacity: " << capacity << ", " << sizeof(Chunk) << " bytes per frame)");
+			uint32_t ratio = (uint)((double) realRuleCount * 100. / offset);
+			TRACE_INFO("stack: " << realRuleCount << " rules for " << offset << " stack frames, ratio: "
+				<< ratio << "% (higher is better), max depth: " << maxOffset);
+			TRACE_INFO("stack: " << ((capacity * sizeof(Chunk)) / 1024) << " KiB (capacity: " << capacity
+				<< ", " << sizeof(Chunk) << " bytes per frame)");
 			uint64 totalCapa = 0;
-			for (uint i = 0; i != (uint) contents.size(); ++i)
+			for (uint32_t i = 0; i != (uint) contents.size(); ++i)
 				totalCapa += contents[i].capacity();
 			TRACE_INFO("content from urls: " << contents.size() << ", total " << (totalCapa / 1024) << " KiB in memory");
 
 			totalCapa += (capacity * sizeof(Chunk));
-			for (uint i = 0; i != (uint) urls.size(); ++i)
+			for (uint32_t i = 0; i != (uint) urls.size(); ++i)
 				totalCapa += urls[i].capacity();
 			totalCapa += root.capacity();
 			TRACE_INFO("total memory usage: " << (totalCapa / 1024) << " KiB");
@@ -1129,97 +1285,102 @@ namespace // anonymous
 		assert(stack[0].rule == + (int) rgEOF and "invalid stack (should have called isParseComplete())");
 
 		// all AST nodes, mapping the stack elements
-		Node::Vector astNodes;
-		astNodes.resize(offset + 1);
+		uint32_t astNodesSize = offset + 1;
+		Node** astNodes = (Node**)::calloc(astNodesSize, sizeof(void*));
 
 		// pseudo root node to avoid special cases for retrieving the parent node
 		astNodes[0] = new Node();
 		astNodes[0]->rule = rgUnknown;
 		astNodes[0]->offset = 0;
 		astNodes[0]->offsetEnd = 0;
-		Node& pseudoRootNode = *astNodes[0];
+
+		const Chunk* cursor = &(stack[0]);
+		const Chunk* const end = cursor + offset;
+		uint32_t i = 0;
 
 		// starting from the first real frame
-		for (uint i = 1; i != offset; ++i)
+		while (++cursor != end)
 		{
-			const Chunk& cursor = stack[i];
-
-			# ifndef NDEBUG
-			if (cursor.rule < 0)
+			++i;
+			#if MORE_CHECKS != 0
+			if (YUNI_UNLIKELY(cursor->rule < 0))
 			{
 				std::cerr << "assert failed: invalid rule  ";
-				PrintFrame(std::cerr, cursor) << std::endl;
-				assert(cursor.rule >= 0 and "some rules are not commited - the parse should have failed");
+				PrintFrame(std::cerr, *cursor) << std::endl;
+				assert(cursor->rule >= 0 and "some rules are not commited - the parse should have failed");
 			}
 			# endif
 
-			if (cursor.rule <= 0)
+			if (not (cursor->rule > 0)) // only commited rules
 				continue;
 
-			# ifndef NDEBUG
-			if (not (cursor.parent < offset))
+
+			#if MORE_CHECKS != 0
+			if (YUNI_UNLIKELY(not (cursor->parent < offset)))
 			{
 				std::cerr << "assert failed: invalid parent: " << i << "/" << offset << ",  ";
-				PrintFrame(std::cerr, cursor) << std::endl;
-				assert(cursor.parent < offset and "invalid parent index");
+				PrintFrame(std::cerr, *cursor) << std::endl;
+				assert(cursor->parent < offset and "invalid parent index");
 			}
-			assert(cursor.parent < astNodes.size());
-			assert(!(!astNodes[cursor.parent]) and "invalid parent");
+			assert(cursor->parent < astNodesSize);
+			assert(!(!astNodes[cursor->parent]) and "invalid parent");
 			# endif
 
 			// The grammar rule for the current node
-			enum Rule rule = (enum Rule) cursor.rule;
+			auto rule = (enum Rule) cursor->rule;
 
-			assert(cursor.parent < astNodes.size());
-			assert((uint64) i < astNodes.size());
+			assert(cursor->parent < astNodesSize);
 
-			Node::Ptr newnode = new Node();
-			astNodes[i] = newnode;
-			astNodes[cursor.parent]->children.push_back(newnode);
-
+			Node* newnode = new Node();
 			newnode->rule      = rule;
-			newnode->offset    = cursor.offset;
-			newnode->offsetEnd = cursor.offsetEnd;
+			newnode->offset    = cursor->offset;
+			newnode->offsetEnd = cursor->offsetEnd;
 
 			// Flag to determine whether the node has to capture the content or not
-			bool attrCapture = RuleAttributeCapture(rule);
-			if (attrCapture)
+			if (_attrAttributeCapture[static_cast<uint32_t>(rule)])
 			{
 				// Checking integrity of the captured content
 				assert(
-					cursor.offsetEnd >= cursor.offset                // valid end offset
-					and cursor.offsetEnd != (uint) -1                // valid end offset
-					and cursor.offset    != (uint) -1                // valid offset
-					and cursor.urlindex  <  (uint)contents.size()    // valuid url index
-					and cursor.offset    <  contents[cursor.urlindex].size()  // valid range
-					and cursor.offsetEnd <= contents[cursor.urlindex].size() // valid range
+					cursor->offsetEnd >= cursor->offset                // valid end offset
+					and cursor->offsetEnd != (uint) -1                // valid end offset
+					and cursor->offset    != (uint) -1                // valid offset
+					and cursor->urlindex  <  (uint)contents.size()    // valuid url index
+					and cursor->offset    <  contents[cursor->urlindex].size()  // valid range
+					and cursor->offsetEnd <= contents[cursor->urlindex].size() // valid range
 					and "invalid offset for content capture");
 
 				// size of the captured content
-				uint size = cursor.offsetEnd - cursor.offset;
+				uint32_t size = cursor->offsetEnd - cursor->offset;
 				// Captured content
-				newnode->text.assign(contents[cursor.urlindex], size, cursor.offset);
+				newnode->text.assign(contents[cursor->urlindex], size, cursor->offset);
 			}
+
+			astNodes[i] = newnode;
+			astNodes[cursor->parent]->children.push_back(newnode);
 		}
 
-		rootnode = (pseudoRootNode.children.size() == 1)
-			? pseudoRootNode.children[0]
-			: nullptr;
+		rootnode = YUNI_LIKELY((astNodes[0]->children.size() == 1))
+			? &(astNodes[0]->children.front()) : nullptr;
+
+		delete astNodes[0];
+		free(astNodes);
 	}
 
 
 	void Datasource::notify(const AnyString& message) const
 	{
+		assert(offset < capacity);
 		Chunk& cursor    = stack[offset];
+		assert(cursor.urlindex < contents.size());
 		const Clob& data = contents[cursor.urlindex];
 
-		uint line = 1;
-		uint x = 0;
+		uint32_t line = 1;
+		uint32_t x = 0;
 
 		// trying to find the appropriate line index
 		if (cursor.offset < data.size())
 		{
-			for (uint i = 0; i != cursor.offset; ++i)
+			for (uint32_t i = 0; i != cursor.offset; ++i)
 			{
 				if (data[i] == '\n')
 				{
@@ -1241,7 +1402,7 @@ namespace // anonymous
 	}
 
 
-	inline bool Datasource::isParseComplete() const
+	bool Datasource::isParseComplete() const
 	{
 		if (offset > 1)
 		{
@@ -1253,53 +1414,56 @@ namespace // anonymous
 			stack[0].rule = + (int) rgEOF;
 
 			// trying to find the commit rule "start", which should be at index 1
-			uint startoffset = 1;
+			const Chunk* const end = &(stack[offset]);
+			const Chunk* cursor = &(stack[1]);
 			do
 			{
-				if (stack[startoffset].rule == rgStart)
+				if (cursor->rule == rgStart)
 				{
-					Chunk& cursor = stack[startoffset];
-
-					if (cursor.urlindex == 0) // the original input source
+					if (cursor->urlindex == 0) // the original input source
 					{
 						// the original content
-						const Clob& data = contents[cursor.urlindex];
+						const Clob& data = contents[cursor->urlindex];
 
-						if (cursor.offset < data.size() and cursor.offsetEnd <= data.size())
+						if (cursor->offset < data.size() and cursor->offsetEnd <= data.size())
 						{
-							if (data.size() == cursor.offsetEnd)
+							if (data.size() == cursor->offsetEnd)
 								return true;
 						}
 					}
-
 					break;
 				}
 
-				++startoffset;
+				++cursor;
 			}
-			while (startoffset <= offset);
+			while (cursor <= end);
 
 			notify("failed to parse");
 		}
-
 		return false;
 	}
 
 
-	inline void Datasource::translateOffset(uint& column, uint& line, uint offset) const
+	inline void Datasource::translateOffset(uint32_t& column, uint32_t& line, uint32_t offset) const
 	{
-		uint fileindex = 0;
+		uint32_t fileindex = 0;
 
 		if (fileindex < (uint) contents.size())
 		{
 			// alias to the content
 			const Clob& content = contents[fileindex];
 			// maximum size
-			uint maxSize = std::max((uint) content.size(), offset);
+			uint32_t maxSize = std::min((uint) content.size(), offset);
 
-			for (uint x = 0; x != maxSize; ++x)
+			column = 0;
+			line = 1;
+
+			const char* c = &(content[0]);
+			const char* const end = c + maxSize;
+
+			for (; c != end; ++c)
 			{
-				if (content[x] == '\n')
+				if (*c == '\n')
 				{
 					column = 0;
 					++line;
@@ -1307,10 +1471,15 @@ namespace // anonymous
 				else
 					++column;
 			}
-		}
 
-		if (line != 0 and column == 0)
-			column = 1;
+			if (column == 0)
+				column = 1;
+		}
+		else
+		{
+			line = 0;
+			column = 0;
+		}
 	}
 
 
@@ -1418,7 +1587,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgArray");
-		uint _ruleOffset = ctx.enterRule(rgArray);
+		uint32_t _ruleOffset = ctx.enterRule(rgArray);
 
 		ctx.push(); // 0 or 1
 		if (not (yyrgTkBracketOpen(ctx))) // ?
@@ -1563,7 +1732,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgError");
-		uint _ruleOffset = ctx.enterRule(rgError);
+		uint32_t _ruleOffset = ctx.enterRule(rgError);
 
 		while (ctx.notMatchOneOf(datatext17 /*  \t\r\n */)) // 0-1 or more
 		{}
@@ -1582,7 +1751,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgErrorBracket");
-		uint _ruleOffset = ctx.enterRule(rgErrorBracket);
+		uint32_t _ruleOffset = ctx.enterRule(rgErrorBracket);
 
 		while (ctx.notMatchOneOf(datatext18 /* []\r\n */)) // 0-1 or more
 		{}
@@ -1602,7 +1771,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgErrorEol");
-		uint _ruleOffset = ctx.enterRule(rgErrorEol);
+		uint32_t _ruleOffset = ctx.enterRule(rgErrorEol);
 
 		while (ctx.notMatchOneOf(datatext19 /* \r\n */)) // 0-1 or more
 		{}
@@ -1623,7 +1792,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgErrorParenthese");
-		uint _ruleOffset = ctx.enterRule(rgErrorParenthese);
+		uint32_t _ruleOffset = ctx.enterRule(rgErrorParenthese);
 
 		while (ctx.notMatchOneOf(datatext21 /* )\r\n */)) // 0-1 or more
 		{}
@@ -1643,7 +1812,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgErrorSemicolon");
-		uint _ruleOffset = ctx.enterRule(rgErrorSemicolon);
+		uint32_t _ruleOffset = ctx.enterRule(rgErrorSemicolon);
 
 		while (ctx.notMatchOneOf(datatext22 /* ;\r\n */)) // 0-1 or more
 		{}
@@ -1664,7 +1833,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgFalse");
-		uint _ruleOffset = ctx.enterRule(rgFalse);
+		uint32_t _ruleOffset = ctx.enterRule(rgFalse);
 
 		if (not (ctx.matchString(datatext24 /* false */))) // ?
 			return false;
@@ -1696,7 +1865,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgInteger");
-		uint _ruleOffset = ctx.enterRule(rgInteger);
+		uint32_t _ruleOffset = ctx.enterRule(rgInteger);
 
 		ctx.push(); // 0 or 1
 		if (not (yyrgDigit(ctx))) // ?
@@ -1723,7 +1892,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgKey");
-		uint _ruleOffset = ctx.enterRule(rgKey);
+		uint32_t _ruleOffset = ctx.enterRule(rgKey);
 
 		ctx.push(); // 0 or 1
 		if (not (yyrgString(ctx))) // ?
@@ -1743,7 +1912,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgNull");
-		uint _ruleOffset = ctx.enterRule(rgNull);
+		uint32_t _ruleOffset = ctx.enterRule(rgNull);
 
 		if (not (ctx.matchString(datatext27 /* null */))) // ?
 			return false;
@@ -1782,7 +1951,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgNumber");
-		uint _ruleOffset = ctx.enterRule(rgNumber);
+		uint32_t _ruleOffset = ctx.enterRule(rgNumber);
 
 		uint sp31 = ctx.push(); // 0 or 1
 		if (not (__helper28(ctx) and __helper29(ctx))) // ?
@@ -1856,7 +2025,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgNumberExponent");
-		uint _ruleOffset = ctx.enterRule(rgNumberExponent);
+		uint32_t _ruleOffset = ctx.enterRule(rgNumberExponent);
 
 		uint sp37 = ctx.push(); // 0 or 1
 		if (not (yyrgNumberSign(ctx))) // ?
@@ -1882,7 +2051,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgNumberHexa");
-		uint _ruleOffset = ctx.enterRule(rgNumberHexa);
+		uint32_t _ruleOffset = ctx.enterRule(rgNumberHexa);
 
 		if (not (ctx.matchString(datatext38 /* 0x */))) // ?
 			return false;
@@ -1911,7 +2080,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgNumberQualifier");
-		uint _ruleOffset = ctx.enterRule(rgNumberQualifier);
+		uint32_t _ruleOffset = ctx.enterRule(rgNumberQualifier);
 
 		ctx.push(); // 0 or 1
 		if (not (yyrgNumberQualifierType(ctx))) // ?
@@ -1937,7 +2106,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgNumberQualifierType");
-		uint _ruleOffset = ctx.enterRule(rgNumberQualifierType);
+		uint32_t _ruleOffset = ctx.enterRule(rgNumberQualifierType);
 
 		if (not (ctx.matchOneOf(datatext41 /* iuf */))) // ?
 			return false;
@@ -1956,7 +2125,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgNumberSign");
-		uint _ruleOffset = ctx.enterRule(rgNumberSign);
+		uint32_t _ruleOffset = ctx.enterRule(rgNumberSign);
 
 		if (not (ctx.matchOneOf(datatext42 /* +- */))) // ?
 			return false;
@@ -2018,7 +2187,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgNumberValue");
-		uint _ruleOffset = ctx.enterRule(rgNumberValue);
+		uint32_t _ruleOffset = ctx.enterRule(rgNumberValue);
 
 		ctx.push(); // 0 or 1
 		if (not (yyrgInteger(ctx))) // ?
@@ -2090,7 +2259,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgObject");
-		uint _ruleOffset = ctx.enterRule(rgObject);
+		uint32_t _ruleOffset = ctx.enterRule(rgObject);
 
 		ctx.push(); // 0 or 1
 		if (not (yyrgTkBraceOpen(ctx))) // ?
@@ -2129,7 +2298,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgObjectEntry");
-		uint _ruleOffset = ctx.enterRule(rgObjectEntry);
+		uint32_t _ruleOffset = ctx.enterRule(rgObjectEntry);
 
 		ctx.push(); // 0 or 1
 		if (not (yyrgKey(ctx))) // ?
@@ -2238,11 +2407,13 @@ namespace // anonymous
 		{
 			ctx.restart(sp64);
 
-			// not allowed to eat :(
-			OffsetAutoReset autoreset(ctx);
+			{
+				// not allowed to eat :(
+				OffsetAutoReset autoreset(ctx);
 
-			if (not (yyrgPunc(ctx))) // ?
-				break;
+				if (not (yyrgPunc(ctx))) // ?
+					break;
+				}
 			rt63 = true;
 			break;
 		}
@@ -2282,11 +2453,11 @@ namespace // anonymous
 	}
 
 	//! Rule start
-	static bool yyrgStart(Datasource& ctx)
+	static inline bool yyrgStart(Datasource& ctx)
 	{
 		(void) ctx;
 		TRACE("entering rgStart");
-		uint _ruleOffset = ctx.enterRule(rgStart);
+		uint32_t _ruleOffset = ctx.enterRule(rgStart);
 
 		do // 0 or more
 		{
@@ -2313,7 +2484,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgString");
-		uint _ruleOffset = ctx.enterRule(rgString);
+		uint32_t _ruleOffset = ctx.enterRule(rgString);
 
 		ctx.push(); // 0 or 1
 		if (not (yyrgTkDoubleQuote(ctx))) // ?
@@ -2368,7 +2539,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgStringLiteral");
-		uint _ruleOffset = ctx.enterRule(rgStringLiteral);
+		uint32_t _ruleOffset = ctx.enterRule(rgStringLiteral);
 
 		do // 0 or more
 		{
@@ -2392,7 +2563,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkBraceClose");
-		uint _ruleOffset = ctx.enterRule(rgTkBraceClose);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkBraceClose);
 
 		if (not (ctx.matchSingleAsciiChar('}'))) // ?
 			return false;
@@ -2407,7 +2578,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkBraceOpen");
-		uint _ruleOffset = ctx.enterRule(rgTkBraceOpen);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkBraceOpen);
 
 		if (not (ctx.matchSingleAsciiChar('{'))) // ?
 			return false;
@@ -2422,7 +2593,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkBracketClose");
-		uint _ruleOffset = ctx.enterRule(rgTkBracketClose);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkBracketClose);
 
 		if (not (ctx.matchSingleAsciiChar(']'))) // ?
 			return false;
@@ -2437,7 +2608,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkBracketOpen");
-		uint _ruleOffset = ctx.enterRule(rgTkBracketOpen);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkBracketOpen);
 
 		if (not (ctx.matchSingleAsciiChar('['))) // ?
 			return false;
@@ -2452,7 +2623,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkColon");
-		uint _ruleOffset = ctx.enterRule(rgTkColon);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkColon);
 
 		if (not (ctx.matchSingleAsciiChar(':'))) // ?
 			return false;
@@ -2467,7 +2638,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkComma");
-		uint _ruleOffset = ctx.enterRule(rgTkComma);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkComma);
 
 		if (not (ctx.matchSingleAsciiChar(','))) // ?
 			return false;
@@ -2482,7 +2653,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkCommentBlock");
-		uint _ruleOffset = ctx.enterRule(rgTkCommentBlock);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkCommentBlock);
 
 		ctx.push(); // 0 or 1
 		if (not (yyrgTkCommentStartBlock(ctx))) // ?
@@ -2504,7 +2675,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkCommentBlockContent");
-		uint _ruleOffset = ctx.enterRule(rgTkCommentBlockContent);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkCommentBlockContent);
 
 		ctx.push(); // 0 or 1
 		if (not (yyrgTkCommentSubbk(ctx))) // ?
@@ -2524,7 +2695,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkCommentEndBlock");
-		uint _ruleOffset = ctx.enterRule(rgTkCommentEndBlock);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkCommentEndBlock);
 
 		if (not (ctx.matchString(datatext77 /* * /  */))) // ?
 			return false;
@@ -2539,7 +2710,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkCommentLine");
-		uint _ruleOffset = ctx.enterRule(rgTkCommentLine);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkCommentLine);
 
 		ctx.push(); // 0 or 1
 		if (not (yyrgTkCommentStartInline(ctx))) // ?
@@ -2562,7 +2733,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkCommentLineContent");
-		uint _ruleOffset = ctx.enterRule(rgTkCommentLineContent);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkCommentLineContent);
 
 		while (ctx.notMatchOneOf(datatext78 /* \n\r */)) // 0-1 or more
 		{}
@@ -2581,7 +2752,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkCommentStartBlock");
-		uint _ruleOffset = ctx.enterRule(rgTkCommentStartBlock);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkCommentStartBlock);
 
 		if (not (ctx.matchString(datatext79 /*  / * */))) // ?
 			return false;
@@ -2600,7 +2771,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkCommentStartInline");
-		uint _ruleOffset = ctx.enterRule(rgTkCommentStartInline);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkCommentStartInline);
 
 		if (not (ctx.matchString(datatext80 /*  /  /  */))) // ?
 			return false;
@@ -2652,11 +2823,13 @@ namespace // anonymous
 			{
 				ctx.restart(sp84);
 
-				// not allowed to eat :(
-				OffsetAutoReset autoreset(ctx);
+				{
+					// not allowed to eat :(
+					OffsetAutoReset autoreset(ctx);
 
-				if (not (yyrgTkCommentEndBlock(ctx))) // ?
-					break;
+					if (not (yyrgTkCommentEndBlock(ctx))) // ?
+						break;
+					}
 				rt83 = true;
 				break;
 			}
@@ -2701,7 +2874,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkDot");
-		uint _ruleOffset = ctx.enterRule(rgTkDot);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkDot);
 
 		if (not (ctx.matchSingleAsciiChar('.'))) // ?
 			return false;
@@ -2716,7 +2889,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTkDoubleQuote");
-		uint _ruleOffset = ctx.enterRule(rgTkDoubleQuote);
+		uint32_t _ruleOffset = ctx.enterRule(rgTkDoubleQuote);
 
 		if (not (ctx.matchSingleAsciiChar('"'))) // ?
 			return false;
@@ -2735,7 +2908,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgTrue");
-		uint _ruleOffset = ctx.enterRule(rgTrue);
+		uint32_t _ruleOffset = ctx.enterRule(rgTrue);
 
 		if (not (ctx.matchString(datatext90 /* true */))) // ?
 			return false;
@@ -2750,7 +2923,7 @@ namespace // anonymous
 	{
 		(void) ctx;
 		TRACE("entering rgValue");
-		uint _ruleOffset = ctx.enterRule(rgValue);
+		uint32_t _ruleOffset = ctx.enterRule(rgValue);
 
 		uint sp92 = ctx.push();
 		bool rt91 = false;
@@ -3027,70 +3200,158 @@ namespace // anonymous
 
 
 
-	bool ShouldIgnoreRuleForDuplication(enum Rule rule)
+	NodeVector::~NodeVector()
 	{
-		static const bool hints[] = {
-			false, // array
-			false, // char-extended
-			false, // digit
-			false, // error
-			false, // error-bracket
-			false, // error-eol
-			false, // error-parenthese
-			false, // error-semicolon
-			false, // false
-			false, // hex
-			false, // integer
-			false, // key
-			false, // null
-			false, // number
-			false, // number-def
-			false, // number-exponent
-			false, // number-hexa
-			false, // number-qualifier
-			false, // number-qualifier-type
-			false, // number-sign
-			false, // number-value
-			false, // object
-			false, // object-entry
-			false, // punc
-			false, // single-char
-			false, // sp
-			false, // start
-			false, // string
-			false, // string-literal
-			true, // tk-brace-close
-			true, // tk-brace-open
-			true, // tk-bracket-close
-			true, // tk-bracket-open
-			true, // tk-colon
-			true, // tk-comma
-			true, // tk-comment-block
-			true, // tk-comment-block-content
-			true, // tk-comment-end-block
-			true, // tk-comment-line
-			true, // tk-comment-line-content
-			true, // tk-comment-start-block
-			true, // tk-comment-start-inline
-			true, // tk-comment-subbk
-			true, // tk-dot
-			true, // tk-double-quote
-			false, // true
-			false, // value
-			false, // wp
-		};		return hints[(uint) rule];
+		uint32_t size = m_size;
+		for (uint32_t i = 0; i != size; ++i)
+			deleteElement(m_pointer[i]);
+		if (m_capacity != preAllocatedCount)
+			free(m_pointer);
+	}
+
+	void NodeVector::shrink_to_fit() noexcept
+	{
+		if (m_capacity != preAllocatedCount)
+		{
+			if (m_size == 0)
+			{
+				free(m_pointer);
+				m_pointer = &(m_innerstorage[0]);
+				m_capacity = preAllocatedCount;
+			}
+		}
+	}
+
+
+	void NodeVector::push_front(NodeVector::T* const element)
+	{
+		assert(element != nullptr);
+		uint32_t size = m_size;
+		if (size == 0)
+			push_back(element);
+
+		uint32_t newsize = size + 1;
+		if (not (newsize < m_capacity))
+			grow();
+		uint32_t i = size;
+		while (i-- > 0)
+			m_pointer[i + 1] = m_pointer[i];
+		m_size = newsize;
+		element->addRef();
+		m_pointer[0] = element;
+	}
+
+
+	void NodeVector::resize(uint32_t count)
+	{
+		uint32_t size = m_size;
+		if (count != size)
+		{
+			if (count > size)
+			{
+				for (uint32_t i = size; i != count; ++i)
+					push_back(new T);
+			}
+			else
+			{
+				for (uint32_t i = count; i != size; ++i)
+					deleteElement(m_pointer[i]);
+			}
+			m_size = count;
+		}
+	}
+
+
+	void NodeVector::erase(uint32_t index) noexcept
+	{
+		uint32_t size = m_size;
+		if (index < size)
+		{
+			deleteElement(m_pointer[index]);
+			for (uint32_t i = index + 1; i < size; ++i)
+				m_pointer[i - 1] = m_pointer[i];
+			m_size = --size;
+		}
+	}
+
+
+	void NodeVector::clear() noexcept
+	{
+		uint32_t size = m_size;
+		if (size)
+		{
+			for (uint32_t i = 0; i != size; ++i)
+				deleteElement(m_pointer[i]);
+			m_size = 0;
+		}
+	}
+
+
+	void NodeVector::pop_back() noexcept
+	{
+		uint32_t size = m_size;
+		if (size != 0)
+		{
+			--size;
+			deleteElement(m_pointer[size]);
+			m_size = size;
+		}
+	}
+
+
+	void NodeVector::push_back(NodeVector::T* const element)
+	{
+		assert(element != nullptr);
+		uint32_t oldsize = m_size;
+		uint32_t newsize = oldsize + 1;
+		if (not (newsize < m_capacity))
+			grow();
+		m_size = newsize;
+		element->addRef();
+		m_pointer[oldsize] = element;
+	}
+
+
+	void NodeVector::grow()
+	{
+		uint32_t newcapacity;
+		T** newptr;
+		if (m_capacity == preAllocatedCount)
+		{
+			newcapacity = 8;
+			newptr = (T**) malloc(sizeof(T*) * newcapacity);
+			if (!newptr)
+			{
+				#if __cpp_exceptions >= 199711
+				throw std::bad_alloc();
+				#else
+				abort();
+				#endif
+			}
+			newptr[0] = m_innerstorage[0];
+			newptr[1] = m_innerstorage[1];
+		}
+		else
+		{
+			newcapacity = m_capacity + 8;
+			newptr = (T**) realloc(m_pointer, sizeof(T*) * newcapacity);
+			if (!newptr)
+			{
+				#if __cpp_exceptions >= 199711
+				throw std::bad_alloc();
+				#else
+				abort();
+				#endif
+			}
+		}
+		m_capacity = newcapacity;
+		m_pointer = newptr;
 	}
 
 
 
-	bool  RuleIsError(enum Rule ruleid)
-	{
-		return RuleAttributeError(ruleid);
-	}
 
-
-
-	AnyString RuleToString(enum Rule ruleid)
+	AnyString ruleToString(Rule ruleid)
 	{
 		switch (ruleid)
 		{
@@ -3202,7 +3463,6 @@ namespace // anonymous
 
 
 	Parser::Parser()
-		: pData()
 	{
 		onURILoading.bind(& StandardURILoaderHandler);
 	}
@@ -3230,9 +3490,18 @@ namespace // anonymous
 			pData = new Datasource(notifications);
 
 		Datasource& ctx = *((Datasource*) pData);
-		ctx.open(filename);
-		DATASOURCE_PARSE(ctx);
-		return ctx.success;
+		switch (ctx.open(filename))
+		{
+			case Datasource::OpenFlag::opened: {
+				DATASOURCE_PARSE(ctx);
+				return ctx.success;
+			}
+			case Datasource::OpenFlag::ignore: {
+				return true;			}
+			case Datasource::OpenFlag::error: {
+				return false;			}
+		}
+		return false;
 	}
 
 
@@ -3250,7 +3519,6 @@ namespace // anonymous
 
 	void Parser::translateOffset(uint& column, uint& line, const Node& node) const
 	{
-		assert(&node and "invalid pointer to node");
 		column = 0;
 		line = 0;
 		if (YUNI_LIKELY(pData))
@@ -3261,7 +3529,7 @@ namespace // anonymous
 	}
 
 
-	void Parser::translateOffset(uint& column, uint& line, uint offset) const
+	void Parser::translateOffset(uint& column, uint& line, uint32_t offset) const
 	{
 		column = 0;
 		line = 0;
@@ -3273,11 +3541,10 @@ namespace // anonymous
 	}
 
 
-	uint Parser::translateOffsetToLine(const Node& node) const
+	uint32_t Parser::translateOffsetToLine(const Node& node) const
 	{
-		assert(&node and "invalid pointer to node");
-		uint column;
-		uint line;
+		uint32_t column;
+		uint32_t line;
 		translateOffset(column, line, node);
 		return line;
 	}
@@ -3294,67 +3561,45 @@ namespace // anonymous
 
 
 
-	#if __HEADER_DEMO_JSON_GRAMMAR_HAS_METADATA != 0
-	/* static */ Node::MetadataReleaseCallback  Node::metadataRelease = nullptr;
-	/* static */ Node::MetadataCloneCallback    Node::metadataClone   = nullptr;
-	#endif
-
-
-
 	void Node::ExportToHTML(Clob& out, const Node& node)
 	{
-		assert(&node and "invalid reference to node");
-
 		String tmp;
 		String indent;
 		InternalNodeExportHTML(out, node, indent, tmp);
 	}
 
 
-	void Node::Export(Clob& out, const Node& node, bool color)
+	void Node::Export(Clob& out, const Node& node, bool color, ExportCallback callback)
 	{
-		assert(&node and "invalid reference to node");
-
 		String tmp;
 		String indent;
 		if (not color)
-			InternalNodeExportConsole<false>(out, node, false, indent, tmp);
+			InternalNodeExportConsole<false>(out, node, false, indent, tmp, callback);
 		else
-			InternalNodeExportConsole<true>(out, node, false, indent, tmp);
+			InternalNodeExportConsole<true>(out, node, false, indent, tmp, callback);
+	}
+
+
+	void Node::ExportToJSON(Yuni::Clob& out, const Node& node, void (*callback)(Yuni::Dictionary<AnyString, YString>::Unordered&, const Node&))
+	{
+		String tmp;
+		String indent;
+		out << "{ \"data\": [\n";
+		InternalNodeExportJSON(out, node, false, indent, tmp, callback);
+		out << "	{}\n";
+		out << "] }\n";
+	}
+
+
+	void Node::ExportToJSON(Yuni::Clob& out, const Node& node)
+	{
+		ExportToJSON(out, node, nullptr);
 	}
 
 
 	void Node::Export(Clob& out, const Node& node)
 	{
 		Export(out, node, ::Yuni::System::Console::IsStdoutTTY());
-	}
-
-
-	Node::Node(const Node& rhs)
-		: inherited()
-		, rule(rhs.rule)
-		, offset(rhs.offset)
-		, offsetEnd(rhs.offsetEnd)
-		, text(rhs.text)
-	{
-		#if __HEADER_DEMO_JSON_GRAMMAR_HAS_METADATA != 0
-		// cloning metadata
-		if (rhs.metadata)
-		{
-			assert(metadataClone != nullptr and "invalid callback for cloning metadata");
-			metadata = metadataClone(rhs.metadata);
-		}
-		else
-			metadata = nullptr;
-		#endif
-
-		// cloning children
-		if (not rhs.children.empty())
-		{
-			children.resize(rhs.children.size());
-			for (unsigned int i = 0; i != (unsigned) rhs.children.size(); ++i)
-				children[i] = new Node(*rhs.children[i]);
-		}
 	}
 
 
@@ -3365,25 +3610,21 @@ namespace // anonymous
 		offsetEnd = rhs.offsetEnd;
 		text = rhs.text;
 		children = rhs.children;
-
-		#if __HEADER_DEMO_JSON_GRAMMAR_HAS_METADATA != 0
-		// copying metadata
-		if (metadata)
-		{
-			assert(metadataRelease != nullptr and "invalid callback for releasing metadata");
-			metadataRelease(metadata);
-		}
-		// cloning metadata
-		if (rhs.metadata)
-		{
-			assert(metadataClone != nullptr and "invalid callback for cloning metadata");
-			metadata = metadataClone(rhs.metadata);
-		}
-		else
-			metadata = nullptr;
-		#endif
-
 		return *this;
+	}
+
+
+	void Node::toText(YString& out) const
+	{
+		if (not text.empty())
+		{
+			if (not out.empty())
+				out += ' ';
+			out += text;
+			out.trimRight();
+		}
+		for (auto& child: children)
+			child.toText(out);
 	}
 
 
@@ -3394,29 +3635,9 @@ namespace // anonymous
 		offset = 0;
 		offsetEnd = 0;
 		rule = rgUnknown;
-
-		#if __HEADER_DEMO_JSON_GRAMMAR_HAS_METADATA != 0
-		if (metadata)
-		{
-			assert(metadataRelease != nullptr and "invalid callback for releasing metadata");
-			metadataRelease(metadata);
-			metadata = nullptr;
-		}
-		#endif
 	}
 
 
-	void Node::swap(Node& other)
-	{
-		std::swap(rule, other.rule);
-		std::swap(offset, other.offset);
-		std::swap(offsetEnd, other.offsetEnd);
-		std::swap(text, other.text);
-		std::swap(children, other.children);
-		#if __HEADER_DEMO_JSON_GRAMMAR_HAS_METADATA != 0
-		std::swap(metadata, other.metadata);
-		#endif
-	}
 
 
 
