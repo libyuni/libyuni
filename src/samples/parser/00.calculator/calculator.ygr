@@ -20,5 +20,5 @@ expr-atom: notext
 expr:
 	expr-sum
 
-start:
+start: notext
 	expr
