@@ -80,15 +80,9 @@
 
 	# define DATASOURCE_PARSE(ctx) \
 		do { \
-			sint64 start = ::Yuni::DateTime::NowMilliSeconds(); \
 			ctx.clear(); \
 			ctx.success = yyrgStart(ctx) and ctx.isParseComplete(); \
-			/*int64_t duration = (uint64) (::Yuni::DateTime::NowMilliSeconds() - start);*/ \
-			/*std::cout << " -- duration: " << duration << "ms\n";*/ \
-			/*start = ::Yuni::DateTime::NowMilliSeconds();*/ \
 			ctx.buildAST(); \
-			/*duration = (uint64) (::Yuni::DateTime::NowMilliSeconds() - start);*/ \
-			/*std::cout << "    build: " << duration << "ms\n";*/ \
 			root = ctx.rootnode; \
 		} \
 		while (false)
