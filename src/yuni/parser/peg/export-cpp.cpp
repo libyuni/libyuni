@@ -302,7 +302,7 @@ namespace PEG
 			h << "		T** m_pointer = &(m_innerstorage[0]);\n";
 			h << "		T* m_innerstorage[preAllocatedCount];\n";
 			h << '\n';
-			h << "		friend class Iterator;\n";
+			h << "		friend struct Iterator;\n";
 			h << "	};\n";
 			h << '\n';
 			h << '\n';
