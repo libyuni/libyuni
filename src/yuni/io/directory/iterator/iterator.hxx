@@ -92,11 +92,13 @@ namespace Directory
 		if (not folder.empty())
 		{
 			// Pushing it into the list
-			String* item = new String();
-			IO::Canonicalize(*item, folder);
-
-			typename ThreadingPolicy::MutexLocker locker(*this);
-			pRootFolder.push_back(item);
+			String* item = new (std::nothrow) String();
+			if (item)
+			{
+				IO::Canonicalize(*item, folder);
+				typename ThreadingPolicy::MutexLocker locker(*this);
+				pRootFolder.push_back(item);
+			}
 		}
 	}
 
@@ -116,7 +118,9 @@ namespace Directory
 
 			if (nullptr == pThread)
 			{
-				pThread = new DetachedThread();
+				pThread = new (std::nothrow) DetachedThread();
+				if (!pThread)
+					return false;
 			}
 			else
 			{

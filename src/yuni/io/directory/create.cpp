@@ -67,13 +67,15 @@ namespace Directory
 
 	static bool UnixMake(const AnyString& path, uint mode)
 	{
-		const uint len = path.size();
-		char* buffer = new char[len + 1];
+		auto len = path.size();
+		char* buffer = new (std::nothrow) char[len + 1];
+		if (!buffer)
+			return false;
+
 		YUNI_MEMCPY(buffer, len, path.c_str(), len);
 		buffer[len] = '\0';
 		char* pt = buffer;
 		char tmp;
-
 		do
 		{
 			if ('\\' == *pt or '/' == *pt or '\0' == *pt)

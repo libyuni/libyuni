@@ -251,9 +251,11 @@ namespace File
 
 			if (size)
 			{
-				char* zero = new char[bufferSize];
-				(void)::memset(zero, '\0', sizeof(char) * bufferSize);
+				char* zero = new (std::nothrow) char[bufferSize];
+				if (!zero)
+					return false;
 
+				(void)::memset(zero, '\0', sizeof(char) * bufferSize);
 				while (size > bufferSize)
 				{
 					if (bufferSize != file.write(zero, bufferSize))
@@ -338,4 +340,3 @@ namespace File
 } // namespace File
 } // namespace IO
 } // namespace Yuni
-

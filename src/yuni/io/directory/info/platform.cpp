@@ -345,18 +345,21 @@ namespace Directory
 	{
 		if (not folder.empty())
 		{
-			IteratorData* data = new IteratorData();
-			data->flags = flags;
-			data->push(folder);
-			return data;
+			IteratorData* data = new (std::nothrow) IteratorData();
+			if (data)
+			{
+				data->flags = flags;
+				data->push(folder);
+				return data;
+			}
 		}
-		return NULL;
+		return nullptr;
 	}
 
 
 	IteratorData* IteratorDataCopy(const IteratorData* data)
 	{
-		return (data) ? (new IteratorData(*data)) : NULL;
+		return (data) ? (new (std::nothrow) IteratorData(*data)) : nullptr;
 	}
 
 	void IteratorDataFree(const IteratorData* data)

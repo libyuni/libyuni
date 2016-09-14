@@ -40,9 +40,10 @@ namespace File
 		if (not toFile.openRW(to))
 			return errNotFound;
 
-		enum { size = 8192 };
+		constexpr uint32_t size = 8192;
 
 		# if defined(YUNI_OS_LINUX) and defined(YUNI_HAS_SYS_SENDFILE_H)
+
 		int fdIN  = fileno(fromFile. nativeHandle());
 		int fdOUT = fileno(toFile.   nativeHandle());
 
@@ -56,8 +57,10 @@ namespace File
 		}
 
 		// fallback to the standard copy
-		char* buffer = new char[size];
 		ssize_t numRead;
+		char* buffer = new (std::nothrow) char[size];
+		if (!buffer)
+			return Yuni::IO::errNotEnoughMemory;
 
 		while ((numRead = ::read(fdIN, buffer, size)) > 0)
 		{
@@ -71,8 +74,11 @@ namespace File
 		# else
 
 		// Generic implementation
-		char* buffer = new char[size];
 		uint64 numRead;
+		char* buffer = new (std::nothrow) char[size];
+		if (!buffer)
+			return Yuni::IO::errNotEnoughMemory;
+
 		while ((numRead = fromFile.read(buffer, size)) != 0)
 		{
 			if (numRead != toFile.write(buffer, numRead))
@@ -82,7 +88,7 @@ namespace File
 			}
 		}
 
-		# endif
+		# endif // ----
 
 		delete[] buffer;
 		return Yuni::IO::errNone;

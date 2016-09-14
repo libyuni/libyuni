@@ -38,6 +38,8 @@ namespace IO
 		errWriteFailed,
 		//! Impossible to read
 		errReadFailed,
+		//! Not enough memory
+		errNotEnoughMemory,
 	};
 
 
