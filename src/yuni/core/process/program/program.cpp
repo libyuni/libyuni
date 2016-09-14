@@ -353,8 +353,9 @@ namespace Process
 
 		if (processID > 0 and timeout > 0)
 		{
-			timeoutThread = new TimeoutThread(processID, timeout);
-			timeoutThread->start();
+			timeoutThread = new (std::nothrow) TimeoutThread(processID, timeout);
+			if (timeoutThread)
+				timeoutThread->start();
 		}
 		else
 		{
@@ -444,7 +445,9 @@ namespace Process
 		ProcessSharedInfo::Ptr envptr = pEnv;
 		if (!envptr)
 		{
-			envptr = new ProcessSharedInfo();
+			envptr = new (std::nothrow) ProcessSharedInfo();
+			if (!envptr)
+				return false;
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -471,11 +474,13 @@ namespace Process
 		}
 
 		// starting a new thread
-		ThreadMonitor* localRef = new ThreadMonitor(*this);
+		ThreadMonitor* localRef = new (std::nothrow) ThreadMonitor(*this);
+		if (!localRef)
+			return false;
+
 		localRef->addRef();
 		// keep somewhere
 		env.thread = localRef;
-
 		// execute the sub command from the **calling** thread
 		bool processReady = localRef->spawnProcess();
 
@@ -612,7 +617,9 @@ namespace Process
 		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new ProcessSharedInfo();
+			envptr = new (std::nothrow) ProcessSharedInfo();
+			if (!envptr)
+				return false;
 			pEnv = envptr;
 		}
 
@@ -659,7 +666,9 @@ namespace Process
 		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new ProcessSharedInfo();
+			envptr = new (std::nothrow) ProcessSharedInfo();
+			if (!envptr)
+				return;
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -747,7 +756,9 @@ namespace Process
 		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new ProcessSharedInfo();
+			envptr = new (std::nothrow) ProcessSharedInfo();
+			if (!envptr)
+				return;
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -788,7 +799,9 @@ namespace Process
 			if (flag)
 				return; // default is true, useless to instanciate something
 
-			envptr = new ProcessSharedInfo();
+			envptr = new (std::nothrow) ProcessSharedInfo();
+			if (!envptr)
+				return;
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -815,7 +828,9 @@ namespace Process
 		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new ProcessSharedInfo();
+			envptr = new (std::nothrow) ProcessSharedInfo();
+			if (!envptr)
+				return;
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -844,7 +859,9 @@ namespace Process
 		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new ProcessSharedInfo();
+			envptr = new (std::nothrow) ProcessSharedInfo();
+			if (!envptr)
+				return;
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -873,7 +890,9 @@ namespace Process
 		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new ProcessSharedInfo();
+			envptr = new (std::nothrow) ProcessSharedInfo();
+			if (!envptr)
+				return;
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -898,7 +917,10 @@ namespace Process
 		Program program;
 		program.commandLine(commandline);
 
-		CaptureOutput* output = new CaptureOutput();
+		CaptureOutput* output = new (std::nothrow) CaptureOutput();
+		if (!output)
+			return false;
+
 		program.stream(output);
 		bool success = program.execute(timeout) and (0 == program.wait());
 
@@ -915,7 +937,10 @@ namespace Process
 		Program program;
 		program.commandLine(commandline);
 
-		CaptureOutput* output = new CaptureOutput();
+		CaptureOutput* output = new (std::nothrow) CaptureOutput();
+		if (!output)
+			return String{};
+
 		program.stream(output);
 		program.execute(timeout) and (0 == program.wait());
 		if (trim)
