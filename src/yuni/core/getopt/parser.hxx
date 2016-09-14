@@ -20,38 +20,36 @@ namespace GetOpt
 	template<class U>
 	inline void Parser::add(U& var, char shortname)
 	{
-		// The new option
-		IOption* option = (IOption*) new Private::GetOptImpl::Option<U, true>(var, shortname);
-		// append the new option
-		appendShortOption(option, shortname);
+		auto* option = new (std::nothrow) Private::GetOptImpl::Option<U, true>(var, shortname);
+		if (option)
+			appendShortOption(option, shortname);
 	}
 
 
 	template<class U>
 	inline void Parser::addFlag(U& var, char shortname)
 	{
-		// The new option
-		IOption* option = (IOption*) new Private::GetOptImpl::Option<U, true, false>(var, shortname);
-		// append the new option
-		appendShortOption(option, shortname);
+		auto* option = new (std::nothrow) Private::GetOptImpl::Option<U, true, false>(var, shortname);
+		if (option)
+			appendShortOption(option, shortname);
 	}
 
 
 	template<class U>
 	inline void Parser::add(U& var, char shortname, const AnyString& longname)
 	{
-		IOption* option = (IOption*) new Private::GetOptImpl::Option<U, true>(var, shortname, longname);
-		// append the new option
-		appendOption(option, shortname);
+		auto* option = new (std::nothrow) Private::GetOptImpl::Option<U, true>(var, shortname, longname);
+		if (option)
+			appendOption(option, shortname);
 	}
 
 
 	template<class U>
 	inline void Parser::add(U& var, char shortname, const AnyString& longname, const AnyString& description)
 	{
-		IOption* option = (IOption*) new Private::GetOptImpl::Option<U, true>(var, shortname, longname, description);
-		// append the new option
-		appendOption(option, shortname);
+		auto* option = new (std::nothrow) Private::GetOptImpl::Option<U, true>(var, shortname, longname, description);
+		if (option)
+			appendOption(option, shortname);
 	}
 
 
@@ -59,44 +57,40 @@ namespace GetOpt
 	template<class U>
 	inline void Parser::addFlag(U& var, char shortname, const AnyString& longname)
 	{
-		// The new option
-		IOption* option = (IOption*) new Private::GetOptImpl::Option<U, true, false>(var, shortname, longname);
-		// append the new option
-		appendOption(option, shortname);
+		auto* option = new (std::nothrow) Private::GetOptImpl::Option<U, true, false>(var, shortname, longname);
+		if (option)
+			appendOption(option, shortname);
 	}
 
 
 	template<class U>
 	void Parser::addFlag(U& var, char shortname, const AnyString& longname, const AnyString& description)
 	{
-		// The new option
-		IOption* option = (IOption*) new Private::GetOptImpl::Option<U, true, false>(var, shortname, longname, description);
-		// append the new option
-		appendOption(option, shortname);
+		auto* option = new (std::nothrow) Private::GetOptImpl::Option<U, true, false>(var, shortname, longname, description);
+		if (option)
+			appendOption(option, shortname);
 	}
 
 
 	template<class U>
 	void Parser::addFlag(U& var, char shortname, const AnyString& longname, const AnyString& description, bool visible)
 	{
-		// The new option
 		IOption* option = (visible)
-			? (IOption*) new Private::GetOptImpl::Option<U, true, false>(var, shortname, longname, description)
-			: (IOption*) new Private::GetOptImpl::Option<U, false, false>(var, shortname, longname, description);
-		// append the new option
-		appendOption(option, shortname);
+			? new (std::nothrow) Private::GetOptImpl::Option<U, true, false>(var, shortname, longname, description)
+			: new (std::nothrow) Private::GetOptImpl::Option<U, false, false>(var, shortname, longname, description);
+		if (option)
+			appendOption(option, shortname);
 	}
 
 
 	template<class U>
 	void Parser::add(U& var, char shortname, const AnyString& longname, const AnyString& description, bool visible)
 	{
-		// The new option
 		IOption* option = (visible)
-			? (IOption*) new Private::GetOptImpl::Option<U, true>(var, shortname, longname, description)
-			: (IOption*) new Private::GetOptImpl::Option<U, false>(var, shortname, longname, description);
-		// append the new option
-		appendOption(option, shortname);
+			? new (std::nothrow) Private::GetOptImpl::Option<U, true>(var, shortname, longname, description)
+			: new (std::nothrow) Private::GetOptImpl::Option<U, false>(var, shortname, longname, description);
+		if (option)
+			appendOption(option, shortname);
 	}
 
 
@@ -105,13 +99,15 @@ namespace GetOpt
 	inline void Parser::remainingArguments(U& var)
 	{
 		delete pRemains;
-		pRemains = new Private::GetOptImpl::Option<U, false>(var, '\0');
+		pRemains = new (std::nothrow) Private::GetOptImpl::Option<U, false>(var, '\0');
 	}
 
 
 	inline void Parser::addParagraph(const AnyString& text)
 	{
-		pAllOptions.push_back(new Private::GetOptImpl::Paragraph(text));
+		auto* option = new (std::nothrow) Private::GetOptImpl::Paragraph(text);
+		if (option)
+			pAllOptions.push_back(option);
 	}
 
 
