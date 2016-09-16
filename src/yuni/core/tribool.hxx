@@ -155,13 +155,7 @@ namespace Yuni
 
 
 //! \name Operator overload for stream printing
-//@{
-inline std::ostream& operator << (std::ostream& out, const Yuni::Tribool& rhs)
-{
-	rhs.print(out);
-	return out;
-}
-//@}
+YUNI_DECL std::ostream& operator << (std::ostream& out, const Yuni::Tribool& rhs);
 
 
 

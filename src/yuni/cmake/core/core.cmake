@@ -354,6 +354,7 @@ add_library(yuni-static-core STATIC
 		core/tree/n/treeN.hxx
 		core/tree/treeN.h
 		core/tribool.h
+		core/tribool.cpp
 		core/tribool.hxx
 		core/unit/angle.h
 		core/unit/data.h

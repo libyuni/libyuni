@@ -20,7 +20,7 @@ namespace Yuni
 	/*!
 	** \brief 3-state boolean
 	*/
-	class Tribool final
+	class YUNI_DECL Tribool final
 	{
 	public:
 		enum class Value
