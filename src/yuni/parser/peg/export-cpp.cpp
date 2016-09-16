@@ -456,46 +456,11 @@ namespace PEG
 		inline void CPPConverter::generateHXX()
 		{
 			hxx << "#pragma once\n";
-			hxx << '\n';
-			hxx << "\n\n\n";
+			hxx << "\n\n\n\n";
 
-			hxx << "inline std::ostream& operator << (std::ostream& out, const ";
-			for (uint32_t i = 0; i != namespaces.size(); ++i)
-				hxx << "::" << namespaces[i];
-			hxx << "::Node& node)\n";
-			hxx << "{\n";
-			hxx << "	::Yuni::Clob content;\n";
-			hxx << "	";
-			for (uint32_t i = 0; i != namespaces.size(); ++i)
-				hxx << "::" << namespaces[i];
-			hxx << "::Node::Export(content, node);";
-			hxx << "out << content;\n";
-			hxx << "	return out;\n";
-			hxx << "}\n";
-			hxx << '\n';
-			hxx << '\n';
-			hxx << '\n';
-
-
-			hxx << "inline std::ostream& operator << (std::ostream& out, const ";
-			for (uint32_t i = 0; i != namespaces.size(); ++i)
-				hxx << "::" << namespaces[i];
-			hxx << "::Node::Ptr node)\n";
-			hxx << "{\n";
-			hxx << "	if (!(!node))\n";
-			hxx << "		out << *node;\n";
-			hxx << "	else\n";
-			hxx << "		out << \"<invalid ast node>\";\n";
-			hxx << "	return out;\n";
-			hxx << "}\n";
-			hxx << '\n';
-			hxx << '\n';
-			hxx << '\n';
 
 			for (uint32_t i = 0; i != namespaces.size(); ++i)
 				hxx << "namespace " << namespaces[i] << "\n{\n";
-			hxx << '\n';
-			hxx << '\n';
 			hxx << '\n';
 			hxx << '\n';
 			hxx << "	inline NodeVector::T& NodeVector::back()\n";
@@ -987,7 +952,39 @@ namespace PEG
 			cpp << "#include <iostream>\n";
 			cpp << '\n';
 			cpp << "using namespace Yuni;\n";
-			cpp << "\n\n";
+			cpp << "\n\n\n\n";
+
+			cpp << "std::ostream& operator << (std::ostream& out, const ";
+			for (uint32_t i = 0; i != namespaces.size(); ++i)
+				cpp << "::" << namespaces[i];
+			cpp << "::Node& node)\n";
+			cpp << "{\n";
+			cpp << "	Clob content;\n";
+			cpp << "	";
+			for (uint32_t i = 0; i != namespaces.size(); ++i)
+				cpp << "::" << namespaces[i];
+			cpp << "::Node::Export(content, node);";
+			cpp << "out << content;\n";
+			cpp << "	return out;\n";
+			cpp << "}\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << "std::ostream& operator << (std::ostream& out, const ";
+			for (uint32_t i = 0; i != namespaces.size(); ++i)
+				cpp << "::" << namespaces[i];
+			cpp << "::Node::Ptr node)\n";
+			cpp << "{\n";
+			cpp << "	if (!!node)\n";
+			cpp << "		out << (*node);\n";
+			cpp << "	else\n";
+			cpp << "		out << \"<invalid ast node>\";\n";
+			cpp << "	return out;\n";
+			cpp << "}\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << '\n';
+			cpp << '\n';
+
 
 			for (uint32_t i = 0; i != namespaces.size(); ++i)
 				cpp << "namespace " << namespaces[i] << "\n{\n";
