@@ -316,7 +316,11 @@ namespace File
 				#ifndef YUNI_OS_WINDOWS
 				{
 					assert((filename.c_str())[filename.size()] == '\0');
+					#ifdef YUNI_OS_MAC
+					int fd = open(filename.c_str(), O_WRONLY|O_CREAT, 0644);
+					#else
 					int fd = open(filename.c_str(), O_WRONLY|O_CREAT|O_LARGEFILE, 0644);
+					#endif
 					if (fd != -1)
 					{
 						bool success = (0 == ftruncate(fd, static_cast<off_t>(size)));
