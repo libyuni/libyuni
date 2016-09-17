@@ -10,6 +10,7 @@
 */
 #pragma once
 #include "uuid.h"
+#include "../core/stl/hash-combine.h"
 
 
 
@@ -17,31 +18,21 @@
 namespace Yuni
 {
 
+	inline UUID::UUID()
+		: m_value{{0, 0}}
+	{}
+
+
 	inline UUID::UUID(const AnyString& string)
 	{
-		if (not assign(string))
-			clear();
+		assign(string);
 	}
 
 
 	inline void UUID::clear()
 	{
-		pValue.n64[0] = 0;
-		pValue.n64[1] = 0;
-	}
-
-
-	inline UUID::UUID()
-	{
-		pValue.n64[0] = 0;
-		pValue.n64[1] = 0;
-	}
-
-
-	inline UUID::UUID(const UUID& rhs)
-	{
-		pValue.n64[0] = rhs.pValue.n64[0];
-		pValue.n64[1] = rhs.pValue.n64[1];
+		m_value.u64[0] = 0;
+		m_value.u64[1] = 0;
 	}
 
 
@@ -63,30 +54,21 @@ namespace Yuni
 
 	inline UUID& UUID::operator = (const AnyString& string)
 	{
-		if (not assign(string))
-			clear();
+		assign(string);
 		return *this;
 	}
 
 
 	inline bool UUID::null() const
 	{
-		return  (0 == pValue.n64[0]) and (0 == pValue.n64[1]);
-	}
-
-
-	inline UUID& UUID::operator = (const UUID& rhs)
-	{
-		pValue.n64[0] = rhs.pValue.n64[0];
-		pValue.n64[1] = rhs.pValue.n64[1];
-		return *this;
+		return  (0 == m_value.u64[0]) and (0 == m_value.u64[1]);
 	}
 
 
 	inline bool UUID::operator == (const UUID& rhs) const
 	{
-		return  (pValue.n64[0] == rhs.pValue.n64[0])
-			and (pValue.n64[1] == rhs.pValue.n64[1]);
+		return  (m_value.u64[0] == rhs.m_value.u64[0])
+			and (m_value.u64[1] == rhs.m_value.u64[1]);
 	}
 
 
@@ -98,17 +80,17 @@ namespace Yuni
 
 	inline bool UUID::operator < (const UUID& rhs) const
 	{
-		return (pValue.n64[0] == rhs.pValue.n64[0])
-			? (pValue.n64[1] < rhs.pValue.n64[1])
-			: (pValue.n64[0] < rhs.pValue.n64[0]);
+		return (m_value.u64[0] == rhs.m_value.u64[0])
+			? (m_value.u64[1] < rhs.m_value.u64[1])
+			: (m_value.u64[0] < rhs.m_value.u64[0]);
 	}
 
 
 	inline bool UUID::operator > (const UUID& rhs) const
 	{
-		return (pValue.n64[0] == rhs.pValue.n64[0])
-			? (pValue.n64[1] > rhs.pValue.n64[1])
-			: (pValue.n64[0] > rhs.pValue.n64[0]);
+		return (m_value.u64[0] == rhs.m_value.u64[0])
+			? (m_value.u64[1] > rhs.m_value.u64[1])
+			: (m_value.u64[0] > rhs.m_value.u64[0]);
 	}
 
 
@@ -124,6 +106,23 @@ namespace Yuni
 	}
 
 
+	inline size_t UUID::hash() const
+	{
+		size_t seed = 0;
+		if (sizeof(size_t) == sizeof(uint64_t))
+		{
+			Yuni::HashCombine(seed, m_value.u64[0]);
+			Yuni::HashCombine(seed, m_value.u64[1]);
+		}
+		else
+		{
+			Yuni::HashCombine(seed, m_value.u32[0]);
+			Yuni::HashCombine(seed, m_value.u32[1]);
+			Yuni::HashCombine(seed, m_value.u32[2]);
+			Yuni::HashCombine(seed, m_value.u32[3]);
+		}
+		return seed;
+	}
 
 
 
@@ -145,7 +144,7 @@ namespace UUID
 	class Helper final
 	{
 	public:
-		static void WriteToCString(char* cstr, const Yuni::UUID& uuid)
+		static inline void WriteToCString(char* cstr, const Yuni::UUID& uuid)
 		{
 			uuid.writeToCString(cstr);
 		}

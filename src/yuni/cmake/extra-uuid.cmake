@@ -3,20 +3,25 @@ YMESSAGE_MODULE("UUID")
 
 LIBYUNI_CONFIG_LIB("both" "uuid" "yuni-static-uuid")
 LIBYUNI_CONFIG_DEPENDENCY("uuid" "core") # core is required
+set(__yuni_libuuid OFF)
 
-if(NOT APPLE AND UNIX)
-	# -luuid
-	LIBYUNI_CONFIG_LIB("both" "uuid" "uuid")
+if (APPLE)
+	LIBYUNI_CONFIG_FRAMEWORK("both" "uuid" CoreFoundation)
+else()
+	if (WIN32 OR WIN64)
+		# -lole32
+		LIBYUNI_CONFIG_LIB("both" "uuid" "ole32")
+		# -lrpcrt4
+		LIBYUNI_CONFIG_LIB("both" "uuid" "rpcrt4")
+	else()
+		# -luuid
+		LIBYUNI_CONFIG_LIB("both" "uuid" "uuid")
+		set(__yuni_libuuid ON)
+	endif()
 endif()
 
-if (WIN32 OR WIN64)
-	# -lole32
-	LIBYUNI_CONFIG_LIB("both" "uuid" "ole32")
-	# -lrpcrt4
-	LIBYUNI_CONFIG_LIB("both" "uuid" "rpcrt4")
-endif()
 
-if (UNIX)
+if (${__yuni_libuuid})
 	#FIXME
 	find_path(UUID_INCLUDE_DIR NAMES uuid/uuid.h PATHS /usr/include /usr/local/include /opt/local/include /sw/include)
 	if(NOT UUID_INCLUDE_DIR)

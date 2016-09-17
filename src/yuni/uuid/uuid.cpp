@@ -9,10 +9,14 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
 #include "uuid.h"
+#ifdef YUNI_OS_MACOS
+#include <CoreFoundation/CFUUID.h>
+#else
 #ifndef YUNI_OS_WINDOWS
 # include <uuid/uuid.h>
 #else
 # include <objbase.h>
+#endif
 #endif
 #include "../core/string.h"
 #include <cassert>
@@ -23,98 +27,181 @@
 namespace Yuni
 {
 
+	namespace // anonymous
+	{
+
+		// converts a single hex char to a number (0 - 15)
+		inline uchar hexDigitToChar(char ch)
+		{
+			if (ch > 47 && ch < 58)
+				return static_cast<uchar>(ch - 48);
+			if (ch > 96 && ch < 103)
+				return static_cast<uchar>(ch - 87);
+			if (ch > 64 && ch < 71)
+				return static_cast<uchar>(ch - 55);
+			return 0;
+		}
+
+		// converts the two hexadecimal characters to an unsigned char (a byte)
+		inline uchar hexPairToChar(char a, char b)
+		{
+			  return static_cast<uchar>(hexDigitToChar(a) * 16 + hexDigitToChar(b));
+		}
+
+	} // anonymous
+
+
+
+
 	void UUID::generate()
 	{
 		assert(sizeof(StorageType) == 16 and "Invalid storage size for uuid");
 
-		# ifndef YUNI_OS_WINDOWS
-		assert(sizeof(uuid_t) == 16);
-		uuid_generate(pValue.cstring);
-		# else
-		if (S_OK != ::CoCreateGuid((::GUID*)pValue.cstring)) // Sadly, the call can fail
-			clear();
-		# endif
-	}
-
-
-	void UUID::writeToCString(char cstring[42]) const
-	{
-		assert(cstring and "invalid pointer");
-
-		# ifndef YUNI_OS_WINDOWS
-		uuid_unparse(pValue.cstring, cstring);
-		# else
-		// StringFromGUID2 returns a string enclosed in braces
-		// Anything less than 39 would make the call fail
-		wchar_t buffer[39];
-		::StringFromGUID2(*(::GUID*)pValue.cstring, buffer, 39);
-
-		// Convert to non-wide string, and cut the prepended and appended braces
-		#ifdef YUNI_OS_MINGW
-		// we should have something like {000000000-0000-0000-0000-00000000000} in buffer
-		if (::wcstombs(cstring, buffer + 1, 36) <= 0)
-			::strncpy(cstring, "000000000-0000-0000-0000-00000000000", 36);
-		#else
-		size_t converted = 0;
-		// we should have something like {000000000-0000-0000-0000-00000000000} in buffer
-		if (::wcstombs_s(&converted, cstring, 42, buffer + 1, 36) != 0)
-			::strcpy_s(cstring, 36, "000000000-0000-0000-0000-00000000000");
-		#endif // YUNI_OS_MINGW
-		else
+		#ifdef YUNI_OS_MACOS
 		{
-			// The guid produced on Windows is uppercase
-			for (uint i = 0; i != 36; ++i)
-				cstring[i] = static_cast<char>(String::ToLower(cstring[i]));
+			CFUUIDRef uuid = CFUUIDCreate(nullptr);
+			if (uuid)
+			{
+				CFUUIDBytes bytes = CFUUIDGetUUIDBytes(uuid);
+				CFRelease(uuid);
+
+				m_value.ubytes[0] =  bytes.byte0;
+				m_value.ubytes[1] =  bytes.byte1;
+				m_value.ubytes[2] =  bytes.byte2;
+				m_value.ubytes[3] =  bytes.byte3;
+				m_value.ubytes[4] =  bytes.byte4;
+				m_value.ubytes[5] =  bytes.byte5;
+				m_value.ubytes[6] =  bytes.byte6;
+				m_value.ubytes[7] =  bytes.byte7;
+				m_value.ubytes[8] =  bytes.byte8;
+				m_value.ubytes[9] =  bytes.byte9;
+				m_value.ubytes[10] = bytes.byte10;
+				m_value.ubytes[11] = bytes.byte11;
+				m_value.ubytes[12] = bytes.byte12;
+				m_value.ubytes[13] = bytes.byte13;
+				m_value.ubytes[14] = bytes.byte14;
+				m_value.ubytes[15] = bytes.byte15;
+				return;
+			}
 		}
-		// Do not forget the null terminator
-		cstring[36] = '\0';
-		# endif
+		#else
+		{
+			#ifdef YUNI_OS_WINDOWS
+			{
+				GUID winguid;
+				if (S_OK == CoCreateGuid(&winguid))
+				{
+					m_value.ubytes =
+					{
+						(winguid.Data1 >> 24) & 0xFF,
+						(winguid.Data1 >> 16) & 0xFF,
+						(winguid.Data1 >> 8) & 0xFF,
+						(winguid.Data1) & 0xff,
+
+						(winguid.Data2 >> 8) & 0xFF,
+						(winguid.Data2) & 0xff,
+
+						(winguid.Data3 >> 8) & 0xFF,
+						(winguid.Data3) & 0xFF,
+
+						winguid.Data4[0],
+						winguid.Data4[1],
+						winguid.Data4[2],
+						winguid.Data4[3],
+						winguid.Data4[4],
+						winguid.Data4[5],
+						winguid.Data4[6],
+						winguid.Data4[7]
+					};
+					return;
+				}
+			}
+			#else
+			{
+				assert(sizeof(uuid_t) == 16);
+				return uuid_generate(m_value.ubytes);
+			}
+			#endif
+		}
+		#endif
+
+		// fallback
+		clear();
 	}
 
 
-	bool UUID::initializeFromCString(const char* cstring)
+	inline void UUID::writeToCString(char* out) const
 	{
-		assert(cstring != NULL);
+		constexpr const char* hex = "0123456789abcdef";
 
-		# ifndef YUNI_OS_WINDOWS
-		// Why uuid_parse takes a char* and not a const char* ??
-		return (0 == uuid_parse(const_cast<char*>(cstring), pValue.cstring));
-		# else
-		// Stop complaining, the Windows implementation is way worse.
-		char* cstring_noconst = const_cast<char*>(cstring);
-		uchar* cstring_unsigned = (uchar*)(cstring_noconst);
-		return (RPC_S_OK == ::UuidFromStringA(cstring_unsigned, (::GUID*)pValue.cstring));
-		# endif
+		const uchar* in = m_value.ubytes;
+		for (uint32_t i = 0; i != 4; ++i)
+		{
+			*out++ = hex[(*in >> 4) & 0xF];
+			*out++ = hex[(*in++) & 0xF];
+		}
+		*out++ = '-';
+
+		for (uint32_t i = 4; i != 6; ++i)
+		{
+			*out++ = hex[(*in >> 4) & 0xF];
+			*out++ = hex[(*in++) & 0xF];
+		}
+		*out++ = '-';
+
+		for (uint32_t i = 6; i != 8; ++i)
+		{
+			*out++ = hex[(*in >> 4) & 0xF];
+			*out++ = hex[(*in++) & 0xF];
+		}
+		*out++ = '-';
+
+		for (uint32_t i = 8; i != 10; ++i)
+		{
+			*out++ = hex[(*in >> 4) & 0xF];
+			*out++ = hex[(*in++) & 0xF];
+		}
+		*out++ = '-';
+
+		for (uint32_t i = 10; i != 16; ++i)
+		{
+			*out++ = hex[(*in >> 4) & 0xF];
+			*out++ = hex[(*in++) & 0xF];
+		}
 	}
 
 
-	bool UUID::assign(AnyString string)
+	void UUID::assign(AnyString string)
 	{
 		// remove useless whitespaces
 		string.trim();
 
-		if (string.size() >= 36)
+		char charOne, charTwo;
+		bool lookingForFirstChar = true;
+
+		uint32_t bindex = 0;
+		for (uint32_t i = 0; i != string.size(); ++i)
 		{
-			char buffer[64]; // 8 Byte Stack Alignment
-			::memcpy(buffer, string.c_str(), 36 * sizeof(char));
-			buffer[36] = '\0';
-			return initializeFromCString(buffer);
+			char ch = string[i];
+			if (ch == '-' or ch == '{')
+				continue;
+
+			if (lookingForFirstChar)
+			{
+				charOne = ch;
+				lookingForFirstChar = false;
+			}
+			else
+			{
+				charTwo = ch;
+				m_value.ubytes[bindex++] = hexPairToChar(charOne, charTwo);
+				lookingForFirstChar = true;
+
+				if (bindex == 16)
+					break;
+			}
 		}
-		return false;
 	}
-
-
-	size_t UUID::hash() const
-	{
-		// TODO This hash may not be suitable for hashing guids,
-		std::size_t r = 0;
-		const uchar* p = pValue.cstring;
-		for (uint i = 0; i != 16; ++i)
-			r = static_cast<uint>(p[i]) + (r << 6) + (r << 16) - r;
-
-		return r;
-	}
-
 
 
 } // namespace Yuni
@@ -126,9 +213,9 @@ namespace Yuni
 
 std::ostream& operator << (std::ostream& out, const Yuni::UUID& rhs)
 {
-	// WriteToCString is guarantee to have 42 chars
-	char cstring[42];
-	Yuni::Private::UUID::Helper::WriteToCString(cstring, rhs);
-	out.write(cstring, 36);
+	// WriteToubytes is guarantee to have 42 chars
+	char ubytes[42];
+	Yuni::Private::UUID::Helper::WriteToCString(ubytes, rhs);
+	out.write(ubytes, 36);
 	return out;
 }

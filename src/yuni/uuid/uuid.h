@@ -74,20 +74,16 @@ namespace Yuni
 		** The UUID will be set to null.
 		*/
 		UUID();
-		/*!
-		** \brief Copy constructor
-		*/
-		UUID(const UUID& rhs);
+		//! Copy constructor
+		UUID(const UUID& rhs) = default;
 		/*!
 		** \brief Constructor with flags
-		**
 		** \param flag Flag to know how to initialize the UUID
 		*/
 		explicit UUID(Flag flag);
 		/*!
 		** \brief Constructor from a string (ex: "c705cf38-1d2f-4d7f-93d4-6b84c44a45b9")
-		**
-		** The input string will be trimmed
+		** \see assign()
 		*/
 		UUID(const AnyString& string);
 		//@}
@@ -111,16 +107,15 @@ namespace Yuni
 		/*!
 		** \brief Assign from a string
 		**
-		** Contrary to the operator =, the internal value will remain untouched
-		** if the conversion failed.
 		** The input string will be trimmed
 		**
 		** \code
 		** UUID uuid;
 		** uuid.assign(" C32b24FE-71AE-440D-a473-56355415BDB1");
+		** uuid.assign("{C8B8431C-C3F3-4FBC-BB39-DC8DA8D801A7}");
 		** \endcode
 		*/
-		bool assign(AnyString string);
+		void assign(AnyString string);
 		//@}
 
 
@@ -136,7 +131,7 @@ namespace Yuni
 		//! \name Operators
 		//@{
 		//! Copy operator
-		UUID& operator = (const UUID& rhs);
+		UUID& operator = (const UUID& rhs) = default;
 		/*!
 		** \brief Assignment from a string
 		**
@@ -163,28 +158,20 @@ namespace Yuni
 
 
 	private:
-		/*!
-		** \brief Write the UUID into string in a C-String
-		**
-		** \param cstring A char* string, which must be 42-bytes length
-		** \internal 42 bytes are required on Windows (more rooms are needed)
-		*/
-		void writeToCString(char cstring[42]) const;
-
-		//! Initialize the UUID from a c-string
-		bool initializeFromCString(const char* cstring);
+		//! Write the UUID into string in a C-String (with at least 36 bytes)
+		void writeToCString(char*) const;
 
 	private:
 		union StorageType
 		{
-			uchar  cstring[16];
-			uint32 n32[4];
-			uint64 n64[2];
+			uint64 u64[2];
+			uint32 u32[4];
+			uchar ubytes[16];
 		};
 
 	private:
 		//! Inner value
-		StorageType pValue;
+		StorageType m_value;
 		// Friend
 		friend class Yuni::Private::UUID::Helper;
 
