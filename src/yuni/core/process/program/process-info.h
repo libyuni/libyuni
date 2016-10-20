@@ -12,7 +12,7 @@
 #include "program.h"
 #include "../../noncopyable.h"
 #include "../../../thread/thread.h"
-
+#include <vector>
 
 
 
@@ -60,7 +60,7 @@ namespace Process
 	public:
 		String executable;
 		//! The command
-		String::Vector arguments;
+		std::vector<String> arguments;
 		//! The working directory
 		String workingDirectory;
 		//! Flag to know if the process is running

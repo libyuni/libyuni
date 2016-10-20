@@ -30,12 +30,6 @@
 
 #include <string>
 #include <functional> // std::hash
-
-
-#ifdef YUNI_HAS_VECTOR
-# include <vector>
-#endif
-#include <list>
 #include <iosfwd>
 
 #ifdef YUNI_OS_MSVC
@@ -51,6 +45,7 @@
 #include "traits/vnsprintf.h"
 #include "traits/into.h"
 #include <utility>
+
 
 
 
@@ -151,14 +146,6 @@ namespace Yuni
 
 		//! Smartptr
 		using Ptr = SmartPtr<CStringType>;
-		//! A String vector
-		typedef std::vector<CStringType> Vector;
-		//! A String vector
-		typedef std::vector<Ptr> VectorPtr;
-		//! A String list
-		typedef std::list<CStringType> List;
-		//! A string list
-		typedef std::list<Ptr> ListPtr;
 
 		//! Size for a single chunk
 		static constexpr yuint32 chunkSize = AncestorType::chunkSize;

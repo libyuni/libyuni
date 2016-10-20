@@ -8,11 +8,10 @@
 ** github: https://github.com/libyuni/libyuni/
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
-#ifndef __YUNI_CORE_VALIDATOR_DEFAULT_H__
-# define __YUNI_CORE_VALIDATOR_DEFAULT_H__
-
-# include "validator.h"
-# include "default.private.h"
+#pragma once
+#include "validator.h"
+#include "default.private.h"
+#include <vector>
 
 
 namespace Yuni
@@ -91,11 +90,7 @@ namespace Text
 		/*!
 		** \brief Constructor with a default exception list
 		*/
-		ExceptionList(const String::Vector& rhs);
-		/*!
-		** \brief Constructor with a default exception list
-		*/
-		ExceptionList(const String::List& rhs);
+		ExceptionList(const std::vector<String>& rhs);
 		//@}
 
 
@@ -127,10 +122,7 @@ namespace Text
 		ExceptionList& operator += (const ExceptionList<OtherDefaultPolicy>& rhs);
 
 		//! Operator += on a std::vector
-		ExceptionList& operator += (const String::Vector& rhs);
-
-		//! Operator += on a std::list
-		ExceptionList& operator += (const String::List& rhs);
+		ExceptionList& operator += (const std::vector<String>& rhs);
 
 		//! Operator << on an arbitrary string
 		ExceptionList& operator << (const AnyString& rhs);
@@ -140,10 +132,7 @@ namespace Text
 		ExceptionList& operator << (const ExceptionList<OtherDefaultPolicy>& rhs);
 
 		//! Operator << on a std::vector
-		ExceptionList& operator << (const String::Vector& rhs);
-
-		//! Operator << on a std::list
-		ExceptionList& operator << (const String::List& rhs);
+		ExceptionList& operator << (const std::vector<String>& rhs);
 		//@}
 
 
@@ -153,14 +142,12 @@ namespace Text
 		template<Yuni::Validator::DefaultPolicy OtherDefaultPolicy>
 		ExceptionList& operator = (const ExceptionList<OtherDefaultPolicy>& rhs);
 		//! Operator =
-		ExceptionList& operator = (const String::Vector& rhs);
-		//! Operator =
-		ExceptionList& operator = (const String::List& rhs);
+		ExceptionList& operator = (const std::vector<String>& rhs);
 		//@}
 
 	private:
 		//! List of exceptions
-		String::Vector pExceptionList;
+		std::vector<String> pExceptionList;
 
 	}; // class ExceptionList
 
@@ -185,6 +172,4 @@ namespace Text
 } // namespace Validator
 } // namespace Yuni
 
-# include "default.hxx"
-
-#endif // __YUNI_CORE_VALIDATOR_DEFAULT_H__
+#include "default.hxx"

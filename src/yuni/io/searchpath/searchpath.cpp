@@ -22,10 +22,10 @@ namespace IO
 	namespace // anonymous
 	{
 
-		static inline bool ValidateExtension(const String::Vector& extensions, const String& extension)
+		static inline bool ValidateExtension(const std::vector<String>& extensions, const String& extension)
 		{
-			const String::Vector::const_iterator end = extensions.end();
-			for (String::Vector::const_iterator i = extensions.begin(); i != end; ++i)
+			const std::vector<String>::const_iterator end = extensions.end();
+			for (std::vector<String>::const_iterator i = extensions.begin(); i != end; ++i)
 			{
 				if (*i == extension)
 					return true;
@@ -34,18 +34,16 @@ namespace IO
 		}
 
 
-		static inline bool ValidatePrefix(const String::Vector& prefixes, const String& text)
+		static inline bool ValidatePrefix(const std::vector<String>& prefixes, const String& text)
 		{
-			const String::Vector::const_iterator end = prefixes.end();
-			for (String::Vector::const_iterator i = prefixes.begin(); i != end; ++i)
+			const std::vector<String>::const_iterator end = prefixes.end();
+			for (std::vector<String>::const_iterator i = prefixes.begin(); i != end; ++i)
 			{
 				if (not (*i) or (text).startsWith(*i))
 					return true;
 			}
 			return false;
 		}
-
-
 
 
 
@@ -59,8 +57,8 @@ namespace IO
 			};
 
 		public:
-			LookupHelper(OutT& out, const AnyString& filename, const String::Vector& directories,
-				const String::Vector&  extensions, const String::Vector&  prefixes) :
+			LookupHelper(OutT& out, const AnyString& filename, const std::vector<String>& directories,
+				const std::vector<String>&  extensions, const std::vector<String>&  prefixes) :
 				out(out),
 				filename(filename),
 				directories(directories),
@@ -77,8 +75,8 @@ namespace IO
 				}
 				else
 				{
-					const String::Vector::const_iterator end = directories.end();
-					for (String::Vector::const_iterator i = directories.begin(); i != end; ++i)
+					const std::vector<String>::const_iterator end = directories.end();
+					for (std::vector<String>::const_iterator i = directories.begin(); i != end; ++i)
 					{
 						if (iterateThroughPrefixes<true>(*i))
 							return true;
@@ -97,8 +95,8 @@ namespace IO
 				}
 				else
 				{
-					const String::Vector::const_iterator end = prefixes.end();
-					for (String::Vector::const_iterator i = prefixes.begin(); i != end; ++i)
+					const std::vector<String>::const_iterator end = prefixes.end();
+					for (std::vector<String>::const_iterator i = prefixes.begin(); i != end; ++i)
 					{
 						if (iterateThroughExtensions<HasDirectoryT>(directory, *i))
 							return true;
@@ -117,8 +115,8 @@ namespace IO
 				}
 				else
 				{
-					const String::Vector::const_iterator end = extensions.end();
-					for (String::Vector::const_iterator i = extensions.begin(); i != end; ++i)
+					const std::vector<String>::const_iterator end = extensions.end();
+					for (std::vector<String>::const_iterator i = extensions.begin(); i != end; ++i)
 					{
 						if (checkForFile<HasDirectoryT>(directory, prefix, *i))
 							return true;
@@ -154,11 +152,11 @@ namespace IO
 			//! The filename
 			AnyString filename;
 			//! List of directories where to search of
-			const String::Vector&  directories;
+			const std::vector<String>& directories;
 			//! List of extensions
-			const String::Vector&  extensions;
+			const std::vector<String>& extensions;
 			//! List of prefixes
-			const String::Vector&  prefixes;
+			const std::vector<String>& prefixes;
 			//! Empty string
 			String empty;
 			//!
@@ -207,7 +205,7 @@ namespace IO
 	}
 
 
-	bool SearchPath::find(String::Vector& out, const AnyString& filename) const
+	bool SearchPath::find(std::vector<String>& out, const AnyString& filename) const
 	{
 		out.clear();
 		if (filename.empty())
@@ -222,30 +220,9 @@ namespace IO
 				return true;
 			}
 		}
-		LookupHelper<String::Vector> lookup(out, filename, directories, extensions, prefixes);
+		LookupHelper<std::vector<String>> lookup(out, filename, directories, extensions, prefixes);
 		return lookup();
 	}
-
-
-	bool SearchPath::find(String::List& out, const AnyString& filename) const
-	{
-		out.clear();
-		if (filename.empty())
-			return false;
-
-		if (pCacheLookup)
-		{
-			CacheStore::const_iterator i = pCache.find((pCacheQuery = filename));
-			if (i != pCache.end())
-			{
-				out.push_back(i->second);
-				return true;
-			}
-		}
-		LookupHelper<String::List> lookup(out, filename, directories, extensions, prefixes);
-		return lookup();
-	}
-
 
 
 	void SearchPath::each(const Bind<void (const String&, const String&)>& callback,
@@ -261,8 +238,8 @@ namespace IO
 		{
 			if (recursive)
 			{
-				const String::Vector::const_iterator end = directories.end();
-				for (String::Vector::const_iterator i = directories.begin(); i != end; ++i)
+				auto end = directories.end();
+				for (auto i = directories.begin(); i != end; ++i)
 				{
 					info.directory() = *i;
 					IO::Directory::Info::recursive_iterator itend = info.recursive_end();
@@ -285,8 +262,8 @@ namespace IO
 			}
 			else
 			{
-				const String::Vector::const_iterator end = directories.end();
-				for (String::Vector::const_iterator i = directories.begin(); i != end; ++i)
+				auto end = directories.end();
+				for (auto i = directories.begin(); i != end; ++i)
 				{
 					info.directory() = *i;
 					IO::Directory::Info::iterator itend = info.end();
@@ -312,8 +289,8 @@ namespace IO
 		{
 			if (recursive)
 			{
-				const String::Vector::const_iterator end = directories.end();
-				for (String::Vector::const_iterator i = directories.begin(); i != end; ++i)
+				auto end = directories.end();
+				for (auto i = directories.begin(); i != end; ++i)
 				{
 					info.directory() = *i;
 					IO::Directory::Info::recursive_file_iterator itend = info.recursive_file_end();
@@ -336,8 +313,8 @@ namespace IO
 			}
 			else
 			{
-				const String::Vector::const_iterator end = directories.end();
-				for (String::Vector::const_iterator i = directories.begin(); i != end; ++i)
+				auto end = directories.end();
+				for (auto i = directories.begin(); i != end; ++i)
 				{
 					info.directory() = *i;
 					IO::Directory::Info::file_iterator itend = info.file_end();

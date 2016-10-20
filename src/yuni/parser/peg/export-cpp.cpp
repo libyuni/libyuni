@@ -10,6 +10,8 @@
 */
 #include "grammar.h"
 #include "../../io/file.h"
+#include <vector>
+
 
 
 
@@ -55,7 +57,7 @@ namespace PEG
 			//! Class name
 			YString classname;
 			//! Namespace
-			YString::Vector namespaces;
+			std::vector<YString> namespaces;
 
 			//! Root filename
 			YString rootfilename;
@@ -101,6 +103,7 @@ namespace PEG
 			h << "#include <yuni/core/bind.h>\n";
 			h << "#include <yuni/core/dictionary.h>\n";
 			h << "#include <yuni/core/smartptr/intrusive.h>\n";
+			h << "#include <vector>\n";
 			h << "#include <initializer_list>\n";
 			h << "\n\n";
 			h << '\n';
@@ -416,7 +419,7 @@ namespace PEG
 			h << "	{\n";
 			h << "	public:\n";
 			h << "		using OnURILoading = Yuni::Bind<bool (Yuni::Clob& out, const AnyString& uri)>;\n";
-			h << "		using OnError = Yuni::Bind<bool (const AnyString& filename, uint32_t line, uint32_t offset, Error, const YString::Vector&)>;\n";
+			h << "		using OnError = Yuni::Bind<bool (const AnyString& filename, uint32_t line, uint32_t offset, Error, const std::vector<YString>&)>;\n";
 			h << '\n';
 			h << "	public:\n";
 			h << "		Parser();\n";
@@ -857,8 +860,8 @@ namespace PEG
 			{
 				// We have to reserve from the begining this vector, to avoir future calls to
 				// std::vector::resize, and to invalidate references to internal elements
-				Clob::Vector helpers;
-				String::Vector datatext;
+				std::vector<Clob> helpers;
+				std::vector<String> datatext;
 				helpers.reserve(node.treeCount());
 
 				// skip the first AND block, which is useless actually

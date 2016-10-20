@@ -284,8 +284,8 @@ namespace Iterator
 
 		// for each folder
 		{
-			const String::VectorPtr::const_iterator& end = options.rootFolder.end();
-			for (String::VectorPtr::const_iterator i = options.rootFolder.begin(); i != end; ++i)
+			auto end = options.rootFolder.end();
+			for (auto i = options.rootFolder.begin(); i != end; ++i)
 			{
 				const String& path = *(*i);
 

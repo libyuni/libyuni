@@ -12,6 +12,7 @@
 #include "../../yuni.h"
 #include "../../core/string.h"
 #include <map>
+#include <vector>
 #include <iosfwd>
 
 
@@ -49,7 +50,7 @@ namespace PEG
 
 		void exportStd(std::ostream& out, uint depth = 1) const;
 		void exportDOTSubgraph(Clob& out, const Map& rules, const String& rulename) const;
-		void exportCPP(Clob& out, const Map& rules, Clob::Vector& helpers, String::Vector& datatext, uint depth, bool canreturn, uint& sp) const;
+		void exportCPP(Clob& out, const Map& rules, std::vector<Clob>& helpers, std::vector<String>& datatext, uint depth, bool canreturn, uint& sp) const;
 		void resetIndex(uint& base);
 		void resetEnumID(const AnyString& rulename);
 		void resetRuleIndexesFromMap(const Node::Map& rules);

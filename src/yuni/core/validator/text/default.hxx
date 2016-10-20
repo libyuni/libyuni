@@ -8,8 +8,8 @@
 ** github: https://github.com/libyuni/libyuni/
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
-#ifndef __YUNI_CORE_VALIDATOR_DEFAULT_HXX__
-# define __YUNI_CORE_VALIDATOR_DEFAULT_HXX__
+#pragma once
+#include "default.h"
 
 
 namespace Yuni
@@ -39,23 +39,9 @@ namespace Text
 
 
 	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
-	inline ExceptionList<DefaultPolicy>::ExceptionList(const String::Vector& rhs)
+	inline ExceptionList<DefaultPolicy>::ExceptionList(const std::vector<String>& rhs)
 		:pExceptionList(rhs)
 	{}
-
-
-	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
-	inline ExceptionList<DefaultPolicy>::ExceptionList(const String::List& rhs)
-	{
-		if (!rhs.empty())
-		{
-			const String::List::const_iterator end = rhs.end();
-			for (String::List::const_iterator i = rhs.begin(); i != end; ++i)
-				pExceptionList.push_back(*i);
-		}
-	}
-
-
 
 
 	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
@@ -64,8 +50,8 @@ namespace Text
 	{
 		if (!pExceptionList.empty())
 		{
-			const String::Vector::const_iterator end = pExceptionList.end();
-			for (String::Vector::const_iterator i = pExceptionList.begin(); i != end; ++i)
+			const std::vector<String>::const_iterator end = pExceptionList.end();
+			for (std::vector<String>::const_iterator i = pExceptionList.begin(); i != end; ++i)
 			{
 				if (*i == s)
 					return !DefaultPolicy;
@@ -73,7 +59,6 @@ namespace Text
 		}
 		return DefaultPolicy;
 	}
-
 
 
 	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
@@ -94,27 +79,11 @@ namespace Text
 
 
 	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
-	inline ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator = (const String::Vector& rhs)
+	inline ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator = (const std::vector<String>& rhs)
 	{
 		pExceptionList = rhs;
 		return *this;
 	}
-
-
-	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
-	ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator = (const String::List& rhs)
-	{
-		pExceptionList.clear();
-		if (!rhs.empty())
-		{
-			const String::List::const_iterator end = rhs.end();
-			for (String::List::const_iterator i = rhs.begin(); i != end; ++i)
-				pExceptionList.push_back(*i);
-		}
-		return *this;
-	}
-
-
 
 
 	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
@@ -135,25 +104,11 @@ namespace Text
 
 
 	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
-	inline ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator += (const String::Vector& rhs)
+	inline ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator += (const std::vector<String>& rhs)
 	{
 		pExceptionList += rhs;
 		return *this;
 	}
-
-
-	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
-	inline ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator += (const String::List& rhs)
-	{
-		if (!rhs.empty())
-		{
-			const String::List::const_iterator end = rhs.end();
-			for (String::List::const_iterator i = rhs.begin(); i != end; ++i)
-				pExceptionList.push_back(*i);
-		}
-		return *this;
-	}
-
 
 
 	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
@@ -174,22 +129,9 @@ namespace Text
 
 
 	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
-	inline ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator << (const String::Vector& rhs)
+	inline ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator << (const std::vector<String>& rhs)
 	{
 		pExceptionList += rhs;
-		return *this;
-	}
-
-
-	template<Yuni::Validator::DefaultPolicy DefaultPolicy>
-	ExceptionList<DefaultPolicy>& ExceptionList<DefaultPolicy>::operator << (const String::List& rhs)
-	{
-		if (!rhs.empty())
-		{
-			const String::List::const_iterator end = rhs.end();
-			for (String::List::const_iterator i = rhs.begin(); i != end; ++i)
-				pExceptionList.push_back(*i);
-		}
 		return *this;
 	}
 
@@ -199,5 +141,3 @@ namespace Text
 } // namespace Text
 } // namespace Validator
 } // namespace Yuni
-
-#endif // __YUNI_CORE_VALIDATOR_DEFAULT_H__

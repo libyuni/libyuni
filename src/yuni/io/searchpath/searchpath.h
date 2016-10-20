@@ -13,8 +13,9 @@
 #include "../../core/string.h"
 #include "../../core/bind.h"
 #include <map>
+#include <vector>
 #ifdef SearchPath
-#	undef SearchPath // On Windows, SearchPath is a macro...
+#undef SearchPath // On Windows, SearchPath is a macro...
 #endif
 
 
@@ -40,7 +41,7 @@ namespace IO
 	**	std::cout << "found: " << location << std::endl;
 	**
 	** // finding all matches
-	** String::Vector list;
+	** std::vector<String> list;
 	** if (search.find(list, "mylib"))
 	**	std::cerr << "impossible to find something\n";
 	** else
@@ -74,12 +75,7 @@ namespace IO
 		/*!
 		** \brief Find all matching filenames/folders in the search paths which math the criteria
 		*/
-		bool find(String::Vector& out, const AnyString& filename) const;
-
-		/*!
-		** \brief Find all matching filenames/folders in the search paths which math the criteria
-		*/
-		bool find(String::List& out, const AnyString& filename) const;
+		bool find(std::vector<String>& out, const AnyString& filename) const;
 
 		/*!
 		** \brief Iterate through all files and folders
@@ -119,11 +115,11 @@ namespace IO
 
 	public:
 		//! List of directories where to search of
-		String::Vector  directories;
+		std::vector<String>  directories;
 		//! List of extensions
-		String::Vector  extensions;
+		std::vector<String>  extensions;
 		//! List of prefixes
-		String::Vector  prefixes;
+		std::vector<String>  prefixes;
 
 
 	private:

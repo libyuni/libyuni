@@ -10,6 +10,8 @@
 */
 #pragma once
 #include "../../../thread/thread.h"
+#include <vector>
+
 
 
 
@@ -90,7 +92,7 @@ namespace Iterator
 		** \internal The shared access to this variable is already guaranted
 		**   by the class IIterator
 		*/
-		String::VectorPtr rootFolder;
+		std::vector<String::Ptr> rootFolder;
 		//! Pointer to the parent class
 		Interface* self;
 

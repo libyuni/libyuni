@@ -353,7 +353,7 @@ namespace Directory
 
 	private:
 		//! The root folder
-		String::VectorPtr pRootFolder;
+		std::vector<String::Ptr> pRootFolder;
 		# ifndef YUNI_NO_THREAD_SAFE
 		//! The de tached thread (only valid if detached != 0)
 		ThreadType* pThread;

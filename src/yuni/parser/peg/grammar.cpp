@@ -11,7 +11,11 @@
 #include "grammar.h"
 #include "../../io/file.h"
 #include <stack>
+#include <vector>
 #include <iostream>
+
+
+
 
 namespace Yuni
 {
@@ -194,7 +198,7 @@ namespace // anonymous
 		options.trim();
 		if (not options.empty())
 		{
-			AnyString::Vector list;
+			std::vector<AnyString> list;
 			options.split(list, ", ");
 			for (uint i = 0; i != (uint) list.size(); ++i)
 			{
@@ -355,7 +359,7 @@ namespace // anonymous
 
 	inline bool RuleParser::prepareNodeFromPragmas(const AnyString& source, const AnyString& rulename, Node& node, const VectorPairYAndLine& pragmas)
 	{
-		AnyString::Vector list;
+		std::vector<AnyString> list;
 		list.reserve(2);
 		bool ok = true;
 

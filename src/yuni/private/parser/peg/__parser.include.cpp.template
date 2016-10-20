@@ -205,11 +205,11 @@
 		//! Root folder
 		YString root;
 		//! File Content of all encountered urls, ordered by their order of arrival
-		Clob::Vector contents;
+		std::vector<Clob> contents;
 		//! Reverse mapping for retriving the index of a known file
-		::Yuni::Dictionary<String, uint>::Unordered  reverseUrlIndexes;
+		std::unordered_map<String, uint32_t> reverseUrlIndexes;
 		//! All urls
-		::Yuni::String::Vector urls;
+		std::vector<::Yuni::String> urls;
 
 		//! Success flag
 		bool success;

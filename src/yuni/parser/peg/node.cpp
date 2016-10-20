@@ -427,7 +427,7 @@ namespace PEG
 
 
 
-	void Node::exportCPP(Clob& out, const Map& rules, Clob::Vector& helpers, String::Vector& datatext, uint depth, bool canreturn, uint& sp) const
+	void Node::exportCPP(Clob& out, const Map& rules, std::vector<Clob>& helpers, std::vector<String>& datatext, uint depth, bool canreturn, uint& sp) const
 	{
 		assert(out.capacity() < 1024 * 1024 * 500); // arbitrary
 		assert(out.size() < 1024 * 1024 * 500);
