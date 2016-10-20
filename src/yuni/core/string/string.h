@@ -118,40 +118,39 @@ namespace Yuni
 	**   string with a fixed-length capacity (equals to ChunkSizeT)
 	*/
 	template<uint ChunkSizeT, bool ExpandableT>
-	class YUNI_DECL CString final :
-		protected Private::CStringImpl::Data<ChunkSizeT,ExpandableT>
+	class YUNI_DECL CString final : protected Private::CStringImpl::Data<ChunkSizeT,ExpandableT>
 	{
 	public:
 		//! POD type
-		typedef char Char;
+		using Char = char;
 		//! Type for the POD type
-		typedef char Type;
+		using Type = char;
 
 		//! Ancestor
-		typedef Private::CStringImpl::Data<ChunkSizeT,ExpandableT>  AncestorType;
+		using AncestorType = Private::CStringImpl::Data<ChunkSizeT,ExpandableT>;
 		//! Size type
-		typedef typename AncestorType::Size Size;
+		using Size = typename AncestorType::Size;
 		//! Self
-		typedef CString<ChunkSizeT,ExpandableT>  CStringType;
+		using CStringType = CString<ChunkSizeT,ExpandableT>;
 
 		//! \name Compatibility with std::string
 		//@{
 		//! The type of object, charT, stored in the string
-		typedef char value_type;
+		using value_type = char;
 		//! Pointer to char
-		typedef char* pointer;
+		using pointer = char*;
 		//! Reference to char
-		typedef char& reference;
+		using reference = char;
 		//! Const reference to char
-		typedef const char& const_reference;
+		using const_reference = const char&;
 		//! An unsigned integral type
-		typedef Size size_type;
+		using size_type = Size;
 		//! A signed integral type
-		typedef ssize_t difference_type;
+		using difference_type = ssize_t;
 		//@}
 
 		//! Smartptr
-		typedef SmartPtr<CStringType> Ptr;
+		using Ptr = SmartPtr<CStringType>;
 		//! A String vector
 		typedef std::vector<CStringType> Vector;
 		//! A String vector
@@ -173,15 +172,14 @@ namespace Yuni
 		//! True if the string is a string adapter (only read-only operations are allowed)
 		static constexpr bool adapter = (0 == chunkSize and expandable);
 
-
 		//! Self, which can be written
-		typedef typename Static::If<adapter or (0 == expandable and chunkSize > 512),
-			CString<>, CStringType>::RetTrue  WritableType;
+		using WritableType = typename Static::If<adapter or (0 == expandable and chunkSize > 512),
+			CString<>, CStringType>::RetTrue;
 
 		//! Operator [] return type
-		typedef typename Static::If<!adapter, char&, char>::Type OperatorBracketReturnType;
+		using OperatorBracketReturnType= typename Static::If<!adapter, char&, char>::Type;
 		//! Operator [] return type (const)
-		typedef typename Static::If<!adapter, const char&, char>::Type ConstOperatorBracketReturnType;
+		using ConstOperatorBracketReturnType = typename Static::If<!adapter, const char&, char>::Type;
 
 		// Checking for a minimal chunk size
 		YUNI_STATIC_ASSERT(adapter or chunkSize > 3, CString_MinimalChunkSizeRequired);
@@ -235,15 +233,15 @@ namespace Yuni
 		//! \name Iterators
 		//@{
 		//! Iterator
-		typedef IIterator<typename Model::ByteIterator, false>  iterator;
+		using iterator = IIterator<typename Model::ByteIterator, false>;
 		//! Iterator (const)
-		typedef IIterator<typename Model::ByteIterator, true>   const_iterator;
+		using const_iterator = IIterator<typename Model::ByteIterator, true>;
 		//! Iterator for UTF8 characters
-		typedef IIterator<typename Model::UTF8Iterator, false>  utf8iterator;
+		using utf8iterator = IIterator<typename Model::UTF8Iterator, false>;
 		//! Iterator for UTF8 characters (const)
-		typedef IIterator<typename Model::UTF8Iterator, true>   const_utf8iterator;
+		using const_utf8iterator = IIterator<typename Model::UTF8Iterator, true>;
 		//! Null iterator
-		typedef IIterator<typename Model::NullIterator, true>   null_iterator;
+		using null_iterator = IIterator<typename Model::NullIterator, true>;
 		//@}
 
 	public:

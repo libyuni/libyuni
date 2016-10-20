@@ -16,14 +16,13 @@ struct Model
 	{
 	public:
 		//! Type of the original string
-		typedef CStringType StringType;
-
+		using StringType = CStringType;
 		//! The type of the orignal object
-		typedef UTF8::Char value_type;
+		using value_type = UTF8::Char;
 		//! An uintegral type
-		typedef typename CStringType::size_type  size_type;
+		using size_type = typename CStringType::size_type;
 		//! A signed integral type
-		typedef typename CStringType::difference_type  difference_type;
+		using difference_type = typename CStringType::difference_type;
 
 		enum
 		{
@@ -116,14 +115,13 @@ struct Model
 	{
 	public:
 		//! Type of the original string
-		typedef CStringType StringType;
-
+		using StringType = CStringType;
 		//! The type of the orignal object
-		typedef UTF8::Char value_type;
+		using value_type = UTF8::Char;
 		//! An uintegral type
-		typedef typename CStringType::size_type  size_type;
+		using size_type = typename CStringType::size_type;
 		//! A signed integral type
-		typedef typename CStringType::difference_type  difference_type;
+		using difference_type = typename CStringType::difference_type;
 
 		enum
 		{
@@ -301,14 +299,13 @@ struct Model
 	{
 	public:
 		//! Type of the original string
-		typedef CStringType StringType;
-
+		using StringType = CStringType;
 		//! The type of the orignal object
-		typedef char value_type;
+		using value_type = char;
 		//! An unsigned  integral type
-		typedef typename CStringType::size_type  size_type;
+		using size_type = typename CStringType::size_type;
 		//! A signed integral type
-		typedef typename CStringType::difference_type  difference_type;
+		using difference_type = typename CStringType::difference_type;
 
 		enum
 		{

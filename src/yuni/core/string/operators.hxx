@@ -200,8 +200,8 @@ namespace std
 	template<uint SizeT, bool ExpT>
 	struct YUNI_DECL hash<Yuni::CString<SizeT, ExpT> >
 	{
-		typedef Yuni::CString<SizeT, ExpT> argument_type;
-		typedef std::size_t result_type;
+		using argument_type = Yuni::CString<SizeT, ExpT>;
+		using result_type = std::size_t;
 
 		result_type operator() (const argument_type& string) const
 		{
