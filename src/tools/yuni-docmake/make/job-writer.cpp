@@ -47,8 +47,8 @@ namespace // anonymous
 		public:
 			CString<16,false> type;
 			String caption;
-			String::Vector x;
-			String::Vector y;
+			std::vector<String> x;
+			std::vector<String> y;
 			bool showPoints;
 			bool fill;
 		};
@@ -647,7 +647,7 @@ void JobWriter::prepareVariables(const String& filenameInHtdocs)
 		String address;
 		if (pArticle.accessPath.empty())
 		{
-			String::Vector list;
+			std::vector<String> list;
 			pArticle.htdocsFilename.split(list, "/");
 			tmp.clear();
 			String path;

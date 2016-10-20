@@ -106,7 +106,7 @@ namespace REST
 		struct mg_context *ctx;
 
 		//! Options for mongoose
-		String::Vector optionsString;
+		std::vector<String> optionsString;
 
 		//! Service
 		Yuni::Messaging::Service* service;

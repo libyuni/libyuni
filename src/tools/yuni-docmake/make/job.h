@@ -43,7 +43,7 @@ private:
 private:
 	const Yuni::String& pInput;
 	const Yuni::String& pHtdocs;
-	Yuni::String::Vector  pSources;
+	std::vector<YString>  pSources;
 
 	ArticleData pArticle;
 	//! Temporary string

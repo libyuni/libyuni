@@ -11,9 +11,11 @@
 #include <yuni/yuni.h>
 #include <yuni/core/getopt.h>
 #include <iostream>
-
+#include <vector>
 
 using namespace Yuni;
+
+
 
 
 /*
@@ -33,8 +35,6 @@ using namespace Yuni;
 ** ./getopt_02_remainingargs --unknown-option
 */
 
-
-
 int main(int argc, char* argv[])
 {
 	// The command line options parser
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 
 	// Catch all remaining arguments (arguments that does not belong to any option,
 	// like a list of paths)
-	String::Vector remainingArgs;
+	std::vector<String> remainingArgs;
 	options.remainingArguments(remainingArgs);
 
 	// Ask to the parser to parse the command line
@@ -62,8 +62,8 @@ int main(int argc, char* argv[])
 	// Displaying all remaining arguments, if any
 	if (!remainingArgs.empty())
 	{
-		const String::Vector::const_iterator end = remainingArgs.end();
-		for (String::Vector::const_iterator i = remainingArgs.begin(); i != end; ++i)
+		const std::vector<String>::const_iterator end = remainingArgs.end();
+		for (std::vector<String>::const_iterator i = remainingArgs.begin(); i != end; ++i)
 			std::cout << " Remains : `" << *i << "`" << std::endl;
 	}
 	else
