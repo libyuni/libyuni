@@ -161,8 +161,8 @@ namespace Yuni
 			IO::Directory::Current::Get(pwd);
 
 			String tmp;
-			const String::List::iterator end = pOptPrefix.end();
-			for (String::List::iterator i = pOptPrefix.begin(); i != end; ++i)
+			const std::vector<String>::iterator end = pOptPrefix.end();
+			for (std::vector<String>::iterator i = pOptPrefix.begin(); i != end; ++i)
 			{
 				IO::MakeAbsolute(tmp, *i, pwd);
 				*i = tmp;
@@ -217,7 +217,7 @@ namespace Yuni
 		if (pOptDefaultPathList)
 		{
 			initializeSystemPathList();
-			for (String::List::const_iterator i = pDefaultPathList.begin(); i != pDefaultPathList.end(); ++i)
+			for (std::vector<String>::const_iterator i = pDefaultPathList.begin(); i != pDefaultPathList.end(); ++i)
 				std::cout << *i << std::endl;
 			return true;
 		}
@@ -252,8 +252,8 @@ namespace Yuni
 		String item;
 
 		// Lowercase
-		const String::List::iterator end = pOptModules.end();
-		for (String::List::iterator i = pOptModules.begin(); i != end; ++i)
+		const std::vector<String>::iterator end = pOptModules.end();
+		for (std::vector<String>::iterator i = pOptModules.begin(); i != end; ++i)
 		{
 			item = *i;
 			*i = item.toLower();
@@ -263,8 +263,8 @@ namespace Yuni
 		do
 		{
 			mustContinue = false;
-			const String::List::iterator end = pOptModules.end();
-			for (String::List::iterator i = pOptModules.begin(); i != end; ++i)
+			const std::vector<String>::iterator end = pOptModules.end();
+			for (std::vector<String>::iterator i = pOptModules.begin(); i != end; ++i)
 			{
 				if (i->empty())
 				{
@@ -296,7 +296,7 @@ namespace Yuni
 					mustContinue = true;
 					item.assign(*i, 1, i->size() - 1);
 					pOptModules.erase(i);
-					pOptModules.remove(item);
+					pOptModules.erase(std::remove(pOptModules.begin(), pOptModules.end(), item), pOptModules.end());
 					break;
 				}
 			}
@@ -324,17 +324,17 @@ namespace Yuni
 
 	void LibConfigProgram::computeDependencies(LibConfig::VersionInfo::Settings& version)
 	{
-		String::List deps;
+		std::vector<String> deps;
 		do
 		{
 			deps.clear();
 			{
-				const String::List::const_iterator end = pOptModules.end();
-				for (String::List::const_iterator i = pOptModules.begin(); i != end; ++i)
+				const std::vector<String>::const_iterator end = pOptModules.end();
+				for (std::vector<String>::const_iterator i = pOptModules.begin(); i != end; ++i)
 				{
-					const String::List& modDeps = version.moduleSettings[*i].dependencies;
-					const String::List::const_iterator endJ = modDeps.end();
-					for (String::List::const_iterator j = modDeps.begin(); j != endJ; ++j)
+					const std::vector<String>& modDeps = version.moduleSettings[*i].dependencies;
+					const std::vector<String>::const_iterator endJ = modDeps.end();
+					for (std::vector<String>::const_iterator j = modDeps.begin(); j != endJ; ++j)
 					{
 						if (pOptModules.end() == std::find(pOptModules.begin(), pOptModules.end(), *j))
 							deps.push_back(*j);
@@ -344,8 +344,8 @@ namespace Yuni
 			if (not deps.empty())
 			{
 				// Merge results
-				const String::List::const_iterator end = deps.end();
-				for (String::List::const_iterator i = deps.begin(); i != end; ++i)
+				const std::vector<String>::const_iterator end = deps.end();
+				for (std::vector<String>::const_iterator i = deps.begin(); i != end; ++i)
 				{
 					if (pOptModules.end() == std::find(pOptModules.begin(), pOptModules.end(), *i))
 						pOptModules.push_back(*i);
@@ -360,8 +360,8 @@ namespace Yuni
 	{
 		std::map<String, bool> deps;
 		{
-			const String::List::const_iterator end = pOptModules.end();
-			for (String::List::const_iterator i = pOptModules.begin(); i != end; ++i)
+			const std::vector<String>::const_iterator end = pOptModules.end();
+			for (std::vector<String>::const_iterator i = pOptModules.begin(); i != end; ++i)
 				deps[*i] = true;
 		}
 
@@ -381,8 +381,8 @@ namespace Yuni
 
 	bool LibConfigProgram::checkForDependencies(LibConfig::VersionInfo::Settings& version)
 	{
-		const String::List::const_iterator end = pOptModules.end();
-		for (String::List::const_iterator i = pOptModules.begin(); i != end; ++i)
+		const std::vector<String>::const_iterator end = pOptModules.end();
+		for (std::vector<String>::const_iterator i = pOptModules.begin(); i != end; ++i)
 		{
 			if (not isCoreModule(*i))
 			{
@@ -401,7 +401,7 @@ namespace Yuni
 	bool LibConfigProgram::displayInformationAboutYuniVersion(LibConfig::VersionInfo::Settings& version)
 	{
 		// Getting the config file
-		String::List options;
+		std::vector<String> options;
 		if (not version.configFile(options, pOptPrintErrors) or not version.parserModulesOptions(options, pOptPrintErrors))
 		{
 			pExitStatus = 1;
@@ -451,10 +451,9 @@ namespace Yuni
 
 		if (pOptCxxFlags)
 		{
-			const String::List::const_iterator end = pOptModules.end();
-			for (String::List::const_iterator i = pOptModules.begin(); i != end; ++i)
+			for (auto& module: pOptModules)
 			{
-				LibConfig::VersionInfo::Settings::SettingsPerModule& modSettings = version.moduleSettings[*i];
+				LibConfig::VersionInfo::Settings::SettingsPerModule& modSettings = version.moduleSettings[module];
 				modSettings.merge(args, modSettings.cxxFlags);
 				modSettings.merge(args, modSettings.defines);
 				modSettings.merge(args, modSettings.includes);
@@ -471,10 +470,9 @@ namespace Yuni
 		if (pOptLibFlags)
 		{
 			args.clear();
-			const String::List::const_iterator end = pOptModules.end();
-			for (String::List::const_iterator i = pOptModules.begin(); i != end; ++i)
+			for (auto& module: pOptModules)
 			{
-				LibConfig::VersionInfo::Settings::SettingsPerModule& modSettings = version.moduleSettings[*i];
+				LibConfig::VersionInfo::Settings::SettingsPerModule& modSettings = version.moduleSettings[module];
 				modSettings.merge(args, modSettings.frameworks);
 				modSettings.merge(args, modSettings.libs);
 				modSettings.merge(args, modSettings.libIncludes);

@@ -66,9 +66,9 @@ namespace VersionInfo
 		Settings();
 		//@}
 
-		bool configFile(String::List& options, bool displayError) const;
+		bool configFile(std::vector<String>& options, bool displayError) const;
 
-		bool parserModulesOptions(String::List& options, bool displayError);
+		bool parserModulesOptions(std::vector<String>& options, bool displayError);
 
 
 	public:
@@ -76,12 +76,12 @@ namespace VersionInfo
 		Mapping mapping;
 		String path;
 		String compilationMode;
-		String::List modules;
+		std::vector<String> modules;
 		bool supportOpenGL;
 		bool supportDirectX;
 
-		String::List includePath;
-		String::List libPath;
+		std::vector<String> includePath;
+		std::vector<String> libPath;
 
 		/*!
 		** \brief Settings Per Module
@@ -108,7 +108,7 @@ namespace VersionInfo
 			//! Defines for the module
 			OptionMap defines;
 			//! Dependencies
-			String::List dependencies;
+			std::vector<String> dependencies;
 		};
 		std::map<String, SettingsPerModule> moduleSettings;
 	};
@@ -133,7 +133,7 @@ namespace VersionInfo
 
 		void checkRootFolder(const String& root);
 
-		void findFromPrefixes(const String::List& prefix);
+		void findFromPrefixes(const std::vector<String>& prefix);
 
 		void print();
 

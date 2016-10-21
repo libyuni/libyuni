@@ -71,12 +71,12 @@ namespace VersionInfo
 	}
 
 
-	void List::findFromPrefixes(const String::List& prefix)
+	void List::findFromPrefixes(const std::vector<String>& prefix)
 	{
 		if (not prefix.empty())
 		{
-			const String::List::const_iterator end = prefix.end();
-			for (String::List::const_iterator i = prefix.begin(); i != end; ++i)
+			const std::vector<String>::const_iterator end = prefix.end();
+			for (std::vector<String>::const_iterator i = prefix.begin(); i != end; ++i)
 				loadFromPath(*i);
 		}
 	}
@@ -221,8 +221,8 @@ namespace VersionInfo
 				std::cout << "    path    : " << path << "\n";
 
 				std::cout << "    modules : [core]";
-				const String::List::const_iterator mend = i->second.modules.end();
-				for (String::List::const_iterator j = i->second.modules.begin(); j != mend; ++j)
+				const std::vector<String>::const_iterator mend = i->second.modules.end();
+				for (std::vector<String>::const_iterator j = i->second.modules.begin(); j != mend; ++j)
 					std::cout << " " << *j;
 				std::cout << "\n";
 				std::cout << "    OpenGL  : " << (i->second.supportOpenGL ? "Yes" : "No") << "\n";
@@ -245,7 +245,7 @@ namespace VersionInfo
 
 
 
-	bool Settings::configFile(String::List& options, bool displayError) const
+	bool Settings::configFile(std::vector<String>& options, bool displayError) const
 	{
 		if (compiler.empty())
 		{
@@ -292,12 +292,12 @@ namespace VersionInfo
 
 
 
-	bool Settings::parserModulesOptions(String::List& options, bool displayError)
+	bool Settings::parserModulesOptions(std::vector<String>& options, bool displayError)
 	{
 		// Cleanup if needed
 		moduleSettings.clear();
 		// End of the list
-		const String::List::const_iterator end = options.end();
+		const std::vector<String>::const_iterator end = options.end();
 		// Key
 		String key;
 		// Value
@@ -316,7 +316,7 @@ namespace VersionInfo
 			compliant = visualstudio;
 
 		// For each entry in the ini file
-		for (String::List::const_iterator i = options.begin(); i != end; ++i)
+		for (std::vector<String>::const_iterator i = options.begin(); i != end; ++i)
 		{
 			i->extractKeyValue(key, value);
 			if (key.empty() || key.first() == '[')

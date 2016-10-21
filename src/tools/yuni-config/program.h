@@ -93,11 +93,11 @@ namespace Yuni
 		bool pOptDebug;
 
 		//! List of required modules
-		String::List pOptModules;
+		std::vector<String> pOptModules;
 		//! List of given prefix
-		String::List pOptPrefix;
+		std::vector<String> pOptPrefix;
 		//! List of default paths
-		String::List pDefaultPathList;
+		std::vector<String> pDefaultPathList;
 		//! The complete list of known libyuni versions
 		LibConfig::VersionInfo::List pVersionList;
 		//! The compiler to use
