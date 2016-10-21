@@ -38,7 +38,7 @@ namespace Yuni
 		//! \name Constructor
 		//@{
 		//! Default constructor
-		Version();
+		Version() = default;
 
 		/*!
 		** \brief Constructor with a given version
@@ -65,7 +65,7 @@ namespace Yuni
 		Version(uint32_t major, uint32_t minor, uint32_t patch);
 
 		//! Copy constructor
-		Version(const Version& c);
+		Version(const Version& c) = default;
 		//@}
 
 
@@ -146,11 +146,11 @@ namespace Yuni
 
 	public:
 		//! The major version number
-		uint32_t hi;
+		uint32_t hi = 0;
 		//! The minor version number
-		uint32_t lo;
+		uint32_t lo = 0;
 		//! patchision
-		uint32_t patch;
+		uint32_t patch = 0;
 		//! Metadata
 		String metadata;
 

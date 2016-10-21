@@ -57,3 +57,10 @@ namespace Yuni
 
 
 } // namespace Yuni
+
+
+std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs)
+{
+	rhs.print(out);
+	return out;
+}

@@ -16,28 +16,18 @@
 namespace Yuni
 {
 
-	inline Version::Version()
-		: hi(), lo(), patch()
-	{}
-
-
 	inline Version::Version(uint32_t major)
-		: hi(major), lo(), patch()
+		: hi(major)
 	{}
 
 
 	inline Version::Version(uint32_t major, uint32_t minor)
-		: hi(major), lo(minor), patch()
+		: hi(major), lo(minor)
 	{}
 
 
 	inline Version::Version(uint32_t major, uint32_t minor, uint32_t patch)
 		: hi(major), lo(minor), patch(patch)
-	{}
-
-
-	inline Version::Version(const Version& c)
-		: hi(c.hi), lo(c.lo), patch(c.patch)
 	{}
 
 
@@ -135,8 +125,4 @@ namespace Yuni
 
 
 
-inline std::ostream& operator << (std::ostream& out, const Yuni::Version& rhs)
-{
-	rhs.print(out);
-	return out;
-}
+std::ostream& operator << (std::ostream&, const Yuni::Version&);
