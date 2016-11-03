@@ -1249,15 +1249,10 @@ namespace PEG
 			cpp << "	{\n";
 			cpp << "		switch (ruleid)\n";
 			cpp << "		{\n";
-			cpp << "			case rgUnknown:\n";
-			cpp << "				return \"<unknown>\";\n";
+			cpp << "			case rgUnknown: return \"<unknown>\";\n";
 			for (Node::Map::const_iterator i = rules.begin(); i != end; ++i)
-			{
-				cpp << "			case " << i->second.enumID << ":\n";
-				cpp << "				return \"" << i->first << "\";\n";
-			}
-			cpp << "			case rgEOF:\n";
-			cpp << "				return \"EOF\";\n";
+				cpp << "			case " << i->second.enumID << ": return \"" << i->first << "\";\n";
+			cpp << "			case rgEOF: return \"EOF\";\n";
 			cpp << "		}\n";
 			cpp << "		return \"<error>\";\n";
 			cpp << "	}\n";
