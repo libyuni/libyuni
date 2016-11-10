@@ -63,6 +63,3 @@ else()
 		"int main() {ssize_t r = 0; return (int) r;}"
 		YUNI_HAS_SSIZE_T)
 endif()
-
-
-

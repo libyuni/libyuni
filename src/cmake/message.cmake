@@ -1,4 +1,3 @@
-
 set(YUNI_ERROR_HAS_OCCURED   false)
 
 
@@ -63,5 +62,3 @@ macro(YFATAL msg)
 
 	set(YUNI_ERROR_HAS_OCCURED  true)
 endmacro()
-
-

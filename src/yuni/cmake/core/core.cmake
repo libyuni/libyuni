@@ -49,15 +49,6 @@ set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS_PREVIOUS})
 
 
 
-
-
-
-
-
-
-
-
-
 if (NOT WIN32)
 	find_package(Threads REQUIRED)
 	link_libraries(${CMAKE_THREAD_LIBS_INIT})
@@ -68,8 +59,6 @@ endif()
 # Generating informations about the platform
 #
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/platform.cmake ${CMAKE_CURRENT_SOURCE_DIR}/platform.h)
-
-
 
 
 # System - Microsoft Windows
@@ -86,10 +75,8 @@ endif()
 
 
 
-
 add_library(yuni-static-core STATIC
 		yuni.h
-
 		core/any/any.cpp
 		core/any/any.h
 		core/any/any.hxx
@@ -396,7 +383,6 @@ add_library(yuni-static-core STATIC
 		datetime/timestamp.hxx
 		datetime/timestamp.cpp
 
-
 		io/constants.cpp
 		io/constants.h
 		io/directory/commons.h
@@ -443,7 +429,6 @@ add_library(yuni-static-core STATIC
 		io/searchpath/searchpath.hxx
 		io/searchpath.h
 
-
 		job/enum.h
 		job/fwd.h
 		job/job.cpp
@@ -462,7 +447,6 @@ add_library(yuni-static-core STATIC
 		private/jobs/queue/thread.h
 		private/jobs/queue/thread.cpp
 		private/jobs/queue/thread.hxx
-
 
 		thread/array.h
 		thread/array.hxx
