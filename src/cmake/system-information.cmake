@@ -1,4 +1,3 @@
-
 #
 # CMake Generator / Compiler
 #
@@ -60,6 +59,3 @@ if(APPLE)
 else()
 	YMESSAGE("System: ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")
 endif()
-
-
-

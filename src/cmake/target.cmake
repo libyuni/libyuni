@@ -1,4 +1,3 @@
-
 set(YUNI_TARGET_DEBUG   true)
 set(YUNI_TARGET_RELEASE true)
 
@@ -45,4 +44,3 @@ endif()
 # Reset
 set(YUNI_TARGET "${CMAKE_BUILD_TYPE}")
 set(TARGET "${CMAKE_BUILD_TYPE}")
-

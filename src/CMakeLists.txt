@@ -5,7 +5,6 @@ project(yuni)
 YMESSAGE("")
 YMESSAGE_BOLD("The Yuni Framework")
 
-
 # Package informations
 set(YUNI_URL_WEBSITE             "http://www.libyuni.org")
 set(YUNI_MAILING_LIST            "dev@libyuni.org")
@@ -22,13 +21,9 @@ set(YUNI_URL_DEVPACK_SOURCE      "http://devpacks.libyuni.org/downloads")
 
 
 
-
-
-
 #
 # -----------------------------------------------------------------------------
 #
-
 # CMake special variables
 set(VS_KEYWORD                   "YuniVS${YUNI_VERSION}")
 set(VERSION                      "${YUNI_VERSION}")
@@ -116,7 +111,6 @@ YMESSAGE("     Build into: ${CMAKE_CURRENT_BINARY_DIR}")
 
 # Custom settings
 if ("${PROFILE}" STREQUAL "")
-
 	if (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake")
 		configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ProfileBuild.template.cmake
 			${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake)
@@ -125,17 +119,12 @@ if ("${PROFILE}" STREQUAL "")
 		YMESSAGE("Please edit this file to override the default settings")
 		YMESSAGE("")
 	endif()
-
 	set(YUNI_PROFILE_PATH "${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake")
-
 else()
-
 	if (NOT EXISTS "${PROFILE}")
 		YERROR("Could not find the specified profile file: (`${PROFILE}`)")
 	endif()
-
 	set(YUNI_PROFILE_PATH "${PROFILE}")
-
 endif()
 
 include("${YUNI_PROFILE_PATH}")
@@ -144,22 +133,17 @@ YMESSAGE("       found in: ${YUNI_PROFILE_PATH}")
 
 # (Re)Check the target
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/target.cmake")
-
 # DevPacks utilities
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/devpack.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/devpack-standard-imports.cmake")
-
 # Modules
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules.cmake")
 
 
-
 # Sub Directories
 add_subdirectory(yuni)
-
 # tools (especially for yuni-config)
 add_subdirectory(tools)
-
 
 
 #
@@ -197,7 +181,6 @@ if (YUNI_BENCHMARKS)
 	add_subdirectory(benchmarks)
 endif()
 
-
 if (YUNI_ERROR_HAS_OCCURED)
 	message(STATUS "")
 	message(STATUS "")
@@ -213,4 +196,3 @@ endif()
 
 # Empty message, for beauty :)
 YMESSAGE("") # done
-
