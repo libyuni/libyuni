@@ -1,10 +1,6 @@
-
-
-
 #
 # --- Applying the Configuation ---
 #
-
 set(YUNI_PROFILE_CXX_FLAGS_INSTRUCTIONS_SETS "")
 
 #
@@ -26,7 +22,6 @@ if("${YUNI_PROFILE_3DNOW}" STREQUAL "yes")
 	else()
 	endif()
 endif()
-
 
 
 #
@@ -87,11 +82,6 @@ if("${YUNI_PROFILE_SSE}" STREQUAL "yes")
 				else()
 				endif()
 			endif()
-
 		endif()
-
 	endif()
-
 endif()
-
-

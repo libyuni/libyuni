@@ -126,20 +126,15 @@ if(NOT MSVC)
 			endif()
 		endif()
 	endif()
-
-
 	if (YUNI_HAS_LIB_CPP11_SUPPORT AND (NOT CLANG OR APPLE))
 		# clang seems to not like the option -stdlib, but required on MacOS...
 		set(YUNI_COMMON_CXX_OPTIONS  "${YUNI_COMMON_CXX_OPTIONS} -stdlib=libc++")
 	endif()
-
-
 	# transform some warnings into errors to avoid common mistakes
 	check_cxx_compiler_flag("-Werror=switch"   YUNI_HAS_W2E_SWITCH)
 	if (YUNI_HAS_W2E_SWITCH)
 		set(YUNI_COMMON_CXX_OPTIONS  "${YUNI_COMMON_CXX_OPTIONS} -Werror=switch")
 	endif()
-
 endif()
 
 if (APPLE AND CLANG)
@@ -187,7 +182,6 @@ endif()
 if(MSVC)
 	set(CMAKE_C_FLAGS_DEBUG   "${COMMON_MSVC_FLAGS} /MD /GR /Ot /Od /EHsc")
 	set(CMAKE_CXX_FLAGS_DEBUG "${COMMON_MSVC_FLAGS} /MD /GR /Ot /Od /EHsc /fp:except")
-
 	set(MSVC_RELEASE_FLAGS)
 
 	# O2x: optimization
@@ -243,21 +237,20 @@ if (NOT MSVC)
 	#compile_flag("-fsanitize=address"   DEBUG_SANITIZE_ADDR  DEBUG RELWITHDEBINFO)
 
 	# warnings
-	compile_flag("-W"                         W   RELEASE DEBUG RELWITHDEBINFO)
-	compile_flag("-Wall"                      W_ALL   RELEASE DEBUG RELWITHDEBINFO)
-	compile_flag("-Wextra"                    W_EXTRA   RELEASE DEBUG RELWITHDEBINFO)
-	compile_flag("-Wunused-parameter"         W_UNUSED_PARAMETER   RELEASE DEBUG RELWITHDEBINFO)
-	compile_flag("-Wconversion"               W_CONVERSION   RELEASE DEBUG RELWITHDEBINFO)
-	compile_flag("-Woverloaded-virtual"       W_OVERLOADED_VIRTUAL   RELEASE DEBUG RELWITHDEBINFO)
-	compile_flag("-Wundef"                    W_UNDEF   RELEASE DEBUG RELWITHDEBINFO)
-	compile_flag("-Wfloat-equal"              W_FLOAT_EQUAL   RELEASE DEBUG RELWITHDEBINFO)
-	compile_flag("-Wmissing-noreturn"         W_MISSING_NORETURN   RELEASE DEBUG RELWITHDEBINFO)
-	compile_flag("-Wcast-align"               W_CAST_ALIGN   RELEASE DEBUG RELWITHDEBINFO)
-	compile_flag("-Wuninitialized"            W_UNINITIALIZED   RELEASE DEBUG RELWITHDEBINFO)
-	compile_flag("-Wdocumentation"            W_DOCUMENTATION   RELEASE DEBUG RELWITHDEBINFO)
-	#compile_flag("-Wold-style-cast"           W_OLD_STYLE_CAST  RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-W"                   W   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wall"                W_ALL   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wextra"              W_EXTRA   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wunused-parameter"   W_UNUSED_PARAMETER   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wconversion"         W_CONVERSION   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Woverloaded-virtual" W_OVERLOADED_VIRTUAL   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wundef"              W_UNDEF   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wfloat-equal"        W_FLOAT_EQUAL   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wmissing-noreturn"   W_MISSING_NORETURN   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wcast-align"         W_CAST_ALIGN   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wuninitialized"      W_UNINITIALIZED   RELEASE DEBUG RELWITHDEBINFO)
+	compile_flag("-Wdocumentation"      W_DOCUMENTATION   RELEASE DEBUG RELWITHDEBINFO)
+	#compile_flag("-Wold-style-cast"     W_OLD_STYLE_CAST  RELEASE DEBUG RELWITHDEBINFO)
 endif()
-
 
 if (MINGW)
 	# mthreads is required on windows with mingw
@@ -265,15 +258,13 @@ if (MINGW)
 endif()
 
 
-
-
 # NDEBUG
 if(MSVC)
-	set(CMAKE_CXX_FLAGS_RELEASE         "${CMAKE_CXX_FLAGS_RELEASE} /DNDEBUG")
-	set(CMAKE_C_FLAGS_RELEASE           "${CMAKE_C_FLAGS_RELEASE} /DNDEBUG")
+	set(CMAKE_CXX_FLAGS_RELEASE  "${CMAKE_CXX_FLAGS_RELEASE} /DNDEBUG")
+	set(CMAKE_C_FLAGS_RELEASE    "${CMAKE_C_FLAGS_RELEASE} /DNDEBUG")
 else()
-	set(CMAKE_CXX_FLAGS_RELEASE         "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
-	set(CMAKE_C_FLAGS_RELEASE           "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG")
+	set(CMAKE_CXX_FLAGS_RELEASE  "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
+	set(CMAKE_C_FLAGS_RELEASE    "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG")
 endif()
 
 set(CMAKE_CXX_FLAGS_RELEASE       "${CMAKE_CXX_FLAGS_RELEASE}      ${YUNI_PROFILE_CXX_FLAGS_INSTRUCTIONS_SETS}")
@@ -305,7 +296,6 @@ else()
 endif()
 
 
-
 #
 # Extra - Mac OS X Bundles
 #
@@ -328,5 +318,3 @@ if(APPLE)
 		YWARNING("Universal binaries disabled. The compiler does not seem to support multiple platform architectures in a single binary)")
 	endif()
 endif()
-
-

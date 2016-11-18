@@ -16,7 +16,6 @@ check_cxx_source_compiles("
 	#include <functional>
 
 	class Dummy {};
-
 	namespace std
 	{
 		template<>
@@ -35,14 +34,13 @@ check_cxx_source_compiles("
 
 check_cxx_source_compiles("
 	#include <unordered_map>
-
 	int main() {std::unordered_map<int, int> map;return 0;}" YUNI_HAS_STL_UNORDERED_MAP)
+
 
 check_cxx_source_compiles("
 	#include <unordered_set>
 
 	int main() {std::unordered_set<int> map;return 0;}" YUNI_HAS_STL_UNORDERED_SET)
-
 
 
 if (MSVC)
@@ -65,7 +63,6 @@ endif()
 
 
 if (NOT MSVC)
-
 	# gcc __attribute__((pure))
 	check_cxx_source_compiles("
 		__attribute__((pure)) static int max(int x, int y) { return x > y ? x : y;}
@@ -89,9 +86,7 @@ if (NOT MSVC)
 		{
 			return max(42, 0);
 		} "  YUNI_HAS_GCC_ATTR_NODISCARD)
-
 endif()
-
 
 
 check_cxx_source_compiles("
@@ -141,7 +136,6 @@ check_cxx_source_compiles("
 	}" YUNI_HAS_STD_ATOMIC)
 
 
-
 check_cxx_source_compiles("
 	#include <iostream>
 	#include <string>
@@ -164,7 +158,6 @@ check_cxx_source_compiles("
 		func();
 		return 0;
 	}" YUNI_HAS_CPP_LAMBDA)
-
 
 
 # constexpr
