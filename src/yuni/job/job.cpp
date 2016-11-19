@@ -25,7 +25,6 @@ namespace Job
 
 	IJob::~IJob()
 	{
-		assert(this != NULL and "IJob: Destructor: Oo `this' is null !?");
 		assert(pThread == NULL and "A job can not be attached to a thread when destroyed");
 	}
 
