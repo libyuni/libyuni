@@ -63,7 +63,7 @@ namespace Job
 	inline bool QueueService::started() const
 	{
 		MutexLocker locker(*this);
-		return (pStatus != sStopped);
+		return (pStatus != State::stopped);
 	}
 
 

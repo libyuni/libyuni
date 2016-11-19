@@ -49,8 +49,6 @@ namespace Job
 
 
 	QueueService::QueueService()
-		: pStatus(sStopped)
-		, pThreads(NULL)
 	{
 		uint count = OptimalCPUCount();
 		pMinimumThreadCount = count;
@@ -59,8 +57,6 @@ namespace Job
 
 
 	QueueService::QueueService(bool autostart)
-		: pStatus(sStopped)
-		, pThreads(NULL)
 	{
 		uint count = OptimalCPUCount();
 		pMinimumThreadCount = count;
@@ -159,7 +155,7 @@ namespace Job
 	bool QueueService::start()
 	{
 		MutexLocker locker(*this);
-		if (YUNI_LIKELY(pStatus == sStopped))
+		if (YUNI_LIKELY(pStatus == State::stopped))
 		{
 			pSignalAllThreadHaveStopped.reset();
 			pSignalShouldStop.reset();
@@ -180,7 +176,7 @@ namespace Job
 			array.start();
 
 			// Ok now we have started
-			pStatus = sRunning;
+			pStatus = State::running;
 		}
 		return true;
 	}
@@ -193,12 +189,12 @@ namespace Job
 		// getting the thread pool
 		{
 			MutexLocker locker(*this);
-			if (pStatus != sRunning)
+			if (pStatus != State::running)
 				return;
 
 			threads  = (ThreadArray*) pThreads;
-			pThreads = NULL;
-			pStatus  = sStopping;
+			pThreads = nullptr;
+			pStatus  = State::stopping;
 		}
 
 		// Destroying the thread pool
@@ -212,7 +208,7 @@ namespace Job
 		MutexLocker locker(*this);
 		// marking the queue service as stopped, just in case
 		// (thread workers should already marked us as 'stopped')
-		pStatus = sStopped;
+		pStatus = State::stopped;
 
 		// signalling that the queueservice is stopped. This signal
 		// will come after pSignalAllThreadHaveStopped in this case
@@ -240,8 +236,8 @@ namespace Job
 			pWorkerSet.erase(it);
 			if (pWorkerSet.empty())
 			{
-				if (pStatus == sStopping)
-					pStatus = sStopped;
+				if (pStatus == State::stopping)
+					pStatus = State::stopped;
 				pSignalAllThreadHaveStopped.notify();
 			}
 		}
@@ -258,10 +254,10 @@ namespace Job
 	void QueueService::gracefulStop()
 	{
 		MutexLocker locker(*this);
-		if (pThreads and pStatus == sRunning)
+		if (pThreads and pStatus == State::running)
 		{
 			// about to stop
-			pStatus = sStopping;
+			pStatus = State::stopping;
 			// ask to stop to all threads
 			((ThreadArray*) pThreads)->gracefulStop();
 			// notifying that the queueservice is stopped (or will stop soon)
@@ -287,7 +283,7 @@ namespace Job
 
 			MutexLocker locker(*this);
 			// if the queue is running, we may have to reset our internal state
-			if (pStatus == sRunning)
+			if (pStatus == State::running)
 			{
 				if (not pWorkerSet.empty() or not pWaitingRoom.empty())
 				{
@@ -309,7 +305,7 @@ namespace Job
 		// checking if not started
 		{
 			MutexLocker locker(*this);
-			if (pStatus == sStopped)
+			if (pStatus == State::stopped)
 				return;
 		}
 
@@ -343,7 +339,7 @@ namespace Job
 		// checking if not started
 		{
 			MutexLocker locker(*this);
-			if (pStatus == sStopped)
+			if (pStatus == State::stopped)
 				return true;
 		}
 

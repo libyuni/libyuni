@@ -268,13 +268,13 @@ namespace Job
 
 	private:
 		//! Flag to know if the service is started [must be protected by the internal mutex]
-		enum State
+		enum class State
 		{
-			sStopped,
-			sRunning,
-			sStopping,
+			stopped,
+			running,
+			stopping,
 		}
-		pStatus;
+		pStatus = State::stopped;
 
 		//! The list of all remaining jobs
 		Yuni::Private::QueueService::WaitingRoom pWaitingRoom;
@@ -286,7 +286,7 @@ namespace Job
 		//! The maximum number of threads [must be protected by the internal mutex]
 		volatile uint pMaximumThreadCount;
 		//! Array of threads
-		volatile void* pThreads;
+		volatile void* pThreads = nullptr;
 
 		//! Signal, for being notified when all threads have stopped to work
 		Yuni::Thread::Signal pSignalAllThreadHaveStopped;
