@@ -15,6 +15,7 @@
 #ifndef YUNI_OS_WINDOWS
 	#include <unistd.h>
 #endif
+#include <memory>
 
 
 namespace Yuni
@@ -173,14 +174,13 @@ namespace Job
 
 	void QueueService::stop(uint timeout)
 	{
-		ThreadArray* threads; // the thread pool
+		std::unique_ptr<ThreadArray> threads; // the thread pool
 		// getting the thread pool
 		{
 			MutexLocker locker(*this);
 			if (pStatus != State::running)
 				return;
-
-			threads  = (ThreadArray*) pThreads;
+			threads.reset((ThreadArray*) pThreads);
 			pThreads = nullptr;
 			pStatus  = State::stopping;
 		}
@@ -190,7 +190,7 @@ namespace Job
 		{
 			// stopping all threads (**before** deleting them)
 			threads->stop(timeout);
-			delete threads;
+			threads.reset(nullptr);
 		}
 		MutexLocker locker(*this);
 		// marking the queue service as stopped, just in case
