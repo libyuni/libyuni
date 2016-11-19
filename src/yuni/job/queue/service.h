@@ -17,6 +17,7 @@
 #include "q-event.h"
 #include "../../core/dictionary.h"
 #include "../../core/smartptr/intrusive.h"
+#include <memory>
 
 
 
@@ -47,33 +48,23 @@ namespace Job
 		};
 
 		//! Information about a single thread
-		class ThreadInfo final
+		struct ThreadInfo final
 		{
-		public:
-			//! The most suitable smart pointer for the class
-			typedef SmartPtr<ThreadInfo> Ptr;
-			//! Vector of ThreadInfo
-			typedef std::vector<typename ThreadInfo::Ptr>  Vector;
-
-		public:
 			//! Reference to the working thread
 			Thread::IThread::Ptr thread;
 			//! Reference to the job currently in execution
 			Job::IJob::Ptr job;
-
 			//! Flag to know if the thread has a job currently in execution
-			bool hasJob;
-
+			bool hasJob = false;
 			//! State of the job (if any)
-			Job::State state;
+			Job::State state = Yuni::Job::State::idle;
 			//! Flag to know if the job is canceling its work
-			bool canceling;
+			bool canceling = false;
 			//! Progression (in percent) of the job (if any, between 0 and 100)
-			int progression;
+			int progression = 0;
 			//! Name of the job
 			String name;
-
-		}; // class ThreadInfo
+		};
 
 
 	public:
@@ -202,7 +193,7 @@ namespace Job
 		** \note Event if in the list, a job may already have finished
 		**   its work at the end of this method.
 		*/
-		void activitySnapshot(ThreadInfo::Vector& out);
+		void activitySnapshot(std::vector<std::unique_ptr<ThreadInfo>>&);
 
 		/*!
 		** \brief Get the number of jobs waiting to be executed

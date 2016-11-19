@@ -392,60 +392,28 @@ namespace Job
 	}
 
 
-
-
-	namespace // anonymous
+	void QueueService::activitySnapshot(std::vector<std::unique_ptr<ThreadInfo>>& out)
 	{
-
-		struct QueueActivityPredicate final
-		{
-			using ThreadInfoType = QueueService::ThreadInfo;
-			using VectorType = ThreadInfoType::Vector;
-
-			QueueActivityPredicate(VectorType* out)
-				: pList(out)
-			{
-				pList->clear();
-			}
-
-			template<class ThreadPtrT>
-			bool operator () (const ThreadPtrT& thread) const
-			{
-				ThreadInfoType* info = new ThreadInfoType();
-				info->thread = thread;
-				if (!(!(info->thread)))
-				{
-					info->job = thread->currentJob();
-					if (!(!(info->job)))
-					{
-						// We have a job which is currently working !
-						info->hasJob = true;
-						info->job->fillInformation(*info);
-						pList->push_back(info);
-						return true;
-					}
-				}
-				info->hasJob = false;
-				info->state = Yuni::Job::State::idle;
-				info->canceling = false;
-				info->progression = 0;
-				pList->push_back(info);
-				return true;
-			}
-
-		private:
-			mutable VectorType* pList;
-		};
-
-	} // anonymous namespace
-
-
-	void QueueService::activitySnapshot(QueueService::ThreadInfo::Vector& out)
-	{
-		QueueActivityPredicate predicate(&out);
+		out.clear();
 		MutexLocker locker(*this);
-		if (pThreads)
-			((ThreadArray*) pThreads)->foreachThread(predicate);
+		if (!pThreads)
+			return;
+		((ThreadArray*) pThreads)->foreachThread([&] (auto& thread) -> bool
+		{
+			auto details = std::make_unique<QueueService::ThreadInfo>();
+			details->thread = thread;
+			if (!(!(details->thread)))
+			{
+				details->job = thread->currentJob();
+				if (!(!(details->job))) // job currently executing
+				{
+					details->hasJob = true;
+					details->job->fillInformation(*details);
+				}
+			}
+			out.emplace_back(std::move(details));
+			return true;
+		});
 	}
 
 
