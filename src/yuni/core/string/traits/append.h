@@ -203,7 +203,6 @@ namespace CString
 	public:
 		static void Perform(CStringT& s, const Yuni::UTF8::Char& rhs)
 		{
-			assert(&rhs != NULL);
 			rhs.write(s);
 		}
 	};
