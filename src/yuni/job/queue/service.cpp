@@ -22,35 +22,28 @@ namespace Yuni
 namespace Job
 {
 
-	enum
+	namespace
 	{
-		maxNumberOfThreads = 512,
-	};
 
+	constexpr static uint32_t maxNumberOfThreads = 512;
 
-	typedef Yuni::Thread::Array<Yuni::Private::QueueService::QueueThread>  ThreadArray;
+	using ThreadArray = Yuni::Thread::Array<Yuni::Private::QueueService::QueueThread>;
 
-
-
-	static inline uint OptimalCPUCount()
+	inline uint32_t optimalCPUCount()
 	{
-		uint count = System::CPU::Count();
-		if (count < 1)
-			return 1;
-		if (count > 2)
-			return count - 1;
-		return count;
+		auto count = System::CPU::Count();
+		return (count > 2) ? (count - 1) : (count < 1 ? 1 : count);
 	}
 
 
-
+	} // anonymous namespace
 
 
 
 
 	QueueService::QueueService()
 	{
-		uint count = OptimalCPUCount();
+		auto count = optimalCPUCount();
 		pMinimumThreadCount = count;
 		pMaximumThreadCount = count;
 	}
@@ -58,10 +51,9 @@ namespace Job
 
 	QueueService::QueueService(bool autostart)
 	{
-		uint count = OptimalCPUCount();
+		auto count = optimalCPUCount();
 		pMinimumThreadCount = count;
 		pMaximumThreadCount = count;
-
 		if (autostart)
 			start();
 	}
@@ -79,10 +71,9 @@ namespace Job
 		if (count > maxNumberOfThreads) // hard-coded value
 			return false;
 		if (0 == count) // default value
-			count = OptimalCPUCount();
+			count = optimalCPUCount();
 
 		MutexLocker locker(*this);
-
 		// checking for the lower bound
 		if (pMinimumThreadCount > count)
 			pMinimumThreadCount = count;
@@ -104,7 +95,7 @@ namespace Job
 		if (count > maxNumberOfThreads) // hard-coded value
 			return false;
 		if (0 == count)
-			count = OptimalCPUCount();
+			count = optimalCPUCount();
 
 		MutexLocker locker(*this);
 
@@ -141,7 +132,7 @@ namespace Job
 			minv = maxv;
 		if (maxv == 0)
 		{
-			maxv = OptimalCPUCount();
+			maxv = optimalCPUCount();
 			minv = maxv;
 		}
 
@@ -165,7 +156,6 @@ namespace Job
 
 			// alias to the thread pool
 			ThreadArray& array = *((ThreadArray*) pThreads);
-
 			// recreate the thread pool
 			// adding the minimum number of threads
 			array.clear();
@@ -174,7 +164,6 @@ namespace Job
 
 			// Start all threads at once
 			array.start();
-
 			// Ok now we have started
 			pStatus = State::running;
 		}
@@ -185,7 +174,6 @@ namespace Job
 	void QueueService::stop(uint timeout)
 	{
 		ThreadArray* threads; // the thread pool
-
 		// getting the thread pool
 		{
 			MutexLocker locker(*this);
@@ -204,12 +192,10 @@ namespace Job
 			threads->stop(timeout);
 			delete threads;
 		}
-
 		MutexLocker locker(*this);
 		// marking the queue service as stopped, just in case
 		// (thread workers should already marked us as 'stopped')
 		pStatus = State::stopped;
-
 		// signalling that the queueservice is stopped. This signal
 		// will come after pSignalAllThreadHaveStopped in this case
 		pSignalShouldStop.notify();
@@ -411,16 +397,13 @@ namespace Job
 	namespace // anonymous
 	{
 
-		class QueueActivityPredicate final
+		struct QueueActivityPredicate final
 		{
-		public:
-			//!
-			typedef QueueService::ThreadInfo ThreadInfoType;
-			typedef ThreadInfoType::Vector VectorType;
+			using ThreadInfoType = QueueService::ThreadInfo;
+			using VectorType = ThreadInfoType::Vector;
 
-		public:
-			QueueActivityPredicate(VectorType* out) :
-				pList(out)
+			QueueActivityPredicate(VectorType* out)
+				: pList(out)
 			{
 				pList->clear();
 			}
@@ -468,9 +451,5 @@ namespace Job
 
 
 
-
-
-
 } // namespace Job
 } // namespace Yuni
-

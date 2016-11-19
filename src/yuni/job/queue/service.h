@@ -282,9 +282,9 @@ namespace Job
 		// Scheduler
 
 		//! The minimum number of threads [must be protected by the internal mutex]
-		volatile uint pMinimumThreadCount;
+		volatile uint32_t pMinimumThreadCount = 1;
 		//! The maximum number of threads [must be protected by the internal mutex]
-		volatile uint pMaximumThreadCount;
+		volatile uint32_t pMaximumThreadCount = 1;
 		//! Array of threads
 		volatile void* pThreads = nullptr;
 
