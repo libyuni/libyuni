@@ -70,19 +70,19 @@ namespace Job
 	{
 	public:
 		//! Ancestor
-		typedef IIntrusiveSmartPtr<IJob, false>  Ancestor;
+		using Ancestor = IIntrusiveSmartPtr<IJob, false>;
 		//! The most suitable smart pointer for the class
-		typedef Ancestor::SmartPtrType<IJob>::PtrThreadSafe Ptr;
+		using Ptr = Ancestor::SmartPtrType<IJob>::PtrThreadSafe;
 		//! The threading policy
-		typedef Ancestor::ThreadingPolicy ThreadingPolicy;
+		using ThreadingPolicy = Ancestor::ThreadingPolicy;
 		//! List of jobs
-		typedef std::list<Ptr> List;
+		using List = std::list<Ptr>;
 
 	public:
 		//! \name Contructor & Destructor
 		//@{
 		//! Default constructor
-		IJob();
+		IJob() = default;
 		//! Destructor
 		virtual ~IJob();
 		//@}
@@ -146,14 +146,10 @@ namespace Job
 		template<class T> void fillInformation(T& info);
 
 	protected:
-		/*!
-		** \brief Implement this method to define your own time-consuming task
-		*/
+		//! Implement this method to define your own time-consuming task
 		virtual void onExecute() = 0;
 
-		/*!
-		** \brief Set the progression in percent (0..100)
-		*/
+		//! Set the progression in percent (0..100)
 		void progression(const int p);
 
 		/*!
@@ -192,7 +188,7 @@ namespace Job
 		//! Flag to cancel the work
 		Atomic::Bool pCanceling;
 		//! The attached thread to this job, if any
-		ThreadingPolicy::Volatile<Thread::IThread*>::Type pThread;
+		ThreadingPolicy::Volatile<Thread::IThread*>::Type pThread = nullptr;
 
 		// our friends !
 		template<class JobT> friend class Yuni::Private::QueueService::JobAccessor;
@@ -207,4 +203,4 @@ namespace Job
 } // namespace Job
 } // namespace Yuni
 
-# include "job.hxx"
+#include "job.hxx"

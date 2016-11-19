@@ -18,11 +18,6 @@ namespace Yuni
 namespace Job
 {
 
-	IJob::IJob()
-		: pThread(nullptr)
-	{}
-
-
 	IJob::~IJob()
 	{
 		assert(pThread == NULL and "A job can not be attached to a thread when destroyed");
