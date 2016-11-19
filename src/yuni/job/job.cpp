@@ -64,7 +64,9 @@ namespace Job
 			onExecute();
 		}
 		catch (...)
-		{}
+		{
+			uncaughtException();
+		}
 
 		// The state must be reset to idle as soon as possible while the
 		// other values are still valid.

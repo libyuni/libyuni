@@ -149,6 +149,9 @@ namespace Job
 		//! Implement this method to define your own time-consuming task
 		virtual void onExecute() = 0;
 
+		//! An unknown exception has been received while executing the job
+		virtual void uncaughtException() {}
+
 		//! Set the progression in percent (0..100)
 		void progression(const int p);
 
