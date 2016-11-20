@@ -33,11 +33,10 @@
 
 #ifdef __cplusplus /* Only with a C++ Compiler */
 
-/*!
-** \brief The Yuni Framework
-*/
-namespace Yuni
-{}
+//! The Yuni Framework
+namespace Yuni {}
+//! Lowercase form for the yuni namespace
+namespace yuni = ::Yuni;
 
 /* nullptr */
 #include "core/system/nullptr.h"
