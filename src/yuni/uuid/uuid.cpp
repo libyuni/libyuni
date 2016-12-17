@@ -89,30 +89,24 @@ namespace Yuni
 			#ifdef YUNI_OS_WINDOWS
 			{
 				GUID winguid;
-				if (S_OK == CoCreateGuid(&winguid))
+				if (S_OK == ::CoCreateGuid(&winguid))
 				{
-					m_value.ubytes =
-					{
-						(winguid.Data1 >> 24) & 0xFF,
-						(winguid.Data1 >> 16) & 0xFF,
-						(winguid.Data1 >> 8) & 0xFF,
-						(winguid.Data1) & 0xff,
-
-						(winguid.Data2 >> 8) & 0xFF,
-						(winguid.Data2) & 0xff,
-
-						(winguid.Data3 >> 8) & 0xFF,
-						(winguid.Data3) & 0xFF,
-
-						winguid.Data4[0],
-						winguid.Data4[1],
-						winguid.Data4[2],
-						winguid.Data4[3],
-						winguid.Data4[4],
-						winguid.Data4[5],
-						winguid.Data4[6],
-						winguid.Data4[7]
-					};
+					m_value.ubytes[0] = static_cast<uchar>((winguid.Data1 >> 24) & 0xFF);
+					m_value.ubytes[1] = (winguid.Data1 >> 16) & 0xFF;
+					m_value.ubytes[2] = (winguid.Data1 >> 8) & 0xFF;
+					m_value.ubytes[3] = (winguid.Data1) & 0xFF;
+					m_value.ubytes[4] = static_cast<uchar>((winguid.Data2 >> 8) & 0xFF);
+					m_value.ubytes[5] = static_cast<uchar>((winguid.Data2) & 0xFF);
+					m_value.ubytes[6] = static_cast<uchar>((winguid.Data3 >> 8) & 0xFF);
+					m_value.ubytes[7] = static_cast<uchar>((winguid.Data3) & 0xFF);
+					m_value.ubytes[8] = winguid.Data4[0];
+					m_value.ubytes[9] = winguid.Data4[1];
+					m_value.ubytes[10] = winguid.Data4[2];
+					m_value.ubytes[11] = winguid.Data4[3];
+					m_value.ubytes[12] = winguid.Data4[4];
+					m_value.ubytes[13] = winguid.Data4[5];
+					m_value.ubytes[14] = winguid.Data4[6];
+					m_value.ubytes[15] = winguid.Data4[7];
 					return;
 				}
 			}
