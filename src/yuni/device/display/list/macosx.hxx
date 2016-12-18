@@ -58,12 +58,9 @@ void cocoaGetAllAvailableModesUseful(CGDirectDisplayID display, SmartPtr<Ordered
 {
 	// get a list of all possible display modes for this system.
 	// >= 10.6 is required for CGDisplayCopyAllDisplayModes
-
 	CFArrayRef availableModes = CGDisplayCopyAllDisplayModes(display, NULL);
 	if (!availableModes)
 		return;
-
-	// Getting the current bits per pixels value
 	uint currentModeBitsPerPixel;
 	{
 		CGDisplayModeRef mode = CGDisplayCopyDisplayMode(display);
@@ -75,14 +72,12 @@ void cocoaGetAllAvailableModesUseful(CGDirectDisplayID display, SmartPtr<Ordered
 		currentModeBitsPerPixel = bitDepthFromDisplayMode(mode);
 		CGDisplayModeRelease(mode);
 	}
-
 	uint numberOfAvailableModes = (uint) CFArrayGetCount(availableModes);
 	for (uint i = 0; i != numberOfAvailableModes; ++i)
 	{
 		CGDisplayModeRef mode = (CGDisplayModeRef) CFArrayGetValueAtIndex(availableModes, i);
 		if (!mode)
 			continue;
-
 		// we are only interested in modes with the same bits per pixel as current.
 		// to allow for switching from fullscreen to windowed modes.
 		// that are safe for this hardward
@@ -90,12 +85,10 @@ void cocoaGetAllAvailableModesUseful(CGDirectDisplayID display, SmartPtr<Ordered
 		uint bitsPerPixel = bitDepthFromDisplayMode(mode);
 		if (bitsPerPixel != currentModeBitsPerPixel)
 			continue;
-
 		uint width  = (uint) CGDisplayModeGetWidth(mode);
 		uint height = (uint) CGDisplayModeGetHeight(mode);
 		(*res) [width][height][(uint8) bitsPerPixel] = true;
 	}
-
 	CFRelease(availableModes);
 }
 
@@ -105,11 +98,9 @@ void DictionaryValueToString(String& out, CFStringRef formatString, ...)
 	CFStringRef resultString;
 	CFDataRef data;
 	va_list argList;
-
 	va_start(argList, formatString);
 	resultString = CFStringCreateWithFormatAndArguments(NULL, NULL, formatString, argList);
 	va_end(argList);
-
 	data = CFStringCreateExternalRepresentation(NULL, resultString, CFStringGetSystemEncoding(), '?');
 	if (data != NULL)
 	{
@@ -120,7 +111,6 @@ void DictionaryValueToString(String& out, CFStringRef formatString, ...)
 
 		CFRelease(data);
 	}
-
 	CFRelease(resultString);
 }
 
@@ -135,51 +125,34 @@ void DictionaryValueToString(String& out, CFStringRef formatString, ...)
 */
 void refreshForCocoa(MonitorsFound& lst)
 {
-	// All displays
 	CGDirectDisplayID displayArray [YUNI_DEVICE_MONITOR_COUNT_HARD_LIMIT];
-	// The count of display
 	CGDisplayCount numDisplays;
-
-	// Grab all available displays
 	CGGetOnlineDisplayList(YUNI_DEVICE_MONITOR_COUNT_HARD_LIMIT, displayArray, &numDisplays);
 	if (0 == numDisplays)
 		return;
-
-	// Product name
 	String monitorProductName;
-
-	// Browse all displays
 	for (uint i = 0; i < numDisplays; ++i)
 	{
 		const CGDirectDisplayID display = displayArray[i];
-
 		monitorProductName.clear();
-
-		// Informations about the display, such as its product name
 		io_connect_t displayPort = CGDisplayIOServicePort(display);
 		if (displayPort != MACH_PORT_NULL)
 		{
 			CFDictionaryRef dict = IODisplayCreateInfoDictionary(displayPort, 0);
-
 			CFDictionaryRef names = (CFDictionaryRef)CFDictionaryGetValue(dict, CFSTR(kDisplayProductName));
-			// Count items in the dictionary
 			CFIndex count = CFDictionaryGetCount(names);
-
 			if (count)
 			{
 				CFTypeRef* keys   = (CFTypeRef*) ::malloc((uint) count * sizeof(CFTypeRef));
 				CFTypeRef* values = (CFTypeRef*) ::malloc((uint) count * sizeof(CFTypeRef));
 				CFDictionaryGetKeysAndValues(names, (const void**) keys, (const void**) values);
-
 				DictionaryValueToString(monitorProductName, CFSTR("%@"), values[0]);
 				monitorProductName.trim(" \r\n\t");
-
 				::free(keys);
 				::free(values);
 			}
 			CFRelease(dict);
 		}
-
 		// int width  = CGDisplayPixelsWide(display);
 		// int height = CGDisplayPixelsHigh(display);
 		// int bpp    = CGDisplayBitsPerPixel(display);
@@ -188,13 +161,10 @@ void refreshForCocoa(MonitorsFound& lst)
 		bool ha          = CGDisplayUsesOpenGLAcceleration(display);
 		// uint32_t modelNumber = CGDisplayModelNumber(display);
 		// uint32_t serialNumer = CGDisplaySerialNumber(display);
-
 		Monitor::Ptr newMonitor(new Monitor(monitorProductName,
 											(Monitor::Handle)display, mainDisplay, ha, builtin));
-
 		SmartPtr<OrderedResolutions> res(new OrderedResolutions());
 		cocoaGetAllAvailableModesUseful(display, res);
-
 		// Add it to the list
 		lst.push_back(SingleMonitorFound(newMonitor, res));
 	}

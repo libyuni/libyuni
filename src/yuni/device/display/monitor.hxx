@@ -62,8 +62,6 @@ namespace Display
 	}
 
 
-
-
 } // namespace Display
 } // namespace Device
 } // namespace Yuni

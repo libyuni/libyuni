@@ -61,7 +61,6 @@ namespace Display
 	List::List()
 		: pNullMonitor(new Monitor(YUNI_DEVICE_DISPLAY_LIST_FAIL_SAFE_NAME))
 	{
-		// Adding the default monitor
 		pMonitors.push_back(pNullMonitor);
 		pPrimary = pNullMonitor;
 	}
@@ -85,32 +84,25 @@ namespace Display
 
 	bool List::refresh(uint32 minWidth, uint32 minHeight, uint8 minDepth)
 	{
-		// No [primary] device for now
 		pPrimary = pNullMonitor;
-		// No monitor for now
 		pMonitors.clear();
-
 		// Get the list of monitors from a specific OS-Dependant implementation
 		// into a temporary mapo
 		MonitorsFound lst;
 		refreshOSSpecific(lst);
-
 		// We will browse each monitor found to see if it is suitable for our needs
 		// In this case, it will be added to the result list
 		const MonitorsFound::iterator& itEnd = lst.end();
 		for (MonitorsFound::iterator it = lst.begin(); it != itEnd; ++it)
 		{
 			OrderedResolutions& resolutions = *(it->second);
-
 			// A monitor without any resolution is useless
 			if (resolutions.empty()) // no available resolutions
 				continue;
-
 			// Keeping a reference to our monitor for code clarity
 			Monitor::Ptr& monitor = it->first;
 			// Removing all its default resolutions
 			monitor->clear();
-
 			// Browsing all resolutions, in the reverse order
 			// It is important since we must have the higher resolution at the
 			// beginning
@@ -121,17 +113,14 @@ namespace Display
 					// j->first  : width
 					// k->first  : height
 					// k->second : color depth
-
 					// Do not accept resolution with a width below minWidth
 					if (j->first < minWidth)
 						continue;
-
 					for (std::map<uint32, std::map<uint8,bool> >::reverse_iterator k = j->second.rbegin(); k != j->second.rend(); ++k)
 					{
 						// Do not accept resolutions with a height below minHeight
 						if (k->first < minHeight)
 							continue;
-
 						for (std::map<uint8,bool>::reverse_iterator l = k->second.rbegin(); l != k->second.rend(); ++l)
 						{
 							if (l->first >= minDepth)
@@ -140,19 +129,16 @@ namespace Display
 					}
 				}
 			}
-
 			if (not monitor->resolutions().empty()) // at least one resolution
 			{
 				pMonitors.push_back(monitor);
 				if (monitor->primary())
 					pPrimary = monitor;
 			}
-
 			// Hard limit
 			if (pMonitors.size() == YUNI_DEVICE_MONITOR_COUNT_HARD_LIMIT)
 				break;
 		}
-
 		// No available monitor/resolution
 		// The list must not be empty
 		if (pMonitors.empty())
@@ -186,9 +172,6 @@ namespace Display
 		}
 		return pNullMonitor;
 	}
-
-
-
 
 
 } // namespace Display

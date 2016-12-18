@@ -86,10 +86,10 @@ namespace Display
 
 	std::ostream& Resolution::print(std::ostream& out) const
 	{
-	  out << pWidth << "x" << pHeight;
-	  if (pBitsPerPixel)
-	    out << " (" << (int) pBitsPerPixel << "Bits)";
-	  return out;
+		out << pWidth << "x" << pHeight;
+		if (pBitsPerPixel)
+			out << " (" << (int) pBitsPerPixel << "Bits)";
+		return out;
 	}
 
 

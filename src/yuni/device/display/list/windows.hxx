@@ -30,18 +30,15 @@ SingleMonitorFound* findMonitor(const wchar_t* monitorID, MonitorsFound& lst)
 	const int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, monitorID, -1, NULL, 0,  NULL, NULL);
 	if (sizeRequired <= 0)
 		return nullptr;
-
 	String newID;
 	newID.reserve((uint) sizeRequired);
 	WideCharToMultiByte(CP_UTF8, 0, monitorID, -1, (char*)newID.data(), sizeRequired,  NULL, NULL);
 	newID.resize(((uint) sizeRequired) - 1);
-
 	uint i;
 	for (i = 0; i < lst.size() and lst[i].first->guid() != newID; ++i)
 	{
 		// does nothing
 	}
-
 	return (i >= lst.size()) ? nullptr : &lst[i];
 }
 
@@ -51,7 +48,6 @@ void addResolutions(DISPLAY_DEVICEW& device, SmartPtr<OrderedResolutions> res)
 	DEVMODEW devMode;
 	devMode.dmSize = (WORD)sizeof(devMode);
 	devMode.dmDriverExtra = 32;
-
 	for (uint i = 0; EnumDisplaySettingsW(device.DeviceName, i, &devMode); ++i)
 	{
 		(*res)[devMode.dmPelsWidth][devMode.dmPelsHeight][(uint8)devMode.dmBitsPerPel] = true;
@@ -90,7 +86,6 @@ void refreshForWindows(MonitorsFound& lst)
 				const int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, monitorDisplayDevice.DeviceString, -1, NULL, 0,  NULL, NULL);
 				if (sizeRequired <= 0)
 					continue;
-
 				String newID;
 				newID.reserve((uint) sizeRequired);
 				WideCharToMultiByte(CP_UTF8, 0, monitorDisplayDevice.DeviceString, -1, (char*)newID.data(), sizeRequired,  NULL, NULL);
@@ -104,10 +99,8 @@ void refreshForWindows(MonitorsFound& lst)
 				monitor = monitorWithRes->first;
 				res = monitorWithRes->second;
 			}
-
 			// Add associated resolutions
 			addResolutions(displayDevice, res);
-
 			// Add the monitor and its resolutions to the list if necessary
 			if (newMonitor)
 				lst.push_back(SingleMonitorFound(monitor, res));
@@ -125,7 +118,6 @@ void refreshOSSpecific(MonitorsFound& lst)
 
 
 } // anonymous namespace
-
 
 
 } // namespace Display

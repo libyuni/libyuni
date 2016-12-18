@@ -105,7 +105,6 @@ namespace Display
 			if (!pResolutions.empty())
 				bld << (*pResolutions.begin())->toString();
 			bld << '|' << pPrimary << '|' << pBuiltin << '|' << pHardwareAcceleration;
-
 			Hash::Checksum::MD5 md5;
 			pMD5Cache = md5.fromString(bld);
 		}

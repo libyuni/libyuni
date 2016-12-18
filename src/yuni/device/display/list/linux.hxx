@@ -32,15 +32,12 @@ void refreshForX11(MonitorsFound& lst)
 	if (display)
 	{
 		const Monitor::Handle scCount = ScreenCount(display);
-
 		for (Monitor::Handle i = 0; i != scCount; ++i)
 		{
 			int depCount;
 			int* depths = XListDepths(display, i, &depCount);
-
 			Monitor::Ptr newMonitor(new Monitor(String(), i, (0 == i), true, false));
 			SmartPtr<OrderedResolutions> res(new OrderedResolutions());
-
 			// All resolutions
 			int count;
 			XRRScreenSize* list = XRRSizes(display, i, &count);
@@ -54,7 +51,6 @@ void refreshForX11(MonitorsFound& lst)
 						(*res)[it->width][it->height][(uint8) d] = true;
 				}
 			}
-
 			lst.push_back(SingleMonitorFound(newMonitor, res));
 			XFree(depths);
 		}
