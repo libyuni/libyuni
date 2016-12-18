@@ -58,9 +58,9 @@ namespace Display
 
 	public:
 		//! An interator
-		typedef MonitorVector::iterator iterator;
+		using iterator = MonitorVector::iterator;
 		//! A const iterator
-		typedef MonitorVector::const_iterator const_iterator;
+		using const_iterator = MonitorVector::const_iterator;
 
 	public:
 		//! \name Constructors &* Destructor

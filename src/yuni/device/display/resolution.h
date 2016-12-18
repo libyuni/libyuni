@@ -31,7 +31,7 @@ namespace Display
 	{
 	public:
 		//! The most suitable smart pointer to use with the class `Resolution`
-		typedef SmartPtr<Resolution> Ptr;
+		using Ptr = SmartPtr<Resolution>;
 
 		enum
 		{
@@ -47,7 +47,7 @@ namespace Display
 		};
 
 		//! Vector of resolutions
-		typedef std::vector<Ptr>  Vector;
+		using Vector = std::vector<Ptr>;
 
 	public:
 		//! \name Constructors
