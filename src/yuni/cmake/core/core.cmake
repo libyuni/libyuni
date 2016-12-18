@@ -77,11 +77,6 @@ endif()
 
 add_library(yuni-static-core STATIC
 		yuni.h
-		core/any/any.cpp
-		core/any/any.h
-		core/any/any.hxx
-		core/any/any.private.h
-		core/any.h
 		core/atomic/bool.h
 		core/atomic/int.h
 		core/atomic/int.hxx
