@@ -22,53 +22,54 @@ namespace Device
 namespace Display
 {
 
-	namespace // anonymous
+namespace // anonymous
+{
+
+
+void refreshForX11(MonitorsFound& lst)
+{
+	::Display* display = XOpenDisplay(NULL);
+	if (display)
 	{
+		const Monitor::Handle scCount = ScreenCount(display);
 
-		void refreshForX11(MonitorsFound& lst)
+		for (Monitor::Handle i = 0; i != scCount; ++i)
 		{
-			::Display* display = XOpenDisplay(NULL);
-			if (display)
+			int depCount;
+			int* depths = XListDepths(display, i, &depCount);
+
+			Monitor::Ptr newMonitor(new Monitor(String(), i, (0 == i), true, false));
+			SmartPtr<OrderedResolutions> res(new OrderedResolutions());
+
+			// All resolutions
+			int count;
+			XRRScreenSize* list = XRRSizes(display, i, &count);
+			for (int i = 0; i < count; ++i)
 			{
-				const Monitor::Handle scCount = ScreenCount(display);
-
-				for (Monitor::Handle i = 0; i != scCount; ++i)
+				XRRScreenSize* it = list + i;
+					for (int j = 0; j < depCount; ++j)
 				{
-					int depCount;
-					int* depths = XListDepths(display, i, &depCount);
-
-					Monitor::Ptr newMonitor(new Monitor(String(), i, (0 == i), true, false));
-					SmartPtr<OrderedResolutions> res(new OrderedResolutions());
-
-					// All resolutions
-					int count;
-					XRRScreenSize* list = XRRSizes(display, i, &count);
-					for (int i = 0; i < count; ++i)
-					{
-						XRRScreenSize* it = list + i;
-							for (int j = 0; j < depCount; ++j)
-						{
-							const int d = *(depths + j);
-							if (d == 8 || d == 16 || d == 24 || d == 32)
-								(*res)[it->width][it->height][(uint8) d] = true;
-						}
-					}
-
-					lst.push_back(SingleMonitorFound(newMonitor, res));
-					XFree(depths);
+					const int d = *(depths + j);
+					if (d == 8 || d == 16 || d == 24 || d == 32)
+						(*res)[it->width][it->height][(uint8) d] = true;
 				}
-				XCloseDisplay(display);
 			}
+
+			lst.push_back(SingleMonitorFound(newMonitor, res));
+			XFree(depths);
 		}
+		XCloseDisplay(display);
+	}
+}
 
 
-		void refreshOSSpecific(MonitorsFound& lst)
-		{
-			refreshForX11(lst);
-		}
+void refreshOSSpecific(MonitorsFound& lst)
+{
+	refreshForX11(lst);
+}
 
-	} // anonymous namespace
 
+} // anonymous namespace
 
 
 } // namespace Display
