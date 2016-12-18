@@ -38,7 +38,7 @@ namespace Display
 	namespace // anonymous
 	{
 
-		static uint bitDepthFromDisplayMode(CGDisplayModeRef mode)
+		uint bitDepthFromDisplayMode(CGDisplayModeRef mode)
 		{
 			CFStringRef pixEnc = CGDisplayModeCopyPixelEncoding(mode);
 
@@ -54,7 +54,7 @@ namespace Display
 
 
 
-		static void cocoaGetAllAvailableModesUseful(CGDirectDisplayID display, SmartPtr<OrderedResolutions>& res)
+		void cocoaGetAllAvailableModesUseful(CGDirectDisplayID display, SmartPtr<OrderedResolutions>& res)
 		{
 			// get a list of all possible display modes for this system.
 			// >= 10.6 is required for CGDisplayCopyAllDisplayModes
@@ -100,7 +100,7 @@ namespace Display
 		}
 
 
-		static void DictionaryValueToString(String& out, CFStringRef formatString, ...)
+		void DictionaryValueToString(String& out, CFStringRef formatString, ...)
 		{
 			CFStringRef resultString;
 			CFDataRef data;
@@ -135,7 +135,7 @@ namespace Display
 		 ** \see http://developer.apple.com/documentation/GraphicsImaging/Conceptual/OpenGL-MacProgGuide/opengl_quartz_services/chapter_952_section_2.html
 		 ** \see http://www.cocoabuilder.com/archive/message/cocoa/2006/9/7/170773
 		 */
-		static void refreshForCocoa(MonitorsFound& lst)
+		void refreshForCocoa(MonitorsFound& lst)
 		{
 			// All displays
 			CGDirectDisplayID displayArray [YUNI_DEVICE_MONITOR_COUNT_HARD_LIMIT];
@@ -203,7 +203,7 @@ namespace Display
 		}
 
 
-		static inline void refreshOSSpecific(MonitorsFound& lst)
+		void refreshOSSpecific(MonitorsFound& lst)
 		{
 			refreshForCocoa(lst);
 		}

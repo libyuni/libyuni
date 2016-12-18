@@ -25,7 +25,7 @@ namespace Display
 	namespace // anonymous
 	{
 
-		static void refreshForX11(MonitorsFound& lst)
+		void refreshForX11(MonitorsFound& lst)
 		{
 			::Display* display = XOpenDisplay(NULL);
 			if (display)
@@ -62,7 +62,7 @@ namespace Display
 		}
 
 
-		static inline void refreshOSSpecific(MonitorsFound& lst)
+		void refreshOSSpecific(MonitorsFound& lst)
 		{
 			refreshForX11(lst);
 		}

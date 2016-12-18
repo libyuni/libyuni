@@ -23,7 +23,7 @@ namespace Display
 	namespace // anonymous
 	{
 
-		static SingleMonitorFound* findMonitor(const wchar_t* monitorID, MonitorsFound& lst)
+		SingleMonitorFound* findMonitor(const wchar_t* monitorID, MonitorsFound& lst)
 		{
 			// Converting from wide char to multibyte in order to compare with Yuni::String
 			const int sizeRequired = WideCharToMultiByte(CP_UTF8, 0, monitorID, -1, NULL, 0,  NULL, NULL);
@@ -45,7 +45,7 @@ namespace Display
 		}
 
 
-		static void addResolutions(DISPLAY_DEVICEW& device, SmartPtr<OrderedResolutions> res)
+		void addResolutions(DISPLAY_DEVICEW& device, SmartPtr<OrderedResolutions> res)
 		{
 			DEVMODEW devMode;
 			devMode.dmSize = (WORD)sizeof(devMode);
@@ -61,7 +61,7 @@ namespace Display
 		/*!
 		 ** \brief Windows-specific implementation for the monitor / resolution list refresh
 		 */
-		static void refreshForWindows(MonitorsFound& lst)
+		void refreshForWindows(MonitorsFound& lst)
 		{
 			DISPLAY_DEVICEW displayDevice;
 			displayDevice.cb = (DWORD)sizeof(DISPLAY_DEVICEW);
@@ -118,7 +118,7 @@ namespace Display
 
 
 
-		static inline void refreshOSSpecific(MonitorsFound& lst)
+		void refreshOSSpecific(MonitorsFound& lst)
 		{
 			refreshForWindows(lst);
 		}
