@@ -69,8 +69,6 @@ namespace Display
 		List();
 		//! Copy constructor (the copy will share the same informations)
 		List(const List& c);
-		//! Destructor
-		~List() {}
 		//@}
 
 		//! \name Refresh
