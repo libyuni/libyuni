@@ -51,11 +51,9 @@ namespace Thread
 		YUNI_STATIC_ASSERT((Static::InheritsFrom<T, IThread>::Yes), ThreadArray_T_MustInheritFrom_IThread);
 		//! Thread list
 		typedef std::vector<typename T::Ptr> ThreadList;
-		enum
-		{
-			//! A hard limit value for the number of threads in the pool
-			maxThreadsLimit = 1024,
-		};
+		//! A hard limit value for the number of threads in the pool
+		constexpr static uint32_t maxThreadsLimit = 1024u;
+
 
 	public:
 		//! \name Constructor
