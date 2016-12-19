@@ -219,15 +219,6 @@ namespace Thread
 
 
 	private:
-		/*!
-		** \brief Append N threads to the list
-		** \internal We use a temporary variable `autostart` to avoid the
-		**   use of the atomic one `pAutoStart` when possible and to
-		**   avoid changes while adding new threads.
-		*/
-		void appendNThreadsWL(uint n, bool autostart);
-
-	private:
 		# ifdef YUNI_OS_MSVC
 		// export instanciation of STL class
 		class YUNI_DECL ThreadList; // see http://support.microsoft.com/kb/168958/en-us/
