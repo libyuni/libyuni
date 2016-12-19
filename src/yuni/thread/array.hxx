@@ -37,7 +37,6 @@ namespace Thread
 	inline Array<T>::Array(uint n)
 		: pAutoStart(false)
 	{
-		// Bound checks
 		if (n > maxThreadsLimit)
 			n = maxThreadsLimit;
 		appendNThreadsWL(n, false);
@@ -48,7 +47,6 @@ namespace Thread
 	inline Array<T>::Array(uint n, bool autoStart)
 		: pAutoStart(autoStart)
 	{
-		// Bound checks
 		if (n > maxThreadsLimit)
 			n = maxThreadsLimit;
 		appendNThreadsWL(n, autoStart);
@@ -110,7 +108,6 @@ namespace Thread
 	{
 		if (autostart)
 			thread->start();
-		// Locking
 		typename ThreadingPolicy::MutexLocker locker(*this);
 		pList.push_back(thread);
 	}
@@ -119,7 +116,6 @@ namespace Thread
 	template<class T>
 	inline void Array<T>::push_back(typename T::Ptr thread)
 	{
-		// Locking
 		typename ThreadingPolicy::MutexLocker locker(*this);
 		pList.push_back(thread);
 	}
