@@ -54,9 +54,8 @@ namespace Yuni
 	** std::cout << uuid << std::endl;
 	** \endcode
 	*/
-	class YUNI_DECL UUID final
+	struct YUNI_DECL UUID final
 	{
-	public:
 		enum Flag
 		{
 			//! Set the UUID to null
@@ -65,7 +64,6 @@ namespace Yuni
 			fGenerate,
 		};
 
-	public:
 		//! \name Constructor
 		//@{
 		/*!
