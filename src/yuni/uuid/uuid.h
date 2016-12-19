@@ -54,12 +54,12 @@ namespace Yuni
 	*/
 	struct YUNI_DECL UUID final
 	{
-		enum Flag
+		enum class Flag
 		{
 			//! Set the UUID to null
-			fNull,
+			null,
 			//! Generate a new UUID
-			fGenerate,
+			generate,
 		};
 
 		//! \name Constructor
