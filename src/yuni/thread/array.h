@@ -58,7 +58,7 @@ namespace Thread
 	public:
 		//! \name Constructor
 		//@{
-		Array();
+		Array() = default;
 		Array(const Array& rhs);
 		explicit Array(uint n);
 		Array(uint n, bool autoStart);
@@ -236,7 +236,7 @@ namespace Thread
 		//! The list of threads in the pool
 		ThreadList pList;
 		//! Auto start thread (when created)
-		typename ThreadingPolicy::template Volatile<bool>::Type pAutoStart;
+		typename ThreadingPolicy::template Volatile<bool>::Type pAutoStart = false;
 
 	}; // class Array<T>
 
