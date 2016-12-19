@@ -164,7 +164,6 @@ namespace Yuni
 
 	void UUID::assign(AnyString string)
 	{
-		// remove useless whitespaces
 		string.trim();
 		char charOne, charTwo;
 		bool lookingForFirstChar = true;

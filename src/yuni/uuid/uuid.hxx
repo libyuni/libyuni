@@ -167,7 +167,6 @@ namespace CString
 			s.reserve(currentLength + 42); // at least 36 + 1 zero-terminated
 			Yuni::Private::UUID::Helper::WriteToCString((char*)s.data() + currentLength, rhs);
 			s.resize(currentLength + 36); // guid is 36-bytes length
-			//s.removeLast();
 		}
 
 	}; // class Append
@@ -198,5 +197,4 @@ namespace CString
 } // namespace Yuni
 
 
-// ostream
 std::ostream& operator << (std::ostream& out, const Yuni::UUID& rhs);
