@@ -164,12 +164,8 @@ namespace Thread
 		typename ThreadingPolicy::MutexLocker locker(*this);
 		// We can start all threads at once while locked because this operation
 		// should be fast enough (signal only).
-		if (not pList.empty())
-		{
-			const typename ThreadList::iterator end = pList.end();
-			for (typename ThreadList::iterator i = pList.begin(); i != end; ++i)
-				(*i)->start();
-		}
+		for (auto& ptr: pList)
+			ptr->start();
 	}
 
 
@@ -179,12 +175,8 @@ namespace Thread
 		typename ThreadingPolicy::MutexLocker locker(*this);
 		// We can ask to all threads to gracefully stop while locked because this operation
 		// should be fast enough (signal only).
-		if (not pList.empty())
-		{
-			const typename ThreadList::iterator end = pList.end();
-			for (typename ThreadList::iterator i = pList.begin(); i != end; ++i)
-				(*i)->gracefulStop();
-		}
+		for (auto& ptr: pList)
+			ptr->gracefulStop();
 	}
 
 
@@ -200,11 +192,8 @@ namespace Thread
 				return;
 			copy = pList;
 		}
-
-		// waiting for all threads
-		const typename ThreadList::iterator end = copy.end();
-		for (typename ThreadList::iterator i = copy.begin(); i != end; ++i)
-			(*i)->wait();
+		for (auto& ptr: copy)
+			ptr->wait();
 	}
 
 
@@ -220,11 +209,8 @@ namespace Thread
 				return;
 			copy = pList;
 		}
-
-		// waiting for all threads
-		const typename ThreadList::iterator end = copy.end();
-		for (typename ThreadList::iterator i = copy.begin(); i != end; ++i)
-			(*i)->wait(milliseconds);
+		for (auto& ptr: copy)
+			ptr->wait(milliseconds);
 	}
 
 
@@ -240,18 +226,14 @@ namespace Thread
 				return;
 			copy = pList;
 		}
-
-		const typename ThreadList::iterator end = copy.end();
-
 		// Asking to the last threads to stop by themselves as soon as possible
 		// This should be done early to make them stop asynchronously.
 		// We may earn a lot of time like this.
-		for (typename ThreadList::iterator i = copy.begin(); i != end; ++i)
-			(*i)->gracefulStop();
-
+		for (auto& ptr: copy)
+			ptr->gracefulStop();
 		// Now we can kill them if they don't cooperate...
-		for (typename ThreadList::iterator i = copy.begin(); i != end; ++i)
-			(*i)->stop(timeout);
+		for (auto& ptr: copy)
+			ptr->stop(timeout);
 	}
 
 
@@ -267,20 +249,17 @@ namespace Thread
 				return;
 			copy = pList;
 		}
-
-		const typename ThreadList::iterator end = copy.end();
-
 		// Asking to the last threads to stop by themselves as soon as possible
 		// This should be done early to make them stop asynchronously.
 		// We may earn a lot of time like this.
-		for (typename ThreadList::iterator i = copy.begin(); i != end; ++i)
-			(*i)->gracefulStop();
+		for (auto& ptr: copy)
+			ptr->gracefulStop();
 		// Now we can kill them if they don't cooperate...
-		for (typename ThreadList::iterator i = copy.begin(); i != end; ++i)
-			(*i)->stop(timeout);
+		for (auto& ptr: copy)
+			ptr->stop(timeout);
 		// And start them again
-		for (typename ThreadList::iterator i = copy.begin(); i != end; ++i)
-			(*i)->start();
+		for (auto& ptr: copy)
+			ptr->start();
 	}
 
 
@@ -290,12 +269,8 @@ namespace Thread
 		typename ThreadingPolicy::MutexLocker locker(*this);
 		// We can wake all threads up at once while locked because this operation
 		// should be fast enough (signal only).
-		if (not pList.empty())
-		{
-			const typename ThreadList::iterator end = pList.end();
-			for (typename ThreadList::iterator i = pList.begin(); i != end; ++i)
-				(*i)->wakeUp();
-		}
+		for (auto& ptr: pList)
+			ptr->wakeUp();
 	}
 
 
@@ -335,9 +310,8 @@ namespace Thread
 	{
 		typename ThreadingPolicy::MutexLocker lockerR(rhs);
 		typename ThreadingPolicy::MutexLocker locker(*this);
-		const typename ThreadList::const_iterator end = rhs.pList.end();
-		for (typename ThreadList::const_iterator i = rhs.pList.begin(); i != end; ++i)
-			pList.push_back(*i);
+		for (auto& ptr: rhs.pList)
+			pList.push_back(ptr);
 		return *this;
 	}
 
@@ -348,9 +322,8 @@ namespace Thread
 		typename Array<T>::Ptr keepReference = rhs;
 		typename ThreadingPolicy::MutexLocker lockerR(*keepReference);
 		typename ThreadingPolicy::MutexLocker locker(*this);
-		const typename ThreadList::const_iterator end = keepReference->pList.end();
-		for (typename ThreadList::const_iterator i = keepReference->pList.begin(); i != end; ++i)
-			pList.push_back(*i);
+		for (auto& ptr: keepReference->pList)
+			pList.push_back(ptr);
 		return *this;
 	}
 
@@ -360,9 +333,8 @@ namespace Thread
 	{
 		typename ThreadingPolicy::MutexLocker lockerR(rhs);
 		typename ThreadingPolicy::MutexLocker locker(*this);
-		const typename ThreadList::const_iterator end = rhs.pList.end();
-		for (typename ThreadList::const_iterator i = rhs.pList.begin(); i != end; ++i)
-			pList.push_back(*i);
+		for (auto& ptr: rhs.pList)
+			pList.push_back(ptr);
 		return *this;
 	}
 
@@ -373,9 +345,8 @@ namespace Thread
 		typename Array<T>::Ptr keepReference = rhs;
 		typename ThreadingPolicy::MutexLocker lockerR(*keepReference);
 		typename ThreadingPolicy::MutexLocker locker(*this);
-		const typename ThreadList::const_iterator end = keepReference->pList.end();
-		for (typename ThreadList::const_iterator i = keepReference->pList.begin(); i != end; ++i)
-			pList.push_back(*i);
+		for (auto& ptr: keepReference->pList)
+			pList.push_back(ptr);
 		return *this;
 	}
 
@@ -472,11 +443,9 @@ namespace Thread
 				return;
 			copy = pList;
 		}
-
-		const typename ThreadList::const_iterator end = copy.end();
-		for (typename ThreadList::const_iterator i = copy.begin(); i != end; ++i)
+		for (auto& ptr: copy)
 		{
-			if (not predicate(*i))
+			if (not predicate(ptr))
 				return;
 		}
 	}
@@ -496,11 +465,9 @@ namespace Thread
 				return;
 			copy = pList;
 		}
-
-		const typename ThreadList::iterator end = copy.end();
-		for (typename ThreadList::iterator i = copy.begin(); i != end; ++i)
+		for (auto& ptr: copy)
 		{
-			if (not predicate(*i))
+			if (not predicate(ptr))
 				return;
 		}
 	}
