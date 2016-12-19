@@ -14,8 +14,6 @@
 #include "../core/string.h"
 
 
-
-
 namespace Yuni
 {
 
@@ -89,14 +87,10 @@ namespace Yuni
 
 		//! \name UUID
 		//@{
-		/*!
-		** \brief Generate a new UUID
-		*/
+		//! Generate a new UUID
 		void generate();
 
-		/*!
-		** \brief Set the UUID to null
-		*/
+		//! Reset the UUID to null
 		void clear();
 
 		//! Get if the UUID is null (e.g. 000000000-0000-0000-0000-00000000000)
@@ -119,9 +113,7 @@ namespace Yuni
 
 		//! \name Hashing
 		//@{
-		/*!
-		** \brief Get the hash of the uuid
-		*/
+		//! hash of the uuid
 		size_t hash() const;
 		//@}
 
@@ -174,9 +166,6 @@ namespace Yuni
 		friend class Yuni::Private::UUID::Helper;
 
 	}; // class UUID
-
-
-
 
 
 } // namespace Yuni

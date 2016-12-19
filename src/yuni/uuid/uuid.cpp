@@ -23,7 +23,6 @@
 #include <iostream>
 
 
-
 namespace Yuni
 {
 
@@ -49,8 +48,6 @@ namespace Yuni
 		}
 
 	} // anonymous
-
-
 
 
 	void UUID::generate()
@@ -169,17 +166,14 @@ namespace Yuni
 	{
 		// remove useless whitespaces
 		string.trim();
-
 		char charOne, charTwo;
 		bool lookingForFirstChar = true;
-
 		uint32_t bindex = 0;
 		for (uint32_t i = 0; i != string.size(); ++i)
 		{
 			char ch = string[i];
 			if (ch == '-' or ch == '{')
 				continue;
-
 			if (lookingForFirstChar)
 			{
 				charOne = ch;
@@ -190,7 +184,6 @@ namespace Yuni
 				charTwo = ch;
 				m_value.ubytes[bindex++] = hexPairToChar(charOne, charTwo);
 				lookingForFirstChar = true;
-
 				if (bindex == 16)
 					break;
 			}
@@ -199,10 +192,6 @@ namespace Yuni
 
 
 } // namespace Yuni
-
-
-
-
 
 
 std::ostream& operator << (std::ostream& out, const Yuni::UUID& rhs)
