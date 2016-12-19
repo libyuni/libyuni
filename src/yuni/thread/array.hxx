@@ -19,12 +19,6 @@ namespace Thread
 {
 
 	template<class T>
-	inline Array<T>::Array()
-		: pAutoStart(false)
-	{}
-
-
-	template<class T>
 	Array<T>::Array(const Array<T>& rhs)
 	{
 		typename ThreadingPolicy::MutexLocker locker(rhs);
@@ -35,7 +29,6 @@ namespace Thread
 
 	template<class T>
 	inline Array<T>::Array(uint n)
-		: pAutoStart(false)
 	{
 		if (n > maxThreadsLimit)
 			n = maxThreadsLimit;
@@ -45,7 +38,7 @@ namespace Thread
 
 	template<class T>
 	inline Array<T>::Array(uint n, bool autoStart)
-		: pAutoStart(autoStart)
+		: pAutoStart{autoStart}
 	{
 		if (n > maxThreadsLimit)
 			n = maxThreadsLimit;
