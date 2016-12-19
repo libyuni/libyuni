@@ -207,27 +207,16 @@ namespace Thread
 		*/
 		typename T::Ptr operator [] (uint index) const;
 
-		//! Copy operator
 		Array& operator = (const Array& rhs);
-		//! Copy operator
 		Array& operator = (const Ptr& rhs);
-		//! Aggregate
 		Array& operator += (const Array& rhs);
-		//! Aggregate
 		Array& operator += (T* rhs);
-		//! Aggregate
 		Array& operator += (const typename T::Ptr& rhs);
-		//! Aggregate
 		Array& operator += (const Ptr& rhs);
-		//! Aggregate
 		Array& operator << (const Array& rhs);
-		//! Aggregate
 		Array& operator << (const Ptr& rhs);
-		//! Aggregate
 		Array& operator << (T* rhs);
-		//! Aggregate
 		Array& operator << (const typename T::Ptr& rhs);
-		//! Aggregate
 		//@}
 
 
