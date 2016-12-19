@@ -40,11 +40,8 @@ namespace Thread
 	};
 
 
-	enum
-	{
-		//! The default timeout for stopping a thread
-		defaultTimeout = 5000, // 5 seconds
-	};
+	//! The default timeout for stopping a thread
+	constexpr static uint32_t defaultTimeout = 5000; // 5 seconds
 
 
 
