@@ -383,30 +383,19 @@ namespace Thread
 	}
 
 
-
 	template<class T>
 	void Array<T>::appendNThreadsWL(uint n, bool autostart)
 	{
-		// Keeping the number of existing thread
-		const uint count = (uint) pList.size();
+		auto count = pList.size();
 		if (count < n)
 		{
-			// We don't have enough threads in pool. Creating a few of them...
-			// We should use the variable `pAutoStart` once time only to avoid
-			// changes while adding the new threads
+			pList.reserve(n);
+			for (auto i = count; i < n; ++i)
+				pList.emplace_back(new T());
 			if (autostart)
 			{
-				for (uint i = count; i < n; ++i)
-				{
-					T* thread = new T();
-					thread->start();
-					pList.push_back(thread);
-				}
-			}
-			else
-			{
-				for (uint i = count; i < n; ++i)
-					pList.push_back(new T());
+				for (auto i = count; i < n; ++i)
+					pList[i]->start();
 			}
 		}
 	}
