@@ -141,9 +141,8 @@ namespace Private
 namespace UUID
 {
 
-	class Helper final
+	struct Helper final
 	{
-	public:
 		static inline void WriteToCString(char* cstr, const Yuni::UUID& uuid)
 		{
 			uuid.writeToCString(cstr);
