@@ -40,8 +40,8 @@ namespace Yuni
 	{
 		switch (flag)
 		{
-			case fGenerate: generate(); break;
-			case fNull: clear(); break;
+			case Flag::generate: generate(); break;
+			case Flag::null: clear(); break;
 		}
 	}
 
