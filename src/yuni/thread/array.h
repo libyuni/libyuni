@@ -60,27 +60,10 @@ namespace Thread
 	public:
 		//! \name Constructor
 		//@{
-		/*!
-		** \brief Default Constructor
-		*/
 		Array();
-
-		/*!
-		** \brief Copy constructor
-		*/
 		Array(const Array& rhs);
-
-		/*!
-		** \brief Constructor with a given amount of thread
-		*/
 		explicit Array(uint n);
-
-		/*!
-		** \brief Constructor, with a given amount of thread
-		*/
 		Array(uint n, bool autoStart);
-
-		//! Destructor
 		~Array();
 		//@}
 
@@ -144,14 +127,10 @@ namespace Thread
 		void resize(uint n);
 
 
-		/*!
-		** \brief Start all threads
-		*/
+		//! Start all threads
 		void start();
 
-		/*!
-		** \brief Ask to all threads to stop their execution as soon as possible
-		*/
+		//! Ask to all threads to stop their execution as soon as possible
 		void gracefulStop();
 
 		/*!
@@ -179,9 +158,7 @@ namespace Thread
 		*/
 		void wakeUp();
 
-		/*!
-		** \brief Wait for all threads to finish
-		*/
+		//! Wait for all threads to finish
 		void wait();
 
 		/*!
@@ -193,9 +170,7 @@ namespace Thread
 		void wait(uint milliseconds);
 
 
-		/*!
-		** \brief Get the number of threads
-		*/
+		//! Get the number of threads
 		uint size() const;
 
 		//! Get if the array is empty
