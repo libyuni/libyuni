@@ -121,7 +121,7 @@ namespace Yuni
 	}
 
 
-	inline void UUID::writeToCString(char* out) const
+	void UUID::writeToCString(char* out) const
 	{
 		constexpr const char* hex = "0123456789abcdef";
 
