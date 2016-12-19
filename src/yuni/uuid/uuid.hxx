@@ -125,13 +125,7 @@ namespace Yuni
 	}
 
 
-
 } // namespace Yuni
-
-
-
-
-
 
 
 namespace Yuni
@@ -153,11 +147,6 @@ namespace UUID
 } // namespace UUID
 } // namespace Private
 } // namespace Yuni
-
-
-
-
-
 
 
 namespace Yuni
@@ -204,7 +193,6 @@ namespace CString
 	}; // class Into
 
 
-
 } // namespace CString
 } // namespace Extension
 } // namespace Yuni
@@ -212,4 +200,3 @@ namespace CString
 
 // ostream
 std::ostream& operator << (std::ostream& out, const Yuni::UUID& rhs);
-
