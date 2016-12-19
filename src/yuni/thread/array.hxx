@@ -59,7 +59,7 @@ namespace Thread
 	template<class T>
 	inline bool Array<T>::autoStart() const
 	{
-		return (pAutoStart);
+		return pAutoStart;
 	}
 
 
