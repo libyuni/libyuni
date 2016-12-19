@@ -135,37 +135,29 @@ namespace Thread
 			clear();
 			return;
 		}
-
-		// Bound checks error
 		if (n > maxThreadsLimit)
 			n = maxThreadsLimit;
-
 		// If we have some thread to remove from the pool, we will use this copy list
 		// since it can take some time
 		ThreadList copy;
-
 		{
 			// Locking
 			typename ThreadingPolicy::MutexLocker locker(*this);
-
 			// Keeping the number of existing thread
 			const uint count = pList.size();
 			if (count == n)
 				return;
-
 			if (count < n)
 			{
 				// We don't have enough threads in pool. Creating a few of them...
 				appendNThreadsWL(n - count, pAutoStart);
 				return;
 			}
-
 			// Asking to the last threads to stop by themselves as soon as possible
 			// This should be done early to make them stop asynchronously.
 			// We may earn a lot of time like this.
 			for (uint i = n; i < count; ++i)
 				pList[i]->gracefulStop();
-
 			// Creating a list of all threads that must be removed
 			copy.reserve(count - n);
 			for (uint i = n; i < count; ++i)

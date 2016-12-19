@@ -19,7 +19,6 @@
 #include "../core/smartptr/intrusive.h"
 
 
-
 namespace Yuni
 {
 namespace Thread
@@ -313,12 +312,7 @@ namespace Thread
 	}; // class IThread
 
 
-
-
-
-
 } // namespace Thread
 } // namespace Yuni
 
 # include "thread.hxx"
-
