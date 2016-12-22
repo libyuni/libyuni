@@ -20,7 +20,7 @@ namespace UI
 
 
 	View::View(float x, float y, float w, float h, uint8 z, bool visible) :
-		pID(UUID::fGenerate),
+		pID(UUID::Flag::generate),
 		pX(x),
 		pY(y),
 		pWidth(w),

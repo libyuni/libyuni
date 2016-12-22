@@ -19,7 +19,7 @@ namespace Gfx3D
 
 	inline Material::Material():
 		pName("New material"),
-		pID(UUID::fGenerate),
+		pID(UUID::Flag::generate),
 		pAmbient(new MaterialSurfaceColored("MaterialAmbient", 1.0f, 1.0f, 1.0f)),
 		pDiffuse(new MaterialSurfaceColored("MaterialDiffuse", 1.0f, 1.0f, 1.0f)),
 		pSpecular(new MaterialSurfaceColored("MaterialSpecular", 0.0f, 0.0f, 0.0f)),
