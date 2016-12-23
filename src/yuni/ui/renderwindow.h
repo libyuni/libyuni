@@ -222,6 +222,9 @@ namespace UI
 		//! Is the window full screen ? (OS-specific)
 		virtual bool fullScreen() const = 0;
 
+		//! When in full screen, update size the window will come back to
+		virtual void updateWindowedSize(uint /*width*/, uint /*height*/) {}
+
 		//! Left position
 		uint left() const { return pLeft; }
 

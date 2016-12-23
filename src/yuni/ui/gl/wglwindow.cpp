@@ -944,6 +944,12 @@ namespace UI
 		return pFullScreen;
 	}
 
+	void WGLWindow::updateWindowedSize(uint width, uint height)
+	{
+		pPrevRect.right = pPrevRect.left + width;
+		pPrevRect.bottom = pPrevRect.top + height;
+	}
+
 
 	bool WGLWindow::loop()
 	{
