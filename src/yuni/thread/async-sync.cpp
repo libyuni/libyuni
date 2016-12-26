@@ -17,9 +17,8 @@
 namespace Yuni
 {
 
-	class AsyncJob final : public Job::IJob
+	struct AsyncJob final : public Job::IJob
 	{
-	public:
 		AsyncJob(const Bind<void ()>& callback) :
 			pCallback(callback)
 		{}

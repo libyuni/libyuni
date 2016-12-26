@@ -19,9 +19,8 @@
 namespace Yuni
 {
 
-	class EveryTimer final : public Thread::Timer
+	struct EveryTimer final : public Thread::Timer
 	{
-	public:
 		EveryTimer(uint ms, const Bind<bool ()>& callback) :
 			Thread::Timer(ms),
 			pCallback(callback)
@@ -62,9 +61,8 @@ namespace Yuni
 
 
 	template<bool PreciseT>
-	class EveryTimerElapsed final : public Thread::Timer
+	struct EveryTimerElapsed final : public Thread::Timer
 	{
-	public:
 		EveryTimerElapsed(uint ms, const Bind<bool (uint64)>& callback) :
 			Thread::Timer(ms),
 			pCallback(callback)
