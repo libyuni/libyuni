@@ -29,7 +29,6 @@ namespace Process
 		{
 			if (INVALID_HANDLE_VALUE != handle)
 			{
-				std::cout << " :: closing handle " << handle << std::endl;
 				BOOL success = ::CloseHandle(handle);
 				(void) success;
 				assert(success != FALSE);
@@ -43,8 +42,7 @@ namespace Process
 			// CreatePipe(read, write, attr, null)
 			if (FALSE == ::CreatePipe(fd, fd + 1, &attr, 0))
 			{
-				std::cerr << "pipe failed : failed to create pipe for "
-						  << pipeName << '\n';
+				std::cerr << "pipe failed : failed to create pipe for " << pipeName << '\n';
 				return false;
 			}
 
@@ -213,9 +211,7 @@ namespace Process
 			YUNI_STATIC_ASSERT(WAIT_OBJECT_0 == 0, waitObject0IsNotZero_CodeRequiresAttention);
 			assert(nbHandles < MAXIMUM_WAIT_OBJECTS);
 
-			std::cout << " ... waiting ..." << std::endl;
 			DWORD waitStatus = ::WaitForMultipleObjectsEx(nbHandles, handleList, false, INFINITE, true);
-			std::cout << " ... event !!" << std::endl;
 
 			if (/*waitStatus >= WAIT_OBJECT_0 and*/ waitStatus < (WAIT_OBJECT_0 + (uint) nbHandles))
 			{
@@ -223,7 +219,6 @@ namespace Process
 
 				HANDLE signalled = handleList[waitStatus - WAIT_OBJECT_0];
 				DWORD exitCode = 0;
-				std::cout << " :: event on handle " << (waitStatus - WAIT_OBJECT_0) << " = " << signalled << std::endl;
 
 				// If the process was signalled
 				if (signalled == processHandle)
@@ -258,9 +253,6 @@ namespace Process
 					//if (success and totalAvailBytes > 0)
 					do
 					{
-						//std::cout << " ... peeking : " << totalAvailBytes << " bytes to read" << std::endl;
-
-						std::cout << " ... reading\n" << std::flush;
 						bool success = (FALSE != ::ReadFile(readFrom, buffer, sizeof(char) * 1, &readBytes, nullptr));
 						if (not success or readBytes == 0)
 							break;
