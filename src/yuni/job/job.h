@@ -75,8 +75,7 @@ namespace Job
 		using Ptr = Ancestor::SmartPtrType<IJob>::PtrThreadSafe;
 		//! The threading policy
 		using ThreadingPolicy = Ancestor::ThreadingPolicy;
-		//! List of jobs
-		using List = std::list<Ptr>;
+
 
 	public:
 		//! \name Contructor & Destructor
