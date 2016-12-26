@@ -20,7 +20,7 @@ namespace Process
 	namespace // anonymous
 	{
 
-		static inline char* duplicateString(const AnyString& string)
+		char* duplicateString(const AnyString& string)
 		{
 			const uint bytes = static_cast<uint>(sizeof(char)) * string.size();
 			char* copy = reinterpret_cast<char*>(::malloc(bytes + 1));
@@ -33,7 +33,7 @@ namespace Process
 		}
 
 
-		static inline bool closeFD(int& fd)
+		bool closeFD(int& fd)
 		{
 			if (fd >= 0)
 			{

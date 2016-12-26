@@ -25,7 +25,7 @@ namespace Process
 	namespace // anonymous
 	{
 
-		static inline void closeHD(HANDLE& handle)
+		void closeHD(HANDLE& handle)
 		{
 			if (INVALID_HANDLE_VALUE != handle)
 			{
@@ -37,7 +37,7 @@ namespace Process
 			}
 		}
 
-		static inline bool pipe(HANDLE (&fd)[2], SECURITY_ATTRIBUTES& attr, const char* const pipeName)
+		bool pipe(HANDLE (&fd)[2], SECURITY_ATTRIBUTES& attr, const char* const pipeName)
 		{
 			// Create a pipe for the child process's STDOUT.
 			// CreatePipe(read, write, attr, null)
@@ -60,7 +60,7 @@ namespace Process
 
 
 		#if _WIN32_WINNT >= 0x0600
-		static inline bool fillProcAttributeList(HANDLE (&handles)[3], LPPROC_THREAD_ATTRIBUTE_LIST& attrList)
+		bool fillProcAttributeList(HANDLE (&handles)[3], LPPROC_THREAD_ATTRIBUTE_LIST& attrList)
 		{
 			SIZE_T size = 0;
 			if (FALSE == ::InitializeProcThreadAttributeList(nullptr, 1, 0, &size))
