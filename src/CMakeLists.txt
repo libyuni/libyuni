@@ -181,7 +181,7 @@ if (YUNI_BENCHMARKS)
 	add_subdirectory(benchmarks)
 endif()
 
-if (YUNI_ERROR_HAS_OCCURED)
+if (__libyuni_error_has_occured)
 	message(STATUS "")
 	message(STATUS "")
 	if (UNIX)

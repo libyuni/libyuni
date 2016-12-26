@@ -1,4 +1,4 @@
-set(YUNI_ERROR_HAS_OCCURED   false)
+set(__libyuni_error_has_occured   false)
 
 
 macro(ynmessage)
@@ -37,7 +37,7 @@ macro(ynerror msg)
 	else()
 		message(STATUS "{yuni}  [ERROR] ${msg}")
 	endif()
-	set(YUNI_ERROR_HAS_OCCURED  true)
+	set(__libyuni_error_has_occured  true)
 endmacro()
 
 
@@ -47,6 +47,5 @@ macro(ynfatal msg)
 	else()
 		message(FATAL_ERROR "{yuni}  [ERROR] ${msg}")
 	endif()
-
-	set(YUNI_ERROR_HAS_OCCURED  true)
+	set(__libyuni_error_has_occured  true)
 endmacro()
