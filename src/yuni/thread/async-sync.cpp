@@ -23,10 +23,6 @@ namespace Yuni
 			pCallback(callback)
 		{}
 
-		virtual ~AsyncJob()
-		{
-		}
-
 
 	protected:
 		virtual void onExecute() override
