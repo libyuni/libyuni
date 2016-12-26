@@ -11,6 +11,7 @@
 #pragma once
 #include "../../yuni.h"
 #include "smartptr.h"
+#include <utility>
 
 
 
@@ -235,10 +236,13 @@ namespace Yuni
 
 
 
-
+	//! Constructs an object of type T and wraps it in an intrusive ref-counting smart pointer
+	template<class T, typename... Args>
+	Ref<T> make_ref(Args&&... args) {
+		return Ref<T>(new T(std::forward<Args>(args)...));
+	}
 
 
 } // namespace Yuni
 
 #include "intrusive.hxx"
-
