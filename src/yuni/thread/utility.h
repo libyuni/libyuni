@@ -93,7 +93,7 @@ namespace Yuni
 	** \param callback The callback to execute
 	** \param autostart True to automatically start the timer
 	*/
-	Thread::Timer::Ptr  every(uint ms, const Bind<bool ()>& callback, bool autostart = true);
+	std::unique_ptr<Thread::Timer> every(uint ms, const Bind<bool ()>& callback, bool autostart = true);
 
 
 	/*!
@@ -125,7 +125,7 @@ namespace Yuni
 	** \param callback The callback to execute
 	** \param autostart True to automatically start the timer
 	*/
-	Thread::Timer::Ptr  every(uint ms, bool precise, const Bind<bool (uint64 /*elapsed*/)>& callback, bool autostart = true);
+	std::unique_ptr<Thread::Timer> every(uint ms, bool precise, const Bind<bool (uint64 /*elapsed*/)>& callback, bool autostart = true);
 
 
 	/*!

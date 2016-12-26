@@ -49,13 +49,9 @@ namespace Yuni
 
 
 
-	Thread::Timer::Ptr  every(uint ms, const Bind<bool ()>& callback, bool autostart)
+	std::unique_ptr<Thread::Timer> every(uint ms, const Bind<bool ()>& callback, bool autostart)
 	{
-		# ifdef YUNI_HAS_CPP_MOVE
-		Thread::Timer* timer = new EveryTimer(ms, std::move(callback));
-		# else
-		Thread::Timer* timer = new EveryTimer(ms, callback);
-		# endif
+		auto timer = std::make_unique<EveryTimer>(ms, callback);
 		if (autostart)
 			timer->start();
 		return timer;
@@ -118,27 +114,13 @@ namespace Yuni
 
 
 
-	Thread::Timer::Ptr  every(uint ms, bool precise, const Bind<bool (uint64)>& callback, bool autostart)
+	std::unique_ptr<Thread::Timer> every(uint ms, bool precise, const Bind<bool (uint64)>& callback, bool autostart)
 	{
-		Thread::Timer* timer;
-
-		if (precise)
-		{
-			# ifdef YUNI_HAS_CPP_MOVE
-			timer = new EveryTimerElapsed<true>(ms, std::move(callback));
-			# else
-			timer = new EveryTimerElapsed<true>(ms, callback);
-			# endif
-		}
-		else
-		{
-			# ifdef YUNI_HAS_CPP_MOVE
-			timer = new EveryTimerElapsed<false>(ms, std::move(callback));
-			# else
-			timer = new EveryTimerElapsed<false>(ms, callback);
-			# endif
-		}
-
+		auto timer = [&]() -> std::unique_ptr<Thread::Timer> {
+			if (precise)
+				return std::make_unique<EveryTimerElapsed<true>>(ms, callback);
+			return std::make_unique<EveryTimerElapsed<false>>(ms, callback);
+		}();
 		if (autostart)
 			timer->start();
 		return timer;
