@@ -50,9 +50,8 @@ namespace Process
 		//! Default constructor
 		ThreadMonitor(Yuni::Process::Program& process);
 		//! Destructor
-		virtual ~ThreadMonitor();
+		virtual ~ThreadMonitor() = default;
 		//@}
-
 
 
 		bool spawnProcess();
@@ -61,9 +60,9 @@ namespace Process
 	protected:
 		virtual bool onExecute() override;
 
-		virtual void onPause() override;
+		virtual void onPause() override {}
 
-		virtual void onStop() override;
+		virtual void onStop() override {}
 
 		virtual void onKill() override;
 
@@ -136,11 +135,6 @@ namespace Process
 	}
 
 
-	inline Program::ThreadMonitor::~ThreadMonitor()
-	{
-	}
-
-
 	inline sint64 Program::ThreadMonitor::currentTime() const
 	{
 		switch (pDurationPrecision)
@@ -166,16 +160,6 @@ namespace Process
 
 		theProcessHasStopped(pKilled, pExitStatus);
 		return false; // stop the thread
-	}
-
-
-	inline void Program::ThreadMonitor::onPause()
-	{
-	}
-
-
-	inline void Program::ThreadMonitor::onStop()
-	{
 	}
 
 
