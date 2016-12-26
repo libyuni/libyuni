@@ -22,9 +22,9 @@ if (OPENAL_FOUND)
 
 else()
 	set(YUNI_CMAKE_ERROR 1)
-	ynmessage(    "[!!] Impossible to find OpenAL. Please check your profile.")
-	ynmessage(    " * Packages needed on Debian: libopenal-dev")
-	ynmessage(    " * Packages needed on redhat: openal-devel")
+	ynmessage("[!!] Impossible to find OpenAL. Please check your profile.")
+	ynmessage(" * Packages needed on Debian: libopenal-dev")
+	ynmessage(" * Packages needed on redhat: openal-devel")
 endif()
 
 
