@@ -1,3 +1,3 @@
 
-YMESSAGE_MODULE("Documentation")
+ynmessage(MODULE "Documentation")
 

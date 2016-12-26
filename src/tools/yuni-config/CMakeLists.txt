@@ -15,11 +15,11 @@ IF(NOT YUNI_AUTO_COMPILE_YUNI_CONFIG)
 endif(NOT YUNI_AUTO_COMPILE_YUNI_CONFIG)
 
 if(YUNI_AUTO_COMPILE_YUNI_CONFIG)
-	YMESSAGE("")
-	YMESSAGE_BOLD("yuni-config  (self)")
+	ynmessage()
+	ynmessage(BOLD "yuni-config  (self)")
 else()
-	YMESSAGE("")
-	YMESSAGE_BOLD("yuni-config")
+	ynmessage()
+	ynmessage(BOLD "yuni-config")
 endif(YUNI_AUTO_COMPILE_YUNI_CONFIG)
 
 

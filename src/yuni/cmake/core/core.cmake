@@ -1,4 +1,4 @@
-YMESSAGE_MODULE("Core")
+ynmessage(MODULE "Core")
 
 # Paths for yuni-config, embedded version.
 LIBYUNI_CONFIG_INCLUDE_PATH("intree" "core" "${CMAKE_CURRENT_SOURCE_DIR}/..")

@@ -1,25 +1,25 @@
 #
 # CMake Generator / Compiler
 #
-YMESSAGE_TITLE("Generator : "  "${CMAKE_GENERATOR}")
+ynmessage(TITLE "Generator : "  "${CMAKE_GENERATOR}")
 if(MSVC)
 	if (WIN64)
-		YMESSAGE("Compiler: Visual Studio (64bits)")
+		ynmessage("Compiler: Visual Studio (64bits)")
 	else()
-		YMESSAGE("Compiler: Visual Studio (32bits)")
+		ynmessage("Compiler: Visual Studio (32bits)")
 	endif()
 endif()
 
 if(MINGW)
 	if (WIN64)
-		YMESSAGE("Compiler: MinGW (64bits)")
+		ynmessage("Compiler: MinGW (64bits)")
 	else()
-		YMESSAGE("Compiler: MinGW (32bits)")
+		ynmessage("Compiler: MinGW (32bits)")
 	endif()
 endif()
 
 if(XCODE)
-	YMESSAGE("Compiler: XCode")
+	ynmessage("Compiler: XCode")
 endif()
 if(CMAKE_COMPILER_IS_GNUCXX)
 	if(NOT GNUCXX_VERSION)
@@ -29,7 +29,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 		string(STRIP "${GNUCXX_VERSION_N}" GNUCXX_VERSION_N)
 		set(GNUCXX_VERSION "${GNUCXX_VERSION_N}" CACHE INTERNAL "Version of the Gnu Gxx compiler")
 	endif()
-	YMESSAGE("g++ Variant : ${GNUCXX_VERSION}")
+	ynmessage("g++ Variant : ${GNUCXX_VERSION}")
 endif()
 
 
@@ -53,9 +53,9 @@ if(APPLE)
 	execute_process(COMMAND sysctl -n hw.cpu64bit_capable OUTPUT_VARIABLE HI_CPU_i64
 		OUTPUT_STRIP_TRAILING_WHITESPACE)
 	# Display
-	YMESSAGE("System: ${SW_PN} ${SW_PV} ${SW_BV} - ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")
-	YMESSAGE("   ${HI_CPU_COUNT} CPUs (${HI_CPU_CORE_COUNT}-Core), SSE1:${CPU_SSE1}, SSE2:${CPU_SSE2}, "
+	ynmessage("System: ${SW_PN} ${SW_PV} ${SW_BV} - ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")
+	ynmessage("   ${HI_CPU_COUNT} CPUs (${HI_CPU_CORE_COUNT}-Core), SSE1:${CPU_SSE1}, SSE2:${CPU_SSE2}, "
 		"SSE3:${CPU_SSE3}, x86_64:${HI_CPU_i64}")
 else()
-	YMESSAGE("System: ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")
+	ynmessage("System: ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")
 endif()

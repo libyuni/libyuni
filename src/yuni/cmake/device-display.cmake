@@ -1,5 +1,5 @@
 
-YMESSAGE_MODULE("Device::Display")
+ynmessage(MODULE "Device::Display")
 
 LIBYUNI_CONFIG_DEPENDENCY("display" "devices") # devices is required
 
@@ -7,20 +7,20 @@ LIBYUNI_CONFIG_DEPENDENCY("display" "devices") # devices is required
 if(UNIX AND NOT APPLE AND NOT HAIKU AND NOT BEOS)
 	find_package(X11)
 	if (NOT X11_FOUND)
-		YMESSAGE(    "[!!] Impossible to find X11 headers")
-		YMESSAGE(    " * Packages needed on debian: libx11-dev")
-		YMESSAGE(    " * Packages needed on redhat: xorg-x11-devel")
+		ynmessage("[!!] Impossible to find X11 headers")
+		ynmessage(" * Packages needed on debian: libx11-dev")
+		ynmessage(" * Packages needed on redhat: xorg-x11-devel")
 	endif()
 	#if (NOT X11_Xext_FOUND)
-#		YERROR(    "Impossible to find X11 Xext extension headers")
-	#	YMESSAGE(    " * Packages needed on debian: x11proto-xext-dev")
-#		YMESSAGE(    " * Packages needed on redhat: xorg-x11-devel")
+#		ynerror("Impossible to find X11 Xext extension headers")
+	#	ynmessage(" * Packages needed on debian: x11proto-xext-dev")
+#		ynmessage(" * Packages needed on redhat: xorg-x11-devel")
 #	endif()
 	check_include_file_cxx("X11/extensions/randr.h" YUNI_HAS_X11_EXTENSION_RANDR)
 	if (NOT YUNI_HAS_X11_EXTENSION_RANDR)
-		YERROR(    "Impossible to find X11 Xrandr extension headers")
-		YMESSAGE(    " * Packages needed on debian: x11proto-randr-dev")
-		YMESSAGE(    " * Packages needed on redhat: libxcb-randr")
+		ynerror("Impossible to find X11 Xrandr extension headers")
+		ynmessage(" * Packages needed on debian: x11proto-randr-dev")
+		ynmessage(" * Packages needed on redhat: libxcb-randr")
 	endif()
 
 	LIBYUNI_CONFIG_LIB("both" "display" "X11")

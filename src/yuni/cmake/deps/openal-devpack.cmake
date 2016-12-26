@@ -1,5 +1,5 @@
 
-YMESSAGE("      Using the OpenAL DevPack")
+ynmessage("      Using the OpenAL DevPack")
 
 DEVPACK_IMPORT_OPENAL()
 # We get OPENAL_INCLUDE_DIR from here.

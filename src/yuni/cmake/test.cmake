@@ -1,5 +1,5 @@
 
-YMESSAGE_MODULE("Tests")
+ynmessage(MODULE "Tests")
 
 LIBYUNI_CONFIG_LIB("both" "tests"      "yuni-static-tests")
 

@@ -1,5 +1,5 @@
 
-YMESSAGE_MODULE("UUID")
+ynmessage(MODULE "UUID")
 
 LIBYUNI_CONFIG_LIB("both" "uuid" "yuni-static-uuid")
 LIBYUNI_CONFIG_DEPENDENCY("uuid" "core") # core is required
@@ -26,9 +26,9 @@ if (${__yuni_libuuid})
 	find_path(UUID_INCLUDE_DIR NAMES uuid/uuid.h PATHS /usr/include /usr/local/include /opt/local/include /sw/include)
 	if(NOT UUID_INCLUDE_DIR)
 		set(YUNI_CMAKE_ERROR 1)
-		YMESSAGE(    "[!!] Impossible to find uuid/uuid.h.")
-		YMESSAGE(    " * Packages needed on Debian: libuuid1, uuid-dev")
-		YMESSAGE(    " * Packages needed on redhat: libuuid-devel")
+		ynmessage("[!!] Impossible to find uuid/uuid.h.")
+		ynmessage(" * Packages needed on Debian: libuuid1, uuid-dev")
+		ynmessage(" * Packages needed on redhat: libuuid-devel")
 	endif()
 endif()
 

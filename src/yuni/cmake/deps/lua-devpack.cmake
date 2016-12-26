@@ -1,14 +1,14 @@
 
 
-YMESSAGE("      Building Lua from source using the Unix DevPack [ Windows FIXME !!! ]")
+ynmessage("      Building Lua from source using the Unix DevPack [ Windows FIXME !!! ]")
 
 if(UNIX AND NOT APPLE)
 	check_include_files("stdio.h;readline/readline.h" YUNI_HAS_READLINE_H)
 	if(NOT YUNI_HAS_READLINE_H)
 		set(YUNI_CMAKE_ERROR 1)
-		YMESSAGE(    "[!!] Impossible to find readline/readline.h")
-		YMESSAGE(    " * Packages needed on Debian: libreadline-dev")
-		YMESSAGE(    " * Packages needed on Fedora: readline-devel.i686")
+		ynmessage("[!!] Impossible to find readline/readline.h")
+		ynmessage(" * Packages needed on Debian: libreadline-dev")
+		ynmessage(" * Packages needed on Fedora: readline-devel.i686")
 	endif()
 endif()
 

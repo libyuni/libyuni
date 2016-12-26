@@ -1,5 +1,5 @@
 
-YMESSAGE_MODULE("OpenGL  (EXPERIMENTAL)")
+ynmessage(MODULE "OpenGL  (EXPERIMENTAL)")
 
 
 LIBYUNI_CONFIG_LIB("both" "opengl"      "yuni-static-graphics-opengl")
@@ -41,19 +41,19 @@ if (YUNI_HAS_OPENGL)
 	check_include_files("OpenGL/gl.h" YUNI_HAS_OPENGL_GL_H)
 	if (NOT YUNI_HAS_GL_H AND NOT YUNI_HAS_GL_GL_H AND NOT YUNI_HAS_OPENGL_GL_H)
 		set(YUNI_CMAKE_ERROR 1)
-		YMESSAGE(    "[!!] Impossible to find gl.h. Please check your profile.")
-		YMESSAGE(    " * Packages needed on Debian: libopengl-dev")
-		YMESSAGE(    " * Packages needed on Ubuntu: libgl1-mesa-dev")
-		YMESSAGE(    " * Packages needed on Fedora: opengl-devel")
+		ynmessage("[!!] Impossible to find gl.h. Please check your profile.")
+		ynmessage(" * Packages needed on Debian: libopengl-dev")
+		ynmessage(" * Packages needed on Ubuntu: libgl1-mesa-dev")
+		ynmessage(" * Packages needed on Fedora: opengl-devel")
 	endif ()
 
 # Not found
 else ()
 	set(YUNI_CMAKE_ERROR 1)
-	YMESSAGE(    "[!!] Impossible to find OpenGL on your system. Please check your profile.")
-	YMESSAGE(    " * Packages needed on Debian: libopengl-dev")
-	YMESSAGE(    " * Packages needed on Ubuntu: libgl1-mesa-dev")
-	YMESSAGE(    " * Packages needed on Fedora: opengl-devel")
+	ynmessage("[!!] Impossible to find OpenGL on your system. Please check your profile.")
+	ynmessage(" * Packages needed on Debian: libopengl-dev")
+	ynmessage(" * Packages needed on Ubuntu: libgl1-mesa-dev")
+	ynmessage(" * Packages needed on Fedora: opengl-devel")
 endif ()
 
 
