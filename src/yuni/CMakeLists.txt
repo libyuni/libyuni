@@ -182,7 +182,7 @@ ynmessage("")
 
 if("${YUNI_CMAKE_ERROR}" GREATER 0)
 	ynmessage("")
-	YERROR("An error has occured. Aborting.")
+	ynerror("An error has occured. Aborting.")
 	ynmessage("")
 	message(FATAL_ERROR  "Aborting.")
 endif()

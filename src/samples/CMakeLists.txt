@@ -57,7 +57,7 @@ else()
 	ynmessage("If you are not building from within the source tree, you should define")
 	ynmessage("YUNI_CONFIG to the path to the yuni-config binary, e.g.:")
 	ynmessage(" $ cmake -DYUNI_CONFIG=path/to/yuni-config <samples_path>")
-	YERROR("Aborting.")
+	ynerror("Aborting.")
 
 endif()
 

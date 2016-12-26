@@ -43,7 +43,7 @@ macro(YWARNING msg)
 endmacro()
 
 
-macro(YERROR msg)
+macro(ynerror msg)
 	if(UNIX)
 		message(STATUS "[1;31m{yuni}  [error][0m ${msg}")
 	else()

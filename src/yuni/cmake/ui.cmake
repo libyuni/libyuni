@@ -139,7 +139,7 @@ if (YUNI_HAS_OPENGL)
 		endif ()
 	endif ()
 else()
-   YERROR("UI module currently requires OpenGL to work !")
+   ynerror("UI module currently requires OpenGL to work !")
 endif()
 
 add_library(yuni-static-ui-core STATIC ${YUNI_EXT_FREETYPE_INCLUDE} ${SRC_UI})
