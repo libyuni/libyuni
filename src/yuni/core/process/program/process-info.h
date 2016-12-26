@@ -38,14 +38,7 @@ namespace Process
 		typedef Yuni::SmartPtr<Program::ProcessSharedInfo> Ptr;
 
 	public:
-		//! \name Constructor & Destructor
-		//@{
-		//! Default constructor
-		ProcessSharedInfo();
-		//! Destructor
 		~ProcessSharedInfo();
-		//@}
-
 
 		/*!
 		** \return True if the signal has been delivered
@@ -65,23 +58,23 @@ namespace Process
 		//! The working directory
 		String workingDirectory;
 		//! Flag to know if the process is running
-		bool running;
+		bool running = false;
 		//! PID
-		int processID;
+		int processID = -1;
 		//! input file descriptors
-		int processInput;
+		int processInput = -1;
 		//! Thread
-		Yuni::Process::Program::ThreadMonitor* thread;
+		Yuni::Process::Program::ThreadMonitor* thread = nullptr;
 		//! Duration in seconds
-		sint64 duration;
+		sint64 duration = 0;
 		//! Duration precision
-		DurationPrecision durationPrecision;
+		DurationPrecision durationPrecision = dpSeconds;
 		//! Timeout
-		uint timeout;
+		uint timeout = 0;
 		//! Exit status
-		int exitstatus;
+		int exitstatus = -1;
 		//! Console
-		bool redirectToConsole;
+		bool redirectToConsole = false;
 		//! Mutex
 		mutable Mutex mutex;
 		//! Optional thread for timeout
@@ -90,14 +83,5 @@ namespace Process
 	}; // class Program::ProcessSharedInfo
 
 
-
-
-
-
-
-
-
 } // namespace Process
 } // namespace Yuni
-
-#include "process-info.hxx"

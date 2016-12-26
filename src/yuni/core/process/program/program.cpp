@@ -92,7 +92,7 @@ namespace Process
 
 		# ifndef YUNI_OS_WINDOWS
 		typedef int FD;
-		pid_t pid;
+		pid_t pid = -1;
 		#else
 		typedef HANDLE FD;
 		HANDLE processHandle;
@@ -107,14 +107,14 @@ namespace Process
 		}
 		channels;
 
-		bool pRedirectToConsole;
+		bool pRedirectToConsole = false;
 
-		int pExitStatus;
+		int pExitStatus = -1;
 		//! Flag to determine whether the process was killed or not
-		bool pKilled;
+		bool pKilled = false;
 
-		sint64 pStartTime;
-		sint64 pEndTime;
+		sint64 pStartTime = -1;
+		sint64 pEndTime = 0;
 
 		//! Duration precision
 		const DurationPrecision pDurationPrecision;
@@ -129,18 +129,10 @@ namespace Process
 		, procinfo(*(process.pEnv))
 		, stream(process.pStream)
 		, pRedirectToConsole(procinfo.redirectToConsole)
-		, pExitStatus(-1)
-		, pKilled(false)
-		, pStartTime(-1)
-		, pEndTime(0)
 		, pDurationPrecision(process.pEnv->durationPrecision)
 	{
 		// to avoid compiler warning
 		(void) procinfoRef;
-
-		#ifndef YUNI_OS_WINDOWS
-		pid = -1;
-		#endif
 	}
 
 
