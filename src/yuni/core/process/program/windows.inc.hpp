@@ -306,14 +306,11 @@ namespace Process
 
 	void Program::ThreadMonitor::cleanupAfterChildTermination()
 	{
-		// stop the thread dedicated to handle the timeout
-		if (procinfo.timeoutThread)
+		if (procinfo.timeoutThread.get()) // stop the thread dedicated to handle the timeout
 		{
 			procinfo.timeoutThread->stop();
-			delete procinfo.timeoutThread;
-			procinfo.timeoutThread = nullptr;
+			procinfo.timeoutThread.reset();
 		}
-
 		closeHD(channels.outfd[1]);
 		closeHD(channels.infd[0]);
 		closeHD(channels.errd[0]);

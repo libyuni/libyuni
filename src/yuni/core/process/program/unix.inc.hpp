@@ -54,14 +54,11 @@ namespace Process
 
 	inline void Program::ThreadMonitor::cleanupAfterChildTermination()
 	{
-		// stop the thread dedicated to handle the timeout
-		if (procinfo.timeoutThread)
+		if (procinfo.timeoutThread.get()) // stop the thread dedicated to handle the timeout
 		{
 			procinfo.timeoutThread->stop();
-			delete procinfo.timeoutThread;
-			procinfo.timeoutThread = nullptr;
+			procinfo.timeoutThread.reset();
 		}
-
 		// close all remaining fd
 		closeFD(channels.infd[0]);
 		closeFD(channels.errd[0]);

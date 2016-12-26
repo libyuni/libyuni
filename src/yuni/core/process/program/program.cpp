@@ -229,12 +229,11 @@ namespace Process
 
 	Program::ProcessSharedInfo::~ProcessSharedInfo()
 	{
-		if (YUNI_UNLIKELY(timeoutThread))
+		if (YUNI_UNLIKELY(timeoutThread.get()))
 		{
 			// should never go in this section
 			assert(false and "the thread for handling the timeout has not been properly stopped");
 			timeoutThread->stop();
-			delete timeoutThread;
 		}
 
 		if (thread and thread->release())
@@ -349,18 +348,11 @@ namespace Process
 
 	void Program::ProcessSharedInfo::createThreadForTimeoutWL()
 	{
-		delete timeoutThread; // for code safety
-
+		timeoutThread.reset();
 		if (processID > 0 and timeout > 0)
 		{
-			timeoutThread = new (std::nothrow) TimeoutThread(processID, timeout);
-			if (timeoutThread)
-				timeoutThread->start();
-		}
-		else
-		{
-			// no valid pid, no thread required for a timeout
-			timeoutThread = nullptr;
+			timeoutThread = std::make_unique<TimeoutThread>(processID, timeout);
+			timeoutThread->start();
 		}
 	}
 

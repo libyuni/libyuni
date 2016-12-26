@@ -13,6 +13,7 @@
 #include "../../noncopyable.h"
 #include "../../../thread/thread.h"
 #include <vector>
+#include <memory>
 
 
 
@@ -83,9 +84,8 @@ namespace Process
 		bool redirectToConsole;
 		//! Mutex
 		mutable Mutex mutex;
-
 		//! Optional thread for timeout
-		Yuni::Thread::IThread* timeoutThread;
+		std::unique_ptr<Yuni::Thread::IThread> timeoutThread;
 
 	}; // class Program::ProcessSharedInfo
 
