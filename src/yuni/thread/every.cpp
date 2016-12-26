@@ -15,7 +15,6 @@
 #endif
 
 
-
 namespace Yuni
 {
 
@@ -47,7 +46,6 @@ namespace Yuni
 	};
 
 
-
 	std::unique_ptr<Thread::Timer> every(uint ms, const Bind<bool ()>& callback, bool autostart)
 	{
 		auto timer = std::make_unique<EveryTimer>(ms, callback);
@@ -55,9 +53,6 @@ namespace Yuni
 			timer->start();
 		return timer;
 	}
-
-
-
 
 
 	template<bool PreciseT>
@@ -83,14 +78,11 @@ namespace Yuni
 			{
 				// current timestamp in ms
 				auto now = DateTime::NowMilliSeconds();
-
 				// callback
 				bool shouldContinue = pCallback((uint64)(now - pLastTimestamp));
-
 				// fetch again the current to avoid taking into consideration
 				// the time spent in the callback
 				pLastTimestamp = DateTime::NowMilliSeconds();
-
 				return shouldContinue;
 			}
 			else
@@ -99,7 +91,6 @@ namespace Yuni
 				auto now = DateTime::NowMilliSeconds();
 				uint64 elapsed = (uint64) (now - pLastTimestamp);
 				pLastTimestamp = now;
-
 				return pCallback(elapsed);
 			}
 		}
@@ -109,7 +100,6 @@ namespace Yuni
 		sint64 pLastTimestamp;
 		Bind<bool (uint64)> pCallback;
 	};
-
 
 
 	std::unique_ptr<Thread::Timer> every(uint ms, bool precise, const Bind<bool (uint64)>& callback, bool autostart)
@@ -125,7 +115,4 @@ namespace Yuni
 	}
 
 
-
-
 } // namespace Yuni
-

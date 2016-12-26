@@ -14,7 +14,6 @@
 #endif
 
 
-
 namespace Yuni
 {
 
@@ -47,8 +46,6 @@ namespace Yuni
 	};
 
 
-
-
 	std::unique_ptr<Thread::IThread> spawn(const Bind<void ()>& callback, bool autostart)
 	{
 		auto thread = std::make_unique<SpawnThread>(callback);
@@ -58,7 +55,4 @@ namespace Yuni
 	}
 
 
-
-
 } // namespace Yuni
-

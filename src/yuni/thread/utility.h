@@ -22,7 +22,6 @@ namespace Yuni { namespace Job { class Taskgroup; }}
 namespace Yuni
 {
 
-
 	/*!
 	** \brief Convenient wrapper for executing some code into another thread
 	**
@@ -170,8 +169,6 @@ namespace Yuni
 	** \brief Convenient wrapper for creating a job from a lambda into a taskgroup
 	*/
 	void async(Job::Taskgroup& task, const Bind<bool (Job::IJob&)>& callback);
-
-
 
 
 } // namespace Yuni

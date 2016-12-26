@@ -13,7 +13,6 @@
 #include "../job/taskgroup.h"
 
 
-
 namespace Yuni
 {
 
@@ -37,8 +36,6 @@ namespace Yuni
 	}; // class AsyncJob
 
 
-
-
 	Job::IJob::Ptr  async(Job::QueueService& queueservice, const Bind<void ()>& callback)
 	{
 		AsyncJob::Ptr job = new AsyncJob(callback);
@@ -59,7 +56,4 @@ namespace Yuni
 	}
 
 
-
-
 } // namespace Yuni
-
