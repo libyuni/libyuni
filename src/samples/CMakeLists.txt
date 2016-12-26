@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 include("../cmake/message.cmake")
 
 
-ynmessage("")
+ynmessage()
 ynmessage("Yuni Framework - Samples")
-ynmessage("")
+ynmessage()
 project(yuni-samples)
 
 if(POLICY CMP0011)
@@ -45,11 +45,11 @@ if(Yuni_FOUND)
 	add_subdirectory(dbi)
 	add_subdirectory(parser)
 
-	ynmessage("")
+	ynmessage()
 	ynmessage("To enable additional modules in libyuni, please refer to the cmake flag '-DMODULES'")
 	ynmessage("when compiling libyuni.")
 	ynmessage("To get the list of all modules, try 'cmake -DMODULES=help' in the libyuni source folder")
-	ynmessage("")
+	ynmessage()
 
 else()
 

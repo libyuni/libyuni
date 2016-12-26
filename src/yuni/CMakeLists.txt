@@ -1,9 +1,9 @@
 
 
 
-ynmessage("")
+ynmessage()
 ynmessage("Modules")
-ynmessage("")
+ynmessage()
 
 
 # The target directory for static libs
@@ -178,12 +178,12 @@ endif()
 
 
 
-ynmessage("")
+ynmessage()
 
 if("${YUNI_CMAKE_ERROR}" GREATER 0)
-	ynmessage("")
+	ynmessage()
 	ynerror("An error has occured. Aborting.")
-	ynmessage("")
+	ynmessage()
 	message(FATAL_ERROR  "Aborting.")
 endif()
 

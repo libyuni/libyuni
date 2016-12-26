@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 include("cmake/message.cmake")
 
 project(yuni)
-ynmessage("")
+ynmessage()
 ynmessage(BOLD "The Yuni Framework")
 
 # Package informations
@@ -88,7 +88,7 @@ endif()
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/target.cmake")
 # Getting the latest revision number
 ynmessage(BOLD "Version : v${YUNI_VERSION_HI}.${YUNI_VERSION_LO}-${YUNI_TARGET} (Rev: ${YUNI_VERSION_REV})")
-ynmessage("")
+ynmessage()
 set(YUNI_VERSION_STRING "${YUNI_VERSION_HI}.${YUNI_VERSION_LO}.${YUNI_VERSION_REV}-${CMAKE_BUILD_TYPE}")
 # Informations about the system
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/system-information.cmake")
@@ -114,10 +114,10 @@ if ("${PROFILE}" STREQUAL "")
 	if (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake")
 		configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ProfileBuild.template.cmake
 			${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake)
-		ynmessage("")
+		ynmessage()
 		ynmessage("A default profile has been created (`<build_directory>/ProfileBuild.cmake`)")
 		ynmessage("Please edit this file to override the default settings")
-		ynmessage("")
+		ynmessage()
 	endif()
 	set(YUNI_PROFILE_PATH "${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake")
 else()
@@ -195,4 +195,4 @@ endif()
 
 
 # Empty message, for beauty :)
-ynmessage("") # done
+ynmessage() # done

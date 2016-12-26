@@ -1,5 +1,5 @@
 
-ynmessage("")
+ynmessage()
 ynmessage(BOLD "edln-make")
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/common-settings.cmake")
