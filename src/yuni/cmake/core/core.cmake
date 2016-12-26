@@ -248,6 +248,7 @@ add_library(yuni-static-core STATIC
 		core/slist/slist.h
 		core/slist/slist.hxx
 		core/slist.h
+		core/memory.h
 		core/smartptr/intrusive.h
 		core/smartptr/intrusive.hxx
 		core/smartptr/policies/checking.h
