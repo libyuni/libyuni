@@ -163,9 +163,9 @@ namespace Yuni
 		//! Inner value
 		StorageType m_value;
 		// Friend
-		friend class Yuni::Private::UUID::Helper;
+		friend struct Yuni::Private::UUID::Helper;
 
-	}; // class UUID
+	}; // struct UUID
 
 
 } // namespace Yuni
