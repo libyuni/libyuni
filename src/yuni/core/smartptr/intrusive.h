@@ -109,7 +109,7 @@ namespace Yuni
 		/*!
 		** \brief Default constructor
 		*/
-		IIntrusiveSmartPtr();
+		IIntrusiveSmartPtr() = default;
 
 		/*!
 		** \brief Destructor
@@ -129,7 +129,7 @@ namespace Yuni
 
 	private:
 		//! Intrusive reference count
-		mutable Atomic::Int<8 * sizeof(void*), TP> pRefCount;
+		mutable Atomic::Int<8 * sizeof(void*), TP> pRefCount = 0;
 
 	}; // class IIntrusiveSmartPtr
 
@@ -205,7 +205,7 @@ namespace Yuni
 		/*!
 		** \brief Default constructor
 		*/
-		IIntrusiveSmartPtr();
+		IIntrusiveSmartPtr() = default;
 
 		/*!
 		** \brief Destructor
@@ -225,7 +225,7 @@ namespace Yuni
 
 	private:
 		//! Intrusive reference count
-		mutable Atomic::Int<8 * sizeof(void*), TP> pRefCount;
+		mutable Atomic::Int<8 * sizeof(void*), TP> pRefCount = 0;
 
 	}; // class IIntrusiveSmartPtr
 
