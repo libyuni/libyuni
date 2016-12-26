@@ -7,6 +7,7 @@ configuration:
   - release
 
 environment:
+  YNMODULES: devices,uuid,parser,dbi,algorithms,marshal,net
   matrix:
   - BUILD_TYPE: cmake
     VS_VERSION: Visual Studio 14 2015
@@ -25,7 +26,7 @@ build_script:
   - if "%BUILD_TYPE%" == "cmake" if "%platform%" == "x86" SET VS_FULL=%VS_VERSION%
   - if "%BUILD_TYPE%" == "cmake" cd src
   - if "%BUILD_TYPE%" == "cmake" echo "cmake generator:" "%VS_FULL%"
-  - if "%BUILD_TYPE%" == "cmake" cmake -G "%VS_FULL%" . -DCMAKE_BUILD_TYPE=%CONFIGURATION%
+  - if "%BUILD_TYPE%" == "cmake" cmake -G "%VS_FULL%" . -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DMODULES=%YNMODULES%
   - if "%BUILD_TYPE%" == "cmake" cmake --build . --config %CONFIGURATION%
 
 test_script:
