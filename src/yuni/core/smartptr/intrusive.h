@@ -17,6 +17,10 @@
 namespace Yuni
 {
 
+	template<class T>
+	using Ref = SmartPtr<T, Yuni::Policy::Ownership::COMReferenceCounted>;
+
+
 	/*!
 	** \brief Give to inherited classes an intrusive counting through CRTP.
 	**
@@ -51,9 +55,9 @@ namespace Yuni
 		{
 		public:
 			//! A thread-safe type
-			typedef Yuni::SmartPtr<T, Yuni::Policy::Ownership::COMReferenceCounted>  PtrThreadSafe;
+			using PtrThreadSafe = Ref<T>;
 			//! A default type
-			typedef Yuni::SmartPtr<T, Yuni::Policy::Ownership::COMReferenceCounted>    PtrSingleThreaded;
+			using PtrSingleThreaded = Ref<T>;
 			//! The most suitable smart pointer for T
 			typedef typename Yuni::Static::If<ThreadingPolicy::threadSafe, PtrThreadSafe, PtrSingleThreaded>::ResultType  Ptr;
 
@@ -158,9 +162,9 @@ namespace Yuni
 		{
 		public:
 			//! A thread-safe type
-			typedef Yuni::SmartPtr<T, Yuni::Policy::Ownership::COMReferenceCounted>  PtrThreadSafe;
+			using PtrThreadSafe = Ref<T>;
 			//! A default type
-			typedef Yuni::SmartPtr<T, Yuni::Policy::Ownership::COMReferenceCounted>    PtrSingleThreaded;
+			using PtrSingleThreaded = Ref<T>;
 			//! The most suitable smart pointer for T
 			typedef typename Yuni::Static::If<ThreadingPolicy::threadSafe, PtrThreadSafe, PtrSingleThreaded>::ResultType Ptr;
 
