@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 include("../cmake/message.cmake")
 
 
-YMESSAGE("")
-YMESSAGE("Yuni Framework - Samples")
-YMESSAGE("")
+ynmessage("")
+ynmessage("Yuni Framework - Samples")
+ynmessage("")
 project(yuni-samples)
 
 if(POLICY CMP0011)
@@ -31,7 +31,7 @@ find_package(Yuni COMPONENTS core)
 if(Yuni_FOUND)
 
 	# Infos
-	YMESSAGE("The Yuni Framework : ${Yuni_INFOS}")
+	ynmessage("The Yuni Framework : ${Yuni_INFOS}")
 
 	add_subdirectory(audio)
 	add_subdirectory(core)
@@ -45,18 +45,18 @@ if(Yuni_FOUND)
 	add_subdirectory(dbi)
 	add_subdirectory(parser)
 
-	YMESSAGE("")
-	YMESSAGE("To enable additional modules in libyuni, please refer to the cmake flag '-DMODULES'")
-	YMESSAGE("when compiling libyuni.")
-	YMESSAGE("To get the list of all modules, try 'cmake -DMODULES=help' in the libyuni source folder")
-	YMESSAGE("")
+	ynmessage("")
+	ynmessage("To enable additional modules in libyuni, please refer to the cmake flag '-DMODULES'")
+	ynmessage("when compiling libyuni.")
+	ynmessage("To get the list of all modules, try 'cmake -DMODULES=help' in the libyuni source folder")
+	ynmessage("")
 
 else()
 
-	YMESSAGE("A working Yuni Framework was not found (could not locate yuni-config).")
-	YMESSAGE("If you are not building from within the source tree, you should define")
-	YMESSAGE("YUNI_CONFIG to the path to the yuni-config binary, e.g.:")
-	YMESSAGE(" $ cmake -DYUNI_CONFIG=path/to/yuni-config <samples_path>")
+	ynmessage("A working Yuni Framework was not found (could not locate yuni-config).")
+	ynmessage("If you are not building from within the source tree, you should define")
+	ynmessage("YUNI_CONFIG to the path to the yuni-config binary, e.g.:")
+	ynmessage(" $ cmake -DYUNI_CONFIG=path/to/yuni-config <samples_path>")
 	YERROR("Aborting.")
 
 endif()

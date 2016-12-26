@@ -1,5 +1,5 @@
 
-YMESSAGE_MODULE("Messaging  (EXPERIMENTAL)")
+ynmessage_module("Messaging  (EXPERIMENTAL)")
 
 LIBYUNI_CONFIG_LIB("both" "messaging"        "yuni-static-messaging")
 

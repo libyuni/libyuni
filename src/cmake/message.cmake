@@ -1,7 +1,7 @@
 set(YUNI_ERROR_HAS_OCCURED   false)
 
 
-macro(YMESSAGE msg)
+macro(ynmessage msg)
 	if(UNIX)
 		message(STATUS "[1;30m{yuni}[0m  ${msg}")
 	else()
@@ -11,7 +11,7 @@ macro(YMESSAGE msg)
 endmacro()
 
 
-macro(YMESSAGE_BOLD msg)
+macro(ynmessage_bold msg)
 	if(UNIX)
 		message(STATUS "[1;30m{yuni}[0m  [1;37m[1m${msg}[0m")
 	else()
@@ -20,7 +20,7 @@ macro(YMESSAGE_BOLD msg)
 endmacro()
 
 
-macro(YMESSAGE_TITLE msg1 msg2)
+macro(ynmessage_title msg1 msg2)
 	if(UNIX)
 		message(STATUS "[1;30m{yuni}[0m  [1;32m${msg1}[0m[1;37m[1m${msg2}[0m")
 	else()
@@ -29,8 +29,8 @@ macro(YMESSAGE_TITLE msg1 msg2)
 endmacro()
 
 
-macro(YMESSAGE_MODULE msg)
-	YMESSAGE_TITLE("[module] " "${msg}")
+macro(ynmessage_module msg)
+	ynmessage_title("[module] " "${msg}")
 endmacro()
 
 

@@ -1,6 +1,6 @@
 
 
-YMESSAGE("      Using custom OpenAL package path")
+ynmessage("      Using custom OpenAL package path")
 
 if (NOT YUNI_DvP_OPENAL_PREFIX)
 	YFATAL(    "[!!] Error: custom mode requires a prefix specification.")

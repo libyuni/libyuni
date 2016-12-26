@@ -1,11 +1,11 @@
 
-YMESSAGE("      Using OpenAL from system")
+ynmessage("      Using OpenAL from system")
 
 # Use find_package for automatic detection
 find_package(OpenAL)
 if (OPENAL_FOUND)
 	set(CMAKE_REQUIRED_INCLUDES "${OPENAL_INCLUDE_DIR}")
-	YMESSAGE("OpenAL found : ${OPENAL_INCLUDE_DIR}")
+	ynmessage("OpenAL found : ${OPENAL_INCLUDE_DIR}")
 
 	# Mac OS X
 	if(APPLE)
@@ -22,9 +22,9 @@ if (OPENAL_FOUND)
 
 else()
 	set(YUNI_CMAKE_ERROR 1)
-	YMESSAGE(    "[!!] Impossible to find OpenAL. Please check your profile.")
-	YMESSAGE(    " * Packages needed on Debian: libopenal-dev")
-	YMESSAGE(    " * Packages needed on redhat: openal-devel")
+	ynmessage(    "[!!] Impossible to find OpenAL. Please check your profile.")
+	ynmessage(    " * Packages needed on Debian: libopenal-dev")
+	ynmessage(    " * Packages needed on redhat: openal-devel")
 endif()
 
 

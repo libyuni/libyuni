@@ -1,5 +1,5 @@
 
-YMESSAGE_MODULE("Media  (EXPERIMENTAL)")
+ynmessage_module("Media  (EXPERIMENTAL)")
 
 
 LIBYUNI_CONFIG_LIB("both" "media"      "yuni-static-media-core")
@@ -58,7 +58,7 @@ else()
 endif()
 
 
-YMESSAGE("      -> OpenAL Libraries: ${OPENAL_MODE}")
+ynmessage("      -> OpenAL Libraries: ${OPENAL_MODE}")
 
 if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cmake/deps/openal-${OPENAL_MODE}.cmake)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/deps/openal-${OPENAL_MODE}.cmake)
@@ -66,14 +66,14 @@ else()
 	YFATAL("[!!] Invalid OPENAL_MODE: ${OPENAL_MODE}")
 endif()
 
-YMESSAGE("      -> OpenAL Libraries: ${OPENAL_INCLUDE_DIR}")
+ynmessage("      -> OpenAL Libraries: ${OPENAL_INCLUDE_DIR}")
 
 
 
 #
 # FFmpeg
 #
-YMESSAGE("Added Support for FFMpeg")
+ynmessage("Added Support for FFMpeg")
 DEVPACK_IMPORT_FFMPEG()
 set(SRC_MEDIA_FFMPEG ${YUNI_EXT_FFMPEG_HEADERS})
 
@@ -84,8 +84,8 @@ if (NOT WIN32 AND NOT WIN64)
 		list(APPEND YUNI_EXT_FFMPEG_LIB ${ZLIB_LIBRARIES})
 	else (ZLIB_FOUND)
 		YERROR(    "Impossible to find ZLib (Media will not work properly !)")
-		YMESSAGE(    " * Packages needed on debian: libz-dev")
-		YMESSAGE(    " * Packages needed on redhat: zlib-devel")
+		ynmessage(    " * Packages needed on debian: libz-dev")
+		ynmessage(    " * Packages needed on redhat: zlib-devel")
 	endif (ZLIB_FOUND)
 
 	# BZIP2
@@ -94,8 +94,8 @@ if (NOT WIN32 AND NOT WIN64)
 		list(APPEND YUNI_EXT_FFMPEG_LIB ${BZIP2_LIBRARIES})
 	else(BZIP2_FOUND)
 		YERROR(    "Impossible to find BZip2 (Media will not work properly !)")
-		YMESSAGE(    " * Packages needed on debian: libbz2-dev")
-		YMESSAGE(    " * Packages needed on redhat: bzip2-devel")
+		ynmessage(    " * Packages needed on debian: libbz2-dev")
+		ynmessage(    " * Packages needed on redhat: bzip2-devel")
 	endif(BZIP2_FOUND)
 endif (NOT WIN32 AND NOT WIN64)
 

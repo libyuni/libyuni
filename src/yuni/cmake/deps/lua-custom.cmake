@@ -1,11 +1,11 @@
 
-YMESSAGE("      Using custom Lua package path")
+ynmessage("      Using custom Lua package path")
 
 if (NOT YUNI_DvP_LUA_PREFIX)
 		YFATAL(    "[!!] Error: custom mode requires a prefix specification.")
 endif()
 
-YMESSAGE("      Using Lua from custom prefix: ${YUNI_DvP_LUA_PREFIX}")
+ynmessage("      Using Lua from custom prefix: ${YUNI_DvP_LUA_PREFIX}")
 
 # Set internal include path
 Set(YUNI_EXT_LUA_INCLUDE "${YUNI_DvP_LUA_PREFIX}/include")

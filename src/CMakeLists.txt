@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.2)
 include("cmake/message.cmake")
 
 project(yuni)
-YMESSAGE("")
-YMESSAGE_BOLD("The Yuni Framework")
+ynmessage("")
+ynmessage_bold("The Yuni Framework")
 
 # Package informations
 set(YUNI_URL_WEBSITE             "http://www.libyuni.org")
@@ -87,8 +87,8 @@ endif()
 # Target
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/target.cmake")
 # Getting the latest revision number
-YMESSAGE_BOLD("Version : v${YUNI_VERSION_HI}.${YUNI_VERSION_LO}-${YUNI_TARGET} (Rev: ${YUNI_VERSION_REV})")
-YMESSAGE("")
+ynmessage_bold("Version : v${YUNI_VERSION_HI}.${YUNI_VERSION_LO}-${YUNI_TARGET} (Rev: ${YUNI_VERSION_REV})")
+ynmessage("")
 set(YUNI_VERSION_STRING "${YUNI_VERSION_HI}.${YUNI_VERSION_LO}.${YUNI_VERSION_REV}-${CMAKE_BUILD_TYPE}")
 # Informations about the system
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/system-information.cmake")
@@ -104,9 +104,9 @@ set(YUNI_SOURCE_TREE         "${CMAKE_CURRENT_SOURCE_DIR}/yuni/")
 
 set(YUNI_SKIP_YUNI_CONFIG  false)
 
-YMESSAGE_BOLD("Folders")
-YMESSAGE("         Source: ${CMAKE_CURRENT_SOURCE_DIR}")
-YMESSAGE("     Build into: ${CMAKE_CURRENT_BINARY_DIR}")
+ynmessage_bold("Folders")
+ynmessage("         Source: ${CMAKE_CURRENT_SOURCE_DIR}")
+ynmessage("     Build into: ${CMAKE_CURRENT_BINARY_DIR}")
 
 
 # Custom settings
@@ -114,10 +114,10 @@ if ("${PROFILE}" STREQUAL "")
 	if (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake")
 		configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ProfileBuild.template.cmake
 			${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake)
-		YMESSAGE("")
-		YMESSAGE("A default profile has been created (`<build_directory>/ProfileBuild.cmake`)")
-		YMESSAGE("Please edit this file to override the default settings")
-		YMESSAGE("")
+		ynmessage("")
+		ynmessage("A default profile has been created (`<build_directory>/ProfileBuild.cmake`)")
+		ynmessage("Please edit this file to override the default settings")
+		ynmessage("")
 	endif()
 	set(YUNI_PROFILE_PATH "${CMAKE_CURRENT_BINARY_DIR}/ProfileBuild.cmake")
 else()
@@ -128,8 +128,8 @@ else()
 endif()
 
 include("${YUNI_PROFILE_PATH}")
-YMESSAGE("  Using profile: ${YUNI_PROFILE_NAME}")
-YMESSAGE("       found in: ${YUNI_PROFILE_PATH}")
+ynmessage("  Using profile: ${YUNI_PROFILE_NAME}")
+ynmessage("       found in: ${YUNI_PROFILE_PATH}")
 
 # (Re)Check the target
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/target.cmake")
@@ -150,13 +150,13 @@ add_subdirectory(tools)
 # Compiling yuni-config if required
 #
 if (YUNI_AUTO_COMPILE_YUNI_CONFIG)
-	YMESSAGE("[yuni-config] Bootstraping")
+	ynmessage("[yuni-config] Bootstraping")
 	if (YUNI_TESTS)
-		YMESSAGE("The bootstrapping is required to compile the testsuite")
+		ynmessage("The bootstrapping is required to compile the testsuite")
 	endif()
 	# --
-	YMESSAGE("Configuring yuni-config...")
-	YMESSAGE("(in ${CMAKE_CURRENT_SOURCE_DIR}/tools/yuni-config)")
+	ynmessage("Configuring yuni-config...")
+	ynmessage("(in ${CMAKE_CURRENT_SOURCE_DIR}/tools/yuni-config)")
 	# Create the yuni-config bootstrap directory.
 	execute_process(COMMAND "${CMAKE_COMMAND}" -E make_directory
 		"${CMAKE_CURRENT_BINARY_DIR}/tools/yuni-config-bootstrap"
@@ -170,7 +170,7 @@ if (YUNI_AUTO_COMPILE_YUNI_CONFIG)
 			-G "${CMAKE_GENERATOR}"
 			WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tools/yuni-config-bootstrap")
 	# Compile it.
-	YMESSAGE("Compiling yuni-config...")
+	ynmessage("Compiling yuni-config...")
 	execute_process(COMMAND "${CMAKE_COMMAND}" --build
                               "${CMAKE_CURRENT_BINARY_DIR}/tools/yuni-config-bootstrap"
             WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tools/yuni-config-bootstrap")
@@ -195,4 +195,4 @@ endif()
 
 
 # Empty message, for beauty :)
-YMESSAGE("") # done
+ynmessage("") # done

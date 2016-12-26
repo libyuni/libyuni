@@ -1,5 +1,5 @@
 
-YMESSAGE_MODULE("DBI (Database independant)  (EXPERIMENTAL)")
+ynmessage_module("DBI (Database independant)  (EXPERIMENTAL)")
 
 LIBYUNI_CONFIG_LIB("both"   "dbi"  "yuni-static-dbi")
 

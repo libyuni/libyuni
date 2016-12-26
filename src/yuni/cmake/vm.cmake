@@ -1,6 +1,6 @@
 
 
-YMESSAGE_MODULE("Virtual Machine  (DEPRECATED)")
+ynmessage_module("Virtual Machine  (DEPRECATED)")
 
 # Paths for yuni-config, embedded version.
 LIBYUNI_CONFIG_INCLUDE_PATH("intree" "vm" "${CMAKE_CURRENT_SOURCE_DIR}/..")

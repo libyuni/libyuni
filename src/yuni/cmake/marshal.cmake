@@ -1,5 +1,5 @@
 
-YMESSAGE_MODULE("Marshal (Object serialization)  (EXPERIMENTAL)")
+ynmessage_module("Marshal (Object serialization)  (EXPERIMENTAL)")
 
 LIBYUNI_CONFIG_LIB("both" "marshal"        "yuni-static-marshal")
 
