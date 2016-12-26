@@ -3,7 +3,7 @@
 ynmessage("      Using custom OpenAL package path")
 
 if (NOT YUNI_DvP_OPENAL_PREFIX)
-	YFATAL(    "[!!] Error: custom mode requires a prefix specification.")
+	ynfatal(    "[!!] Error: custom mode requires a prefix specification.")
 endif()
 
 find_path(OPENAL_INCLUDE_DIR al.h

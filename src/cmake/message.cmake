@@ -34,7 +34,7 @@ macro(ynmessage_module msg)
 endmacro()
 
 
-macro(YWARNING msg)
+macro(ynwarning msg)
 	if(UNIX)
 		message(STATUS "[1;33m{yuni}  [warning][0m ${msg}")
 	else()
@@ -53,7 +53,7 @@ macro(ynerror msg)
 endmacro()
 
 
-macro(YFATAL msg)
+macro(ynfatal msg)
 	if(UNIX)
 		message(FATAL_ERROR "[1;31m{yuni}  [error][0m ${msg}")
 	else()

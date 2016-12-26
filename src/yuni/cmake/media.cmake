@@ -63,7 +63,7 @@ ynmessage("      -> OpenAL Libraries: ${OPENAL_MODE}")
 if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cmake/deps/openal-${OPENAL_MODE}.cmake)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/deps/openal-${OPENAL_MODE}.cmake)
 else()
-	YFATAL("[!!] Invalid OPENAL_MODE: ${OPENAL_MODE}")
+	ynfatal("[!!] Invalid OPENAL_MODE: ${OPENAL_MODE}")
 endif()
 
 ynmessage("      -> OpenAL Libraries: ${OPENAL_INCLUDE_DIR}")
