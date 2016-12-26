@@ -16,10 +16,10 @@ endif(NOT YUNI_AUTO_COMPILE_YUNI_CONFIG)
 
 if(YUNI_AUTO_COMPILE_YUNI_CONFIG)
 	ynmessage("")
-	ynmessage_bold("yuni-config  (self)")
+	ynmessage(BOLD "yuni-config  (self)")
 else()
 	ynmessage("")
-	ynmessage_bold("yuni-config")
+	ynmessage(BOLD "yuni-config")
 endif(YUNI_AUTO_COMPILE_YUNI_CONFIG)
 
 

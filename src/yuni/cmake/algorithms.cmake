@@ -1,5 +1,5 @@
 
-ynmessage_module("Algorithms")
+ynmessage(MODULE "Algorithms")
 
 LIBYUNI_CONFIG_LIB("both" "algorithms" "yuni-static-algorithms")
 

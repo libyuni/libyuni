@@ -1,5 +1,5 @@
 
-ynmessage_module("Device::Display")
+ynmessage(MODULE "Device::Display")
 
 LIBYUNI_CONFIG_DEPENDENCY("display" "devices") # devices is required
 

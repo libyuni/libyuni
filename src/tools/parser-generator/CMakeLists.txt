@@ -1,7 +1,7 @@
 project(yuni-config CXX)
 cmake_minimum_required(VERSION 2.8)
 
-ynmessage_title("[tool]" " yuni-parser-generator")
+ynmessage(TITLE "[tool]" " yuni-parser-generator")
 
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/common-settings.cmake")

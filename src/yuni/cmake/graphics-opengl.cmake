@@ -1,5 +1,5 @@
 
-ynmessage_module("OpenGL  (EXPERIMENTAL)")
+ynmessage(MODULE "OpenGL  (EXPERIMENTAL)")
 
 
 LIBYUNI_CONFIG_LIB("both" "opengl"      "yuni-static-graphics-opengl")

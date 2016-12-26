@@ -1,5 +1,5 @@
 
-ynmessage_module("UUID")
+ynmessage(MODULE "UUID")
 
 LIBYUNI_CONFIG_LIB("both" "uuid" "yuni-static-uuid")
 LIBYUNI_CONFIG_DEPENDENCY("uuid" "core") # core is required

@@ -3,7 +3,7 @@ include("cmake/message.cmake")
 
 project(yuni)
 ynmessage("")
-ynmessage_bold("The Yuni Framework")
+ynmessage(BOLD "The Yuni Framework")
 
 # Package informations
 set(YUNI_URL_WEBSITE             "http://www.libyuni.org")
@@ -87,7 +87,7 @@ endif()
 # Target
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/target.cmake")
 # Getting the latest revision number
-ynmessage_bold("Version : v${YUNI_VERSION_HI}.${YUNI_VERSION_LO}-${YUNI_TARGET} (Rev: ${YUNI_VERSION_REV})")
+ynmessage(BOLD "Version : v${YUNI_VERSION_HI}.${YUNI_VERSION_LO}-${YUNI_TARGET} (Rev: ${YUNI_VERSION_REV})")
 ynmessage("")
 set(YUNI_VERSION_STRING "${YUNI_VERSION_HI}.${YUNI_VERSION_LO}.${YUNI_VERSION_REV}-${CMAKE_BUILD_TYPE}")
 # Informations about the system
@@ -104,7 +104,7 @@ set(YUNI_SOURCE_TREE         "${CMAKE_CURRENT_SOURCE_DIR}/yuni/")
 
 set(YUNI_SKIP_YUNI_CONFIG  false)
 
-ynmessage_bold("Folders")
+ynmessage(BOLD "Folders")
 ynmessage("         Source: ${CMAKE_CURRENT_SOURCE_DIR}")
 ynmessage("     Build into: ${CMAKE_CURRENT_BINARY_DIR}")
 

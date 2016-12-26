@@ -1,7 +1,7 @@
 #
 # CMake Generator / Compiler
 #
-ynmessage_title("Generator : "  "${CMAKE_GENERATOR}")
+ynmessage(TITLE "Generator : "  "${CMAKE_GENERATOR}")
 if(MSVC)
 	if (WIN64)
 		ynmessage("Compiler: Visual Studio (64bits)")

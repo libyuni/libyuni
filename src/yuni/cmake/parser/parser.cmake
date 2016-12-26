@@ -1,5 +1,5 @@
 
-ynmessage_module("Parser Generator")
+ynmessage(MODULE "Parser Generator")
 
 LIBYUNI_CONFIG_LIB("both" "parser"        "yuni-static-parser")
 

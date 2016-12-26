@@ -1,5 +1,5 @@
 
-ynmessage_module("UI  (EXPERIMENTAL)")
+ynmessage(MODULE "UI  (EXPERIMENTAL)")
 
 LIBYUNI_CONFIG_LIB("both" "ui"      "yuni-static-ui-core")
 

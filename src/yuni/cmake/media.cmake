@@ -1,5 +1,5 @@
 
-ynmessage_module("Media  (EXPERIMENTAL)")
+ynmessage(MODULE "Media  (EXPERIMENTAL)")
 
 
 LIBYUNI_CONFIG_LIB("both" "media"      "yuni-static-media-core")

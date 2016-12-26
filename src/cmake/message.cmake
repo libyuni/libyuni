@@ -1,36 +1,24 @@
 set(YUNI_ERROR_HAS_OCCURED   false)
 
 
-macro(ynmessage msg)
-	if(UNIX)
-		message(STATUS "[1;30m{yuni}[0m  ${msg}")
+macro(ynmessage)
+	set(options BOLD MODULE)
+	set(oneValueArgs TITLE)
+	set(multiValueArgs)
+	cmake_parse_arguments(opts "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+	if (UNIX)
+		if (${opts_BOLD})
+			message(STATUS "[1;30m{yuni}[0m  [1;37m[1m${opts_UNPARSED_ARGUMENTS}[0m")
+		elseif (${opts_MODULE})
+			ynmessage(TITLE "[module] " "${opts_UNPARSED_ARGUMENTS}")
+		elseif (NOT "${opts_TITLE}" STREQUAL "")
+			message(STATUS "[1;30m{yuni}[0m  [1;32m${opts_TITLE}[0m[1;37m[1m${opts_UNPARSED_ARGUMENTS}[0m")
+		else()
+			message(STATUS "[1;30m{yuni}[0m  ${opts_UNPARSED_ARGUMENTS}")
+		endif()
 	else()
-		message(STATUS "{yuni}  ${msg}")
+		message(STATUS "{yuni}  ${opts_TITLE}${opts_UNPARSED_ARGUMENTS}")
 	endif()
-
-endmacro()
-
-
-macro(ynmessage_bold msg)
-	if(UNIX)
-		message(STATUS "[1;30m{yuni}[0m  [1;37m[1m${msg}[0m")
-	else()
-		message(STATUS "{yuni}  ${msg}")
-	endif()
-endmacro()
-
-
-macro(ynmessage_title msg1 msg2)
-	if(UNIX)
-		message(STATUS "[1;30m{yuni}[0m  [1;32m${msg1}[0m[1;37m[1m${msg2}[0m")
-	else()
-		message(STATUS "{yuni}  ${msg1}${msg2}")
-	endif()
-endmacro()
-
-
-macro(ynmessage_module msg)
-	ynmessage_title("[module] " "${msg}")
 endmacro()
 
 

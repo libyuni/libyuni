@@ -1,5 +1,5 @@
 
-ynmessage_module("Network  (EXPERIMENTAL)")
+ynmessage(MODULE "Network  (EXPERIMENTAL)")
 
 LIBYUNI_CONFIG_LIB("both" "net"        "yuni-static-net")
 
