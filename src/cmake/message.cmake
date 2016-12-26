@@ -1,3 +1,4 @@
+include(CMakeParseArguments)
 set(__libyuni_error_has_occured   false)
 
 
