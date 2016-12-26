@@ -13,6 +13,7 @@
 #include "timer.h"
 #include "../job/job.h"
 #include "../core/bind.h"
+#include <memory>
 
 namespace Yuni { namespace Job { class QueueService; }}
 namespace Yuni { namespace Job { class Taskgroup; }}
@@ -60,7 +61,7 @@ namespace Yuni
 	** \param callback The callback to execute
 	** \param autostart True to automatically start the timer
 	*/
-	Thread::IThread::Ptr  spawn(const Bind<void ()>& callback, bool autostart = true);
+	std::unique_ptr<Thread::IThread> spawn(const Bind<void ()>& callback, bool autostart = true);
 
 
 	/*!

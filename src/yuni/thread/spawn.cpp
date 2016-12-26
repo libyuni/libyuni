@@ -49,14 +49,9 @@ namespace Yuni
 
 
 
-	Thread::IThread::Ptr  spawn(const Bind<void ()>& callback, bool autostart)
+	std::unique_ptr<Thread::IThread> spawn(const Bind<void ()>& callback, bool autostart)
 	{
-		# ifdef YUNI_HAS_CPP_MOVE
-		Thread::IThread* thread = new SpawnThread(std::move(callback));
-		# else
-		Thread::IThread* thread = new SpawnThread(callback);
-		# endif
-
+		auto thread = std::make_unique<SpawnThread>(callback);
 		if (autostart)
 			thread->start();
 		return thread;
