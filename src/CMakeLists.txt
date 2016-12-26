@@ -50,18 +50,6 @@ if (WIN32 AND NOT WIN64)
 endif()
 
 
-#
-# CMake policies
-#
-# Preprocessor definition values are now escaped automatically
-if (POLICY CMP0005)
-	CMake_Policy(SET CMP0005 NEW)
-endif()
-if (POLICY CMP0011)
-	CMake_Policy(SET CMP0011 NEW)
-endif()
-
-
 set(YUNI_INSTALL_CXX_FLAGS   "")
 set(YUNI_INSTALL_CXX_DEFINES "")
 
