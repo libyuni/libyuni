@@ -30,18 +30,14 @@ namespace Display
 	class Resolution final
 	{
 	public:
-		enum
-		{
-			//! The smallest value allowed for the width of the screen
-			minimumWidth  = 320u,
-			//! The smallest allowed value for the height of the screen
-			minimumHeight = 200u,
-
-			//! The highest allowed for the width of the screen
-			maximumWidth  = 8192u, // 8K Video Format
-			//! The highest allowed value for the height of the screen
-			maximumHeight = 4320u,
-		};
+		//! The smallest value allowed for the width of the screen
+		constexpr static uint32_t minimumWidth  = 320;
+		//! The smallest allowed value for the height of the screen
+		constexpr static uint32_t minimumHeight = 200;
+		//! The highest allowed for the width of the screen
+		constexpr static uint32_t maximumWidth  = 8192; // 8K Video Format
+		//! The highest allowed value for the height of the screen
+		constexpr static uint32_t maximumHeight = 4320;
 
 	public:
 		//! \name Constructors
