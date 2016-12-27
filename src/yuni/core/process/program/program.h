@@ -274,7 +274,7 @@ namespace Process
 
 		//! Information on the program currently executed
 		// \note This class may be shared by several threads
-		SmartPtr<ProcessSharedInfo> pEnv;
+		std::shared_ptr<ProcessSharedInfo> pEnv;
 		//! Stream
 		std::shared_ptr<Stream> pStream;
 

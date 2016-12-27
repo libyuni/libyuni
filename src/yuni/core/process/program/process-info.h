@@ -32,11 +32,6 @@ namespace Process
 	struct Program::ProcessSharedInfo final
 		: public Yuni::NonCopyable<Program::ProcessSharedInfo>
 	{
-		//! Smart pointer
-		// \note This type must match the definition of \p pEnv
-		typedef Yuni::SmartPtr<Program::ProcessSharedInfo> Ptr;
-
-	public:
 		~ProcessSharedInfo();
 
 		/*!

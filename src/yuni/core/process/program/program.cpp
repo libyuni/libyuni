@@ -80,7 +80,7 @@ namespace Process
 
 	private:
 		//! Reference to the original shared data structure
-		Yuni::Process::Program::ProcessSharedInfo::Ptr procinfoRef;
+		std::shared_ptr<Yuni::Process::Program::ProcessSharedInfo> procinfoRef;
 		//! Convient alias to the shared data
 		Yuni::Process::Program::ProcessSharedInfo& procinfo;
 
@@ -379,8 +379,8 @@ namespace Process
 	void Program::signal(int sig)
 	{
 		#ifndef YUNI_OS_MSVC
-		ProcessSharedInfo::Ptr envptr = pEnv;
-		if (!(!envptr))
+		auto envptr = pEnv;
+		if (!!envptr)
 			envptr->sendSignal(true, sig);
 		#else
 		// Signals are not supported on Windows. Silently ignoring it.
@@ -408,13 +408,10 @@ namespace Process
 
 	bool Program::execute(uint timeout)
 	{
-		// new environment
-		ProcessSharedInfo::Ptr envptr = pEnv;
+		auto envptr = pEnv;
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return false;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -460,7 +457,7 @@ namespace Process
 
 	int Program::wait(sint64* duration)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv;
+		auto envptr = pEnv;
 		if (YUNI_UNLIKELY(!envptr))
 		{
 			if (duration)
@@ -581,12 +578,10 @@ namespace Process
 
 	bool Program::dispatchExecution(const Bind<void (const Callback&)>& dispatcher, uint timeout)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv;
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return false;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 
@@ -620,7 +615,7 @@ namespace Process
 
 	bool Program::running() const
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv;
+		auto envptr = pEnv;
 		return (!envptr) ? false : (envptr->running);
 	}
 
@@ -630,12 +625,10 @@ namespace Process
 		// remove all whitespaces
 		cmd.trim();
 
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -720,12 +713,10 @@ namespace Process
 
 	void Program::workingDirectory(const AnyString& directory)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -737,7 +728,7 @@ namespace Process
 
 	String Program::workingDirectory() const
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 			return nullptr;
 		ProcessSharedInfo& env = *envptr;
@@ -748,7 +739,7 @@ namespace Process
 
 	bool Program::redirectToConsole() const
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 			return true;
 		ProcessSharedInfo& env = *envptr;
@@ -760,15 +751,12 @@ namespace Process
 
 	void Program::redirectToConsole(bool flag)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
 			if (flag)
 				return; // default is true, useless to instanciate something
-
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -781,7 +769,7 @@ namespace Process
 
 	String Program::program() const
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 			return nullptr;
 		ProcessSharedInfo& env = *envptr;
@@ -792,12 +780,10 @@ namespace Process
 
 	void Program::program(const AnyString& prgm)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -810,7 +796,7 @@ namespace Process
 
 	void Program::argumentClear()
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 			return;
 		ProcessSharedInfo& env = *envptr;
@@ -823,12 +809,10 @@ namespace Process
 
 	void Program::argumentAdd(const AnyString& arg)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -841,7 +825,7 @@ namespace Process
 
 	Program::DurationPrecision  Program::durationPrecision() const
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!(!envptr))
 		{
 			ProcessSharedInfo& env = *envptr;
@@ -854,12 +838,10 @@ namespace Process
 
 	void Program::durationPrecision(Program::DurationPrecision precision)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
