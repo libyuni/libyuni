@@ -92,15 +92,14 @@ namespace Display
 		refreshOSSpecific(lst);
 		// We will browse each monitor found to see if it is suitable for our needs
 		// In this case, it will be added to the result list
-		const MonitorsFound::iterator& itEnd = lst.end();
-		for (MonitorsFound::iterator it = lst.begin(); it != itEnd; ++it)
+		for (auto& it: lst)
 		{
-			OrderedResolutions& resolutions = *(it->second);
+			OrderedResolutions& resolutions = *(it.second);
 			// A monitor without any resolution is useless
 			if (resolutions.empty()) // no available resolutions
 				continue;
 			// Keeping a reference to our monitor for code clarity
-			auto& monitor = it->first;
+			auto& monitor = it.first;
 			// Removing all its default resolutions
 			monitor->clear();
 			// Browsing all resolutions, in the reverse order
@@ -116,12 +115,12 @@ namespace Display
 					// Do not accept resolution with a width below minWidth
 					if (j->first < minWidth)
 						continue;
-					for (std::map<uint32, std::map<uint8,bool> >::reverse_iterator k = j->second.rbegin(); k != j->second.rend(); ++k)
+					for (auto k = j->second.rbegin(); k != j->second.rend(); ++k)
 					{
 						// Do not accept resolutions with a height below minHeight
 						if (k->first < minHeight)
 							continue;
-						for (std::map<uint8,bool>::reverse_iterator l = k->second.rbegin(); l != k->second.rend(); ++l)
+						for (auto l = k->second.rbegin(); l != k->second.rend(); ++l)
 						{
 							if (l->first >= minDepth)
 								*monitor << new Resolution(j->first, k->first, l->first);
@@ -152,11 +151,10 @@ namespace Display
 
 	Ref<Monitor> List::findByHandle(const Monitor::Handle hwn) const
 	{
-		const MonitorVector::const_iterator& end = pMonitors.end();
-		for (MonitorVector::const_iterator it = pMonitors.begin(); it != end; ++it)
+		for (auto& monitor: pMonitors)
 		{
-			if (hwn == (*it)->handle())
-				return *it;
+			if (hwn == monitor->handle())
+				return monitor;
 		}
 		return pNullMonitor;
 	}
@@ -164,11 +162,10 @@ namespace Display
 
 	Ref<Monitor> List::findByGUID(const String& guid) const
 	{
-		const MonitorVector::const_iterator& end = pMonitors.end();
-		for (MonitorVector::const_iterator it = pMonitors.begin(); it != end; ++it)
+		for (auto& monitor: pMonitors)
 		{
-			if (guid == (*it)->guid())
-				return *it;
+			if (guid == monitor->guid())
+				return monitor;
 		}
 		return pNullMonitor;
 	}
