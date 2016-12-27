@@ -16,13 +16,6 @@ namespace Yuni
 {
 
 	template<class ChildT, bool VirtualT, template<class> class TP>
-	inline IIntrusiveSmartPtr<ChildT,VirtualT,TP>::IIntrusiveSmartPtr() :
-		pRefCount()
-	{
-	}
-
-
-	template<class ChildT, bool VirtualT, template<class> class TP>
 	inline IIntrusiveSmartPtr<ChildT,VirtualT,TP>::~IIntrusiveSmartPtr()
 	{
 		assert(pRefCount == 0 and "Destroying smart ptr object with a non-zero reference count");
@@ -30,8 +23,7 @@ namespace Yuni
 
 
 	template<class ChildT, bool VirtualT, template<class> class TP>
-	inline IIntrusiveSmartPtr<ChildT,VirtualT,TP>::IIntrusiveSmartPtr(const IIntrusiveSmartPtr<ChildT,VirtualT,TP>&) :
-		pRefCount()
+	inline IIntrusiveSmartPtr<ChildT,VirtualT,TP>::IIntrusiveSmartPtr(const IIntrusiveSmartPtr<ChildT,VirtualT,TP>&)
 	{
 	}
 
@@ -85,13 +77,6 @@ namespace Yuni
 
 
 	template<class ChildT, template<class> class TP>
-	inline IIntrusiveSmartPtr<ChildT,false,TP>::IIntrusiveSmartPtr() :
-		pRefCount()
-	{
-	}
-
-
-	template<class ChildT, template<class> class TP>
 	inline IIntrusiveSmartPtr<ChildT,false,TP>::~IIntrusiveSmartPtr()
 	{
 		assert(pRefCount == 0 and "Destroying smart ptr object with a non-zero reference count");
@@ -99,9 +84,8 @@ namespace Yuni
 
 
 	template<class ChildT, template<class> class TP>
-	inline IIntrusiveSmartPtr<ChildT,false,TP>::IIntrusiveSmartPtr(const IIntrusiveSmartPtr<ChildT,false,TP>&) :
-		ThreadingPolicy(),
-		pRefCount()
+	inline IIntrusiveSmartPtr<ChildT,false,TP>::IIntrusiveSmartPtr(const IIntrusiveSmartPtr<ChildT,false,TP>&)
+		: ThreadingPolicy()
 	{
 	}
 

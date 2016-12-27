@@ -42,17 +42,15 @@ namespace Process
 {
 
 
-	class Program::ThreadMonitor final : public Yuni::Thread::IThread
+	struct Program::ThreadMonitor final : public Yuni::Thread::IThread
 	{
-	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default constructor
 		ThreadMonitor(Yuni::Process::Program& process);
 		//! Destructor
-		virtual ~ThreadMonitor();
+		virtual ~ThreadMonitor() = default;
 		//@}
-
 
 
 		bool spawnProcess();
@@ -61,9 +59,9 @@ namespace Process
 	protected:
 		virtual bool onExecute() override;
 
-		virtual void onPause() override;
+		virtual void onPause() override {}
 
-		virtual void onStop() override;
+		virtual void onStop() override {}
 
 		virtual void onKill() override;
 
@@ -82,17 +80,17 @@ namespace Process
 
 	private:
 		//! Reference to the original shared data structure
-		Yuni::Process::Program::ProcessSharedInfo::Ptr procinfoRef;
+		std::shared_ptr<Yuni::Process::Program::ProcessSharedInfo> procinfoRef;
 		//! Convient alias to the shared data
 		Yuni::Process::Program::ProcessSharedInfo& procinfo;
 
 		//! Reference to the original stream handler
 		// \internal Automatically reset by \p theProcessHasStopped
-		Stream::Ptr stream;
+		std::shared_ptr<Stream> stream;
 
 		# ifndef YUNI_OS_WINDOWS
 		typedef int FD;
-		pid_t pid;
+		pid_t pid = -1;
 		#else
 		typedef HANDLE FD;
 		HANDLE processHandle;
@@ -107,14 +105,14 @@ namespace Process
 		}
 		channels;
 
-		bool pRedirectToConsole;
+		bool pRedirectToConsole = false;
 
-		int pExitStatus;
+		int pExitStatus = -1;
 		//! Flag to determine whether the process was killed or not
-		bool pKilled;
+		bool pKilled = false;
 
-		sint64 pStartTime;
-		sint64 pEndTime;
+		sint64 pStartTime = -1;
+		sint64 pEndTime = 0;
 
 		//! Duration precision
 		const DurationPrecision pDurationPrecision;
@@ -129,23 +127,10 @@ namespace Process
 		, procinfo(*(process.pEnv))
 		, stream(process.pStream)
 		, pRedirectToConsole(procinfo.redirectToConsole)
-		, pExitStatus(-1)
-		, pKilled(false)
-		, pStartTime(-1)
-		, pEndTime(0)
 		, pDurationPrecision(process.pEnv->durationPrecision)
 	{
 		// to avoid compiler warning
 		(void) procinfoRef;
-
-		#ifndef YUNI_OS_WINDOWS
-		pid = -1;
-		#endif
-	}
-
-
-	inline Program::ThreadMonitor::~ThreadMonitor()
-	{
 	}
 
 
@@ -174,16 +159,6 @@ namespace Process
 
 		theProcessHasStopped(pKilled, pExitStatus);
 		return false; // stop the thread
-	}
-
-
-	inline void Program::ThreadMonitor::onPause()
-	{
-	}
-
-
-	inline void Program::ThreadMonitor::onStop()
-	{
 	}
 
 
@@ -229,12 +204,11 @@ namespace Process
 
 	Program::ProcessSharedInfo::~ProcessSharedInfo()
 	{
-		if (YUNI_UNLIKELY(timeoutThread))
+		if (YUNI_UNLIKELY(timeoutThread.get()))
 		{
 			// should never go in this section
 			assert(false and "the thread for handling the timeout has not been properly stopped");
 			timeoutThread->stop();
-			delete timeoutThread;
 		}
 
 		if (thread and thread->release())
@@ -349,18 +323,11 @@ namespace Process
 
 	void Program::ProcessSharedInfo::createThreadForTimeoutWL()
 	{
-		delete timeoutThread; // for code safety
-
+		timeoutThread.reset();
 		if (processID > 0 and timeout > 0)
 		{
-			timeoutThread = new (std::nothrow) TimeoutThread(processID, timeout);
-			if (timeoutThread)
-				timeoutThread->start();
-		}
-		else
-		{
-			// no valid pid, no thread required for a timeout
-			timeoutThread = nullptr;
+			timeoutThread = std::make_unique<TimeoutThread>(processID, timeout);
+			timeoutThread->start();
 		}
 	}
 
@@ -412,8 +379,8 @@ namespace Process
 	void Program::signal(int sig)
 	{
 		#ifndef YUNI_OS_MSVC
-		ProcessSharedInfo::Ptr envptr = pEnv;
-		if (!(!envptr))
+		auto envptr = pEnv;
+		if (!!envptr)
 			envptr->sendSignal(true, sig);
 		#else
 		// Signals are not supported on Windows. Silently ignoring it.
@@ -441,13 +408,10 @@ namespace Process
 
 	bool Program::execute(uint timeout)
 	{
-		// new environment
-		ProcessSharedInfo::Ptr envptr = pEnv;
+		auto envptr = pEnv;
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return false;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -493,7 +457,7 @@ namespace Process
 
 	int Program::wait(sint64* duration)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv;
+		auto envptr = pEnv;
 		if (YUNI_UNLIKELY(!envptr))
 		{
 			if (duration)
@@ -614,12 +578,10 @@ namespace Process
 
 	bool Program::dispatchExecution(const Bind<void (const Callback&)>& dispatcher, uint timeout)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv;
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return false;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 
@@ -653,7 +615,7 @@ namespace Process
 
 	bool Program::running() const
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv;
+		auto envptr = pEnv;
 		return (!envptr) ? false : (envptr->running);
 	}
 
@@ -663,12 +625,10 @@ namespace Process
 		// remove all whitespaces
 		cmd.trim();
 
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -753,12 +713,10 @@ namespace Process
 
 	void Program::workingDirectory(const AnyString& directory)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -770,7 +728,7 @@ namespace Process
 
 	String Program::workingDirectory() const
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 			return nullptr;
 		ProcessSharedInfo& env = *envptr;
@@ -781,7 +739,7 @@ namespace Process
 
 	bool Program::redirectToConsole() const
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 			return true;
 		ProcessSharedInfo& env = *envptr;
@@ -793,15 +751,12 @@ namespace Process
 
 	void Program::redirectToConsole(bool flag)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
 			if (flag)
 				return; // default is true, useless to instanciate something
-
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -814,7 +769,7 @@ namespace Process
 
 	String Program::program() const
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 			return nullptr;
 		ProcessSharedInfo& env = *envptr;
@@ -825,12 +780,10 @@ namespace Process
 
 	void Program::program(const AnyString& prgm)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -843,7 +796,7 @@ namespace Process
 
 	void Program::argumentClear()
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 			return;
 		ProcessSharedInfo& env = *envptr;
@@ -856,12 +809,10 @@ namespace Process
 
 	void Program::argumentAdd(const AnyString& arg)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -874,7 +825,7 @@ namespace Process
 
 	Program::DurationPrecision  Program::durationPrecision() const
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!(!envptr))
 		{
 			ProcessSharedInfo& env = *envptr;
@@ -887,12 +838,10 @@ namespace Process
 
 	void Program::durationPrecision(Program::DurationPrecision precision)
 	{
-		ProcessSharedInfo::Ptr envptr = pEnv; // keeping a reference to the current env
+		auto envptr = pEnv; // keeping a reference to the current env
 		if (!envptr)
 		{
-			envptr = new (std::nothrow) ProcessSharedInfo();
-			if (!envptr)
-				return;
+			envptr = std::make_shared<ProcessSharedInfo>();
 			pEnv = envptr;
 		}
 		ProcessSharedInfo& env = *envptr;
@@ -917,10 +866,7 @@ namespace Process
 		Program program;
 		program.commandLine(commandline);
 
-		CaptureOutput* output = new (std::nothrow) CaptureOutput();
-		if (!output)
-			return false;
-
+		auto output = std::make_shared<CaptureOutput>();
 		program.stream(output);
 		bool success = program.execute(timeout) and (0 == program.wait());
 
@@ -937,10 +883,7 @@ namespace Process
 		Program program;
 		program.commandLine(commandline);
 
-		CaptureOutput* output = new (std::nothrow) CaptureOutput();
-		if (!output)
-			return String{};
-
+		auto output = std::make_shared<CaptureOutput>();
 		program.stream(output);
 		program.execute(timeout) and (0 == program.wait());
 		if (trim)

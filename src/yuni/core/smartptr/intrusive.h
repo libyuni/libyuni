@@ -11,11 +11,16 @@
 #pragma once
 #include "../../yuni.h"
 #include "smartptr.h"
+#include <utility>
 
 
 
 namespace Yuni
 {
+
+	template<class T>
+	using Ref = SmartPtr<T, Yuni::Policy::Ownership::COMReferenceCounted>;
+
 
 	/*!
 	** \brief Give to inherited classes an intrusive counting through CRTP.
@@ -51,9 +56,9 @@ namespace Yuni
 		{
 		public:
 			//! A thread-safe type
-			typedef Yuni::SmartPtr<T, Yuni::Policy::Ownership::COMReferenceCounted>  PtrThreadSafe;
+			using PtrThreadSafe = Ref<T>;
 			//! A default type
-			typedef Yuni::SmartPtr<T, Yuni::Policy::Ownership::COMReferenceCounted>    PtrSingleThreaded;
+			using PtrSingleThreaded = Ref<T>;
 			//! The most suitable smart pointer for T
 			typedef typename Yuni::Static::If<ThreadingPolicy::threadSafe, PtrThreadSafe, PtrSingleThreaded>::ResultType  Ptr;
 
@@ -109,7 +114,7 @@ namespace Yuni
 		/*!
 		** \brief Default constructor
 		*/
-		IIntrusiveSmartPtr();
+		IIntrusiveSmartPtr() = default;
 
 		/*!
 		** \brief Destructor
@@ -129,7 +134,7 @@ namespace Yuni
 
 	private:
 		//! Intrusive reference count
-		mutable Atomic::Int<8 * sizeof(void*), TP> pRefCount;
+		mutable Atomic::Int<8 * sizeof(void*), TP> pRefCount = 0;
 
 	}; // class IIntrusiveSmartPtr
 
@@ -158,9 +163,9 @@ namespace Yuni
 		{
 		public:
 			//! A thread-safe type
-			typedef Yuni::SmartPtr<T, Yuni::Policy::Ownership::COMReferenceCounted>  PtrThreadSafe;
+			using PtrThreadSafe = Ref<T>;
 			//! A default type
-			typedef Yuni::SmartPtr<T, Yuni::Policy::Ownership::COMReferenceCounted>    PtrSingleThreaded;
+			using PtrSingleThreaded = Ref<T>;
 			//! The most suitable smart pointer for T
 			typedef typename Yuni::Static::If<ThreadingPolicy::threadSafe, PtrThreadSafe, PtrSingleThreaded>::ResultType Ptr;
 
@@ -205,7 +210,7 @@ namespace Yuni
 		/*!
 		** \brief Default constructor
 		*/
-		IIntrusiveSmartPtr();
+		IIntrusiveSmartPtr() = default;
 
 		/*!
 		** \brief Destructor
@@ -225,16 +230,19 @@ namespace Yuni
 
 	private:
 		//! Intrusive reference count
-		mutable Atomic::Int<8 * sizeof(void*), TP> pRefCount;
+		mutable Atomic::Int<8 * sizeof(void*), TP> pRefCount = 0;
 
 	}; // class IIntrusiveSmartPtr
 
 
 
-
+	//! Constructs an object of type T and wraps it in an intrusive ref-counting smart pointer
+	template<class T, typename... Args>
+	Ref<T> make_ref(Args&&... args) {
+		return Ref<T>(new T(std::forward<Args>(args)...));
+	}
 
 
 } // namespace Yuni
 
 #include "intrusive.hxx"
-

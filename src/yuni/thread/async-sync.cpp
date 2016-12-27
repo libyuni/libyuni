@@ -13,20 +13,14 @@
 #include "../job/taskgroup.h"
 
 
-
 namespace Yuni
 {
 
-	class AsyncJob final : public Job::IJob
+	struct AsyncJob final : public Job::IJob
 	{
-	public:
 		AsyncJob(const Bind<void ()>& callback) :
 			pCallback(callback)
 		{}
-
-		virtual ~AsyncJob()
-		{
-		}
 
 
 	protected:
@@ -40,8 +34,6 @@ namespace Yuni
 		Bind<void ()> pCallback;
 
 	}; // class AsyncJob
-
-
 
 
 	Job::IJob::Ptr  async(Job::QueueService& queueservice, const Bind<void ()>& callback)
@@ -64,7 +56,4 @@ namespace Yuni
 	}
 
 
-
-
 } // namespace Yuni
-

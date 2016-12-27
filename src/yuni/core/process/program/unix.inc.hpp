@@ -20,7 +20,7 @@ namespace Process
 	namespace // anonymous
 	{
 
-		static inline char* duplicateString(const AnyString& string)
+		char* duplicateString(const AnyString& string)
 		{
 			const uint bytes = static_cast<uint>(sizeof(char)) * string.size();
 			char* copy = reinterpret_cast<char*>(::malloc(bytes + 1));
@@ -33,7 +33,7 @@ namespace Process
 		}
 
 
-		static inline bool closeFD(int& fd)
+		bool closeFD(int& fd)
 		{
 			if (fd >= 0)
 			{
@@ -54,14 +54,11 @@ namespace Process
 
 	inline void Program::ThreadMonitor::cleanupAfterChildTermination()
 	{
-		// stop the thread dedicated to handle the timeout
-		if (procinfo.timeoutThread)
+		if (procinfo.timeoutThread.get()) // stop the thread dedicated to handle the timeout
 		{
 			procinfo.timeoutThread->stop();
-			delete procinfo.timeoutThread;
-			procinfo.timeoutThread = nullptr;
+			procinfo.timeoutThread.reset();
 		}
-
 		// close all remaining fd
 		closeFD(channels.infd[0]);
 		closeFD(channels.errd[0]);
@@ -211,10 +208,7 @@ namespace Process
 		const bool hasStream = !(!stream);
 		// is a buffer required ?
 		const bool captureOutput = (hasStream or pRedirectToConsole);
-
-		// a 4K buffer seems the most efficient size
-		enum { bufferSize = 4096 };
-		// buffer for reading std::cout and std::cerr
+		constexpr uint32_t bufferSize = 4096;
 		char* const buffer = (captureOutput) ? (char*)::malloc(sizeof(char) * bufferSize) : nullptr;
 		if (YUNI_UNLIKELY(!buffer and captureOutput)) // allocation failed
 		{

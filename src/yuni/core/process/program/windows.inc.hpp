@@ -25,11 +25,10 @@ namespace Process
 	namespace // anonymous
 	{
 
-		static inline void closeHD(HANDLE& handle)
+		void closeHD(HANDLE& handle)
 		{
 			if (INVALID_HANDLE_VALUE != handle)
 			{
-				std::cout << " :: closing handle " << handle << std::endl;
 				BOOL success = ::CloseHandle(handle);
 				(void) success;
 				assert(success != FALSE);
@@ -37,14 +36,13 @@ namespace Process
 			}
 		}
 
-		static inline bool pipe(HANDLE (&fd)[2], SECURITY_ATTRIBUTES& attr, const char* const pipeName)
+		bool pipe(HANDLE (&fd)[2], SECURITY_ATTRIBUTES& attr, const char* const pipeName)
 		{
 			// Create a pipe for the child process's STDOUT.
 			// CreatePipe(read, write, attr, null)
 			if (FALSE == ::CreatePipe(fd, fd + 1, &attr, 0))
 			{
-				std::cerr << "pipe failed : failed to create pipe for "
-						  << pipeName << '\n';
+				std::cerr << "pipe failed : failed to create pipe for " << pipeName << '\n';
 				return false;
 			}
 
@@ -60,7 +58,7 @@ namespace Process
 
 
 		#if _WIN32_WINNT >= 0x0600
-		static inline bool fillProcAttributeList(HANDLE (&handles)[3], LPPROC_THREAD_ATTRIBUTE_LIST& attrList)
+		bool fillProcAttributeList(HANDLE (&handles)[3], LPPROC_THREAD_ATTRIBUTE_LIST& attrList)
 		{
 			SIZE_T size = 0;
 			if (FALSE == ::InitializeProcThreadAttributeList(nullptr, 1, 0, &size))
@@ -200,10 +198,8 @@ namespace Process
 
 	void Program::ThreadMonitor::waitForSubProcess()
 	{
-		// a 4K buffer seems the most efficient size
-		enum { bufferSize = 4096 };
-		enum { nbHandles = 3 };
-
+		constexpr uint32_t bufferSize = 4096;
+		constexpr uint32_t nbHandles = 3;
 		// Wait for all these handles
 		const HANDLE handleList[nbHandles] = { channels.infd[0], channels.errd[0], processHandle };
 
@@ -213,9 +209,7 @@ namespace Process
 			YUNI_STATIC_ASSERT(WAIT_OBJECT_0 == 0, waitObject0IsNotZero_CodeRequiresAttention);
 			assert(nbHandles < MAXIMUM_WAIT_OBJECTS);
 
-			std::cout << " ... waiting ..." << std::endl;
 			DWORD waitStatus = ::WaitForMultipleObjectsEx(nbHandles, handleList, false, INFINITE, true);
-			std::cout << " ... event !!" << std::endl;
 
 			if (/*waitStatus >= WAIT_OBJECT_0 and*/ waitStatus < (WAIT_OBJECT_0 + (uint) nbHandles))
 			{
@@ -223,7 +217,6 @@ namespace Process
 
 				HANDLE signalled = handleList[waitStatus - WAIT_OBJECT_0];
 				DWORD exitCode = 0;
-				std::cout << " :: event on handle " << (waitStatus - WAIT_OBJECT_0) << " = " << signalled << std::endl;
 
 				// If the process was signalled
 				if (signalled == processHandle)
@@ -258,9 +251,6 @@ namespace Process
 					//if (success and totalAvailBytes > 0)
 					do
 					{
-						//std::cout << " ... peeking : " << totalAvailBytes << " bytes to read" << std::endl;
-
-						std::cout << " ... reading\n" << std::flush;
 						bool success = (FALSE != ::ReadFile(readFrom, buffer, sizeof(char) * 1, &readBytes, nullptr));
 						if (not success or readBytes == 0)
 							break;
@@ -306,14 +296,11 @@ namespace Process
 
 	void Program::ThreadMonitor::cleanupAfterChildTermination()
 	{
-		// stop the thread dedicated to handle the timeout
-		if (procinfo.timeoutThread)
+		if (procinfo.timeoutThread.get()) // stop the thread dedicated to handle the timeout
 		{
 			procinfo.timeoutThread->stop();
-			delete procinfo.timeoutThread;
-			procinfo.timeoutThread = nullptr;
+			procinfo.timeoutThread.reset();
 		}
-
 		closeHD(channels.outfd[1]);
 		closeHD(channels.infd[0]);
 		closeHD(channels.errd[0]);

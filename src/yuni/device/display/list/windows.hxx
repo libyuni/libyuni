@@ -77,7 +77,7 @@ void refreshForWindows(MonitorsFound& lst)
 			// Check if we have already stored info on this monitor
 			SingleMonitorFound* monitorWithRes = findMonitor(monitorDisplayDevice.DeviceID, lst);
 			bool newMonitor = (NULL == monitorWithRes);
-			Monitor::Ptr monitor;
+			Ref<Monitor> monitor;
 			SmartPtr<OrderedResolutions> res;
 
 			if (newMonitor)
@@ -91,7 +91,7 @@ void refreshForWindows(MonitorsFound& lst)
 				WideCharToMultiByte(CP_UTF8, 0, monitorDisplayDevice.DeviceString, -1, (char*)newID.data(), sizeRequired,  NULL, NULL);
 				newID.resize(((uint) sizeRequired) - 1);
 				// Create the new monitor
-				monitor = new Monitor(newID, (Monitor::Handle)monitorDisplayDevice.DeviceID, mainDisplay, true, true);
+				monitor = make_ref<Monitor>(newID, (Monitor::Handle)monitorDisplayDevice.DeviceID, mainDisplay, true, true);
 				res = new OrderedResolutions();
 			}
 			else

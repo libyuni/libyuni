@@ -232,7 +232,6 @@ add_library(yuni-static-core STATIC
 		core/process/program/program.h
 		core/process/program/program.hxx
 		core/process/program/process-info.h
-		core/process/program/process-info.hxx
 		core/process/program/windows.inc.hpp
 		core/process/program/unix.inc.hpp
 		core/process/rename.cpp
@@ -248,6 +247,7 @@ add_library(yuni-static-core STATIC
 		core/slist/slist.h
 		core/slist/slist.hxx
 		core/slist.h
+		core/memory.h
 		core/smartptr/intrusive.h
 		core/smartptr/intrusive.hxx
 		core/smartptr/policies/checking.h

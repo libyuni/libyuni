@@ -12,7 +12,8 @@
 #include "../../yuni.h"
 #include "resolution.h"
 #include "../../core/string.h"
-#include "../../core/smartptr/smartptr.h"
+#include "../../core/smartptr/intrusive.h"
+#include <vector>
 
 
 #if defined(YUNI_OS_MACOSX)
@@ -43,12 +44,9 @@ namespace Display
 	**
 	** This class is not thread-safe
 	*/
-	class Monitor final
+	class Monitor final: public IIntrusiveSmartPtr<Monitor>
 	{
 	public:
-		//! The most suitable smart pointer to use with the class `Monitor`
-		typedef SmartPtr<Monitor> Ptr;
-
 		/*!
 		** \brief Handle for a single monitor
 		**
@@ -87,10 +85,7 @@ namespace Display
 			bool a = false, bool b = false);
 
 		//! Constructor by copy
-		Monitor(const Monitor& copy);
-
-		//! Destructor
-		~Monitor();
+		Monitor(const Monitor&) = default;
 		//@}
 
 
@@ -154,7 +149,7 @@ namespace Display
 		** The returned value is guaranteed to not be empty and to be
 		** a sorted descendant list.
 		*/
-		const Resolution::Vector& resolutions() const;
+		const std::vector<Resolution>& resolutions() const;
 
 		/*!
 		** \brief Get the recommended resolution for this device
@@ -162,7 +157,7 @@ namespace Display
 		** It is merely the highest available resolution
 		** \return A valid and not null resolution
 		*/
-		Resolution::Ptr recommendedResolution() const;
+		Resolution recommendedResolution() const;
 
 		/*!
 		** \brief Get if a resolution is valid for this monitor
@@ -170,7 +165,7 @@ namespace Display
 		** \param rhs The resolution to check
 		** \return True if the resolution is valid, merely if this resolution is in the list
 		*/
-		bool resolutionIsValid(const Resolution::Ptr& rhs) const;
+		bool resolutionIsValid(const Resolution& rhs) const;
 
 		/*!
 		** \brief Remove all resolutions
@@ -183,7 +178,7 @@ namespace Display
 		** \param[in] resolution The resolution to add
 		** \internal It is a sorted descendant list. The first value must be the highest available value
 		*/
-		void add(const Resolution::Ptr& resolution);
+		void add(const Resolution& resolution);
 
 		/*!
 		** \brief Add some safe resolutions
@@ -198,40 +193,34 @@ namespace Display
 		//! \name Operators
 		//@{
 		//! Append a resolution
-		Monitor& operator += (Resolution* rhs);
+		Monitor& operator += (const Resolution& rhs);
 		//! Append a resolution
-		Monitor& operator += (const Resolution::Ptr& rhs);
-		//! Append a resolution
-		Monitor& operator << (Resolution* rhs);
-		//! Append a resolution
-		Monitor& operator << (const Resolution::Ptr& rhs);
+		Monitor& operator << (const Resolution& rhs);
+		//! Copy
+		Monitor& operator = (const Monitor&) = default;
 		//@}
 
 
 	protected:
 		//! The index of the monitor
-		Monitor::Handle pHandle;
+		Monitor::Handle pHandle = InvalidHandle;
 		//! Name of the current monitor
 		String pProductName;
 		/*!
 		** \brief All resolutions
 		** \internal It is a sorted descendant list. The first value must be the highest available value
 		*/
-		Resolution::Vector pResolutions;
+		std::vector<Resolution> pResolutions;
 		//! Primary
-		bool pPrimary;
+		bool pPrimary = false;
 		//! Hardware Acceleration
-		bool pHardwareAcceleration;
+		bool pHardwareAcceleration = false;
 		//! Builtin device
-		bool pBuiltin;
+		bool pBuiltin = false;
 
 		//! The MD5 for the guid - avoid multiple md5 calculations
 		// mutable: to allow guid() const
 		mutable String pMD5Cache;
-
-		# ifdef YUNI_OS_WINDOWS
-		wchar_t pDeviceID[128];
-		# endif
 
 	}; // class Monitor
 

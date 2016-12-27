@@ -54,7 +54,7 @@ namespace Display
 	{
 	private:
 		//! Vector of Monitor
-		typedef std::vector<Monitor::Ptr> MonitorVector;
+		typedef std::vector<Ref<Monitor>> MonitorVector;
 
 	public:
 		//! An interator
@@ -95,7 +95,7 @@ namespace Display
 		**
 		** The result is guaranteed to be valid for use.
 		*/
-		Monitor::Ptr primary() const;
+		Ref<Monitor> primary() const;
 		//@}
 
 		//! \name Searching
@@ -120,7 +120,7 @@ namespace Display
 		**
 		** \see Monitor::valid()
 		*/
-		Monitor::Ptr findByHandle(const Monitor::Handle hwn) const;
+		Ref<Monitor> findByHandle(const Monitor::Handle hwn) const;
 
 		/*!
 		** \brief Find a monitor by its guid
@@ -132,7 +132,7 @@ namespace Display
 		**
 		** \see Monitor::valid()
 		*/
-		Monitor::Ptr findByGUID(const String& guid) const;
+		Ref<Monitor> findByGUID(const String& guid) const;
 		//@}
 
 
@@ -149,9 +149,9 @@ namespace Display
 		//! All available monitors
 		MonitorVector  pMonitors;
 		//! The primary display
-		Monitor::Ptr pPrimary;
+		Ref<Monitor> pPrimary;
 		//! A null monitor
-		Monitor::Ptr pNullMonitor;
+		Ref<Monitor> pNullMonitor;
 
 	}; // class List
 

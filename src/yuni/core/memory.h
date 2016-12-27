@@ -9,30 +9,5 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
 #pragma once
-#include "process-info.h"
-
-
-namespace Yuni
-{
-namespace Process
-{
-
-
-	inline Program::ProcessSharedInfo::ProcessSharedInfo()
-		: running(false)
-		, processID(-1)
-		, processInput(-1)
-		, thread(nullptr)
-		, duration(0)
-		, durationPrecision(dpSeconds)
-		, timeout()
-		, exitstatus(-1)
-		, redirectToConsole(false)
-		, timeoutThread(nullptr)
-	{}
-
-
-
-
-} // namespace Process
-} // namespace Yuni
+#include "../yuni.h"
+#include "smartptr/intrusive.h"

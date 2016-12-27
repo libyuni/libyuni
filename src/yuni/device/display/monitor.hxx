@@ -38,7 +38,7 @@ namespace Display
 	}
 
 
-	inline const Resolution::Vector& Monitor::resolutions() const
+	inline const std::vector<Resolution>& Monitor::resolutions() const
 	{
 		return pResolutions;
 	}

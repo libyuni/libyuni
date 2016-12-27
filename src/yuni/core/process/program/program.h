@@ -14,6 +14,7 @@
 #include "../../atomic/int.h"
 #include "../../bind.h"
 #include "stream.h"
+#include <memory>
 
 
 
@@ -94,9 +95,8 @@ namespace Process
 	** \internal `std::cout` and `std::cerr` should be used instead of `write` when redirecting
 	**  the outputs in order to share the same buffer and to have cleaner output
 	*/
-	class YUNI_DECL Program final
+	struct YUNI_DECL Program final
 	{
-	public:
 		//! Callback for main loop
 		typedef Bind<bool ()>  Callback;
 
@@ -241,9 +241,9 @@ namespace Process
 		void redirectToConsole(bool flag);
 
 		//! Set the stream handler used for capturing events
-		void stream(Stream::Ptr newstream);
+		void stream(std::shared_ptr<Stream> newstream);
 		//! Get the stream used for capturing events
-		Stream::Ptr stream() const;
+		std::shared_ptr<Stream> stream() const;
 		//@}
 
 
@@ -269,16 +269,16 @@ namespace Process
 
 	private:
 		// forward declaration
-		class ProcessSharedInfo;
-		class ThreadMonitor;
+		struct ProcessSharedInfo;
+		struct ThreadMonitor;
 
 		//! Information on the program currently executed
 		// \note This class may be shared by several threads
-		SmartPtr<ProcessSharedInfo> pEnv;
+		std::shared_ptr<ProcessSharedInfo> pEnv;
 		//! Stream
-		Stream::Ptr pStream;
+		std::shared_ptr<Stream> pStream;
 
-	}; // class Program
+	}; // struct Program
 
 
 

@@ -30,24 +30,14 @@ namespace Display
 	class Resolution final
 	{
 	public:
-		//! The most suitable smart pointer to use with the class `Resolution`
-		using Ptr = SmartPtr<Resolution>;
-
-		enum
-		{
-			//! The smallest value allowed for the width of the screen
-			minimumWidth  = 320u,
-			//! The smallest allowed value for the height of the screen
-			minimumHeight = 200u,
-
-			//! The highest allowed for the width of the screen
-			maximumWidth  = 8192u, // 8K Video Format
-			//! The highest allowed value for the height of the screen
-			maximumHeight = 4320u,
-		};
-
-		//! Vector of resolutions
-		using Vector = std::vector<Ptr>;
+		//! The smallest value allowed for the width of the screen
+		constexpr static uint32_t minimumWidth  = 320;
+		//! The smallest allowed value for the height of the screen
+		constexpr static uint32_t minimumHeight = 200;
+		//! The highest allowed for the width of the screen
+		constexpr static uint32_t maximumWidth  = 8192; // 8K Video Format
+		//! The highest allowed value for the height of the screen
+		constexpr static uint32_t maximumHeight = 4320;
 
 	public:
 		//! \name Constructors
@@ -65,7 +55,7 @@ namespace Display
 		** \brief Constructor by copy
 		** \param rhs The instance to copy
 		*/
-		Resolution(const Resolution& rhs);
+		Resolution(const Resolution& rhs) = default;
 		//@}
 
 		/*!
@@ -141,7 +131,7 @@ namespace Display
 		** \param p The new values
 		** \return Always *this
 		*/
-		Resolution& operator = (const Resolution& p);
+		Resolution& operator = (const Resolution& p) = default;
 		//@}
 
 
@@ -181,6 +171,4 @@ namespace Display
 //@{
 inline std::ostream& operator << (std::ostream& out, const Yuni::Device::Display::Resolution& rhs)
 { return rhs.print(out); }
-inline std::ostream& operator << (std::ostream& out, const Yuni::Device::Display::Resolution::Ptr& rhs)
-{ return rhs->print(out); }
 //@}

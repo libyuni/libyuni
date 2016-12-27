@@ -13,6 +13,7 @@
 #include "timer.h"
 #include "../job/job.h"
 #include "../core/bind.h"
+#include <memory>
 
 namespace Yuni { namespace Job { class QueueService; }}
 namespace Yuni { namespace Job { class Taskgroup; }}
@@ -20,7 +21,6 @@ namespace Yuni { namespace Job { class Taskgroup; }}
 
 namespace Yuni
 {
-
 
 	/*!
 	** \brief Convenient wrapper for executing some code into another thread
@@ -60,7 +60,7 @@ namespace Yuni
 	** \param callback The callback to execute
 	** \param autostart True to automatically start the timer
 	*/
-	Thread::IThread::Ptr  spawn(const Bind<void ()>& callback, bool autostart = true);
+	std::unique_ptr<Thread::IThread> spawn(const Bind<void ()>& callback, bool autostart = true);
 
 
 	/*!
@@ -92,7 +92,7 @@ namespace Yuni
 	** \param callback The callback to execute
 	** \param autostart True to automatically start the timer
 	*/
-	Thread::Timer::Ptr  every(uint ms, const Bind<bool ()>& callback, bool autostart = true);
+	std::unique_ptr<Thread::Timer> every(uint ms, const Bind<bool ()>& callback, bool autostart = true);
 
 
 	/*!
@@ -124,7 +124,7 @@ namespace Yuni
 	** \param callback The callback to execute
 	** \param autostart True to automatically start the timer
 	*/
-	Thread::Timer::Ptr  every(uint ms, bool precise, const Bind<bool (uint64 /*elapsed*/)>& callback, bool autostart = true);
+	std::unique_ptr<Thread::Timer> every(uint ms, bool precise, const Bind<bool (uint64 /*elapsed*/)>& callback, bool autostart = true);
 
 
 	/*!
@@ -169,8 +169,6 @@ namespace Yuni
 	** \brief Convenient wrapper for creating a job from a lambda into a taskgroup
 	*/
 	void async(Job::Taskgroup& task, const Bind<bool (Job::IJob&)>& callback);
-
-
 
 
 } // namespace Yuni
