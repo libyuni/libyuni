@@ -222,10 +222,6 @@ namespace Display
 		// mutable: to allow guid() const
 		mutable String pMD5Cache;
 
-		# ifdef YUNI_OS_WINDOWS
-		wchar_t pDeviceID[128];
-		# endif
-
 	}; // class Monitor
 
 

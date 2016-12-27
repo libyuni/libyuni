@@ -47,15 +47,6 @@ namespace Display
 		pHardwareAcceleration(a),
 		pBuiltin(b)
 	{
-		#ifdef YUNI_OS_WINDOWS
-		if (NULL != hwn)
-		{
-			YUNI_MEMCPY(pDeviceID, sizeof(wchar_t) * 128, hwn, sizeof(wchar_t) * 128);
-			pHandle = pDeviceID;
-		}
-		else
-			memset(pDeviceID, 0, sizeof(wchar_t) * 128);
-		#endif
 		addSafeResolutions();
 	}
 
