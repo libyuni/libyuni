@@ -14,6 +14,7 @@
 #include "../../atomic/int.h"
 #include "../../bind.h"
 #include "stream.h"
+#include <memory>
 
 
 
@@ -240,9 +241,9 @@ namespace Process
 		void redirectToConsole(bool flag);
 
 		//! Set the stream handler used for capturing events
-		void stream(Stream::Ptr newstream);
+		void stream(std::shared_ptr<Stream> newstream);
 		//! Get the stream used for capturing events
-		Stream::Ptr stream() const;
+		std::shared_ptr<Stream> stream() const;
 		//@}
 
 
@@ -275,7 +276,7 @@ namespace Process
 		// \note This class may be shared by several threads
 		SmartPtr<ProcessSharedInfo> pEnv;
 		//! Stream
-		Stream::Ptr pStream;
+		std::shared_ptr<Stream> pStream;
 
 	}; // struct Program
 

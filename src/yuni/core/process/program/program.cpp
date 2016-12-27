@@ -86,7 +86,7 @@ namespace Process
 
 		//! Reference to the original stream handler
 		// \internal Automatically reset by \p theProcessHasStopped
-		Stream::Ptr stream;
+		std::shared_ptr<Stream> stream;
 
 		# ifndef YUNI_OS_WINDOWS
 		typedef int FD;
@@ -884,10 +884,7 @@ namespace Process
 		Program program;
 		program.commandLine(commandline);
 
-		CaptureOutput* output = new (std::nothrow) CaptureOutput();
-		if (!output)
-			return false;
-
+		auto output = std::make_shared<CaptureOutput>();
 		program.stream(output);
 		bool success = program.execute(timeout) and (0 == program.wait());
 
@@ -904,10 +901,7 @@ namespace Process
 		Program program;
 		program.commandLine(commandline);
 
-		CaptureOutput* output = new (std::nothrow) CaptureOutput();
-		if (!output)
-			return String{};
-
+		auto output = std::make_shared<CaptureOutput>();
 		program.stream(output);
 		program.execute(timeout) and (0 == program.wait());
 		if (trim)

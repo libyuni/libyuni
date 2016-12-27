@@ -38,13 +38,13 @@ namespace Process
 	}
 
 
-	inline Stream::Ptr  Program::stream() const
+	inline std::shared_ptr<Stream> Program::stream() const
 	{
 		return pStream;
 	}
 
 
-	inline void Program::stream(Stream::Ptr newstream)
+	inline void Program::stream(std::shared_ptr<Stream> newstream)
 	{
 		pStream = newstream;
 	}

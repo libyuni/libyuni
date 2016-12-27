@@ -28,8 +28,6 @@ namespace Process
 	*/
 	struct Stream
 	{
-		typedef SmartPtr<Stream> Ptr;
-
 		Stream() {}
 		virtual ~Stream() {}
 
@@ -49,8 +47,6 @@ namespace Process
 
 	struct CaptureOutput : public Process::Stream
 	{
-		typedef SmartPtr<CaptureOutput>  Ptr;
-
 		CaptureOutput() {}
 		virtual ~CaptureOutput() {}
 
