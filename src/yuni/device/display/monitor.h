@@ -12,7 +12,7 @@
 #include "../../yuni.h"
 #include "resolution.h"
 #include "../../core/string.h"
-#include "../../core/smartptr/smartptr.h"
+#include "../../core/smartptr/intrusive.h"
 
 
 #if defined(YUNI_OS_MACOSX)
@@ -43,12 +43,9 @@ namespace Display
 	**
 	** This class is not thread-safe
 	*/
-	class Monitor final
+	class Monitor final: public IIntrusiveSmartPtr<Monitor>
 	{
 	public:
-		//! The most suitable smart pointer to use with the class `Monitor`
-		typedef SmartPtr<Monitor> Ptr;
-
 		/*!
 		** \brief Handle for a single monitor
 		**

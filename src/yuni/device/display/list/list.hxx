@@ -27,7 +27,7 @@ namespace Display
 	}
 
 
-	inline Monitor::Ptr List::primary() const
+	inline Ref<Monitor> List::primary() const
 	{
 		return pPrimary;
 	}

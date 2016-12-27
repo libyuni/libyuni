@@ -36,7 +36,7 @@ void refreshForX11(MonitorsFound& lst)
 		{
 			int depCount;
 			int* depths = XListDepths(display, i, &depCount);
-			Monitor::Ptr newMonitor(new Monitor(String(), i, (0 == i), true, false));
+			auto newMonitor = make_ref<Monitor>(String(), i, (0 == i), true, false);
 			SmartPtr<OrderedResolutions> res(new OrderedResolutions());
 			// All resolutions
 			int count;

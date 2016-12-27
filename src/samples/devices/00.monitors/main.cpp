@@ -22,7 +22,7 @@ void title(const String& t)
 }
 
 
-void printMonitor(Device::Display::Monitor::Ptr monitor)
+void printMonitor(Ref<Device::Display::Monitor> monitor)
 {
 	if (!monitor)
 		return;

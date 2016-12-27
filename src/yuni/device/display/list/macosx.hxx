@@ -161,8 +161,7 @@ void refreshForCocoa(MonitorsFound& lst)
 		bool ha          = CGDisplayUsesOpenGLAcceleration(display);
 		// uint32_t modelNumber = CGDisplayModelNumber(display);
 		// uint32_t serialNumer = CGDisplaySerialNumber(display);
-		Monitor::Ptr newMonitor(new Monitor(monitorProductName,
-											(Monitor::Handle)display, mainDisplay, ha, builtin));
+		auto newMonitor = make_ref<Monitor>(monitorProductName, (Monitor::Handle)display, mainDisplay, ha, builtin);
 		SmartPtr<OrderedResolutions> res(new OrderedResolutions());
 		cocoaGetAllAvailableModesUseful(display, res);
 		// Add it to the list

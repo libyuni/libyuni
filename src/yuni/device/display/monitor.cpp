@@ -65,6 +65,7 @@ namespace Display
 
 
 	Monitor::Monitor(const Monitor& copy) :
+		IIntrusiveSmartPtr<Monitor>(copy),
 		pHandle(copy.pHandle),
 		pProductName(copy.pProductName),
 		pResolutions(copy.pResolutions),

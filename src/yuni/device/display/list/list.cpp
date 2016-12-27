@@ -23,7 +23,7 @@ namespace Display
 
 	typedef std::map<uint32, std::map<uint32, std::map<uint8, bool> > >  OrderedResolutions;
 
-	typedef std::pair<Monitor::Ptr, SmartPtr<OrderedResolutions> > SingleMonitorFound;
+	typedef std::pair<Ref<Monitor>, SmartPtr<OrderedResolutions> > SingleMonitorFound;
 
 	typedef std::vector<SingleMonitorFound> MonitorsFound;
 
@@ -59,7 +59,7 @@ namespace Display
 
 
 	List::List()
-		: pNullMonitor(new Monitor(YUNI_DEVICE_DISPLAY_LIST_FAIL_SAFE_NAME))
+		: pNullMonitor(make_ref<Monitor>(YUNI_DEVICE_DISPLAY_LIST_FAIL_SAFE_NAME))
 	{
 		pMonitors.push_back(pNullMonitor);
 		pPrimary = pNullMonitor;
@@ -100,7 +100,7 @@ namespace Display
 			if (resolutions.empty()) // no available resolutions
 				continue;
 			// Keeping a reference to our monitor for code clarity
-			Monitor::Ptr& monitor = it->first;
+			auto& monitor = it->first;
 			// Removing all its default resolutions
 			monitor->clear();
 			// Browsing all resolutions, in the reverse order
@@ -150,7 +150,7 @@ namespace Display
 	}
 
 
-	Monitor::Ptr List::findByHandle(const Monitor::Handle hwn) const
+	Ref<Monitor> List::findByHandle(const Monitor::Handle hwn) const
 	{
 		const MonitorVector::const_iterator& end = pMonitors.end();
 		for (MonitorVector::const_iterator it = pMonitors.begin(); it != end; ++it)
@@ -162,7 +162,7 @@ namespace Display
 	}
 
 
-	Monitor::Ptr List::findByGUID(const String& guid) const
+	Ref<Monitor> List::findByGUID(const String& guid) const
 	{
 		const MonitorVector::const_iterator& end = pMonitors.end();
 		for (MonitorVector::const_iterator it = pMonitors.begin(); it != end; ++it)
