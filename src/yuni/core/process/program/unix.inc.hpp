@@ -208,10 +208,7 @@ namespace Process
 		const bool hasStream = !(!stream);
 		// is a buffer required ?
 		const bool captureOutput = (hasStream or pRedirectToConsole);
-
-		// a 4K buffer seems the most efficient size
-		enum { bufferSize = 4096 };
-		// buffer for reading std::cout and std::cerr
+		constexpr uint32_t bufferSize = 4096;
 		char* const buffer = (captureOutput) ? (char*)::malloc(sizeof(char) * bufferSize) : nullptr;
 		if (YUNI_UNLIKELY(!buffer and captureOutput)) // allocation failed
 		{

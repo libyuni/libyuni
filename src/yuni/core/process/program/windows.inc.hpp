@@ -198,10 +198,8 @@ namespace Process
 
 	void Program::ThreadMonitor::waitForSubProcess()
 	{
-		// a 4K buffer seems the most efficient size
-		enum { bufferSize = 4096 };
-		enum { nbHandles = 3 };
-
+		constexpr uint32_t bufferSize = 4096;
+		constexpr uint32_t nbHandles = 3;
 		// Wait for all these handles
 		const HANDLE handleList[nbHandles] = { channels.infd[0], channels.errd[0], processHandle };
 
