@@ -33,11 +33,7 @@ namespace Display
 	}
 
 
-	Monitor::Monitor() :
-		pHandle(Monitor::InvalidHandle),
-		pPrimary(false),
-		pHardwareAcceleration(false),
-		pBuiltin(false)
+	Monitor::Monitor()
 	{
 		addSafeResolutions();
 	}
@@ -61,23 +57,6 @@ namespace Display
 			memset(pDeviceID, 0, sizeof(wchar_t) * 128);
 		#endif
 		addSafeResolutions();
-	}
-
-
-	Monitor::Monitor(const Monitor& copy) :
-		IIntrusiveSmartPtr<Monitor>(copy),
-		pHandle(copy.pHandle),
-		pProductName(copy.pProductName),
-		pResolutions(copy.pResolutions),
-		pPrimary(copy.pPrimary),
-		pHardwareAcceleration(copy.pHardwareAcceleration),
-		pBuiltin(copy.pBuiltin)
-	{}
-
-
-	Monitor::~Monitor()
-	{
-		pResolutions.clear();
 	}
 
 

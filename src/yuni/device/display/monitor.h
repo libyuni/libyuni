@@ -85,10 +85,7 @@ namespace Display
 			bool a = false, bool b = false);
 
 		//! Constructor by copy
-		Monitor(const Monitor& copy);
-
-		//! Destructor
-		~Monitor();
+		Monitor(const Monitor&) = default;
 		//@}
 
 
@@ -199,12 +196,14 @@ namespace Display
 		Monitor& operator += (const Resolution& rhs);
 		//! Append a resolution
 		Monitor& operator << (const Resolution& rhs);
+		//! Copy
+		Monitor& operator = (const Monitor&) = default;
 		//@}
 
 
 	protected:
 		//! The index of the monitor
-		Monitor::Handle pHandle;
+		Monitor::Handle pHandle = InvalidHandle;
 		//! Name of the current monitor
 		String pProductName;
 		/*!
@@ -213,11 +212,11 @@ namespace Display
 		*/
 		std::vector<Resolution> pResolutions;
 		//! Primary
-		bool pPrimary;
+		bool pPrimary = false;
 		//! Hardware Acceleration
-		bool pHardwareAcceleration;
+		bool pHardwareAcceleration = false;
 		//! Builtin device
-		bool pBuiltin;
+		bool pBuiltin = false;
 
 		//! The MD5 for the guid - avoid multiple md5 calculations
 		// mutable: to allow guid() const

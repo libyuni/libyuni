@@ -55,7 +55,7 @@ namespace Display
 		** \brief Constructor by copy
 		** \param rhs The instance to copy
 		*/
-		Resolution(const Resolution& rhs);
+		Resolution(const Resolution& rhs) = default;
 		//@}
 
 		/*!
@@ -131,7 +131,7 @@ namespace Display
 		** \param p The new values
 		** \return Always *this
 		*/
-		Resolution& operator = (const Resolution& p);
+		Resolution& operator = (const Resolution& p) = default;
 		//@}
 
 

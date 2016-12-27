@@ -21,12 +21,6 @@ namespace Device
 namespace Display
 {
 
-	Resolution::Resolution(const Resolution& rhs)
-		: pWidth(rhs.pWidth)
-		, pHeight(rhs.pHeight)
-		, pBitsPerPixel(rhs.pBitsPerPixel)
-	{}
-
 
 	Resolution::Resolution(uint width, uint height, uint8 bits)
 	{
@@ -93,18 +87,6 @@ namespace Display
 	}
 
 
-	Resolution& Resolution::operator = (const Resolution& p)
-	{
-		pWidth = p.pWidth;
-		pHeight = p.pHeight;
-		pBitsPerPixel = p.pBitsPerPixel;
-		return (*this);
-	}
-
-
-
-
 } // namespace Display
 } // namespace Device
 } // namespace Yuni
-
