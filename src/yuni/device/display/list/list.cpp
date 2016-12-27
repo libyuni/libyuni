@@ -123,7 +123,7 @@ namespace Display
 						for (auto l = k->second.rbegin(); l != k->second.rend(); ++l)
 						{
 							if (l->first >= minDepth)
-								*monitor << new Resolution(j->first, k->first, l->first);
+								*monitor += Resolution{j->first, k->first, l->first};
 						}
 					}
 				}

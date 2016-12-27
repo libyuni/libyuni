@@ -30,9 +30,6 @@ namespace Display
 	class Resolution final
 	{
 	public:
-		//! The most suitable smart pointer to use with the class `Resolution`
-		using Ptr = SmartPtr<Resolution>;
-
 		enum
 		{
 			//! The smallest value allowed for the width of the screen
@@ -45,9 +42,6 @@ namespace Display
 			//! The highest allowed value for the height of the screen
 			maximumHeight = 4320u,
 		};
-
-		//! Vector of resolutions
-		using Vector = std::vector<Ptr>;
 
 	public:
 		//! \name Constructors
@@ -181,6 +175,4 @@ namespace Display
 //@{
 inline std::ostream& operator << (std::ostream& out, const Yuni::Device::Display::Resolution& rhs)
 { return rhs.print(out); }
-inline std::ostream& operator << (std::ostream& out, const Yuni::Device::Display::Resolution::Ptr& rhs)
-{ return rhs->print(out); }
 //@}

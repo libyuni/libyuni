@@ -27,9 +27,9 @@ namespace Display
 	{
 		// Default (and assumed safe) resolutions
 		pResolutions.reserve(pResolutions.size() + 3);
-		pResolutions.push_back(new Resolution(1024, 768, 32));
-		pResolutions.push_back(new Resolution(800, 600, 32));
-		pResolutions.push_back(new Resolution(640, 480, 32));
+		pResolutions.emplace_back(1024, 768, 32);
+		pResolutions.emplace_back(799, 600, 32);
+		pResolutions.emplace_back(640, 480, 32);
 	}
 
 
@@ -81,12 +81,12 @@ namespace Display
 	}
 
 
-	Resolution::Ptr Monitor::recommendedResolution() const
+	Resolution Monitor::recommendedResolution() const
 	{
 		// we assume that the first resolution is the highest available
 		return (!pResolutions.empty())
 			? *(pResolutions.begin())
-			: new Resolution(640, 480);
+			: Resolution(640, 480);
 	}
 
 
@@ -104,7 +104,7 @@ namespace Display
 			String bld;
 			bld << this->pProductName << '|';
 			if (!pResolutions.empty())
-				bld << (*pResolutions.begin())->toString();
+				bld << pResolutions.begin()->toString();
 			bld << '|' << pPrimary << '|' << pBuiltin << '|' << pHardwareAcceleration;
 			Hash::Checksum::MD5 md5;
 			pMD5Cache = md5.fromString(bld);
@@ -113,53 +113,33 @@ namespace Display
 	}
 
 
-	void Monitor::add(const Resolution::Ptr& resolution)
+	void Monitor::add(const Resolution& resolution)
 	{
-		pResolutions.push_back(resolution);
+		pResolutions.emplace_back(resolution);
 	}
 
 
-	bool Monitor::resolutionIsValid(const Resolution::Ptr& rhs) const
+	bool Monitor::resolutionIsValid(const Resolution& other) const
 	{
-		if (!(!rhs)) // The pointer must be valid
+		for (auto& resolution: pResolutions)
 		{
-			// Browse all available resolutions
-			// The lookup should be done in the usual way since it is a sorted descendant list
-			Resolution::Vector::const_iterator end = pResolutions.end();
-			for (Resolution::Vector::const_iterator it = pResolutions.begin(); it != end; ++it)
-			{
-				if (*(*it) == *rhs)
-					return true;
-			}
+			if (resolution == other)
+				return true;
 		}
 		return false;
 	}
 
 
-	Monitor& Monitor::operator += (Resolution* rhs)
+	Monitor& Monitor::operator += (const Resolution& rhs)
 	{
-		pResolutions.push_back(rhs);
+		pResolutions.emplace_back(rhs);
 		return *this;
 	}
 
 
-	Monitor& Monitor::operator += (const Resolution::Ptr& rhs)
+	Monitor& Monitor::operator << (const Resolution& rhs)
 	{
-		pResolutions.push_back(rhs);
-		return *this;
-	}
-
-
-	Monitor& Monitor::operator << (Resolution* rhs)
-	{
-		pResolutions.push_back(rhs);
-		return *this;
-	}
-
-
-	Monitor& Monitor::operator << (const Resolution::Ptr& rhs)
-	{
-		pResolutions.push_back(rhs);
+		pResolutions.emplace_back(rhs);
 		return *this;
 	}
 
