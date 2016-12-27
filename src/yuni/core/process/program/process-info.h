@@ -29,10 +29,9 @@ namespace Process
 	**
 	** \note This class may be shared by several threads
 	*/
-	class Program::ProcessSharedInfo final
+	struct Program::ProcessSharedInfo final
 		: public Yuni::NonCopyable<Program::ProcessSharedInfo>
 	{
-	public:
 		//! Smart pointer
 		// \note This type must match the definition of \p pEnv
 		typedef Yuni::SmartPtr<Program::ProcessSharedInfo> Ptr;

@@ -94,9 +94,8 @@ namespace Process
 	** \internal `std::cout` and `std::cerr` should be used instead of `write` when redirecting
 	**  the outputs in order to share the same buffer and to have cleaner output
 	*/
-	class YUNI_DECL Program final
+	struct YUNI_DECL Program final
 	{
-	public:
 		//! Callback for main loop
 		typedef Bind<bool ()>  Callback;
 
@@ -269,8 +268,8 @@ namespace Process
 
 	private:
 		// forward declaration
-		class ProcessSharedInfo;
-		class ThreadMonitor;
+		struct ProcessSharedInfo;
+		struct ThreadMonitor;
 
 		//! Information on the program currently executed
 		// \note This class may be shared by several threads
@@ -278,7 +277,7 @@ namespace Process
 		//! Stream
 		Stream::Ptr pStream;
 
-	}; // class Program
+	}; // struct Program
 
 
 

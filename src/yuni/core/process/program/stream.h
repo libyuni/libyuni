@@ -26,12 +26,10 @@ namespace Process
 	** The lifetime of a process stream is guarantee to be at least
 	** the whole execution of the underlying process
 	*/
-	class Stream
+	struct Stream
 	{
-	public:
 		typedef SmartPtr<Stream> Ptr;
 
-	public:
 		Stream() {}
 		virtual ~Stream() {}
 
@@ -49,12 +47,10 @@ namespace Process
 
 
 
-	class CaptureOutput : public Process::Stream
+	struct CaptureOutput : public Process::Stream
 	{
-	public:
 		typedef SmartPtr<CaptureOutput>  Ptr;
 
-	public:
 		CaptureOutput() {}
 		virtual ~CaptureOutput() {}
 
@@ -75,7 +71,7 @@ namespace Process
 		Clob cout;
 		Clob cerr;
 
-	}; // class CaptureOutput
+	}; // struct CaptureOutput
 
 
 

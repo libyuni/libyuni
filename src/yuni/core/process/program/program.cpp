@@ -42,9 +42,8 @@ namespace Process
 {
 
 
-	class Program::ThreadMonitor final : public Yuni::Thread::IThread
+	struct Program::ThreadMonitor final : public Yuni::Thread::IThread
 	{
-	public:
 		//! \name Constructor & Destructor
 		//@{
 		//! Default constructor
