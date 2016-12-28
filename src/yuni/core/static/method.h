@@ -100,16 +100,6 @@ namespace HasMethod
 	YUNI_IMPL_STATIC_HAS_METHOD(release, bool, ());
 
 
-	/*!
-	** \brief Determine whether a class has the method `hasIntrusiveSmartPtr`
-	*/
-	YUNI_IMPL_STATIC_HAS_METHOD(hasIntrusiveSmartPtr, bool, ());
-
-
-
-
-
-
 } // namespace HasMethod
 } // namespace Static
 } // namespace Yuni

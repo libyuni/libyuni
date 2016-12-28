@@ -507,8 +507,6 @@ namespace Core
 		void addRef() const;
 		//! Decrement the internal reference counter
 		bool release() const;
-		//! Dummy method for checking smartptr compatibility
-		bool hasIntrusiveSmartPtr() const;
 		//@}
 
 

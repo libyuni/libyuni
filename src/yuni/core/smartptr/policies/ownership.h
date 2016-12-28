@@ -53,8 +53,7 @@ namespace Ownership
 			enum
 			{
 				yes =   Static::HasMethod::addRef<T>::yes
-					and Static::HasMethod::release<T>::yes
-					and Static::HasMethod::hasIntrusiveSmartPtr<T>::yes,
+					and Static::HasMethod::release<T>::yes,
 				no  = !yes,
 			};
 		};

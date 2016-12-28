@@ -598,15 +598,5 @@ namespace Core
 	}
 
 
-	template<class T, template<class> class TP, template <class> class ChckP,
-		class ConvP>
-	inline bool TreeN<T,TP,ChckP,ConvP>::hasIntrusiveSmartPtr() const
-	{
-		return true;
-	}
-
-
-
-
 } // namespace Core
 } // namespace Yuni
