@@ -214,7 +214,7 @@
 		//! Success flag
 		bool success;
 		//! Root node
-		Node::Ptr rootnode;
+		Ref<Node> rootnode;
 
 		//! Notifications
 		Notification::Vector& notifications;

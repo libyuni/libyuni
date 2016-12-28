@@ -241,11 +241,11 @@ namespace PEG
 			h << '\n';
 			h << "		void push_back(T* const element);\n";
 			h << '\n';
-			h << "		template<class U> void push_back(U& element);\n";
+			h << "		void push_back(yuni::Ref<T> element);\n";
 			h << '\n';
 			h << "		void push_front(T* const element);\n";
 			h << '\n';
-			h << "		template<class U> void push_front(U& element);\n";
+			h << "		void push_front(yuni::Ref<T> element);\n";
 			h << '\n';
 			h << "		//! Remove the last element\n";
 			h << "		void pop_back();\n";
@@ -369,7 +369,6 @@ namespace PEG
 			h << "		bool exists(enum Rule rule) const;\n";
 			h << '\n';
 			h << "		const Node* xpath(std::initializer_list<enum Rule> path) const;\n";
-			// h << "		Node::Ptr  xpath(enum Rule path) const;\n";
 			h << '\n';
 			h << "		Node& operator = (const Node& rhs);\n";
 			h << '\n';
@@ -448,7 +447,7 @@ namespace PEG
 			h << "		OnError  onError;\n";
 			h << '\n';
 			h << "		//! The root node, if any\n";
-			h << "		Node::Ptr root;\n";
+			h << "		yuni::Ref<Node> root;\n";
 			h << '\n';
 			h << "		//! Notifications\n";
 			h << "		Notification::Vector notifications;\n";
@@ -532,16 +531,14 @@ namespace PEG
 			hxx << "		erase(it.m_index);\n";
 			hxx << "	}\n";
 			hxx << '\n';
-			hxx << "	template<class U>\n";
-			hxx << "	inline void NodeVector::push_back(U& element)\n";
+			hxx << "	inline void NodeVector::push_back(yuni::Ref<T> element)\n";
 			hxx << "	{\n";
-			hxx << "		push_back(T::Ptr::WeakPointer(element));\n";
+			hxx << "		push_back(yuni::Ref<T>::WeakPointer(element));\n";
 			hxx << "	}\n";
 			hxx << '\n';
-			hxx << "	template<class U>\n";
-			hxx << "	inline void NodeVector::push_front(U& element)\n";
+			hxx << "	inline void NodeVector::push_front(yuni::Ref<T> element)\n";
 			hxx << "	{\n";
-			hxx << "		push_front(T::Ptr::WeakPointer(element));\n";
+			hxx << "		push_front(yuni::Ref<T>::WeakPointer(element));\n";
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << "	inline NodeVector::Iterator NodeVector::begin()\n";
@@ -841,17 +838,6 @@ namespace PEG
 			hxx << "	}\n";
 			hxx << '\n';
 			hxx << '\n';
-			// hxx << "	inline Node::Ptr  Node::xpath(enum Rule path) const\n";
-			// hxx << "	{\n";
-			// hxx << "		for (uint32_t i = 0; i != (uint) children.size(); ++i)\n";
-			// hxx << "		{\n";
-			// hxx << "			if (children[i]->rule == path)\n";
-			// hxx << "				return children[i];\n";
-			// hxx << "		}\n";
-			// hxx << "		return nullptr;\n";
-			// hxx << "	}\n";
-			// hxx << '\n';
-			// hxx << '\n';
 			hxx << '\n';
 			hxx << '\n';
 		}
@@ -977,10 +963,10 @@ namespace PEG
 			cpp << "}\n";
 			cpp << '\n';
 			cpp << '\n';
-			cpp << "std::ostream& operator << (std::ostream& out, const ";
+			cpp << "std::ostream& operator << (std::ostream& out, const yuni::Ref<";
 			for (uint32_t i = 0; i != namespaces.size(); ++i)
 				cpp << "::" << namespaces[i];
-			cpp << "::Node::Ptr node)\n";
+			cpp << "::Node>& node)\n";
 			cpp << "{\n";
 			cpp << "	if (!!node)\n";
 			cpp << "		out << (*node);\n";
