@@ -81,8 +81,6 @@ namespace Yuni
 		//! Decrement the internal reference counter and returns true if it should
 		// be deleted (should not be called directly)
 		bool release() const;
-		//! Dummy method for checking smartptr compatibility
-		bool hasIntrusiveSmartPtr() const {return true;}
 		//@}
 
 
@@ -188,8 +186,6 @@ namespace Yuni
 		//! Decrement the internal reference counter and returns true if it should
 		// be deleted (should not be called directly)
 		bool release() const;
-		//! Dummy method for checking smartptr compatibility
-		bool hasIntrusiveSmartPtr() const {return true;}
 		//@}
 
 
