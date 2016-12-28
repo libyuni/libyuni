@@ -104,6 +104,7 @@ namespace PEG
 			h << "#include <yuni/core/dictionary.h>\n";
 			h << "#include <yuni/core/smartptr/intrusive.h>\n";
 			h << "#include <vector>\n";
+			h << "#include <memory>\n";
 			h << "#include <initializer_list>\n";
 			h << "\n\n";
 			h << '\n';
@@ -163,12 +164,6 @@ namespace PEG
 			h << '\n';
 			h << "	class YUNI_DECL Notification final\n";
 			h << "	{\n";
-			h << "	public:\n";
-			h << "		//! Most suitable martptr\n";
-			h << "		using Ptr = Yuni::SmartPtr<Notification>;\n";
-			h << "		//! Vector of nodes\n";
-			h << "		using Vector = std::vector<Ptr>;\n";
-			h << '\n';
 			h << "	public:\n";
 			h << "		//! Start offset\n";
 			h << "		uint32_t offset = 0;\n";
@@ -420,7 +415,7 @@ namespace PEG
 			h << "		//! The root node, if any\n";
 			h << "		yuni::Ref<Node> root;\n";
 			h << "		//! Notifications\n";
-			h << "		Notification::Vector notifications;\n";
+			h << "		std::vector<std::shared_ptr<Notification>> notifications;\n";
 			h << '\n';
 			h << '\n';
 			h << "	private:\n";
@@ -1238,8 +1233,10 @@ namespace PEG
 			cpp << "		root = nullptr;\n";
 			cpp << "		delete (Datasource*) pData;\n";
 			cpp << "		pData = nullptr;\n";
-			cpp << "		if (not notifications.empty())\n";
-			cpp << "			Notification::Vector().swap(notifications);\n";
+			cpp << "		if (not notifications.empty()) {\n";
+			cpp << "			notifications.clear();\n";
+			cpp << "			notifications.shrink_to_fit();\n";
+			cpp << "		}\n";
 			cpp << "	}\n";
 			cpp << '\n';
 			cpp << '\n';

@@ -134,7 +134,7 @@
 		//! \name Constructors
 		//@{
 		//! Default constructor
-		Datasource(Notification::Vector& notifications);
+		Datasource(std::vector<std::shared_ptr<Notification>>& notifications);
 		~Datasource();
 		//@}
 
@@ -217,7 +217,7 @@
 		Ref<Node> rootnode;
 
 		//! Notifications
-		Notification::Vector& notifications;
+		std::vector<std::shared_ptr<Notification>>& notifications;
 
 	private:
 		void grow();
@@ -267,7 +267,7 @@
 
 
 
-	Datasource::Datasource(Notification::Vector& notifications) :
+	Datasource::Datasource(std::vector<std::shared_ptr<Notification>>& notifications) :
 		stack(),
 		offset(),
 		capacity(chunkGrowSize),
@@ -1177,13 +1177,12 @@
 			}
 		}
 
-		Notification* notification = new Notification();
-		notification->offset     = ((0 != x) ? x : 1);
-		notification->line       = line;
-		notification->message    = message;
-		notification->filename   = urls[cursor.urlindex];
-
-		const_cast<Notification::Vector&>(notifications).push_back(notification);
+		auto notification = std::make_shared<Notification>();
+		notification->offset   = ((0 != x) ? x : 1);
+		notification->line     = line;
+		notification->message  = message;
+		notification->filename = urls[cursor.urlindex];
+		notifications.push_back(notification);
 	}
 
 
