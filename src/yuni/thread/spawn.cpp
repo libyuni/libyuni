@@ -51,7 +51,7 @@ namespace Yuni
 		auto thread = std::make_unique<SpawnThread>(callback);
 		if (autostart)
 			thread->start();
-		return thread;
+		return std::unique_ptr<Thread::IThread>(std::move(thread));
 	}
 
 

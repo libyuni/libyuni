@@ -51,7 +51,7 @@ namespace Yuni
 		auto timer = std::make_unique<EveryTimer>(ms, callback);
 		if (autostart)
 			timer->start();
-		return timer;
+		return std::unique_ptr<Thread::Timer>(std::move(timer));
 	}
 
 
