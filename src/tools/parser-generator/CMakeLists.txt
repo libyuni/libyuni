@@ -1,5 +1,4 @@
 project(yuni-config CXX)
-cmake_minimum_required(VERSION 2.8)
 
 ynmessage(TITLE "[tool]" " yuni-parser-generator")
 
