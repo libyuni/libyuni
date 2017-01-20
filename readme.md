@@ -4,6 +4,8 @@ About the Yuni project
 
 [![Join the chat at https://gitter.im/libyuni/libyuni](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/libyuni/libyuni?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![Join the chat at https://gitter.im/libyuni/libyuni](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/libyuni/libyuni?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 Build Status
 ------------
