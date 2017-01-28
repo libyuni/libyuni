@@ -57,13 +57,10 @@ namespace Yuni
 			using ConstType = typename BindType::template PointerToMember<C>::ConstType;
 		};
 
-		enum
-		{
-			//! The number of arguments
-			argumentCount = BindType::argumentCount,
-			//! A non-zero value if the prototype has a return value (!= void)
-			hasReturnValue = BindType::hasReturnValue,
-		};
+		//! The number of arguments
+		static constexpr uint32_t argumentCount = BindType::argumentCount;
+		//! A non-zero value if the prototype has a return value (!= void)
+		static constexpr bool hasReturnValue = BindType::hasReturnValue;
 
 		//! The type of the return value
 		typedef typename BindType::ReturnType ReturnType;
