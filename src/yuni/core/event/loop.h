@@ -83,25 +83,25 @@ namespace EventLoop
 	{
 	public:
 		//! Parent
-		typedef ParentT  ParentType;
+		using ParentType = ParentT;
 		//! A request
-		typedef Bind<bool ()>  RequestType;
+		using RequestType = Bind<bool ()>;
 		//! List of requests
-		typedef LinkedList<RequestType>  RequestListType;
+		using RequestListType = LinkedList<RequestType>;
 
 		//! The Event loop
-		typedef IEventLoop<ParentType, FlowT, StatsT, DetachedT>  EventLoopType;
+		using EventLoopType = IEventLoop<ParentType, FlowT, StatsT, DetachedT>;
 		//! The most suitable smart pointer for the class
-		typedef SmartPtr<EventLoopType>  Ptr;
+		using Ptr = SmartPtr<EventLoopType>;
 		//! The threading policy
-		typedef Policy::ObjectLevelLockableNotRecursive<EventLoopType>  ThreadingPolicy;
+		using ThreadingPolicy = Policy::ObjectLevelLockableNotRecursive<EventLoopType>;
 		//! The thread used for the inner loop
-		typedef Yuni::Private::Core::EventLoop::Thread<EventLoopType>  ThreadType;
+		using ThreadType = Yuni::Private::Core::EventLoop::Thread<EventLoopType>;
 
 		//! The flow policy
-		typedef FlowT<EventLoopType>  FlowPolicy;
+		using FlowPolicy = FlowT<EventLoopType>;
 		//! The statistics policy
-		typedef StatsT<EventLoopType>  StatisticsPolicy;
+		using StatisticsPolicy = StatsT<EventLoopType>;
 
 		enum
 		{

@@ -30,18 +30,18 @@ namespace Yuni
 	{
 	public:
 		//! Event
-		typedef Event<P> EventType;
+		using EventType = Event<P>;
 		//! The Bind Type
-		typedef Bind<P> BindType;
+		using BindType = Bind<P>;
 		//! Type of the Ancestor
-		typedef typename Yuni::Private::EventImpl::template WithNArguments<BindType::argumentCount, BindType> AncestorType;
+		using AncestorType = typename Yuni::Private::EventImpl::template WithNArguments<BindType::argumentCount, BindType>;
 
 		//! The Threading Policy
-		typedef typename AncestorType::ThreadingPolicy ThreadingPolicy;
+		using ThreadingPolicy = typename AncestorType::ThreadingPolicy;
 		//! The most suitable smartptr for the class
-		typedef SmartPtr<Event> Ptr;
+		using Ptr = SmartPtr<Event>;
 		//! Pointer-to-function
-		typedef typename BindType::FunctionType FunctionType;
+		using FunctionType = typename BindType::FunctionType;
 
 		/*!
 		** \brief Pointer-to-member of any Class
@@ -50,11 +50,11 @@ namespace Yuni
 		template<class C> struct PointerToMember final
 		{
 			//! Mere type for C
-			typedef typename BindType::template PointerToMember<C>::Class Class;
+			using Class = typename BindType::template PointerToMember<C>::Class;
 			//! Type for a pointer-to-member
-			typedef typename BindType::template PointerToMember<C>::Type Type;
+			using Type = typename BindType::template PointerToMember<C>::Type;
 			//! Type for a const pointer-to-member
-			typedef typename BindType::template PointerToMember<C>::ConstType ConstType;
+			using ConstType = typename BindType::template PointerToMember<C>::ConstType;
 		};
 
 		enum
@@ -79,7 +79,7 @@ namespace Yuni
 		template<int I> struct Argument final
 		{
 			//! Type of the argument at position I (zero-based)
-			typedef typename BindType::template Argument<I>::Type Type;
+			using Type = typename BindType::template Argument<I>::Type;
 		};
 
 

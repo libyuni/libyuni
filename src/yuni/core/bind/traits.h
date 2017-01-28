@@ -625,53 +625,34 @@ namespace BindImpl
 
 
 
-	template<class T>
-	struct Parameter
-	{
-		typedef const
-			typename Static::Remove::Const<	typename Static::Remove::RefOnly<T>::Type>::Type
-			& Type;
+	template<class T> struct Parameter {
+		using Type = const
+			typename Static::Remove::Const<	typename Static::Remove::RefOnly<T>::Type>::Type&;
 	};
 
-
-	template<class T>
-	struct Parameter<const T*>
-	{
-		typedef const T* Type;
+	template<class T> struct Parameter<const T*> {
+		using Type = const T*;
 	};
 
-	template<class T>
-	struct Parameter<T*>
-	{
-		typedef T* Type;
+	template<class T> struct Parameter<T*> {
+		using Type = T*;
 	};
 
-	template<class T, int N>
-	struct Parameter<const T[N]>
-	{
-		typedef const T* Type;
+	template<class T, int N> struct Parameter<const T[N]> {
+		using Type = const T*;
 	};
 
-	template<class T, int N>
-	struct Parameter<T[N]>
-	{
-		typedef T* Type;
+	template<class T, int N> struct Parameter<T[N]> {
+		using Type = T*;
 	};
 
-	template<class T>
-	struct Parameter<T&>
-	{
-		typedef const T& Type;
+	template<class T> struct Parameter<T&> {
+		using Type = const T&;
 	};
 
-	template<class T>
-	struct Parameter<const T&>
-	{
-		typedef const T& Type;
+	template<class T> struct Parameter<const T&> {
+		using Type = const T&;
 	};
-
-
-
 
 
 
