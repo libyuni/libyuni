@@ -172,10 +172,6 @@ namespace Yuni
 	}; // class IEventObserver
 
 
-
-
-
 } // namespace Yuni
 
 #include "interfaces.hxx"
-

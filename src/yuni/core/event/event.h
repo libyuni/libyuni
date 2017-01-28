@@ -191,11 +191,6 @@ namespace Yuni
 	}; // class Event<>
 
 
-
-
-
-
 } // namespace Yuni
 
 #include "event.hxx"
-

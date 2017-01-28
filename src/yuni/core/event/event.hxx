@@ -12,7 +12,6 @@
 #include "event.h"
 
 
-
 namespace Yuni
 {
 
@@ -250,9 +249,6 @@ namespace Yuni
 	{
 		return (AncestorType::pEmpty);
 	}
-
-
-
 
 
 } // namespace Yuni
