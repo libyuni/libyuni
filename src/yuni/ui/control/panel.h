@@ -38,7 +38,7 @@ namespace Control
 		Panel(const Point2D<float>& position, const Point2D<float>& size);
 
 		//! Virtual destructor
-		virtual ~Panel() {}
+		virtual ~Panel() { destroyBoundEvents(); }
 
 		//! Draw the panel
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;

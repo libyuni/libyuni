@@ -36,6 +36,14 @@ namespace Input
 		//! Virtual destructor
 		virtual ~WinMouse() {}
 
+		virtual bool visible() const
+		{
+			CURSORINFO info;
+			info.cbSize = sizeof(CURSORINFO);
+			::GetCursorInfo(&info);
+			return (info.flags & CURSOR_SHOWING) > 0;
+		}
+
 		virtual void showCursor() { ::ShowCursor(true); }
 
 		virtual void hideCursor() { ::ShowCursor(false); }

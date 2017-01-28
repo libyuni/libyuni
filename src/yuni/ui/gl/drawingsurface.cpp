@@ -487,7 +487,7 @@ namespace UI
 				// We do not want Bounds to interfere with display, so increase them properly
 				maxXBound = xEnd;
 				maxYBound = yEnd;
-				// Nothing to do on coordinates are perfect
+				// Nothing to do on coordinates
 				break;
 			case dmNone:
 			case dmOffset:
@@ -520,7 +520,38 @@ namespace UI
 				}
 				break;
 			case dmFit:
-				// TODO
+				{
+					float overlayAR = overlayWidth / overlayHeight;
+					float texAR = texWidth / texHeight;
+					if (overlayAR > texAR)
+					{
+						float resizedWidth = overlayHeight * texAR;
+						float resizedHeight = overlayHeight;
+						xStart = (overlayWidth - resizedWidth) / 2.0f;
+						yStart = 0.0f;
+						xEnd = xStart + resizedWidth;
+						yEnd = yStart + resizedHeight;
+						maxXBound = overlayWidth;
+						maxYBound = overlayHeight;
+					}
+					else if (overlayAR < texAR)
+					{
+						float resizedWidth = overlayWidth;
+						float resizedHeight = overlayWidth / texAR;
+						xStart = 0.0f;
+						yStart = (overlayHeight - resizedHeight) / 2.0f;
+						xEnd = xStart + resizedWidth;
+						yEnd = yStart + resizedHeight;
+						maxXBound = overlayWidth;
+						maxYBound = overlayHeight;
+					}
+					else // overlayAR == texAR
+					{
+						maxXBound = xEnd;
+						maxYBound = yEnd;
+					}
+					std::cout << "UI says " << xEnd - xStart << 'x' << yEnd - yStart << std::endl;
+				}
 				break;
 			case dmFill:
 				// TODO
@@ -532,7 +563,7 @@ namespace UI
 
 		pImpl->pictureShader->bindUniform("FillColor", fillColor);
 		pImpl->pictureShader->bindUniform("Opacity", imageOpacity);
-		pImpl->pictureShader->bindUniform("Bounds", xStart, yStart, maxXBound, maxYBound);
+		pImpl->pictureShader->bindUniform("Bounds", 0, 0, maxXBound, maxYBound);//xStart, yStart, maxXBound, maxYBound);
 		::glBindTexture(GL_TEXTURE_2D, texture->id());
 		// Tex coords
 		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);

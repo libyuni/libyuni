@@ -72,6 +72,24 @@ void main()
 }
 		)";
 
+	// For 2D post shaders, texture coordinates are calculated by transforming vertex position
+	// from [-1,1] to [0,1]
+	const char* const vs2DFlipVertical =
+		R"(
+#version 130
+
+in vec2 attrVertex;
+out vec2 texCoord;
+
+// For 2D post shaders, texture coordinates are calculated by transforming vertex position
+// from [-1,1] to [0,1]
+void main()
+{
+	gl_Position = vec4(attrVertex, 0.0f, 1.0f);
+	texCoord = (attrVertex + 1.0) / 2.0;
+	texCoord.y = 1.0 - texCoord.y;
+}
+		)";
 
 	// Pass the color as attribute
 	const char* const vsColorAttr =
@@ -265,7 +283,7 @@ void main()
 	// Sample the texture
 	vec4 texColor = texture(Texture0, texCoord);
 	// Multiply by the given opacity
-	texColor = vec4(texColor.rgb, texColor.a * Opacity);
+	texColor.a = texColor.a * Opacity;
 	// Take either the texture color or the fill color depending on if we are out of bounds
 	gl_FragColor = mix(texColor, FillColor, isEmpty);
 }

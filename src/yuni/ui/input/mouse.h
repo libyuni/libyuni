@@ -97,6 +97,7 @@ namespace Input
 
 		//! \name Cursor visibility
 		//@{
+		virtual bool visible() const = 0;
 		virtual void showCursor() = 0;
 		virtual void hideCursor() = 0;
 		virtual void showCursor(bool visible) = 0;
