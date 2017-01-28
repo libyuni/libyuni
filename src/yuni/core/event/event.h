@@ -47,10 +47,8 @@ namespace Yuni
 		** \brief Pointer-to-member of any Class
 		** \tparam C Any class
 		*/
-		template<class C>
-		class PointerToMember final
+		template<class C> struct PointerToMember final
 		{
-		public:
 			//! Mere type for C
 			typedef typename BindType::template PointerToMember<C>::Class Class;
 			//! Type for a pointer-to-member
@@ -78,8 +76,7 @@ namespace Yuni
 		** use `argumentCount` to know exactly the number of arguments.
 		** \tparam I Index of the argument (zero-based)
 		*/
-		template<int I>
-		struct Argument final
+		template<int I> struct Argument final
 		{
 			//! Type of the argument at position I (zero-based)
 			typedef typename BindType::template Argument<I>::Type Type;
