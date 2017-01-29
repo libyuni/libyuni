@@ -8,7 +8,8 @@
 ** github: https://github.com/libyuni/libyuni/
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
-// TODO: We should really do without this (using a better error management)
+
+#include "../../yuni.h"
 #include <iostream>
 #include "../windowfactory.h"
 #include "glxwindow.h"
@@ -41,7 +42,7 @@ namespace UI
 		attrList[indx++] = 1;
 		attrList[indx] = 0; // None
 
-		vinfo = glXChooseVisual(pDisplay, DefaultScreen(pDisplay), attrList);
+		vinfo = ::glXChooseVisual(pDisplay, DefaultScreen(pDisplay), attrList);
 		if (vinfo == NULL)
 		{
 			std::cerr << "ERROR: Can't open window" << std::endl;
@@ -49,23 +50,23 @@ namespace UI
 		}
 		Window root = DefaultRootWindow(pDisplay);
 
-		pAttr.colormap = XCreateColormap(pDisplay, root, vinfo->visual, AllocNone);
+		pAttr.colormap = ::XCreateColormap(pDisplay, root, vinfo->visual, AllocNone);
 		pAttr.background_pixel = BlackPixel(pDisplay, vinfo->screen);
 		pAttr.border_pixel = BlackPixel(pDisplay, vinfo->screen);
-		pWindow = XCreateWindow(pDisplay, root,
-							30, 30, pWidth, pHeight, 0, vinfo->depth, CopyFromParent,
-							vinfo->visual, CWBackPixel | CWBorderPixel | CWColormap, &pAttr);
+		pWindow = ::XCreateWindow(pDisplay, root,
+			30, 30, pWidth, pHeight, 0, vinfo->depth, CopyFromParent,
+			vinfo->visual, CWBackPixel | CWBorderPixel | CWColormap, &pAttr);
 
-		XMapWindow(pDisplay, pWindow);
-		XStoreName(pDisplay, pWindow, "VERY SIMPLE APPLICATION");
+		::XMapWindow(pDisplay, pWindow);
+		::XStoreName(pDisplay, pWindow, "Yuni Window");
 
-		pContext = glXCreateContext(pDisplay, vinfo, NULL, True);
+		pContext = ::glXCreateContext(pDisplay, vinfo, nullptr, True);
 		if (pContext == NULL)
 		{
 			std::cerr << "glXCreateContext failed" << std::endl;
 			return false;
 		}
-		if (!glXMakeCurrent(pDisplay, pWindow, pContext))
+		if (!::glXMakeCurrent(pDisplay, pWindow, pContext))
 		{
 			std::cout << "glXMakeCurrent failed" << std::endl;
 			return false;
@@ -73,7 +74,7 @@ namespace UI
 		resize(pWidth, pHeight);
 		if (!GLWindow::initialize())
 		{
-			std::cout << "GL initialization failed" << std::endl;
+			std::cerr << "GL initialization failed" << std::endl;
 			return false;
 		}
 		return true;
@@ -83,12 +84,12 @@ namespace UI
 	{
 		if (pContext)
 		{
-			if (!glXMakeCurrent(pDisplay, 0, NULL))
+			if (!::glXMakeCurrent(pDisplay, 0, nullptr))
 			{
-				printf("Could not release drawing context.\n");
+				std::cerr << "Could not release drawing context." << std::endl;
 			}
-			glXDestroyContext(pDisplay, pContext);
-			pContext = NULL;
+			::glXDestroyContext(pDisplay, pContext);
+			pContext = nullptr;
 		}
 		// Switch back to original desktop resolution if we were in fs
 		if (pFullScreen)
@@ -96,8 +97,8 @@ namespace UI
 // 			XF86VidModeSwitchToMode(pDisplay, pScreen, &GLWin.deskMode);
 // 			XF86VidModeSetViewPort(pDisplay, pScreen, 0, 0);
 		}
-		XCloseDisplay(pDisplay);
-		pDisplay = NULL;
+		::XCloseDisplay(pDisplay);
+		pDisplay = nullptr;
 
 		GLWindow::kill();
 	}
@@ -111,7 +112,7 @@ namespace UI
 
 	void GLXWindow::title(const AnyString& path)
 	{
-		// TODO
+		::XStoreName(pDisplay, pWindow, path.c_str());
 	}
 
 
@@ -119,11 +120,11 @@ namespace UI
 	{
 		typedef int (*SwapGetIntervalProto)();
 		SwapGetIntervalProto getSwapIntervalEXT = 0;
-		const String extensions((const char*)glGetString(GL_EXTENSIONS));
+		const String extensions((const char*)::glGetString(GL_EXTENSIONS));
 
 		if (extensions.find("GLX_MESA_swap_control") != String::npos)
 		{
-			getSwapIntervalEXT = (SwapGetIntervalProto)glXGetProcAddress((const GLubyte*)"glXGetSwapIntervalMESA");
+			getSwapIntervalEXT = (SwapGetIntervalProto)::glXGetProcAddress((const GLubyte*)"glXGetSwapIntervalMESA");
 			if (getSwapIntervalEXT)
 				return getSwapIntervalEXT();
 		}
@@ -137,14 +138,14 @@ namespace UI
 	{
 		typedef int (*SwapIntervalProto)(int);
 		SwapIntervalProto swapIntervalEXT = 0;
-		const String extensions((const char*)glGetString(GL_EXTENSIONS));
+		const String extensions((const char*)::glGetString(GL_EXTENSIONS));
 
 		if (extensions.find("GLX_SGI_swap_control") != String::npos)
-			swapIntervalEXT = (SwapIntervalProto)glXGetProcAddress((const GLubyte*)"glXSwapIntervalSGI");
+			swapIntervalEXT = (SwapIntervalProto)::glXGetProcAddress((const GLubyte*)"glXSwapIntervalSGI");
 		else
 		{
 			if (extensions.find("GLX_MESA_swap_control") != String::npos)
-				swapIntervalEXT = (SwapIntervalProto)glXGetProcAddress((const GLubyte*)"glXSwapIntervalMESA");
+				swapIntervalEXT = (SwapIntervalProto)::glXGetProcAddress((const GLubyte*)"glXSwapIntervalMESA");
 		}
 
 		if (swapIntervalEXT)
@@ -158,7 +159,7 @@ namespace UI
 		XEvent event;
 		while (true)
 		{
-			XNextEvent(pDisplay, &event);
+			::XNextEvent(pDisplay, &event);
 			switch (event.type)
 			{
 				case ConfigureNotify:

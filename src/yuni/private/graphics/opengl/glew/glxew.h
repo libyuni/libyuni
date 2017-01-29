@@ -1666,4 +1666,6 @@ GLEWAPI GLboolean GLEWAPIENTRY glxewGetExtension (const char *name);
 }
 #endif
 
+#undef Bool
+
 #endif /* __glxew_h__ */

@@ -8,11 +8,9 @@
 ** github: https://github.com/libyuni/libyuni/
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
-#ifndef __YUNI_UI_GLXWINDOW_H__
-# define __YUNI_UI_GLXWINDOW_H__
+#pragma once
 
 #include <yuni/yuni.h>
-#include <yuni/private/graphics/opengl/glew/glew.h>
 #include <yuni/private/graphics/opengl/glew/glxew.h>
 #include "glwindow.h"
 
@@ -71,15 +69,6 @@ namespace UI
 		//! Current status of the vertical sync
 		virtual bool vsync() const override;
 
-		//! Does the window have Full Screen AntiAliasing / MultiSampling ?
-		virtual bool antiAliasing() const override;
-		/*!
-		** \brief Should Full Screen AntiAliasing / MultiSampling be enabled ?
-		**
-		** Changing this value may kill and re-create the window.
-		*/
-		virtual void antiAliasing(bool enable) override;
-
 		//! Enable / Disable full screen
 		virtual void fullScreen(bool enable) override;
 		//! Is the window full screen ?
@@ -100,5 +89,3 @@ namespace UI
 } // Yuni
 
 #include "glxwindow.hxx"
-
-#endif // __YUNI_UI_GLXWINDOW_H__
