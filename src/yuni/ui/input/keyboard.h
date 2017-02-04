@@ -8,8 +8,7 @@
 ** github: https://github.com/libyuni/libyuni/
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
-#ifndef __YUNI_INPUT_KEYBOARD_H__
-# define __YUNI_INPUT_KEYBOARD_H__
+#pragma once
 
 # include "../../yuni.h"
 # include "../../core/bind.h"
@@ -105,6 +104,3 @@ namespace Input
 
 } // namespace Input
 } // namespace Yuni
-
-
-#endif // __YUNI_INPUT_KEYBOARD_H__

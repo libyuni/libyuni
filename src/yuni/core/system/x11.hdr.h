@@ -11,7 +11,7 @@
 #pragma once
 #include "../../yuni.h"
 #include <cstring>
-#include <GL/glx.h>
+#include "../../private/graphics/opengl/glew/glxew.h"
 #include <X11/extensions/Xrender.h>
 
 // The define None from the X11 headers overlaps with Yuni::None...

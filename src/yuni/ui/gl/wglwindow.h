@@ -37,9 +37,7 @@ namespace UI
 		WGLWindow(const AnyString& title, uint width, uint height, uint bitDepth, bool fullScreen):
 			GLWindow(title, width, height, bitDepth, fullScreen),
 			pHasMSAASupport(false)
-		{
-			pMouse = new Input::WinMouse();
-		}
+		{}
 		//! Destructor
 		~WGLWindow();
 

@@ -50,12 +50,35 @@ namespace Gfx3D
 
 	bool VertexShader::loadFromMemory(const AnyString& source)
 	{
+		GLClearError();
+		pError.clear();
+
 		if (pID == invalidID)
 			pID = ::glCreateShader(GL_VERTEX_SHADER);
 		const char* data = source.data();
 		::glShaderSource(pID, 1, &data, nullptr);
 		::glCompileShader(pID);
-		return GLTestError("VertexShader::loadFromMemory");
+		GLTestError("VertexShader::loadFromMemory, glCompileShader");
+
+		int compiled;
+		::glGetShaderiv(pID, GL_COMPILE_STATUS, &compiled);
+		GLTestError("VertexShader::loadFromMemory, glGetProgramiv");
+
+		if (GL_FALSE == compiled)
+		{
+			char log[1024];
+			int length = 0;
+			::glGetShaderInfoLog(pID, 1024, &length, log);
+
+			pError.clear() << "Shader " << pID << " failed to compile !";
+			if ((uint) length < 1024)
+			{
+				log[(uint)length] = '\0'; // for safety, just in case
+				pError += '\n';
+				pError.append(log, (uint)length);
+			}
+		}
+		return GL_TRUE == compiled;
 	}
 
 
@@ -94,13 +117,36 @@ namespace Gfx3D
 
 	bool FragmentShader::loadFromMemory(const AnyString& source)
 	{
+		GLClearError();
+		pError.clear();
+
 		if (pID == invalidID)
 			pID = ::glCreateShader(GL_FRAGMENT_SHADER);
 
 		const char* data = source.data();
 		::glShaderSource(pID, 1, &data, nullptr);
 		::glCompileShader(pID);
-		return GLTestError("FragmentShader::loadFromMemory");
+		GLTestError("FragmentShader::loadFromMemory");
+
+		int compiled;
+		::glGetShaderiv(pID, GL_COMPILE_STATUS, &compiled);
+		GLTestError("FragmentShader::loadFromMemory, glGetProgramiv");
+
+		if (GL_FALSE == compiled)
+		{
+			char log[1024];
+			int length = 0;
+			::glGetShaderInfoLog(pID, 1024, &length, log);
+
+			pError.clear() << "Shader " << pID << " failed to compile !";
+			if ((uint) length < 1024)
+			{
+				log[(uint)length] = '\0'; // for safety, just in case
+				pError += '\n';
+				pError.append(log, (uint)length);
+			}
+		}
+		return GL_TRUE == compiled;
 	}
 
 

@@ -10,8 +10,9 @@
 */
 #pragma once
 
-#include "../../core/system/windows.hdr.h"
-#include "mouse.h"
+#ifdef YUNI_WINDOWSYSTEM_MSW
+
+# include "../../core/system/windows.hdr.h"
 
 namespace Yuni
 {
@@ -53,6 +54,7 @@ namespace Input
 	}; // class WinMouse
 
 
-
 } // namespace Input
 } // namespace Yuni
+
+#endif // YUNI_WINDOWSYSTEM_MSW

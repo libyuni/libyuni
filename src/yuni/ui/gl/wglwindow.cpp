@@ -747,6 +747,8 @@ namespace UI
 				pFullScreen = false;
 		}
 
+		pMouse = new Input::WinMouse();
+
 		return true;
 	}
 

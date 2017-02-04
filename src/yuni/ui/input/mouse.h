@@ -133,7 +133,16 @@ namespace Input
 	}; // class IMouse
 
 
-
 } // namespace Input
 } // namespace Yuni
 
+
+#ifdef YUNI_WINDOWSYSTEM_MSW
+# include "winmouse.h"
+#else
+# ifdef YUNI_WINDOWSYSTEM_X11
+#	include "x11mouse.h"
+# else
+#	warning "Yuni::Input::Mouse : Unsupported Window System !"
+# endif
+#endif

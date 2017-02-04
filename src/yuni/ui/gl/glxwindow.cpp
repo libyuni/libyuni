@@ -27,7 +27,7 @@ namespace UI
 		int attrList[20];
 		int indx = 0;
 
-		if (!(pDisplay = XOpenDisplay (NULL)))
+		if (!(pDisplay = ::XOpenDisplay(NULL)))
 			return false;
 
 		attrList[indx++] = GLX_USE_GL;
@@ -66,6 +66,54 @@ namespace UI
 			std::cerr << "glXCreateContext failed" << std::endl;
 			return false;
 		}
+
+		typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, Bool, const int*);
+
+		glXCreateContextAttribsARBProc glXCreateContextAttribsARB = 0;
+		glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)
+			::glXGetProcAddressARB((const GLubyte *) "glXCreateContextAttribsARB");
+
+		// Try to get a context with a higher GL version
+		if (glXCreateContextAttribsARB)
+		{
+			// Get a matching FB config
+			static const int visualAttribs[] =
+				{
+					GLX_X_RENDERABLE    , True,
+					GLX_DRAWABLE_TYPE   , GLX_WINDOW_BIT,
+					GLX_RENDER_TYPE     , GLX_RGBA_BIT,
+					GLX_X_VISUAL_TYPE   , GLX_TRUE_COLOR,
+					GLX_RED_SIZE        , 8,
+					GLX_GREEN_SIZE      , 8,
+					GLX_BLUE_SIZE       , 8,
+					GLX_ALPHA_SIZE      , 8,
+					GLX_DEPTH_SIZE      , 24,
+					GLX_STENCIL_SIZE    , 8,
+					GLX_DOUBLEBUFFER    , True,
+					//GLX_SAMPLE_BUFFERS  , 1,
+					//GLX_SAMPLES         , 4,
+					0
+				};
+
+			PFNGLXCHOOSEFBCONFIGPROC glXChooseFBConfig = 0;
+			glXChooseFBConfig = (PFNGLXCHOOSEFBCONFIGPROC)::glXGetProcAddress((const GLubyte*)"glXChooseFBConfig");
+
+			int fbCount;
+			GLXFBConfig* fbConfig = glXChooseFBConfig(pDisplay, DefaultScreen(pDisplay), visualAttribs, &fbCount);
+
+			static const int contextAttribs[] =
+				{
+					GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+					GLX_CONTEXT_MINOR_VERSION_ARB, 3,
+					//GLX_CONTEXT_FLAGS_ARB        , GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+					0
+				};
+			pContext = glXCreateContextAttribsARB(pDisplay, *fbConfig, 0, True, contextAttribs);
+
+			// Sync to ensure any errors generated are processed.
+			::XSync(pDisplay, False);
+		}
+
 		if (!::glXMakeCurrent(pDisplay, pWindow, pContext))
 		{
 			std::cout << "glXMakeCurrent failed" << std::endl;
@@ -77,6 +125,8 @@ namespace UI
 			std::cerr << "GL initialization failed" << std::endl;
 			return false;
 		}
+
+		pMouse = new Input::X11Mouse(pDisplay, pWindow);
 		return true;
 	}
 

@@ -44,13 +44,13 @@ namespace UI
 		virtual void kill() override;
 
 		//! Minimize the window
-		virtual void minimize() override;
+		virtual void minimize() override {}
 
 		//! Minimize the window
-		virtual void maximize() override;
+		virtual void maximize() override {}
 
 		//! Minimize the window
-		virtual void restore() override;
+		virtual void restore() override {}
 
 		//! Swap front and back buffers (OS-specific)
 		virtual void swapBuffers() override;
@@ -70,9 +70,9 @@ namespace UI
 		virtual bool vsync() const override;
 
 		//! Enable / Disable full screen
-		virtual void fullScreen(bool enable) override;
+		virtual void fullScreen(bool enable) override {}
 		//! Is the window full screen ?
-		virtual bool fullScreen() const override;
+		virtual bool fullScreen() const override { return false;}
 
 	private:
 		Display* pDisplay;

@@ -139,8 +139,9 @@ namespace Gfx3D
 			::glGetProgramiv(pID, GL_LINK_STATUS, &linked);
 			GLTestError("ShaderProgram::load, glGetProgramiv");
 
+			return true;
 			pLinked = (linked == GL_TRUE);
-			if (0 == pLinked)
+			if (not pLinked)
 			{
 				char log[1024];
 				int length = 0;

@@ -8,8 +8,7 @@
 ** github: https://github.com/libyuni/libyuni/
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
-#ifndef __YUNI_INPUT_KEY_H__
-# define __YUNI_INPUT_KEY_H__
+#pragma once
 
 namespace Yuni
 {
@@ -128,5 +127,3 @@ namespace Input
 
 } // namespace Input
 } // namespace Yuni
-
-#endif // __YUNI_INPUT_KEY_H__
