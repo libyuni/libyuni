@@ -50,7 +50,7 @@ namespace Yuni
 	{
 	public:
 		//! IEvent list
-		typedef std::map<IEvent*, uint> Map;
+		using Map = std::map<IEvent*, uint>;
 
 	public:
 		IEvent() {}
@@ -125,9 +125,9 @@ namespace Yuni
 	{
 	public:
 		//! Type of the Event observer
-		typedef IEventObserver<Derived,TP> IEventObserverType;
+		using IEventObserverType = IEventObserver<Derived,TP>;
 		//! The Threading policy
-		typedef TP<IEventObserverType> ThreadingPolicy;
+		using ThreadingPolicy = TP<IEventObserverType>;
 
 	public:
 		//! \name Constructor & Destructor
@@ -172,10 +172,6 @@ namespace Yuni
 	}; // class IEventObserver
 
 
-
-
-
 } // namespace Yuni
 
 #include "interfaces.hxx"
-
