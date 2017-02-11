@@ -251,7 +251,7 @@ namespace UI
 
 		::XSelectInput(pDisplay, pWindow,
 			ExposureMask | ButtonPressMask | ButtonReleaseMask | PointerMotionMask |
-			KeyPressMask | KeyReleaseMask | EnterWindowMask | LeaveWindowMask);
+			KeyPressMask | KeyReleaseMask | EnterWindowMask | LeaveWindowMask | StructureNotifyMask);
 
 		// We need a dummy context to initialize everything
 		pContext = ::glXCreateContext(pDisplay, vinfo, nullptr, True);
@@ -381,13 +381,13 @@ namespace UI
 	void GLXWindow::move(uint left, uint top)
 	{
 		GLWindow::move(left, top);
-		::XMoveResizeWindow(pDisplay, pWindow, left, top, pWidth, pHeight);
+		::XMoveWindow(pDisplay, pWindow, left, top);
 	}
 
 	void GLXWindow::resize(unsigned int width, unsigned int height)
 	{
 		GLWindow::resize(width, height);
-		::XMoveResizeWindow(pDisplay, pWindow, pLeft, pTop, width, height);
+		::XResizeWindow(pDisplay, pWindow, width, height);
 	}
 
 
@@ -451,9 +451,14 @@ namespace UI
 			newHeight = screen->height;
 		}
 
-		move(newX, newY);
-		resize(newWidth, newHeight);
-		::XMapRaised(pDisplay, pWindow);
+		::XMoveResizeWindow(pDisplay, pWindow, newX, newY, newWidth, newHeight);
+		GLWindow::move(newX, newY);
+		GLWindow::resize(newWidth, newHeight);
+
+		if (enable)
+			::XMapRaised(pDisplay, pWindow);
+		else
+			::XMapWindow(pDisplay, pWindow);
 		pFullScreen = enable;
 	}
 
@@ -463,13 +468,15 @@ namespace UI
 		XEvent event;
 
 		auto mask = ExposureMask | ButtonPressMask | ButtonReleaseMask | PointerMotionMask |
-			KeyPressMask | KeyReleaseMask | EnterWindowMask | LeaveWindowMask;
+			KeyPressMask | KeyReleaseMask | EnterWindowMask | LeaveWindowMask | StructureNotifyMask;
 		while (::XCheckWindowEvent(pDisplay, pWindow, mask, &event))
 		{
 			//::XNextEvent(pDisplay, &event);
 			switch (event.type)
 			{
 				case ConfigureNotify:
+					GLWindow::move(event.xconfigure.x, event.xconfigure.y);
+					GLWindow::resize(event.xconfigure.width, event.xconfigure.height);
 					break;
 				case Expose:
 					refreshAndSwap();
