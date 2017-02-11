@@ -221,7 +221,7 @@ namespace UI
 		//! Enable / Disable full screen (OS-specific)
 		virtual void fullScreen(bool enable) = 0;
 		//! Is the window full screen ? (OS-specific)
-		virtual bool fullScreen() const = 0;
+		bool fullScreen() const { return pFullScreen; }
 
 		//! When in full screen, update size the window will come back to
 		virtual void updateWindowedSize(uint /*width*/, uint /*height*/) {}

@@ -20,7 +20,7 @@ namespace Input
 	*/
 	enum Key
 	{
-		Invalid,
+		Invalid = 0,
 
 		// Main control keys
 		Escape,

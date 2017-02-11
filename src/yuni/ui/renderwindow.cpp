@@ -191,7 +191,7 @@ namespace UI
 		{
 			if (id == (*it)->id())
 			{
-				(*it)->draw(1);
+				(*it)->draw();
 				break;
 			}
 		}
@@ -202,7 +202,7 @@ namespace UI
 	{
 		if (wsMinimized == pState)
 			return;
-		view->draw(1);
+		view->draw();
 	}
 
 
@@ -210,11 +210,12 @@ namespace UI
 	{
 		if (wsMinimized == pState)
 			return;
+
 		// Activate the frame buffer
 		pFB.activate();
 		// Draw the views
 		for (const View::Ptr& view : pViewList)
-			view->draw(1);
+			view->draw();
 		static bool init = false;
 		if (!init)
 		{
@@ -254,6 +255,7 @@ namespace UI
 		}
 		// The last post filter is applied directly, so deactivate our frame buffer
 		pFB.deactivate();
+
 		// And draw one last time to the default frame buffer
 		if (pPostEffects.size() > 0)
 		{

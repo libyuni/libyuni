@@ -18,15 +18,12 @@ namespace UI
 
 	inline void GLXWindow::swapBuffers()
 	{
-		//XNextEvent(pDisplay, &xev);
-		::XGetWindowAttributes(pDisplay, pWindow, &pWndAttr);
 		::glXSwapBuffers(pDisplay, pWindow);
 	}
 
 	inline void GLXWindow::refreshAndSwap()
 	{
 		onRefresh();
-		::XGetWindowAttributes(pDisplay, pWindow, &pWndAttr);
 		::glXSwapBuffers(pDisplay, pWindow);
 	}
 

@@ -19,6 +19,10 @@
 #	undef None
 # endif
 
+# ifdef Bool
+#	undef Bool
+# endif
+
 # define YUNI_X11LIB_NONE  0L
 
 # define _NET_WM_STATE_REMOVE	0 // Unset a state

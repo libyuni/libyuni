@@ -76,6 +76,7 @@ namespace Gfx3D
 				log[(uint)length] = '\0'; // for safety, just in case
 				pError += '\n';
 				pError.append(log, (uint)length);
+				std::cerr << pError;
 			}
 		}
 		return GL_TRUE == compiled;
@@ -144,6 +145,7 @@ namespace Gfx3D
 				log[(uint)length] = '\0'; // for safety, just in case
 				pError += '\n';
 				pError.append(log, (uint)length);
+				std::cerr << pError;
 			}
 		}
 		return GL_TRUE == compiled;

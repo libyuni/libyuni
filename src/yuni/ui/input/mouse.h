@@ -43,11 +43,11 @@ namespace Input
 		//! Button types
 		enum Button
 		{
-			ButtonLeft,
+			ButtonLeft = 1,
 
-			ButtonRight,
+			ButtonMiddle = 2,
 
-			ButtonMiddle,
+			ButtonRight = 3,
 
 			ButtonCount // Used to count the enum values, please keep at end of enum
 
