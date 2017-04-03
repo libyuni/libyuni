@@ -58,7 +58,7 @@ endif()
 #
 # Generating informations about the platform
 #
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/platform.cmake ${CMAKE_CURRENT_SOURCE_DIR}/platform.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/platform.cmake platform.h)
 
 
 # System - Microsoft Windows
