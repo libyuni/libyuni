@@ -2,6 +2,7 @@ ynmessage(MODULE "Core")
 
 # Paths for yuni-config, embedded version.
 LIBYUNI_CONFIG_INCLUDE_PATH("intree" "core" "${CMAKE_CURRENT_SOURCE_DIR}/..")
+LIBYUNI_CONFIG_INCLUDE_PATH("intree" "core" "${CMAKE_CURRENT_BINARY_DIR}")
 LIBYUNI_CONFIG_LIB_PATH("intree" "core" "${LIBRARY_OUTPUT_PATH}")
 
 # Paths for yuni-config, installed version.
