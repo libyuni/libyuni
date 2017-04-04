@@ -9,8 +9,8 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
 #pragma once
-#include "../yuni.h"
-#include "string.h"
+#include "yuni/yuni.h"
+#include "yuni/core/string.h"
 #include <map>
 #include <set>
 #ifdef YUNI_HAS_STL_UNORDERED_MAP

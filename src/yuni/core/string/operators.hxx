@@ -9,7 +9,7 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
 #pragma once
-#include "string.h"
+#include "yuni/core/string.h"
 
 
 

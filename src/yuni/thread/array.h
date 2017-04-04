@@ -9,9 +9,9 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
 #pragma once
-#include "../yuni.h"
-#include "thread.h"
-#include "../core/static/inherit.h"
+#include "yuni/yuni.h"
+#include "yuni/thread/thread.h"
+#include "yuni/core/static/inherit.h"
 #include <vector>
 
 

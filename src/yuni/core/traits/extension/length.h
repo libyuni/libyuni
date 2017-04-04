@@ -9,11 +9,10 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
 #pragma once
-#include "../../../yuni.h"
+#include "yuni/yuni.h"
 #include <string>
-#include <cstring>
-#include "../../smartptr.h"
-#include "../length.h"
+#include <string.h>
+#include "yuni/core/smartptr/smartptr.h"
 
 
 

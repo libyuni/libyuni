@@ -9,7 +9,7 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
 #pragma once
-#include "tribool.h"
+#include "yuni/core/tribool.h"
 
 
 

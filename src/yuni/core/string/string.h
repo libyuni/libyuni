@@ -9,13 +9,13 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
 #pragma once
-#include "../../yuni.h"
-#include "../static/remove.h"
-#include "../static/assert.h"
-#include "../static/typedef.h"
-#include "../traits/cstring.h"
-#include "../traits/length.h"
-#include "../smartptr.h"
+#include "yuni/yuni.h"
+#include "yuni/core/static/remove.h"
+#include "yuni/core/static/assert.h"
+#include "yuni/core/static/typedef.h"
+#include "yuni/core/traits/cstring.h"
+#include "yuni/core/traits/length.h"
+#include "yuni/core/smartptr/smartptr.h"
 
 #ifdef YUNI_OS_MSVC
 #pragma warning(push)

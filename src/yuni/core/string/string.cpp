@@ -8,7 +8,7 @@
 ** github: https://github.com/libyuni/libyuni/
 ** gitlab: https://gitlab.com/libyuni/libyuni/ (mirror)
 */
-#include "string.h"
+#include "yuni/core/string.h"
 #include <iostream>
 
 

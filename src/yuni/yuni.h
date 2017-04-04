@@ -15,18 +15,18 @@
 #ifdef YUNI_CONFIG_H_LOCATION
 #	include YUNI_CONFIG_H_LOCATION
 #else
-#	include "config.h"
+#	include "yuni/config.h"
 #endif
 
 
 /* Platform checks */
-#include "platform.h"
+#include "yuni/platform.h"
 /* Standard Preprocessor tools */
-#include "core/preprocessor/std.h"
+#include "yuni/core/preprocessor/std.h"
 /* Operating System / Capabilities auto-detection */
-#include "core/system/capabilities.h"
+#include "yuni/core/system/capabilities.h"
 /* Standard Types */
-#include "core/system/stdint.h"
+#include "yuni/core/system/stdint.h"
 /* ISO 646 - part of C90 standard but not by default on all compilers */
 #include <iso646.h>
 
@@ -39,9 +39,9 @@ namespace Yuni {}
 namespace yuni = ::Yuni;
 
 /* nullptr */
-#include "core/system/nullptr.h"
+#include "yuni/core/system/nullptr.h"
 /* All standard forward declarations */
-#include "core/fwd.h"
+#include "yuni/core/fwd.h"
 
 /* banned.h - SDL requirement */
 #ifdef YUNI_OS_MSVC
