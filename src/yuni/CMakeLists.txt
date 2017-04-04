@@ -173,7 +173,6 @@ include_directories(${YUNI_INCLUDE})
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../")
 if (NOT "${CMAKE_CURRENT_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
-	include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 	include_directories("${CMAKE_CURRENT_BINARY_DIR}/../")
 endif()
 
