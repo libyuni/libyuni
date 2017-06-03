@@ -403,6 +403,7 @@ namespace PEG
 			h << "		void translateOffset(uint& column, uint& line, const Node&) const;\n";
 			h << "		void translateOffset(uint& column, uint& line, uint32_t offset) const;\n";
 			h << "		uint32_t translateOffsetToLine(const Node& node) const;\n";
+			h << "		AnyString firstSourceContent() const;\n";
 			h << '\n';
 			h << "		Parser& operator = (const Parser&) = delete;\n";
 			h << '\n';
@@ -1237,6 +1238,17 @@ namespace PEG
 			cpp << "			notifications.clear();\n";
 			cpp << "			notifications.shrink_to_fit();\n";
 			cpp << "		}\n";
+			cpp << "	}\n";
+			cpp << '\n';
+			cpp << '\n';
+			cpp << "	AnyString Parser::firstSourceContent() const\n";
+			cpp << "	{\n";
+			cpp << "		if (pData) {\n";
+			cpp << "			Datasource& ctx = *((Datasource*) pData);\n";
+			cpp << "			if (not ctx.contents.empty())\n";
+			cpp << "				return ctx.contents.front();\n";
+			cpp << "		}\n";
+			cpp << "		return AnyString();\n";
 			cpp << "	}\n";
 			cpp << '\n';
 			cpp << '\n';
