@@ -179,6 +179,11 @@ namespace IO
 	}
 
 
+	inline String Canonicalize(const AnyString& in, const AnyString& rootpath) {
+		String path;
+		Canonicalize(path, in, rootpath);
+		return std::move(path);
+	}
 
 
 

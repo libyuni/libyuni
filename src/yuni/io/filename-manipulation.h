@@ -275,6 +275,10 @@ namespace IO
 	*/
 	void Canonicalize(Clob& out, const AnyString& in, const AnyString& rootpath = nullptr);
 
+	/*!
+	** \brief Make the path absolute, and simplifies it by removing navigation elements such as "." and ".."
+	*/
+	String Canonicalize(const AnyString& in, const AnyString& rootpath = nullptr);
 
 
 
