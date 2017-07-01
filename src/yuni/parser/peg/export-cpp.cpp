@@ -315,6 +315,10 @@ namespace PEG
 			h << "		const Node& lastChild() const;\n";
 			h << "		Node& lastChild();\n";
 			h << '\n';
+			h << "		bool hasAttributeImportant() const;\n";
+			h << "		bool hasAttributeCapture() const;\n";
+			h << "		AnyString attributeCapturedText() const;\n";
+			h << '\n';
 			h << "		Node& append(Rule);\n";
 			h << "		Node& append(Rule, Rule);\n";
 			h << "		Node& append(Rule, Rule, Rule);\n";
@@ -1134,6 +1138,17 @@ namespace PEG
 			cpp << "	rule = rgUnknown;\n";
 			cpp << "}\n";
 			cpp << '\n';
+			cpp << "bool Node::hasAttributeImportant() const {\n";
+			cpp << "	return ruleAttributeImportant(rule);\n";
+			cpp << "}\n";
+			cpp << '\n';
+			cpp << "bool Node::hasAttributeCapture() const {\n";
+			cpp << "	return ruleAttributeCapture(rule);\n";
+			cpp << "}\n";
+			cpp << '\n';
+			cpp << "AnyString Node::attributeCapturedText() const {\n";
+			cpp << "	return ruleAttributeSimpleTextCapture(rule);\n";
+			cpp << "}\n";
 		}
 
 		inline void CPPConverter::startHeaderheaderGuardID()
