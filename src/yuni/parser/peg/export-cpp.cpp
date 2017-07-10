@@ -231,6 +231,8 @@ namespace PEG
 			h << "		//! Retrive the first element (const)\n";
 			h << "		const T& front() const;\n";
 			h << '\n';
+			h << "		void swap(NodeVector&);\n";
+			h << '\n';
 			h << "		//! Retrieve the Nth element\n";
 			h << "		T& operator [] (uint32_t i);\n";
 			h << "		//! Retrieve the Nth element (const)\n";
@@ -488,6 +490,16 @@ namespace PEG
 			hxx << "		return *this;";
 			hxx << "	}\n";
 			hxx << '\n';
+			hxx << "	inline void NodeVector::swap(NodeVector& other) {\n";
+			hxx << "		std::swap(m_size, other.m_size);\n";
+			hxx << "		std::swap(m_capacity, other.m_capacity);\n";
+			hxx << "		std::swap(m_innerstorage, other.m_innerstorage);\n";
+			hxx << "		std::swap(m_pointer, other.m_pointer);\n";
+			hxx << "		if (m_capacity == preAllocatedCount)\n";
+			hxx << "			m_pointer = &(m_innerstorage[0]);\n";
+			hxx << "		if (other.m_capacity == preAllocatedCount)\n";
+			hxx << "			other.m_pointer = &(other.m_innerstorage[0]);\n";
+			hxx << "	}\n";
 			hxx << '\n';
 			hxx << "	//! References for tokens\n";
 			hxx << "	static constexpr const bool isToken[] = {\n";
