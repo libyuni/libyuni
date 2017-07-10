@@ -194,7 +194,7 @@ namespace PEG
 			h << "	public:\n";
 			h << "		NodeVector() = default;\n";
 			h << "		NodeVector(const NodeVector&) = delete;\n";
-			h << "		NodeVector(NodeVector&&) = default;\n";
+			h << "		NodeVector(NodeVector&&) = delete;\n";
 			h << "		~NodeVector();\n";
 			h << '\n';
 			h << "		Iterator begin();\n";
@@ -236,7 +236,7 @@ namespace PEG
 			h << "		//! Retrieve the Nth element (const)\n";
 			h << "		const T& operator [] (uint32_t i) const;\n";
 			h << "		//! Move operator\n";
-			h << "		NodeVector& operator = (NodeVector&&) = default;\n";
+			h << "		NodeVector& operator = (NodeVector&&) = delete;\n";
 			h << "		//! Copy operator\n";
 			h << "		NodeVector& operator = (const NodeVector&);\n";
 			h << '\n';
