@@ -137,7 +137,19 @@ namespace Process
 		PROCESS_INFORMATION winProcInfo;
 		::ZeroMemory(&winProcInfo, sizeof(PROCESS_INFORMATION));
 
-		WString cmdLine(procinfo.executable);
+		String cmd;
+		{
+			String tmpstr = procinfo.executable;
+			tmpstr.replace("\"", "\\\"");
+			cmd << '"' << tmpstr << '"';
+			uint32_t count = static_cast<uint32_t>(procinfo.arguments.size());
+			for (uint32_t i = 0; i != count; ++i) {
+				tmpstr = procinfo.arguments[i];
+				tmpstr.replace("\"", "\\\"");
+				cmd << " \"" << tmpstr << '"';
+			}
+		}
+		WString cmdLine(cmd);
 
 		// Getting the start time of execution
 		pStartTime = currentTime();
