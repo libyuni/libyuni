@@ -255,7 +255,7 @@
 **
 ** int main()
 ** {
-**     sum(2, 5); // warning: ignoring return value of ‘sum’
+**     sum(2, 5); // warning: ignoring return value of sum
 **     return 0;
 ** }
 ** \endcode

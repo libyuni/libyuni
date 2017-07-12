@@ -67,9 +67,9 @@
 **	//	./main.cpp:11: error: creating array with size zero (` Assert_TheImplementationIsMissing')
 **
 **	// Error with gcc 4.x :
-**	// ./main.cpp: In member function ‘void Dummy<T>::foo() [with T = uint]’:
+**	// ./main.cpp: In member function 'void Dummy<T>::foo() [with T = uint]':
 **	//	./main.cpp:36:   instantiated from here
-**	//	./main.cpp:11: error: creating array with negative size (‘(StaticAssert_TheImplementationIsMissing::._67)-0x000000001’)
+**	//	./main.cpp:11: error: creating array with negative size ('(StaticAssert_TheImplementationIsMissing::._67)-0x000000001')
 **	return 0;
 ** }
 ** \endcode

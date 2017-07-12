@@ -71,7 +71,7 @@ namespace Traits
 		** \internal The template T is here to manage some special cases with
 		**   the const qualifier, especially when U = const char* const. Your compiler
 		**   may complain about the following error :
-		**   "invalid conversion from ‘const char* const’ to ‘char*’"
+		**   "invalid conversion from 'const char* const' to 'char*'"
 		** \param value A arbitrary variable
 		** \return The equivalent of a `const char*` pointer (can be NULL)
 		*/
