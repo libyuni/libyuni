@@ -180,12 +180,12 @@ if(MINGW)
 endif()
 
 if(MSVC)
-	set(CMAKE_C_FLAGS_DEBUG   "${COMMON_MSVC_FLAGS} /MD /GR /Ot /Od /EHsc /std:c++latest")
-	set(CMAKE_CXX_FLAGS_DEBUG "${COMMON_MSVC_FLAGS} /MD /GR /Ot /Od /EHsc /fp:except /std:c++latest")
+	set(CMAKE_C_FLAGS_DEBUG   "${COMMON_MSVC_FLAGS} /MD /GR /Ot /Od /EHsc /std:c++latest /utf-8")
+	set(CMAKE_CXX_FLAGS_DEBUG "${COMMON_MSVC_FLAGS} /MD /GR /Ot /Od /EHsc /fp:except /std:c++latest /utf-8")
 	set(MSVC_RELEASE_FLAGS)
 
 	# Use the latest C++ standard
-	set(MSVC_RELEASE_FLAGS "${MSVC_RELEASE_FLAGS} /std:c++latest")
+	set(MSVC_RELEASE_FLAGS "${MSVC_RELEASE_FLAGS} /std:c++latest /utf-8")
 	# O2x: optimization
 	set(MSVC_RELEASE_FLAGS "${MSVC_RELEASE_FLAGS} /Ox")
 	# Prefer speed instead of size
