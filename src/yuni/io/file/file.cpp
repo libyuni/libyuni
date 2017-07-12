@@ -336,7 +336,9 @@ namespace File
 						HANDLE hndl = CreateFileW(wstr.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 						if (hndl)
 						{
-							DWORD dwPtr = SetFilePointer(hndl, size, 0, FILE_BEGIN);
+							LARGE_INTEGER li;
+							li.QuadPart = size;
+							DWORD dwPtr = SetFilePointer(hndl, li.LowPart, &li.HighPart, FILE_BEGIN);
 							if (dwPtr != INVALID_SET_FILE_POINTER)
 								SetEndOfFile(hndl);
 							CloseHandle(hndl);
