@@ -12,7 +12,6 @@
 #include "../../yuni.h"
 #include "../string.h"
 #include "bit.h"
-#include <iostream>
 
 
 
