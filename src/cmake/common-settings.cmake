@@ -220,7 +220,11 @@ if (NOT MSVC)
 	compile_flag("-fvisibility=hidden"       VISIBILITY_HIDDEN    RELEASE DEBUG RELWITHDEBINFO)
 	#compile_flag("-mfpmath=sse"          FPMATH_MSSE          RELEASE RELWITHDEBINFO)
 	if (NOT "${CLANG}")
-		compile_flag("-fdiagnostics-color=auto"  DIAG_COLORS      RELEASE DEBUG RELWITHDEBINFO)
+		if ("$ENV{CLICOLOR_FORCE}" STREQUAL "1")
+			compile_flag("-fdiagnostics-color=always" DIAG_COLORS  RELEASE DEBUG RELWITHDEBINFO)
+		else()
+			compile_flag("-fdiagnostics-color=auto"  DIAG_COLORS   RELEASE DEBUG RELWITHDEBINFO)
+		endif()
 	endif()
 
 	# link
