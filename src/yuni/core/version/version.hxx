@@ -125,4 +125,4 @@ namespace Yuni
 
 
 
-std::ostream& operator << (std::ostream&, const Yuni::Version&);
+YUNI_DECL std::ostream& operator << (std::ostream&, const Yuni::Version&);

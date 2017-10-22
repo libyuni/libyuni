@@ -197,4 +197,4 @@ namespace CString
 } // namespace Yuni
 
 
-std::ostream& operator << (std::ostream& out, const Yuni::UUID& rhs);
+YUNI_DECL std::ostream& operator << (std::ostream& out, const Yuni::UUID& rhs);

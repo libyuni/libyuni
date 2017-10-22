@@ -78,7 +78,7 @@ namespace PEG
 } // namespace Parser
 } // namespace Yuni
 
-std::ostream& operator << (std::ostream& out, const Yuni::Parser::PEG::Grammar& grammar);
+YUNI_DECL std::ostream& operator << (std::ostream& out, const Yuni::Parser::PEG::Grammar& grammar);
 
 #include "grammar.hxx"
 
