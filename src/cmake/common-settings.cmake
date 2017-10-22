@@ -228,7 +228,7 @@ if (NOT MSVC)
 	endif()
 
 	# link
-	compile_flag("-flto"  FLTO  DEBUG RELEASE RELWITHDEBINFO)
+	#compile_flag("-flto"  FLTO  DEBUG RELEASE RELWITHDEBINFO)
 
 	# debugging symbols
 	compile_flag("-g"     DEBUG_G     DEBUG RELWITHDEBINFO)
