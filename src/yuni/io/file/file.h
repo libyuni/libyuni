@@ -44,7 +44,7 @@ namespace File
 	** \param filename The folder/filename to test
 	** \return True if it exists, false otherwise
 	*/
-	bool Exists(const AnyString& filename);
+	YUNI_DECL bool Exists(const AnyString& filename);
 
 
 	/*!
@@ -54,7 +54,7 @@ namespace File
 	** \param[out] size The size (in bytes) of the file. The value is guaranteed to be set (null) is an error has occured
 	** \return True if the operation succeeded, False otherwise
 	*/
-	bool Size(const AnyString& filename, uint64& size);
+	YUNI_DECL bool Size(const AnyString& filename, uint64& size);
 
 	/*!
 	** \brief Get the size (in bytes) of a file
@@ -77,7 +77,7 @@ namespace File
 	** \param filename The filename
 	** \return The size (in bytes) of the file. The returned value is guaranteed to be null is an error has occured
 	*/
-	uint64 Size(const AnyString& filename);
+	YUNI_DECL uint64 Size(const AnyString& filename);
 
 
 	//! \name Date / Time
@@ -85,7 +85,7 @@ namespace File
 	/*!
 	** \brief Get the unix timestamp of the last modification
 	*/
-	sint64 LastModificationTime(const AnyString& filename);
+	YUNI_DECL sint64 LastModificationTime(const AnyString& filename);
 	//@}
 
 
@@ -100,7 +100,7 @@ namespace File
 	** \param hardlimit If the size of the file exceeds this limit, it will not be loaded
 	** \return errNone if successful
 	*/
-	IO::Error LoadFromFile(std::string& out, const AnyString& filename, uint64 hardlimit = sizeHardLimit);
+	YUNI_DECL IO::Error LoadFromFile(std::string& out, const AnyString& filename, uint64 hardlimit = sizeHardLimit);
 	/*!
 	** \brief Load the entire content of a file into memory
 	**
@@ -110,7 +110,7 @@ namespace File
 	** \param hardlimit If the size of the file exceeds this limit, it will not be loaded
 	** \return errNone if successful
 	*/
-	IO::Error LoadFromFile(String& out, const AnyString& filename, uint64 hardlimit = sizeHardLimit);
+	YUNI_DECL IO::Error LoadFromFile(String& out, const AnyString& filename, uint64 hardlimit = sizeHardLimit);
 	/*!
 	** \brief Load the entire content of a file into memory
 	**
@@ -120,7 +120,7 @@ namespace File
 	** \param hardlimit If the size of the file exceeds this limit, it will not be loaded
 	** \return errNone if successful
 	*/
-	IO::Error LoadFromFile(Clob& out, const AnyString& filename, uint64 hardlimit = sizeHardLimit);
+	YUNI_DECL IO::Error LoadFromFile(Clob& out, const AnyString& filename, uint64 hardlimit = sizeHardLimit);
 
 
 	/*!
@@ -132,7 +132,7 @@ namespace File
 	*/
 	template<class U>
 	YUNI_DEPRECATED("use SetContent / AppendContent instead",
-	bool SaveToFile(const AnyString& filename, const U& content));
+	YUNI_DECL bool SaveToFile(const AnyString& filename, const U& content));
 	//@}
 
 
@@ -144,7 +144,7 @@ namespace File
 	** \param overwrite Overwrite the target file if already exists
 	** \return errNone if the operation succeeded
 	*/
-	IO::Error Copy(const AnyString& from, const AnyString& to, bool overwrite = true);
+	YUNI_DECL IO::Error Copy(const AnyString& from, const AnyString& to, bool overwrite = true);
 
 
 	/*!
@@ -152,7 +152,7 @@ namespace File
 	**
 	** \param filename The file to delete
 	*/
-	IO::Error Delete(const AnyString& filename);
+	YUNI_DECL IO::Error Delete(const AnyString& filename);
 
 
 	/*!
@@ -161,7 +161,7 @@ namespace File
 	** \param filename An UTF8 filename
 	** \return True if the file has been created or truncated
 	*/
-	bool CreateEmptyFile(const AnyString& filename);
+	YUNI_DECL bool CreateEmptyFile(const AnyString& filename);
 
 
 	/*!
@@ -171,7 +171,7 @@ namespace File
 	** IO::File::SetContent("/tmp/anyfile.txt", "Hello world !\n");
 	** \endcode
 	*/
-	template<class U> bool SetContent(const AnyString& filename, const U& content);
+	template<class U> YUNI_DECL bool SetContent(const AnyString& filename, const U& content);
 
 	/*!
 	** \brief Append the content of an arbitrary string to a file
@@ -180,7 +180,7 @@ namespace File
 	** IO::File::AppendContent("/tmp/anyfile.txt", "lorem ipsumi\n");
 	** \endcode
 	*/
-	template<class U> bool AppendContent(const AnyString& filename, const U& content);
+	template<class U> YUNI_DECL bool AppendContent(const AnyString& filename, const U& content);
 
 
 	/*!
@@ -198,18 +198,18 @@ namespace File
 	** \param predicate A functor or a lambda function
 	*/
 	template<class PredicateT>
-	bool ReadLineByLine(const AnyString& filename, const PredicateT& predicate);
+	YUNI_DECL bool ReadLineByLine(const AnyString& filename, const PredicateT& predicate);
 
 
 	/*!
 	** \brief Resize a file
 	*/
-	bool Resize(const AnyString& filename, uint64_t size);
+	YUNI_DECL bool Resize(const AnyString& filename, uint64_t size);
 
 	/*!
 	** \brief Empty a file
 	*/
-	bool Truncate(const AnyString& filename);
+	YUNI_DECL bool Truncate(const AnyString& filename);
 
 
 

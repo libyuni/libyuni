@@ -9,8 +9,7 @@
 ** github: https://github.com/libyuni/libyuni/ {mirror}
 */
 #pragma once
-
-
+#include <yuni/yuni.h>
 
 namespace Yuni
 {
@@ -38,12 +37,12 @@ namespace OpenMode
 	/*!
 	** \brief Convert an open mode into a C-String for 'fopen'
 	*/
-	const char* ToCString(int mode);
+	YUNI_DECL const char* ToCString(int mode);
 
 	/*!
 	** \brief Convert an open mode into a C-String for 'fwopen'
 	*/
-	const wchar_t*  ToWCString(int mode);
+	YUNI_DECL const wchar_t*  ToWCString(int mode);
 
 
 

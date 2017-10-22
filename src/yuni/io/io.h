@@ -31,7 +31,7 @@ namespace IO
 	** \param filename The file/directory to test (must be zero-terminated)
 	** \return True if it exists, false otherwise
 	*/
-	bool Exists(const AnyString& filename);
+	YUNI_DECL bool Exists(const AnyString& filename);
 
 	/*!
 	** \brief Get the type of a node
@@ -40,7 +40,7 @@ namespace IO
 	** \param followSymLink True to get information about the real file
 	** \return True if it exists, false otherwise
 	*/
-	NodeType TypeOf(const AnyString& filename, bool followSymLink = true);
+	YUNI_DECL NodeType TypeOf(const AnyString& filename, bool followSymLink = true);
 
 
 	/*!
@@ -52,7 +52,7 @@ namespace IO
 	** \param followSymLink True to get information about the real file
 	** \return True if it exists, false otherwise
 	*/
-	NodeType FetchFileStatus(const AnyString& filename, yuint64& size, yint64& lastModified, bool followSymLink = true);
+	YUNI_DECL NodeType FetchFileStatus(const AnyString& filename, yuint64& size, yint64& lastModified, bool followSymLink = true);
 
 
 

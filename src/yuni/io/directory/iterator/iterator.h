@@ -127,7 +127,7 @@ namespace Directory
 	**    the detached mode is automatically disabled.
 	*/
 	template<bool DetachedT = true>
-	class IIterator
+	class YUNI_DECL IIterator
 		: public Yuni::IIntrusiveSmartPtr<IIterator<DetachedT>, true, Yuni::Policy::ObjectLevelLockable>
 		, public Private::IO::Directory::Iterator::Interface
 	{

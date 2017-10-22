@@ -44,7 +44,7 @@ namespace Iterator
 
 
 
-	class Interface
+	class YUNI_DECL Interface
 	{
 	public:
 		Interface() {}
@@ -74,7 +74,7 @@ namespace Iterator
 
 
 
-	class Options final
+	class YUNI_DECL Options final
 	{
 	public:
 		//! Default constructor
@@ -108,7 +108,7 @@ namespace Iterator
 
 
 	# ifndef YUNI_NO_THREAD_SAFE
-	class IDetachedThread : public Yuni::Thread::IThread
+	class YUNI_DECL IDetachedThread : public Yuni::Thread::IThread
 	{
 	public:
 		IDetachedThread() {}

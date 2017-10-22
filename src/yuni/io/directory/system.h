@@ -32,7 +32,7 @@ namespace System
 	** \param emptyBefore True to empty the variable \p out before anything else
 	** \return True if the operation succeeded, false otherwise
 	*/
-	bool Temporary(String& out, bool emptyBefore = true);
+	YUNI_DECL bool Temporary(String& out, bool emptyBefore = true);
 	/*!
 	** \brief Get the temporary folder [clob]
 	**
@@ -40,7 +40,7 @@ namespace System
 	** \param emptyBefore True to empty the variable \p out before anything else
 	** \return True if the operation succeeded, false otherwise
 	*/
-	bool Temporary(Clob& out, bool emptyBefore = true);
+	YUNI_DECL bool Temporary(Clob& out, bool emptyBefore = true);
 
 
 
@@ -52,7 +52,7 @@ namespace System
 	** \param emptyBefore True to clear the given variable \p out before
 	** \return True if the operation succeeded, false otherwise
 	*/
-	bool UserHome(String& out, bool emptyBefore = true);
+	YUNI_DECL bool UserHome(String& out, bool emptyBefore = true);
 	/*!
 	** \brief Get the user's home folder [clob]
 	**
@@ -60,7 +60,7 @@ namespace System
 	** \param emptyBefore True to clear the given variable \p out before
 	** \return True if the operation succeeded, false otherwise
 	*/
-	bool UserHome(Clob& out, bool emptyBefore = true);
+	YUNI_DECL bool UserHome(Clob& out, bool emptyBefore = true);
 
 
 
@@ -72,7 +72,7 @@ namespace System
 	** \param emptyBefore True to clear the given variable \p out before
 	** \return True if the operation succeeded, false otherwise
 	*/
-	bool Fonts(String& out, bool emptyBefore = true);
+	YUNI_DECL bool Fonts(String& out, bool emptyBefore = true);
 	/*!
 	** \brief Get the system fonts folder [clob]
 	**
@@ -80,7 +80,7 @@ namespace System
 	** \param emptyBefore True to clear the given variable \p out before
 	** \return True if the operation succeeded, false otherwise
 	*/
-	bool Fonts(Clob& out, bool emptyBefore = true);
+	YUNI_DECL bool Fonts(Clob& out, bool emptyBefore = true);
 
 
 

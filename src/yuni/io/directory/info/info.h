@@ -47,7 +47,7 @@ namespace Directory
 	** }
 	** \endcode
 	*/
-	class Info final
+	class YUNI_DECL Info final
 	{
 	public:
 		//! \name Iterators

@@ -37,7 +37,7 @@ namespace Directory
 	** \param path The directory to test
 	** \return True if it exists, false otherwise
 	*/
-	bool Exists(const AnyString& path);
+	YUNI_DECL bool Exists(const AnyString& path);
 	//@}
 
 
@@ -53,7 +53,7 @@ namespace Directory
 		** \param clearBefore True to clean \p out before
 		** \return True if the operation succeeded. False otherwise
 		*/
-		bool Get(String& out, bool clearBefore = true);
+		YUNI_DECL bool Get(String& out, bool clearBefore = true);
 
 		/*!
 		** \brief Get the current directory (clob)
@@ -62,7 +62,7 @@ namespace Directory
 		** \param clearBefore True to clean \p out before
 		** \return True if the operation succeeded. False otherwise
 		*/
-		bool Get(Clob& out, bool clearBefore = true);
+		YUNI_DECL bool Get(Clob& out, bool clearBefore = true);
 
 		/*!
 		** \brief Get the current directory
@@ -78,7 +78,7 @@ namespace Directory
 		** \param path The new current directory
 		** \return True if the operation succeeded
 		*/
-		bool Set(const AnyString& path);
+		YUNI_DECL bool Set(const AnyString& path);
 
 	} // namespace Current
 
@@ -94,7 +94,7 @@ namespace Directory
 	** \param mode Access permissions (ignored on the MS Windows platforms)
 	** \return True if the operation succeeded, false otherwise
 	*/
-	bool Create(const AnyString& path, unsigned int mode = 0755);
+	YUNI_DECL bool Create(const AnyString& path, unsigned int mode = 0755);
 	//@}
 
 
@@ -106,7 +106,7 @@ namespace Directory
 	** \param path The path to delete
 	** \return True if the operation succeeded False otherwise
 	*/
-	bool Remove(const AnyString& path);
+	YUNI_DECL bool Remove(const AnyString& path);
 	//@}
 
 
@@ -130,7 +130,7 @@ namespace Directory
 	** \param overwrite True to overwrite the files even if they already exist
 	** \return True if the operation succeeded, false otherwise
 	*/
-	bool Copy(const AnyString& source, const AnyString& destination, bool recursive = true, bool overwrite = true);
+	YUNI_DECL bool Copy(const AnyString& source, const AnyString& destination, bool recursive = true, bool overwrite = true);
 
 	/*!
 	** \brief Copy a directory
@@ -140,7 +140,7 @@ namespace Directory
 	** \param onUpdate Event
 	** \return True if the operation succeeded, false otherwise
 	*/
-	bool Copy(const AnyString& source, const AnyString& destination, const CopyOnUpdateBind& onUpdate);
+	YUNI_DECL bool Copy(const AnyString& source, const AnyString& destination, const CopyOnUpdateBind& onUpdate);
 
 	/*!
 	** \brief Copy a directory
@@ -152,7 +152,7 @@ namespace Directory
 	** \param onUpdate Event
 	** \return True if the operation succeeded, false otherwise
 	*/
-	bool Copy(const AnyString& source, const AnyString& destination, bool recursive,
+	YUNI_DECL bool Copy(const AnyString& source, const AnyString& destination, bool recursive,
 		bool overwrite, const CopyOnUpdateBind& onUpdate);
 	//@}
 

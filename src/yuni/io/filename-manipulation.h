@@ -32,7 +32,7 @@ namespace IO
 	** \param[in] path The filename
 	** \param[in] systemDependant Consider only the system-dependant path-separator
 	*/
-	void ExtractFilePath(String& out, const AnyString& path, bool systemDependant = false);
+	YUNI_DECL void ExtractFilePath(String& out, const AnyString& path, bool systemDependant = false);
 
 	/*!
 	** \brief Extract the path part of a filename
@@ -48,7 +48,7 @@ namespace IO
 	** \param[in] path The filename
 	** \param[in] systemDependant Consider only the system-dependant path-separator
 	*/
-	void ExtractFilePath(Clob& out, const AnyString& path, bool systemDependant = false);
+	YUNI_DECL void ExtractFilePath(Clob& out, const AnyString& path, bool systemDependant = false);
 
 
 
@@ -66,7 +66,7 @@ namespace IO
 	** \param[in] path The filename
 	** \param[in] systemDependant Consider only the system-dependant path-separator
 	*/
-	void ExtractAbsoluteFilePath(String& out, const AnyString& path, bool systemDependant = false);
+	YUNI_DECL void ExtractAbsoluteFilePath(String& out, const AnyString& path, bool systemDependant = false);
 
 	/*!
 	** \brief Extract the path part of a filename and make it absolute
@@ -82,7 +82,7 @@ namespace IO
 	** \param[in] path The filename
 	** \param[in] systemDependant Consider only the system-dependant path-separator
 	*/
-	void ExtractAbsoluteFilePath(Clob& out, const AnyString& path, bool systemDependant = false);
+	YUNI_DECL void ExtractAbsoluteFilePath(Clob& out, const AnyString& path, bool systemDependant = false);
 
 
 
@@ -97,7 +97,7 @@ namespace IO
 	** \param path            The original filename
 	** \param systemDependant Consider only the system-dependant path-separator
 	*/
-	void ExtractFileName(String& out, const AnyString& path, bool systemDependant = true);
+	YUNI_DECL void ExtractFileName(String& out, const AnyString& path, bool systemDependant = true);
 
 	/*!
 	** \brief Extract the bare file name
@@ -109,7 +109,7 @@ namespace IO
 	** \param path            The original filename
 	** \param systemDependant Consider only the system-dependant path-separator
 	*/
-	void ExtractFileName(Clob& out, const AnyString& path, bool systemDependant = true);
+	YUNI_DECL void ExtractFileName(Clob& out, const AnyString& path, bool systemDependant = true);
 
 	/*!
 	** \brief Extract the path part and the bare file name
@@ -119,7 +119,7 @@ namespace IO
 	** \param filename        The original filename
 	** \param systemDependant Consider only the system-dependant path-separator
 	*/
-	void ExtractFilePathAndName(String& path, String& name, const AnyString& filename, bool systemDependant = true);
+	YUNI_DECL void ExtractFilePathAndName(String& path, String& name, const AnyString& filename, bool systemDependant = true);
 
 	/*!
 	** \brief Extract the path part and the bare file name
@@ -129,7 +129,7 @@ namespace IO
 	** \param filename        The original filename
 	** \param systemDependant Consider only the system-dependant path-separator
 	*/
-	void ExtractFilePathAndName(Clob& path, Clob& name, const AnyString& filename, bool systemDependant = true);
+	YUNI_DECL void ExtractFilePathAndName(Clob& path, Clob& name, const AnyString& filename, bool systemDependant = true);
 
 
 	/*!
@@ -143,7 +143,7 @@ namespace IO
 	** \param systemDependant Consider only the system-dependant path-separator
 	*/
 	template<class StringT>
-	void ExtractFileNameWithoutExtension(StringT& out, const AnyString& path, bool systemDependant = true);
+	YUNI_DECL void ExtractFileNameWithoutExtension(StringT& out, const AnyString& path, bool systemDependant = true);
 
 
 	/*!
@@ -156,7 +156,7 @@ namespace IO
 	** \return True if an extension has been found
 	*/
 	template<class StringT>
-	bool ExtractExtension(StringT& out, const AnyString& filename, bool dot = true, bool clear = true);
+	YUNI_DECL bool ExtractExtension(StringT& out, const AnyString& filename, bool dot = true, bool clear = true);
 
 
 	/*!
@@ -165,7 +165,7 @@ namespace IO
 	** \param filename The path or the filename to test
 	** \return True if the given filename is an absolute path, false otherwise (or empty)
 	*/
-	bool IsAbsolute(const AnyString& filename);
+	YUNI_DECL bool IsAbsolute(const AnyString& filename);
 
 
 	/*!
@@ -174,7 +174,7 @@ namespace IO
 	** \param filename The path or the filename to test
 	** \return True if the given filename is an absolute path, false otherwise (or empty)
 	*/
-	bool IsRelative(const AnyString& filename);
+	YUNI_DECL bool IsRelative(const AnyString& filename);
 
 
 	/*!
@@ -186,7 +186,7 @@ namespace IO
 	** \param      clearBefore True to clean \p out before
 	*/
 	template<class StringT>
-	void MakeAbsolute(StringT& out, const AnyString& filename, bool clearBefore = true);
+	YUNI_DECL void MakeAbsolute(StringT& out, const AnyString& filename, bool clearBefore = true);
 
 	/*!
 	** \brief Make a path absolute
@@ -198,7 +198,7 @@ namespace IO
 	** \param      clearBefore True to clean \p out before
 	*/
 	template<class StringT>
-	void MakeAbsolute(StringT& out, const AnyString& path, const AnyString& currentPath, bool clearBefore = true);
+	YUNI_DECL void MakeAbsolute(StringT& out, const AnyString& path, const AnyString& currentPath, bool clearBefore = true);
 
 
 	/*!
@@ -215,7 +215,7 @@ namespace IO
 	** \return True if the extension has been replaced (means `found and replaced`)
 	*/
 	template<class StringT1, class StringT2>
-	bool ReplaceExtension(StringT1& filename, const StringT2& newExtension);
+	YUNI_DECL bool ReplaceExtension(StringT1& filename, const StringT2& newExtension);
 
 
 
@@ -234,7 +234,7 @@ namespace IO
 	** \param      replaceSlashes True to replace slashes according the local OS conventions. False to keep
 	**                            as it.
 	*/
-	void Normalize(String& out, const AnyString& in, bool replaceSlashes = true);
+	YUNI_DECL void Normalize(String& out, const AnyString& in, bool replaceSlashes = true);
 
 
 	/*!
@@ -252,7 +252,7 @@ namespace IO
 	** \param      replaceSlashes True to replace slashes according the local OS conventions. False to keep
 	**                            as it.
 	*/
-	void Normalize(Clob& out, const AnyString& in, bool replaceSlashes = true);
+	YUNI_DECL void Normalize(Clob& out, const AnyString& in, bool replaceSlashes = true);
 
 
 	/*!
@@ -263,7 +263,7 @@ namespace IO
 	** \param      in         A path/filename to normalize
 	** \param      rootpath   A root path to take to make the path absolute (current directory if empty)
 	*/
-	void Canonicalize(String& out, const AnyString& in, const AnyString& rootpath = nullptr);
+	YUNI_DECL void Canonicalize(String& out, const AnyString& in, const AnyString& rootpath = nullptr);
 
 	/*!
 	** \brief Make the path absolute, and simplifies it by removing navigation elements such as "." and ".."
@@ -273,12 +273,12 @@ namespace IO
 	** \param      in         A path/filename to normalize
 	** \param      rootpath   A root path to take to make the path absolute (current directory if empty)
 	*/
-	void Canonicalize(Clob& out, const AnyString& in, const AnyString& rootpath = nullptr);
+	YUNI_DECL void Canonicalize(Clob& out, const AnyString& in, const AnyString& rootpath = nullptr);
 
 	/*!
 	** \brief Make the path absolute, and simplifies it by removing navigation elements such as "." and ".."
 	*/
-	String Canonicalize(const AnyString& in, const AnyString& rootpath = nullptr);
+	YUNI_DECL String Canonicalize(const AnyString& in, const AnyString& rootpath = nullptr);
 
 
 
