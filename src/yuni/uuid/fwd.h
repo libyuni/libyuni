@@ -14,7 +14,7 @@
 namespace Yuni
 {
 
-	class UUID;
+	struct UUID;
 
 namespace Private
 {
@@ -22,7 +22,7 @@ namespace UUID
 {
 
 	//! Class for accessing to internal methods of UUID
-	class Helper;
+	struct Helper;
 
 
 } // namespace UUID
