@@ -224,9 +224,5 @@ namespace Bit
 
 //! \name Operator overload for stream printing
 //@{
-inline std::ostream& operator << (std::ostream& out, const Yuni::Bit::Array& rhs)
-{
-	rhs.print(out);
-	return out;
-}
+std::ostream& operator << (std::ostream& out, const Yuni::Bit::Array& rhs);
 //@}

@@ -9,6 +9,7 @@
 ** github: https://github.com/libyuni/libyuni/ {mirror}
 */
 #include "array.h"
+#include <iostream>
 
 
 namespace Yuni
@@ -139,3 +140,9 @@ namespace Bit
 } // namespace Bit
 } // namespace Yuni
 
+
+std::ostream& operator << (std::ostream& out, const Yuni::Bit::Array& rhs)
+{
+	rhs.print(out);
+	return out;
+}
