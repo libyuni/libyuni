@@ -64,7 +64,7 @@ namespace Bit
 		//! \name Constructors & Destructor
 		//@{
 		//! Default constructor
-		Array();
+		Array() = default;
 
 		//! Constructor, with an initial number of bits
 		explicit Array(uint n);
@@ -237,7 +237,7 @@ namespace Bit
 	private:
 		//! Number of bits into the buffer, requested by the caller
 		// This value is lower or equal to the buffer size
-		uint pCount;
+		uint pCount = 0;
 		//! Internal buffer
 		BufferType pBuffer;
 

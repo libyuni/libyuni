@@ -19,11 +19,6 @@ namespace Yuni
 namespace Bit
 {
 
-	inline Array::Array() :
-		pCount(0)
-	{}
-
-
 	inline Array::Array(uint n)
 	{
 		resize(n);
