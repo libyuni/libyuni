@@ -303,6 +303,7 @@ namespace Job
 				pSignalShouldStop.wait();
 
 				// break : do not break - waiting for all threads being stopped
+				[[fallthrough]];
 			}
 			case qseIdle:
 			{

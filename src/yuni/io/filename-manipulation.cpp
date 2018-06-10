@@ -181,6 +181,7 @@ namespace IO
 							// * break *
 							// we have a real folder, so `break` _must_ not
 							// be used here.
+							[[fallthrough]];
 						}
 					default:
 						{

@@ -3345,6 +3345,7 @@ namespace Yuni
 					// Empty value if we have a comment otherwise '/' is a valid entry
 					if (rv + 1 >= AncestorType::size or AncestorType::data[rv + 1] == '/')
 						break;
+					[[fallthrough]];
 				}
 				default:
 				{
