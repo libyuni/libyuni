@@ -613,7 +613,7 @@ namespace Process
 	}
 
 
-	bool Program::running() const
+	bool Program::running() const noexcept
 	{
 		auto envptr = pEnv;
 		return (!envptr) ? false : (envptr->running);

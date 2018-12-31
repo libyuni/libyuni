@@ -217,7 +217,7 @@ namespace Process
 		** may change anytime.
 		** \see Program::wait()
 		*/
-		bool running() const;
+		bool running() const noexcept;
 
 
 		/*!
