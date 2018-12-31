@@ -655,6 +655,7 @@ namespace Process
 					break;
 				}
 				case '"':
+					[[fallthrough]];
 				case '\'':
 				{
 					if (instring == '\0')
@@ -685,13 +686,14 @@ namespace Process
 						case 'f':  (*str) += '\f'; break;
 						case 'v':  (*str) += '\v'; break;
 						case '0':  (*str) += '\0'; break;
-						case 'e':
-						case 'a':
+						case 'e': [[fallthrough]];
+						case 'a': [[fallthrough]];
 						case 'E':  break;
 						default:   (*str) << '\\' << c; break;
 					}
 				}
 				case ' ':
+					[[fallthrough]];
 				case '\t':
 				{
 					if (instring == '\0')
