@@ -691,6 +691,7 @@ namespace Process
 						case 'E':  break;
 						default:   (*str) << '\\' << c; break;
 					}
+					break;
 				}
 				case ' ':
 					[[fallthrough]];
