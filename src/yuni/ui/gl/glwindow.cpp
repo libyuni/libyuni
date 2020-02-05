@@ -11,6 +11,7 @@
 #include "../../core/logs.h"
 #include "../../private/graphics/opengl/glew/glew.h"
 #include <iostream>
+#include "glerror.h"
 #include "glwindow.h"
 #include "texture.h"
 
@@ -21,6 +22,8 @@ namespace UI
 
 	bool GLWindow::initialize()
 	{
+		Gfx3D::GLTestError("GLWindow::initialize : Error at initialization ! No GL calls should be done before this !");
+
 		// Black background
 		::glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		// Depth Buffer setup
@@ -33,7 +36,7 @@ namespace UI
 		//::glEnable(GL_CULL_FACE);
 
 		// Display OpenGL version
-#ifndef NDEBUG
+#ifndef DEBUG
 		Yuni::Logs::Logger<> logs;
 		const uint8* version = ::glGetString(GL_VERSION);
 		logs.notice() << "OpenGL " << (const char*)version;
@@ -44,10 +47,12 @@ namespace UI
 		if (GLEW_OK != error)
 		{
 #ifndef NDEBUG
-			logs.error() << ::glewGetErrorString(error);
+			logs.error() << (const char*)::glewGetErrorString(error);
 #endif
 			return false;
 		}
+
+		Gfx3D::GLTestError("GLWindow::initialize : glew Init failed !");
 
 		// Wait for the context to be ready before initializing some GL objects in the main window
 		RenderWindow::initialize();
@@ -66,19 +71,25 @@ namespace UI
 
 		// Reset The Current Viewport
 		::glViewport(0, 0, width, height);
+		Gfx3D::GLTestError("GLWindow::resize : glViewport");
 
 		// Select the Projection Matrix
 		::glMatrixMode(GL_PROJECTION);
+		Gfx3D::GLTestError("GLWindow::resize : glMatrixMode");
 		// Reset the Projection Matrix
 		::glLoadIdentity();
+		Gfx3D::GLTestError("GLWindow::resize : glLoadIdentity");
 
 		// Calculate the Aspect Ratio of the window
 		::gluPerspective(60.0f, (GLfloat)width / (GLfloat)height, 0.01f, 1000.0f);
+		Gfx3D::GLTestError("GLWindow::resize : gluPerspective");
 
 		// Select the Modelview Matrix
 		::glMatrixMode(GL_MODELVIEW);
+		Gfx3D::GLTestError("GLWindow::resize : glMatrixMode");
 		// Reset the Modelview Matrix
 		::glLoadIdentity();
+		Gfx3D::GLTestError("GLWindow::resize : glLoadIdentity");
 
 		RenderWindow::resize(width, height);
 	}
@@ -113,38 +124,6 @@ namespace UI
 		::glVertex2f(1.0f, -1.0f);
 		::glEnd();
 
-
-		// Texture coordinates are useless when 2D shaders are activated
-		// but they are used when no post-processing effect is present
-		// const float texCoord[] =
-		// 	{
-		// 		0.0f, 1.0f,
-		// 		0.0f, 0.0f,
-		// 		1.0f, 0.0f,
-		// 		0.0f, 1.0f,
-		// 		1.0f, 0.0f,
-		// 		1.0f, 1.0f
-		// 	};
-		// ::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
-		// ::glVertexAttribPointer(Gfx3D::Vertex<>::vaTextureCoord, 2, GL_FLOAT, 0, 0, texCoord);
-		// Set vertex positions
-		/*const float vertices[] =
-			{
-				-1.0f, 1.0f,
-				-1.0f, -1.0f,
-				1.0f, -1.0f,
-				-1.0f, 1.0f,
-				1.0f, -1.0f,
-				1.0f, 1.0f
-			};
-		::glEnableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
-		::glVertexAttribPointer(Gfx3D::Vertex<>::vaPosition, 2, GL_FLOAT, 0, 0, vertices);
-		// Draw
-		::glDrawArrays(GL_TRIANGLES, 0, 6);
-
-		::glDisableVertexAttribArray(Gfx3D::Vertex<>::vaPosition);
-		::glDisableVertexAttribArray(Gfx3D::Vertex<>::vaTextureCoord);
-		*/
 		::glMatrixMode(GL_PROJECTION);
 		::glPopMatrix();
 		::glMatrixMode(GL_MODELVIEW);
@@ -160,6 +139,7 @@ namespace UI
 	void GLWindow::clear() const
 	{
 		pFB.activate();
+		::glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		::glClear(GL_COLOR_BUFFER_BIT);
 		pFB.deactivate();
 	}

@@ -33,6 +33,10 @@ namespace Gfx3D
 	// from [-1,1] to [0,1]
 	extern const char* const vs2D;
 
+	// For 2D post shaders, texture coordinates are calculated by transforming vertex position
+	// from [-1,1] to [0,1], and also flip upside down
+	extern const char* const vs2DFlipVertical;
+
 	// Pass the color as attribute
 	extern const char* const vsColorAttr;
 

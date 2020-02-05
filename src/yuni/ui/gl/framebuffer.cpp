@@ -38,6 +38,8 @@ namespace Gfx3D
 		if (not pSize.x || not pSize.y)
 			return false;
 
+		GLClearError();
+
 		pUsage = usage;
 		if (UI::MultiSampling::msNone == msType)
 		{
@@ -57,13 +59,16 @@ namespace Gfx3D
 				pBackTexture = Texture::NewMS(pSize.x, pSize.y, 4 /* RGBA */, type, samples, nullptr);
 		}
 
-		auto textureType = UI::MultiSampling::msNone == msType ? GL_TEXTURE_2D : GL_TEXTURE_2D_MULTISAMPLE;
+		auto textureType = (UI::MultiSampling::msNone == msType) ? GL_TEXTURE_2D : GL_TEXTURE_2D_MULTISAMPLE;
 		// Unbind
 		::glBindTexture(textureType, 0);
+
+		GLTestError("FrameBuffer::initialize : glBindTexture failed");
 
 		// Depth buffer
 		uint id;
 		::glGenRenderbuffers(1, &id);
+		GLTestError("glGenRenderbuffers depth buffer creation");
 		::glBindRenderbuffer(GL_RENDERBUFFER, id);
 		::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, pSize.x, pSize.y);
 		::glBindRenderbuffer(GL_RENDERBUFFER, 0);

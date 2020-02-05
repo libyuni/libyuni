@@ -97,7 +97,7 @@ namespace Control
 		}
 
 		//! Virtual destructor
-		virtual ~ListBox() { }
+		virtual ~ListBox() { destroyBoundEvents(); }
 
 		//! Draw the panel
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;

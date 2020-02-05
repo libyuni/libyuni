@@ -63,7 +63,8 @@ namespace UI
 
 		//! Draw the text using the given shader
 		void draw(const Gfx3D::ShaderProgram::Ptr& shader) const;
-		void draw(const Gfx3D::ShaderProgram::Ptr& shader, const Color::RGB<float>& backColor) const;		void draw(const Gfx3D::ShaderProgram::Ptr& shader, const Color::RGBA<float>& backColor) const;
+		void draw(const Gfx3D::ShaderProgram::Ptr& shader, const Color::RGB<float>& backColor) const;
+		void draw(const Gfx3D::ShaderProgram::Ptr& shader, const Color::RGBA<float>& backColor) const;
 
 		//! Clear the text
 		String& clear();
@@ -88,8 +89,8 @@ namespace UI
 
 		//! Text ascent (Y bearing = distance from the top of the text to the baseline)
 		int ascent() const { return pAscent; }
-
 		//! Modify the color used
+		const Color::RGBA<float>& color() const { return pColor; }
 		void color(float r, float g, float b);
 		void color(float r, float g, float b, float a);
 		void color(const Color::RGB<float>& color);

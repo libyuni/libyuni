@@ -65,6 +65,9 @@ namespace Gfx3D
 	protected:
 		uint pID;
 
+		//! Error string storage
+		String pError;
+
 		//! Friend declaration : ShaderProgram
 		friend class ShaderProgram;
 

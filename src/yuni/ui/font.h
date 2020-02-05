@@ -65,6 +65,9 @@ namespace UI
 		//! Get the font ID
 		virtual uint id() const { return pID; }
 
+		//! Maximum ascent for this font
+		virtual int maxAscent() const = 0;
+
 		//! Font name
 		const String& name() const { return pName; }
 

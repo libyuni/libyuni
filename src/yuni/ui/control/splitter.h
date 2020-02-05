@@ -55,7 +55,7 @@ namespace Control
 		{}
 
 		//! Virtual destructor
-		virtual ~Splitter() {}
+		virtual ~Splitter() { destroyBoundEvents(); }
 
 		//! Draw the splitter
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;

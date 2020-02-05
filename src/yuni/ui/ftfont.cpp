@@ -162,6 +162,7 @@ namespace UI
 				return;
 			}
 			::FT_Set_Char_Size(pFace, 0, (long int)(size * 64), 96, 96);
+			::FT_Select_Charmap(pFace, FT_ENCODING_UNICODE);
 
 			pValid = true;
 		}
@@ -379,6 +380,19 @@ namespace UI
 	bool FTFont::valid() const
 	{
 		return pImpl and FT() and pImpl->valid();
+	}
+
+
+	int FTFont::maxAscent() const
+	{
+		if (not valid())
+			return 0;
+		uint width = 0u;
+		uint height = 0u;
+		int ascent = 0;
+		int descent = 0;
+		measure("I`^&/|@#!é", width, height, ascent, descent, false, 4);
+		return ascent;
 	}
 
 

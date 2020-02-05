@@ -72,6 +72,24 @@ void main()
 }
 		)";
 
+	// For 2D post shaders, texture coordinates are calculated by transforming vertex position
+	// from [-1,1] to [0,1]
+	const char* const vs2DFlipVertical =
+		R"(
+#version 130
+
+in vec2 attrVertex;
+out vec2 texCoord;
+
+// For 2D post shaders, texture coordinates are calculated by transforming vertex position
+// from [-1,1] to [0,1]
+void main()
+{
+	gl_Position = vec4(attrVertex, 0.0f, 1.0f);
+	texCoord = (attrVertex + 1.0) / 2.0;
+	texCoord.y = 1.0 - texCoord.y;
+}
+		)";
 
 	// Pass the color as attribute
 	const char* const vsColorAttr =
@@ -204,13 +222,13 @@ void main()
 		R"(
 #version 130
 
-out vec4 gl_FragColor;
+out vec4 vFragColor;
 uniform vec4 Color;
 
 // Use a single color given as uniform
 void main()
 {
-	gl_FragColor = Color;
+	vFragColor = Color;
 }
 		)";
 
@@ -221,12 +239,12 @@ void main()
 #version 130
 
 in vec4 color;
-out vec4 gl_FragColor;
+out vec4 vFragColor;
 
 // Use color passed as an attribute
 void main()
 {
-	gl_FragColor = color;
+	vFragColor = color;
 }
 		)";
 
@@ -237,13 +255,13 @@ void main()
 #version 130
 
 in vec2 texCoord;
-out vec4 gl_FragColor;
+out vec4 vFragColor;
 uniform sampler2D Texture0;
 
 // Use directly the texture value, no lighting
 void main()
 {
-	gl_FragColor = texture(Texture0, texCoord);
+	vFragColor = texture(Texture0, texCoord);
 }
 		)";
 
@@ -255,7 +273,7 @@ void main()
 
 in vec2 texCoord;
 in float isEmpty; // Used as a boolean (0 = false, 1 = true)
-out vec4 gl_FragColor;
+out vec4 vFragColor;
 uniform sampler2D Texture0;
 uniform vec4 FillColor = vec4(0.0f, 0.0f, 0.0f, 0.0f); // Full transparent
 uniform float Opacity = 1.0f; // Opaque
@@ -265,9 +283,9 @@ void main()
 	// Sample the texture
 	vec4 texColor = texture(Texture0, texCoord);
 	// Multiply by the given opacity
-	texColor = vec4(texColor.rgb, texColor.a * Opacity);
+	texColor.a = texColor.a * Opacity;
 	// Take either the texture color or the fill color depending on if we are out of bounds
-	gl_FragColor = mix(texColor, FillColor, isEmpty);
+	vFragColor = mix(texColor, FillColor, isEmpty);
 }
 		)";
 
@@ -279,7 +297,7 @@ void main()
 #version 130
 
 in vec2 texCoord;
-out vec4 gl_FragColor;
+out vec4 vFragColor;
 uniform sampler2D Texture0;
 uniform sampler2D Texture1;
 uniform vec4 TextColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -295,7 +313,7 @@ void main(void)
 
 	vec4 withBGColor = mix(BackColor, TextColor, alpha.r);
 	vec4 withoutBGColor = vec4(TextColor.r, TextColor.g, TextColor.b, TextColor.a * alpha.r);
-	gl_FragColor = mix(withoutBGColor, withBGColor, HasBGColor);
+	vFragColor = mix(withoutBGColor, withBGColor, HasBGColor);
 }
 		)";
 
@@ -305,7 +323,7 @@ void main(void)
 		R"(
 #version 410
 
-out vec4 gl_FragColor;
+out vec4 vFragColor;
 
 // uint is 32-bit
 uniform uint ObjectID = 0u;
@@ -317,7 +335,7 @@ void main()
 	float high = ((ObjectID >> 16u) & 0xff) / 255.0f;
 	float low = ((ObjectID >> 8u) & 0xff) / 255.0f;
 	float lowest = (ObjectID & 0xff) / 255.0f;
-	gl_FragColor = vec4(highest, high, low, lowest);
+	vFragColor = vec4(highest, high, low, lowest);
 }
 		)";
 
@@ -328,13 +346,13 @@ void main()
 #version 130
 
 in vec3 texCoord;
-out vec4 gl_FragColor;
+out vec4 vFragColor;
 uniform samplerCube Texture0;
 
 // Cube map access
 void main()
 {
-	gl_FragColor = texture(Texture0, texCoord);
+	vFragColor = texture(Texture0, texCoord);
 }
 		)";
 
@@ -349,7 +367,7 @@ const uint MAX_LIGHTS = 4u;
 in vec3 vertex;
 in vec3 normal;
 in vec2 texCoord;
-out vec4 gl_FragColor;
+out vec4 vragColor;
 uniform sampler2D Texture0;
 uniform sampler2D Texture1;
 uniform sampler2D Texture2;
@@ -392,7 +410,7 @@ void main()
 		matColor += spec;
 	}
 	// write Total Color:
-	gl_FragColor = matColor;
+	vFragColor = matColor;
 }
 		)";
 
@@ -402,7 +420,7 @@ void main()
 #version 130
 
 in vec2 texCoord;
-out vec4 gl_FragColor;
+out vec4 vFragColor;
 uniform uint PaddedWidth = 1u;
 uniform uint Width = 1u; // The only important thing here is the Width / PaddedWidth ratio
 uniform sampler2D TextureY;
@@ -427,7 +445,7 @@ void main()
 	float g = y - 0.39173 * cb - 0.81290 * cr;
 	float b = y + 2.017 * cb;
 
-	gl_FragColor = vec4(r, g, b, 1.0);
+	vFragColor = vec4(r, g, b, 1.0);
 }
 		)";
 

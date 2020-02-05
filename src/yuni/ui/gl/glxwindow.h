@@ -8,11 +8,9 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/
 ** github: https://github.com/libyuni/libyuni/ {mirror}
 */
-#ifndef __YUNI_UI_GLXWINDOW_H__
-# define __YUNI_UI_GLXWINDOW_H__
+#pragma once
 
 #include <yuni/yuni.h>
-#include <yuni/private/graphics/opengl/glew/glew.h>
 #include <yuni/private/graphics/opengl/glew/glxew.h>
 #include "glwindow.h"
 
@@ -30,7 +28,11 @@ namespace UI
 	public:
 		//! Constructor
 		GLXWindow(const AnyString& title, uint width, uint height, uint bitDepth, bool fullScreen) :
-			GLWindow(title, width, height, bitDepth, fullScreen)
+			GLWindow(title, width, height, bitDepth, fullScreen),
+			pPrevX(pLeft),
+			pPrevY(pTop),
+			pPrevWidth(width),
+			pPrevHeight(height)
 		{}
 
 		//! Virtual destructor
@@ -39,6 +41,12 @@ namespace UI
 		//! Initialize the window
 		virtual bool initialize() override;
 
+		//! Move the window
+		virtual void move(uint left, uint top) override;
+
+		//! Resize the window
+		virtual void resize(unsigned int width, unsigned int height) override;
+
 		//! Main event loop
 		virtual bool loop();
 
@@ -46,13 +54,13 @@ namespace UI
 		virtual void kill() override;
 
 		//! Minimize the window
-		virtual void minimize() override;
+		virtual void minimize() override {} // TODO
 
 		//! Minimize the window
-		virtual void maximize() override;
+		virtual void maximize() override {} // TODO
 
 		//! Minimize the window
-		virtual void restore() override;
+		virtual void restore() override {} // TODO
 
 		//! Swap front and back buffers (OS-specific)
 		virtual void swapBuffers() override;
@@ -71,27 +79,20 @@ namespace UI
 		//! Current status of the vertical sync
 		virtual bool vsync() const override;
 
-		//! Does the window have Full Screen AntiAliasing / MultiSampling ?
-		virtual bool antiAliasing() const override;
-		/*!
-		** \brief Should Full Screen AntiAliasing / MultiSampling be enabled ?
-		**
-		** Changing this value may kill and re-create the window.
-		*/
-		virtual void antiAliasing(bool enable) override;
-
 		//! Enable / Disable full screen
 		virtual void fullScreen(bool enable) override;
-		//! Is the window full screen ?
-		virtual bool fullScreen() const override;
 
 	private:
 		Display* pDisplay;
 		int pScreen;
 		Window pWindow;
 		GLXContext pContext;
-		XSetWindowAttributes pAttr;
-		XWindowAttributes pWndAttr;
+
+		// Store values on full screen to restore previous window values
+		int pPrevX;
+		int pPrevY;
+		uint pPrevWidth;
+		uint pPrevHeight;
 
 	}; // GLXWindow
 
@@ -100,5 +101,3 @@ namespace UI
 } // Yuni
 
 #include "glxwindow.hxx"
-
-#endif // __YUNI_UI_GLXWINDOW_H__

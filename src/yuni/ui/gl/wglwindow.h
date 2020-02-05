@@ -37,9 +37,7 @@ namespace UI
 		WGLWindow(const AnyString& title, uint width, uint height, uint bitDepth, bool fullScreen):
 			GLWindow(title, width, height, bitDepth, fullScreen),
 			pHasMSAASupport(false)
-		{
-			pMouse = new Input::WinMouse();
-		}
+		{}
 		//! Destructor
 		~WGLWindow();
 
@@ -90,8 +88,6 @@ namespace UI
 
 		//! Enable / Disable full screen
 		virtual void fullScreen(bool enable) override;
-		//! Is the window full screen ?
-		virtual bool fullScreen() const override;
 
 		//! When in full screen, update size the window will come back to
 		virtual void updateWindowedSize(uint width, uint height) override;
