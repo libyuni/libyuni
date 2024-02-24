@@ -82,7 +82,7 @@ set(src
 	versions.h
 	versions.hxx
 	versions.cpp
-	
+
 	program.h
 	program.hxx
 	program.cpp
