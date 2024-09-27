@@ -8,8 +8,7 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/
 ** github: https://github.com/libyuni/libyuni/ {mirror}
 */
-#ifndef __YUNI_INPUT_KEY_H__
-# define __YUNI_INPUT_KEY_H__
+#pragma once
 
 namespace Yuni
 {
@@ -21,7 +20,7 @@ namespace Input
 	*/
 	enum Key
 	{
-		Invalid,
+		Invalid = 0,
 
 		// Main control keys
 		Escape,
@@ -128,5 +127,3 @@ namespace Input
 
 } // namespace Input
 } // namespace Yuni
-
-#endif // __YUNI_INPUT_KEY_H__

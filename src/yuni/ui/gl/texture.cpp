@@ -112,6 +112,7 @@ namespace Gfx3D
 						::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 					break;
 			}
+			GLTestError("Texture::SetPixelStore : glPixelStorei failed");
 		}
 
 
@@ -247,9 +248,11 @@ namespace Gfx3D
 
 		// Allocate a texture name
 		::glGenTextures(1, &id);
+		GLTestError("Texture::New : glGenTextures");
 
 		// Select our current texture
 		::glBindTexture(GL_TEXTURE_2D, id);
+		GLTestError("Texture::New : glBindTexture");
 
 		// When texture area is small, bilinear filter and average with the 2 closest mipmaps
 		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmaps ?
@@ -262,23 +265,13 @@ namespace Gfx3D
 		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-		// This Enable right here is necessary in cases where no shader is activated
-		// !!! However, it is freakishly buggy ! If you do it on every texture load,
-		// !!! it will break the video player (it displays levels of red...)
-		// So yeah, only do it once.
-		static bool first = true;
-		if (first)
-		{
-			::glEnable(GL_TEXTURE_2D);
-			first = false;
-		}
-
 		// Set the texture in OpenGL
 		GLenum format = DepthToGLEnum(colorDepth);
 		GLenum formatInt = DepthToGLEnumInternal(colorDepth);
 		GLenum dataType = DataTypeToGLEnum(type);
 		SetPixelStore(colorDepth);
 		::glTexImage2D(GL_TEXTURE_2D, 0, formatInt, width, height, 0, format, dataType, data);
+		GLTestError("Texture::New : glTexImage2D");
 
 		// Build our texture mipmaps
 		if (mipmaps)
@@ -333,6 +326,7 @@ namespace Gfx3D
 		GLenum dataType = DataTypeToGLEnum(type);
 		SetPixelStore(colorDepth);
 		::glTexImage2D(GL_TEXTURE_2D, 0, formatInt, width, height, 0, format, dataType, data);
+		GLTestError("Texture::New3D : glTexImage2D failed to assign data to texture");
 
 		// Build our texture mipmaps
 		if (mipmaps)
@@ -370,6 +364,7 @@ namespace Gfx3D
 		// GLenum dataType = DataTypeToGLEnum(type);
 		SetPixelStore(colorDepth);
 		::glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, formatInt, width, height, false);
+		GLTestError("Texture::NewMS : glTexImage2DMultisample failed to assign data to texture");
 
 		return new Texture(id, width, height, colorDepth, type);
 	}

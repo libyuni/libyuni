@@ -40,7 +40,7 @@ namespace Control
 		{}
 
 		//! Virtual destructor
-		virtual ~Window() {}
+		virtual ~Window() { destroyBoundEvents(); }
 
 		//! Draw the window
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;

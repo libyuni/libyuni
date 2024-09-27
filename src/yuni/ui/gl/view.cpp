@@ -38,6 +38,7 @@ namespace UI
 
 	bool View::initShaders()
 	{
+		Gfx3D::GLClearError();
 		// Shaders are created here temporarily, because creation in the constructor requires
 		// a GL context that the first created view does not have yet
 		if (!pTextShaders and !pPictureShaders)

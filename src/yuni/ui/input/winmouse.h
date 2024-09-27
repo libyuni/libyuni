@@ -10,8 +10,9 @@
 */
 #pragma once
 
-#include "../../core/system/windows.hdr.h"
-#include "mouse.h"
+#ifdef YUNI_WINDOWSYSTEM_MSW
+
+# include "../../core/system/windows.hdr.h"
 
 namespace Yuni
 {
@@ -36,6 +37,14 @@ namespace Input
 		//! Virtual destructor
 		virtual ~WinMouse() {}
 
+		virtual bool visible() const
+		{
+			CURSORINFO info;
+			info.cbSize = sizeof(CURSORINFO);
+			::GetCursorInfo(&info);
+			return (info.flags & CURSOR_SHOWING) > 0;
+		}
+
 		virtual void showCursor() { ::ShowCursor(true); }
 
 		virtual void hideCursor() { ::ShowCursor(false); }
@@ -45,6 +54,7 @@ namespace Input
 	}; // class WinMouse
 
 
-
 } // namespace Input
 } // namespace Yuni
+
+#endif // YUNI_WINDOWSYSTEM_MSW

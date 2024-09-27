@@ -55,7 +55,7 @@ namespace Control
 		{}
 
 		//! Virtual destructor
-		virtual ~Picture() {}
+		virtual ~Picture() { destroyBoundEvents(); }
 
 		//! Draw the picture
 		virtual void draw(DrawingSurface::Ptr& surface, float xOffset, float yOffset) const override;

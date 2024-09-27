@@ -43,11 +43,11 @@ namespace Input
 		//! Button types
 		enum Button
 		{
-			ButtonLeft,
+			ButtonLeft = 1,
 
-			ButtonRight,
+			ButtonMiddle = 2,
 
-			ButtonMiddle,
+			ButtonRight = 3,
 
 			ButtonCount // Used to count the enum values, please keep at end of enum
 
@@ -97,6 +97,7 @@ namespace Input
 
 		//! \name Cursor visibility
 		//@{
+		virtual bool visible() const = 0;
 		virtual void showCursor() = 0;
 		virtual void hideCursor() = 0;
 		virtual void showCursor(bool visible) = 0;
@@ -132,7 +133,16 @@ namespace Input
 	}; // class IMouse
 
 
-
 } // namespace Input
 } // namespace Yuni
 
+
+#ifdef YUNI_WINDOWSYSTEM_MSW
+# include "winmouse.h"
+#else
+# ifdef YUNI_WINDOWSYSTEM_X11
+#	include "x11mouse.h"
+# else
+#	warning "Yuni::Input::Mouse : Unsupported Window System !"
+# endif
+#endif

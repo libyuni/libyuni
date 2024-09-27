@@ -50,7 +50,6 @@ namespace UI
 		//! Unordered set of controls (by ptr)
 		typedef Yuni::Set<Ptr>::Ordered  Set;
 
-
 	public:
 		//! Mouse move callback
 		Yuni::Event<EventPropagation (IControl* sender, float x, float y)>  onMouseMove;

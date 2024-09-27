@@ -8,14 +8,15 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/
 ** github: https://github.com/libyuni/libyuni/ {mirror}
 */
-#ifndef __YUNI_UI_RENDERWINDOW_H__
-# define __YUNI_UI_RENDERWINDOW_H__
+#pragma once
 
 # undef None
+# undef Bool
 # include "../yuni.h"
 # include "../core/bind.h"
 # include "../core/string.h"
 # include <list>
+# include "../private/graphics/opengl/glew/glew.h"
 # include "input/key.h"
 # include "input/keyboard.h"
 # include "input/mouse.h"
@@ -161,7 +162,7 @@ namespace UI
 		//! Manage mouse input events
 		Input::IMouse& mouse()
 		{
-			assert(pMouse && "RenderWindow inheritors must instantiate the proper Mouse type !");
+			assert(pMouse && "Mouse can not be used if the window is not yet initialized !");
 			return *pMouse;
 		}
 
@@ -220,7 +221,7 @@ namespace UI
 		//! Enable / Disable full screen (OS-specific)
 		virtual void fullScreen(bool enable) = 0;
 		//! Is the window full screen ? (OS-specific)
-		virtual bool fullScreen() const = 0;
+		bool fullScreen() const { return pFullScreen; }
 
 		//! When in full screen, update size the window will come back to
 		virtual void updateWindowedSize(uint /*width*/, uint /*height*/) {}
@@ -350,5 +351,3 @@ namespace UI
 
 } // namespace UI
 } // namespace Yuni
-
-#endif // __YUNI_UI_RENDERWINDOW_H__

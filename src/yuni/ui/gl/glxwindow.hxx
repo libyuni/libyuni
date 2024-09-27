@@ -8,8 +8,7 @@
 ** gitlab: https://gitlab.com/libyuni/libyuni/
 ** github: https://github.com/libyuni/libyuni/ {mirror}
 */
-#ifndef __YUNI_UI_GLXWINDOW_HXX__
-# define __YUNI_UI_GLXWINDOW_HXX__
+#pragma once
 
 namespace Yuni
 {
@@ -19,15 +18,12 @@ namespace UI
 
 	inline void GLXWindow::swapBuffers()
 	{
-		//XNextEvent(pDisplay, &xev);
-		::XGetWindowAttributes(pDisplay, pWindow, &pWndAttr);
 		::glXSwapBuffers(pDisplay, pWindow);
 	}
 
 	inline void GLXWindow::refreshAndSwap()
 	{
-		pRefreshFunc();
-		::XGetWindowAttributes(pDisplay, pWindow, &pWndAttr);
+		onRefresh();
 		::glXSwapBuffers(pDisplay, pWindow);
 	}
 
@@ -35,5 +31,3 @@ namespace UI
 
 } // UI
 } // Yuni
-
-#endif // __YUNI_UI_GLXWINDOW_HXX__

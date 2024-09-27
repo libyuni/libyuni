@@ -63,6 +63,9 @@ namespace UI
 		//! Is the font valid ?
 		bool valid() const;
 
+		//! Maximum ascent for this font
+		int maxAscent() const;
+
 	private:
 		//! PImpl pattern (to avoid freetype dependencies in the header)
 		FTFontImpl* pImpl;

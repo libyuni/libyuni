@@ -747,6 +747,8 @@ namespace UI
 				pFullScreen = false;
 		}
 
+		pMouse = new Input::WinMouse();
+
 		return true;
 	}
 
@@ -938,11 +940,6 @@ namespace UI
 			disableFullScreen();
 	}
 
-
-	bool WGLWindow::fullScreen() const
-	{
-		return pFullScreen;
-	}
 
 	void WGLWindow::updateWindowedSize(uint width, uint height)
 	{

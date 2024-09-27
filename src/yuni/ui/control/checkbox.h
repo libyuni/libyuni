@@ -47,7 +47,7 @@ namespace Control
 		{}
 
 		//! Virtual destructor
-		virtual ~CheckBox() {}
+		virtual ~CheckBox() { destroyBoundEvents(); }
 
 		const String& text() const { return pText; }
 		void text(const AnyString& text) { pText = text; invalidate(); }

@@ -140,7 +140,7 @@ namespace Gfx3D
 			GLTestError("ShaderProgram::load, glGetProgramiv");
 
 			pLinked = (linked == GL_TRUE);
-			if (0 == pLinked)
+			if (not pLinked)
 			{
 				char log[1024];
 				int length = 0;
@@ -149,7 +149,6 @@ namespace Gfx3D
 				pError.clear() << "Shader program " << pID << " failed to load !";
 				if ((uint) length < 1024)
 				{
-					log[(uint)length] = '\0'; // for safety, just in case
 					pError += '\n';
 					pError.append(log, (uint)length);
 				}

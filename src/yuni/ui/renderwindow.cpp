@@ -98,19 +98,24 @@ namespace UI
 		View::Ptr lowestView = nullptr;
 		bool found = false;
 		View::List::iterator end = pViewList.end();
+		View::List::iterator toRemove = end;
 		for (View::List::iterator it = pViewList.begin(); end != it; ++it)
 		{
 			if ((*it)->id() == id)
 			{
-				pViewList.erase(it);
+				toRemove = it;
 				found = true;
 			}
 			else if (!lowestView or lowestView->z() > (*it)->z())
 				lowestView = *it;
 		}
 		// If we are deleting the active view, the lowest view becomes the new active view
-		if (found and pActiveView->id() == id)
-			pActiveView = lowestView;
+		if (found)
+		{
+			if (pActiveView->id() == id)
+				pActiveView = lowestView;
+			pViewList.erase(toRemove);
+		}
 		return found;
 	}
 
@@ -186,7 +191,7 @@ namespace UI
 		{
 			if (id == (*it)->id())
 			{
-				(*it)->draw(1);
+				(*it)->draw();
 				break;
 			}
 		}
@@ -197,7 +202,7 @@ namespace UI
 	{
 		if (wsMinimized == pState)
 			return;
-		view->draw(1);
+		view->draw();
 	}
 
 
@@ -205,11 +210,12 @@ namespace UI
 	{
 		if (wsMinimized == pState)
 			return;
+
 		// Activate the frame buffer
 		pFB.activate();
 		// Draw the views
 		for (const View::Ptr& view : pViewList)
-			view->draw(1);
+			view->draw();
 		static bool init = false;
 		if (!init)
 		{
@@ -249,6 +255,7 @@ namespace UI
 		}
 		// The last post filter is applied directly, so deactivate our frame buffer
 		pFB.deactivate();
+
 		// And draw one last time to the default frame buffer
 		if (pPostEffects.size() > 0)
 		{

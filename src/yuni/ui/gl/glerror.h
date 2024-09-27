@@ -23,9 +23,9 @@ namespace Gfx3D
 
 	inline void GLClearError()
 	{
-		# ifndef NDEBUG
+# ifndef NDEBUG
 		::glGetError();
-		# endif // DEBUG
+# endif // NDEBUG
 	}
 
 

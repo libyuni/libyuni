@@ -27,10 +27,10 @@ namespace UI
 		::glBindTexture(GL_TEXTURE_2D, pTexture->id());
 		shader->bindUniform("Texture0", Yuni::Gfx3D::Vertex<>::vaTexture0);
 
-		const float texWidth = (float)pTexture->width();
-		const float texHeight = (float)pTexture->height();
 		const float overlayWidth = (float)pWidth;
 		const float overlayHeight = (float)pHeight;
+		float texWidth = (float)pTexture->width();
+		float texHeight = (float)pTexture->height();
 		// pDisplay == dmNone
 		float offsetX = 0.0f;
 		float offsetY = 0.0f;
@@ -88,7 +88,14 @@ namespace UI
 				}
 				break;
 			case dmFit:
-				// TODO
+				{
+					float overlayAR = overlayWidth / overlayHeight;
+					float texAR = texWidth / texHeight;
+					if (overlayAR > texAR)
+						texWidth = texHeight * texAR;
+					else if (overlayAR < texAR)
+						texHeight = texWidth / texAR;
+				}
 				break;
 			case dmFill:
 				// TODO
